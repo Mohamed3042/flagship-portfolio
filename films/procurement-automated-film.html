@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#0B0E0C;}
+*{box-sizing:border-box;}
+@keyframes paGlow{0%,100%{box-shadow:0 0 0 1px oklch(0.78 0.16 155 / .55),0 0 22px oklch(0.78 0.16 155 / .16);}50%{box-shadow:0 0 0 1px oklch(0.78 0.16 155 / .95),0 0 46px oklch(0.78 0.16 155 / .34);}}
+@keyframes paWobble{0%,100%{transform:rotate(-1.4deg) translateY(0);}50%{transform:rotate(1.6deg) translateY(-4px);}}
+@keyframes paBlink{0%,100%{opacity:1;}50%{opacity:.15;}}
+@keyframes paBob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+@keyframes paCursor{0%{transform:translate(26px,180px);}16%{transform:translate(140px,64px);}26%{transform:translate(140px,64px);}44%{transform:translate(300px,104px);}54%{transform:translate(300px,104px);}78%{transform:translate(84px,146px);}88%{transform:translate(84px,146px);}100%{transform:translate(26px,180px);}}
+@keyframes paRowA{0%,14%,30%,100%{background:rgba(233,237,234,.05);}18%,26%{background:oklch(0.78 0.16 155 / .22);}}
+@keyframes paRowB{0%,42%,58%,100%{background:rgba(233,237,234,.05);}46%,54%{background:oklch(0.8 0.14 85 / .22);}}
+@keyframes paRowC{0%,76%,92%,100%{background:rgba(233,237,234,.05);}80%,88%{background:oklch(0.66 0.19 25 / .22);}}
+@keyframes paSwapA{0%,42%{opacity:1;}50%,92%{opacity:0;}100%{opacity:1;}}
+@keyframes paSwapB{0%,42%{opacity:0;}50%,92%{opacity:1;}100%{opacity:0;}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</helmet>
+<div id="pa-root" dir="ltr" style="position:relative;height:100vh;background:#0B0E0C;color:#E9EDEA;font-family:'Space Grotesk',sans-serif;overflow:hidden;">
+
+  <div style="position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px 24px;pointer-events:none;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(233,237,234,.55);">
+      <span data-l="en" style="letter-spacing:.14em;">STORY 11 — PROCUREMENT, AUTOMATED</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">قصة ١١ — الشراء المؤتمت</span>
+    </div>
+    <div style="display:flex;gap:4px;padding:4px;border:1px solid rgba(233,237,234,.16);border-radius:999px;pointer-events:auto;background:rgba(11,14,12,.7);">
+      <button data-langbtn="en" onClick="{{ toggleEn }}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;padding:5px 12px;border:none;border-radius:999px;cursor:pointer;background:#E9EDEA;color:#0B0E0C;">EN</button>
+      <button data-langbtn="ar" onClick="{{ toggleAr }}" style="font-family:'IBM Plex Sans Arabic',sans-serif;font-size:12px;padding:5px 12px;border:none;border-radius:999px;cursor:pointer;background:transparent;color:rgba(233,237,234,.65);">العربية</button>
+    </div>
+  </div>
+
+  <div style="position:absolute;top:50%;right:16px;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:10px;">
+    <div data-dot="1" style="width:8px;height:8px;border-radius:50%;background:#E9EDEA;transition:background .3s,transform .3s;"></div>
+    <div data-dot="2" style="width:8px;height:8px;border-radius:50%;background:rgba(233,237,234,.22);transition:background .3s,transform .3s;"></div>
+    <div data-dot="3" style="width:8px;height:8px;border-radius:50%;background:rgba(233,237,234,.22);transition:background .3s,transform .3s;"></div>
+    <div data-dot="4" style="width:8px;height:8px;border-radius:50%;background:rgba(233,237,234,.22);transition:background .3s,transform .3s;"></div>
+    <div data-dot="5" style="width:8px;height:8px;border-radius:50%;background:rgba(233,237,234,.22);transition:background .3s,transform .3s;"></div>
+    <div data-dot="6" style="width:8px;height:8px;border-radius:50%;background:rgba(233,237,234,.22);transition:background .3s,transform .3s;"></div>
+  </div>
+
+  <div id="pa-scroller" style="height:100%;overflow-y:auto;scroll-snap-type:y mandatory;">
+
+    <section data-scene="1" data-screen-label="S1 Hook" style="min-height:100vh;scroll-snap-align:start;display:grid;place-items:center;padding:72px 24px;position:relative;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:40px;max-width:860px;text-align:center;">
+        <div data-anim="up" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.78 0.16 155);">
+          <span data-l="en" style="letter-spacing:.18em;">SCENE 01 — THE HOOK</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">المشهد ٠١ — الخطّاف</span>
+        </div>
+        <h1 data-anim="up" data-delay="120" style="margin:0;font-size:clamp(34px,5.4vw,64px);line-height:1.08;font-weight:700;text-wrap:balance;">
+          <span data-l="en">One click. A whole day of searching — gone.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">نقرة واحدة. يومٌ كامل من البحث — اختفى.</span>
+        </h1>
+        <div style="position:relative;width:min(420px,86vw);height:280px;">
+          <div data-collapse style="position:absolute;inset:20px 30px;background:#141A16;border:1px solid rgba(233,237,234,.14);border-radius:10px;transform:translate(-96px,-26px) rotate(-9deg);"></div>
+          <div data-collapse style="position:absolute;inset:20px 30px;background:#11150F;border:1px solid rgba(233,237,234,.12);border-radius:10px;transform:translate(88px,-38px) rotate(7deg);"></div>
+          <div data-collapse style="position:absolute;inset:20px 30px;background:#151812;border:1px solid rgba(233,237,234,.12);border-radius:10px;transform:translate(-58px,44px) rotate(5deg);"></div>
+          <div data-collapse style="position:absolute;inset:20px 30px;background:#121713;border:1px solid rgba(233,237,234,.12);border-radius:10px;transform:translate(64px,36px) rotate(-6deg);"></div>
+          <div data-collapse style="position:absolute;inset:20px 30px;background:#161B17;border:1px solid rgba(233,237,234,.16);border-radius:10px;transform:translate(0px,-8px) rotate(2deg);"></div>
+          <div data-anim="pop" data-delay="1350" style="position:absolute;inset:20px 30px;background:#0F1411;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;animation:paGlow 3s ease-in-out infinite;" data-ambient>
+            <div style="display:inline-flex;padding:4px 12px;border-radius:999px;background:oklch(0.78 0.16 155 / .16);color:oklch(0.78 0.16 155);font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;">
+              <span data-l="en">DECISION BRIEF</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">موجز القرار</span>
+            </div>
+            <div style="font-size:30px;font-weight:700;font-family:'IBM Plex Mono',monospace;">170 <span style="font-size:16px;color:rgba(233,237,234,.6);">KWD</span></div>
+            <div style="font-size:13px;color:rgba(233,237,234,.6);">
+              <span data-l="en">one clean card, sourced &amp; scored</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">بطاقة واحدة نظيفة، موثّقة ومقيَّمة</span>
+            </div>
+          </div>
+        </div>
+        <div data-anim="up" data-delay="400" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(233,237,234,.45);display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span data-l="en" style="letter-spacing:.14em;">SCROLL</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">مرِّر</span>
+          <span data-ambient style="display:block;animation:paBob 1.8s ease-in-out infinite;">↓</span>
+        </div>
+      </div>
+    </section>
+
+    <section data-scene="2" data-screen-label="S2 Problem" style="min-height:100vh;scroll-snap-align:start;display:grid;place-items:center;padding:72px 24px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center;max-width:1000px;width:100%;">
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div data-anim="up" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.8 0.14 85);">
+            <span data-l="en" style="letter-spacing:.18em;">SCENE 02 — THE PROBLEM</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">المشهد ٠٢ — المشكلة</span>
+          </div>
+          <h2 data-anim="up" data-delay="100" style="margin:0;font-size:clamp(28px,3.6vw,44px);line-height:1.12;font-weight:700;text-wrap:balance;">
+            <span data-l="en">Two engineers. Two CAD workstations. One tight budget.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">مهندسان. محطتا عمل CAD. ميزانية واحدة ضيقة.</span>
+          </h2>
+          <p data-anim="up" data-delay="200" style="margin:0;font-size:16px;line-height:1.6;color:rgba(233,237,234,.65);max-width:44ch;">
+            <span data-l="en">A confusing used market in Kuwait — tabs everywhere, prices trailed by question marks.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">سوق مستعمل مربك في الكويت — تبويبات في كل مكان، وأسعار تتبعها علامات استفهام.</span>
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <div data-anim="pop" data-delay="320" style="padding:8px 14px;border-radius:999px;border:1px solid oklch(0.78 0.16 155 / .5);color:oklch(0.78 0.16 155);font-family:'IBM Plex Mono',monospace;font-size:13px;">
+              <span data-l="en">≤ 190 KWD / unit · new</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">≤ ١٩٠ د.ك للوحدة · جديد</span>
+            </div>
+            <div data-anim="pop" data-delay="440" style="padding:8px 14px;border-radius:999px;border:1px solid oklch(0.8 0.14 85 / .5);color:oklch(0.8 0.14 85);font-family:'IBM Plex Mono',monospace;font-size:13px;">
+              <span data-l="en">&lt; 150 KWD / unit · used</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">&lt; ١٥٠ د.ك للوحدة · مستعمل</span>
+            </div>
+          </div>
+        </div>
+        <div style="position:relative;height:320px;">
+          <div data-anim="pop" data-delay="150" style="position:absolute;top:8%;left:4%;width:58%;"><div data-ambient style="background:#121713;border:1px solid rgba(233,237,234,.14);border-radius:10px;padding:12px 14px;animation:paWobble 3.4s ease-in-out infinite;display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:13px;color:rgba(233,237,234,.75);"><span data-l="en">4Sale — tower… used?</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">فورسيل — برج… مستعمل؟</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.66 0.19 25);">? KWD</span></div></div>
+          <div data-anim="pop" data-delay="280" style="position:absolute;top:32%;left:26%;width:60%;"><div data-ambient style="background:#141A16;border:1px solid rgba(233,237,234,.14);border-radius:10px;padding:12px 14px;animation:paWobble 4.1s ease-in-out infinite .4s;display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:13px;color:rgba(233,237,234,.75);"><span data-l="en">RTX… new? old stock?</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">RTX… جديد؟ مخزون قديم؟</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.8 0.14 85);">?? KWD</span></div></div>
+          <div data-anim="pop" data-delay="410" style="position:absolute;top:56%;left:10%;width:56%;"><div data-ambient style="background:#11150F;border:1px solid rgba(233,237,234,.14);border-radius:10px;padding:12px 14px;animation:paWobble 3.7s ease-in-out infinite .8s;display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:13px;color:rgba(233,237,234,.75);"><span data-l="en">is this a fair price?</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">هل هذا سعر عادل؟</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.66 0.19 25);" data-ambient>?<span data-ambient style="animation:paBlink 1.6s infinite;">?</span>?</span></div></div>
+          <div data-anim="pop" data-delay="540" style="position:absolute;top:78%;left:32%;width:52%;"><div data-ambient style="background:#151812;border:1px solid rgba(233,237,234,.14);border-radius:10px;padding:12px 14px;animation:paWobble 4.5s ease-in-out infinite 1.1s;display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-size:13px;color:rgba(233,237,234,.75);"><span data-l="en">…tab 14 of 30</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">…تبويب ١٤ من ٣٠</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(233,237,234,.4);">✕</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section data-scene="3" data-screen-label="S3 Insight" style="min-height:100vh;scroll-snap-align:start;display:grid;place-items:center;padding:72px 24px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:40px;max-width:860px;text-align:center;">
+        <div data-anim="up" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.78 0.16 155);">
+          <span data-l="en" style="letter-spacing:.18em;">SCENE 03 — THE INSIGHT</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">المشهد ٠٣ — الفكرة</span>
+        </div>
+        <h2 data-anim="up" data-delay="120" style="margin:0;font-size:clamp(30px,4.6vw,56px);line-height:1.1;font-weight:700;text-wrap:balance;">
+          <span data-l="en">“Searching is annoying. So I stopped searching.”</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">«البحث مزعج. فتوقّفتُ عن البحث.»</span>
+        </h2>
+        <p data-anim="up" data-delay="220" style="margin:0;font-size:16px;color:rgba(233,237,234,.65);">
+          <span data-l="en">One specified instruction in — and the cursor starts moving on its own.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">تعليمة واحدة محدّدة — ويبدأ المؤشر بالتحرك من تلقاء نفسه.</span>
+        </p>
+        <div data-anim="pop" data-delay="350" style="position:relative;width:min(440px,88vw);height:250px;background:#0F1411;border:1px solid rgba(233,237,234,.16);border-radius:12px;overflow:hidden;text-align:left;" dir="ltr">
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid rgba(233,237,234,.1);">
+            <span style="width:8px;height:8px;border-radius:50%;background:rgba(233,237,234,.2);display:block;"></span>
+            <span style="width:8px;height:8px;border-radius:50%;background:rgba(233,237,234,.2);display:block;"></span>
+            <span style="flex:1;margin-left:6px;background:rgba(233,237,234,.06);border-radius:6px;padding:4px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.78 0.16 155);">agent · reading real, dated listings…</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding:14px;">
+            <div data-ambient style="height:34px;border-radius:8px;background:rgba(233,237,234,.05);animation:paRowA 8s linear infinite;"></div>
+            <div data-ambient style="height:34px;border-radius:8px;background:rgba(233,237,234,.05);animation:paRowB 8s linear infinite;"></div>
+            <div data-ambient style="height:34px;border-radius:8px;background:rgba(233,237,234,.05);animation:paRowC 8s linear infinite;"></div>
+            <div style="height:34px;border-radius:8px;background:rgba(233,237,234,.04);"></div>
+          </div>
+          <div data-ambient style="position:absolute;top:0;left:0;animation:paCursor 8s cubic-bezier(.45,.05,.35,1) infinite;">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path d="M2 1 L16 9 L8 11 L5 17 Z" fill="#E9EDEA"></path></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-scene="4" data-screen-label="S4 Rules" style="min-height:100vh;scroll-snap-align:start;display:grid;place-items:center;padding:72px 24px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:40px;max-width:960px;width:100%;text-align:center;">
+        <div data-anim="up" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.8 0.14 85);">
+          <span data-l="en" style="letter-spacing:.18em;">SCENE 04 — THE RULES</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">المشهد ٠٤ — القواعد</span>
+        </div>
+        <h2 data-anim="up" data-delay="100" style="margin:0;font-size:clamp(28px,3.8vw,46px);font-weight:700;">
+          <span data-l="en">Four rules. No exceptions.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">أربع قواعد. بلا استثناءات.</span>
+        </h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;">
+          <div data-anim="pop" data-delay="250" style="background:#121713;border:1px solid oklch(0.78 0.16 155 / .4);border-radius:14px;padding:24px 18px;display:flex;flex-direction:column;gap:10px;align-items:center;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.78 0.16 155);">01</div>
+            <div style="font-size:18px;font-weight:700;"><span data-l="en">Real prices only</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">أسعار حقيقية فقط</span></div>
+            <div style="font-size:13px;color:rgba(233,237,234,.55);"><span data-l="en">every listing dated &amp; verified</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">كل إعلان مؤرَّخ وموثَّق</span></div>
+          </div>
+          <div data-anim="pop" data-delay="420" style="background:#121713;border:1px solid oklch(0.78 0.16 155 / .4);border-radius:14px;padding:24px 18px;display:flex;flex-direction:column;gap:10px;align-items:center;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.78 0.16 155);">02</div>
+            <div style="font-size:18px;font-weight:700;"><span data-l="en">Cite the source</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">اذكر المصدر</span></div>
+            <div style="font-size:13px;color:rgba(233,237,234,.55);"><span data-l="en">listing ID + read date on every option</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">معرّف الإعلان وتاريخ القراءة على كل خيار</span></div>
+          </div>
+          <div data-anim="pop" data-delay="590" style="background:#121713;border:1px solid oklch(0.8 0.14 85 / .45);border-radius:14px;padding:24px 18px;display:flex;flex-direction:column;gap:10px;align-items:center;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.8 0.14 85);">03</div>
+            <div style="font-size:18px;font-weight:700;"><span data-l="en">Flag overpriced</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">علِّم المبالَغ في سعره</span></div>
+            <div style="font-size:13px;color:rgba(233,237,234,.55);"><span data-l="en">% gap vs researched fair value</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">نسبة الفرق عن القيمة العادلة المدروسة</span></div>
+          </div>
+          <div data-anim="pop" data-delay="760" style="background:#121713;border:1px solid oklch(0.66 0.19 25 / .45);border-radius:14px;padding:24px 18px;display:flex;flex-direction:column;gap:10px;align-items:center;">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:oklch(0.66 0.19 25);">04</div>
+            <div style="font-size:18px;font-weight:700;"><span data-l="en">Say so if it doesn’t exist</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">قل ذلك إن لم يكن موجوداً</span></div>
+            <div style="font-size:13px;color:rgba(233,237,234,.55);"><span data-l="en">no wishful listings, no filler</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">لا إعلانات متمنّاة، ولا حشو</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-scene="5" data-screen-label="S5 Result" style="min-height:100vh;scroll-snap-align:start;display:grid;place-items:center;padding:72px 24px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:32px;max-width:1080px;width:100%;text-align:center;">
+        <div data-anim="up" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.78 0.16 155);">
+          <span data-l="en" style="letter-spacing:.18em;">SCENE 05 — THE BRIEF · 4 JULY 2026</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">المشهد ٠٥ — الموجز · ٤ يوليو ٢٠٢٦</span>
+        </div>
+        <h2 data-anim="up" data-delay="100" style="margin:0;font-size:clamp(26px,3.4vw,42px);font-weight:700;text-wrap:balance;">
+          <span data-l="en">Five verified options. A verdict on each.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">خمسة خيارات موثّقة. وحكمٌ على كلٍّ منها.</span>
+        </h2>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;gap:14px;" dir="ltr">
+          <div data-anim="pop" data-delay="200" style="transform-origin:bottom center;"><div style="width:164px;background:#121713;border:1px solid rgba(233,237,234,.12);border-radius:14px;padding:16px 14px;transform:rotate(-7deg) translateY(16px);display:flex;flex-direction:column;gap:8px;align-items:center;"><span style="padding:3px 10px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;background:oklch(0.8 0.14 85 / .16);color:oklch(0.8 0.14 85);"><span data-l="en">FAIR</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">عادل</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;">··· <span style="font-size:12px;color:rgba(233,237,234,.5);">KWD</span></span><span style="font-size:11px;color:rgba(233,237,234,.5);"><span data-l="en">vs fair value: ·%</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">مقابل القيمة العادلة: ·٪</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(233,237,234,.35);">4Sale · #···· · 4 Jul 2026</span></div></div>
+          <div data-anim="pop" data-delay="320" style="transform-origin:bottom center;"><div style="width:164px;background:#121713;border:1px solid oklch(0.78 0.16 155 / .4);border-radius:14px;padding:16px 14px;transform:rotate(-3deg) translateY(6px);display:flex;flex-direction:column;gap:8px;align-items:center;"><span style="padding:3px 10px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;background:oklch(0.78 0.16 155 / .16);color:oklch(0.78 0.16 155);"><span data-l="en">GOOD</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">جيد</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;">130 <span style="font-size:12px;color:rgba(233,237,234,.5);">KWD</span></span><span style="font-size:11px;color:rgba(233,237,234,.6);"><span data-l="en">strictly in-budget alternative</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">بديل ملتزم بالميزانية</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(233,237,234,.35);">4Sale · #···· · 4 Jul 2026</span></div></div>
+          <div data-anim="pop" data-delay="440" style="transform-origin:bottom center;z-index:2;"><div data-ambient style="width:184px;background:#0F1411;border-radius:14px;padding:20px 16px;transform:translateY(-8px);display:flex;flex-direction:column;gap:8px;align-items:center;animation:paGlow 2.6s ease-in-out infinite;"><span style="padding:3px 10px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;background:oklch(0.78 0.16 155);color:#0B0E0C;font-weight:500;"><span data-l="en">GOOD ★ RECOMMENDED</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">جيد ★ المُوصى به</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:700;">170 <span style="font-size:13px;color:rgba(233,237,234,.5);">KWD</span></span><span style="font-size:12px;color:oklch(0.78 0.16 155);"><span data-l="en">~6% below comparable market</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">أقل من السوق المماثل بنحو ٦٪</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(233,237,234,.35);">4Sale · #···· · 4 Jul 2026</span></div></div>
+          <div data-anim="pop" data-delay="560" style="transform-origin:bottom center;"><div style="width:164px;background:#121713;border:1px solid oklch(0.66 0.19 25 / .4);border-radius:14px;padding:16px 14px;transform:rotate(4deg) translateY(6px);display:flex;flex-direction:column;gap:8px;align-items:center;"><span style="padding:3px 10px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;background:oklch(0.66 0.19 25 / .18);color:oklch(0.7 0.17 25);"><span data-l="en">OVERPRICED</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">مبالغ فيه</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;">··· <span style="font-size:12px;color:rgba(233,237,234,.5);">KWD</span></span><span style="font-size:11px;color:rgba(233,237,234,.5);"><span data-l="en">+·% vs fair value</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">+·٪ فوق القيمة العادلة</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(233,237,234,.35);">4Sale · #···· · 4 Jul 2026</span></div></div>
+          <div data-anim="pop" data-delay="680" style="transform-origin:bottom center;"><div style="width:164px;background:#121713;border:1px solid rgba(233,237,234,.12);border-radius:14px;padding:16px 14px;transform:rotate(8deg) translateY(16px);display:flex;flex-direction:column;gap:8px;align-items:center;"><span style="padding:3px 10px;border-radius:999px;font-family:'IBM Plex Mono',monospace;font-size:11px;background:oklch(0.8 0.14 85 / .16);color:oklch(0.8 0.14 85);"><span data-l="en">FAIR</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">عادل</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;">··· <span style="font-size:12px;color:rgba(233,237,234,.5);">KWD</span></span><span style="font-size:11px;color:rgba(233,237,234,.5);"><span data-l="en">vs fair value: ·%</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">مقابل القيمة العادلة: ·٪</span></span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(233,237,234,.35);">4Sale · #···· · 4 Jul 2026</span></div></div>
+        </div>
+        <div data-anim="up" data-delay="800" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;align-items:center;">
+          <div style="padding:8px 14px;border-radius:999px;border:1px solid rgba(233,237,234,.16);font-family:'IBM Plex Mono',monospace;font-size:13px;display:inline-grid;">
+            <span data-ambient style="grid-area:1/1;animation:paSwapA 4s linear infinite;">EN</span><span data-ambient style="grid-area:1/1;animation:paSwapB 4s linear infinite;font-family:'IBM Plex Sans Arabic',sans-serif;">ع</span>
+          </div>
+          <div style="padding:8px 14px;border-radius:999px;border:1px solid oklch(0.78 0.16 155 / .5);font-family:'IBM Plex Mono',monospace;font-size:13px;color:oklch(0.78 0.16 155);">
+            <span data-l="en">×2 units — </span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">×٢ وحدة — </span><span id="pa-total">0</span> <span data-l="en">KWD</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">د.ك</span>
+          </div>
+          <div style="padding:8px 14px;border-radius:999px;border:1px solid rgba(233,237,234,.16);font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(233,237,234,.6);">
+            <span data-l="en">Print / PDF</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">طباعة / PDF</span>
+          </div>
+        </div>
+        <div data-anim="up" data-delay="950" style="max-width:640px;padding:14px 20px;border-radius:12px;background:oklch(0.66 0.19 25 / .08);border:1px solid oklch(0.66 0.19 25 / .3);font-size:14px;line-height:1.55;color:rgba(233,237,234,.75);">
+          <span data-l="en"><strong style="color:oklch(0.7 0.17 25);">Reality check —</strong> no brand-new sub-190-KWD RTX tower exists in Kuwait. The brief says so, plainly.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;"><strong style="color:oklch(0.7 0.17 25);">مصارحة —</strong> لا يوجد في الكويت برج RTX جديد بأقل من ١٩٠ د.ك. والموجز يقولها بوضوح.</span>
+        </div>
+      </div>
+    </section>
+
+    <section data-scene="6" data-screen-label="S6 CTA" style="min-height:100vh;scroll-snap-align:start;display:grid;place-items:center;padding:72px 24px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:28px;max-width:760px;text-align:center;">
+        <div data-anim="up" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:oklch(0.78 0.16 155);">
+          <span data-l="en" style="letter-spacing:.18em;">SCENE 06 — THE OUTCOME</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">المشهد ٠٦ — النتيجة</span>
+        </div>
+        <h2 data-anim="up" data-delay="120" style="margin:0;font-size:clamp(34px,5vw,60px);line-height:1.08;font-weight:700;text-wrap:balance;">
+          <span data-l="en">Procurement, automated — decide in minutes, not days.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">الشراء مؤتمت — قرارك في دقائق، لا أيام.</span>
+        </h2>
+        <p data-anim="up" data-delay="240" style="margin:0;font-size:16px;line-height:1.65;color:rgba(233,237,234,.65);max-width:56ch;">
+          <span data-l="en">Validated against manual research — sources real, nothing skipped — and moved to purchase within budget the same day. First live run: 4 July 2026.</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">تمت مطابقته مع بحث يدوي — المصادر حقيقية ولا شيء أُغفل — وتم الشراء ضمن الميزانية في اليوم نفسه. أول تشغيل فعلي: ٤ يوليو ٢٠٢٦.</span>
+        </p>
+        <button data-anim="pop" data-delay="380" onClick="{{ replay }}" style="margin-top:8px;padding:14px 28px;border-radius:999px;border:none;background:oklch(0.78 0.16 155);color:#0B0E0C;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;cursor:pointer;">
+          <span data-l="en">Replay the story ↑</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">أعد تشغيل القصة ↑</span>
+        </button>
+        <div data-anim="up" data-delay="500" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(233,237,234,.35);">
+          <span data-l="en" style="letter-spacing:.12em;">MOHAMED MAHMOUD · STORY 11 · AI-DIRECTED PROCUREMENT</span><span data-l="ar" style="display:none;font-family:'IBM Plex Sans Arabic',sans-serif;">محمد محمود · قصة ١١ · شراء موجَّه بالذكاء الاصطناعي</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:800},&quot;defaultLang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;ar&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;ambientMotion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this._done = new Set();
+    this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this._scroller = document.getElementById('pa-scroller');
+    this.setLang(this.props.defaultLang === 'ar' ? 'ar' : 'en');
+    if (this.props.ambientMotion === false) {
+      document.querySelectorAll('[data-ambient]').forEach(el => { el.style.animation = 'none'; });
+    }
+    if (this.reduced) {
+      document.querySelectorAll('[data-collapse]').forEach(el => { el.style.display = 'none'; });
+      const total = document.getElementById('pa-total');
+      if (total) total.textContent = '340';
+    } else {
+      this._scroller.querySelectorAll('[data-anim]').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = this._initial(el.getAttribute('data-anim'));
+      });
+    }
+    this._sections = Array.from(this._scroller.querySelectorAll('[data-scene]'));
+    this._onScroll = () => {
+      const sc = this._scroller;
+      const mid = sc.scrollTop + sc.clientHeight * 0.5;
+      let current = this._sections[0];
+      this._sections.forEach(s => {
+        if (s.offsetTop <= mid) current = s;
+      });
+      if (current) {
+        this._setDot(current.getAttribute('data-scene'));
+        this._activate(current);
+      }
+    };
+    this._scroller.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+
+  componentWillUnmount() {
+    if (this._scroller && this._onScroll) this._scroller.removeEventListener('scroll', this._onScroll);
+    if (this._tickTimer) clearInterval(this._tickTimer);
+  }
+
+  _initial(kind) {
+    if (kind === 'pop') return 'scale(1.32)';
+    if (kind === 'left') return 'translateX(-36px)';
+    return 'translateY(30px)';
+  }
+
+  _setDot(id) {
+    document.querySelectorAll('[data-dot]').forEach(d => {
+      const on = d.getAttribute('data-dot') === id;
+      d.style.background = on ? '#E9EDEA' : 'rgba(233,237,234,.22)';
+      d.style.transform = on ? 'scale(1.35)' : 'scale(1)';
+    });
+  }
+
+  _activate(section) {
+    const id = section.getAttribute('data-scene');
+    if (this._done.has(id)) return;
+    this._done.add(id);
+    if (!this.reduced) {
+      section.querySelectorAll('[data-anim]').forEach(el => {
+        const d = parseInt(el.getAttribute('data-delay') || '0', 10);
+        el.style.transition = 'opacity .7s cubic-bezier(.2,.75,.25,1) ' + d + 'ms, transform .7s cubic-bezier(.2,.75,.25,1) ' + d + 'ms';
+        setTimeout(() => {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }, 30);
+      });
+      if (id === '1') {
+        section.querySelectorAll('[data-collapse]').forEach((el, i) => {
+          setTimeout(() => {
+            el.style.transition = 'transform .55s cubic-bezier(.6,0,.4,1), opacity .5s ease';
+            el.style.transform = 'translate(0px, 24px) rotate(0deg) scale(.82)';
+            el.style.opacity = '0';
+          }, 620 + i * 90);
+        });
+      }
+    }
+    if (id === '5' && !this.reduced) this._tick();
+  }
+
+  _tick() {
+    const el = document.getElementById('pa-total');
+    if (!el) return;
+    const t0 = Date.now() + 700;
+    const dur = 1200;
+    if (this._tickTimer) clearInterval(this._tickTimer);
+    this._tickTimer = setInterval(() => {
+      const p = Math.min(1, Math.max(0, (Date.now() - t0) / dur));
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = String(Math.round(340 * eased));
+      if (p >= 1) clearInterval(this._tickTimer);
+    }, 40);
+  }
+
+  setLang(l) {
+    this._lang = l;
+    const root = document.getElementById('pa-root');
+    if (!root) return;
+    root.setAttribute('dir', l === 'ar' ? 'rtl' : 'ltr');
+    root.querySelectorAll('[data-l]').forEach(el => {
+      el.style.display = el.getAttribute('data-l') === l ? '' : 'none';
+    });
+    document.querySelectorAll('[data-langbtn]').forEach(b => {
+      const on = b.getAttribute('data-langbtn') === l;
+      b.style.background = on ? '#E9EDEA' : 'transparent';
+      b.style.color = on ? '#0B0E0C' : 'rgba(233,237,234,.65)';
+    });
+  }
+
+  renderVals() {
+    return {
+      toggleEn: () => this.setLang('en'),
+      toggleAr: () => this.setLang('ar'),
+      replay: () => {
+        this._done.clear();
+        if (this._scroller) this._scroller.scrollTo({ top: 0, behavior: this.reduced ? 'auto' : 'smooth' });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>The Document That Wasn't There — Medmac Kuwait Brand Ecosystem</title>
+<style>
+:root{
+  --red:#98151A; --ink:#171112; --ivory:#F2EBDC; --gold:#C9B98F;
+  --ink2:#221A1B; --dim:rgba(242,235,220,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{
+  background:var(--ink); color:var(--ivory);
+  font-family:"Helvetica Neue",Helvetica,Arial,"Segoe UI",Tahoma,sans-serif;
+  overflow-x:hidden;
+}
+[dir="rtl"] body{font-family:"Segoe UI",Tahoma,"Helvetica Neue",Arial,sans-serif}
+.scene{position:relative;height:230vh}
+#s6{height:170vh}
+.stage{
+  position:sticky;top:0;height:100vh;height:100dvh;
+  display:grid;place-items:center;overflow:hidden;padding:4vh 6vw;
+}
+.inner{width:min(880px,100%);display:grid;justify-items:center;gap:3.2vh;text-align:center}
+@media (max-height:700px){
+  .inner{gap:2vh}
+  #s1 .cap{font-size:clamp(16px,2.4vw,24px)}
+  #s1 .sub{font-size:14px}
+  #s1 .hint{display:none}
+}
+h2.kick{
+  font-size:clamp(12px,1.4vw,15px);letter-spacing:.32em;text-transform:uppercase;
+  color:var(--gold);font-weight:600;
+}
+[dir="rtl"] h2.kick{letter-spacing:.08em}
+.cap{font-size:clamp(20px,3vw,32px);font-weight:700;line-height:1.25;max-width:620px}
+.sub{font-size:clamp(14px,1.8vw,18px);color:var(--dim);line-height:1.6;max-width:560px}
+.fade{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
+.fade.on{opacity:1;transform:none}
+
+/* ---------- lang + rail ---------- */
+#langBtn{
+  position:fixed;top:16px;inset-inline-end:16px;z-index:50;
+  background:transparent;color:var(--gold);border:1px solid rgba(201,185,143,.5);
+  border-radius:999px;padding:7px 16px;font-size:14px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:background .3s,color .3s;
+}
+#langBtn:hover{background:var(--gold);color:var(--ink)}
+#rail{position:fixed;top:50%;inset-inline-end:18px;transform:translateY(-50%);z-index:40;display:grid;gap:12px}
+#rail button{
+  width:9px;height:9px;border-radius:50%;border:1px solid rgba(201,185,143,.55);
+  background:transparent;cursor:pointer;padding:0;transition:background .3s,transform .3s;
+}
+#rail button.act{background:var(--gold);transform:scale(1.35)}
+.hint{
+  position:absolute;bottom:3.5vh;left:50%;transform:translateX(-50%);
+  font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+[dir="rtl"] .hint{letter-spacing:.1em}
+.hint::after{content:"";width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:drip 1.8s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(.2);transform-origin:top}55%{transform:scaleY(1)}100%{opacity:0;transform:scaleY(1)}}
+
+/* ---------- S1 phone ---------- */
+.phone{
+  height:min(52vh,520px);width:auto;aspect-ratio:9/17.5;max-width:72vw;border-radius:34px;
+  border:2px solid rgba(201,185,143,.45);background:var(--ink2);
+  padding:16px 14px;display:flex;flex-direction:column;gap:10px;position:relative;
+  box-shadow:0 30px 80px rgba(0,0,0,.55);
+}
+.phone::before{content:"";width:56px;height:5px;border-radius:3px;background:rgba(201,185,143,.3);margin:2px auto 6px}
+.chat{flex:1;display:flex;flex-direction:column;gap:10px;justify-content:flex-end;padding-bottom:8px}
+.bub{
+  max-width:88%;padding:10px 13px;border-radius:15px;font-size:14.5px;line-height:1.45;
+  opacity:0;transform:translateY(10px) scale(.96);transition:opacity .4s,transform .4s;
+}
+.bub.on{opacity:1;transform:none}
+.bub.in{align-self:flex-start;background:#2C2223;border-start-start-radius:4px}
+.bub.out{align-self:flex-end;background:rgba(152,21,26,.28);border:1px solid rgba(152,21,26,.5);border-start-end-radius:4px}
+.caret{display:inline-block;width:2px;height:1em;background:var(--gold);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--dim);margin:0 2px;animation:bob 1s ease-in-out infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.nofile{display:flex;align-items:center;gap:10px;color:var(--dim)}
+.docIcon{width:26px;height:34px;border:1.5px dashed rgba(201,185,143,.6);border-radius:3px;position:relative;flex:none}
+.docIcon::after{content:"";position:absolute;inset:-6px;background:linear-gradient(to top left,transparent 48.5%,var(--red) 48.5%,var(--red) 51.5%,transparent 51.5%)}
+
+/* ---------- S2 gap ---------- */
+.gapRow{display:flex;align-items:flex-end;gap:min(6vw,56px);flex-wrap:wrap;justify-content:center}
+.sky{width:min(380px,60vw);opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+.sky.on{opacity:1;transform:none}
+.blankDoc{
+  width:min(150px,26vw);aspect-ratio:210/297;border:2px dashed rgba(201,185,143,.5);
+  border-radius:4px;display:grid;place-items:center;color:var(--dim);font-size:26px;
+  opacity:0;transform:translateY(30px);transition:opacity .7s .15s,transform .7s .15s cubic-bezier(.2,.8,.2,1);
+  background:rgba(242,235,220,.02);
+}
+.blankDoc.on{opacity:1;transform:none}
+.stats{display:flex;gap:min(5vw,46px);flex-wrap:wrap;justify-content:center}
+.stat{display:grid;gap:4px;min-width:86px}
+.stat b{font-size:clamp(30px,4.6vw,50px);font-weight:800;color:var(--ivory);font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.stat b em{font-style:normal;color:var(--gold)}
+.stat span{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+[dir="rtl"] .stat span{letter-spacing:.05em}
+.stat i{width:26px;height:2px;background:var(--red);justify-self:center;border-radius:1px}
+
+/* ---------- S3 stamps ---------- */
+.stamps{display:grid;grid-template-columns:repeat(2,minmax(200px,270px));gap:22px;justify-content:center}
+@media(max-width:560px){.stamps{grid-template-columns:minmax(200px,1fr)}}
+.stamp{
+  border:3px solid var(--gold);color:var(--gold);padding:20px 14px;border-radius:6px;
+  font-weight:800;font-size:clamp(15px,1.9vw,20px);letter-spacing:.14em;text-transform:uppercase;
+  opacity:0;transform:scale(1.7) rotate(-7deg);transition:opacity .28s,transform .32s cubic-bezier(.2,1.4,.4,1);
+}
+[dir="rtl"] .stamp{letter-spacing:.03em}
+.stamp:nth-child(even){--rot:4deg}
+.stamp.on{opacity:1;transform:scale(1) rotate(var(--rot,-2deg))}
+.stamp.red{border-color:var(--red);color:#E88A8D}
+
+/* ---------- S4 build ---------- */
+.buildWrap{display:flex;gap:min(5vw,54px);align-items:flex-start;justify-content:center;flex-wrap:wrap}
+.tplCol{display:grid;gap:14px;justify-items:center}
+.dropdown{
+  display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(201,185,143,.5);
+  border-radius:8px;padding:9px 15px;font-size:14px;color:var(--ivory);background:var(--ink2);
+  font-variant-numeric:tabular-nums;min-width:200px;justify-content:space-between;
+}
+.dropdown::after{content:"";width:8px;height:8px;border-inline-end:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);margin-top:-4px}
+.pages{display:flex;gap:8px}
+.pg{
+  width:52px;aspect-ratio:210/297;background:#FBF7EE;border-radius:2.5px;padding:6px 5px;
+  display:grid;gap:4px;align-content:start;
+  opacity:0;transform:translateY(14px);transition:opacity .4s,transform .4s;
+}
+.pg.on{opacity:1;transform:none}
+.pg i{display:block;height:3px;border-radius:1.5px;background:#C9BFAD;transition:width .35s ease}
+.pg i.hd{height:6px;background:var(--red)}
+.pg i.gl{background:var(--gold)}
+.eq{font-size:clamp(13px,1.6vw,16px);color:var(--gold);font-weight:600;max-width:300px;line-height:1.5}
+.catCol{display:grid;gap:12px;justify-items:center}
+.catGrid{display:grid;grid-template-columns:repeat(8,14px);gap:5px}
+.catGrid b{width:14px;height:14px;border-radius:3px;background:rgba(242,235,220,.08);transition:background .25s}
+.catGrid b.on{background:var(--gold)}
+.catGrid b.on:nth-child(5n){background:var(--red)}
+.catNum{font-size:clamp(24px,3.4vw,36px);font-weight:800;font-variant-numeric:tabular-nums}
+.catNum small{font-size:.45em;font-weight:600;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+[dir="rtl"] .catNum small{letter-spacing:.03em}
+
+/* ---------- S5 result ---------- */
+.resRow{display:flex;gap:min(5vw,58px);align-items:center;justify-content:center;flex-wrap:wrap}
+.a4{
+  width:min(180px,32vw);aspect-ratio:210/297;background:#FBF7EE;border-radius:4px;
+  padding:12px 11px;display:grid;gap:7px;align-content:start;position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(26px) rotate(-2deg);transition:opacity .6s,transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.a4.on{opacity:1;transform:rotate(-2deg)}
+.a4 i{display:block;height:4px;border-radius:2px;background:#C9BFAD}
+.a4 .band{height:22px;background:var(--red);border-radius:2px}
+.a4 .rule{height:2px;background:var(--gold)}
+.check{
+  position:absolute;inset-inline-end:-16px;bottom:-16px;width:52px;height:52px;border-radius:50%;
+  background:var(--red);display:grid;place-items:center;color:var(--ivory);
+  transform:scale(0);transition:transform .4s cubic-bezier(.2,1.5,.4,1) .2s;
+  box-shadow:0 10px 26px rgba(152,21,26,.45);
+}
+.a4.on .check{transform:scale(1)}
+.docList{display:grid;gap:10px;text-align:start;min-width:min(300px,80vw)}
+.docCard{
+  display:flex;align-items:center;gap:12px;border:1px solid rgba(201,185,143,.28);
+  background:rgba(242,235,220,.04);border-radius:10px;padding:12px 15px;font-size:14.5px;
+  opacity:0;transform:translateX(24px);transition:opacity .45s,transform .45s;
+}
+[dir="rtl"] .docCard{transform:translateX(-24px)}
+.docCard.on{opacity:1;transform:none}
+.docCard b{width:10px;height:14px;border-radius:2px;background:var(--gold);flex:none}
+.docCard:first-child b{background:var(--red)}
+.badge{
+  display:inline-block;background:var(--gold);color:var(--ink);font-weight:800;
+  padding:9px 18px;border-radius:999px;font-size:clamp(13px,1.7vw,16px);letter-spacing:.04em;
+}
+
+/* ---------- S6 cta ---------- */
+.ctaMark{display:flex;gap:8px;justify-content:center}
+.ctaMark s{width:14px;height:38px;border-radius:2px;text-decoration:none;transform:scaleY(0);transform-origin:bottom;transition:transform .5s cubic-bezier(.2,.9,.2,1)}
+.ctaMark.on s{transform:scaleY(1)}
+.ctaMark s:nth-child(1){background:var(--red)}
+.ctaMark s:nth-child(2){background:var(--gold);transition-delay:.1s}
+.ctaMark s:nth-child(3){background:var(--ivory);transition-delay:.2s}
+.ctaH{font-size:clamp(30px,5.4vw,58px);font-weight:800;line-height:1.12;letter-spacing:-.01em;max-width:760px}
+[dir="rtl"] .ctaH{letter-spacing:0}
+.ctaSub{font-size:clamp(16px,2.2vw,22px);color:var(--gold);font-weight:600}
+.credit{font-size:13px;color:var(--dim);letter-spacing:.06em}
+
+/* ---------- reduced motion ---------- */
+.rm .scene{height:auto}
+.rm .stage{position:relative;height:auto;min-height:100vh;padding:12vh 6vw}
+.rm *{transition:none!important;animation:none!important}
+.rm .hint{display:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<button id="langBtn" aria-label="العربية">ع</button>
+<nav id="rail" aria-label="Scenes"></nav>
+<main>
+
+<!-- S1 HOOK -->
+<section class="scene" id="s1" data-screen-label="S1 Hook">
+  <div class="stage"><div class="inner">
+    <div class="phone" aria-hidden="true">
+      <div class="chat">
+        <div class="bub in" id="msgIn"><span id="typed"></span><span class="caret" id="caret"></span></div>
+        <div class="bub out dots" id="typing"><span></span><span></span><span></span></div>
+        <div class="bub out nofile" id="noFile"><span class="docIcon"></span><span data-k="s1_nofile"></span></div>
+      </div>
+    </div>
+    <p class="cap fade" id="cap1" data-k="s1_cap"></p>
+    <p class="sub fade" id="sub1" data-k="s1_sub"></p>
+    <div class="hint" data-k="scroll"></div>
+  </div></div>
+</section>
+
+<!-- S2 PROBLEM -->
+<section class="scene" id="s2" data-screen-label="S2 Problem">
+  <div class="stage"><div class="inner">
+    <h2 class="kick" data-k="s2_h"></h2>
+    <div class="gapRow">
+      <svg class="sky" id="sky" viewBox="0 0 380 150" aria-hidden="true">
+        <g fill="#2C2223">
+          <rect x="0" y="90" width="34" height="60"/><rect x="42" y="62" width="30" height="88"/>
+          <rect x="80" y="100" width="26" height="50"/><rect x="114" y="46" width="34" height="104"/>
+          <rect x="156" y="78" width="24" height="72"/><rect x="262" y="70" width="30" height="80"/>
+          <rect x="300" y="96" width="26" height="54"/><rect x="334" y="54" width="34" height="96"/>
+        </g>
+        <g stroke="#C9B98F" stroke-width="3" fill="none">
+          <line x1="206" y1="150" x2="206" y2="24"/><line x1="236" y1="150" x2="236" y2="52"/>
+        </g>
+        <circle cx="206" cy="40" r="13" fill="#98151A"/><circle cx="206" cy="70" r="9" fill="#98151A"/>
+        <circle cx="236" cy="64" r="10" fill="#98151A"/>
+        <line x1="0" y1="150" x2="380" y2="150" stroke="#C9B98F" stroke-width="2" opacity=".5"/>
+      </svg>
+      <div class="blankDoc" id="blankDoc">?</div>
+    </div>
+    <div class="stats" id="stats">
+      <div class="stat"><b data-t="2003">0</b><i></i><span data-k="s2_l1"></span></div>
+      <div class="stat"><b data-t="2010">0</b><i></i><span data-k="s2_l2"></span></div>
+      <div class="stat"><b data-t="121">0</b><i></i><span data-k="s2_l3"></span></div>
+      <div class="stat"><b data-t="11">0</b><i></i><span data-k="s2_l4"></span></div>
+    </div>
+    <p class="cap fade" id="cap2" data-k="s2_cap"></p>
+  </div></div>
+</section>
+
+<!-- S3 BRIEF -->
+<section class="scene" id="s3" data-screen-label="S3 Brief">
+  <div class="stage"><div class="inner">
+    <h2 class="kick" data-k="s3_h"></h2>
+    <div class="stamps" id="stamps">
+      <div class="stamp red" data-k="s3_1"></div>
+      <div class="stamp" data-k="s3_2"></div>
+      <div class="stamp" data-k="s3_3"></div>
+      <div class="stamp red" data-k="s3_4"></div>
+    </div>
+    <p class="cap fade" id="cap3" data-k="s3_cap"></p>
+  </div></div>
+</section>
+
+<!-- S4 BUILD -->
+<section class="scene" id="s4" data-screen-label="S4 Build">
+  <div class="stage"><div class="inner">
+    <h2 class="kick" data-k="s4_h"></h2>
+    <p class="sub" data-k="s4_sub" style="margin-top:-2vh"></p>
+    <div class="buildWrap">
+      <div class="tplCol">
+        <div class="dropdown"><span id="divLabel"></span></div>
+        <div class="pages" id="pages">
+          <div class="pg"><i class="hd"></i><i class="gl" style="width:60%"></i><i></i><i></i><i></i><i></i></div>
+          <div class="pg"><i class="gl" style="width:45%"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="pg"><i class="gl" style="width:45%"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="pg"><i class="gl" style="width:45%"></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="pg"><i class="hd" style="background:#C9B98F"></i><i></i><i></i><i style="background:#98151A;width:55%"></i><i></i><i></i></div>
+        </div>
+        <p class="eq" data-k="s4_eq"></p>
+      </div>
+      <div class="catCol">
+        <p class="catNum"><span id="catN">0</span> <small data-k="s4_models"></small></p>
+        <div class="catGrid" id="catGrid"></div>
+        <p class="sub" data-k="s4_cat" style="font-size:13px"></p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- S5 RESULT -->
+<section class="scene" id="s5" data-screen-label="S5 Result">
+  <div class="stage"><div class="inner">
+    <h2 class="kick" data-k="s5_h"></h2>
+    <div class="resRow">
+      <div class="a4" id="a4" aria-hidden="true">
+        <div class="band"></div><div class="rule"></div>
+        <i style="width:70%"></i><i style="width:88%"></i><i style="width:80%"></i><i style="width:55%"></i>
+        <i style="width:84%"></i><i style="width:76%"></i><i style="width:40%"></i>
+        <div class="check">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="docList" id="docList">
+        <div class="docCard"><b></b><span data-k="s5_d1"></span></div>
+        <div class="docCard"><b></b><span data-k="s5_d2"></span></div>
+        <div class="docCard"><b></b><span data-k="s5_d3"></span></div>
+        <div class="docCard"><b></b><span data-k="s5_d4"></span></div>
+      </div>
+    </div>
+    <p class="badge fade" id="badge5" data-k="s5_badge"></p>
+    <p class="sub fade" id="cap5" data-k="s5_cap"></p>
+  </div></div>
+</section>
+
+<!-- S6 CTA -->
+<section class="scene" id="s6" data-screen-label="S6 CTA">
+  <div class="stage"><div class="inner">
+    <div class="ctaMark" id="ctaMark"><s></s><s></s><s></s></div>
+    <h1 class="ctaH fade" id="ctaH" data-k="s6_h"></h1>
+    <p class="ctaSub fade" id="ctaSub" data-k="s6_sub"></p>
+    <p class="credit fade" id="credit" data-k="s6_credit"></p>
+  </div></div>
+</section>
+
+</main>
+<script>
+"use strict";
+var STR = {
+en:{
+  s1_msg:"Can you share your company profile?",
+  s1_nofile:"No file to send",
+  s1_cap:"There was nothing to send.",
+  s1_sub:"20+ years of building in Kuwait. Zero client-ready collateral.",
+  s2_h:"The gap",
+  s2_l1:"Founded", s2_l2:"Own factory", s2_l3:"Documented projects", s2_l4:"Divisions",
+  s2_cap:"Two decades of work. Not one document to show for it.",
+  s3_h:"The brief",
+  s3_1:"Zero prices", s3_2:"Verified facts only", s3_3:"One WhatsApp", s3_4:"English + Arabic",
+  s3_cap:"Four guardrails. Non-negotiable.",
+  s4_h:"The build",
+  s4_sub:"One working session — 2 July 2026",
+  s4_eq:"1 template + 11 data cartridges = 22 division profiles, from a single file",
+  s4_cat:"Equipment catalog fills to 56 models",
+  s4_models:"models",
+  s4_div:"Division",
+  s5_h:"The result",
+  s5_d1:"Sales Kit Hub", s5_d2:"Company Profile — 11 pages",
+  s5_d3:"Division Profiles — all 22 from one file", s5_d4:"Equipment Catalog — 56 models",
+  s5_badge:"Up to 60 printable A4 PDFs — EN + AR",
+  s5_cap:"Margin-less browser print. No prices in print. Every CTA routes to one WhatsApp number.",
+  s6_h:"A complete brand ecosystem.",
+  s6_sub:"Blank page to client-ready — in one day.",
+  s6_credit:"Directed by Mohamed Mahmoud · Built with Claude Design · 2 July 2026",
+  scroll:"Scroll"
+},
+ar:{
+  s1_msg:"هل يمكنك مشاركة ملف شركتكم؟",
+  s1_nofile:"لا يوجد ملف للإرسال",
+  s1_cap:"لم يكن هناك ما نُرسله.",
+  s1_sub:"أكثر من ٢٠ عاماً من البناء في الكويت — بلا أي مستند جاهز للعملاء.",
+  s2_h:"الفجوة",
+  s2_l1:"التأسيس", s2_l2:"مصنع خاص", s2_l3:"مشروعاً موثّقاً", s2_l4:"قسماً",
+  s2_cap:"عقدان من العمل — ولا مستند واحد يعرضه.",
+  s3_h:"الموجز",
+  s3_1:"بلا أسعار", s3_2:"حقائق موثّقة فقط", s3_3:"واتساب واحد", s3_4:"إنجليزي + عربي",
+  s3_cap:"أربعة ضوابط. غير قابلة للتفاوض.",
+  s4_h:"البناء",
+  s4_sub:"جلسة عمل واحدة — ٢ يوليو ٢٠٢٦",
+  s4_eq:"قالب واحد + ١١ خرطوشة بيانات = ٢٢ ملفاً للأقسام، من ملف واحد",
+  s4_cat:"كتالوج المعدات يمتلئ حتى ٥٦ موديلاً",
+  s4_models:"موديلاً",
+  s4_div:"القسم",
+  s5_h:"النتيجة",
+  s5_d1:"منصة عدة المبيعات", s5_d2:"الملف التعريفي — ١١ صفحة",
+  s5_d3:"ملفات الأقسام — ٢٢ ملفاً من ملف واحد", s5_d4:"كتالوج المعدات — ٥٦ موديلاً",
+  s5_badge:"حتى ٦٠ ملف A4 قابلاً للطباعة — عربي + إنجليزي",
+  s5_cap:"طباعة بلا هوامش من المتصفح. بلا أسعار في المطبوعات. كل دعوة تواصل تمر عبر رقم واتساب واحد.",
+  s6_h:"منظومة علامة متكاملة.",
+  s6_sub:"من صفحة فارغة إلى جاهزية العميل — في يوم واحد.",
+  s6_credit:"إخراج: محمد محمود · بُنيت مع Claude Design · ٢ يوليو ٢٠٢٦",
+  scroll:"مرّر"
+}};
+var lang = "en";
+var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var AR_D = "٠١٢٣٤٥٦٧٨٩";
+function fmt(n){ n = String(n); return lang==="ar" ? n.replace(/\d/g, function(d){return AR_D[+d];}) : n; }
+function t(k){ return STR[lang][k]; }
+function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+function ease(x){ return 1 - Math.pow(1 - x, 3); }
+function sub(p, a, b){ return clamp01((p - a) / (b - a)); }
+
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.getElementById("langBtn").textContent = lang === "ar" ? "EN" : "ع";
+  var els = document.querySelectorAll("[data-k]");
+  for (var i = 0; i < els.length; i++) els[i].textContent = t(els[i].getAttribute("data-k"));
+  renderAll();
+}
+
+/* build catalog grid */
+var catGrid = document.getElementById("catGrid");
+for (var ci = 0; ci < 56; ci++) catGrid.appendChild(document.createElement("b"));
+var catCells = catGrid.children;
+
+/* helpers */
+function on(el, yes){ el.classList.toggle("on", !!yes); }
+var $ = function(id){ return document.getElementById(id); };
+
+/* per-scene renderers, p in [0,1] */
+var pgLines = document.querySelectorAll("#pages .pg i:not(.hd):not(.gl)");
+var renderers = {
+  s1: function(p){
+    var msg = t("s1_msg");
+    var n = Math.round(sub(p, .02, .32) * msg.length);
+    $("typed").textContent = msg.slice(0, n);
+    $("caret").style.display = (p > .01 && p < .45) ? "inline-block" : "none";
+    on($("msgIn"), p > .02);
+    on($("typing"), p > .38 && p < .58);
+    $("typing").style.display = (p > .58) ? "none" : "";
+    on($("noFile"), p > .58);
+    on($("cap1"), p > .7);
+    on($("sub1"), p > .82);
+  },
+  s2: function(p){
+    on($("sky"), p > .06);
+    on($("blankDoc"), p > .14);
+    var bs = document.querySelectorAll("#stats b");
+    for (var i = 0; i < bs.length; i++){
+      var target = +bs[i].getAttribute("data-t");
+      var lp = ease(sub(p, .18 + i * .08, .5 + i * .08));
+      bs[i].innerHTML = fmt(Math.round(target * lp));
+    }
+    on($("cap2"), p > .74);
+  },
+  s3: function(p){
+    var st = document.querySelectorAll("#stamps .stamp");
+    for (var i = 0; i < st.length; i++) on(st[i], p > .12 + i * .16);
+    on($("cap3"), p > .82);
+  },
+  s4: function(p){
+    var pgs = document.querySelectorAll("#pages .pg");
+    for (var i = 0; i < pgs.length; i++) on(pgs[i], p > .06 + i * .06);
+    /* division cycler */
+    var idx = Math.min(11, 1 + Math.floor(sub(p, .3, .92) * 11));
+    if (p < .3) idx = 1;
+    $("divLabel").textContent = t("s4_div") + " " + fmt(String(idx).padStart(2, "0")) + " / " + fmt(11);
+    for (var j = 0; j < pgLines.length; j++){
+      pgLines[j].style.width = (38 + ((idx * 17 + j * 29) % 55)) + "%";
+    }
+    /* catalog fill */
+    var n = Math.round(ease(sub(p, .34, .96)) * 56);
+    $("catN").textContent = fmt(n);
+    for (var k = 0; k < 56; k++) on(catCells[k], k < n);
+  },
+  s5: function(p){
+    on($("a4"), p > .08);
+    var cards = document.querySelectorAll("#docList .docCard");
+    for (var i = 0; i < cards.length; i++) on(cards[i], p > .24 + i * .1);
+    on($("badge5"), p > .68);
+    on($("cap5"), p > .8);
+  },
+  s6: function(p){
+    on($("ctaMark"), p > .1);
+    on($("ctaH"), p > .22);
+    on($("ctaSub"), p > .4);
+    on($("credit"), p > .55);
+  }
+};
+
+var scenes = Array.prototype.slice.call(document.querySelectorAll(".scene"));
+var tops = [], heights = [], vh = window.innerHeight;
+function measure(){
+  vh = window.innerHeight;
+  scenes.forEach(function(s, i){ tops[i] = s.offsetTop; heights[i] = s.offsetHeight; });
+}
+function renderAll(){
+  if (RM){ scenes.forEach(function(s){ renderers[s.id](1); }); setActive(0); return; }
+  var y = window.pageYOffset || document.documentElement.scrollTop;
+  var act = 0;
+  scenes.forEach(function(s, i){
+    var p = clamp01((y - tops[i]) / Math.max(1, heights[i] - vh));
+    renderers[s.id](p);
+    if (y + vh * .5 >= tops[i]) act = i;
+  });
+  setActive(act);
+}
+
+/* rail */
+var rail = document.getElementById("rail");
+scenes.forEach(function(s, i){
+  var b = document.createElement("button");
+  b.setAttribute("aria-label", "Scene " + (i + 1));
+  b.addEventListener("click", function(){
+    window.scrollTo({ top: tops[i] + 10, behavior: RM ? "auto" : "smooth" });
+  });
+  rail.appendChild(b);
+});
+function setActive(i){
+  var bs = rail.children;
+  for (var k = 0; k < bs.length; k++) bs[k].classList.toggle("act", k === i);
+}
+
+document.getElementById("langBtn").addEventListener("click", function(){
+  lang = lang === "en" ? "ar" : "en";
+  applyLang();
+});
+
+if (RM) document.documentElement.classList.add("rm");
+measure();
+applyLang();
+if (!RM){
+  var ticking = false;
+  window.addEventListener("scroll", function(){
+    if (!ticking){ ticking = true; requestAnimationFrame(function(){ renderAll(); ticking = false; }); }
+  }, { passive: true });
+  window.addEventListener("resize", function(){ measure(); renderAll(); });
+}
+</script>
+</body>
+</html>
