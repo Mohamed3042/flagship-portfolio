@@ -137,6 +137,8 @@ body[data-accent="indigo"] {--accent:#7574ee;--accent-2:#9b99ff;--grad:linear-gr
 body[data-accent="orange"] {--accent:#ff9f0a;--accent-2:#ffd60a;--grad:linear-gradient(120deg,#ff7a00,#ffd60a)}   /* AI Operating Model */
 /* Career OS — this site: signature multi-stop gradient identity */
 body[data-accent="resume"] {--accent:#2997ff;--accent-2:#bf5af2;--grad:linear-gradient(120deg,#2997ff 0%,#bf5af2 50%,#30d158 100%)}
+body[data-accent="rose"]   {--accent:#ff375f;--accent-2:#ff7eb6;--grad:linear-gradient(120deg,#ff375f,#ff7eb6)}   /* B2B Sales Kit */
+body[data-accent="mint"]   {--accent:#00c7be;--accent-2:#6ef0e4;--grad:linear-gradient(120deg,#00c7be,#6ef0e4)}   /* AI Procurement */
 
 /* text-accent — the bright --accent reads fine on dark, but as small text on the
    light surface every accent fails WCAG AA. --accent-ink is the accent for TEXT:
@@ -695,6 +697,8 @@ h1,h2,h3{line-height:1.05;letter-spacing:-.03em;font-weight:800}
 .handoff[data-next="indigo"]{--next:#7574ee}
 .handoff[data-next="orange"]{--next:#ff9f0a}
 .handoff[data-next="resume"]{--next:#bf5af2}
+.handoff[data-next="rose"]{--next:#ff375f}
+.handoff[data-next="mint"]{--next:#00c7be}
 .handoff__wash{position:absolute;inset:0;z-index:0;pointer-events:none;
   background:linear-gradient(0deg,color-mix(in srgb,var(--next) 16%,transparent),transparent 70%)}
 .handoff__row{position:relative;z-index:1;max-width:1180px;margin-inline:auto;display:flex;justify-content:space-between;

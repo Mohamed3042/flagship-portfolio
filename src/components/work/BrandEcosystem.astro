@@ -1,0 +1,186 @@
+---
+import Spine from './spine/Spine.astro';
+import Hook from './spine/Hook.astro';
+import Brief from './spine/Brief.astro';
+import Build from './spine/Build.astro';
+import Proof from './spine/Proof.astro';
+import Honesty from './spine/Honesty.astro';
+import CartridgeFan from './centerpieces/CartridgeFan.astro';
+import FilmEmbed from './FilmEmbed.astro';
+import Metrics, { type MetricItem } from '../Metrics.astro';
+import { pick, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// The 4 delivered HTML documents shown in the Brief beat (kit facts, 2 Jul 2026).
+const documents = [
+  { doc: { en: 'Hub', ar: 'المركز الرئيسي' }, role: { en: 'the entry point', ar: 'نقطة الدخول' } },
+  { doc: { en: 'Company profile', ar: 'ملف الشركة' }, role: { en: '11 pages', ar: '١١ صفحة' } },
+  { doc: { en: 'Division profiles', ar: 'ملفات الأقسام' }, role: { en: '22 · from ONE template', ar: '٢٢ · من قالبٍ واحد' } },
+  { doc: { en: 'Equipment catalog', ar: 'كتالوج المعدّات' }, role: { en: '56 models', ar: '٥٦ طرازًا' } },
+];
+
+const buildItems = [
+  {
+    n: '01',
+    title: { en: 'The hub', ar: 'المركز الرئيسي' },
+    body: {
+      en: 'One entry document that ties the whole kit together — bilingual EN/AR with true RTL, like every page in the kit.',
+      ar: 'مستند دخولٍ واحد يربط العُدّة كلها — ثنائي اللغة إنجليزي/عربي بـRTL صحيح، ككل صفحات العُدّة.',
+    },
+  },
+  {
+    n: '02',
+    title: { en: 'The 11-page company profile', ar: 'ملف الشركة من ١١ صفحة' },
+    body: {
+      en: 'The company-wide document: Medmac end to end, in eleven pages, in both languages.',
+      ar: 'المستند الجامع للشركة: Medmac من أولها إلى آخرها، في إحدى عشرة صفحة، وباللغتين.',
+    },
+  },
+  {
+    n: '03',
+    title: { en: 'The data cartridge', ar: 'خرطوشة البيانات' },
+    body: {
+      en: 'All 22 division profiles — 11 divisions × 2 languages — render from ONE 5-page template. Content is data; the layout exists once.',
+      ar: 'كل ملفات الأقسام الـ٢٢ — ١١ قسمًا × لغتين — تتكوّن من قالبٍ واحد من ٥ صفحات. المحتوى بيانات؛ والتخطيط موجودٌ مرةً واحدة.',
+    },
+  },
+  {
+    n: '04',
+    title: { en: 'The 56-model catalog + print', ar: 'كتالوج الـ٥٦ طرازًا والطباعة' },
+    body: {
+      en: 'A 56-model equipment catalog, and a print pipeline that turns the kit into up to 60 print-ready A4 PDFs.',
+      ar: 'كتالوج معدّاتٍ من ٥٦ طرازًا، ومسار طباعةٍ يحوّل العُدّة إلى ما يصل إلى ٦٠ ملف PDF جاهزًا للطباعة بمقاس A4.',
+    },
+  },
+];
+
+// Kit numbers — verbatim from the sourced brief (2026-07-05); nothing derived.
+const kitMetrics: MetricItem[] = [
+  {
+    count: 4,
+    label: { en: 'HTML documents', ar: 'مستندات HTML' },
+    sub: { en: 'hub · profile · divisions · catalog', ar: 'مركز · ملف · أقسام · كتالوج' },
+  },
+  {
+    count: 22,
+    label: { en: 'division profiles', ar: 'ملف قسم' },
+    sub: { en: '11 divisions × 2 languages', ar: '١١ قسمًا × لغتين' },
+  },
+  { count: 56, label: { en: 'equipment models', ar: 'طراز معدّات' }, sub: { en: 'one catalog', ar: 'كتالوج واحد' } },
+  {
+    count: 60,
+    label: { en: 'print-ready A4 PDFs', ar: 'ملف PDF جاهز للطباعة' },
+    sub: { en: 'up to · from one session', ar: 'حتى · من جلسةٍ واحدة' },
+  },
+];
+
+const note = {
+  en: 'Built in one working session (2 Jul 2026) — spec-driven and AI-assisted, with me as architect and reviewer. Zero prices by design: every CTA routes to WhatsApp. The kit is delivered as 4 bilingual HTML documents; <b>no client-delivery metrics are recorded yet</b>, so none are claimed.',
+  ar: 'بُنيت في جلسة عملٍ واحدة (٢ يوليو ٢٠٢٦) — بمواصفاتٍ محدّدة وبمساعدة الذكاء الاصطناعي، وأنا المهندس والمراجع. صفر أسعار عن قصد: كل دعوةٍ لاتخاذ إجراء تُحوَّل إلى واتساب. سُلِّمت العُدّة كأربعة مستندات HTML ثنائية اللغة؛ <b>ولا توجد بعد مقاييس تسليمٍ للعميل مسجَّلة</b>، لذا لا يُدّعى أيٌّ منها.',
+};
+---
+
+<Spine lang={lang}>
+  <Hook
+    lang={lang}
+    badge={{ en: 'B2B Sales Kit · one working session', ar: 'عُدّة مبيعات B2B · جلسة عملٍ واحدة' }}
+    headline={{
+      en: 'One template.<br><span class="gradient-text">22 profiles.</span>',
+      ar: 'قالبٌ واحد.<br><span class="gradient-text">٢٢ ملفًا.</span>',
+    }}
+    lead={{
+      en: 'Medmac’s complete bilingual (EN/AR, true RTL) B2B sales kit, built in one working session on 2 Jul 2026: <b>4 HTML documents</b> — a hub, an 11-page company profile, the division profiles, and a 56-model equipment catalog.',
+      ar: 'عُدّة مبيعات Medmac الكاملة ثنائية اللغة (إنجليزي/عربي بـRTL صحيح)، بُنيت في جلسة عملٍ واحدة يوم ٢ يوليو ٢٠٢٦: <b>٤ مستندات HTML</b> — مركز رئيسي، وملف شركةٍ من ١١ صفحة، وملفات الأقسام، وكتالوج معدّاتٍ من ٥٦ طرازًا.',
+    }}
+    heroNumber="60"
+    heroCaption={{ en: 'up to · print-ready<br>A4 PDFs · one session', ar: 'حتى · جاهزة للطباعة<br>PDF بمقاس A4 · جلسة واحدة' }}
+    ghost="60"
+  />
+
+  <Brief
+    lang={lang}
+    kicker={{ en: 'The brief', ar: 'المهمة' }}
+    heading={{ en: 'A whole kit. Zero prices.', ar: 'عُدّة كاملة. وصفر أسعار.' }}
+    body={{
+      en: 'A complete B2B sales kit for Medmac with <b>zero prices by design</b> — every CTA routes to WhatsApp, so the conversation starts with sales, not with a price list.',
+      ar: 'عُدّة مبيعات B2B كاملة لـMedmac بـ<b>صفر أسعار عن قصد</b> — كل دعوةٍ لاتخاذ إجراء تُحوَّل إلى واتساب، فيبدأ الحديث مع المبيعات لا مع قائمة أسعار.',
+    }}
+    ghostWord="KIT"
+  >
+    <div class="device">
+      <div class="device__bar">
+        <span class="d r"></span><span class="d y"></span><span class="d g"></span>
+        <span class="addr">{pick(lang, { en: 'The 4 documents', ar: 'المستندات الأربعة' })}</span>
+      </div>
+      <div class="device__body" style="padding:20px">
+        <div class="kit">
+          {
+            documents.map((d, i) => (
+              <div class={`kit__row reveal${i ? ` d${i}` : ''}`}>
+                <b>{pick(lang, d.doc)}</b>
+                <span><bdi>{pick(lang, d.role)}</bdi></span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </Brief>
+
+  <Build
+    lang={lang}
+    kicker={{ en: 'How it was built', ar: 'كيف بُنيت' }}
+    heading={{ en: 'Four documents, one session.', ar: 'أربعة مستندات، جلسة واحدة.' }}
+    items={buildItems}
+  />
+
+  <Proof lang={lang} center="cartridge-fan">
+    <CartridgeFan lang={lang} />
+  </Proof>
+
+  <section class="story-section section-glow proof-numbers">
+    <div class="wrap">
+      <Metrics lang={lang} eyebrow={{ en: 'The kit, in numbers', ar: 'العُدّة بالأرقام' }} items={kitMetrics} />
+    </div>
+  </section>
+
+  <Honesty lang={lang} slug="brand-ecosystem" kicker={{ en: 'Honest credit', ar: 'نسبةٌ صادقة' }} note={note} />
+</Spine>
+
+<FilmEmbed
+  lang={lang}
+  film="brand-ecosystem-film.html"
+  title={{ en: 'Medmac B2B sales kit — interactive story film', ar: 'فيلم القصة التفاعلي — عُدّة مبيعات Medmac' }}
+/>
+
+<style>
+  .kit {
+    display: grid;
+    gap: 10px;
+  }
+  .kit__row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid var(--panel-brd);
+  }
+  .kit__row b {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .kit__row span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+</style>

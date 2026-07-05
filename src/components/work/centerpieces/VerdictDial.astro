@@ -1,0 +1,259 @@
+---
+/** Centerpiece · procurement-automated — "the verdict dial".
+ *  The decision brief's GOOD / FAIR / OVERPRICED scale as a gauge: as the proof
+ *  pin scrubs, the needle sweeps out of the OVERPRICED zone and settles on the
+ *  recommended unit — 170 KWD, ~6% below market — while the readout fades in.
+ *  Pure CSS off var(--q) — no JS. (var(--q) is set on the pinned Proof ancestor
+ *  by lib/storyscroll.ts: 0 at pin start, 1 at the end / on mobile fallback.) */
+import { pick, type Lang } from '../../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// the run's receipts, assembling as --q rises — verbatim run facts
+const receipts = [
+  { num: '5', cap: { en: 'verified listings', ar: 'عروض موثّقة' } },
+  { num: '170 KWD', cap: { en: 'recommended unit', ar: 'الجهاز المُوصى به' } },
+  { num: '~6%', cap: { en: 'below market', ar: 'دون سعر السوق' } },
+];
+---
+
+<div class="proof__grid vdial">
+  <div class="vdial__copy reveal">
+    <span class="kicker">{pick(lang, { en: 'The proof · the decision brief', ar: 'الإثبات · موجز القرار' })}</span>
+    <h2>{pick(lang, { en: 'A verdict you can act on.', ar: 'حُكمٌ يُبنى عليه القرار.' })}</h2>
+    <p>
+      {
+        pick(lang, {
+          en: 'Every listing lands on one bilingual scale — GOOD, FAIR or OVERPRICED — benchmarked against fair value for the spec. The recommended unit came in at 170 KWD, about 6% below market, and the purchase moved the same day.',
+          ar: 'كل عرضٍ يقع على مقياسٍ واحد ثنائي اللغة — جيد أو عادل أو مبالَغ فيه — مقيسًا على القيمة العادلة للمواصفات. جاء الجهاز المُوصى به بسعر ١٧٠ دينارًا، نحو ٦٪ دون سعر السوق، وتم الشراء في اليوم نفسه.',
+        })
+      }
+    </p>
+
+    <div class="vdial__receipts" aria-hidden="true">
+      {
+        receipts.map((f, i) => (
+          <div class="rc" style={`--i:${i}`}>
+            <b class="rc__num"><bdi>{f.num}</bdi></b>
+            <span class="rc__cap">{pick(lang, f.cap)}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="vdial__stage">
+    <div class="vdial__card">
+      <div class="vdial__gauge" aria-hidden="true">
+        <div class="vdial__arc"></div>
+        <div class="vdial__needle"><i></i></div>
+        <div class="vdial__hub"></div>
+      </div>
+      <div class="vdial__zones">
+        <span class="vz vz--over">{pick(lang, { en: 'Overpriced', ar: 'مبالَغ فيه' })}</span>
+        <span class="vz vz--fair">{pick(lang, { en: 'Fair', ar: 'عادل' })}</span>
+        <span class="vz vz--good">{pick(lang, { en: 'Good', ar: 'جيد' })}</span>
+      </div>
+      <div class="vdial__readout">
+        <b class="tnum"><bdi>170 KWD</bdi></b>
+        <span>{pick(lang, { en: '~6% below market · recommended unit', ar: '~٦٪ دون سعر السوق · الجهاز المُوصى به' })}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .vdial {
+    align-items: center;
+  }
+
+  /* ----- left copy ----- */
+  .vdial__copy h2 {
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    margin: 14px 0 14px;
+  }
+  .vdial__copy p {
+    color: var(--ink-2);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 420px;
+  }
+
+  /* ----- the run receipts (assemble on --q) ----- */
+  .vdial__receipts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 18px;
+    margin-top: 26px;
+  }
+  .rc {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    opacity: calc((var(--q, 1) - var(--i) * 0.22) * 3.2);
+    transform: translateY(calc((1 - var(--q, 1)) * 14px));
+  }
+  .rc__num {
+    font-size: clamp(20px, 2.6vw, 30px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .rc__cap {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ----- right: the gauge card ----- */
+  .vdial__stage {
+    display: flex;
+    justify-content: center;
+  }
+  .vdial__card {
+    width: 100%;
+    max-width: 440px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 16px;
+    background: var(--surface-raised);
+    box-shadow: -24px 30px 70px -24px rgba(0, 0, 0, 0.7);
+    padding: 28px 26px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  [dir='rtl'] .vdial__card {
+    box-shadow: 24px 30px 70px -24px rgba(0, 0, 0, 0.7);
+  }
+
+  .vdial__gauge {
+    position: relative;
+    width: min(300px, 78%);
+    aspect-ratio: 2/1;
+    margin-inline: auto;
+  }
+  /* the three-zone arc: OVERPRICED → FAIR → GOOD, hollowed into a ring */
+  .vdial__arc {
+    position: absolute;
+    inset: 0;
+    border-radius: 300px 300px 0 0;
+    background: conic-gradient(
+      from -90deg at 50% 100%,
+      color-mix(in srgb, #ff453a 55%, transparent) 0deg 60deg,
+      color-mix(in srgb, #ffd60a 55%, transparent) 60deg 120deg,
+      color-mix(in srgb, var(--accent) 70%, transparent) 120deg 180deg
+    );
+    -webkit-mask: radial-gradient(circle at 50% 100%, transparent 58%, #000 59%);
+    mask: radial-gradient(circle at 50% 100%, transparent 58%, #000 59%);
+    opacity: calc(0.35 + var(--q, 1) * 0.65);
+  }
+  /* the needle sweeps from deep in OVERPRICED to the recommended unit in GOOD */
+  .vdial__needle {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 86%;
+    transform-origin: bottom center;
+    transform: rotate(calc(-72deg + var(--q, 1) * 128deg));
+    transition: transform 0.15s linear;
+  }
+  [dir='rtl'] .vdial__needle {
+    transform: rotate(calc(72deg - var(--q, 1) * 128deg));
+  }
+  .vdial__needle i {
+    position: absolute;
+    left: -1.5px;
+    bottom: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(to top, var(--ink), color-mix(in srgb, var(--accent) 80%, var(--ink)));
+    box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .vdial__hub {
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 18%, transparent);
+  }
+
+  /* ----- the bilingual scale labels ----- */
+  .vdial__zones {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .vz {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    padding: 5px 10px;
+    background: var(--surface-card);
+    position: relative;
+  }
+  /* the GOOD chip lights up only as the needle arrives (--q → 1) */
+  .vz--good {
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--hair));
+  }
+  .vz--good::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    opacity: calc((var(--q, 1) - 0.7) * 3.3);
+    pointer-events: none;
+  }
+
+  /* ----- the recommended-unit readout (fades in at the end) ----- */
+  .vdial__readout {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-align: center;
+    opacity: calc((var(--q, 1) - 0.5) * 2);
+    transform: translateY(calc((1 - var(--q, 1)) * 10px));
+  }
+  .vdial__readout b {
+    font-size: clamp(26px, 3.4vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+  .vdial__readout span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 820px) {
+    .vdial__copy p {
+      max-width: none;
+    }
+  }
+</style>

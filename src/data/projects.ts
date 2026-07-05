@@ -19,7 +19,9 @@ export type Accent =
   | 'yellow' // Automation
   | 'indigo' // Web · Live
   | 'orange' // AI Operating Model
-  | 'resume'; // Career OS — this site
+  | 'resume' // Career OS — this site
+  | 'rose' // B2B Sales Kit
+  | 'mint'; // AI Procurement
 
 export interface ProjectMeta {
   slug: string;
@@ -173,6 +175,36 @@ export const projects: ProjectMeta[] = [
     stat: { en: '3 · 1 · 1', ar: '٣ · ١ · ١' },
     statNote: { en: 'tools · workflow · person', ar: 'أدوات · سير عمل · شخص' },
   },
+  {
+    slug: 'brand-ecosystem',
+    film: 'brand-ecosystem-film.html',
+    accent: 'rose',
+    cardA: '#ff375f',
+    cardB: '#ff7eb6',
+    tag: { en: 'B2B Sales Kit', ar: 'عُدّة مبيعات B2B' },
+    title: { en: 'A sales kit, in one session', ar: 'عُدّة مبيعات في جلسةٍ واحدة' },
+    blurb: {
+      en: 'Medmac’s bilingual B2B kit — 22 division profiles from one template.',
+      ar: 'عُدّة Medmac ثنائية اللغة — ٢٢ ملف قسمٍ من قالبٍ واحد.',
+    },
+    stat: { en: '60', ar: '٦٠' },
+    statNote: { en: 'printable PDFs from one session', ar: 'ملف PDF قابل للطباعة من جلسةٍ واحدة' },
+  },
+  {
+    slug: 'procurement-automated',
+    film: 'procurement-automated-film.html',
+    accent: 'mint',
+    cardA: '#00c7be',
+    cardB: '#6ef0e4',
+    tag: { en: 'AI Procurement', ar: 'مشتريات بالذكاء الاصطناعي' },
+    title: { en: 'Buying, AI-directed', ar: 'شراءٌ بتوجيه الذكاء الاصطناعي' },
+    blurb: {
+      en: 'One instruction → verified listings, a fair-value benchmark, a decision brief.',
+      ar: 'تعليمةٌ واحدة ← عروضٌ موثّقة، ومعيار سعرٍ عادل، وموجز قرار.',
+    },
+    stat: { en: '~6%', ar: '~٦٪' },
+    statNote: { en: 'below market on the recommended unit', ar: 'دون سعر السوق للجهاز المُوصى به' },
+  },
 ];
 
 /** Canonical hex for each domain accent (single source for inline card colours). */
@@ -186,6 +218,8 @@ export const accentHex: Record<Accent, string> = {
   indigo: '#7574ee',
   orange: '#ff9f0a',
   resume: '#bf5af2',
+  rose: '#ff375f',
+  mint: '#00c7be',
 };
 
 export const projectSlugs = projects.map((p) => p.slug);

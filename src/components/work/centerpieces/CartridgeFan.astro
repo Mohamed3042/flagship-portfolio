@@ -1,0 +1,300 @@
+---
+/** Centerpiece · brand-ecosystem — "the data cartridge".
+ *  A document window where the 11 division cartridges fan open above ONE
+ *  5-page template: at --q=0 the cartridges are stacked + the window is tilted;
+ *  at --q=1 the window settles flat, the cartridges spread into a strip, the 5
+ *  template pages assemble and the 11 × 2 = 22 equation counts itself in.
+ *  Pure CSS off var(--q) — no JS. (var(--q) is set on the pinned Proof ancestor
+ *  by lib/storyscroll.ts: 0 at pin start, 1 at the end / on mobile fallback.) */
+import { pick, type Lang } from '../../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// 11 division cartridges — numbered, not named (schematic of the real 11).
+const cartridges = Array.from({ length: 11 }, (_, i) => String(i + 1).padStart(2, '0'));
+
+// the equation hint that assembles as --q rises — verbatim kit facts
+const equation = [
+  { num: '11', cap: { en: 'divisions', ar: 'قسمًا' } },
+  { num: '× 2', cap: { en: 'languages', ar: 'لغتان' } },
+  { num: '= 22', cap: { en: 'profiles', ar: 'ملفًا' } },
+];
+---
+
+<div class="proof__grid cartfan">
+  <div class="cartfan__copy reveal">
+    <span class="kicker">{pick(lang, { en: 'The proof · the cartridge', ar: 'الإثبات · الخرطوشة' })}</span>
+    <h2>{pick(lang, { en: 'One 5-page template. 22 outputs.', ar: 'قالبٌ واحد من ٥ صفحات. و٢٢ مخرجًا.' })}</h2>
+    <p>
+      {
+        pick(lang, {
+          en: 'A data-cartridge architecture: every division is data, the layout is one 5-page template. Load a cartridge, pick a language — the profile renders itself, in either direction.',
+          ar: 'بنية «خرطوشة البيانات»: كل قسمٍ بياناتٌ، والتخطيط قالبٌ واحد من خمس صفحات. حمِّل الخرطوشة واختر اللغة — فيتكوّن الملف بنفسه، في الاتجاهين.',
+        })
+      }
+    </p>
+
+    <div class="cartfan__eq" aria-hidden="true">
+      {
+        equation.map((f, i) => (
+          <div class="eq" style={`--i:${i}`}>
+            <b class="eq__num"><bdi>{f.num}</bdi></b>
+            <span class="eq__cap">{pick(lang, f.cap)}</span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="cartfan__stage">
+    <div class="cartfan__win">
+      <div class="cartfan__bar" aria-hidden="true">
+        <i class="r"></i><i class="y"></i><i class="g"></i>
+        <span class="addr"><bdi>division-profile · ONE template</bdi></span>
+      </div>
+
+      <div class="cartfan__strip" aria-hidden="true">
+        {
+          cartridges.map((c, i) => (
+            <span class={`cf-cart${i === 5 ? ' is-on' : ''}`} style={`--i:${i}`}>
+              <bdi>{c}</bdi>
+            </span>
+          ))
+        }
+      </div>
+
+      <div class="cartfan__body" aria-hidden="true">
+        <div class="cartfan__pages">
+          {[0, 1, 2, 3, 4].map((i) => (
+            <span class="cf-page" style={`--i:${i}`}><i></i><i></i><i></i></span>
+          ))}
+        </div>
+        <div class="cartfan__langs">
+          <span class="cf-lang">EN</span>
+          <span class="cf-lang">ع</span>
+          <span class="cf-x">× 2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cartfan {
+    align-items: center;
+  }
+
+  /* ----- left copy ----- */
+  .cartfan__copy h2 {
+    font-size: clamp(28px, 4vw, 46px);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    margin: 14px 0 14px;
+  }
+  .cartfan__copy p {
+    color: var(--ink-2);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 400px;
+  }
+
+  /* ----- the 11 × 2 = 22 equation (assembles on --q) ----- */
+  .cartfan__eq {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 18px;
+    margin-top: 26px;
+  }
+  .eq {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    opacity: calc((var(--q, 1) - var(--i) * 0.22) * 3.2);
+    transform: translateY(calc((1 - var(--q, 1)) * 14px));
+  }
+  .eq__num {
+    font-size: clamp(20px, 2.6vw, 30px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .eq__cap {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ----- right: the tilted template window ----- */
+  .cartfan__stage {
+    perspective: 1300px;
+    display: flex;
+    justify-content: center;
+  }
+  .cartfan__win {
+    width: 100%;
+    max-width: 460px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface-raised);
+    box-shadow: -24px 30px 70px -24px rgba(0, 0, 0, 0.7);
+    transform-style: preserve-3d;
+    will-change: transform;
+    transform: perspective(1300px) rotateX(calc((1 - var(--q, 1)) * 13deg))
+      rotateY(calc((1 - var(--q, 1)) * -20deg));
+  }
+  [dir='rtl'] .cartfan__win {
+    box-shadow: 24px 30px 70px -24px rgba(0, 0, 0, 0.7);
+    transform: perspective(1300px) rotateX(calc((1 - var(--q, 1)) * 13deg))
+      rotateY(calc((1 - var(--q, 1)) * 20deg));
+  }
+  .cartfan__bar {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--hair);
+    background: var(--win-bar);
+  }
+  .cartfan__bar i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+  .cartfan__bar .r {
+    background: #ff5f57;
+  }
+  .cartfan__bar .y {
+    background: #febc2e;
+  }
+  .cartfan__bar .g {
+    background: #28c840;
+  }
+  .cartfan__bar .addr {
+    margin-inline-start: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+
+  /* ----- the 11 cartridges that FAN OUT ----- */
+  .cartfan__strip {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid var(--hair);
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+  }
+  .cf-cart {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-2);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    padding: 5px 10px;
+    background: var(--surface-card);
+    white-space: nowrap;
+    transform-origin: bottom center;
+    --fan: calc(1 - var(--q, 1));
+    --dir: calc(var(--i) - 5); /* -5 … +5 around centre */
+    transform: rotate(calc(var(--dir) * var(--fan) * 4deg))
+      translateY(calc(var(--fan) * -10px))
+      translateX(calc(var(--dir) * var(--fan) * -6px));
+    opacity: calc(0.4 + var(--q, 1) * 0.6);
+  }
+  [dir='rtl'] .cf-cart {
+    transform: rotate(calc(var(--dir) * var(--fan) * -4deg))
+      translateY(calc(var(--fan) * -10px))
+      translateX(calc(var(--dir) * var(--fan) * 6px));
+  }
+  .cf-cart.is-on {
+    color: var(--ink);
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface-card));
+  }
+
+  /* ----- the ONE 5-page template + the × 2 languages ----- */
+  .cartfan__body {
+    padding: 16px 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .cartfan__pages {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  .cf-page {
+    flex: 0 1 64px;
+    aspect-ratio: 3/4;
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--hair));
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--accent) 7%, var(--surface-card));
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 7px;
+    /* pages assemble one by one as --q rises */
+    opacity: calc((var(--q, 1) - var(--i) * 0.14) * 2.6);
+    transform: translateY(calc((1 - var(--q, 1)) * (10px + var(--i) * 4px)));
+  }
+  .cf-page i {
+    display: block;
+    height: 3px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--accent) 34%, transparent);
+  }
+  .cf-page i:first-child {
+    width: 70%;
+    background: color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .cf-page i:nth-child(2) {
+    width: 92%;
+  }
+  .cf-page i:nth-child(3) {
+    width: 84%;
+  }
+  .cartfan__langs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: calc((var(--q, 1) - 0.55) * 2.4);
+  }
+  .cf-lang {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 7px;
+    padding: 4px 9px;
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface-card));
+  }
+  .cf-x {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 820px) {
+    .cartfan__copy p {
+      max-width: none;
+    }
+  }
+</style>

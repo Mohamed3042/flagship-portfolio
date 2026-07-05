@@ -1,0 +1,187 @@
+---
+import Spine from './spine/Spine.astro';
+import Hook from './spine/Hook.astro';
+import Brief from './spine/Brief.astro';
+import Build from './spine/Build.astro';
+import Proof from './spine/Proof.astro';
+import Honesty from './spine/Honesty.astro';
+import VerdictDial from './centerpieces/VerdictDial.astro';
+import FilmEmbed from './FilmEmbed.astro';
+import Metrics, { type MetricItem } from '../Metrics.astro';
+import { pick, type Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// The decision brief shown in the Brief beat (first live run, 4 Jul 2026).
+const brief = [
+  { k: { en: 'Listings', ar: 'العروض' }, v: { en: '5 · verified, dated', ar: '٥ · موثّقة ومؤرّخة' } },
+  { k: { en: 'Target', ar: 'الهدف' }, v: { en: '2 CAD workstations', ar: 'جهازا عمل CAD' } },
+  { k: { en: 'Recommended', ar: 'التوصية' }, v: { en: '170 KWD · ~6% below market', ar: '١٧٠ د.ك · ~٦٪ دون السوق' } },
+  { k: { en: 'Scale', ar: 'المقياس' }, v: { en: 'GOOD / FAIR / OVERPRICED', ar: 'جيد / عادل / مبالَغ فيه' } },
+];
+
+const buildItems = [
+  {
+    n: '01',
+    title: { en: 'One specified instruction', ar: 'تعليمةٌ واحدة محدّدة' },
+    body: {
+      en: 'What to buy, the budget, and the rules of evidence — written once, precisely.',
+      ar: 'ماذا نشتري، وما الميزانية، وما قواعد الإثبات — تُكتب مرةً واحدة وبدقة.',
+    },
+  },
+  {
+    n: '02',
+    title: { en: 'Market research, evidence-only', ar: 'بحث سوقٍ بالأدلة فقط' },
+    body: {
+      en: 'The agent researches the live market and pulls only real, dated listings — 5 were verified for the 2 CAD workstations.',
+      ar: 'يبحث الوكيل في السوق الفعلي ويجلب عروضًا حقيقية مؤرّخة فقط — تم توثيق ٥ عروض لجهازَي عمل CAD.',
+    },
+  },
+  {
+    n: '03',
+    title: { en: 'Fair-value benchmark', ar: 'معيار القيمة العادلة' },
+    body: {
+      en: 'Every listing is benchmarked against fair value for the spec — not against the loudest price.',
+      ar: 'كل عرضٍ يُقاس على القيمة العادلة للمواصفات — لا على أعلى الأسعار صوتًا.',
+    },
+  },
+  {
+    n: '04',
+    title: { en: 'The decision brief', ar: 'موجز القرار' },
+    body: {
+      en: 'A bilingual GOOD / FAIR / OVERPRICED brief comes back. The recommended unit: 170 KWD, ~6% below market — and the purchase moved the same day, within budget.',
+      ar: 'يعود موجزٌ ثنائي اللغة: جيد / عادل / مبالَغ فيه. الجهاز المُوصى به: ١٧٠ دينارًا، ~٦٪ دون سعر السوق — وتم الشراء في اليوم نفسه وضمن الميزانية.',
+    },
+  },
+];
+
+// Run numbers — verbatim from the sourced brief (2026-07-05); nothing derived.
+const runMetrics: MetricItem[] = [
+  {
+    count: 5,
+    label: { en: 'verified listings', ar: 'عروض موثّقة' },
+    sub: { en: 'real · dated · first live run, 4 Jul 2026', ar: 'حقيقية · مؤرّخة · أول تشغيل، ٤ يوليو ٢٠٢٦' },
+  },
+  { count: 2, label: { en: 'CAD workstations', ar: 'جهازا عمل CAD' }, sub: { en: 'the target', ar: 'الهدف' } },
+  {
+    count: 170,
+    suffix: ' KWD',
+    label: { en: 'recommended unit', ar: 'الجهاز المُوصى به' },
+    sub: { en: '~6% below market', ar: '~٦٪ دون سعر السوق' },
+  },
+  {
+    count: 1,
+    label: { en: 'live run — the first', ar: 'تشغيلٌ فعلي — الأول' },
+    sub: { en: 'same-day purchase · within budget', ar: 'شراءٌ في اليوم نفسه · ضمن الميزانية' },
+  },
+];
+
+const note = {
+  en: 'The agent executes under my direction — I wrote the instruction, set the evidence rules (real, dated listings only) and made the buying decision. The brief recommended 170 KWD, ~6% below market; <b>the final negotiated price is pending</b>, so it isn’t claimed.',
+  ar: 'الوكيل يُنفّذ بإدارتي — أنا كتبت التعليمة، ووضعت قواعد الإثبات (عروض حقيقية مؤرّخة فقط)، واتخذت قرار الشراء. أوصى الموجز بسعر ١٧٠ دينارًا، ~٦٪ دون سعر السوق؛ <b>والسعر النهائي بعد التفاوض ما يزال معلّقًا</b>، لذا لا يُدّعى.',
+};
+---
+
+<Spine lang={lang}>
+  <Hook
+    lang={lang}
+    badge={{ en: 'AI Procurement · first live run', ar: 'مشتريات بالذكاء الاصطناعي · أول تشغيلٍ فعلي' }}
+    headline={{
+      en: 'One instruction.<br><span class="gradient-text">A verified verdict.</span>',
+      ar: 'تعليمةٌ واحدة.<br><span class="gradient-text">وحُكمٌ موثّق.</span>',
+    }}
+    lead={{
+      en: 'An AI-directed buying workflow: one specified instruction, and an agent researches the market, pulls <b>only real, dated listings</b>, benchmarks fair value, and returns a bilingual GOOD / FAIR / OVERPRICED decision brief.',
+      ar: 'سير شراءٍ يوجّهه الذكاء الاصطناعي: تعليمةٌ واحدة محدّدة، فيبحث الوكيل في السوق، ويجلب <b>عروضًا حقيقية مؤرّخة فقط</b>، ويقيس القيمة العادلة، ويعيد موجز قرارٍ ثنائي اللغة: جيد / عادل / مبالَغ فيه.',
+    }}
+    heroNumber="~6%"
+    heroCaption={{ en: 'below market ·<br>the recommended unit', ar: 'دون سعر السوق ·<br>الجهاز المُوصى به' }}
+    ghost="%"
+  />
+
+  <Brief
+    lang={lang}
+    kicker={{ en: 'The first live run', ar: 'أول تشغيلٍ فعلي' }}
+    heading={{ en: 'Instruction to purchase, same day.', ar: 'من التعليمة إلى الشراء في اليوم نفسه.' }}
+    body={{
+      en: 'First live run — 4 Jul 2026: <b>5 verified listings</b> for 2 CAD workstations. The brief recommended a unit at <b>170 KWD</b>, about 6% below market — and the purchase moved the same day, within budget.',
+      ar: 'أول تشغيلٍ فعلي — ٤ يوليو ٢٠٢٦: <b>٥ عروض موثّقة</b> لجهازَي عمل CAD. أوصى الموجز بجهازٍ بسعر <b>١٧٠ دينارًا</b>، نحو ٦٪ دون سعر السوق — وتم الشراء في اليوم نفسه وضمن الميزانية.',
+    }}
+    ghostWord="BUY"
+  >
+    <div class="device">
+      <div class="device__bar">
+        <span class="d r"></span><span class="d y"></span><span class="d g"></span>
+        <span class="addr">{pick(lang, { en: 'Decision brief', ar: 'موجز القرار' })}</span>
+      </div>
+      <div class="device__body" style="padding:20px">
+        <div class="db">
+          {
+            brief.map((b, i) => (
+              <div class={`db__row reveal${i ? ` d${i}` : ''}`}>
+                <b>{pick(lang, b.k)}</b>
+                <span><bdi>{pick(lang, b.v)}</bdi></span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </Brief>
+
+  <Build
+    lang={lang}
+    kicker={{ en: 'How it works', ar: 'كيف يعمل' }}
+    heading={{ en: 'Specify, research, benchmark, decide.', ar: 'تحديدٌ، بحثٌ، معايرةٌ، قرار.' }}
+    items={buildItems}
+  />
+
+  <Proof lang={lang} center="verdict-dial">
+    <VerdictDial lang={lang} />
+  </Proof>
+
+  <section class="story-section section-glow proof-numbers">
+    <div class="wrap">
+      <Metrics lang={lang} eyebrow={{ en: 'The run, in numbers', ar: 'التشغيل بالأرقام' }} items={runMetrics} />
+    </div>
+  </section>
+
+  <Honesty lang={lang} slug="procurement-automated" kicker={{ en: 'Honest credit', ar: 'نسبةٌ صادقة' }} note={note} />
+</Spine>
+
+<FilmEmbed
+  lang={lang}
+  film="procurement-automated-film.html"
+  title={{ en: 'AI-directed procurement — interactive story film', ar: 'فيلم القصة التفاعلي — مشتريات بتوجيه الذكاء الاصطناعي' }}
+/>
+
+<style>
+  .db {
+    display: grid;
+    gap: 10px;
+  }
+  .db__row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid var(--panel-brd);
+  }
+  .db__row b {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .db__row span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+</style>
