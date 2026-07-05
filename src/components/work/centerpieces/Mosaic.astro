@@ -2,8 +2,9 @@
 /** Centerpiece · brand-system — "the content galaxy".
  *  ~254 production files / ~144 videos drift in layered depths; as the proof
  *  pin scrubs (--q 0→1) the scattered tiles converge into a clean grid and the
- *  count snaps into focus. Pure-CSS off --q (no JS). AssetSlot tiles are marked
- *  placeholders — no fabricated thumbnails. */
+ *  count snaps into focus. Pure-CSS off --q (no JS). The 8 tiles are REAL
+ *  archive creatives from public/img/work (the original brand-system ads) —
+ *  labels describe exactly what each image is. */
 import AssetSlot from '../spine/AssetSlot.astro';
 import { pick, type Lang } from '../../../i18n/utils';
 
@@ -15,12 +16,14 @@ const { lang } = Astro.props;
 // Scattered start → grid end. Each tile carries a depth + a start offset that
 // CSS lerps toward 0 as --q rises. dx/dy in px (RTL flips dx via the wrapper).
 const tiles = [
-  { ratio: '16/10', depth: 1.15, dx: -42, dy: -64, rot: -7, label: { en: 'Social ad creative', ar: 'إعلان سوشيال' } },
-  { ratio: '1/1', depth: 0.7, dx: 50, dy: -40, rot: 6, label: { en: 'WhatsApp catalog card', ar: 'بطاقة كتالوج واتساب' } },
-  { ratio: '16/10', depth: 0.95, dx: -56, dy: 48, rot: 5, label: { en: 'AI ad concept (Kling/Wan)', ar: 'مفهوم إعلان AI (Kling/Wan)' } },
-  { ratio: '1/1', depth: 1.3, dx: 60, dy: 58, rot: -8, label: { en: 'Restored legacy photo', ar: 'صورة قديمة مُرمَّمة' } },
-  { ratio: '16/10', depth: 0.55, dx: 4, dy: -78, rot: 3, label: { en: 'Print catalog spread', ar: 'صفحة كتالوج طباعة' } },
-  { ratio: '1/1', depth: 0.85, dx: 8, dy: 80, rot: -4, label: { en: 'Brand preview page', ar: 'صفحة معاينة الهوية' } },
+  { ratio: '16/10', depth: 1.15, dx: -42, dy: -64, rot: -7, src: '/img/work/ad5.jpg', label: { en: 'Social ad — equipment, sale & rent', ar: 'إعلان سوشيال — معدّات، بيع وإيجار' } },
+  { ratio: '1/1', depth: 0.7, dx: 50, dy: -40, rot: 6, src: '/img/work/scaffold.jpg', label: { en: 'Scaffolding ad creative', ar: 'إعلان سقالات' } },
+  { ratio: '16/10', depth: 0.95, dx: -56, dy: 48, rot: 5, src: '/img/work/eq1.jpg', label: { en: 'Lifts catalog creative', ar: 'إعلان روافع' } },
+  { ratio: '1/1', depth: 1.3, dx: 60, dy: 58, rot: -8, src: '/img/work/hire1.jpg', label: { en: 'Hiring campaign poster', ar: 'إعلان حملة توظيف' } },
+  { ratio: '16/10', depth: 0.55, dx: 4, dy: -78, rot: 3, src: '/img/work/eq2.jpg', label: { en: 'Equipment ad creative', ar: 'إعلان معدّات' } },
+  { ratio: '1/1', depth: 0.85, dx: 8, dy: 80, rot: -4, src: '/img/work/cover3.jpg', label: { en: 'Brand cover page', ar: 'صفحة غلاف الهوية' } },
+  { ratio: '16/10', depth: 1.0, dx: -34, dy: 70, rot: -5, src: '/img/work/eq3.jpg', label: { en: 'Equipment ad creative', ar: 'إعلان معدّات' } },
+  { ratio: '1/1', depth: 0.6, dx: 44, dy: -70, rot: 7, src: '/img/work/eq4.jpg', label: { en: 'Equipment ad creative', ar: 'إعلان معدّات' } },
 ];
 ---
 
@@ -53,7 +56,7 @@ const tiles = [
           class="mosaic__tile"
           style={`--depth:${t.depth};--dx:${t.dx}px;--dy:${t.dy}px;--rot:${t.rot}deg`}
         >
-          <AssetSlot lang={lang} ratio={t.ratio} label={t.label} />
+          <AssetSlot lang={lang} ratio={t.ratio} label={t.label} src={t.src} />
         </div>
       ))
     }

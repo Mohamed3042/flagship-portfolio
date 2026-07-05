@@ -11,7 +11,7 @@ updated as you make progress.
 A **premium, cinematic, bilingual (English + العربية, full RTL) portfolio** for **Mohamed Mahmoud**
 (brand nickname **"Medmac"**) — a Digital Marketing Specialist in **Kuwait**. Apple-keynote
 aesthetic: near-black canvas, gradient accents, an animated "aurora" hero, scroll-reveal motion,
-animated proof metrics, and **9 project "story" pages** that each tell their story through a
+animated proof metrics, and **11 project "story" pages** that each tell their story through a
 page-level **parallax StoryScroll spine** (Lenis + GSAP). *(As of the 2026-06-30 rework — see §7.5
 and `continue.md`. The boxed self-playing explainer was removed; the interactive Claude Design film
 survives as a lazy "explore it yourself" tail.)*
@@ -34,16 +34,17 @@ Both live under: `C:\Users\GAMING\Claude\Projects\MY Resume\`
 > static structure, confirm whether the owner wants it on the **live Astro site** (almost always yes)
 > and translate the change into this Astro project instead.
 
-## 3. Live deployment (DUAL host — Netlify public canonical, Vercel mirror)
+## 3. Live deployment (Netlify public canonical + GitHub Pages mirror)
 
-- **Public canonical:** Netlify — https://mohamed-mahmoud-kuwait.netlify.app
-  (`astro.config.mjs` `SITE` points here as of 2026-06-30 — see §7.7.)
-- **Mirror:** Vercel — https://mohamed-mahmoud-kw.vercel.app (still gated by Vercel
-  Deployment Protection → SSO wall for the public; the deploy alias
-  `flagship-rebuild.vercel.app` is public and serves the same build).
-- **Account:** `engineeringprojectswork@gmail.com`. Both folders are CLI-linked
-  (`.vercel/` + `.netlify/` are gitignored). **No git remote — local repo only**,
-  so deploy via the CLIs (NOT `git push`).
+- **Public canonical:** Netlify — https://mohamed-khalil-kw.netlify.app
+  (`astro.config.mjs` `SITE` points here; drives canonical/sitemap/hreflang/OG).
+- **Mirror:** GitHub Pages — https://engineeringprojectswork-droid.github.io/flagship-portfolio/
+  (a *project site*: build with `DEPLOY_TARGET=ghpages` / `npm run build:ghpages`,
+  which sets `base:'/flagship-portfolio'`; its pages canonical-tag back to Netlify).
+- **Legacy:** the old Vercel host (`mohamed-mahmoud-kw.vercel.app`) is login-walled
+  by Deployment Protection — retired; never name it in canonicals.
+- **Account:** `engineeringprojectswork@gmail.com`.
+  **Git remote:** `engineeringprojectswork-droid/flagship-portfolio` on GitHub.
 - **Redeploy both (run from the long path):**
   ```
   npm run build
@@ -60,8 +61,22 @@ Both live under: `C:\Users\GAMING\Claude\Projects\MY Resume\`
 
 - **Astro 5**, **static output** (prerendered), **TypeScript strict**.
 - **Styling:** hand-rolled CSS design tokens in `src/styles/tokens.css` (NO Tailwind) + Astro
-  component-scoped styles. Dark is the default theme; light is a toggle (`data-theme="light"` on
-  `<html>`, no-FOUC inline script in `BaseLayout`).
+  component-scoped styles. **Six switchable themes** (2026-07-05): dark (default, attribute
+  absent) · light · **neon · cinema · storybook · wave** — the four packs are `[data-theme]`
+  token blocks in `tokens.css` mapped 1:1 from the Claude Design theme sheets (grounds,
+  surfaces, space/glass/glow tokens, radius + per-theme `--dur-*`/`--ease-*`/`--px-*` motion
+  tokens). The per-story accent system stays in charge of `--accent`/`--grad`. Selection: a
+  keyboard-accessible listbox in the nav (`Nav.astro`), engine in `BaseLayout` (no-FOUC inline
+  script + `localStorage['mm-theme']` — the SAME key the Flagship-One-Page site reads, so the
+  visitor's choice follows them — + `mm:themechange` event). **`src/lib/theme.ts`** is the JS
+  registry: `THEMES`, `THEME_MOTION` (per-theme scrub smoothing, parallax depth scale,
+  storybook's curved-path drift, glow gain, Lenis lerp — read by `motion.ts`/`storyscroll.ts`/
+  `home.ts`/`interactions.ts`; dark/light frozen at pre-pack values; one map, no forks) and
+  `THEME_AURORA` (hero-canvas palettes). `space.ts` draws a per-theme particle identity
+  (neon grid/scanlines + signal dots · cinema dust motes + scroll-beat letterbox via
+  `html.beat-pinned` · storybook sparkles · wave scroll-velocity waveform); bespoke per-theme
+  heroes are a noted follow-up (this pass theme-tints the existing canvas/ribbon).
+  Inspired-by aesthetics only — no trademarks or brand names in shipped UI.
 - **i18n:** real routes `/en` + `/ar` via a `[lang]` dynamic param + `getStaticPaths`. Content is a
   typed dictionary (`src/i18n/ui.ts`) + co-located `{en,ar}` pairs in components (NO duplicated DOM).
   Per-page `hreflang`/canonical, `@astrojs/sitemap`. `/` redirects to saved/preferred locale.
@@ -75,15 +90,17 @@ Both live under: `C:\Users\GAMING\Claude\Projects\MY Resume\`
 ```
 src/
   data/        profile.ts   ← SINGLE SOURCE OF TRUTH for every number
-               projects.ts  ← the 8 stories: slug, order, accent, card copy, prev/next
+               projects.ts  ← the 11 stories: slug, order, accent, card copy, prev/next
   i18n/        ui.ts (shared chrome strings) · utils.ts (pick, dir, mirrorPath, workPath, locales…)
   styles/      tokens.css   ← the whole design system + effects
-  lib/         aurora.ts · interactions.ts · icons.ts (brand-icon registry)
+  lib/         aurora.ts · interactions.ts · icons.ts (brand-icon registry) · theme.ts
+               (THEMES/THEME_MOTION/THEME_AURORA) · space.ts (per-theme particle layer)
   layouts/     BaseLayout.astro  (head/SEO/JSON-LD/hreflang/theme/nav/footer/ClientRouter)
   components/  Nav, Footer, Hero, Statements, Metrics, ProjectsGrid, Team, About, Contact, Tech, TechRow
                viz/StatRing.astro
-               work/  StoryHero · FilmEmbed · Pager  +  the 8 story components
-                      (MetaAds, AlMaali, Crm, BrandSystem, SheepApp, HrSystem, MedmacWebsite, AiWorkflow)
+               work/  StoryHero · FilmEmbed · Pager  +  the 11 story components
+                      (MetaAds, AlMaali, Crm, BrandSystem, SheepApp, HrSystem, MedmacWebsite,
+                       AiWorkflow, MyResume, BrandEcosystem, ProcurementAutomated)
   pages/       index.astro (root redirect) · [lang]/index.astro · [lang]/work/[slug].astro · 404.astro
 public/        films/*.html (8) · img/work/*.jpg (8) · og/{en,ar}.png · apple-touch-icon.png · robots.txt
 scripts/       generate-og.mjs   (npm run og)
@@ -167,6 +184,20 @@ Commands: `npm run dev` (4321) · `npm run build` → `dist/` · `npm run previe
    glass panel (no more dashed "screenshot" boxes), glow-halo floor zeroed, Orbit `:global` fix,
    Arabic Pager arrows, Lenis teardown on mobile resize, theme-color light variant, localized
    Person JSON-LD, 404 noindex. See `DEPLOY-STATUS.md`.
+8. **Theme packs + 2 new stories (2026-07-05).** (a) Stories 10+11: `brand-ecosystem`
+   (Medmac B2B sales kit — 4 HTML docs, 22 division profiles from ONE 5-page template,
+   up to 60 print-ready A4 PDFs, zero prices by design; honesty: *no client-delivery
+   metrics recorded yet*; accent `rose`, CartridgeFan centerpiece) and
+   `procurement-automated` (AI-directed buying — first live run 4 Jul 2026: 5 verified
+   listings, 2 CAD workstations, recommended unit 170 KWD ~6% below market, same-day
+   purchase; honesty: *final negotiated price pending*; accent `mint`, VerdictDial
+   centerpiece). Films in `public/films/` (`brand-ecosystem-film.html`;
+   `procurement-automated-film.html` + its `support.js` runtime). (b) The 6-theme system
+   (see §4 Styling): 4 theme packs, nav theme menu, `lib/theme.ts` THEME_MOTION map,
+   per-theme space/aurora canvas palettes. (c) The 8 archive JPGs in `public/img/work/`
+   (ad5, cover3, eq1–4, hire1, scaffold) are now WIRED as real Mosaic tiles on the
+   brand-system story (they were unreferenced since the old gallery was removed).
+   Mobile Lighthouse on the built EN home after the pack: **97 perf / 95 a11y**.
 
 ## 8. ACTIVE / PENDING (current)
 

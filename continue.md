@@ -116,28 +116,23 @@ on the `#work` section gates the home scenes.
   bar, section rail, EN+AR (RTL mirrors chips/rail/film-strip/3D tilt), light theme,
   and the mobile/reduced static fallback (all content visible, no pins). Console clean.
 
-## 4. Deploy status (as of 2026-06-30)
+## 4. Deploy status (corrected 2026-07-05 — the old Vercel-primary table was stale)
 
-Both platforms are live and in sync. Deploy from `dist/` — always build first.
+**Netlify is the public canonical host** — `astro.config.mjs` `SITE` =
+`https://mohamed-khalil-kw.netlify.app` (drives canonical, sitemap, hreflang, OG;
+it must stay the public, crawlable origin). A GitHub Pages mirror serves the same
+build as a *project site* under `/flagship-portfolio/` (build with
+`DEPLOY_TARGET=ghpages` → `npm run build:ghpages`); its pages canonical-tag back
+to the Netlify origin so crawlers see ONE canonical.
 
-| Platform | URL | Status |
+| Platform | URL | Role |
 |---|---|---|
-| **Vercel** (primary / canonical) | https://mohamed-mahmoud-kw.vercel.app | ✅ Live |
-| **Netlify** (mirror) | https://mohamed-mahmoud-kuwait.netlify.app | ✅ Live |
+| **Netlify** (canonical) | https://mohamed-khalil-kw.netlify.app | ✅ Public canonical |
+| **GitHub Pages** (mirror) | https://engineeringprojectswork-droid.github.io/flagship-portfolio/ | Mirror — canonicals point at Netlify |
+| Vercel (legacy) | mohamed-mahmoud-kw.vercel.app | 🔒 Login-walled (Deployment Protection) — retired; never name it in canonicals |
 
-**Vercel details:**
-- Project: `mohamed-mahmoud-kw` · Scope: `mohamedkw` · ID: `prj_519TppVqznVHZNE4unMmfZlGBSGk`
-- `.vercel/project.json` is up to date.
-- CLI: `vercel deploy --prod --scope mohamedkw --yes` (run from the long path)
-- Netlify canonical tags point to the Vercel domain — Vercel is the SEO primary.
-
-**Netlify details:**
-- Site: `mohamed-mahmoud-kuwait` · CLI: `netlify deploy --prod --dir dist`
-- The Netlify site name (`*-kuwait`) predates the Vercel rename. Could be renamed to
-  `mohamed-mahmoud-kw` in the Netlify dashboard if desired — cosmetic only.
-
-**`astro.config.mjs` `SITE`:** `https://mohamed-mahmoud-kw.vercel.app`
-— drives canonical, sitemap, hreflang, OG. Update this if the primary domain changes.
+**GitHub:** `engineeringprojectswork-droid/flagship-portfolio` is the repo remote.
+Always `npm run build` first; deploy from `dist/`.
 
 ## 5. PENDING / next steps (in priority order)
 1. **Real screenshots** for the marked `AssetSlot` placeholders (16:10 / 16:11). Drop a
