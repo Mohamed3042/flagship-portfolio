@@ -5,6 +5,7 @@
    CSS fallback and never touches GSAP.
    ===================================================================== */
 import { getST } from './motion';
+import { themeMotion } from './theme';
 
 const RAIL_MIN = 1180;
 let railBound = false;
@@ -30,7 +31,7 @@ function initFilmStrip(): void {
     start: 'top top',
     end: '+=' + dist,
     pin: sticky,
-    scrub: true,
+    scrub: themeMotion().scrub,
     invalidateOnRefresh: true,
     onUpdate: (self: { progress: number }) => {
       const p = self.progress;

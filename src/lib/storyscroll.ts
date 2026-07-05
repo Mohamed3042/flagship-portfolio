@@ -23,8 +23,21 @@
    All scrub motion is Y-axis; RTL only flips the 3D rotateY sign (cost-fall).
    ===================================================================== */
 import { getST, clamp01 } from './motion';
+import { themeMotion } from './theme';
 
 const isRTL = (): boolean => document.documentElement.getAttribute('dir') === 'rtl';
+
+/* html.beat-pinned while any Build/Proof pin is engaged — the cinema theme's
+   letterbox bars key off it (pure CSS everywhere else). */
+let pinnedCount = 0;
+function setPinned(on: boolean): void {
+  pinnedCount = Math.max(0, pinnedCount + (on ? 1 : -1));
+  document.documentElement.classList.toggle('beat-pinned', pinnedCount > 0);
+}
+function resetPinned(): void {
+  pinnedCount = 0;
+  document.documentElement.classList.remove('beat-pinned');
+}
 
 /* ---------- BUILD: stepped item reveal ---------- */
 function stepBuild(items: HTMLElement[], bar: HTMLElement | null, p: number): void {
@@ -127,6 +140,7 @@ export function renderStoryStatic(): void {
 
 /** Desktop: pin + scrub the Build and Proof beats (engine already loaded). */
 export function initStoryScroll(): void {
+  resetPinned();
   if (!document.querySelector('[data-spine]')) return;
   const ST = getST();
   if (!ST) return;
@@ -135,6 +149,7 @@ export function initStoryScroll(): void {
   // distances were tuned for desktop viewport heights, which made each beat
   // complete in too little scroll on a short mobile viewport.
   const slow = window.innerWidth <= 820 ? 1.9 : 1;
+  const scrub = themeMotion().scrub;
 
   document.querySelectorAll<HTMLElement>('[data-build]').forEach((sec) => {
     const sticky = sec.querySelector<HTMLElement>('[data-build-sticky]') || (sec.firstElementChild as HTMLElement);
@@ -149,9 +164,10 @@ export function initStoryScroll(): void {
       start: 'top top',
       end: '+=' + dist,
       pin: sticky,
-      scrub: true,
+      scrub,
       invalidateOnRefresh: true,
       onUpdate: (self: { progress: number }) => stepBuild(items, bar, clamp01(self.progress)),
+      onToggle: (self: { isActive: boolean }) => setPinned(self.isActive),
     });
   });
 
@@ -166,9 +182,10 @@ export function initStoryScroll(): void {
       start: 'top top',
       end: '+=' + dist,
       pin: sticky,
-      scrub: true,
+      scrub,
       invalidateOnRefresh: true,
       onUpdate: (self: { progress: number }) => update(clamp01(self.progress)),
+      onToggle: (self: { isActive: boolean }) => setPinned(self.isActive),
     });
   });
 }

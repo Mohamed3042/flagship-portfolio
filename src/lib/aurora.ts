@@ -4,7 +4,10 @@
    blurred glow buffer, drifting particles. Targets #auroraCanvas.
    Pauses when tab hidden; static single frame under reduced-motion.
    Safe to re-init after an Astro View Transition (cancels the old loop).
+   Theme packs re-tint the four blobs + ground via THEME_AURORA (lib/theme)
+   and repaint on mm:themechange. dark/light keep the original palette.
    ===================================================================== */
+import { activeTheme, THEME_AURORA } from './theme';
 
 type Blob = {
   bx: number; by: number; ax: number; ay: number; kx: number; ky: number;
@@ -44,6 +47,15 @@ export function initAurora(): void {
     { bx: .93, by: .95, ax: .05, ay: .06, kx: 2, ky: 1, px: 1.1, py: 3.0, col: [255, 94, 138], rad: .46, a: .50 },
     { bx: .07, by: .92, ax: .06, ay: .05, kx: 1, ky: 1, px: 3.4, py: 0.9, col: [124, 108, 255], rad: .44, a: .42 },
   ];
+
+  // Theme-tint the four blobs + the ground fill (dark/light = original palette).
+  let auroraBg = '#000';
+  function applyPalette(): void {
+    const pal = THEME_AURORA[activeTheme()];
+    auroraBg = pal.bg;
+    blobs.forEach((b, i) => { b.col = pal.blobs[i % pal.blobs.length]; });
+  }
+  applyPalette();
 
   let particles: Particle[] = [];
   function makeParticles() {
@@ -124,7 +136,7 @@ export function initAurora(): void {
     drawGlow(ph);
     ctx!.setTransform(1, 0, 0, 1, 0, 0);
     ctx!.globalCompositeOperation = 'source-over';
-    ctx!.fillStyle = '#000';
+    ctx!.fillStyle = auroraBg;
     ctx!.fillRect(0, 0, canvas!.width, canvas!.height);
     ctx!.imageSmoothingEnabled = true;
     ctx!.imageSmoothingQuality = 'high';
@@ -146,17 +158,21 @@ export function initAurora(): void {
   let rt: ReturnType<typeof setTimeout>;
   const onResize = () => { clearTimeout(rt); rt = setTimeout(() => { particles = []; resize(); }, 150); };
   const onVisibility = () => { if (document.hidden) pause(); else play(); };
+  // Re-tint + repaint on theme switch (covers the reduced-motion static frame).
+  const onTheme = () => { applyPalette(); draw(lastMs || SEED); };
 
   resize();
   draw(SEED);
   window.addEventListener('resize', onResize);
   document.addEventListener('visibilitychange', onVisibility);
+  document.addEventListener('mm:themechange', onTheme);
   play();
 
   cleanup = () => {
     pause();
     window.removeEventListener('resize', onResize);
     document.removeEventListener('visibilitychange', onVisibility);
+    document.removeEventListener('mm:themechange', onTheme);
     cleanup = null;
   };
 }

@@ -8,6 +8,8 @@
    Astro View Transition (no duplicate listeners, no double-count).
    ===================================================================== */
 
+import { themeMotion } from './theme';
+
 const reduce = () =>
   window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
@@ -165,6 +167,8 @@ function updateGlow() {
   const vh = window.innerHeight || document.documentElement.clientHeight || 0;
   const vc = vh / 2;
   const span = vh * 0.62 || 1;
+  // per-theme glow curve (dark/light = 1; hotter under neon, calmer in cinema)
+  const gain = themeMotion().glowGain;
   for (const el of glowEls) {
     const r = el.getBoundingClientRect();
     let g = 0;
@@ -172,6 +176,7 @@ function updateGlow() {
       const ctr = r.top + r.height / 2;
       g = 1 - Math.min(1, Math.abs(ctr - vc) / span);
       if (g < 0) g = 0;
+      g = Math.min(1, g * gain);
     }
     const gs = g.toFixed(2);
     if (el.dataset.g !== gs) {

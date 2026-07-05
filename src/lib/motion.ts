@@ -11,6 +11,7 @@
    ===================================================================== */
 import { initStoryScroll, renderStoryStatic } from './storyscroll';
 import { initHomeMotion, renderHomeStatic } from './home';
+import { themeMotion } from './theme';
 
 export const prefersReduced = (): boolean =>
   !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches);
@@ -50,9 +51,10 @@ async function loadEngine(): Promise<void> {
     ST.config({ ignoreMobileResize: true });
     modulesReady = true;
   }
-  // (re)create Lenis only when it's actually wanted (desktop + motion)
+  // (re)create Lenis only when it's actually wanted (desktop + motion).
+  // Smoothing comes from the THEME_MOTION map (dark/light keep 0.1).
   if (!lenis) {
-    lenis = new LenisCtor({ lerp: 0.1, wheelMultiplier: 1, smoothWheel: true, autoRaf: false });
+    lenis = new LenisCtor({ lerp: themeMotion().lenisLerp, wheelMultiplier: 1, smoothWheel: true, autoRaf: false });
     lenis.on('scroll', ST.update);
     tickerCb = (time: number) => {
       if (lenis) lenis.raf(time * 1000);
@@ -83,11 +85,15 @@ function applyParallax(): void {
   const els = document.querySelectorAll<HTMLElement>('[data-px]');
   if (!els.length) return;
   const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+  // Per-theme parallax identity: depth scale + storybook's curved (sine) drift.
+  const m = themeMotion();
+  const rtl = document.documentElement.getAttribute('dir') === 'rtl';
   els.forEach((el) => {
-    const sp = parseFloat(el.getAttribute('data-px') || '0') || 0;
+    const sp = (parseFloat(el.getAttribute('data-px') || '0') || 0) * m.pxScale;
     const r = el.getBoundingClientRect();
     const c = r.top + r.height / 2 - vh / 2;
-    el.style.transform = 'translate3d(0,' + (-c * sp).toFixed(1) + 'px,0)';
+    const x = m.curve ? Math.sin((c / (vh || 1)) * 4.712) * sp * m.curve * (rtl ? -1 : 1) : 0;
+    el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (-c * sp).toFixed(1) + 'px,0)';
   });
 }
 function initParallaxDepth(): void {
@@ -146,6 +152,12 @@ export async function initMotion(): Promise<void> {
     lifecycleBound = true;
     window.addEventListener('load', () => {
       if (ST) ST.refresh();
+    });
+    // Theme switch: rebuild Lenis (new smoothing) + triggers (new scrub) and
+    // re-run the depth pass so THEME_MOTION takes effect immediately.
+    document.addEventListener('mm:themechange', () => {
+      destroyLenis();
+      void initMotion();
     });
     // Re-evaluate only when it matters: a reduced-motion toggle flips the heavy
     // state (full rebuild); an orientation / real width change needs a refresh.

@@ -171,9 +171,13 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
         const apply = () => {
           try {
             const root = document.documentElement;
-            if (localStorage.getItem('mm-theme') === 'light')
-              root.setAttribute('data-theme', 'light');
-            else root.removeAttribute('data-theme');
+            // N-theme selector: dark (attribute absent, the default) · light ·
+            // neon · cinema · storybook · wave — same mm-theme key both sites share.
+            const THEMES = ['dark', 'light', 'neon', 'cinema', 'storybook', 'wave'];
+            let v = localStorage.getItem('mm-theme') || 'dark';
+            if (THEMES.indexOf(v) === -1) v = 'dark';
+            if (v === 'dark') root.removeAttribute('data-theme');
+            else root.setAttribute('data-theme', v);
             localStorage.setItem('mm-lang', root.getAttribute('lang') || 'en');
           } catch (e) {
             /* ignore */
@@ -205,38 +209,87 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
       import { initMotion } from '../lib/motion';
       import { initAurora } from '../lib/aurora';
       import { initSpace } from '../lib/space';
+      import { activeTheme, THEME_GLYPHS } from '../lib/theme';
+
+      // Reflect the active theme in the nav menu (trigger glyph + selected row).
+      function syncThemeUI() {
+        const cur = activeTheme();
+        document
+          .querySelectorAll<HTMLElement>('[data-theme-btn]')
+          .forEach((b) => (b.textContent = THEME_GLYPHS[cur]));
+        document
+          .querySelectorAll<HTMLElement>('[data-theme-opt]')
+          .forEach((o) => o.setAttribute('aria-selected', o.dataset.themeOpt === cur ? 'true' : 'false'));
+      }
 
       function boot() {
         initInteractions();
         initMotion();
         initAurora();
         initSpace();
-        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        document
-          .querySelectorAll('[data-theme-btn]')
-          .forEach((b) => (b.textContent = isLight ? '☾' : '☀'));
+        syncThemeUI();
       }
       boot();
       document.addEventListener('astro:page-load', boot);
 
-      // Theme toggle — delegated once on document (survives View Transitions).
-      document.addEventListener('click', (e) => {
-        const btn = (e.target as HTMLElement).closest('[data-theme-btn]');
-        if (!btn) return;
+      /* Theme menu — delegated once on document (survives View Transitions). */
+      function closeThemeMenus() {
+        document.querySelectorAll<HTMLElement>('[data-theme-menu]').forEach((m) => {
+          m.querySelector('[data-theme-btn]')?.setAttribute('aria-expanded', 'false');
+          m.querySelector('.theme-menu__list')?.setAttribute('hidden', '');
+        });
+      }
+      function applyTheme(v: string) {
         const root = document.documentElement;
-        const goLight = root.getAttribute('data-theme') !== 'light';
-        if (goLight) root.setAttribute('data-theme', 'light');
-        else root.removeAttribute('data-theme');
+        if (v === 'dark') root.removeAttribute('data-theme');
+        else root.setAttribute('data-theme', v);
         try {
-          localStorage.setItem('mm-theme', goLight ? 'light' : 'dark');
+          localStorage.setItem('mm-theme', v);
         } catch (err) {
           /* ignore */
         }
-        // Repaint canvases (starfield / hero) for the new palette.
+        // Repaint canvases + retime the motion engines for the new palette.
         document.dispatchEvent(new Event('mm:themechange'));
-        document
-          .querySelectorAll('[data-theme-btn]')
-          .forEach((b) => (b.textContent = goLight ? '☾' : '☀'));
+        syncThemeUI();
+      }
+      document.addEventListener('click', (e) => {
+        const t = e.target as HTMLElement;
+        const opt = t.closest<HTMLElement>('[data-theme-opt]');
+        if (opt) {
+          applyTheme(opt.dataset.themeOpt || 'dark');
+          closeThemeMenus();
+          return;
+        }
+        const btn = t.closest<HTMLElement>('[data-theme-btn]');
+        if (btn) {
+          const menu = btn.closest('[data-theme-menu]');
+          const list = menu?.querySelector<HTMLElement>('.theme-menu__list');
+          const wasClosed = !!list?.hasAttribute('hidden');
+          closeThemeMenus();
+          if (list && wasClosed) {
+            list.removeAttribute('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+          return;
+        }
+        closeThemeMenus();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const open = document.querySelector<HTMLElement>('[data-theme-menu] [aria-expanded="true"]');
+          closeThemeMenus();
+          open?.focus();
+          return;
+        }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          const list = (e.target as HTMLElement).closest?.('.theme-menu__list');
+          if (!list) return;
+          e.preventDefault();
+          const opts = Array.from(list.querySelectorAll<HTMLElement>('[data-theme-opt]'));
+          const i = opts.indexOf(document.activeElement as HTMLElement);
+          const n = e.key === 'ArrowDown' ? (i + 1) % opts.length : (i - 1 + opts.length) % opts.length;
+          opts[n]?.focus();
+        }
       });
     </script>
   </body>

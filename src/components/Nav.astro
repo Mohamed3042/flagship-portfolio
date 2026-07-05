@@ -1,5 +1,6 @@
 ---
 import { useTranslations, otherLang, mirrorPath, homePath, type Lang } from '../i18n/utils';
+import { THEMES, THEME_GLYPHS } from '../lib/theme';
 
 interface Props {
   lang: Lang;
@@ -26,6 +27,26 @@ const otherLabel = other === 'ar' ? 'ع' : 'EN';
   </div>
   <div class="nav__tools">
     <a class="pill" href={mirror} aria-label={t('a11y.switchLang')} data-astro-reload>{otherLabel}</a>
-    <button class="pill" type="button" data-theme-btn aria-label={t('a11y.toggleTheme')}>☀</button>
+    <div class="theme-menu" data-theme-menu>
+      <button
+        class="pill"
+        type="button"
+        data-theme-btn
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        aria-label={t('a11y.themeMenu')}>☾</button>
+      <ul class="theme-menu__list" role="listbox" aria-label={t('a11y.themeMenu')} hidden>
+        {
+          THEMES.map((th) => (
+            <li role="presentation">
+              <button class="theme-menu__opt" type="button" role="option" data-theme-opt={th} aria-selected="false">
+                <span class="theme-menu__glyph" aria-hidden="true">{THEME_GLYPHS[th]}</span>
+                {t(`theme.${th}`)}
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
 </nav>
