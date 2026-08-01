@@ -1,0 +1,159 @@
+/* =====================================================================
+   SERVICE-NATIVE SELECTED WORK
+
+   The project data, links, horizontal scroll distance and active-card logic
+   stay shared. Each non-Astronomy identity turns that rail into a product
+   surface from its own world instead of merely recolouring the same cards.
+   ===================================================================== */
+
+[data-world]:not([data-world="astronomy"]) #work .sw-service-chrome{
+  position:absolute;inset:0;z-index:3;display:block;pointer-events:none;
+}
+#work .sw-service-chrome{display:none}
+#work .sw-service-title,#work .sw-service-items,#work .sw-service-line{position:absolute;display:block}
+[data-world]:not([data-world="astronomy"]) #work .sw-stripwrap{
+  margin:clamp(10px,1.8vh,20px) clamp(10px,2.2vw,32px) 0;
+  border:1px solid color-mix(in srgb,var(--world-accent) 18%,transparent);
+  background:color-mix(in srgb,var(--surface-base) 48%,transparent);
+  box-shadow:inset 0 1px color-mix(in srgb,#fff 7%,transparent),0 28px 90px rgba(0,0,0,.24);
+}
+[data-world]:not([data-world="astronomy"]) #work .sw-stripwrap::before,
+[data-world]:not([data-world="astronomy"]) #work .sw-stripwrap::after{
+  position:absolute;z-index:5;pointer-events:none;font-family:var(--font-label);text-transform:uppercase;
+}
+[data-world]:not([data-world="astronomy"]) #work .sw-strip{transition:opacity .5s var(--ease-std)}
+[data-world]:not([data-world="astronomy"]) #work .sw-tile{will-change:transform,opacity;transform-style:preserve-3d}
+[data-world]:not([data-world="astronomy"]) #work .sw-dots i.on{background:linear-gradient(90deg,var(--world-accent),var(--world-accent-2))}
+
+/* RAZER / SYNAPSE COMMAND DECK */
+[data-world="razer"] #work .sw-head::before{content:"SYNAPSE COMMAND DECK";display:block;color:#8dff70;font:800 10px/1 var(--font-label);letter-spacing:.2em;margin-bottom:10px}
+[dir="rtl"][data-world="razer"] #work .sw-head::before{content:"لوحة تحكم SYNAPSE"}
+[data-world="razer"] #work .sw-stripwrap{border-radius:0;clip-path:polygon(0 10px,10px 0,34% 0,35% 8px,65% 8px,66% 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px));background:repeating-linear-gradient(90deg,transparent 0 63px,rgba(68,214,44,.025) 64px),rgba(2,8,4,.78);box-shadow:inset 0 0 50px rgba(68,214,44,.035),0 0 40px rgba(0,224,255,.05)}
+[data-world="razer"] #work .sw-stripwrap::before{content:"DEVICE MATRIX  /  MODULES ONLINE";left:24px;top:14px;color:#44d62c;font-size:9px;letter-spacing:.17em}
+[dir="rtl"][data-world="razer"] #work .sw-stripwrap::before{content:"مصفوفة الأجهزة  /  الوحدات متصلة";left:auto;right:24px}
+[data-world="razer"] #work .sw-stripwrap::after{content:"CHROMA BUS  16.8M";right:24px;top:14px;color:#00e0ff;font-size:9px;letter-spacing:.15em}
+[dir="rtl"][data-world="razer"] #work .sw-stripwrap::after{content:"ناقل CHROMA  16.8M";right:auto;left:24px}
+[data-world="razer"] #work .sw-service-items{right:5vw;top:112px;display:flex;gap:6px}
+[data-world="razer"] #work .sw-service-items i{width:34px;height:4px;background:#44d62c;box-shadow:0 0 12px #44d62c;animation:ids-signal 1.6s ease-in-out infinite alternate}
+[data-world="razer"] #work .sw-service-items i:nth-child(2){background:#00e0ff;animation-delay:-.3s}[data-world="razer"] #work .sw-service-items i:nth-child(3){background:#ff2dc4;animation-delay:-.6s}[data-world="razer"] #work .sw-service-items i:nth-child(4){animation-delay:-.9s}
+[data-world="razer"] #work .sw-tile{width:clamp(270px,34vw,390px);height:clamp(300px,49vh,430px);border-radius:0;clip-path:polygon(0 14px,14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%);background:linear-gradient(145deg,rgba(68,214,44,.08),rgba(0,224,255,.025),#050a06);border-color:rgba(68,214,44,.18);transform:perspective(900px) rotateY(10deg) translateY(18px) scale(.9);box-shadow:inset 0 1px rgba(141,255,112,.16),0 28px 70px #0009}
+[data-world="razer"] #work .sw-tile.act{transform:perspective(900px) rotateY(0) translateY(-8px) scale(1);opacity:1;box-shadow:0 0 0 1px rgba(68,214,44,.5),0 0 40px rgba(68,214,44,.16),0 38px 90px #000a}
+[data-world="razer"] #work .sw-tile::before{height:3px;background:linear-gradient(90deg,#44d62c,#00e0ff,#ff2dc4);box-shadow:0 0 18px #44d62c}
+[data-world="razer"] #work .sw-idx{font-family:"Chakra Petch",var(--font-label);opacity:.18}
+[data-world="razer"] #work .sw-go{border-radius:3px;background:#44d62c;color:#020604;border:0;box-shadow:0 0 22px rgba(68,214,44,.45)}
+[data-world="razer"] #work .sw-dots i{border-radius:0;height:4px}
+
+/* DISNEY / TURNING STORY CHAPTERS */
+[data-world="disney"] #work .sw-head::before{content:"ONCE UPON A SYSTEM…";display:block;color:#e8c87a;font:700 11px/1 var(--font-label);letter-spacing:.18em;margin-bottom:10px}
+[dir="rtl"][data-world="disney"] #work .sw-head::before{content:"كان يا ما كان… نظام"}
+[data-world="disney"] #work .sw-stripwrap{border-radius:48% 48% 22px 22px;border-color:rgba(232,200,122,.28);background:linear-gradient(90deg,rgba(255,247,216,.025) 0 49.8%,rgba(232,200,122,.16) 50%,rgba(255,247,216,.025) 50.2%),rgba(8,17,57,.58);perspective:1200px;box-shadow:inset 0 0 90px rgba(0,168,225,.04),0 36px 100px rgba(2,6,30,.48)}
+[data-world="disney"] #work .sw-stripwrap::before{content:"CHOOSE THE NEXT CHAPTER";left:50%;top:14px;translate:-50% 0;color:#e8c87a;font-size:9px;letter-spacing:.2em;white-space:nowrap}
+[dir="rtl"][data-world="disney"] #work .sw-stripwrap::before{content:"اختر الفصل التالي"}
+[data-world="disney"] #work .sw-service-items{left:50%;top:118px;translate:-50% 0;display:flex;gap:18px}
+[data-world="disney"] #work .sw-service-items i{width:7px;height:7px;rotate:45deg;background:#e8c87a;box-shadow:0 0 16px #e8c87a;animation:ids-signal 2.6s ease-in-out infinite}
+[data-world="disney"] #work .sw-tile{width:clamp(280px,36vw,410px);height:clamp(320px,51vh,446px);border-radius:48% 10px 22px 10px;border-color:rgba(232,200,122,.28);background:repeating-linear-gradient(0deg,rgba(232,200,122,.035) 0 1px,transparent 1px 29px),linear-gradient(145deg,rgba(255,246,209,.08),rgba(0,168,225,.025),rgba(11,23,70,.88));transform:perspective(1000px) rotateY(-13deg) translateY(18px) scale(.9);transform-origin:left center;box-shadow:inset 0 1px rgba(255,245,210,.22),18px 28px 70px rgba(1,5,27,.48)}
+[dir="rtl"][data-world="disney"] #work .sw-tile{transform-origin:right center;transform:perspective(1000px) rotateY(13deg) translateY(18px) scale(.9)}
+[data-world="disney"] #work .sw-tile.act{transform:perspective(1000px) rotateY(0) translateY(-8px) scale(1);box-shadow:inset 0 1px rgba(255,245,210,.28),0 0 42px rgba(232,200,122,.1),0 38px 90px rgba(1,5,27,.56)}
+[data-world="disney"] #work .sw-tile::before{left:14%;right:14%;top:13px;height:1px;background:linear-gradient(90deg,transparent,#e8c87a,transparent)}
+[data-world="disney"] #work .sw-idx{font-family:var(--font-display);opacity:.12}
+[data-world="disney"] #work .sw-go{background:#e8c87a;color:#172154;border:0;box-shadow:0 0 24px rgba(232,200,122,.42)}
+
+/* COD / OPERATION + LOADOUT SELECT */
+[data-world="cod"] #work .sw-head::before{content:"OPERATION: SYSTEMS";display:block;color:#ff7a00;font:800 10px/1 var(--font-label);letter-spacing:.2em;margin-bottom:10px}
+[dir="rtl"][data-world="cod"] #work .sw-head::before{content:"العملية: الأنظمة"}
+[data-world="cod"] #work .sw-stripwrap{border-radius:0;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));background:repeating-linear-gradient(90deg,transparent 0 55px,rgba(154,170,91,.035) 56px),repeating-linear-gradient(0deg,transparent 0 55px,rgba(154,170,91,.035) 56px),rgba(8,9,7,.76);border-color:rgba(154,170,91,.28)}
+[data-world="cod"] #work .sw-stripwrap::before{content:"SELECT LOADOUT  /  TEN VERIFIED SYSTEMS";left:24px;top:14px;color:#9baa24;font-size:9px;font-weight:800;letter-spacing:.16em}
+[dir="rtl"][data-world="cod"] #work .sw-stripwrap::before{content:"اختر العتاد  /  عشرة أنظمة موثقة";left:auto;right:24px}
+[data-world="cod"] #work .sw-stripwrap::after{content:"DEPLOYMENT READY";right:24px;bottom:14px;color:#ff7a00;font-size:9px;letter-spacing:.16em}
+[dir="rtl"][data-world="cod"] #work .sw-stripwrap::after{content:"جاهز للنشر";right:auto;left:24px}
+[data-world="cod"] #work .sw-service-items{right:5vw;top:112px;display:grid;grid-template-columns:repeat(4,18px);gap:4px}
+[data-world="cod"] #work .sw-service-items i{height:7px;background:#9baa24;opacity:.5}[data-world="cod"] #work .sw-service-items i:last-child{background:#ff7a00;opacity:1;box-shadow:0 0 12px #ff7a00}
+[data-world="cod"] #work .sw-tile{width:clamp(272px,34vw,388px);height:clamp(306px,49vh,426px);border-radius:0;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));background:repeating-linear-gradient(0deg,rgba(154,170,91,.04) 0 1px,transparent 1px 18px),linear-gradient(145deg,rgba(154,170,91,.09),#0c0e0a);border-color:rgba(154,170,91,.3);transform:translateY(16px) scale(.91);box-shadow:0 30px 80px #000a}
+[data-world="cod"] #work .sw-tile.act{transform:translateY(-10px) scale(1);box-shadow:inset 8px 0 #ff7a00,0 0 0 1px rgba(255,122,0,.38),0 38px 90px #000b}
+[data-world="cod"] #work .sw-tile::before{width:44px;height:6px;left:18px;right:auto;background:#ff7a00}
+[data-world="cod"] #work .sw-go{border-radius:0;border-color:#ff7a00;color:#ff7a00;background:#0b0d09}
+[data-world="cod"] #work .sw-dots{gap:4px}[data-world="cod"] #work .sw-dots i{width:16px;height:4px;border-radius:0}
+
+/* NETFLIX / PROFILE GATE -> TOP 10 HOME ROW */
+[data-world="netflix"] #work .sw-head{padding-inline:clamp(24px,4vw,60px)}
+[data-world="netflix"] #work .sw-head::before{content:"N  ·  WHO'S WATCHING?";display:block;color:#e50914;font:900 12px/1 var(--font-label);letter-spacing:.16em;margin-bottom:10px}
+[dir="rtl"][data-world="netflix"] #work .sw-head::before{content:"N  ·  من يشاهد؟"}
+[data-world="netflix"] #work .sw-service-title{left:50%;top:29%;translate:-50% -50%;opacity:clamp(0,calc((.18 - var(--p,0))*8),1)}
+[data-world="netflix"] #work .sw-service-title::before{content:"Who's watching?";color:#fff;font:700 clamp(24px,4vw,48px)/1 var(--font);white-space:nowrap}
+[dir="rtl"][data-world="netflix"] #work .sw-service-title::before{content:"من يشاهد؟"}
+[data-world="netflix"] #work .sw-service-items{left:50%;top:38%;translate:-50% 0;display:flex;gap:clamp(12px,2vw,24px);opacity:clamp(0,calc((.18 - var(--p,0))*8),1)}
+[data-world="netflix"] #work .sw-service-items i{width:clamp(62px,9vw,112px);aspect-ratio:1;border-radius:4px;background:linear-gradient(145deg,#e50914,#2b0508);box-shadow:inset 0 0 0 1px #fff2}
+[data-world="netflix"] #work .sw-service-items i:nth-child(2){background:linear-gradient(145deg,#1b2e57,#5579bb)}[data-world="netflix"] #work .sw-service-items i:nth-child(3){background:linear-gradient(145deg,#3a1c52,#9b4ebe)}[data-world="netflix"] #work .sw-service-items i:nth-child(4){background:#151515;box-shadow:inset 0 0 0 2px #555}
+[data-world="netflix"] #work .sw-stripwrap{border:0;border-radius:0;margin-inline:0;background:linear-gradient(90deg,#050505,rgba(25,5,7,.78),#050505);box-shadow:none;opacity:clamp(0,calc((var(--p,0) - .07)*10),1)}
+[data-world="netflix"] #work .sw-stripwrap::before{content:"TOP 10 SYSTEMS IN KUWAIT TODAY";left:clamp(24px,4vw,60px);top:14px;color:#fff;font-size:clamp(12px,1.4vw,18px);font-weight:800;letter-spacing:.04em}
+[dir="rtl"][data-world="netflix"] #work .sw-stripwrap::before{content:"أفضل 10 أنظمة في الكويت اليوم";left:auto;right:clamp(24px,4vw,60px)}
+[data-world="netflix"] #work .sw-tile{width:clamp(300px,40vw,450px);height:clamp(250px,40vh,340px);border-radius:4px;border:0;background:linear-gradient(180deg,transparent 0 26%,rgba(0,0,0,.94) 100%),radial-gradient(ellipse at 50% 18%,color-mix(in srgb,var(--a) 42%,#170405),#080808 68%);transform:scale(.91);opacity:.62;box-shadow:0 20px 60px #000b;padding:clamp(18px,2.4vw,26px)}
+[data-world="netflix"] #work .sw-tile.act{transform:scale(1.08);opacity:1;z-index:3;box-shadow:0 0 0 3px #fff,0 36px 90px #000}
+[data-world="netflix"] #work .sw-tile::before{height:3px;background:#e50914}
+[data-world="netflix"] #work .sw-idx{inset-inline-start:-20px;inset-inline-end:auto;top:8px;font-family:var(--font-display);font-size:clamp(120px,18vw,210px);opacity:.28;background:linear-gradient(180deg,#fff,#5c5c5c);-webkit-background-clip:text;background-clip:text;-webkit-text-stroke:1px #fff}
+[data-world="netflix"] #work .sw-tag{color:#e50914}
+[data-world="netflix"] #work .sw-go{width:44px;height:44px;background:#fff;color:#050505;border:0;opacity:1;font-size:18px}
+[data-world="netflix"] #work .sw-dots i{border-radius:1px;height:3px}[data-world="netflix"] #work .sw-dots i.on{background:#e50914}
+
+/* SPOTIFY / PERSONAL HOME + PLAYLIST RAIL */
+[data-world="spotify"] #work .sw-head::before{content:"GOOD EVENING, MOHAMED";display:block;color:#fff;font:800 11px/1 var(--font);letter-spacing:.03em;margin-bottom:10px}
+[dir="rtl"][data-world="spotify"] #work .sw-head::before{content:"مساء الخير يا محمد"}
+[data-world="spotify"] #work .sw-stripwrap{border:0;border-radius:20px;background:linear-gradient(180deg,rgba(29,185,84,.12),rgba(18,18,18,.88) 45%);box-shadow:inset 0 1px #ffffff10,0 32px 100px #0009}
+[data-world="spotify"] #work .sw-stripwrap::before{content:"MADE FOR MOHAMED  ·  YOUR AUTOMATION MIX";left:24px;top:16px;color:#fff;font-size:11px;font-weight:800;letter-spacing:.06em}
+[dir="rtl"][data-world="spotify"] #work .sw-stripwrap::before{content:"صُمم لمحمد  ·  مزيج الأتمتة الخاص بك";left:auto;right:24px}
+[data-world="spotify"] #work .sw-service-title{left:24px;top:124px}
+[data-world="spotify"] #work .sw-service-title::before{content:"HOME\A SEARCH\A YOUR SYSTEMS";white-space:pre;color:#b3b3b3;font:700 9px/2.2 var(--font-label);letter-spacing:.1em}
+[dir="rtl"][data-world="spotify"] #work .sw-service-title{left:auto;right:24px;text-align:right}
+[dir="rtl"][data-world="spotify"] #work .sw-service-title::before{content:"الرئيسية\A بحث\A أنظمتك"}
+[data-world="spotify"] #work .sw-tile{width:clamp(270px,33vw,374px);height:clamp(320px,51vh,444px);border-radius:10px;border:0;background:linear-gradient(180deg,color-mix(in srgb,var(--a) 18%,#242424),#181818 52%);transform:translateY(14px) scale(.92);box-shadow:0 24px 70px #0008}
+[data-world="spotify"] #work .sw-tile.act{transform:translateY(-10px) scale(1);box-shadow:0 36px 90px #000b}
+[data-world="spotify"] #work .sw-tile::before{inset:18px 18px auto;height:42%;border-radius:5px;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--b) 78%,#fff),transparent 16%),repeating-radial-gradient(circle at 50% 55%,#151515 0 10%,color-mix(in srgb,var(--a) 70%,#202020) 10.5% 12%,#151515 12.5% 18%);box-shadow:0 18px 34px #0007}
+[data-world="spotify"] #work .sw-tile::after{opacity:.3;background:linear-gradient(145deg,color-mix(in srgb,var(--a) 50%,transparent),transparent 55%)}
+[data-world="spotify"] #work .sw-tag{margin-top:46%;margin-bottom:0}
+[data-world="spotify"] #work .sw-go{top:38%;width:50px;height:50px;border:0;background:#1ed760;color:#050805;box-shadow:0 12px 30px #0008;opacity:0;transform:translateY(8px)}
+[data-world="spotify"] #work .sw-tile.act .sw-go{opacity:1;transform:none}
+[data-world="spotify"] #work .sw-idx{font-size:clamp(72px,14vw,126px);top:20px;opacity:.11}
+[data-world="spotify"] #work .sw-tag{color:#1ed760}
+[data-world="spotify"] #work .sw-prog::before{content:"0:00";color:#b3b3b3;font:600 9px/1 var(--font-label);margin-inline-end:12px}
+[data-world="spotify"] #work .sw-prog::after{content:"3:04";color:#b3b3b3;font:600 9px/1 var(--font-label);margin-inline-start:12px}
+[data-world="spotify"] #work .sw-dots{gap:2px;align-items:center}[data-world="spotify"] #work .sw-dots i{width:28px;height:3px;border-radius:0;background:#444}[data-world="spotify"] #work .sw-dots i.on{width:34px;background:#1ed760}
+
+/* APPLE / PRECISION PRODUCT GALLERY */
+[data-world="apple"] #work .sw-head::before{content:"BUILT WITH INTENTION";display:block;color:#dce5f0;font:650 10px/1 var(--font-label);letter-spacing:.18em;margin-bottom:10px}
+[dir="rtl"][data-world="apple"] #work .sw-head::before{content:"صُمم بقصد"}
+[data-world="apple"] #work .sw-stripwrap{border-radius:42px;border-color:rgba(230,238,248,.16);background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(7,9,13,.72));box-shadow:inset 0 1px rgba(255,255,255,.16),0 40px 110px #0008}
+[data-world="apple"] #work .sw-stripwrap::before{content:"EXPLORE THE SYSTEM";left:50%;top:16px;translate:-50% 0;color:#dce5f0;font-size:9px;letter-spacing:.18em;white-space:nowrap}
+[dir="rtl"][data-world="apple"] #work .sw-stripwrap::before{content:"استكشف النظام"}
+[data-world="apple"] #work .sw-tile{width:clamp(286px,37vw,420px);height:clamp(320px,51vh,446px);border-radius:34px;border-color:rgba(230,238,248,.14);background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(127,185,255,.018),rgba(7,9,13,.82));transform:translateY(16px) scale(.91);box-shadow:inset 0 1px rgba(255,255,255,.2),0 34px 90px #0008}
+[data-world="apple"] #work .sw-tile.act{transform:translateY(-10px) scale(1);box-shadow:inset 0 1px rgba(255,255,255,.28),0 0 0 1px rgba(220,229,240,.2),0 45px 110px #000a}
+[data-world="apple"] #work .sw-tile::before{left:50%;top:20px;translate:-50% 0;width:42%;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#fff,transparent)}
+[data-world="apple"] #work .sw-idx{font-weight:650;opacity:.08;background:linear-gradient(160deg,#fff,#7e8998);-webkit-background-clip:text;background-clip:text}
+[data-world="apple"] #work .sw-go{background:#f2f5f9;color:#0a0b0e;border:0;box-shadow:0 10px 30px #0007}
+[data-world="apple"] #work .sw-dots i{background:#555}[data-world="apple"] #work .sw-dots i.on{width:26px;background:#f4f6f8}
+
+/* SAMSUNG / ONE UI DEVICE ECOSYSTEM */
+[data-world="samsung"] #work .sw-head::before{content:"CONNECTED EXPERIENCE";display:block;color:#67e4ff;font:750 10px/1 var(--font-label);letter-spacing:.17em;margin-bottom:10px}
+[dir="rtl"][data-world="samsung"] #work .sw-head::before{content:"تجربة متصلة"}
+[data-world="samsung"] #work .sw-stripwrap{border-radius:34px;border-color:rgba(103,228,255,.18);background:linear-gradient(135deg,rgba(53,98,255,.10),rgba(1,6,23,.72) 48%,rgba(18,182,255,.05));box-shadow:inset 0 1px rgba(103,228,255,.15),0 38px 100px rgba(0,4,30,.62)}
+[data-world="samsung"] #work .sw-stripwrap::before{content:"YOUR GALAXY  ·  CONTINUE ACROSS SYSTEMS";left:24px;top:16px;color:#67e4ff;font-size:9px;font-weight:800;letter-spacing:.14em}
+[dir="rtl"][data-world="samsung"] #work .sw-stripwrap::before{content:"GALAXY الخاص بك  ·  تابع عبر الأنظمة";left:auto;right:24px}
+[data-world="samsung"] #work .sw-service-items{right:5vw;top:116px;display:flex;gap:8px}
+[data-world="samsung"] #work .sw-service-items i{width:32px;height:18px;border:1px solid #67e4ff55;border-radius:7px;background:#3562ff22}[data-world="samsung"] #work .sw-service-items i:nth-child(even){translate:0 8px}
+[data-world="samsung"] #work .sw-tile{width:clamp(282px,36vw,410px);height:clamp(320px,50vh,438px);border-radius:30px;border-color:rgba(103,228,255,.18);background:linear-gradient(145deg,rgba(53,98,255,.15),rgba(18,182,255,.035),rgba(1,6,23,.86));transform:perspective(900px) rotateY(12deg) translateY(14px) scale(.91);transform-origin:left center;box-shadow:inset 0 1px rgba(103,228,255,.16),0 36px 90px rgba(0,4,30,.6)}
+[dir="rtl"][data-world="samsung"] #work .sw-tile{transform-origin:right center;transform:perspective(900px) rotateY(-12deg) translateY(14px) scale(.91)}
+[data-world="samsung"] #work .sw-tile.act{transform:perspective(900px) rotateY(0) translateY(-10px) scale(1);box-shadow:inset 0 1px rgba(103,228,255,.22),0 0 42px rgba(18,182,255,.12),0 42px 100px rgba(0,4,30,.72)}
+[data-world="samsung"] #work .sw-tile::before{left:50%;top:0;bottom:0;width:1px;height:auto;background:linear-gradient(transparent,#67e4ff,transparent);box-shadow:0 0 18px #12b6ff}
+[data-world="samsung"] #work .sw-go{background:linear-gradient(135deg,#3562ff,#12b6ff);border:0;box-shadow:0 10px 28px rgba(18,182,255,.28)}
+[data-world="samsung"] #work .sw-dots i{border-radius:6px;background:#24345c}[data-world="samsung"] #work .sw-dots i.on{width:26px;background:#12b6ff}
+
+@media(max-width:760px){
+  [data-world]:not([data-world="astronomy"]) #work .sw-stripwrap{margin-inline:6px}
+  [data-world]:not([data-world="astronomy"]) #work .sw-tile{width:min(78vw,330px);height:min(48vh,400px)}
+  [data-world="netflix"] #work .sw-tile{width:82vw;height:min(36vh,310px)}
+  [data-world="spotify"] #work .sw-service-title{display:none}
+  [data-world="spotify"] #work .sw-tag{margin-top:43%}
+  [data-world="disney"] #work .sw-stripwrap{border-radius:36px 36px 16px 16px}
+  [data-world="apple"] #work .sw-stripwrap,[data-world="samsung"] #work .sw-stripwrap{border-radius:24px}
+  [data-world="netflix"] #work .sw-service-title{top:25%}
+  [data-world="netflix"] #work .sw-service-items{top:32%}
+}

@@ -199,8 +199,14 @@ export function initSpace(): void {
       x!.shadowColor = s.col;
       x!.shadowBlur = 10 * DPR;
       x!.fillStyle = s.col;
+      // Ink-gold page diamonds keep Storybook distinct from the star field.
+      const rr = s.r * DPR;
       x!.beginPath();
-      x!.arc(px * DPR, py * DPR, s.r * DPR, 0, 6.2832);
+      x!.moveTo(px * DPR, py * DPR - rr * 1.6);
+      x!.lineTo(px * DPR + rr, py * DPR);
+      x!.lineTo(px * DPR, py * DPR + rr * 1.6);
+      x!.lineTo(px * DPR - rr, py * DPR);
+      x!.closePath();
       x!.fill();
       if (s.star) {
         // four-point twinkle: a slim cross that scales with the twinkle
@@ -266,16 +272,29 @@ export function initSpace(): void {
     const cx = W * DPR * .52, cy = H * DPR * .46;
     const max = Math.min(W, H) * DPR;
     x!.lineWidth = DPR;
+    // Nested machined slabs and datum marks replace orbital geometry.
     for (let i = 0; i < 5; i++) {
-      const r = max * (.16 + i * .075);
+      const w = max * (.30 + i * .095), h = max * (.14 + i * .045);
       const phase = REDUCE ? 0 : ms / (3600 + i * 540);
-      const g = x!.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+      const g = x!.createLinearGradient(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2);
       g.addColorStop(0, 'rgba(255,255,255,.03)');
       g.addColorStop(.48, 'rgba(220,229,240,.22)');
       g.addColorStop(.55, 'rgba(127,185,255,.14)');
       g.addColorStop(1, 'rgba(255,255,255,.02)');
       x!.strokeStyle = g;
-      x!.beginPath(); x!.ellipse(cx, cy, r, r * .42, -.16 + phase * .03, phase, phase + Math.PI * 1.52); x!.stroke();
+      x!.save();
+      x!.translate(cx, cy);
+      x!.rotate(-.035 + phase * .005 + i * .008);
+      x!.beginPath(); x!.roundRect(-w / 2, -h / 2, w, h, (16 + i * 3) * DPR); x!.stroke();
+      x!.restore();
+    }
+    x!.strokeStyle = 'rgba(220,229,240,.16)';
+    const datumY = cy + max * .31;
+    x!.beginPath(); x!.moveTo(cx - max * .42, datumY); x!.lineTo(cx + max * .42, datumY); x!.stroke();
+    for (let i = 0; i <= 20; i++) {
+      const px = cx - max * .42 + max * .84 * (i / 20);
+      const tick = (i % 5 === 0 ? 10 : 5) * DPR;
+      x!.beginPath(); x!.moveTo(px, datumY - tick); x!.lineTo(px, datumY + tick); x!.stroke();
     }
     for (const m of motes) {
       const py = ((m.y + (REDUCE ? 0 : ms / m.T * .12)) % 1) * H * DPR;
@@ -286,20 +305,33 @@ export function initSpace(): void {
   }
 
   function drawGalaxy(ms: number): void {
-    drawStars(ms * .58);
     const cx = W * DPR * .55, cy = H * DPR * .48;
     const max = Math.min(W, H) * DPR;
+    const panelW = max * .34, panelH = max * .28;
+    const fold = REDUCE ? .08 : .08 + Math.sin(ms / 2300) * .035;
     x!.lineWidth = DPR;
-    for (let i = 0; i < 4; i++) {
-      const phase = REDUCE ? i * .55 : ms / (4200 + i * 700) + i * .7;
-      const rx = max * (.22 + i * .07), ry = rx * (.27 + i * .025);
-      x!.strokeStyle = i % 2 ? 'rgba(18,182,255,.18)' : 'rgba(53,98,255,.2)';
-      x!.beginPath(); x!.ellipse(cx, cy, rx, ry, -.24 + i * .08, 0, Math.PI * 2); x!.stroke();
-      x!.globalAlpha = .75;
+    x!.save();
+    x!.translate(cx, cy);
+    x!.strokeStyle = 'rgba(103,228,255,.22)';
+    x!.fillStyle = 'rgba(53,98,255,.035)';
+    x!.save(); x!.transform(1, 0, fold, 1, 0, 0);
+    x!.beginPath(); x!.roundRect(-panelW, -panelH / 2, panelW, panelH, 24 * DPR); x!.fill(); x!.stroke(); x!.restore();
+    x!.save(); x!.transform(1, 0, -fold, 1, 0, 0);
+    x!.beginPath(); x!.roundRect(0, -panelH / 2, panelW, panelH, 24 * DPR); x!.fill(); x!.stroke(); x!.restore();
+    const hinge = x!.createLinearGradient(0, -panelH / 2, 0, panelH / 2);
+    hinge.addColorStop(0, 'rgba(103,228,255,0)'); hinge.addColorStop(.5, 'rgba(103,228,255,.8)'); hinge.addColorStop(1, 'rgba(103,228,255,0)');
+    x!.strokeStyle = hinge; x!.lineWidth = 2 * DPR;
+    x!.beginPath(); x!.moveTo(0, -panelH / 2); x!.lineTo(0, panelH / 2); x!.stroke();
+    x!.restore();
+
+    // Rectangular ecosystem nodes travel between the two display halves.
+    for (let i = 0; i < 8; i++) {
+      const phase = REDUCE ? i / 8 : (ms / 5200 + i / 8) % 1;
+      const px = cx - panelW * .82 + panelW * 1.64 * phase;
+      const py = cy + Math.sin(phase * Math.PI * 2 + i) * panelH * .34;
+      x!.globalAlpha = .28 + (i % 3) * .16;
       x!.fillStyle = i % 2 ? '#67e4ff' : '#6184ff';
-      x!.beginPath();
-      x!.arc(cx + Math.cos(phase) * rx, cy + Math.sin(phase) * ry, (2.3 + i * .45) * DPR, 0, Math.PI * 2);
-      x!.fill();
+      x!.beginPath(); x!.roundRect(px - 3 * DPR, py - 3 * DPR, 6 * DPR, 6 * DPR, 2 * DPR); x!.fill();
     }
   }
 

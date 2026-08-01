@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import Contact from '../../components/Contact.astro';
 import ProjectCollection from '../../components/ProjectCollection.astro';
+import IdentityScene from '../../components/IdentityScene.astro';
 import { useTranslations, workPath, pick, type Lang } from '../../i18n/utils';
 import { locales } from '../../i18n/utils';
 import { automationProjects, labProjects } from '../../data/system-projects';
@@ -78,10 +79,11 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 01 · PAID SOCIAL · blue nebula bloom ============ -->
   <section data-pin style="position:relative;z-index:1;height:280vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
+      <IdentityScene scene={1} />
       <!-- 01 · I run the ads → precision targeting: the reticle locks on while
            "reach" rings ripple outward (impressions spreading to an audience). -->
-      <div class="sc b1-glow" aria-hidden="true"></div>
-      <div class="sc b1" aria-hidden="true">
+      <div class="astro-art sc b1-glow" aria-hidden="true"></div>
+      <div class="astro-art sc b1" aria-hidden="true">
         <span class="b1-reach r1"></span><span class="b1-reach r2"></span><span class="b1-reach r3"></span>
         <span class="b1-sweep"></span>
         <span class="b1-cross h"></span><span class="b1-cross v"></span>
@@ -99,9 +101,10 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 02 · AUDIENCE GROWTH · star-warp + scrubbed count ============ -->
   <section data-pin style="position:relative;z-index:1;height:330vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
-      <div style="position:absolute;left:50%;top:50%;width:200vmax;height:200vmax;transform:translate(-50%,-50%) rotate(calc(var(--p,0)*90deg)) scale(calc(.7 + var(--p,0)*.6));background:repeating-conic-gradient(from 0deg, transparent 0 .5deg, rgba(255,94,138,.5) .5deg .85deg, transparent .85deg 1.9deg);mask:radial-gradient(circle, transparent 10%, #000 46%, transparent 86%);-webkit-mask:radial-gradient(circle, transparent 10%, #000 46%, transparent 86%);opacity:calc(.16 + var(--p,0)*.6);pointer-events:none"></div>
-      <div style="position:absolute;left:50%;top:50%;width:200vmax;height:200vmax;transform:translate(-50%,-50%) rotate(calc(var(--p,0)*-70deg)) scale(calc(.6 + var(--p,0)*.7));background:repeating-conic-gradient(from 12deg, transparent 0 .55deg, rgba(162,89,255,.45) .55deg .95deg, transparent .95deg 2.2deg);mask:radial-gradient(circle, transparent 12%, #000 50%, transparent 88%);-webkit-mask:radial-gradient(circle, transparent 12%, #000 50%, transparent 88%);opacity:calc(.12 + var(--p,0)*.5);pointer-events:none"></div>
-      <div style="position:absolute;left:50%;top:50%;width:42vw;height:42vw;transform:translate(-50%,-50%) scale(calc(.5 + var(--p,0)*1));border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),rgba(255,94,138,.22) 30%,transparent 64%);filter:blur(8px);opacity:calc(.14 + var(--p,0)*.6);pointer-events:none"></div>
+      <IdentityScene scene={2} />
+      <div class="astro-art" style="position:absolute;left:50%;top:50%;width:200vmax;height:200vmax;transform:translate(-50%,-50%) rotate(calc(var(--p,0)*90deg)) scale(calc(.7 + var(--p,0)*.6));background:repeating-conic-gradient(from 0deg, transparent 0 .5deg, rgba(255,94,138,.5) .5deg .85deg, transparent .85deg 1.9deg);mask:radial-gradient(circle, transparent 10%, #000 46%, transparent 86%);-webkit-mask:radial-gradient(circle, transparent 10%, #000 46%, transparent 86%);opacity:calc(.16 + var(--p,0)*.6);pointer-events:none"></div>
+      <div class="astro-art" style="position:absolute;left:50%;top:50%;width:200vmax;height:200vmax;transform:translate(-50%,-50%) rotate(calc(var(--p,0)*-70deg)) scale(calc(.6 + var(--p,0)*.7));background:repeating-conic-gradient(from 12deg, transparent 0 .55deg, rgba(162,89,255,.45) .55deg .95deg, transparent .95deg 2.2deg);mask:radial-gradient(circle, transparent 12%, #000 50%, transparent 88%);-webkit-mask:radial-gradient(circle, transparent 12%, #000 50%, transparent 88%);opacity:calc(.12 + var(--p,0)*.5);pointer-events:none"></div>
+      <div class="astro-art" style="position:absolute;left:50%;top:50%;width:42vw;height:42vw;transform:translate(-50%,-50%) scale(calc(.5 + var(--p,0)*1));border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),rgba(255,94,138,.22) 30%,transparent 64%);filter:blur(8px);opacity:calc(.14 + var(--p,0)*.6);pointer-events:none"></div>
       <div class="bm-tag" style="--c:#ff5e8a"><span class="bm-num">02</span><span class="bm-sl">/</span><span>{ar ? 'سلسلة الأدلة' : 'Evidence Chain'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'تتبّع الأصل' : 'trace the source'}</span></div>
       <div class="bm-copy">
         <div data-step data-glow data-climb style="font-size:clamp(64px,15vw,200px);font-weight:900;letter-spacing:-.05em;line-height:.9;font-variant-numeric:tabular-nums;color:var(--ink,#f3f4ff);opacity:0;transform:translateY(34px);will-change:transform,opacity;filter:drop-shadow(0 0 calc(var(--glow,0)*24px) rgba(var(--text-glow,170,195,255), calc(var(--glow,0)*.75)));transition:filter .18s linear">TRACE</div>
@@ -114,11 +117,12 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 03 · MARKETING OPS · CRM · synthwave grid + rising planet ============ -->
   <section data-pin style="position:relative;z-index:1;height:300vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
-      <div style="position:absolute;inset:auto 0 0 0;height:56%;overflow:hidden;opacity:calc(.4 + var(--p,0)*.6);pointer-events:none;perspective:340px">
+      <IdentityScene scene={3} />
+      <div class="astro-art" style="position:absolute;inset:auto 0 0 0;height:56%;overflow:hidden;opacity:calc(.4 + var(--p,0)*.6);pointer-events:none;perspective:340px">
         <div style="position:absolute;inset:0;transform-origin:bottom;transform:rotateX(76deg);background:repeating-linear-gradient(90deg, transparent 0 42px, color-mix(in srgb, #64d2ff 60%, transparent) 42px 44px), repeating-linear-gradient(0deg, transparent 0 42px, color-mix(in srgb, #a259ff 52%, transparent) 42px 44px);mask:linear-gradient(transparent, #000 40%);-webkit-mask:linear-gradient(transparent, #000 40%)"></div>
       </div>
-      <div style="position:absolute;left:0;right:0;top:44%;height:2px;background:linear-gradient(90deg,transparent,#64d2ff,transparent);filter:blur(1px);opacity:calc(.35 + var(--p,0)*.5);box-shadow:0 0 30px #64d2ff;pointer-events:none"></div>
-      <div style="position:absolute;left:50%;top:calc(60% - var(--p,0)*40%);transform:translate(-50%,-50%);width:min(30vw,300px);height:min(30vw,300px);border-radius:50%;background:radial-gradient(circle at 36% 30%, #d7ffe9, #3bd6a0 32%, #1f8f7a 56%, #123a52 80%, #0a1f33);box-shadow:0 0 80px -6px rgba(48,209,88,.5), inset -18px -12px 56px rgba(0,0,0,.55);pointer-events:none">
+      <div class="astro-art" style="position:absolute;left:0;right:0;top:44%;height:2px;background:linear-gradient(90deg,transparent,#64d2ff,transparent);filter:blur(1px);opacity:calc(.35 + var(--p,0)*.5);box-shadow:0 0 30px #64d2ff;pointer-events:none"></div>
+      <div class="astro-art" style="position:absolute;left:50%;top:calc(60% - var(--p,0)*40%);transform:translate(-50%,-50%);width:min(30vw,300px);height:min(30vw,300px);border-radius:50%;background:radial-gradient(circle at 36% 30%, #d7ffe9, #3bd6a0 32%, #1f8f7a 56%, #123a52 80%, #0a1f33);box-shadow:0 0 80px -6px rgba(48,209,88,.5), inset -18px -12px 56px rgba(0,0,0,.55);pointer-events:none">
         <div style="position:absolute;left:50%;top:50%;width:154%;height:42%;transform:translate(-50%,-50%) rotate(-22deg);border-radius:50%;border:2px solid rgba(120,230,200,.42);box-shadow:0 0 20px rgba(100,210,255,.3)"></div>
       </div>
       <div class="bm-tag" style="--c:#30d158"><span class="bm-num">03</span><span class="bm-sl">/</span><span>{ar ? 'معمارية النظام' : 'System Architecture'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'ربط الطبقات' : 'connect the layers'}</span></div>
@@ -132,10 +136,11 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 04 · BRAND & CONTENT · aurora ribbons ============ -->
   <section data-pin style="position:relative;z-index:1;height:280vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
+      <IdentityScene scene={4} />
       <!-- 04 · I shape the brand → scattered fragments converge into one clean,
            glowing mark (voice + story + art direction shaped into an identity). -->
-      <div class="sc b4-glow" aria-hidden="true"></div>
-      <div class="sc b4" aria-hidden="true">
+      <div class="astro-art sc b4-glow" aria-hidden="true"></div>
+      <div class="astro-art sc b4" aria-hidden="true">
         <span class="b4-ring"></span>
         {brandDots.map((d) => (
           <span class="b4-dot" style={`--ex:${d.ex};--ey:${d.ey};--sx:${d.sx};--sy:${d.sy}`} />
@@ -153,6 +158,12 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ SELECTED WORK · cinematic horizontal showcase (Claude Design) ============ -->
   <section id="work" data-pin class="sw" style="position:relative;z-index:1;height:560vh">
     <div data-stage class="sw-stage" style="position:sticky;top:0;height:100svh;min-height:580px;display:flex;flex-direction:column;overflow:hidden">
+      <IdentityScene scene={9} />
+      <div class="sw-service-chrome" aria-hidden="true">
+        <span class="sw-service-title"></span>
+        <div class="sw-service-items"><i></i><i></i><i></i><i></i></div>
+        <b class="sw-service-line"></b>
+      </div>
       <header class="sw-head">
         <div class="bm-tag" style="--c:#64d2ff;position:static;transform:none;justify-content:flex-start"><span class="bm-num">★</span><span class="bm-sl">/</span><span>{ar ? 'أنظمة الأتمتة' : 'Automation Systems'}</span></div>
         <div class="sw-headrow">
@@ -188,7 +199,8 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 05 · SOFTWARE · orbital wireframe globe ============ -->
   <section data-pin style="position:relative;z-index:1;height:280vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
-      <div style="position:absolute;left:50%;top:45%;transform:translate(-50%,-50%) scale(calc(.7 + var(--p,0)*.42));opacity:calc(.5 + var(--p,0)*.5);pointer-events:none">
+      <IdentityScene scene={5} />
+      <div class="astro-art" style="position:absolute;left:50%;top:45%;transform:translate(-50%,-50%) scale(calc(.7 + var(--p,0)*.42));opacity:calc(.5 + var(--p,0)*.5);pointer-events:none">
         <svg width="420" height="420" viewBox="0 0 420 420" style="filter:drop-shadow(0 0 12px rgba(100,210,255,.5));overflow:visible">
           <g fill="none" stroke="#64d2ff" stroke-opacity=".5" stroke-width="1.3">
             <circle cx="210" cy="210" r="180" stroke-opacity=".7"/>
@@ -218,11 +230,12 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 06 · AUTOMATION · comet stream ============ -->
   <section data-pin style="position:relative;z-index:1;height:280vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
+      <IdentityScene scene={6} />
       <!-- 06 · I automate the rest with AI → a self-running pipeline: task tokens
            stream IN → through the AI core → OUT, on an endless loop (it runs by
            itself; scroll powers it up). -->
-      <div class="sc b6-glow" aria-hidden="true"></div>
-      <div class="sc b6" aria-hidden="true">
+      <div class="astro-art sc b6-glow" aria-hidden="true"></div>
+      <div class="astro-art sc b6" aria-hidden="true">
         <span class="b6-rail"></span>
         <span class="b6-tok t1"></span><span class="b6-tok t2"></span><span class="b6-tok t3"></span><span class="b6-tok t4"></span><span class="b6-tok t5"></span>
         <span class="b6-node in"></span>
@@ -240,11 +253,12 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 07 · WEB · LIVE · constellation network ============ -->
   <section data-pin style="position:relative;z-index:1;height:280vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
+      <IdentityScene scene={7} />
       <!-- 07 · I put it on the web → a live site loads in a browser: the URL
            fills, content blocks load in, and the green LIVE badge lights up
            (shipped, in production). A faint wireframe globe = the open web. -->
-      <div class="sc b7-globe" aria-hidden="true"></div>
-      <div class="sc b7" aria-hidden="true">
+      <div class="astro-art sc b7-globe" aria-hidden="true"></div>
+      <div class="astro-art sc b7" aria-hidden="true">
         <div class="b7-win">
           <div class="b7-bar"><i></i><i></i><i></i><span class="b7-url"></span></div>
           <div class="b7-body">
@@ -264,7 +278,8 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <!-- ============ BIOME 08 · AI OPERATING MODEL · convergence finale ============ -->
   <section data-pin style="position:relative;z-index:1;height:340vh">
     <div data-stage style="position:sticky;top:0;height:100svh;min-height:580px;display:grid;place-items:center;text-align:center;overflow:hidden">
-      <div style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:min(86vw,920px);height:min(86vw,920px);pointer-events:none">
+      <IdentityScene scene={8} />
+      <div class="astro-art" style="position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:min(86vw,920px);height:min(86vw,920px);pointer-events:none">
         <div style="position:absolute;left:50%;top:50%;width:44%;height:44%;transform:translate(-50%,-50%) scale(calc(.28 + var(--p,0)*1.05));border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(255,159,10,.5) 18%,rgba(162,89,255,.3) 42%,transparent 66%);filter:blur(6px);opacity:calc(.18 + var(--p,0)*.82);animation:corePulse 6s ease-in-out infinite"></div>
         <div style="position:absolute;left:50%;top:50%;width:16%;height:16%;transform:translate(-50%,-50%) scale(calc(.4 + var(--p,0)*1));border-radius:50%;border:1px solid rgba(255,255,255,calc(.1 + var(--p,0)*.5));opacity:calc(var(--p,0))"></div>
         <div style="position:absolute;left:50%;top:50%;width:18px;height:18px;border-radius:50%;background:#ff5e8a;box-shadow:0 0 22px 5px rgba(255,94,138,.7);transform:translate(-50%,-50%) translate(calc((1 - var(--p,0)) * -300px), calc((1 - var(--p,0)) * -160px))"></div>

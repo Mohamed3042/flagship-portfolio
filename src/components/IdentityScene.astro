@@ -1,0 +1,33 @@
+---
+interface Props {
+  /** 1–8 = narrative beats, 9 = selected-work chapter */
+  scene: number;
+}
+
+const { scene } = Astro.props;
+const pieces = Array.from({ length: 8 });
+const signals = Array.from({ length: 7 });
+const meters = Array.from({ length: 12 });
+---
+
+<div class="identity-scene" data-identity-scene={scene} aria-hidden="true">
+  <div class="ids-field"></div>
+  <div class="ids-grid"></div>
+  <div class="ids-object">
+    <span class="ids-frame"></span>
+    <span class="ids-ring ids-ring--a"></span>
+    <span class="ids-ring ids-ring--b"></span>
+    <span class="ids-core"></span>
+    <div class="ids-pieces">
+      {pieces.map((_, index) => <i class={`ids-piece ids-piece--${index + 1}`} style={`--i:${index};--n:${index + 1}`}></i>)}
+    </div>
+  </div>
+  <div class="ids-flow">
+    <span class="ids-rail"></span>
+    {signals.map((_, index) => <i class={`ids-signal ids-signal--${index + 1}`} style={`--i:${index};--n:${index + 1}`}></i>)}
+  </div>
+  <div class="ids-meter">
+    {meters.map((_, index) => <i style={`--i:${index}`}></i>)}
+  </div>
+  <div class="ids-shutter"><i></i><b></b></div>
+</div>
