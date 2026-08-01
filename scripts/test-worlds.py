@@ -14,7 +14,11 @@ from playwright.sync_api import sync_playwright
 
 
 WORLDS = ["astronomy", "razer", "disney", "cod", "netflix", "spotify", "apple", "samsung"]
-REPRESENTATIVE_STORIES = ["career-autopilot", "portfolio-design-system"]
+AUTOMATION = ["career-autopilot", "lifeos", "medmac-document-studio", "medmac-box-studio", "cake-studio", "quotations-locker", "reclaim", "sheep-cycle", "resume-builder-skill", "polyblast-arena"]
+FOUNDATION = ["meta-ads", "al-maali", "crm", "brand-system", "sheep-app", "hr-system", "medmac-website", "ai-workflow", "my-resume"]
+LAB = ["b2mh", "artillery3d", "war-strikes", "uberstrike-restoration", "cocolani-3d", "job-apply-engine", "portfolio-design-system"]
+ALL_STORIES = AUTOMATION + FOUNDATION + LAB
+REPRESENTATIVE_STORIES = [AUTOMATION[0], LAB[-1]]
 CHROME = Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
 
 
@@ -24,10 +28,17 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="http://127.0.0.1:4321")
     parser.add_argument("--viewport", choices=("desktop", "mobile"), default="desktop")
+    parser.add_argument("--all-stories", action="store_true")
+    parser.add_argument("--worlds", default=",".join(WORLDS), help="Comma-separated world shard")
     args = parser.parse_args()
 
     viewport = {"width": 1440, "height": 900} if args.viewport == "desktop" else {"width": 390, "height": 844}
     base = args.base_url.rstrip("/")
+    worlds = [world.strip() for world in args.worlds.split(",") if world.strip()]
+    unknown = sorted(set(worlds) - set(WORLDS))
+    if unknown:
+        raise SystemExit(f"Unknown worlds: {', '.join(unknown)}")
+    stories = ALL_STORIES if args.all_stories else REPRESENTATIVE_STORIES
     failures: list[str] = []
     console_errors: list[str] = []
     bad_responses: list[str] = []
@@ -35,10 +46,16 @@ def main() -> None:
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True, executable_path=str(CHROME), args=["--disable-gpu"])
-        page = browser.new_page(viewport=viewport, device_scale_factor=1)
-        page.on("console", lambda msg: console_errors.append(f"{page.url}: {msg.text}") if msg.type == "error" else None)
-        page.on("pageerror", lambda error: console_errors.append(f"{page.url}: {error}"))
-        page.on("response", lambda response: bad_responses.append(f"{response.status} {response.url}") if response.status >= 400 else None)
+        context = browser.new_context(viewport=viewport, device_scale_factor=1)
+
+        def fresh_page():
+            candidate = context.new_page()
+            candidate.on("console", lambda msg: console_errors.append(f"{candidate.url}: {msg.text}") if msg.type == "error" else None)
+            candidate.on("pageerror", lambda error: console_errors.append(f"{candidate.url}: {error}"))
+            candidate.on("response", lambda response: bad_responses.append(f"{response.status} {response.url}") if response.status >= 400 else None)
+            return candidate
+
+        page = fresh_page()
 
         page.goto(f"{base}/en", wait_until="networkidle")
         page.evaluate("localStorage.setItem('mm-world','astronomy'); localStorage.setItem('mm-mode','dark')")
@@ -46,7 +63,7 @@ def main() -> None:
 
         # Select through the real listbox once per world, then prove the choice
         # survives both language and story-route navigation.
-        for world in WORLDS:
+        for world in worlds:
             page.goto(f"{base}/en", wait_until="networkidle")
             page.locator("[data-world-btn]").click()
             if page.locator("[data-world-opt]").count() != len(WORLDS):
@@ -75,13 +92,19 @@ def main() -> None:
                 if mode_hidden != (world != "astronomy"):
                     failures.append(f"{args.viewport}: appearance control visibility is wrong under {world}")
 
-                for slug in REPRESENTATIVE_STORIES:
+                for story_index, slug in enumerate(stories):
+                    # The portfolio intentionally runs several perpetual canvas
+                    # and GSAP engines. Recycling the page keeps exhaustive
+                    # multi-world audits bounded without losing localStorage.
+                    if args.all_stories and story_index and story_index % 8 == 0:
+                        page.close()
+                        page = fresh_page()
                     page.goto(f"{base}/{lang}/work/{slug}", wait_until="networkidle")
                     if page.locator("html").get_attribute("data-world") != world:
                         failures.append(f"{args.viewport}: {world} did not persist to /{lang}/work/{slug}")
                     if page.locator("main h1").count() != 1:
                         failures.append(f"{args.viewport}: /{lang}/work/{slug} lost its h1 under {world}")
-                    if page.locator("article.system-story").count() != 1:
+                    if slug in AUTOMATION + LAB and page.locator("article.system-story").count() != 1:
                         failures.append(f"{args.viewport}: /{lang}/work/{slug} lost its shared story spine under {world}")
                     overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
                     if overflow > 2:
@@ -106,13 +129,15 @@ def main() -> None:
         if page.locator("html").get_attribute("data-theme") != "light":
             failures.append(f"{args.viewport}: Astronomy light mode did not return after world travel")
 
+        context.close()
         browser.close()
 
     failures.extend(f"console: {message}" for message in sorted(set(console_errors)))
     failures.extend(f"response: {message}" for message in sorted(set(bad_responses)))
     report = {
         "viewport": args.viewport,
-        "worlds": len(WORLDS),
+        "worlds": len(worlds),
+        "stories_per_language": len(stories),
         "story_language_world_checks": checks,
         "console_errors": len(set(console_errors)),
         "bad_responses": len(set(bad_responses)),
