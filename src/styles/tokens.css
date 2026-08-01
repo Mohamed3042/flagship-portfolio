@@ -11,7 +11,10 @@
    reads far clearer than the old IBM Plex Sans Arabic at display + body sizes,
    and covers the full 400–900 range our headings use from one file. */
 @import '@fontsource-variable/cairo/wght.css';
-/* Mono — spec labels / routes / number-meta (Claude Design parallax package) */
+/* Space Grotesk — technical microcopy without the terminal-like texture of a
+   monospace face. Used for scene labels, pills, routes and compact metadata. */
+@import '@fontsource-variable/space-grotesk/wght.css';
+/* JetBrains Mono is retained only for genuinely code-like content. */
 @import '@fontsource-variable/jetbrains-mono/wght.css';
 /* Al Rai Media ("Media Pro") — the owner's display face for the big Arabic
    headings. Display weights only (Bold + Black), self-hosted; Arabic BODY text
@@ -68,10 +71,12 @@ ul{list-style:none}
   --mesh-b:#000000;     /* project-card mesh base (end) */
 
   /* ----- Claude Design parallax package: wired once, reused everywhere ----- */
-  /* JetBrains Mono has NO Arabic glyphs, so Arabic in any mono label fell back to
-     an ugly system serif. Cairo sits right after it: Latin/digits stay monospace,
-     Arabic letters render in Cairo (per-glyph fallback). */
-  --font-mono:"JetBrains Mono Variable","Cairo Variable",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  /* Compact interface copy should feel engineered, not like terminal output.
+     Keep the historical aliases so every existing story adopts the new face. */
+  --font-label:"Space Grotesk Variable","Cairo Variable",var(--font);
+  --font-mono:var(--font-label);
+  --mono:var(--font-label);
+  --font-code:"JetBrains Mono Variable","Cairo Variable",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   /* Layered surfaces (theme-aware; dark cinematic by default) */
   --surface-base:#08080a;   /* page / hook backdrop */
   --surface-raised:#0e0e11; /* cards, panels, story articles */
@@ -337,7 +342,7 @@ body{
 .kicker{font-family:var(--font-mono);font-size:clamp(12px,1.3vw,14px);font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
 [dir="rtl"] .kicker{font-family:var(--font-mono);letter-spacing:.04em}
 /* Mono utility — spec labels, routes, hero-number captions */
-.mono{font-family:var(--font-mono);letter-spacing:.04em}
+.mono{font-family:var(--font-code);letter-spacing:.04em}
 h1,h2,h3{line-height:1.05;letter-spacing:-.03em;font-weight:800}
 [dir="rtl"] h1,[dir="rtl"] h2,[dir="rtl"] h3{letter-spacing:0;line-height:1.2}
 .display{font-size:clamp(44px,10.5vw,150px);font-weight:900;line-height:.95}

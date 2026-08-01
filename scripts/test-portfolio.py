@@ -111,7 +111,7 @@ def main() -> None:
                 href = f"/{lang}/work/{slug}"
                 link = page.locator(f'a[href="{href}"]').first
                 try:
-                    if args.viewport == "mobile" and slug in AUTOMATION:
+                    if slug in AUTOMATION:
                         progress = AUTOMATION.index(slug) / (len(AUTOMATION) - 1)
                         page.evaluate(
                             """p => {
@@ -121,7 +121,10 @@ def main() -> None:
                             }""",
                             progress,
                         )
-                        page.wait_for_timeout(350)
+                        # Both desktop (pinned scrub) and mobile (native strip)
+                        # move the cards horizontally. Drive the section to the
+                        # requested card and let Lenis/GSAP settle before click.
+                        page.wait_for_timeout(500)
                     else:
                         link.scroll_into_view_if_needed(timeout=10_000)
                     link.click(timeout=10_000)
