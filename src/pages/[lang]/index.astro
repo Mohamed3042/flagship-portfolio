@@ -295,7 +295,7 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   @keyframes bmDriftY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 
   /* Biome scene chrome */
-  .bm-tag{position:absolute;top:84px;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono,ui-monospace,Menlo,monospace);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3,#6f74a0);display:flex;gap:10px;align-items:center;white-space:nowrap}
+  .bm-tag{position:absolute;top:84px;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--font-label,var(--font));font-size:12px;font-weight:600;letter-spacing:.075em;text-transform:uppercase;color:var(--ink-3,#6f74a0);display:flex;gap:10px;align-items:center;white-space:nowrap}
   .bm-num{color:var(--c,#2997ff);font-weight:600}
   .bm-sl{opacity:.45}
   .bm-copy{position:relative;z-index:5;width:100%;max-width:1100px;margin-inline:auto;padding-inline:clamp(20px,5vw,40px)}
@@ -312,7 +312,7 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
     background:linear-gradient(100deg,rgba(255,255,255,.10),rgba(255,255,255,.20),rgba(255,255,255,.10));background-size:200% 100%}
   .bm-h .u-cursor{display:inline-block;width:.5em;height:1em;vertical-align:-.12em;margin-inline-start:.04em;border-radius:2px;background:currentColor;opacity:0;will-change:opacity,transform}
   .bm-pillrow{opacity:0;transform:translateY(34px);will-change:transform,opacity;margin-top:28px}
-  .bm-pill{display:inline-block;font-family:var(--font-mono);font-size:clamp(12px,1.5vw,15px);letter-spacing:.04em;color:var(--ink,#f3f4ff);padding:12px 20px;border-radius:999px;background:var(--glass-bg,rgba(255,255,255,.05));border:1px solid var(--glass-brd,rgba(255,255,255,.12));backdrop-filter:saturate(160%) blur(20px);-webkit-backdrop-filter:saturate(160%) blur(20px);box-shadow:0 0 calc(8px + var(--glow,0)*16px) rgba(255,94,138,calc((.08 + var(--glow,0)*.30)*var(--aura-k,1))), 0 0 calc(16px + var(--glow,0)*30px) rgba(162,89,255,calc((.08 + var(--glow,0)*.30)*var(--aura-k,1))), 0 0 calc(26px + var(--glow,0)*48px) rgba(41,151,255,calc((.06 + var(--glow,0)*.26)*var(--aura-k,1)));transition:box-shadow .18s linear}
+  .bm-pill{display:inline-block;font-family:var(--font-label,var(--font));font-size:clamp(12px,1.5vw,15px);font-weight:600;letter-spacing:.015em;color:var(--ink,#f3f4ff);padding:12px 20px;border-radius:999px;background:var(--glass-bg,rgba(255,255,255,.05));border:1px solid var(--glass-brd,rgba(255,255,255,.12));backdrop-filter:saturate(160%) blur(20px);-webkit-backdrop-filter:saturate(160%) blur(20px);box-shadow:0 0 calc(8px + var(--glow,0)*16px) rgba(255,94,138,calc((.08 + var(--glow,0)*.30)*var(--aura-k,1))), 0 0 calc(16px + var(--glow,0)*30px) rgba(162,89,255,calc((.08 + var(--glow,0)*.30)*var(--aura-k,1))), 0 0 calc(26px + var(--glow,0)*48px) rgba(41,151,255,calc((.06 + var(--glow,0)*.26)*var(--aura-k,1)));transition:box-shadow .18s linear}
   /* Arabic pills: render larger so the captions under the big headings stay clear. */
   [dir="rtl"] .bm-pill{font-size:clamp(15px,2vw,18px);padding:13px 22px}
 
@@ -325,7 +325,7 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   .sw-title{font-size:clamp(30px,6vw,60px);font-weight:900;letter-spacing:-.035em;line-height:1;margin:0;
     color:var(--ink,#f3f4ff);filter:drop-shadow(0 0 calc(var(--glow,0)*20px) rgba(var(--text-glow,170,195,255),calc(var(--glow,0)*.7)));transition:filter .18s linear}
   [dir="rtl"] .sw-title{letter-spacing:0;line-height:1.2}
-  .sw-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono,ui-monospace,Menlo,monospace);
+  .sw-live{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-label,var(--font));
     font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2,#aab0d6)}
   .sw-livedot{width:8px;height:8px;border-radius:50%;background:#30d158;box-shadow:0 0 10px #30d158;animation:swPulse 2.4s ease infinite}
   .sw-counter{direction:ltr}
@@ -351,7 +351,7 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   .sw-idx{position:absolute;top:clamp(-8px,-1vw,-2px);inset-inline-end:clamp(8px,2vw,20px);z-index:-1;
     font-weight:900;font-size:clamp(118px,24vw,196px);line-height:.82;letter-spacing:-.04em;will-change:transform;
     color:transparent;background:linear-gradient(160deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;opacity:.14}
-  .sw-tag{font-family:var(--mono,ui-monospace,Menlo,monospace);font-size:clamp(9.5px,2.2vw,11.5px);
+  .sw-tag{font-family:var(--font-label,var(--font));font-size:clamp(9.5px,2.2vw,11.5px);
     letter-spacing:.14em;text-transform:uppercase;color:var(--b);margin-bottom:auto}
   [dir="rtl"] .sw-tag{letter-spacing:.04em}
   .sw-ti{font-weight:800;letter-spacing:-.02em;line-height:1.08;font-size:clamp(21px,4.6vw,27px);margin-top:14px;color:var(--ink,#f3f4ff)}
@@ -361,7 +361,7 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
     border-top:1px solid var(--glass-brd,rgba(255,255,255,.12))}
   .sw-stat{font-weight:900;font-size:clamp(22px,5vw,30px);letter-spacing:-.02em;font-variant-numeric:tabular-nums;
     background:linear-gradient(120deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-  .sw-note{font-family:var(--mono,ui-monospace,Menlo,monospace);font-size:10px;letter-spacing:.04em;color:var(--ink-3,#6f74a0);text-align:end}
+  .sw-note{font-family:var(--font-label,var(--font));font-size:10px;letter-spacing:.04em;color:var(--ink-3,#6f74a0);text-align:end}
   .sw-go{position:absolute;top:16px;inset-inline-end:clamp(14px,2.6vw,20px);width:32px;height:32px;border-radius:50%;
     display:grid;place-items:center;color:var(--ink,#f3f4ff);background:rgba(10,11,18,.5);border:1px solid var(--glass-brd,rgba(255,255,255,.12));
     opacity:0;transform:translateY(-6px);transition:opacity .4s,transform .4s;font-size:14px}

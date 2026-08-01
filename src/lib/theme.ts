@@ -1,39 +1,67 @@
 /* =====================================================================
-   Theme registry + THEME_MOTION (Claude Design theme sheets, 2026-07-05).
-   Six switchable themes: dark (default, attribute absent) · light · neon ·
-   cinema · storybook · wave. The CSS token packs live in tokens.css; this
-   module is the single JS source for (a) the theme list the selector renders,
-   (b) the per-theme MOTION personality the engines read (easings/scrub
-   smoothing/depth/glow — parameterizing the existing systems, never forking
-   them), and (c) the canvas palettes for the space + aurora layers.
-   dark/light keep the exact pre-theme-pack values — their behavior is frozen.
+   Identity-world registry.
+
+   The portfolio owns one content model and one scroll engine. `data-world`
+   changes the art direction and motion response without forking routes or
+   story markup. `data-theme="light"` remains a separate appearance setting;
+   Astronomy is always the default world.
    ===================================================================== */
 
-export const THEMES = ['dark', 'light', 'neon', 'cinema', 'storybook', 'wave'] as const;
-export type ThemeName = (typeof THEMES)[number];
+export const WORLDS = [
+  'astronomy',
+  'razer',
+  'disney',
+  'cod',
+  'netflix',
+  'spotify',
+  'apple',
+  'samsung',
+] as const;
 
-/** Per-theme glyph for the nav trigger + menu rows (decorative, aria-hidden). */
-export const THEME_GLYPHS: Record<ThemeName, string> = {
-  dark: '☾',
-  light: '☀',
-  neon: '▞',
-  cinema: '▭',
-  storybook: '✦',
-  wave: '≈',
-};
+export type WorldName = (typeof WORLDS)[number];
+export type ThemeName = WorldName; // compatibility for the existing motion modules
 
-/** The active theme, read from <html data-theme> (absent = dark). */
-export function activeTheme(): ThemeName {
-  const v = document.documentElement.getAttribute('data-theme') || 'dark';
-  return (THEMES as readonly string[]).includes(v) ? (v as ThemeName) : 'dark';
+export interface WorldMeta {
+  glyph: string;
+  label: string;
+  transition: 'constellation' | 'chroma' | 'arc' | 'deploy' | 'zoom' | 'pulse' | 'titanium' | 'orbit';
 }
 
-/* ---- Motion personality (one map, four identities + the frozen default) ----
-   scrub      GSAP ScrollTrigger scrub (true = 1:1, number = smoothing seconds)
-   pxScale    multiplier on every [data-px] depth speed
-   curve      storybook's curved-path drift: max X offset in px (0 = straight)
-   glowGain   multiplier on the scroll-glow curve (clamped to 1)
-   lenisLerp  Lenis smoothing (higher = snappier wheel response)               */
+export const WORLD_META: Record<WorldName, WorldMeta> = {
+  astronomy: { glyph: '✦', label: 'Astronomy', transition: 'constellation' },
+  razer: { glyph: '⌁', label: 'Razer · Chroma', transition: 'chroma' },
+  disney: { glyph: '✧', label: 'Disney · Storybook', transition: 'arc' },
+  cod: { glyph: '⌖', label: 'COD · Tactical', transition: 'deploy' },
+  netflix: { glyph: '▮', label: 'Netflix · Cinema', transition: 'zoom' },
+  spotify: { glyph: '≋', label: 'Spotify · Pulse', transition: 'pulse' },
+  apple: { glyph: '◌', label: 'Apple · Titanium', transition: 'titanium' },
+  samsung: { glyph: '◎', label: 'Samsung · Galaxy', transition: 'orbit' },
+};
+
+export const WORLD_GLYPHS: Record<WorldName, string> = Object.fromEntries(
+  WORLDS.map((world) => [world, WORLD_META[world].glyph]),
+) as Record<WorldName, string>;
+
+/** Legacy names kept only long enough to migrate an existing visitor choice. */
+export const LEGACY_WORLD_MAP: Record<string, WorldName> = {
+  dark: 'astronomy',
+  light: 'astronomy',
+  neon: 'razer',
+  cinema: 'netflix',
+  storybook: 'disney',
+  wave: 'spotify',
+};
+
+export function activeWorld(): WorldName {
+  const value = document.documentElement.getAttribute('data-world') || 'astronomy';
+  return (WORLDS as readonly string[]).includes(value) ? (value as WorldName) : 'astronomy';
+}
+
+/** Compatibility alias used by the existing canvas modules. */
+export const activeTheme = activeWorld;
+
+/* Scroll topology is shared. These values only change how the same progress
+   feels: smoothing, depth, curved drift, glow response and Lenis damping. */
 export interface ThemeMotion {
   scrub: true | number;
   pxScale: number;
@@ -41,31 +69,38 @@ export interface ThemeMotion {
   glowGain: number;
   lenisLerp: number;
 }
-export const THEME_MOTION: Record<ThemeName, ThemeMotion> = {
-  // frozen: identical to the pre-pack engine values
-  dark: { scrub: true, pxScale: 1, curve: 0, glowGain: 1, lenisLerp: 0.1 },
-  light: { scrub: true, pxScale: 1, curve: 0, glowGain: 1, lenisLerp: 0.1 },
-  // snappy/hard — slides stop dead, deeper parallax, hotter glow
-  neon: { scrub: 0.35, pxScale: 1.6, curve: 0, glowGain: 1.25, lenisLerp: 0.16 },
-  // slow dolly — heavy smoothing, ~half depth (reads as camera, not layers)
-  cinema: { scrub: 1.6, pxScale: 0.45, curve: 0, glowGain: 0.55, lenisLerp: 0.07 },
-  // floaty — soft smoothing, deep drift on curved (sine) paths
-  storybook: { scrub: 1.1, pxScale: 1.35, curve: 260, glowGain: 0.9, lenisLerp: 0.085 },
-  // rhythmic bounce — quantized feel, moderate smoothing
-  wave: { scrub: 0.7, pxScale: 1.15, curve: 0, glowGain: 1, lenisLerp: 0.12 },
+
+export const WORLD_MOTION: Record<WorldName, ThemeMotion> = {
+  astronomy: { scrub: true, pxScale: 1, curve: 0, glowGain: 1, lenisLerp: 0.1 },
+  razer: { scrub: 0.34, pxScale: 1.65, curve: 0, glowGain: 1.28, lenisLerp: 0.16 },
+  disney: { scrub: 1.08, pxScale: 1.32, curve: 220, glowGain: 0.9, lenisLerp: 0.085 },
+  cod: { scrub: 0.28, pxScale: 1.42, curve: 0, glowGain: 0.82, lenisLerp: 0.17 },
+  netflix: { scrub: 1.45, pxScale: 0.52, curve: 0, glowGain: 0.58, lenisLerp: 0.07 },
+  spotify: { scrub: 0.68, pxScale: 1.16, curve: 0, glowGain: 1.02, lenisLerp: 0.12 },
+  apple: { scrub: 0.92, pxScale: 0.72, curve: 0, glowGain: 0.72, lenisLerp: 0.09 },
+  samsung: { scrub: 0.72, pxScale: 1.22, curve: 34, glowGain: 1.08, lenisLerp: 0.12 },
 };
+
+export const THEME_MOTION = WORLD_MOTION;
+
 export function themeMotion(): ThemeMotion {
-  return THEME_MOTION[activeTheme()];
+  return WORLD_MOTION[activeWorld()];
 }
 
-/* ---- Aurora (dark hero canvas) blob palettes, RGB triples ----
-   dark/light keep the original blues; the packs re-tint the same four blobs.
-   (Bespoke per-theme heroes are a noted follow-up — this pass theme-tints.) */
-export const THEME_AURORA: Record<ThemeName, { bg: string; blobs: [number, number, number][] }> = {
-  dark: { bg: '#000', blobs: [[41, 151, 255], [162, 89, 255], [255, 94, 138], [124, 108, 255]] },
-  light: { bg: '#000', blobs: [[41, 151, 255], [162, 89, 255], [255, 94, 138], [124, 108, 255]] },
-  neon: { bg: '#0a0a0a', blobs: [[0, 255, 128], [255, 61, 242], [0, 214, 108], [255, 61, 242]] },
-  cinema: { bg: '#000', blobs: [[217, 4, 41], [255, 180, 84], [217, 4, 41], [120, 10, 30]] },
-  storybook: { bg: '#0b1029', blobs: [[242, 193, 78], [255, 159, 178], [169, 155, 240], [242, 193, 78]] },
-  wave: { bg: '#0e0e0e', blobs: [[25, 212, 106], [138, 92, 255], [25, 212, 106], [138, 92, 255]] },
+export interface AuroraPalette {
+  bg: string;
+  blobs: [number, number, number][];
+}
+
+export const WORLD_AURORA: Record<WorldName, AuroraPalette> = {
+  astronomy: { bg: '#000000', blobs: [[41, 151, 255], [162, 89, 255], [255, 94, 138], [124, 108, 255]] },
+  razer: { bg: '#020604', blobs: [[68, 214, 44], [0, 224, 255], [255, 45, 196], [68, 214, 44]] },
+  disney: { bg: '#050b2b', blobs: [[0, 168, 225], [232, 200, 122], [113, 95, 204], [79, 156, 255]] },
+  cod: { bg: '#070806', blobs: [[255, 122, 0], [143, 163, 30], [214, 177, 100], [71, 85, 54]] },
+  netflix: { bg: '#050505', blobs: [[229, 9, 20], [125, 9, 18], [255, 84, 48], [76, 7, 12]] },
+  spotify: { bg: '#030705', blobs: [[29, 185, 84], [30, 215, 96], [138, 92, 255], [20, 92, 55]] },
+  apple: { bg: '#020204', blobs: [[210, 220, 235], [115, 137, 166], [159, 122, 255], [78, 171, 255]] },
+  samsung: { bg: '#010617', blobs: [[53, 98, 255], [18, 182, 255], [77, 90, 231], [45, 216, 255]] },
 };
+
+export const THEME_AURORA = WORLD_AURORA;

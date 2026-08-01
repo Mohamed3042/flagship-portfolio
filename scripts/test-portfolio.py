@@ -139,7 +139,7 @@ def main() -> None:
                     failures.append(f"{href} has the wrong html language")
                 if page.locator("html").get_attribute("dir") != expected_dir:
                     failures.append(f"{href} has the wrong direction")
-                if page.locator("h1").count() != 1 or not page.locator("h1").inner_text().strip():
+                if page.locator("main h1").count() != 1 or not page.locator("main h1").inner_text().strip():
                     failures.append(f"{href} does not have one visible h1")
                 main_text = page.locator("main").inner_text().strip()
                 if len(main_text) < 250:

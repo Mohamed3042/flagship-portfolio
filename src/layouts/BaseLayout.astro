@@ -1,5 +1,6 @@
 ---
 import '../styles/tokens.css';
+import '../styles/worlds.css';
 import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -89,7 +90,7 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
 ---
 
 <!doctype html>
-<html lang={lang} dir={direction}>
+<html lang={lang} dir={direction} data-world="astronomy">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -171,13 +172,20 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
         const apply = () => {
           try {
             const root = document.documentElement;
-            // N-theme selector: dark (attribute absent, the default) · light ·
-            // neon · cinema · storybook · wave — same mm-theme key both sites share.
-            const THEMES = ['dark', 'light', 'neon', 'cinema', 'storybook', 'wave'];
-            let v = localStorage.getItem('mm-theme') || 'dark';
-            if (THEMES.indexOf(v) === -1) v = 'dark';
-            if (v === 'dark') root.removeAttribute('data-theme');
-            else root.setAttribute('data-theme', v);
+            const WORLDS = ['astronomy', 'razer', 'disney', 'cod', 'netflix', 'spotify', 'apple', 'samsung'];
+            const LEGACY = { dark: 'astronomy', light: 'astronomy', neon: 'razer', cinema: 'netflix', storybook: 'disney', wave: 'spotify' };
+            const legacy = localStorage.getItem('mm-theme') || '';
+            let world = localStorage.getItem('mm-world') || LEGACY[legacy] || 'astronomy';
+            if (WORLDS.indexOf(world) === -1) world = 'astronomy';
+            let mode = localStorage.getItem('mm-mode') || (legacy === 'light' ? 'light' : 'dark');
+            if (mode !== 'light') mode = 'dark';
+            root.setAttribute('data-world', world);
+            // Branded worlds are purpose-built dark environments. The stored
+            // appearance returns when the visitor comes back to Astronomy.
+            if (world === 'astronomy' && mode === 'light') root.setAttribute('data-theme', 'light');
+            else root.removeAttribute('data-theme');
+            localStorage.setItem('mm-world', world);
+            localStorage.setItem('mm-mode', mode);
             localStorage.setItem('mm-lang', root.getAttribute('lang') || 'en');
           } catch (e) {
             /* ignore */
@@ -193,6 +201,15 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
 
   <body data-accent={accent}>
     <canvas id="space" aria-hidden="true"></canvas>
+    <div class="world-ambient" aria-hidden="true">
+      <i class="wa-grid"></i>
+      <b class="wa-orbit"></b>
+      <i class="wa-signal"></i>
+      <span class="wa-mark">{lang === 'ar' ? 'عالم الهوية / محمد محمود' : 'Identity world / Mohamed Mahmoud'}</span>
+    </div>
+    <div class="world-transition" data-world-transition aria-hidden="true">
+      <i></i><b></b><span data-world-transition-label></span>
+    </div>
     <a href="#main" class="skip-link">{t('a11y.skip')}</a>
     <div class="progress" aria-hidden="true"></div>
 
@@ -209,17 +226,26 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
       import { initMotion } from '../lib/motion';
       import { initAurora } from '../lib/aurora';
       import { initSpace } from '../lib/space';
-      import { activeTheme, THEME_GLYPHS } from '../lib/theme';
+      import { activeWorld, WORLDS, WORLD_GLYPHS, WORLD_META, type WorldName } from '../lib/theme';
 
-      // Reflect the active theme in the nav menu (trigger glyph + selected row).
-      function syncThemeUI() {
-        const cur = activeTheme();
+      // Reflect the active identity world and Astronomy appearance in the nav.
+      function syncWorldUI() {
+        const cur = activeWorld();
         document
-          .querySelectorAll<HTMLElement>('[data-theme-btn]')
-          .forEach((b) => (b.textContent = THEME_GLYPHS[cur]));
+          .querySelectorAll<HTMLElement>('[data-world-glyph]')
+          .forEach((el) => (el.textContent = WORLD_GLYPHS[cur]));
         document
-          .querySelectorAll<HTMLElement>('[data-theme-opt]')
-          .forEach((o) => o.setAttribute('aria-selected', o.dataset.themeOpt === cur ? 'true' : 'false'));
+          .querySelectorAll<HTMLElement>('[data-world-opt]')
+          .forEach((o) => o.setAttribute('aria-selected', o.dataset.worldOpt === cur ? 'true' : 'false'));
+        const selected = document.querySelector<HTMLElement>(`[data-world-opt="${cur}"]`);
+        document
+          .querySelectorAll<HTMLElement>('[data-world-label]')
+          .forEach((el) => (el.textContent = selected?.dataset.worldCopy || WORLD_META[cur].label));
+        const mode = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        document.querySelectorAll<HTMLElement>('[data-mode-btn]').forEach((button) => {
+          button.textContent = mode === 'light' ? '☀' : '☾';
+          button.toggleAttribute('hidden', cur !== 'astronomy');
+        });
       }
 
       function boot() {
@@ -227,57 +253,94 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
         initMotion();
         initAurora();
         initSpace();
-        syncThemeUI();
+        syncWorldUI();
       }
       boot();
       document.addEventListener('astro:page-load', boot);
 
-      /* Theme menu — delegated once on document (survives View Transitions). */
-      function closeThemeMenus() {
-        document.querySelectorAll<HTMLElement>('[data-theme-menu]').forEach((m) => {
-          m.querySelector('[data-theme-btn]')?.setAttribute('aria-expanded', 'false');
+      /* Identity menu — delegated once on document (survives View Transitions). */
+      function closeWorldMenus() {
+        document.querySelectorAll<HTMLElement>('[data-world-menu]').forEach((m) => {
+          m.querySelector('[data-world-btn]')?.setAttribute('aria-expanded', 'false');
           m.querySelector('.theme-menu__list')?.setAttribute('hidden', '');
         });
       }
-      function applyTheme(v: string) {
+      function storedMode(): 'dark' | 'light' {
+        try { return localStorage.getItem('mm-mode') === 'light' ? 'light' : 'dark'; }
+        catch { return 'dark'; }
+      }
+      function applyAppearance(world: WorldName) {
         const root = document.documentElement;
-        if (v === 'dark') root.removeAttribute('data-theme');
-        else root.setAttribute('data-theme', v);
+        if (world === 'astronomy' && storedMode() === 'light') root.setAttribute('data-theme', 'light');
+        else root.removeAttribute('data-theme');
+      }
+      let worldTimer = 0;
+      function applyWorld(value: string) {
+        if (!(WORLDS as readonly string[]).includes(value)) return;
+        const world = value as WorldName;
         try {
-          localStorage.setItem('mm-theme', v);
+          localStorage.setItem('mm-world', world);
         } catch (err) {
           /* ignore */
         }
-        // Repaint canvases + retime the motion engines for the new palette.
+        const root = document.documentElement;
+        const overlay = document.querySelector<HTMLElement>('[data-world-transition]');
+        const label = overlay?.querySelector<HTMLElement>('[data-world-transition-label]');
+        window.clearTimeout(worldTimer);
+        if (overlay) overlay.dataset.nextWorld = world;
+        if (label) label.textContent = WORLD_META[world].label;
+        root.dataset.worldNext = world;
+        root.classList.add('world-switching');
+        window.setTimeout(() => {
+          root.dataset.world = world;
+          applyAppearance(world);
+          document.dispatchEvent(new Event('mm:themechange'));
+          document.dispatchEvent(new CustomEvent('mm:worldchange', { detail: { world } }));
+          syncWorldUI();
+        }, 220);
+        worldTimer = window.setTimeout(() => {
+          root.classList.remove('world-switching');
+          delete root.dataset.worldNext;
+          if (overlay) delete overlay.dataset.nextWorld;
+        }, 820);
+      }
+      function toggleMode() {
+        const next = storedMode() === 'light' ? 'dark' : 'light';
+        try { localStorage.setItem('mm-mode', next); } catch { /* ignore */ }
+        applyAppearance(activeWorld());
         document.dispatchEvent(new Event('mm:themechange'));
-        syncThemeUI();
+        syncWorldUI();
       }
       document.addEventListener('click', (e) => {
         const t = e.target as HTMLElement;
-        const opt = t.closest<HTMLElement>('[data-theme-opt]');
+        const opt = t.closest<HTMLElement>('[data-world-opt]');
         if (opt) {
-          applyTheme(opt.dataset.themeOpt || 'dark');
-          closeThemeMenus();
+          applyWorld(opt.dataset.worldOpt || 'astronomy');
+          closeWorldMenus();
           return;
         }
-        const btn = t.closest<HTMLElement>('[data-theme-btn]');
+        if (t.closest<HTMLElement>('[data-mode-btn]')) {
+          toggleMode();
+          return;
+        }
+        const btn = t.closest<HTMLElement>('[data-world-btn]');
         if (btn) {
-          const menu = btn.closest('[data-theme-menu]');
+          const menu = btn.closest('[data-world-menu]');
           const list = menu?.querySelector<HTMLElement>('.theme-menu__list');
           const wasClosed = !!list?.hasAttribute('hidden');
-          closeThemeMenus();
+          closeWorldMenus();
           if (list && wasClosed) {
             list.removeAttribute('hidden');
             btn.setAttribute('aria-expanded', 'true');
           }
           return;
         }
-        closeThemeMenus();
+        closeWorldMenus();
       });
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
-          const open = document.querySelector<HTMLElement>('[data-theme-menu] [aria-expanded="true"]');
-          closeThemeMenus();
+          const open = document.querySelector<HTMLElement>('[data-world-menu] [aria-expanded="true"]');
+          closeWorldMenus();
           open?.focus();
           return;
         }
@@ -285,7 +348,7 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
           const list = (e.target as HTMLElement).closest?.('.theme-menu__list');
           if (!list) return;
           e.preventDefault();
-          const opts = Array.from(list.querySelectorAll<HTMLElement>('[data-theme-opt]'));
+          const opts = Array.from(list.querySelectorAll<HTMLElement>('[data-world-opt]'));
           const i = opts.indexOf(document.activeElement as HTMLElement);
           const n = e.key === 'ArrowDown' ? (i + 1) % opts.length : (i - 1 + opts.length) % opts.length;
           opts[n]?.focus();

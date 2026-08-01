@@ -20,6 +20,12 @@ Key routes:
 - `#foundation` — nine earlier operating stories
 - `#lab` — seven architecture, restoration, and private-safe Engineering Lab studies
 
+The compact world control in the fixed navigation changes the art direction
+without changing a route or duplicating content. Astronomy is the incumbent
+default; Razer · Chroma, Disney · Storybook, COD · Tactical, Netflix · Cinema,
+Spotify · Pulse, Apple · Titanium, and Samsung · Galaxy are opt-in identity
+studies. The selected world persists across English, Arabic, and all stories.
+
 ## Production build
 
 ```bash
@@ -39,4 +45,4 @@ This regenerates the English and Arabic OpenGraph cards and the touch icon in `p
 
 ## Architecture
 
-Shared facts and bilingual story content live in `src/data/`. The original nine stories retain their bespoke components; the 17 new project families share a narrative spine while each uses a project-specific systems visual. See `NOTES.md` for the original rebuild notes and `PRODUCT.md` for the current product contract.
+Shared facts and bilingual story content live in `src/data/`. The original nine stories retain their bespoke components; the 17 new project families share a narrative spine while each uses a project-specific systems visual. Identity state and motion values live in `src/lib/theme.ts`; world-level materials live in `src/styles/worlds.css`. See `NOTES.md` for the original rebuild notes and `PRODUCT.md` for the current product contract.

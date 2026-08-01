@@ -61,7 +61,7 @@ for (const lang of ['en', 'ar']) {
   const homePath = join(dist, lang, 'index.html');
   const home = await readFile(homePath, 'utf8');
   const direction = lang === 'ar' ? 'rtl' : 'ltr';
-  assert(home.includes(`<html lang="${lang}" dir="${direction}">`), `${lang} homepage has the wrong language direction`);
+  assert(home.includes(`<html lang="${lang}" dir="${direction}"`), `${lang} homepage has the wrong language direction`);
   assert(home.includes(`${canonicalOrigin}/${lang}`), `${lang} homepage canonical is not on the production origin`);
   assert(home.includes(lang === 'en' ? 'Automation Engineer' : 'مهندس أتمتة'), `${lang} homepage is missing the Automation Engineer position`);
 
@@ -71,7 +71,7 @@ for (const lang of ['en', 'ar']) {
 
     const storyPath = join(dist, lang, 'work', slug, 'index.html');
     const story = await readFile(storyPath, 'utf8');
-    assert(story.includes(`<html lang="${lang}" dir="${direction}">`), `${href} has the wrong language direction`);
+    assert(story.includes(`<html lang="${lang}" dir="${direction}"`), `${href} has the wrong language direction`);
     assert(story.includes(`<link rel="canonical" href="${canonicalOrigin}${href}">`), `${href} has the wrong canonical URL`);
     assert((story.match(/<h1[\s>]/g) ?? []).length === 1, `${href} must contain exactly one h1`);
     assert(story.length > 8_000, `${href} appears unexpectedly thin`);

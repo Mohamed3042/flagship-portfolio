@@ -180,7 +180,18 @@ const arrow = ar ? '←' : '→';
 
     let W = 0, H = 0, cx = 0, cy = 0, maxR = 0;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const SPECTRUM = ['#ff5e8a', '#a259ff', '#2997ff', '#64d2ff'];
+    const palettes: Record<string, string[]> = {
+      astronomy: ['#ff5e8a', '#a259ff', '#2997ff', '#64d2ff'],
+      razer: ['#44d62c', '#00e0ff', '#ff2dc4', '#8dff70'],
+      disney: ['#e8c87a', '#00a8e1', '#a99bf0', '#fff0c2'],
+      cod: ['#ff7a00', '#9baa24', '#d6b164', '#f0e8d5'],
+      netflix: ['#e50914', '#ff4d57', '#780714', '#ffd0c7'],
+      spotify: ['#1db954', '#8a5cff', '#1ed760', '#a6ffca'],
+      apple: ['#dce5f0', '#7fb9ff', '#9f7aff', '#ffffff'],
+      samsung: ['#3562ff', '#12b6ff', '#67e4ff', '#8b7cff'],
+    };
+    const world = document.documentElement.dataset.world || 'astronomy';
+    const SPECTRUM = palettes[world] || palettes.astronomy;
     type P = { a: number; r: number; v: number; col: string; sz: number; jit: number };
     let parts: P[] = [];
     let N = 0;
@@ -220,9 +231,9 @@ const arrow = ar ? '←' : '→';
       const coreR = Math.min(W, H) * 0.16 * (0.92 + 0.12 * pulse) * (0.5 + 0.5 * ign);
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR * 2.4);
       g.addColorStop(0, rgba('#ffffff', 0.9 * ign));
-      g.addColorStop(0.18, rgba('#cdd9ff', 0.5 * ign));
-      g.addColorStop(0.4, rgba('#a259ff', 0.26 * ign));
-      g.addColorStop(0.7, rgba('#2997ff', 0.1 * ign));
+      g.addColorStop(0.18, rgba(SPECTRUM[3], 0.5 * ign));
+      g.addColorStop(0.4, rgba(SPECTRUM[1], 0.26 * ign));
+      g.addColorStop(0.7, rgba(SPECTRUM[2], 0.1 * ign));
       g.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, coreR * 2.4, 0, Math.PI * 2); ctx.fill();
 
@@ -261,4 +272,5 @@ const arrow = ar ? '←' : '→';
 
   initHero();
   document.addEventListener('astro:page-load', initHero);
+  document.addEventListener('mm:worldchange', initHero);
 </script>

@@ -14,7 +14,7 @@
    The nebula bloom lives in the CSS body background; this canvas draws only
    the particle layer.
    ===================================================================== */
-import { activeTheme } from './theme';
+import { activeWorld, type WorldName } from './theme';
 
 type Star = { x: number; y: number; r: number; tw: number };
 type LayerSpec = { n: number; sp: number; r: [number, number]; a: number };
@@ -23,7 +23,7 @@ type Dot = { x: number; y: number; ph: number; f: number; m: boolean };
 type Mote = { x: number; y: number; r: number; T: number; ph: number; a: number };
 type Spark = { x: number; y: number; r: number; col: string; ph: number; f: number; star: boolean };
 
-type Mode = 'stars' | 'neon' | 'cinema' | 'storybook' | 'wave';
+type Mode = 'stars' | 'neon' | 'cinema' | 'storybook' | 'wave' | 'tactical' | 'titanium' | 'galaxy';
 
 let raf: number | null = null;
 let cleanup: (() => void) | null = null;
@@ -55,14 +55,23 @@ export function initSpace(): void {
   ];
 
   function computeMode(): void {
-    const t = activeTheme();
-    mode = t === 'dark' || t === 'light' ? 'stars' : t;
+    const modes: Record<WorldName, Mode> = {
+      astronomy: 'stars',
+      razer: 'neon',
+      disney: 'storybook',
+      cod: 'tactical',
+      netflix: 'cinema',
+      spotify: 'wave',
+      apple: 'titanium',
+      samsung: 'galaxy',
+    };
+    mode = modes[activeWorld()];
   }
 
   function build(): void {
     computeMode();
     layers = []; dots = []; motes = []; sparks = [];
-    if (mode === 'stars') {
+    if (mode === 'stars' || mode === 'galaxy') {
       layers = SPECS.map((L) => {
         const stars: Star[] = [];
         for (let i = 0; i < L.n; i++) {
@@ -79,7 +88,7 @@ export function initSpace(): void {
       for (let i = 0; i < 16; i++) {
         dots.push({ x: Math.random(), y: Math.random(), ph: Math.random() * 6.283, f: 0.4 + Math.random() * 1.1, m: i % 3 === 0 });
       }
-    } else if (mode === 'cinema') {
+    } else if (mode === 'cinema' || mode === 'titanium') {
       for (let i = 0; i < 54; i++) {
         motes.push({ x: Math.random(), y: Math.random(), r: 0.8 + Math.random() * 0.8, T: 12000 + Math.random() * 8000, ph: Math.random() * 6.283, a: 0.3 + Math.random() * 0.2 });
       }
@@ -229,6 +238,71 @@ export function initSpace(): void {
     }
   }
 
+  function drawTactical(ms: number): void {
+    const unit = 56 * DPR;
+    const drift = REDUCE ? 0 : ((ms * 0.01) % 56) * DPR;
+    x!.strokeStyle = 'rgba(154,174,91,.10)';
+    x!.lineWidth = 1;
+    for (let gx = -unit + drift; gx < W * DPR + unit; gx += unit) {
+      x!.beginPath(); x!.moveTo(gx, 0); x!.lineTo(gx, H * DPR); x!.stroke();
+    }
+    for (let gy = -unit + drift; gy < H * DPR + unit; gy += unit) {
+      x!.beginPath(); x!.moveTo(0, gy); x!.lineTo(W * DPR, gy); x!.stroke();
+    }
+    const cx = W * DPR * .78, cy = H * DPR * .58, radius = Math.min(W, H) * DPR * .25;
+    x!.strokeStyle = 'rgba(255,122,0,.18)';
+    [1, .66, .33].forEach((k) => { x!.beginPath(); x!.arc(cx, cy, radius * k, 0, Math.PI * 2); x!.stroke(); });
+    const angle = REDUCE ? -.7 : ms / 1900;
+    x!.beginPath(); x!.moveTo(cx, cy); x!.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius); x!.stroke();
+    for (let i = 0; i < 9; i++) {
+      const a = i * 2.39, rr = radius * (.18 + ((i * 37) % 70) / 100);
+      x!.globalAlpha = .25 + .55 * Math.max(0, Math.sin(ms / 800 + i));
+      x!.fillStyle = i % 3 ? '#9baa24' : '#ff7a00';
+      x!.fillRect(cx + Math.cos(a) * rr - DPR, cy + Math.sin(a) * rr - DPR, 3 * DPR, 3 * DPR);
+    }
+  }
+
+  function drawTitanium(ms: number): void {
+    const cx = W * DPR * .52, cy = H * DPR * .46;
+    const max = Math.min(W, H) * DPR;
+    x!.lineWidth = DPR;
+    for (let i = 0; i < 5; i++) {
+      const r = max * (.16 + i * .075);
+      const phase = REDUCE ? 0 : ms / (3600 + i * 540);
+      const g = x!.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+      g.addColorStop(0, 'rgba(255,255,255,.03)');
+      g.addColorStop(.48, 'rgba(220,229,240,.22)');
+      g.addColorStop(.55, 'rgba(127,185,255,.14)');
+      g.addColorStop(1, 'rgba(255,255,255,.02)');
+      x!.strokeStyle = g;
+      x!.beginPath(); x!.ellipse(cx, cy, r, r * .42, -.16 + phase * .03, phase, phase + Math.PI * 1.52); x!.stroke();
+    }
+    for (const m of motes) {
+      const py = ((m.y + (REDUCE ? 0 : ms / m.T * .12)) % 1) * H * DPR;
+      x!.globalAlpha = .08 + m.a * .2;
+      x!.fillStyle = '#e6edf7';
+      x!.fillRect(m.x * W * DPR, py, Math.max(DPR, m.r * DPR * .65), Math.max(DPR, m.r * DPR * .65));
+    }
+  }
+
+  function drawGalaxy(ms: number): void {
+    drawStars(ms * .58);
+    const cx = W * DPR * .55, cy = H * DPR * .48;
+    const max = Math.min(W, H) * DPR;
+    x!.lineWidth = DPR;
+    for (let i = 0; i < 4; i++) {
+      const phase = REDUCE ? i * .55 : ms / (4200 + i * 700) + i * .7;
+      const rx = max * (.22 + i * .07), ry = rx * (.27 + i * .025);
+      x!.strokeStyle = i % 2 ? 'rgba(18,182,255,.18)' : 'rgba(53,98,255,.2)';
+      x!.beginPath(); x!.ellipse(cx, cy, rx, ry, -.24 + i * .08, 0, Math.PI * 2); x!.stroke();
+      x!.globalAlpha = .75;
+      x!.fillStyle = i % 2 ? '#67e4ff' : '#6184ff';
+      x!.beginPath();
+      x!.arc(cx + Math.cos(phase) * rx, cy + Math.sin(phase) * ry, (2.3 + i * .45) * DPR, 0, Math.PI * 2);
+      x!.fill();
+    }
+  }
+
   function draw(ms: number): void {
     x!.setTransform(1, 0, 0, 1, 0, 0);
     x!.clearRect(0, 0, c!.width, c!.height);
@@ -236,7 +310,10 @@ export function initSpace(): void {
     else if (mode === 'neon') drawNeon(ms);
     else if (mode === 'cinema') drawCinema(ms);
     else if (mode === 'storybook') drawStorybook(ms);
-    else drawWave(ms);
+    else if (mode === 'wave') drawWave(ms);
+    else if (mode === 'tactical') drawTactical(ms);
+    else if (mode === 'titanium') drawTitanium(ms);
+    else drawGalaxy(ms);
     x!.globalAlpha = 1;
   }
 

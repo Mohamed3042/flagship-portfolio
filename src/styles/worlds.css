@@ -1,0 +1,189 @@
+/* =====================================================================
+   IDENTITY WORLDS
+
+   This layer changes art direction without forking content or scroll markup.
+   Astronomy is deliberately absent from almost every selector so the prized
+   incumbent presentation remains the untouched default.
+   ===================================================================== */
+
+/* ---------- Shared selector + transition shell ---------- */
+.world-pill{max-width:min(30vw,190px);white-space:nowrap}
+.world-pill__label{overflow:hidden;text-overflow:ellipsis}
+.theme-menu__list{min-width:224px}
+.theme-menu__glyph{font-size:16px}
+
+.world-transition{
+  position:fixed;inset:0;z-index:1000;pointer-events:none;display:grid;place-items:center;
+  opacity:0;visibility:hidden;overflow:hidden;background:#030305;
+  transition:opacity 160ms linear,visibility 0s linear 820ms;
+}
+.world-transition i,.world-transition b{position:absolute;display:block;pointer-events:none}
+.world-transition i{inset:-35%;opacity:.65;transform:scale(.65) rotate(-12deg)}
+.world-transition b{width:min(54vw,620px);aspect-ratio:1;border:1px solid currentColor;border-radius:50%;opacity:.38;transform:scale(.2)}
+.world-transition span{
+  position:relative;z-index:2;padding:11px 18px;border:1px solid currentColor;border-radius:999px;
+  color:#f7f8fb;background:rgba(0,0,0,.46);backdrop-filter:blur(18px);
+  font-family:var(--font-label);font-size:clamp(12px,1.5vw,16px);font-weight:700;letter-spacing:.04em;
+  opacity:0;transform:translateY(14px);
+}
+.world-switching .world-transition{opacity:1;visibility:visible;transition:opacity 160ms linear,visibility 0s}
+.world-switching .world-transition i{animation:world-wipe 760ms var(--ease-expo) both}
+.world-switching .world-transition b{animation:world-core 760ms var(--ease-expo) both}
+.world-switching .world-transition span{animation:world-label 760ms var(--ease-expo) both}
+@keyframes world-wipe{0%{transform:scale(.62) rotate(-12deg);opacity:0}45%{opacity:.8}100%{transform:scale(1.2) rotate(8deg);opacity:0}}
+@keyframes world-core{0%{transform:scale(.2);opacity:0}45%{opacity:.5}100%{transform:scale(2.5);opacity:0}}
+@keyframes world-label{0%,18%,86%,100%{opacity:0;transform:translateY(14px)}38%,68%{opacity:1;transform:none}}
+
+.world-transition[data-next-world="astronomy"]{color:#8bc2ff;background:radial-gradient(circle at 50% 50%,#10163c,#000 60%)}
+.world-transition[data-next-world="astronomy"] i{background:repeating-conic-gradient(from 20deg,transparent 0 8deg,rgba(130,185,255,.22) 8deg 8.4deg)}
+.world-transition[data-next-world="razer"]{color:#44d62c;background:#030604}
+.world-transition[data-next-world="razer"] i{background:repeating-linear-gradient(90deg,transparent 0 7%,rgba(68,214,44,.25) 7% 7.4%),repeating-linear-gradient(0deg,transparent 0 7%,rgba(0,224,255,.16) 7% 7.4%);border-radius:0}
+.world-transition[data-next-world="disney"]{color:#e8c87a;background:radial-gradient(circle at 50% 100%,#1d2a68,#070d2a 68%)}
+.world-transition[data-next-world="disney"] i{border:2px solid #e8c87a;border-radius:50%;box-shadow:0 0 80px rgba(232,200,122,.35)}
+.world-transition[data-next-world="cod"]{color:#ff7a00;background:#080907}
+.world-transition[data-next-world="cod"] i{background:repeating-linear-gradient(0deg,transparent 0 39px,rgba(154,170,91,.18) 40px),repeating-linear-gradient(90deg,transparent 0 39px,rgba(154,170,91,.18) 40px);clip-path:polygon(0 18%,42% 18%,42% 0,58% 0,58% 18%,100% 18%,100% 82%,58% 82%,58% 100%,42% 100%,42% 82%,0 82%)}
+.world-transition[data-next-world="netflix"]{color:#e50914;background:#000}
+.world-transition[data-next-world="netflix"] i{inset:0;background:linear-gradient(90deg,transparent 46%,rgba(229,9,20,.9) 49%,#fff 50%,rgba(229,9,20,.9) 51%,transparent 54%);filter:blur(7px)}
+.world-transition[data-next-world="spotify"]{color:#1ed760;background:radial-gradient(circle,#183721,#070b08 70%)}
+.world-transition[data-next-world="spotify"] i{inset:20% 0;background:repeating-linear-gradient(90deg,transparent 0 1.1%,rgba(29,185,84,.55) 1.1% 1.5%,transparent 1.5% 2.4%);mask:radial-gradient(ellipse,#000,transparent 70%)}
+.world-transition[data-next-world="apple"]{color:#dce5f0;background:radial-gradient(circle,#232934,#050507 62%)}
+.world-transition[data-next-world="apple"] i{border-radius:50%;background:conic-gradient(from 80deg,transparent,#eef4fb,transparent 16%,#7fb9ff,transparent 32%,#8a8f99,transparent 50%);filter:blur(3px)}
+.world-transition[data-next-world="samsung"]{color:#67e4ff;background:radial-gradient(circle,#0c215b,#010617 68%)}
+.world-transition[data-next-world="samsung"] i{border:1px solid #315cff;border-radius:50%;box-shadow:0 0 0 8vw rgba(49,92,255,.08),0 0 0 17vw rgba(0,185,255,.06),0 0 90px #315cff}
+
+/* ---------- Fixed ambient instrument layer ---------- */
+.world-ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;display:none}
+[data-world]:not([data-world="astronomy"]) .world-ambient{display:block}
+[data-world]:not([data-world="astronomy"]) main,
+[data-world]:not([data-world="astronomy"]) .footer{position:relative;z-index:1}
+.world-ambient>*{position:absolute;display:block}
+.wa-grid{inset:0;opacity:.28}
+.wa-orbit{width:min(82vw,980px);aspect-ratio:1;right:-24vw;top:14vh;border:1px solid var(--world-accent);border-radius:50%;opacity:.13}
+.wa-signal{left:0;right:0;bottom:0;height:26vh;opacity:.2}
+.wa-mark{left:clamp(18px,3vw,42px);bottom:28px;color:var(--world-accent);font:600 10px/1 var(--font-label);letter-spacing:.12em;text-transform:uppercase;opacity:.52}
+
+[data-world="razer"] .wa-grid{background:repeating-linear-gradient(90deg,transparent 0 63px,rgba(68,214,44,.1) 64px),repeating-linear-gradient(0deg,transparent 0 63px,rgba(0,224,255,.08) 64px);transform:perspective(800px) rotateX(58deg) scale(1.4);transform-origin:bottom}
+[data-world="razer"] .wa-orbit{border-radius:0;rotate:45deg;box-shadow:inset 0 0 60px rgba(68,214,44,.12),0 0 30px rgba(0,224,255,.1)}
+[data-world="razer"] .wa-signal{background:repeating-linear-gradient(90deg,transparent 0 6%,rgba(68,214,44,.24) 6% 6.25%,transparent 6.25% 10%);clip-path:polygon(0 72%,7% 72%,7% 42%,13% 42%,13% 82%,22% 82%,22% 58%,31% 58%,31% 88%,42% 88%,42% 32%,50% 32%,50% 64%,58% 64%,58% 46%,67% 46%,67% 78%,77% 78%,77% 24%,85% 24%,85% 62%,93% 62%,93% 48%,100% 48%,100% 100%,0 100%)}
+
+[data-world="disney"] .wa-grid{background:radial-gradient(circle at 18% 18%,#e8c87a 0 1px,transparent 1.8px),radial-gradient(circle at 72% 32%,#fff 0 1px,transparent 1.8px);background-size:170px 190px,240px 220px;opacity:.4}
+[data-world="disney"] .wa-orbit{right:-18vw;top:-36vw;border-color:#e8c87a;box-shadow:0 0 80px rgba(232,200,122,.15),inset 0 0 80px rgba(0,168,225,.08)}
+[data-world="disney"] .wa-orbit::after{content:"";position:absolute;inset:7%;border:1px solid rgba(232,200,122,.28);border-radius:50%}
+[data-world="disney"] .wa-signal{height:34vh;background:linear-gradient(170deg,transparent 0 46%,rgba(0,168,225,.14) 47%,rgba(232,200,122,.09) 54%,transparent 55%)}
+
+[data-world="cod"] .wa-grid{background:repeating-linear-gradient(90deg,transparent 0 79px,rgba(154,170,91,.09) 80px),repeating-linear-gradient(0deg,transparent 0 79px,rgba(154,170,91,.09) 80px)}
+[data-world="cod"] .wa-orbit{border-radius:50%;border-color:#9baa24;box-shadow:0 0 0 42px rgba(154,170,91,.025),0 0 0 84px rgba(154,170,91,.018)}
+[data-world="cod"] .wa-orbit::before,[data-world="cod"] .wa-orbit::after{content:"";position:absolute;background:#ff7a00;opacity:.45}
+[data-world="cod"] .wa-orbit::before{left:50%;top:-8%;width:1px;height:116%}
+[data-world="cod"] .wa-orbit::after{top:50%;left:-8%;height:1px;width:116%}
+[data-world="cod"] .wa-signal{background:repeating-linear-gradient(105deg,transparent 0 10px,rgba(210,220,177,.06) 11px,transparent 12px 22px);animation:tactical-rain 7s linear infinite}
+@keyframes tactical-rain{to{transform:translate3d(80px,0,0)}}
+
+[data-world="netflix"] .wa-grid{background:linear-gradient(90deg,rgba(0,0,0,.8),transparent 22% 78%,rgba(0,0,0,.8)),repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.018) 4px)}
+[data-world="netflix"] .wa-orbit{width:36vw;right:4vw;top:17vh;border-color:#e50914;border-radius:4px;transform:perspective(900px) rotateY(-24deg);box-shadow:-70px 0 130px rgba(229,9,20,.12)}
+[data-world="netflix"] .wa-signal{height:18vh;background:linear-gradient(180deg,transparent,rgba(229,9,20,.12),transparent);filter:blur(28px)}
+
+[data-world="spotify"] .wa-grid{background:radial-gradient(circle at 90% 0%,rgba(138,92,255,.22),transparent 38%),radial-gradient(circle at 10% 100%,rgba(29,185,84,.18),transparent 42%)}
+[data-world="spotify"] .wa-orbit{right:-18vw;top:4vh;border:0;background:repeating-radial-gradient(circle,transparent 0 9%,rgba(29,185,84,.15) 9.2%,transparent 9.6% 15%);animation:spin-record 28s linear infinite}
+[data-world="spotify"] .wa-signal{background:repeating-linear-gradient(90deg,transparent 0 1.4%,rgba(29,185,84,.32) 1.4% 1.8%,transparent 1.8% 3%);mask:linear-gradient(transparent,#000);animation:audio-pulse 1.36s ease-in-out infinite alternate;transform-origin:bottom}
+@keyframes spin-record{to{rotate:1turn}}
+@keyframes audio-pulse{to{transform:scaleY(.38);filter:hue-rotate(75deg)}}
+
+[data-world="apple"] .wa-grid{background:radial-gradient(circle at 65% 18%,rgba(255,255,255,.12),transparent 2%,rgba(127,185,255,.06) 14%,transparent 34%)}
+[data-world="apple"] .wa-orbit{right:-14vw;top:7vh;border-color:rgba(230,238,248,.28);box-shadow:inset 24px 12px 80px rgba(255,255,255,.06),-28px 20px 90px rgba(127,185,255,.08);transform:perspective(900px) rotateX(66deg) rotateZ(-18deg)}
+[data-world="apple"] .wa-signal{height:40vh;background:linear-gradient(125deg,transparent 20%,rgba(255,255,255,.04) 42%,rgba(127,185,255,.08) 48%,transparent 67%);filter:blur(16px)}
+
+[data-world="samsung"] .wa-grid{background:linear-gradient(115deg,transparent 0 49.8%,rgba(103,228,255,.12) 50%,transparent 50.2%),radial-gradient(circle at 30% 60%,rgba(53,98,255,.14),transparent 32%)}
+[data-world="samsung"] .wa-orbit{right:-18vw;top:5vh;border-color:#3562ff;box-shadow:0 0 0 7vw rgba(53,98,255,.035),0 0 0 14vw rgba(18,182,255,.025),0 0 80px rgba(53,98,255,.12);animation:galaxy-orbit 18s ease-in-out infinite alternate}
+[data-world="samsung"] .wa-signal{height:46vh;background:linear-gradient(120deg,transparent 35%,rgba(53,98,255,.1) 35.2% 49.7%,rgba(103,228,255,.16) 50%,rgba(53,98,255,.06) 50.3% 64%,transparent 64.2%);transform-origin:center;animation:fold-plane 8s ease-in-out infinite alternate}
+@keyframes galaxy-orbit{to{transform:translate3d(-8vw,7vh,0) rotate(12deg)}}
+@keyframes fold-plane{to{transform:perspective(900px) rotateY(18deg) scaleX(.92)}}
+
+/* ---------- The same scenes, re-authored through each world's material ---------- */
+[data-world]:not([data-world="astronomy"]) [data-stage]::before,
+[data-world]:not([data-world="astronomy"]) [data-stage]::after{
+  content:"";position:absolute;z-index:0;pointer-events:none;transition:opacity var(--dur-base) var(--ease-std),transform var(--dur-reveal) var(--ease-expo)
+}
+[data-world]:not([data-world="astronomy"]) [data-stage]::before{inset:clamp(72px,8vw,120px) clamp(14px,5vw,76px) clamp(18px,4vw,58px);border:1px solid color-mix(in srgb,var(--world-accent) 24%,transparent);border-radius:var(--r);opacity:calc(.26 + var(--p,0)*.34)}
+[data-world]:not([data-world="astronomy"]) [data-stage]::after{width:min(60vw,720px);aspect-ratio:1;right:-18%;top:8%;border:1px solid color-mix(in srgb,var(--world-accent-2) 28%,transparent);border-radius:50%;transform:rotate(calc(var(--p,0)*80deg)) scale(calc(.82 + var(--p,0)*.22));opacity:.36}
+[data-world]:not([data-world="astronomy"]) [data-stage]>:not(.world-stage){position:relative;z-index:2}
+
+/* The hero keeps its layout and converging-light story, but every alternate
+   world supplies its own light spectrum, ground and control material. */
+[data-world]:not([data-world="astronomy"]) .hh{background:radial-gradient(120% 110% at 50% 42%,var(--surface-raised),var(--surface-base) 58%,var(--bg) 100%)}
+[data-world]:not([data-world="astronomy"]) .hh-l2{filter:drop-shadow(0 8px 42px color-mix(in srgb,var(--world-accent) 34%,transparent))}
+[data-world]:not([data-world="astronomy"]) .hh-btn--primary{background:linear-gradient(120deg,var(--world-accent),var(--world-accent-2));box-shadow:0 16px 46px -17px color-mix(in srgb,var(--world-accent) 80%,transparent)}
+[data-world]:not([data-world="astronomy"]) .hh-btn--ghost{border-color:color-mix(in srgb,var(--world-accent) 22%,transparent);background:color-mix(in srgb,var(--surface-raised) 68%,transparent)}
+[data-world="razer"] .hh{--pink:#ff2dc4;--violet:#00e0ff;--blue:#44d62c;--cyan:#8dff70}
+[data-world="razer"] .hh-stars,[data-world="cod"] .hh-stars{background-image:repeating-linear-gradient(90deg,transparent 0 63px,color-mix(in srgb,var(--world-accent) 8%,transparent) 64px),repeating-linear-gradient(0deg,transparent 0 63px,color-mix(in srgb,var(--world-accent-2) 7%,transparent) 64px);animation:none}
+[data-world="disney"] .hh{--pink:#a99bf0;--violet:#00a8e1;--blue:#e8c87a;--cyan:#fff0c2}
+[data-world="cod"] .hh{--pink:#9baa24;--violet:#d6b164;--blue:#ff7a00;--cyan:#f0e8d5}
+[data-world="netflix"] .hh{--pink:#780714;--violet:#e50914;--blue:#ff4d57;--cyan:#ffd0c7}
+[data-world="netflix"] .hh-stars{opacity:.24;filter:grayscale(1)}
+[data-world="spotify"] .hh{--pink:#8a5cff;--violet:#1db954;--blue:#1ed760;--cyan:#a6ffca}
+[data-world="spotify"] .hh::after{content:"";position:absolute;inset:auto 0 0;height:12vh;background:repeating-linear-gradient(90deg,transparent 0 1.5%,rgba(29,185,84,.26) 1.5% 1.9%,transparent 1.9% 3%);mask:linear-gradient(transparent,#000);animation:audio-pulse 1.36s ease-in-out infinite alternate;transform-origin:bottom}
+[data-world="apple"] .hh{--pink:#9f7aff;--violet:#7fb9ff;--blue:#dce5f0;--cyan:#ffffff}
+[data-world="samsung"] .hh{--pink:#8b7cff;--violet:#3562ff;--blue:#12b6ff;--cyan:#67e4ff}
+
+[data-world="razer"] .spectrum-text{background-image:linear-gradient(100deg,#44d62c,#00e0ff,#ff2dc4,#44d62c)}
+[data-world="disney"] .spectrum-text{background-image:linear-gradient(100deg,#e8c87a,#00a8e1,#a99bf0,#e8c87a)}
+[data-world="cod"] .spectrum-text{background-image:linear-gradient(100deg,#ff7a00,#9baa24,#d6b164,#ff7a00)}
+[data-world="netflix"] .spectrum-text{background-image:linear-gradient(100deg,#e50914,#ff4d57,#780714,#e50914)}
+[data-world="spotify"] .spectrum-text{background-image:linear-gradient(100deg,#1db954,#8a5cff,#1ed760,#1db954)}
+[data-world="apple"] .spectrum-text{background-image:linear-gradient(100deg,#f3f6fa,#7fb9ff,#9f7aff,#f3f6fa)}
+[data-world="samsung"] .spectrum-text{background-image:linear-gradient(100deg,#3562ff,#12b6ff,#67e4ff,#3562ff)}
+
+[data-world="razer"] [data-stage]::before{border-radius:0;clip-path:polygon(0 0,34% 0,36% 10px,64% 10px,66% 0,100% 0,100% 100%,72% 100%,70% calc(100% - 10px),30% calc(100% - 10px),28% 100%,0 100%);box-shadow:inset 0 0 40px rgba(68,214,44,.035)}
+[data-world="razer"] [data-stage]::after{border-radius:0;transform:rotate(45deg) scale(calc(.72 + var(--p,0)*.36));box-shadow:0 0 50px rgba(0,224,255,.1)}
+[data-world="disney"] [data-stage]::before{border-color:rgba(232,200,122,.28);border-radius:48% 48% 22px 22px;box-shadow:inset 0 0 70px rgba(0,168,225,.055)}
+[data-world="disney"] [data-stage]::after{right:50%;translate:50%;top:-42%;width:min(95vw,1100px);border-color:rgba(232,200,122,.32)}
+[data-world="cod"] [data-stage]::before{border-radius:0;clip-path:polygon(0 0,30% 0,31.5% 7px,68.5% 7px,70% 0,100% 0,100% 100%,0 100%);background:repeating-linear-gradient(90deg,transparent 0 95px,rgba(154,170,91,.05) 96px)}
+[data-world="cod"] [data-stage]::after{border-radius:50%;border-style:dashed;right:-12%;box-shadow:0 0 0 32px rgba(154,170,91,.025)}
+[data-world="netflix"] [data-stage]::before{inset:9vh 4vw;border-color:rgba(255,255,255,.1);border-radius:4px;box-shadow:inset 0 0 140px rgba(0,0,0,.76)}
+[data-world="netflix"] [data-stage]::after{border-radius:0;border:0;background:linear-gradient(90deg,transparent,rgba(229,9,20,.12),transparent);filter:blur(20px);transform:translateX(calc((var(--p,0) - .5)*30vw))}
+[data-world="spotify"] [data-stage]::before{border-radius:38px;background:linear-gradient(145deg,rgba(29,185,84,.035),rgba(138,92,255,.04));box-shadow:inset 0 0 70px rgba(29,185,84,.03)}
+[data-world="spotify"] [data-stage]::after{border:0;background:repeating-radial-gradient(circle,transparent 0 11%,rgba(29,185,84,.18) 11.3%,transparent 11.8% 18%);animation:spin-record 32s linear infinite}
+[data-world="apple"] [data-stage]::before{border-radius:34px;background:linear-gradient(135deg,rgba(255,255,255,.035),rgba(127,185,255,.018));box-shadow:inset 0 1px rgba(255,255,255,.13),0 34px 90px rgba(0,0,0,.28);backdrop-filter:blur(2px)}
+[data-world="apple"] [data-stage]::after{border-color:rgba(230,238,248,.24);transform:perspective(900px) rotateX(68deg) rotateZ(calc(-18deg + var(--p,0)*24deg));box-shadow:inset 0 0 60px rgba(127,185,255,.05)}
+[data-world="samsung"] [data-stage]::before{border-radius:26px;background:linear-gradient(135deg,rgba(53,98,255,.04),transparent 48%,rgba(18,182,255,.035));box-shadow:inset 0 1px rgba(103,228,255,.12)}
+[data-world="samsung"] [data-stage]::after{border-color:rgba(103,228,255,.3);box-shadow:0 0 0 7vw rgba(53,98,255,.025);transform:rotate(calc(-22deg + var(--p,0)*110deg)) scale(calc(.7 + var(--p,0)*.45))}
+
+/* ---------- Cards, story panels, and interaction language ---------- */
+[data-world]:not([data-world="astronomy"]) .nav{border-bottom-color:color-mix(in srgb,var(--world-accent) 20%,transparent);background:color-mix(in srgb,var(--surface-base) 76%,transparent)}
+[data-world]:not([data-world="astronomy"]) .nav__brand .dot{background:var(--world-accent);box-shadow:0 0 16px var(--world-accent)}
+[data-world]:not([data-world="astronomy"]) .progress{background:linear-gradient(90deg,var(--world-accent),var(--world-accent-2));box-shadow:0 0 12px var(--world-accent)}
+[data-world]:not([data-world="astronomy"]) .pill:hover{border-color:var(--world-accent)}
+[data-world]:not([data-world="astronomy"]) .theme-menu__glyph,
+[data-world]:not([data-world="astronomy"]) .theme-menu__opt[aria-selected="true"]::after{color:var(--world-accent)}
+
+[data-world]:not([data-world="astronomy"]) .foundation-story,
+[data-world]:not([data-world="astronomy"]) .system-visual,
+[data-world]:not([data-world="astronomy"]) .contract-panel{
+  border:1px solid color-mix(in srgb,var(--world-accent) 16%,var(--panel-brd));
+  background:linear-gradient(145deg,color-mix(in srgb,var(--world-accent) 4%,var(--surface-raised)),color-mix(in srgb,var(--surface-base) 94%,transparent));
+}
+[data-world="razer"] .foundation-story,[data-world="razer"] .system-visual,[data-world="razer"] .contract-panel,
+[data-world="cod"] .foundation-story,[data-world="cod"] .system-visual,[data-world="cod"] .contract-panel{border-radius:2px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+[data-world="disney"] .foundation-story,[data-world="disney"] .system-visual,[data-world="disney"] .contract-panel{border-color:rgba(232,200,122,.2);box-shadow:0 34px 90px rgba(5,9,34,.42),inset 0 1px rgba(232,200,122,.12)}
+[data-world="netflix"] .foundation-story,[data-world="netflix"] .system-visual,[data-world="netflix"] .contract-panel{border-radius:4px;box-shadow:0 38px 110px rgba(0,0,0,.6)}
+[data-world="spotify"] .foundation-story,[data-world="spotify"] .system-visual,[data-world="spotify"] .contract-panel{border-radius:28px}
+[data-world="apple"] .foundation-story,[data-world="apple"] .system-visual,[data-world="apple"] .contract-panel{border-color:rgba(229,237,248,.14);box-shadow:inset 0 1px rgba(255,255,255,.1),0 38px 110px rgba(0,0,0,.42)}
+[data-world="samsung"] .foundation-story,[data-world="samsung"] .system-visual,[data-world="samsung"] .contract-panel{border-color:rgba(80,145,255,.2);box-shadow:inset 0 1px rgba(103,228,255,.1),0 38px 110px rgba(0,5,30,.46)}
+
+/* World-specific reveal grammar, layered over the shared GSAP progression. */
+[data-world="razer"] .reveal:not(.in){clip-path:inset(0 100% 0 0);transform:translateX(-18px)}
+[data-world="cod"] .reveal:not(.in){clip-path:inset(0 0 100% 0);transform:translateY(-12px)}
+[data-world="netflix"] .reveal:not(.in){filter:blur(12px);transform:scale(1.035)}
+[data-world="disney"] .reveal:not(.in){transform:translateY(48px) scale(.97)}
+[data-world="spotify"] .reveal:not(.in){transform:translateY(34px) scale(.9)}
+[data-world="apple"] .reveal:not(.in){filter:blur(8px);transform:translateY(22px) scale(.985)}
+[data-world="samsung"] .reveal:not(.in){transform:perspective(700px) rotateY(8deg) translateX(26px)}
+[data-world]:not([data-world="astronomy"]) .reveal.in{clip-path:inset(0);filter:none}
+
+@media(max-width:760px){
+  .world-pill{width:40px;padding-inline:0}
+  .world-pill__label{display:none}
+  .theme-menu__list{position:fixed;top:62px;left:12px;right:12px;min-width:0;max-height:calc(100dvh - 76px);overflow:auto}
+  .world-ambient .wa-mark{display:none}
+  [data-world]:not([data-world="astronomy"]) [data-stage]::before{inset:68px 10px 12px}
+}

@@ -33,7 +33,7 @@ The work spans bilingual Kuwait business operations, offline and LAN-only intern
 
 ## Brand Commitments
 
-Preserve the recovered live portfolio’s cinematic cosmic design language, dark luminous surfaces, existing typography, bilingual behavior, motion system, and per-story art direction. Reposition the content from “marketing team” to “Automation Engineer” without replacing the approved visual identity.
+Preserve the recovered live portfolio’s cinematic cosmic design language as the default Astronomy world, including its pinned story structure, luminous depth, bilingual behavior, motion system, and per-story art direction. Seven opt-in identity studies may reinterpret typography, material, atmosphere, transitions, and motion, but must never fork facts, routes, or story markup. Interface labels use a readable proportional face; monospace is reserved for genuine code or telemetry.
 
 ## Evidence on Hand
 
