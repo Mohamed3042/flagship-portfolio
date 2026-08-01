@@ -1,48 +1,42 @@
-# Mohamed Mahmoud — Flagship Portfolio (Astro rebuild)
+# Mohamed Mahmoud — Automation Engineer Portfolio
 
-A cinematic, bilingual (English / العربية, with full RTL) portfolio. Static Astro site — an aurora hero, scroll-driven storytelling, animated proof metrics, and 8 project "story" pages each embedding an interactive Claude Design film.
+A cinematic, bilingual English/Arabic portfolio built with Astro and full RTL support. The site presents 26 evidence-backed project stories: ten Automation Engineering flagships, nine operating-foundation stories, and seven Engineering Lab studies.
 
-## Preview it
+Every new story is grounded in its source repository. Private projects are presented as sanitized case studies without repository links, source excerpts, credentials, or rights-restricted assets.
+
+## Local development
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Then open **http://localhost:4321** — it redirects to `/en` (or `/ar` if your browser is Arabic). Use the **ع / EN** pill in the nav to switch language and **☀ / ☾** to switch theme.
+Open `http://localhost:4321`. The root redirects to `/en` or `/ar` from the browser language; the language control switches between equivalent routes.
 
 Key routes:
 
-- `/en`, `/ar` — the homepage
-- `/en/work/<slug>`, `/ar/work/<slug>` — the 8 stories
-  (`meta-ads`, `al-maali`, `crm`, `brand-system`, `sheep-app`, `hr-system`, `medmac-website`, `ai-workflow`)
+- `/en` and `/ar` — bilingual homepages
+- `/en/work/<slug>` and `/ar/work/<slug>` — all 26 project stories
+- `#foundation` — nine earlier operating stories
+- `#lab` — seven architecture, restoration, and private-safe Engineering Lab studies
 
-## Build the static site
-
-```bash
-npm run build      # outputs to dist/
-npm run preview    # serve the production build locally
-```
-
-`dist/` is a fully static bundle — deployable to Netlify, Vercel, Cloudflare Pages, or any static host.
-
-## Deploy (Netlify)
-
-`netlify.toml` is included. Either connect the repo (build command `npm run build`, publish dir `dist`) or:
+## Production build
 
 ```bash
 npm run build
-npx netlify deploy --prod --dir dist
+npm run preview
 ```
 
-Before deploying, set the production URL in **`astro.config.mjs`** (`const SITE = …`) so canonical/sitemap/OG links are correct.
+The static output is written to `dist/`. Canonical URLs, sitemap entries, and social metadata target `https://mohamed-mahmoud-kuwait.netlify.app`.
 
-## Optional: regenerate social images
+## Social images
 
 ```bash
-npm run og         # writes public/og/en.png, public/og/ar.png, apple-touch-icon.png
+npm run og
 ```
 
-## Where things live
+This regenerates the English and Arabic OpenGraph cards and the touch icon in `public/`.
 
-See **`NOTES.md`** for the architecture, the stack rationale, and what changed from the original static site. Every displayed number traces to **`src/data/profile.ts`**.
+## Architecture
+
+Shared facts and bilingual story content live in `src/data/`. The original nine stories retain their bespoke components; the 17 new project families share a narrative spine while each uses a project-specific systems visual. See `NOTES.md` for the original rebuild notes and `PRODUCT.md` for the current product contract.

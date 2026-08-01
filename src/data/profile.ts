@@ -12,13 +12,13 @@ export const profile = {
   name: { en: 'Mohamed Mahmoud', ar: 'محمد محمود' },
   nickname: 'Medmac',
   title: {
-    en: 'Digital Marketing Specialist',
-    ar: 'أخصائي تسويق رقمي',
+    en: 'Automation Engineer',
+    ar: 'مهندس أتمتة',
   },
-  // One-line positioning — the marketer who also builds the systems behind the ads.
+  // One-line positioning — the engineer who turns manual work into guarded systems.
   tagline: {
-    en: 'A marketer who builds the systems behind the ads — campaigns, CRM, and AI assistants.',
-    ar: 'مُسوِّق يبني الأنظمة التي تقف خلف الإعلانات — حملاتٌ ونظام إدارة علاقات العملاء ومساعدون بالذكاء الاصطناعي.',
+    en: 'An Automation Engineer who maps manual work, builds the internal tool, and verifies the result.',
+    ar: 'مهندس أتمتة يرسم العمل اليدوي، ويبني الأداة الداخلية، ويتحقق من النتيجة.',
   },
   location: { en: 'Kuwait', ar: 'الكويت' },
   nationality: { en: 'Egyptian', ar: 'مصري' },

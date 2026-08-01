@@ -10,12 +10,12 @@ export type Lang = keyof typeof languages;
 
 export const ui = {
   en: {
-    'site.title': 'Mohamed Mahmoud — A whole marketing team, in one person',
+    'site.title': 'Mohamed Mahmoud — Automation Engineer in Kuwait',
     'site.description':
-      'Mohamed Mahmoud (Medmac) — a one-person marketing department in Kuwait. Meta ads at $0.84/lead, a channel grown to 1M+ followers, a 12-tab CRM, and four AI-assisted production systems shipped. Bilingual AR/EN.',
+      'Mohamed Mahmoud is an Automation Engineer in Kuwait building local AI, internal tools, bilingual document systems, desktop software, and verified system integrations. 26 project stories in English and Arabic.',
     'nav.work': 'Work',
-    'nav.team': 'One-person team',
-    'nav.about': 'About',
+    'nav.team': 'Engineering Lab',
+    'nav.about': 'Foundation',
     'nav.contact': 'Contact',
     'a11y.switchLang': 'التبديل إلى العربية',
     'a11y.toggleTheme': 'Toggle light / dark theme',
@@ -41,12 +41,12 @@ export const ui = {
     'footer.top': 'Back to top ↑',
   },
   ar: {
-    'site.title': 'محمد محمود — فريق تسويقٍ كامل، في شخصٍ واحد',
+    'site.title': 'محمد محمود — مهندس أتمتة في الكويت',
     'site.description':
-      'محمد محمود (Medmac) — قسم تسويقٍ من شخصٍ واحد في الكويت. إعلانات ميتا بتكلفة ٠٫٨٤$ للعميل، وقناة نمت إلى مليون+ متابع، ونظام عملاء بـ١٢ جدولًا، وأربعة أنظمة إنتاجية بمساعدة الذكاء الاصطناعي. ثنائي اللغة عربي/إنجليزي.',
+      'محمد محمود مهندس أتمتة في الكويت يبني ذكاءً محليًا وأدوات داخلية وأنظمة مستندات ثنائية وبرمجيات سطح مكتب وتكاملات موثقة. ٢٦ قصة مشروع بالعربية والإنجليزية.',
     'nav.work': 'الأعمال',
-    'nav.team': 'فريق من شخص',
-    'nav.about': 'نبذة',
+    'nav.team': 'المختبر الهندسي',
+    'nav.about': 'الأساس',
     'nav.contact': 'تواصل',
     'a11y.switchLang': 'Switch to English',
     'a11y.toggleTheme': 'تبديل المظهر الفاتح / الداكن',

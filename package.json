@@ -2,7 +2,7 @@
   "name": "mohamed-mahmoud-flagship",
   "type": "module",
   "version": "1.0.0",
-  "description": "Flagship bilingual (AR/EN) cinematic portfolio for Mohamed Mahmoud (Medmac) — Astro rebuild.",
+  "description": "Mohamed Mahmoud's bilingual Automation Engineer portfolio — 26 evidence-backed project stories in Astro.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -10,6 +10,8 @@
     "build:ghpages": "DEPLOY_TARGET=ghpages astro build",
     "preview": "astro preview",
     "og": "node scripts/generate-og.mjs",
+    "verify:static": "node scripts/verify-portfolio.mjs",
+    "verify:browser": "python scripts/test-portfolio.py",
     "astro": "astro"
   },
   "dependencies": {
