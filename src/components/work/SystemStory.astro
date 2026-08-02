@@ -5,7 +5,6 @@ import Build from './spine/Build.astro';
 import Proof from './spine/Proof.astro';
 import Honesty from './spine/Honesty.astro';
 import SystemVisual from './SystemVisual.astro';
-import IdentityStoryWorlds from './IdentityStoryWorlds.astro';
 import { homePath, pick, useTranslations, type Lang } from '../../i18n/utils';
 import type { ProjectMeta } from '../../data/projects';
 
@@ -19,8 +18,6 @@ const story = project.story!;
 const t = useTranslations(lang);
 const ar = lang === 'ar';
 ---
-
-<IdentityStoryWorlds lang={lang} project={project} />
 
 <article class="system-story system-story--astronomy" data-spine>
   <section class="system-hook" data-screen="hook">

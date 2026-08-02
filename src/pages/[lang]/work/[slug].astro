@@ -2,6 +2,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Pager from '../../../components/work/Pager.astro';
 import SystemStory from '../../../components/work/SystemStory.astro';
+import IdentityStoryWorlds from '../../../components/work/IdentityStoryWorlds.astro';
 import { getProject, projectSlugs } from '../../../data/projects';
 import { profile } from '../../../data/profile';
 import { pick, workPath, locales, type Lang } from '../../../i18n/utils';
@@ -61,6 +62,13 @@ const creativeWork = {
   accent={project.accent}
   jsonLd={creativeWork}
 >
-  {Story ? <Story lang={lang} /> : <SystemStory lang={lang} project={project} />}
+  <IdentityStoryWorlds lang={lang} project={project} />
+  <div class="astronomy-project-story">
+    {Story ? <Story lang={lang} /> : <SystemStory lang={lang} project={project} />}
+  </div>
   <Pager lang={lang} slug={slug} />
 </BaseLayout>
+
+<style is:global>
+  html[data-world]:not([data-world="astronomy"]) .astronomy-project-story{display:none!important}
+</style>

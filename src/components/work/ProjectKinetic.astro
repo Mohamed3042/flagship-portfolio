@@ -1,0 +1,246 @@
+---
+import type { ProjectMeta } from '../../data/projects';
+import { kineticSpecFor } from '../../data/project-kinetics';
+import { pick, type Lang } from '../../i18n/utils';
+
+interface Props {
+  project: ProjectMeta;
+  lang: Lang;
+  world?: 'astronomy' | 'razer' | 'disney' | 'cod' | 'netflix' | 'spotify' | 'apple' | 'samsung';
+  compact?: boolean;
+  phase?: 'input' | 'run' | 'proof';
+}
+
+const { project, lang, world = 'astronomy', compact = false, phase = 'run' } = Astro.props;
+const spec = kineticSpecFor(project);
+const slug = project.slug;
+const stages = spec.stages.map((label, index) => ({ label: pick(lang, label), index }));
+---
+
+<figure
+  class:list={['project-kinetic', compact && 'project-kinetic--compact']}
+  data-project-kinetic
+  data-kinetic={slug}
+  data-kinetic-world={world}
+  data-kinetic-phase={phase}
+  style={`--ka:${project.cardA};--kb:${project.cardB};view-transition-name:kinetic-${slug}`}
+  aria-label={`${pick(lang, project.title)} — ${pick(lang, project.stat)}`}
+>
+  <div class="kinetic-chrome" aria-hidden="true"><i></i><i></i><i></i><span>{spec.code}</span></div>
+  <div class="kinetic-viewport" aria-hidden="true">
+    <svg viewBox="0 0 800 460" role="presentation">
+      <defs>
+        <linearGradient id={`kg-${slug}`} x1="0" y1="0" x2="1" y2="1"><stop stop-color={project.cardA}/><stop offset="1" stop-color={project.cardB}/></linearGradient>
+        <radialGradient id={`kr-${slug}`}><stop stop-color={project.cardA}/><stop offset="1" stop-color={project.cardB} stop-opacity="0"/></radialGradient>
+        <filter id={`glow-${slug}`} x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <pattern id={`grid-${slug}`} width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="currentColor" stroke-opacity=".09"/></pattern>
+      </defs>
+      <rect width="800" height="460" fill={`url(#grid-${slug})`} class="kinetic-grid"/>
+      <path class="kinetic-horizon" d="M40 374H760" pathLength="1"/>
+
+      {slug === 'career-autopilot' && <g class="signature approval">
+        <g class="job-cards"><rect x="65" y="105" width="132" height="76" rx="12"/><rect x="82" y="193" width="132" height="76" rx="12"/><rect x="65" y="281" width="132" height="76" rx="12"/></g>
+        <path class="flow" pathLength="1" d="M216 230H360"/><rect class="gate" x="360" y="96" width="82" height="270" rx="18"/><circle class="human" cx="401" cy="177" r="22"/><path class="human" d="M365 272c10-56 62-56 72 0"/>
+        <path class="flow" pathLength="1" d="M442 230H650"/><g class="send"><rect x="608" y="185" width="112" height="90" rx="16"/><path d="m630 232 30 22 36-44"/></g><circle class="packet" cx="298" cy="230" r="10"/>
+      </g>}
+      {slug === 'lifeos' && <g class="signature local-ai">
+        <path class="shield" d="M400 62 585 126v116c0 100-80 150-185 176-105-26-185-76-185-176V126z"/>
+        <circle class="core spin" cx="400" cy="224" r="82"/><circle class="core" cx="400" cy="224" r="35"/><g class="orbit spin"><ellipse cx="400" cy="224" rx="143" ry="48"/><circle cx="543" cy="224" r="10"/><ellipse cx="400" cy="224" rx="48" ry="143"/><circle cx="400" cy="81" r="10"/></g>
+        <path class="flow" pathLength="1" d="M112 224h100M588 224h100"/><path class="lock" d="M378 216v-24c0-31 44-31 44 0v24m-58 0h72v69h-72z"/>
+      </g>}
+      {slug === 'medmac-document-studio' && <g class="signature document">
+        <g class="page page-a"><path d="M92 83h206l50 50v248H92z"/><path d="M298 83v50h50M126 182h158M126 220h112M126 258h148"/></g>
+        <g class="page page-b"><path d="M452 83h206l50 50v248H452z"/><path d="M658 83v50h50M488 182h158M532 220h112M496 258h148"/></g>
+        <path class="merge flow" pathLength="1" d="M342 231h116"/><circle class="press" cx="400" cy="231" r="38"/><path d="m382 231 13 14 26-31"/>
+      </g>}
+      {slug === 'medmac-box-studio' && <g class="signature box-studio">
+        <g class="dieline draw"><path pathLength="1" d="M78 151h154V80h154v71h154v154H386v75H232v-75H78zm154 0v154m154-154v154m154-154h154v154H540"/><path pathLength="1" d="m78 151-45 42v69l45 43m616-154 45 42v69l-45 43"/></g>
+        <g class="box fold"><path d="m306 139 134 34v142l-134-34z"/><path d="m440 173 112-56v142l-112 56z"/><path d="m306 139 112-56 134 34-112 56z"/></g>
+      </g>}
+      {slug === 'cake-studio' && <g class="signature cake">
+        <g class="cake-layers"><path d="M190 319c0-38 420-38 420 0v55H190z"/><path d="M235 231c0-34 330-34 330 0v70H235z"/><path d="M286 151c0-30 228-30 228 0v68H286z"/></g>
+        <g class="repos"><circle cx="220" cy="92" r="35"/><circle cx="400" cy="68" r="35"/><circle cx="580" cy="92" r="35"/></g><path class="flow" pathLength="1" d="M220 127q20 70 166 75M400 103v99M580 127q-20 70-166 75"/>
+        <path class="seam" d="M320 338h160"/><circle class="packet" cx="400" cy="338" r="13"/>
+      </g>}
+      {slug === 'quotations-locker' && <g class="signature locker">
+        <g class="quote"><path d="M80 92h250v292H80z"/><path d="M118 145h174M118 187h112M118 285h174M118 327h174"/><text x="133" y="260">WATERMARK</text></g>
+        <path class="flow" pathLength="1" d="M330 238h124"/><g class="vault-door"><rect x="454" y="78" width="260" height="320" rx="22"/><circle class="spin" cx="584" cy="238" r="72"/><path d="M584 166v144M512 238h144M533 187l102 102M635 187 533 289"/></g>
+        <g class="hash-chain"><circle cx="377" cy="320" r="9"/><circle cx="410" cy="340" r="9"/><circle cx="443" cy="320" r="9"/><path d="m385 325 17 10m16 0 17-10"/></g>
+      </g>}
+      {slug === 'reclaim' && <g class="signature reclaim">
+        <circle class="disk" cx="310" cy="230" r="170"/><circle cx="310" cy="230" r="112"/><circle cx="310" cy="230" r="32"/><path class="sweep spin" d="M310 230 438 118A170 170 0 0 1 480 230z"/>
+        <path class="flow" pathLength="1" d="M480 230h82"/><g class="files"><rect x="562" y="105" width="150" height="54" rx="8"/><rect x="582" y="181" width="150" height="54" rx="8"/><rect x="562" y="257" width="150" height="54" rx="8"/><rect x="582" y="333" width="150" height="54" rx="8"/></g>
+      </g>}
+      {slug === 'sheep-cycle' && <g class="signature ration">
+        <g class="ingredient-bars"><rect x="82" y="100" width="150" height="30" rx="15"/><rect x="82" y="155" width="214" height="30" rx="15"/><rect x="82" y="210" width="120" height="30" rx="15"/><rect x="82" y="265" width="185" height="30" rx="15"/></g>
+        <g class="matrix"><path d="M356 83h260v260H356zM421 83v260M486 83v260M551 83v260M356 148h260M356 213h260M356 278h260"/><path class="solver" d="m372 293 64-106 65 45 94-108"/></g>
+        <g class="balance"><path d="M660 130v210M622 340h76M620 190h80M620 190l-45 78h90z"/></g>
+      </g>}
+      {slug === 'resume-builder-skill' && <g class="signature resume-fit">
+        <g class="layouts"><rect x="67" y="106" width="118" height="166"/><rect x="210" y="86" width="118" height="166"/><rect x="67" y="294" width="118" height="96"/><rect x="210" y="274" width="118" height="116"/></g>
+        <path class="flow" pathLength="1" d="M328 234h118"/><g class="a4"><rect x="446" y="48" width="264" height="364" rx="8"/><path d="M477 100h200M477 137h145M477 190h75v160h125M573 190v160"/><path class="measure" d="M432 48h-28v364h28M404 48l-12 16m12-16 12 16M404 412l-12-16m12 16 12-16"/></g>
+      </g>}
+      {slug === 'polyblast-arena' && <g class="signature sim">
+        <g class="players"><circle cx="95" cy="130" r="24"/><circle cx="95" cy="230" r="24"/><circle cx="95" cy="330" r="24"/></g><path class="flow" pathLength="1" d="M119 130q100 0 180 100M119 230h180M119 330q100 0 180-100"/>
+        <g class="server"><path d="M299 114h206v232H299z"/><path d="M328 160h148M328 205h148M328 250h148M328 295h148"/><circle class="tick" cx="402" cy="230" r="81"/><text x="367" y="240">60 HZ</text></g>
+        <path class="flow" pathLength="1" d="M505 230h95"/><g class="states"><circle cx="649" cy="130" r="27"/><circle cx="682" cy="230" r="27"/><circle cx="649" cy="330" r="27"/><path d="M600 230l49-100m-49 100h82m-82 0 49 100"/></g>
+      </g>}
+      {slug === 'petpoint-ops-hub' && <g class="signature ops-hub">
+        <g class="branches"><path d="M96 90h150v80H96zM96 194h150v80H96zM96 298h150v80H96z"/><path d="M554 90h150v80H554zM554 194h150v80H554zM554 298h150v80H554z"/></g>
+        <g class="hub"><circle cx="400" cy="234" r="102"/><circle cx="400" cy="234" r="50"/><path class="spin" d="M400 132v204M298 234h204"/></g><path class="flow" pathLength="1" d="M246 130 315 190M246 234h52M246 338l69-60M554 130l-69 60M554 234h-52M554 338l-69-60"/>
+      </g>}
+      {slug === 'relayops' && <g class="signature relay">
+        <g class="lanes"><path d="M68 110h664M68 180h664M68 250h664M68 320h664"/></g>
+        <g class="savepoints"><circle cx="180" cy="110" r="15"/><circle cx="335" cy="180" r="15"/><circle cx="490" cy="250" r="15"/><circle cx="640" cy="320" r="15"/></g>
+        <path class="retry draw" pathLength="1" d="M490 250c95-95 120 80 30 86-72 5-100-83-30-86"/><path class="flow" pathLength="1" d="M70 110h110m15 0 537 0M70 180h265m15 0h382M70 250h420m15 0h227M70 320h570m15 0h77"/>
+      </g>}
+      {slug === 'statement-styler' && <g class="signature statement">
+        <g class="scan"><path d="M68 67h226v330H68z"/><path d="M95 122h172M95 164h172M95 206h172M95 248h172M95 290h172"/><rect class="scanner" x="78" y="118" width="206" height="34" rx="8"/></g>
+        <path class="flow" pathLength="1" d="M294 232h138"/><g class="outputs"><path d="M432 78h128v142H432zM576 244h156v152H576z"/><path d="M450 116h92M450 150h92M600 280h108M600 314h108M600 348h108"/><text x="464" y="196">XLSX</text><text x="622" y="380">A4</text></g>
+      </g>}
+      {slug === 'meta-ads' && <g class="signature ads">
+        <g class="impressions">{Array.from({length:12}).map((_, i) => <circle cx={80 + (i % 4) * 48} cy={95 + Math.floor(i / 4) * 55} r="10" style={`--i:${i}`}/>)}</g>
+        <path class="funnel" d="M315 78h310L514 245v108H426V245z"/><path class="flow" pathLength="1" d="M258 180h68M470 353v55"/><circle class="lead" cx="470" cy="402" r="25"/><path d="m458 403 9 9 18-23"/><text x="378" y="192">$0.84 / LEAD</text>
+      </g>}
+      {slug === 'al-maali' && <g class="signature audience">
+        <circle class="core" cx="400" cy="230" r="54"/><g class="rings spin"><circle cx="400" cy="230" r="104"/><circle cx="400" cy="230" r="162"/><circle cx="400" cy="230" r="216"/></g>
+        {Array.from({length:14}).map((_, i) => <circle class="audience-dot" cx={400 + Math.cos(i * .9) * (95 + i * 8)} cy={230 + Math.sin(i * .9) * (95 + i * 8)} r={5 + (i % 3)} style={`--i:${i}`}/>)}<text x="355" y="242">1M+</text>
+      </g>}
+      {slug === 'crm' && <g class="signature crm">
+        <g class="columns">{Array.from({length:6}).map((_, i) => <g><rect x={60 + i * 116} y="76" width="94" height="310" rx="12"/><circle cx={107 + i * 116} cy="112" r="10"/></g>)}</g>
+        <path class="lead-route flow" pathLength="1" d="M107 190h116v54h116v-74h116v120h116v-52h116"/><circle class="packet" cx="397" cy="198" r="13"/>
+      </g>}
+      {slug === 'brand-system' && <g class="signature brand">
+        <circle class="core spin" cx="400" cy="230" r="72"/><path class="flow" pathLength="1" d="M348 178 180 82M452 178 620 82M348 282 180 378M452 282 620 378"/>
+        <g class="assets"><rect x="90" y="42" width="180" height="80" rx="12"/><rect x="530" y="42" width="180" height="80" rx="12"/><rect x="90" y="338" width="180" height="80" rx="12"/><rect x="530" y="338" width="180" height="80" rx="12"/></g><text x="361" y="242">254</text>
+      </g>}
+      {slug === 'sheep-app' && <g class="signature sheep-app">
+        <rect class="window" x="70" y="65" width="480" height="330" rx="18"/><path d="M70 112h480M108 88h1M137 88h1M166 88h1"/><g class="tables">{Array.from({length:15}).map((_, i) => <rect x={96 + (i % 5) * 80} y={140 + Math.floor(i / 5) * 72} width="58" height="44" rx="6" style={`--i:${i}`}/>)}</g>
+        <path class="flow" pathLength="1" d="M550 230h76"/><g class="builds"><rect x="626" y="130" width="112" height="80" rx="12"/><rect x="626" y="250" width="112" height="80" rx="12"/><path d="m652 170 17 17 39-43m-56 146 17 17 39-43"/></g>
+      </g>}
+      {slug === 'hr-system' && <g class="signature hiring">
+        <g class="inboxes"><rect x="60" y="88" width="150" height="66" rx="12"/><rect x="60" y="198" width="150" height="66" rx="12"/><rect x="60" y="308" width="150" height="66" rx="12"/></g>
+        <path class="flow" pathLength="1" d="M210 121q105 0 155 109M210 231h155M210 341q105 0 155-110"/><g class="dedupe"><circle cx="405" cy="230" r="75"/><text x="367" y="240">142→100</text></g>
+        <path class="flow" pathLength="1" d="M480 230h104"/><g class="shortlist"><rect x="584" y="105" width="158" height="250" rx="16"/><circle cx="620" cy="152" r="13"/><circle cx="620" cy="214" r="13"/><circle cx="620" cy="276" r="13"/><path d="M650 152h58M650 214h58M650 276h58"/></g>
+      </g>}
+      {slug === 'medmac-website' && <g class="signature website">
+        <g class="screens"><rect x="58" y="72" width="380" height="280" rx="16"/><rect x="106" y="112" width="380" height="280" rx="16"/><path d="M106 158h380M142 198h130v154H142zM292 198h158M292 238h158M292 278h120"/></g>
+        <g class="gauges">{[0,1,2,3].map((i) => <g><circle cx={570 + (i%2)*100} cy={150 + Math.floor(i/2)*150} r="38"/><path class="gauge" d={`M${532+(i%2)*100} ${150+Math.floor(i/2)*150}a38 38 0 1 1 76 0`}/></g>)}</g><text x="535" y="230">96—100</text>
+      </g>}
+      {slug === 'ai-workflow' && <g class="signature ai-workflow">
+        <circle class="human" cx="400" cy="230" r="62"/><path d="M374 244c8-48 44-48 52 0M400 183a18 18 0 1 0 0 36 18 18 0 0 0 0-36"/>
+        <g class="agents"><circle cx="162" cy="115" r="52"/><circle cx="638" cy="115" r="52"/><circle cx="400" cy="375" r="52"/></g><path class="flow" pathLength="1" d="M208 140 347 204M592 140 453 204M400 323v-31"/><path class="approval-ring spin" d="M400 115a115 115 0 1 1-1 0"/><text x="362" y="238">HUMAN</text>
+      </g>}
+      {slug === 'my-resume' && <g class="signature resume-os">
+        <g class="master"><path d="M72 78h210v304H72z"/><path d="M104 130h146M104 170h146M104 210h110M104 285h146M104 325h98"/></g><path class="flow" pathLength="1" d="M282 230h90"/>
+        <g class="tools"><circle cx="430" cy="130" r="38"/><circle cx="430" cy="230" r="38"/><circle cx="430" cy="330" r="38"/></g><path class="flow" pathLength="1" d="M468 130q90 0 120 76M468 230h96M468 330q90 0 120-76"/>
+        <g class="proof"><rect x="588" y="126" width="146" height="208" rx="12"/><path d="M614 175h94M614 216h94M614 257h94"/></g>
+      </g>}
+      {slug === 'spaceframe-world' && <g class="signature frame-solver">
+        <g class="truss draw"><path pathLength="1" d="M64 328 150 130l92 198 88-198 92 198 90-198 92 198 82-198 70 198M64 328h672M150 130h180M330 130h182M512 130h174"/></g>
+        <g class="nodes">{[64,150,242,330,422,512,604,686,736].map((x,i)=><circle cx={x} cy={i===1||i===3||i===5||i===7?130:328} r="8"/>)}</g><path class="load" d="M400 48v122m-18-20 18 20 18-20"/><path class="deform" d="M64 348q336 70 672 0"/>
+      </g>}
+      {slug === 'b2mh' && <g class="signature texture">
+        <g class="face source"><path d="M92 110c40-70 178-70 218 0v150c0 92-55 142-109 142S92 352 92 260z"/><path d="M128 190h48m50 0h48M201 204v58m-38 54q38 28 76 0"/></g>
+        <path class="flow" pathLength="1" d="M310 230h180"/><g class="layers">{[0,1,2,3].map(i=><path d={`M${340+i*28} ${124+i*18}v212`} style={`--i:${i}`}/>)}</g>
+        <g class="face target"><path d="M490 110c40-70 178-70 218 0v150c0 92-55 142-109 142S490 352 490 260z"/><path d="M526 190h48m50 0h48M599 204v58m-38 54q38 28 76 0"/></g><text x="346" y="102">dE 1.41</text>
+      </g>}
+      {slug === 'artillery3d' && <g class="signature artillery">
+        <path class="terrain" d="M52 350q92-120 192 0 92-90 178 0 118-155 326 0"/><g class="cannon"><rect x="95" y="280" width="100" height="48" rx="14"/><path d="m170 286 72-94 18 15-64 100"/><circle cx="120" cy="338" r="24"/><circle cx="180" cy="338" r="24"/></g>
+        <path class="arc draw" pathLength="1" d="M250 194Q470-40 666 276"/><circle class="shell" cx="450" cy="94" r="12"/><circle class="impact" cx="666" cy="276" r="48"/>
+      </g>}
+      {slug === 'war-strikes' && <g class="signature architecture">
+        <g class="architecture-layers"><rect x="86" y="78" width="628" height="68" rx="14"/><rect x="126" y="170" width="548" height="68" rx="14"/><rect x="166" y="262" width="468" height="68" rx="14"/><rect x="206" y="354" width="388" height="54" rx="14"/></g>
+        <path class="flow" pathLength="1" d="M400 146v24m0 68v24m0 68v24"/><g class="qa-scan"><rect x="74" y="64" width="652" height="98" rx="18"/><path d="m658 112 17 17 35-42"/></g>
+      </g>}
+      {slug === 'uberstrike-restoration' && <g class="signature restoration">
+        <g class="legacy-shards"><path d="m72 102 96-36 72 84-48 100-108-17zM95 293l102-30 57 82-82 56-104-42z"/></g>
+        <path class="bridge flow" pathLength="1" d="M254 230h278"/><g class="patches"><rect x="302" y="185" width="48" height="90"/><rect x="376" y="165" width="48" height="130"/><rect x="450" y="185" width="48" height="90"/></g>
+        <g class="unity-six"><path d="m532 91 194 68v142l-194 68-91-139z"/><text x="556" y="252">UNITY 6</text></g>
+      </g>}
+      {slug === 'cocolani-3d' && <g class="signature world-audit">
+        <g class="islands"><path d="M65 168q70-115 160 0t166 0q75-105 164 0t180 0v165H65z"/></g><g class="audit-flags"><circle cx="154" cy="178" r="20"/><circle cx="400" cy="168" r="20"/><circle cx="650" cy="178" r="20"/><text x="146" y="184">V</text><text x="394" y="174">I</text><text x="644" y="184">L</text></g>
+        <path class="scanline" d="M40 80h720"/><g class="private-lock"><rect x="330" y="294" width="140" height="88" rx="14"/><path d="M360 294v-34c0-55 80-55 80 0v34"/></g>
+      </g>}
+      {slug === 'job-apply-engine' && <g class="signature receipt">
+        <g class="facts"><rect x="55" y="96" width="174" height="62" rx="12"/><rect x="55" y="197" width="174" height="62" rx="12"/><rect x="55" y="298" width="174" height="62" rx="12"/></g><path class="flow" pathLength="1" d="M229 127q90 0 120 103M229 228h120M229 329q90 0 120-99"/>
+        <g class="gate"><path d="M349 106h102v248H349z"/><circle cx="400" cy="230" r="28"/></g><path class="flow" pathLength="1" d="M451 230h96"/>
+        <g class="receipt-paper"><path d="M547 76h188v316l-23-16-23 16-23-16-23 16-23-16-23 16-23-16-27 16z"/><path d="M578 130h126M578 178h126M578 226h94M578 294h126"/><path d="m602 338 16 16 40-52"/></g>
+      </g>}
+      {slug === 'portfolio-design-system' && <g class="signature design-system">
+        <circle class="truth-core" cx="400" cy="230" r="70"/><text x="366" y="237">TRUTH</text><g class="world-orbits spin"><circle cx="400" cy="230" r="138"/><circle cx="400" cy="230" r="202"/></g>
+        {Array.from({length:8}).map((_,i)=><g class="world-node" style={`--i:${i}`} transform={`translate(${400+Math.cos(i*Math.PI/4)*202} ${230+Math.sin(i*Math.PI/4)*202})`}><circle r="24"/><path d="M-10 0h20M0-10v20"/></g>)}
+        <g class="story-rays">{Array.from({length:8}).map((_,i)=><path class="flow" pathLength="1" d={`M400 230L${400+Math.cos(i*Math.PI/4)*178} ${230+Math.sin(i*Math.PI/4)*178}`}/>)}</g>
+      </g>}
+
+      <g class="kinetic-progress">
+        {stages.map(({ index }) => <g class="kinetic-step" style={`--i:${index}`}><circle cx={150 + index * 167} cy="410" r="8"/><path d={index < 3 ? `M158 410H${309 + index * 167}` : ''}/></g>)}
+      </g>
+    </svg>
+  </div>
+  <figcaption>
+    <div class="kinetic-contract"><span>{spec.input}</span><i>→</i><b>{spec.process}</b><i>→</i><span>{spec.output}</span></div>
+    {!compact && <ol>{stages.map(({ label, index }) => <li style={`--i:${index}`}><span>{String(index + 1).padStart(2, '0')}</span>{label}</li>)}</ol>}
+    <strong>{pick(lang, project.stat)}</strong>
+  </figcaption>
+</figure>
+
+<script>
+  let projectKineticCleanup: (() => void) | null = null;
+  function initProjectKinetics() {
+    projectKineticCleanup?.();
+    const roots = [...document.querySelectorAll<HTMLElement>('[data-project-kinetic]')];
+    if (!roots.length) return;
+    const active = new Set<HTMLElement>();
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const h = innerHeight;
+      active.forEach((root) => {
+        const rect = root.getBoundingClientRect();
+        const p = Math.max(0, Math.min(1, (h - rect.top) / (h + rect.height)));
+        root.style.setProperty('--kp', p.toFixed(4));
+      });
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.isIntersecting ? active.add(entry.target as HTMLElement) : active.delete(entry.target as HTMLElement));
+      queue();
+    }, { rootMargin: '18% 0px' });
+    roots.forEach((root) => observer.observe(root));
+    const pointer = (event: PointerEvent) => {
+      const root = (event.target as Element | null)?.closest<HTMLElement>('[data-project-kinetic]');
+      if (!root) return;
+      const rect = root.getBoundingClientRect();
+      root.style.setProperty('--mx', ((event.clientX - rect.left) / rect.width - .5).toFixed(3));
+      root.style.setProperty('--my', ((event.clientY - rect.top) / rect.height - .5).toFixed(3));
+    };
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', queue, { passive: true });
+    document.addEventListener('pointermove', pointer, { passive: true });
+    projectKineticCleanup = () => {
+      observer.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+      removeEventListener('scroll', queue);
+      removeEventListener('resize', queue);
+      document.removeEventListener('pointermove', pointer);
+    };
+  }
+  initProjectKinetics();
+  document.addEventListener('astro:page-load', initProjectKinetics);
+</script>
+
+<style>
+  .project-kinetic{--kp:.42;--mx:0;--my:0;position:relative;margin:0;aspect-ratio:16/9;min-height:320px;overflow:hidden;isolation:isolate;color:#eaf4ff;background:radial-gradient(circle at calc(50% + var(--mx)*18%) calc(44% + var(--my)*15%),color-mix(in srgb,var(--ka) 24%,transparent),transparent 34%),linear-gradient(145deg,color-mix(in srgb,var(--kb) 18%,#070a12),#05070c 70%);border:1px solid color-mix(in srgb,var(--ka) 38%,#ffffff18);border-radius:32px;box-shadow:0 42px 100px #0008;transform:perspective(1200px) rotateX(calc(var(--my)*-2deg)) rotateY(calc(var(--mx)*3deg));transform-style:preserve-3d;contain:layout paint;transition:border-color .25s,box-shadow .25s}
+  .project-kinetic:hover{border-color:color-mix(in srgb,var(--ka) 76%,white);box-shadow:0 46px 110px #0009,0 0 55px color-mix(in srgb,var(--ka) 18%,transparent)}
+  .kinetic-chrome{position:absolute;z-index:3;inset:18px 22px auto;display:flex;align-items:center;gap:7px;color:#bdc8d9;font:700 9px var(--font-mono);letter-spacing:.14em}.kinetic-chrome i{width:7px;aspect-ratio:1;border-radius:50%;background:#ffffff38}.kinetic-chrome i:first-child{background:var(--ka);box-shadow:0 0 14px var(--ka)}.kinetic-chrome span{margin-inline-start:auto;color:var(--ka)}
+  .kinetic-viewport{position:absolute;inset:34px 20px 60px;transform:translateZ(20px)}.kinetic-viewport svg{width:100%;height:100%;overflow:visible;color:var(--ka)}
+  .kinetic-grid{opacity:calc(.45 + var(--kp)*.35)}.kinetic-horizon,.signature path,.signature rect,.signature circle,.signature ellipse{vector-effect:non-scaling-stroke}.kinetic-horizon{fill:none;stroke:var(--ka);stroke-width:1;opacity:.22}.signature{fill:none;stroke:color-mix(in srgb,var(--ka) 74%,white);stroke-width:2}.signature text{fill:#eef6ff;stroke:none;font:800 18px var(--font-mono);letter-spacing:.04em}.signature .flow,.signature .draw path,.signature path.draw,.signature .arc{stroke:url(#kg-placeholder);stroke:var(--ka);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--kp));filter:drop-shadow(0 0 8px var(--ka))}.signature rect,.signature circle,.signature path,.signature ellipse{transition:opacity .2s}.signature>g,.signature>path,.signature>circle{transform-box:fill-box;transform-origin:center}.spin{transform-box:fill-box;transform-origin:center;transform:rotate(calc(var(--kp)*300deg))}.packet,.shell,.lead{fill:var(--ka);stroke:white;filter:drop-shadow(0 0 14px var(--ka));transform:translateX(calc(var(--kp)*110px - 55px))}.scanner,.scanline{transform:translateY(calc(var(--kp)*210px - 105px));fill:color-mix(in srgb,var(--ka) 26%,transparent);filter:drop-shadow(0 0 13px var(--ka))}.gate,.press,.human,.truth-core,.core{fill:color-mix(in srgb,var(--ka) 14%,transparent);filter:drop-shadow(0 0 12px color-mix(in srgb,var(--ka) 45%,transparent))}.kinetic-progress{stroke:#ffffff34;fill:#0b0d13}.kinetic-step{opacity:clamp(.18,calc(var(--kp)*4 - var(--i)),1);transform:translateY(calc((1 - clamp(0,calc(var(--kp)*4 - var(--i)),1))*14px))}.kinetic-step circle{fill:var(--ka);stroke:none;filter:drop-shadow(0 0 8px var(--ka))}.kinetic-step path{stroke:#ffffff38}
+  .job-cards rect,.inboxes rect,.facts rect{fill:color-mix(in srgb,var(--kb) 25%,#0b101b);transform:translateX(calc(var(--kp)*48px));}.send rect,.receipt-paper,.a4,.quote,.window,.screens,.outputs,.master,.proof{fill:color-mix(in srgb,var(--kb) 16%,#0a0d15)}.local-ai .shield{fill:color-mix(in srgb,var(--kb) 13%,transparent);stroke-width:3}.local-ai .orbit{stroke:var(--kb)}.document .page-a{transform:translateX(calc(var(--kp)*54px));}.document .page-b{transform:translateX(calc(var(--kp)*-54px));}.document .press{fill:var(--ka)}.dieline{opacity:calc(1 - var(--kp)*.65)}.box-studio .fold{transform:translateX(calc(var(--kp)*-160px)) scale(calc(.55 + var(--kp)*.45));fill:color-mix(in srgb,var(--ka) 22%,transparent);filter:drop-shadow(0 16px 25px #000)}.cake-layers path{fill:color-mix(in srgb,var(--ka) 20%,transparent);transform:translateY(calc((1 - var(--kp))*-48px))}.repos circle{fill:color-mix(in srgb,var(--kb) 35%,#080b12)}.vault-door rect{fill:#0a0e16;stroke-width:4}.quote text{fill:var(--ka);opacity:.55;transform:rotate(-22deg);transform-origin:center}.disk{fill:color-mix(in srgb,var(--kb) 15%,#080b11);stroke-width:4}.sweep{fill:url(#kr-reclaim);stroke:none;transform-origin:310px 230px}.files rect{fill:color-mix(in srgb,var(--ka) 12%,#080d16);transform:translateX(calc((1 - var(--kp))*55px))}.ingredient-bars rect{fill:color-mix(in srgb,var(--ka) 34%,transparent);transform:scaleX(calc(.35 + var(--kp)*.65));transform-origin:left}.matrix{fill:color-mix(in srgb,var(--kb) 8%,transparent)}.solver,.gauge{stroke:var(--ka);stroke-width:5;filter:drop-shadow(0 0 10px var(--ka))}.layouts rect{fill:color-mix(in srgb,var(--kb) 16%,#0a0d14);transform:translateX(calc(var(--kp)*40px))}.measure{stroke:var(--kb)!important}.tick{stroke-width:8;stroke-dasharray:8 9;transform:rotate(calc(var(--kp)*360deg));transform-origin:402px 230px}.server{fill:color-mix(in srgb,var(--ka) 9%,#090d15)}.branches path,.assets rect,.architecture-layers rect{fill:color-mix(in srgb,var(--kb) 17%,#090d16)}.hub circle{fill:color-mix(in srgb,var(--ka) 12%,transparent)}.lanes path{stroke:#ffffff2e}.savepoints circle{fill:var(--ka);transform:scale(calc(.55 + var(--kp)*.45))}.outputs>path,.outputs>rect{fill:color-mix(in srgb,var(--kb) 18%,#0a0e17)}.impressions circle,.audience-dot{fill:var(--ka);stroke:none;opacity:clamp(.15,calc(var(--kp)*3 - var(--i)*.1),1)}.funnel{fill:color-mix(in srgb,var(--ka) 14%,transparent);stroke-width:4}.rings{stroke:color-mix(in srgb,var(--ka) 55%,transparent)}.columns rect{fill:color-mix(in srgb,var(--kb) 13%,#090d15)}.columns circle{fill:var(--ka)}.assets rect{transform:scale(calc(.74 + var(--kp)*.26))}.tables rect{fill:color-mix(in srgb,var(--ka) 19%,transparent);opacity:clamp(.1,calc(var(--kp)*3 - var(--i)*.08),1)}.builds rect,.shortlist rect{fill:color-mix(in srgb,var(--kb) 18%,#080c14)}.gauges circle{fill:none;stroke:#ffffff20;stroke-width:9}.gauge{stroke-dasharray:140 240;transform:rotate(calc(var(--kp)*160deg));transform-origin:center}.agents circle{fill:color-mix(in srgb,var(--kb) 25%,#090c14)}.approval-ring{fill:none;stroke-dasharray:5 12}.tools circle{fill:color-mix(in srgb,var(--ka) 18%,#090d15);transform:translateX(calc(var(--kp)*26px))}.truss{stroke-width:3}.load{stroke:var(--kb)!important;stroke-width:5!important;transform:translateY(calc(var(--kp)*65px))}.deform{stroke:var(--ka)!important;opacity:var(--kp)}.face{fill:color-mix(in srgb,var(--ka) 9%,transparent)}.layers path{stroke:var(--kb);transform:translateX(calc(var(--kp)*52px - 26px))}.terrain{fill:color-mix(in srgb,var(--kb) 18%,#080b12)}.cannon{fill:color-mix(in srgb,var(--ka) 22%,#080b12)}.shell{transform:translate(calc(var(--kp)*170px - 85px),calc(var(--kp)*-30px + 15px))}.impact{fill:color-mix(in srgb,var(--ka) 18%,transparent);transform:scale(calc(.3 + var(--kp)*.7))}.architecture-layers rect{transform:translateX(calc((1 - var(--kp))*35px))}.qa-scan{transform:translateY(calc(var(--kp)*230px));opacity:.7}.legacy-shards{fill:color-mix(in srgb,var(--kb) 22%,#090c13);transform:rotate(calc((1 - var(--kp))*-9deg))}.patches rect{fill:color-mix(in srgb,var(--ka) 25%,#090d14);transform:scaleY(var(--kp))}.unity-six{fill:color-mix(in srgb,var(--ka) 13%,#090d15)}.islands{fill:color-mix(in srgb,var(--kb) 22%,#080c13)}.audit-flags circle{fill:var(--ka)}.private-lock{fill:color-mix(in srgb,var(--ka) 16%,#080c13)}.receipt .gate{transform:none}.receipt-paper{transform:translateX(calc((1 - var(--kp))*45px))}.world-orbits{stroke:color-mix(in srgb,var(--ka) 50%,transparent)}.world-node circle{fill:color-mix(in srgb,var(--kb) 35%,#080b12)}
+  figcaption{position:absolute;z-index:4;inset:auto 24px 16px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}.kinetic-contract{display:flex;align-items:center;gap:9px;min-width:0;color:#aeb9ca;font:700 8px var(--font-mono);letter-spacing:.09em;white-space:nowrap}.kinetic-contract b{color:#eef6ff}.kinetic-contract i{color:var(--ka);font-style:normal}.project-kinetic figcaption>strong{color:var(--ka);font:800 14px var(--font-display)}figcaption ol{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;list-style:none;margin:5px 0 0;padding:0}figcaption li{padding-top:8px;border-top:1px solid #ffffff20;color:#d6dfeb;font:600 9px var(--font-label);opacity:clamp(.2,calc(var(--kp)*4 - var(--i)),1)}figcaption li span{margin-inline-end:7px;color:var(--ka);font:800 8px var(--font-mono)}
+  .project-kinetic--compact{min-height:0;border-radius:18px;box-shadow:0 22px 45px #0005;transform:none}.project-kinetic--compact .kinetic-viewport{inset:22px 9px 38px}.project-kinetic--compact .kinetic-chrome{inset:9px 12px auto}.project-kinetic--compact figcaption{inset:auto 12px 8px}.project-kinetic--compact .kinetic-contract{display:none}.project-kinetic--compact figcaption>strong{font-size:11px}
+  [data-kinetic-world="razer"]{border-radius:0;clip-path:polygon(0 10%,8% 0,100% 0,100% 90%,92% 100%,0 100%);background:linear-gradient(145deg,#061007,#020503)}[data-kinetic-world="razer"] .kinetic-chrome span{color:#44d62c}[data-kinetic-world="disney"]{border-radius:48% 48% 22px 22px;background:radial-gradient(circle at 50% 24%,color-mix(in srgb,var(--ka) 30%,#fff8e8),#2d183d 62%);border-color:#f8d37d88}[data-kinetic-world="cod"]{border-radius:2px;clip-path:polygon(0 0,96% 0,100% 10%,100% 100%,4% 100%,0 90%);background:linear-gradient(145deg,#15180f,#070805)}[data-kinetic-world="netflix"]{border-radius:5px;background:linear-gradient(145deg,color-mix(in srgb,var(--ka) 36%,#151515),#070707 70%);box-shadow:0 28px 64px #000}[data-kinetic-world="spotify"]{border-radius:8px;background:linear-gradient(145deg,color-mix(in srgb,var(--ka) 36%,#14231a),#070907);box-shadow:0 28px 65px #000}[data-kinetic-world="apple"]{border:0;border-radius:30px;background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--ka) 22%,#252528),#050505 66%);box-shadow:0 35px 75px #0003}[data-kinetic-world="samsung"]{border-radius:28px;background:radial-gradient(circle at 50% 35%,color-mix(in srgb,var(--ka) 24%,#edf4ff),#071c52 72%);border-color:#93b7ff80}
+  [data-kinetic-phase="run"]{background:radial-gradient(circle at calc(50% + var(--mx)*14%) 46%,color-mix(in srgb,var(--ka) 34%,transparent),transparent 32%),linear-gradient(145deg,color-mix(in srgb,var(--kb) 20%,#070a12),#04060a 72%)}[data-kinetic-phase="run"] .signature{filter:drop-shadow(0 0 10px color-mix(in srgb,var(--ka) 32%,transparent))}[data-kinetic-phase="run"] .kinetic-grid{transform:translateY(calc(var(--kp)*18px));transform-origin:center}[data-kinetic-phase="proof"] .signature{transform:scale(calc(.92 + var(--kp)*.08));transform-origin:center}
+  @media(max-width:720px){.project-kinetic{min-height:260px;border-radius:20px}.kinetic-viewport{inset:30px 7px 58px}.kinetic-contract span{display:none}figcaption ol{grid-template-columns:1fr 1fr}.project-kinetic--compact{min-height:0}.project-kinetic--compact .kinetic-viewport{inset:20px 4px 36px}}
+  @media(prefers-reduced-motion:reduce){.project-kinetic{--kp:1!important;transform:none!important}.spin,.scanner,.scanline,.packet,.shell,.lead,.qa-scan{transform:none!important}.signature .flow,.signature .draw path,.signature path.draw,.signature .arc{stroke-dashoffset:0!important}}
+</style>

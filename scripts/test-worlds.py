@@ -18,7 +18,7 @@ AUTOMATION = ["career-autopilot", "lifeos", "medmac-document-studio", "medmac-bo
 FOUNDATION = ["meta-ads", "al-maali", "crm", "brand-system", "sheep-app", "hr-system", "medmac-website", "ai-workflow", "my-resume"]
 LAB = ["spaceframe-world", "b2mh", "artillery3d", "war-strikes", "uberstrike-restoration", "cocolani-3d", "job-apply-engine", "portfolio-design-system"]
 ALL_STORIES = AUTOMATION + FOUNDATION + LAB
-REPRESENTATIVE_STORIES = [AUTOMATION[0], LAB[-1]]
+REPRESENTATIVE_STORIES = [AUTOMATION[0], FOUNDATION[2], LAB[-1]]
 CHROME = Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
 
 
@@ -106,6 +106,13 @@ def main() -> None:
                         failures.append(f"{args.viewport}: /{lang}/work/{slug} lost its h1 under {world}")
                     if slug in AUTOMATION + LAB and page.locator("article.system-story").count() != 1:
                         failures.append(f"{args.viewport}: /{lang}/work/{slug} lost its shared story spine under {world}")
+                    if world != "astronomy":
+                        active_story = page.locator(f'[data-story-world="{world}"]')
+                        if active_story.count() != 1 or active_story.get_attribute("aria-hidden") != "false":
+                            failures.append(f"{args.viewport}: /{lang}/work/{slug} lost its active {world} story")
+                        kinetic_count = active_story.locator(f'[data-project-kinetic][data-kinetic="{slug}"]').count()
+                        if kinetic_count < 2:
+                            failures.append(f"{args.viewport}: /{lang}/work/{slug} has {kinetic_count}/2 project-specific kinetic phases")
                     overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
                     if overflow > 2:
                         failures.append(f"{args.viewport}: /{lang}/work/{slug} has {overflow}px overflow under {world}")

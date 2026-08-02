@@ -79,6 +79,8 @@ for (const lang of ['en', 'ar']) {
     assert(story.includes(`<link rel="canonical" href="${canonicalOrigin}${href}">`), `${href} has the wrong canonical URL`);
     assert((story.match(/<h1[\s>]/g) ?? []).length === 1, `${href} must contain exactly one h1`);
     assert(story.length > 8_000, `${href} appears unexpectedly thin`);
+    assert(story.includes(`data-project-kinetic data-kinetic="${slug}"`), `${href} is missing its project-specific kinetic scene`);
+    assert(home.includes(`data-project-kinetic data-kinetic="${slug}"`), `${lang} homepage is missing the kinetic catalog scene for ${slug}`);
   }
 
   assert(automation.every((slug) => home.indexOf(`/work/${slug}`) < home.indexOf('id="foundation"')), `${lang} flagship stories are not ahead of the foundation section`);
