@@ -1,0 +1,230 @@
+---
+import { automationProjects, labProjects } from '../../data/system-projects';
+import { legacyProjects } from '../../data/projects';
+import { storybookRealmFor } from '../../data/storybook-realms';
+import { pick, workPath, type Lang } from '../../i18n/utils';
+import ProjectKinetic from '../work/ProjectKinetic.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const all = [...automationProjects, ...legacyProjects, ...labProjects];
+const groups = [
+  { title: ar ? 'أنظمة الأتمتة' : 'Automation systems', kicker: ar ? 'الفصل الأول' : 'Act one', items: automationProjects },
+  { title: ar ? 'الأساس التشغيلي' : 'Operating foundation', kicker: ar ? 'الفصل الثاني' : 'Act two', items: legacyProjects },
+  { title: ar ? 'المختبر الهندسي' : 'Engineering lab', kicker: ar ? 'الفصل الثالث' : 'Act three', items: labProjects },
+];
+const particles = Array.from({ length: 18 });
+const chapterNumber = (slug: string) => String(all.findIndex((item) => item.slug === slug) + 1).padStart(2, '0');
+const chapterStyle = (project: (typeof all)[number], index: number) => {
+  const hash = [...project.slug].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return `--ink:${project.cardA};--ink-2:${project.cardB};--tilt:${((hash % 9) - 4) * .35}deg;--drift:${18 + (hash % 33)}px;--delay:${(index % 7) * -.37}s`;
+};
+const arrow = ar ? '←' : '→';
+---
+
+<article class="wj wj--disney db-world" data-world-journey="disney" data-disney-book-home aria-hidden="true">
+  <section class="wj-stage db-awakening" data-world-stage>
+    <div class="wj-stick">
+      <div class="db-night" aria-hidden="true">
+        <div class="db-moon"></div>
+        <div class="db-hills"><i></i><i></i><i></i></div>
+        <div class="db-fireflies">{particles.map((_, i) => <i style={`--i:${i}`}></i>)}</div>
+      </div>
+      <div class="db-pedestal" aria-hidden="true"><i></i><b></b></div>
+      <div class="db-closed-book" aria-hidden="true">
+        <div class="db-book-pages"></div>
+        <div class="db-cover">
+          <span>MM</span>
+          <i></i>
+          <b>{ar ? 'حكايات الأنظمة' : 'Stories of systems'}</b>
+          <small>{all.length} {ar ? 'فصلًا حقيقيًا' : 'true chapters'}</small>
+        </div>
+      </div>
+      <div class="db-intro">
+        <p>{ar ? 'كتاب أعمال حي' : 'A living book of work'}</p>
+        <div class="home-heading" role="heading" aria-level="1">{ar ? 'كل نظام يبدأ قبل أن تُرى الآلة.' : 'Every system begins before the machine appears.'}</div>
+        <span>{ar ? 'مرّر الصفحة. اقترب من الكتاب.' : 'Scroll. Move closer to the book.'}</span>
+      </div>
+      <div class="db-scroll-cue" aria-hidden="true"><i></i><span>{ar ? 'افتح' : 'OPEN'}</span></div>
+    </div>
+  </section>
+
+  <section class="wj-stage db-portal" data-world-stage>
+    <div class="wj-stick">
+      <div class="db-portal-night" aria-hidden="true">{particles.slice(0, 10).map((_, i) => <i style={`--i:${i}`}></i>)}</div>
+      <div class="db-spread" aria-hidden="true">
+        <div class="db-page db-page--left">
+          <span>{ar ? 'قبل' : 'Once'}</span>
+          <svg viewBox="0 0 400 420" role="presentation"><path d="M48 330h304M93 330V191l67-64 65 64v139m-97-1v-70h63v70m52 0V113l72 78v139M90 154 46 211v119"/><circle cx="105" cy="95" r="30"/><path d="M105 125v57m-33-26h66"/></svg>
+        </div>
+        <b class="db-gutter"></b>
+        <div class="db-page db-page--right">
+          <span>{ar ? 'بعد' : 'After'}</span>
+          <svg viewBox="0 0 400 420" role="presentation"><path d="M45 329h310M65 329V180h80v149m17 0V111h80v218m18 0V214h76v115M81 201h48m49-59h48m50 103h44"/><path d="M82 160c28-73 112-101 178-56 38 26 59 65 60 110"/><circle cx="82" cy="160" r="13"/><circle cx="320" cy="214" r="13"/></svg>
+        </div>
+        <div class="db-page-turn" aria-hidden="true"></div>
+      </div>
+      <div class="db-portal-copy">
+        <span>{ar ? 'الحقيقة لا تتغير عندما يتغير الفصل' : 'The truth survives the page turn'}</span>
+        <h2>{ar ? 'ادخل الكتاب.' : 'Enter the book.'}</h2>
+        <p>{ar ? 'في الداخل، تتحول كل مشكلة إلى مشهد، وكل معمارية إلى آلية ورقية، وكل نتيجة إلى دليل مكتوب على الصفحة.' : 'Inside, every problem becomes a scene, every architecture becomes a paper mechanism, and every result leaves evidence on the page.'}</p>
+      </div>
+      <div class="db-iris" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <main class="db-manuscript" id="disney-chapters">
+    <header class="db-manuscript__title">
+      <span>{ar ? 'المخطوطة الكاملة' : 'The complete manuscript'}</span>
+      <h2>{ar ? 'ثلاثون فصلًا. لكل واحد عالمه وآليته.' : 'Thirty chapters. Each with its own world and mechanism.'}</h2>
+      <p>{ar ? 'لا بطاقات مكررة هنا. كل تمريرة تقلب صفحة، وكل رسم يشرح كيف يعمل المشروع بالفعل.' : 'No repeated cards here. Each scroll turns a page, and each illustration explains how that project actually works.'}</p>
+    </header>
+
+    {groups.map((group, groupIndex) => (
+      <section class="db-act" data-act={groupIndex + 1}>
+        <header>
+          <span>{group.kicker}</span>
+          <h3>{group.title}</h3>
+          <i>{String(group.items.length).padStart(2, '0')} {ar ? 'فصول' : 'chapters'}</i>
+        </header>
+        <div class="db-chapter-list">
+          {group.items.map((project, index) => {
+            const scene = storybookRealmFor(project);
+            const absoluteIndex = all.findIndex((item) => item.slug === project.slug);
+            return (
+              <section
+                class:list={['db-chapter', `db-chapter--${scene}`, absoluteIndex % 2 && 'db-chapter--reverse']}
+                data-disney-chapter
+                data-project-chapter={project.slug}
+                data-scene={scene}
+                style={chapterStyle(project, absoluteIndex)}
+              >
+                <div class="db-chapter__atmosphere" aria-hidden="true">
+                  <i></i><i></i><i></i><b></b><span></span>
+                </div>
+                <a class="db-sheet" href={workPath(lang, project.slug)} aria-label={`${ar ? 'افتح فصل' : 'Open chapter'} ${pick(lang, project.title)}`}>
+                  <div class="db-sheet__grain" aria-hidden="true"></div>
+                  <div class="db-chapter-copy">
+                    <span>{ar ? 'الفصل' : 'Chapter'} {chapterNumber(project.slug)}</span>
+                    <small>{pick(lang, project.tag)}</small>
+                    <h4>{pick(lang, project.title)}</h4>
+                    <p>{pick(lang, project.blurb)}</p>
+                    <dl><dt>{pick(lang, project.stat)}</dt><dd>{pick(lang, project.statNote)}</dd></dl>
+                    <b>{ar ? 'ادخل الفصل' : 'Enter chapter'} {arrow}</b>
+                  </div>
+                  <div class="db-pop-up" aria-hidden="true">
+                    <div class="db-scene-sky"><i></i><i></i><i></i></div>
+                    <div class="db-scene-arch"><i></i><b></b><i></i></div>
+                    <ProjectKinetic project={project} lang={lang} world="disney" compact />
+                    <div class="db-scene-front"><i></i><i></i><i></i></div>
+                  </div>
+                  <div class="db-folio">MM · {chapterNumber(project.slug)}</div>
+                  <div class="db-curl" aria-hidden="true"></div>
+                </a>
+              </section>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+
+    <footer class="db-epilogue">
+      <div aria-hidden="true"><i></i><b>MM</b><i></i></div>
+      <span>{ar ? 'الخاتمة ليست النهاية' : 'The epilogue is not the end'}</span>
+      <h2>{ar ? 'الفصل التالي نكتبه معًا.' : 'We write the next chapter together.'}</h2>
+      <a href="#contact">{ar ? 'ابدأ الحكاية التالية' : 'Begin the next story'} {arrow}</a>
+    </footer>
+  </main>
+</article>
+
+<script>
+  let disneyBookCleanup: (() => void) | null = null;
+  function initDisneyBook() {
+    disneyBookCleanup?.();
+    const root = document.querySelector<HTMLElement>('[data-disney-book-home]');
+    if (!root) return;
+    const chapters = [...root.querySelectorAll<HTMLElement>('[data-disney-chapter]')];
+    const manuscript = root.querySelector<HTMLElement>('.db-manuscript');
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      if (root.getAttribute('aria-hidden') === 'true') {
+        document.documentElement.removeAttribute('data-disney-book-open');
+        return;
+      }
+      const vh = Math.max(window.innerHeight, 1);
+      if (manuscript) {
+        const paper = manuscript.getBoundingClientRect();
+        document.documentElement.toggleAttribute('data-disney-book-open', paper.top < vh * .52 && paper.bottom > 0);
+      }
+      chapters.forEach((chapter) => {
+        const rect = chapter.getBoundingClientRect();
+        const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh + rect.height)));
+        chapter.style.setProperty('--chapter-p', progress.toFixed(4));
+        chapter.toggleAttribute('data-in-view', rect.bottom > vh * .08 && rect.top < vh * .92);
+      });
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', queue, { passive: true });
+    document.addEventListener('mm:worldchange', queue);
+    update();
+    disneyBookCleanup = () => {
+      if (raf) cancelAnimationFrame(raf);
+      removeEventListener('scroll', queue);
+      removeEventListener('resize', queue);
+      document.removeEventListener('mm:worldchange', queue);
+      document.documentElement.removeAttribute('data-disney-book-open');
+    };
+  }
+  initDisneyBook();
+  document.addEventListener('astro:page-load', initDisneyBook);
+</script>
+
+<style>
+  .db-world{--paper:#f4e8c6;--paper-deep:#d8c493;--night:#070c27;--gold:#e6c66f;background:var(--night);color:#fff9e8;font-family:var(--font-serif);overflow:clip}
+  .db-awakening .wj-stick{background:radial-gradient(circle at 50% 38%,#324880 0,#151d51 34%,#080d29 68%,#030617 100%)}
+  .db-night,.db-portal-night{position:absolute;inset:0;overflow:hidden}.db-night::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 8% 18%,#fff 0 1px,transparent 1.8px),radial-gradient(circle at 72% 29%,#ffe9a0 0 1px,transparent 1.8px),radial-gradient(circle at 41% 68%,#bde5ff 0 1px,transparent 1.8px);background-size:137px 173px,211px 229px,283px 251px;transform:translateY(calc(var(--p)*-110px)) scale(calc(1 + var(--p)*.08));opacity:calc(.65 - var(--p)*.25)}
+  .db-moon{position:absolute;left:50%;top:14%;width:min(18vw,220px);aspect-ratio:1;border-radius:50%;background:#fff5cf;box-shadow:0 0 45px #fff4c9aa,0 0 140px #8ab8ff66;transform:translate(-50%,calc(var(--p)*-5vh)) scale(calc(.78 + var(--p)*.38))}
+  .db-moon::after{content:"";position:absolute;inset:12%;border-radius:inherit;background:radial-gradient(circle at 65% 35%,#d6cfae 0 5%,transparent 6%),radial-gradient(circle at 38% 62%,#d6cfae 0 8%,transparent 9%);opacity:.42}
+  .db-hills i{position:absolute;left:-10%;right:-10%;bottom:-12%;height:45%;background:#05091e;clip-path:polygon(0 69%,8% 51%,15% 68%,23% 35%,31% 62%,42% 30%,50% 57%,59% 20%,70% 62%,79% 38%,88% 63%,100% 31%,100% 100%,0 100%);transform:translateY(calc(var(--p)*var(--y)))}.db-hills i:nth-child(1){--y:32px;opacity:.35;bottom:3%;background:#263865}.db-hills i:nth-child(2){--y:54px;opacity:.65;bottom:-5%;background:#11183a}.db-hills i:nth-child(3){--y:82px}
+  .db-fireflies i,.db-portal-night i{--x:calc((var(--i)*47)%100);position:absolute;left:calc(4% + (var(--i)*53%));top:calc(8% + (var(--i)*37%));width:clamp(3px,.45vw,7px);aspect-ratio:1;border-radius:50%;background:#ffe58b;box-shadow:0 0 16px #ffe58b;animation:db-float calc(3.2s + var(--i)*.13s) ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.31s)}
+  .db-pedestal{position:absolute;left:50%;bottom:3%;width:min(86vw,1080px);height:20vh;transform:translateX(-50%) translateY(calc(var(--p)*8vh));perspective:900px}.db-pedestal i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse,#1e2b59,#080d25 68%);transform:rotateX(67deg);box-shadow:0 -10px 60px #d7c67b22}.db-pedestal b{position:absolute;left:50%;top:34%;width:42%;height:70%;transform:translateX(-50%);background:linear-gradient(90deg,#090d25,#1b2750,#090d25);clip-path:polygon(8% 0,92% 0,100% 100%,0 100%)}
+  .db-closed-book{position:absolute;z-index:3;left:50%;top:52%;width:min(52vw,670px);aspect-ratio:1.48;transform-style:preserve-3d;transform:translate(-50%,-50%) perspective(1200px) rotateX(calc(54deg - var(--p)*43deg)) rotateZ(calc(-7deg + var(--p)*7deg)) scale(calc(.68 + var(--p)*.56));filter:drop-shadow(0 45px 55px #000a)}
+  .db-book-pages{position:absolute;inset:5% -1% -4% 3%;border-radius:18px 34px 34px 18px;background:repeating-linear-gradient(#f5e8c5 0 2px,#c9b47f 3px 4px);transform:translateZ(-18px)}
+  .db-cover{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:12%;border:5px double var(--gold);border-radius:18px 40px 40px 18px;background:radial-gradient(circle at 50% 42%,#315391,#182855 54%,#0b153a);box-shadow:inset 0 0 0 12px #0b1332,inset 0 0 0 14px #e6c66f66;transform-origin:left;transform:rotateY(calc(var(--p)*-8deg));overflow:hidden}.db-cover::before,.db-cover::after{content:"";position:absolute;width:42%;aspect-ratio:1;border:1px solid #e6c66f55;transform:rotate(45deg)}.db-cover::before{left:-22%;top:-20%}.db-cover::after{right:-22%;bottom:-20%}.db-cover span{position:absolute;top:11%;font-size:13px;letter-spacing:.38em;color:var(--gold)}.db-cover i{width:42%;aspect-ratio:1;border:1px solid var(--gold);border-radius:50%;box-shadow:0 0 0 10px #e6c66f12,0 0 40px #e6c66f33}.db-cover b{position:absolute;left:12%;right:12%;font-size:clamp(25px,3.8vw,54px);line-height:1.02;text-transform:uppercase;letter-spacing:.02em}.db-cover small{position:absolute;bottom:12%;color:#d9e3ff;font:600 11px var(--font);letter-spacing:.18em;text-transform:uppercase}
+  .db-intro{position:absolute;z-index:5;left:6vw;top:11vh;width:min(720px,47vw);transform:translateY(calc(var(--p)*-36px));opacity:calc(1 - var(--p)*1.35)}.db-intro p{color:var(--gold);font-style:italic}.db-intro .home-heading{font-size:clamp(52px,7.5vw,108px);font-weight:700;line-height:.9;text-wrap:balance}.db-intro>span{display:block;margin-top:24px;color:#d5ddf8;font-family:var(--font)}
+  .db-scroll-cue{position:absolute;z-index:5;right:5vw;bottom:6vh;display:grid;justify-items:center;gap:9px;color:#d9c477;font:700 9px var(--font);letter-spacing:.22em}.db-scroll-cue i{width:1px;height:52px;background:linear-gradient(transparent,#e6c66f);transform-origin:top;transform:scaleY(calc(.2 + var(--p)*.8))}
+  .db-portal .wj-stick{background:radial-gradient(circle at 50% 50%,#3a4e82,#0b112f 65%,#040719)}.db-portal-night{opacity:calc(1 - var(--p)*1.3)}.db-portal-night i{left:calc(9% + var(--i)*9%);top:calc(14% + (var(--i)%4)*19%)}
+  .db-spread{position:absolute;z-index:2;left:50%;top:50%;width:min(84vw,1180px);height:min(66vw,710px);display:grid;grid-template-columns:1fr 18px 1fr;transform-style:preserve-3d;transform:translate(-50%,-50%) perspective(1400px) rotateX(calc(48deg - var(--p)*47deg)) scale(calc(.74 + var(--p)*1.8));filter:drop-shadow(0 50px 65px #000a)}
+  .db-page{position:relative;padding:8%;background:var(--paper);color:#342b3e;overflow:hidden;box-shadow:inset 0 0 90px #8e6c3028}.db-page::after{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 30% 20%,#6d54230a 0 1px,transparent 1px 4px);mix-blend-mode:multiply}.db-page--left{border-radius:30px 4px 4px 30px;transform-origin:right;transform:rotateY(calc((1 - var(--p))*62deg))}.db-page--right{border-radius:4px 30px 30px 4px;transform-origin:left;transform:rotateY(calc((1 - var(--p))*-62deg))}.db-page>span{position:relative;z-index:2;font-size:clamp(31px,5vw,72px);font-weight:700;text-transform:uppercase}.db-page svg{position:absolute;inset:19% 7% 2%;width:86%;height:76%;fill:none;stroke:#5d4b54;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;opacity:calc(.2 + var(--p)*.75);transform:translateY(calc((1 - var(--p))*35px))}.db-gutter{background:linear-gradient(90deg,#5a3b24,#8c6336,#50331e);box-shadow:0 0 25px #2c1a13}.db-page-turn{position:absolute;z-index:5;right:0;top:0;width:50%;height:100%;border-radius:4px 30px 30px 4px;background:linear-gradient(100deg,#c5ad77,#f4e8c6 22%,#dfca99 100%);transform-origin:left;transform:rotateY(calc(-176deg*var(--p)));box-shadow:-25px 0 45px #4b351c44;backface-visibility:hidden}
+  .db-portal-copy{position:absolute;z-index:5;left:50%;top:50%;width:min(780px,82vw);text-align:center;transform:translate(-50%,-50%) translateY(calc((1 - var(--p))*60px));opacity:clamp(0,calc((var(--p) - .24)*3),1);color:#362a3b}.db-portal-copy span{color:#8b6b2b;font-style:italic}.db-portal-copy h2{margin:17px 0;font-size:clamp(58px,9vw,128px);line-height:.86}.db-portal-copy p{max-width:66ch;margin-inline:auto;font:500 clamp(15px,1.4vw,20px)/1.65 var(--font)}
+  .db-iris{position:absolute;z-index:7;inset:-25%;pointer-events:none;border:clamp(0px,calc((1 - var(--p))*18vw),290px) solid #030617;border-radius:42%;opacity:calc(1 - var(--p));transform:scale(calc(1 + var(--p)*.4))}
+  .db-manuscript{position:relative;background:var(--paper);color:#30283a;box-shadow:0 -60px 120px #0008}.db-manuscript::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 5% 7%,#6c512112 0 1px,transparent 1.7px),radial-gradient(circle at 80% 43%,#6c51210c 0 1px,transparent 1.5px);background-size:17px 19px,23px 27px;mix-blend-mode:multiply;opacity:.65}
+  .db-manuscript__title{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:12vh 8vw 16vh;border-bottom:1px solid #846d423d;text-align:center}.db-manuscript__title::before{content:"MM";position:absolute;left:50%;top:50%;font-size:min(42vw,610px);line-height:.7;color:#765d2410;transform:translate(-50%,-50%)}.db-manuscript__title span,.db-act>header span{color:#8c6b25;font-style:italic}.db-manuscript__title h2{position:relative;max-width:13ch;margin:22px auto;font-size:clamp(54px,8vw,112px);line-height:.92;text-wrap:balance}.db-manuscript__title p{position:relative;max-width:68ch;margin-inline:auto;font:500 clamp(16px,1.5vw,21px)/1.65 var(--font);color:#5f5663}
+  .db-act{position:relative}.db-act>header{position:relative;z-index:3;display:grid;grid-template-columns:1fr auto;align-items:end;min-height:46vh;padding:12vh 7vw 7vh;border-bottom:1px solid #745d3038}.db-act>header span{grid-column:1/-1}.db-act>header h3{margin:16px 0 0;font-size:clamp(47px,7vw,96px);line-height:.9}.db-act>header i{font:600 11px var(--font);font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:#7c705e}
+  .db-chapter{--chapter-p:0;position:relative;min-height:112svh;padding:6vh 3vw;display:grid;place-items:center;perspective:1400px;isolation:isolate;overflow:hidden;border-bottom:1px solid #735c3030;background:radial-gradient(circle at calc(25% + var(--chapter-p)*50%) 45%,color-mix(in srgb,var(--ink) 12%,transparent),transparent 43%)}
+  .db-chapter__atmosphere{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:calc(.35 + var(--chapter-p)*.5)}.db-chapter__atmosphere::before{content:"";position:absolute;left:-8%;right:-8%;bottom:-6%;height:37%;background:color-mix(in srgb,var(--ink) 23%,#c1ab76);clip-path:polygon(0 71%,8% 47%,15% 64%,23% 27%,31% 63%,43% 39%,54% 72%,64% 22%,75% 62%,84% 41%,93% 67%,100% 32%,100% 100%,0 100%);transform:translateY(calc((1 - var(--chapter-p))*45px))}.db-chapter__atmosphere>i{position:absolute;border:1px solid color-mix(in srgb,var(--ink) 45%,#8a743d);border-radius:50%;transform:translateY(calc((.5 - var(--chapter-p))*var(--drift)))}.db-chapter__atmosphere>i:nth-child(1){width:28vw;aspect-ratio:1;left:-9vw;top:12%}.db-chapter__atmosphere>i:nth-child(2){width:12vw;aspect-ratio:1;right:8vw;top:18%}.db-chapter__atmosphere>i:nth-child(3){width:6vw;aspect-ratio:1;right:30vw;bottom:16%}.db-chapter__atmosphere>b{position:absolute;left:50%;top:4%;width:1px;height:34%;background:linear-gradient(transparent,var(--ink),transparent);box-shadow:0 0 30px var(--ink);transform:rotate(34deg)}
+  .db-sheet{position:relative;z-index:2;width:min(94vw,1420px);min-height:min(82svh,880px);display:grid;grid-template-columns:1fr 1.18fr;color:#30283a;text-decoration:none;background:linear-gradient(90deg,#f1e3be 0 49.5%,#b59b653d 49.8% 50.2%,#f7edcf 50.5%);border:1px solid #7e633331;border-radius:28px;box-shadow:0 45px 90px #5a431f2b,0 7px 0 #bba16d,0 13px 0 #e4d4ad;overflow:hidden;transform:rotateX(calc((.5 - var(--chapter-p))*4deg)) rotateZ(var(--tilt)) translateY(calc((.5 - var(--chapter-p))*var(--drift)));transition:box-shadow .35s ease}.db-sheet:hover{box-shadow:0 55px 105px #5a431f3f,0 8px 0 #bba16d,0 15px 0 #e4d4ad}.db-sheet__grain{position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 20% 10%,#4e3d180d 0 1px,transparent 1.3px 4px);mix-blend-mode:multiply}.db-chapter-copy{position:relative;z-index:4;display:flex;flex-direction:column;justify-content:center;padding:clamp(30px,6vw,90px)}.db-chapter-copy>span{color:color-mix(in srgb,var(--ink) 68%,#684f1c);font-style:italic}.db-chapter-copy>small{margin-top:22px;font:650 10px var(--font);letter-spacing:.17em;text-transform:uppercase;color:#6d626b}.db-chapter-copy h4{max-width:12ch;margin:20px 0;font-size:clamp(40px,5.4vw,82px);line-height:.91;text-wrap:balance}.db-chapter-copy p{max-width:52ch;color:#5d5360;font:500 clamp(15px,1.22vw,18px)/1.6 var(--font)}.db-chapter-copy dl{margin:22px 0 0}.db-chapter-copy dt{font-size:clamp(25px,3vw,44px);font-weight:700;color:var(--ink)}.db-chapter-copy dd{max-width:47ch;margin:5px 0 0;color:#756a71;font:500 12px/1.5 var(--font)}.db-chapter-copy>b{margin-top:28px;color:#6d5120;font:700 13px var(--font)}
+  .db-pop-up{position:relative;z-index:3;display:grid;place-items:center;margin:clamp(22px,4vw,58px);overflow:hidden;border-radius:45% 45% 8% 8% / 23% 23% 8% 8%;background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--ink) 24%,#fff5d4),#dac797 71%);box-shadow:inset 0 0 70px #5d471a25;perspective:1000px}.db-pop-up::after{content:"";position:absolute;left:3%;right:3%;bottom:0;height:22%;background:color-mix(in srgb,var(--ink) 33%,#8b7642);clip-path:polygon(0 62%,13% 19%,25% 60%,37% 5%,51% 65%,63% 22%,78% 58%,90% 12%,100% 54%,100% 100%,0 100%);transform-origin:bottom;transform:perspective(600px) rotateX(calc(48deg - var(--chapter-p)*34deg)) scaleY(1.5)}
+  .db-pop-up :global(.project-kinetic){position:relative!important;z-index:5!important;width:88%!important;min-height:0!important;margin:0!important;border-color:color-mix(in srgb,var(--ink) 35%,#927a46)!important;background:#f0e2bcaa!important;box-shadow:0 25px 55px #5e421f3b!important;mix-blend-mode:multiply;transform:translateY(calc((.5 - var(--chapter-p))*var(--drift))) rotateX(calc((1 - var(--chapter-p))*13deg)) scale(calc(.86 + var(--chapter-p)*.1))!important;transform-origin:center bottom;filter:sepia(.22) saturate(.85) contrast(1.05)}
+  .db-scene-sky,.db-scene-arch,.db-scene-front{position:absolute;inset:0;pointer-events:none}.db-scene-sky i{position:absolute;width:6px;aspect-ratio:1;border-radius:50%;background:#fff5c8;box-shadow:0 0 18px #fff5c8;animation:db-twinkle 2.6s ease-in-out infinite alternate}.db-scene-sky i:nth-child(1){left:18%;top:18%}.db-scene-sky i:nth-child(2){right:19%;top:28%;animation-delay:-.8s}.db-scene-sky i:nth-child(3){left:57%;top:11%;animation-delay:-1.6s}.db-scene-arch{z-index:2;transform:translateY(calc((.5 - var(--chapter-p))*calc(var(--drift)*.55)))}.db-scene-arch i{position:absolute;bottom:8%;width:17%;height:58%;border:3px solid color-mix(in srgb,var(--ink) 58%,#66532a);border-bottom:0;border-radius:50% 50% 0 0}.db-scene-arch i:first-child{left:5%}.db-scene-arch i:last-child{right:5%}.db-scene-arch b{position:absolute;left:12%;right:12%;top:8%;height:20%;border:2px solid color-mix(in srgb,var(--ink) 55%,#6f5825);border-bottom:0;border-radius:50% 50% 0 0}.db-scene-front{z-index:6}.db-scene-front i{position:absolute;bottom:-2%;width:16%;height:30%;background:color-mix(in srgb,var(--ink) 52%,#6a5530);clip-path:polygon(50% 0,65% 47%,100% 100%,0 100%,35% 47%);transform-origin:bottom;transform:rotate(calc((.5 - var(--chapter-p))*8deg))}.db-scene-front i:nth-child(1){left:1%}.db-scene-front i:nth-child(2){right:2%;height:37%}.db-scene-front i:nth-child(3){left:44%;width:10%;height:20%;opacity:.55}
+  .db-folio{position:absolute;z-index:8;right:3%;bottom:3%;color:#766844;font:600 10px var(--font);letter-spacing:.14em}.db-curl{position:absolute;z-index:9;right:-1px;top:-1px;width:52%;height:calc(100% + 2px);transform-origin:left;transform:perspective(1200px) rotateY(calc(-110deg + var(--chapter-p)*110deg));background:linear-gradient(100deg,#c7ad73,#fff3d1 13%,#e0ca99 100%);box-shadow:-28px 0 40px #6b4f2730;opacity:clamp(0,calc(1 - var(--chapter-p)*1.6),1);backface-visibility:hidden;pointer-events:none}
+  .db-chapter--reverse .db-sheet{grid-template-columns:1.18fr 1fr}.db-chapter--reverse .db-chapter-copy{grid-column:2;grid-row:1}.db-chapter--reverse .db-pop-up{grid-column:1;grid-row:1}.db-chapter--reverse .db-folio{right:auto;left:3%}.db-chapter--reverse .db-curl{right:auto;left:-1px;transform-origin:right;transform:perspective(1200px) rotateY(calc(110deg - var(--chapter-p)*110deg))}
+  .db-chapter--observatory .db-pop-up{border-radius:50%;background:radial-gradient(circle,#243b67 0 5%,#aab2b7 6% 7%,#213456 8% 45%,#d8c792 46%)}.db-chapter--observatory .db-scene-arch b{border-radius:50%;height:70%;top:12%}.db-chapter--archive .db-scene-arch i{border-radius:0;background:repeating-linear-gradient(90deg,transparent 0 12%,color-mix(in srgb,var(--ink) 25%,#765b29) 13% 18%)}.db-chapter--garden .db-pop-up{background:radial-gradient(circle at 50% 82%,#e7d68c,#9ebf94 44%,#bfd0bd 66%)}.db-chapter--garden .db-scene-front i{border-radius:50% 50% 0 0}.db-chapter--forge .db-pop-up{background:radial-gradient(circle at 50% 63%,#ffe9a5,#b56f4d 20%,#423b49 68%)}.db-chapter--forge .db-scene-sky i{background:#ffb161}.db-chapter--harbor .db-pop-up{background:linear-gradient(#9fb8c1 0 57%,#506f7c 58% 65%,#cfbc86 66%)}.db-chapter--harbor .db-pop-up::after{clip-path:polygon(0 55%,14% 48%,27% 59%,40% 43%,55% 55%,70% 47%,86% 58%,100% 49%,100% 100%,0 100%)}.db-chapter--clocktower .db-scene-arch b{height:56%;width:56%;left:22%;border:4px double color-mix(in srgb,var(--ink) 60%,#5f4920);border-radius:50%}.db-chapter--theatre .db-pop-up{border-radius:52% 52% 6% 6%}.db-chapter--theatre .db-scene-arch i{width:34%;height:100%;bottom:0;border:0;border-radius:0;background:color-mix(in srgb,var(--ink) 48%,#614326);clip-path:polygon(0 0,100% 0,74% 21%,92% 44%,64% 63%,81% 84%,45% 100%,0 100%)}
+  .db-epilogue{position:relative;min-height:100svh;display:grid;place-content:center;justify-items:center;padding:13vh 6vw;text-align:center;color:#fff4d9;background:radial-gradient(circle at 50% 44%,#293d73,#10183e 48%,#070b23)}.db-epilogue::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 25%,#fff1a2 0 1px,transparent 2px),radial-gradient(circle at 78% 43%,#c5dfff 0 1px,transparent 2px);background-size:191px 213px,263px 239px}.db-epilogue>div{position:relative;display:flex;align-items:center;gap:18px}.db-epilogue>div i{width:90px;height:1px;background:var(--gold)}.db-epilogue>div b{font-size:50px;color:var(--gold)}.db-epilogue>span{position:relative;margin-top:30px;color:var(--gold);font-style:italic}.db-epilogue h2{position:relative;max-width:11ch;margin:22px 0;font-size:clamp(57px,9vw,126px);line-height:.88}.db-epilogue a{position:relative;padding:15px 24px;border:1px solid var(--gold);color:#fff4d9;text-decoration:none;font:700 13px var(--font);transition:background .25s,color .25s}.db-epilogue a:hover{background:var(--gold);color:#172044}
+  [dir="rtl"] .db-intro{left:auto;right:6vw}.db-world[dir="rtl"] .db-chapter-copy,[dir="rtl"] .db-chapter-copy{text-align:right}.db-world[dir="rtl"] .db-folio,[dir="rtl"] .db-folio{letter-spacing:0}
+  @keyframes db-float{to{transform:translate(18px,-24px) scale(1.4);opacity:.4}}@keyframes db-twinkle{to{transform:scale(1.8);opacity:.35}}
+  @media(max-width:900px){.db-intro{width:min(640px,68vw)}.db-sheet{grid-template-columns:.9fr 1.1fr}.db-chapter--reverse .db-sheet{grid-template-columns:1.1fr .9fr}.db-chapter-copy{padding:34px}.db-pop-up{margin:24px}.db-chapter-copy p{font-size:14px}.db-chapter-copy dl{margin-top:14px}}
+  @media(max-width:620px){.db-awakening,.db-portal{height:190vh!important}.db-intro{left:20px;right:20px;top:9vh;width:auto;text-align:center}.db-intro .home-heading{font-size:clamp(44px,12.5vw,63px);line-height:.98}.db-closed-book{top:58%;width:88vw}.db-moon{top:25%;width:35vw}.db-pedestal{bottom:7%;width:120vw}.db-scroll-cue{right:18px;bottom:4vh}.db-spread{width:96vw;height:68vh;grid-template-columns:1fr 8px 1fr;transform:translate(-50%,-50%) perspective(1000px) rotateX(calc(42deg - var(--p)*41deg)) scale(calc(.78 + var(--p)*2.25))}.db-page{padding:9% 7%}.db-page>span{font-size:24px}.db-portal-copy{width:84vw}.db-portal-copy h2{font-size:clamp(50px,16vw,72px)}.db-portal-copy p{font-size:14px}.db-manuscript__title{padding-inline:22px}.db-manuscript__title h2{font-size:clamp(47px,13vw,68px)}.db-act>header{min-height:42vh;padding:10vh 20px 5vh;display:block}.db-act>header h3{font-size:clamp(43px,12vw,64px)}.db-act>header i{display:block;margin-top:20px}.db-chapter{min-height:114svh;padding:26px 10px}.db-sheet,.db-chapter--reverse .db-sheet{min-height:calc(100svh - 48px);grid-template-columns:1fr;grid-template-rows:46% 54%;border-radius:16px;background:linear-gradient(#f7edcf 0 46%,#c2ab7738 46.2% 46.8%,#f1e3be 47%)}.db-chapter-copy,.db-chapter--reverse .db-chapter-copy{grid-column:1;grid-row:2;padding:24px 22px 30px;justify-content:flex-start}.db-pop-up,.db-chapter--reverse .db-pop-up{grid-column:1;grid-row:1;margin:14px;border-radius:45% 45% 9% 9%}.db-pop-up :global(.project-kinetic){width:94%!important}.db-chapter-copy>span{font-size:13px}.db-chapter-copy>small{margin-top:8px}.db-chapter-copy h4{margin:10px 0;font-size:clamp(35px,10.6vw,50px)}.db-chapter-copy p{display:-webkit-box;margin-bottom:0;overflow:hidden;-webkit-line-clamp:3;-webkit-box-orient:vertical}.db-chapter-copy dl{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}.db-chapter-copy dt{font-size:23px}.db-chapter-copy dd{font-size:10px}.db-chapter-copy>b{margin-top:14px}.db-folio,.db-chapter--reverse .db-folio{right:18px;left:auto;bottom:13px}.db-curl,.db-chapter--reverse .db-curl{left:auto;right:0;top:0;width:100%;height:46%;transform-origin:top;transform:perspective(900px) rotateX(calc(-95deg + var(--chapter-p)*95deg))}.db-epilogue h2{font-size:clamp(52px,15vw,76px)}}
+  @media(prefers-reduced-motion:reduce){.db-awakening,.db-portal{height:auto!important}.db-awakening .wj-stick,.db-portal .wj-stick{position:relative}.db-closed-book,.db-spread,.db-page--left,.db-page--right,.db-page-turn,.db-iris,.db-sheet,.db-curl,.db-pop-up :global(.project-kinetic){transform:none!important}.db-curl,.db-page-turn{display:none}.db-fireflies i,.db-portal-night i,.db-scene-sky i{animation:none}}
+</style>
+
+<style is:global>
+  html[data-world="disney"] .nav{transition:background-color .55s ease,color .55s ease,border-color .55s ease,box-shadow .55s ease}
+  html[data-world="disney"][data-disney-book-open] .nav{background:#f3e7c5ed!important;color:#352b3c!important;border-bottom-color:#7b633932!important;box-shadow:0 12px 35px #614a2520;backdrop-filter:blur(18px) saturate(.8)}
+  html[data-world="disney"][data-disney-book-open] .nav a,html[data-world="disney"][data-disney-book-open] .nav button{color:#352b3c!important}
+  html[data-world="disney"][data-disney-book-open] .nav .pill{border-color:#79623855!important;background:#fff8e755!important}
+  html[data-world="disney"][data-disney-book-open] .nav .dot{background:#9a7427!important;box-shadow:0 0 16px #9a742777}
+</style>

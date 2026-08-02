@@ -3,6 +3,7 @@ import { projects, type ProjectMeta } from '../../data/projects';
 import { storyForProject } from '../../data/project-kinetics';
 import { homePath, pick, type Lang } from '../../i18n/utils';
 import ProjectKinetic from './ProjectKinetic.astro';
+import DisneyProjectBook from './worlds/DisneyProjectBook.astro';
 
 interface Props { lang: Lang; project: ProjectMeta }
 const { lang, project } = Astro.props;
@@ -36,11 +37,7 @@ const arrow = ar ? '←' : '→';
     <section class="rzstory-limit"><span>{pick(lang, story.boundaryKicker)}</span><h2>{ar ? 'حد التشغيل.' : 'Operating limit.'}</h2><p>{pick(lang, story.boundary)}</p><div>{story.tools.map((tool) => <i>{tool}</i>)}</div><a href={back}>{ar ? 'أغلق السجل' : 'Close recorder'} {arrow}</a></section>
   </article>
 
-  <article class="sworld sworld--disney" data-story-world="disney" aria-hidden="true">
-    <section class="sworld-stage dstory-cover" data-story-stage><div class="sworld-stick"><ProjectKinetic project={project} lang={lang} world="disney" phase="input" /><div class="dstory-book" aria-hidden="true"><span>{no}</span><b>{story.ghost}</b><i></i></div><div class="dstory-title"><span>{pick(lang, project.tag)}</span><div class="story-heading" role="heading" aria-level="1">{pick(lang, project.title)}</div><p>{pick(lang, story.lead)}</p><a href="#chapter-one">{ar ? 'افتح الحكاية' : 'Open the story'} {arrow}</a></div></div></section>
-    <section class="sworld-stage dstory-turn" id="chapter-one" data-story-stage><div class="sworld-stick"><div class="story-mechanism story-mechanism--sticky"><ProjectKinetic project={project} lang={lang} world="disney" phase="run" /></div><div class="dstory-pages" aria-hidden="true"><div><span>{ar ? 'قبل' : 'BEFORE'}</span></div><b></b><div><span>{ar ? 'التحول' : 'TRANSFORMATION'}</span></div></div><div class="dstory-problem"><h2>{pick(lang, story.problemHeading)}</h2><p>{pick(lang, story.problemBody)}</p></div></div></section>
-    <section class="dstory-chapters"><header><span>{ar ? 'الفصول' : 'The chapters'}</span><h2>{pick(lang, story.stepsHeading)}</h2><p>{pick(lang, story.stepsIntro)}</p></header><ol>{story.steps.map((step) => <li><span>{step.n}</span><h3>{pick(lang, step.title)}</h3><p>{pick(lang, step.body)}</p></li>)}</ol><section><div><h2>{pick(lang, story.proofHeading)}</h2><p>{pick(lang, story.proofBody)}</p></div><dl>{story.proof.map((metric) => <div><dt>{metric.value}</dt><dd>{pick(lang, metric.label)}</dd></div>)}</dl></section><footer><span>{ar ? 'العبرة' : 'The moral'}</span><p>{pick(lang, story.boundary)}</p><a href={back}>{ar ? 'عد إلى المكتبة' : 'Return to the library'} {arrow}</a></footer></section>
-  </article>
+  <DisneyProjectBook lang={lang} project={project} />
 
   <article class="sworld sworld--cod" data-story-world="cod" aria-hidden="true">
     <section class="sworld-stage codstory-brief" data-story-stage><div class="sworld-stick"><ProjectKinetic project={project} lang={lang} world="cod" phase="input" /><div class="codstory-grid" aria-hidden="true"><i></i><i></i><b></b></div><div class="codstory-copy"><span>MISSION {no} / {project.slug.toUpperCase()}</span><div class="story-heading" role="heading" aria-level="1">{pick(lang, project.title)}</div><p>{pick(lang, story.lead)}</p><dl><div><dt>OBJECTIVE</dt><dd>{pick(lang, story.problemHeading)}</dd></div><div><dt>STATUS</dt><dd>{pick(lang, project.stat)}</dd></div><div><dt>ROE</dt><dd>VERIFY / FAIL CLOSED</dd></div></dl></div></div></section>

@@ -3,6 +3,7 @@ import { automationProjects, labProjects } from '../data/system-projects';
 import { legacyProjects } from '../data/projects';
 import { pick, workPath, type Lang } from '../i18n/utils';
 import ProjectKinetic from './work/ProjectKinetic.astro';
+import DisneyBookHome from './worlds/DisneyBookHome.astro';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -59,21 +60,7 @@ const indexOf = (slug: string) => String(all.findIndex((p) => p.slug === slug) +
     </section>
   </article>
 
-  <article class="wj wj--disney" data-world-journey="disney" aria-hidden="true">
-    <section class="wj-stage ds-opening" data-world-stage><div class="wj-stick">
-      <div class="ds-castle" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b></div>
-      <div class="ds-copy"><p>{ar ? 'حكاية أنظمة حقيقية' : 'A story of real systems'}</p><div class="home-heading" role="heading" aria-level="1">{ar ? 'كل عمل يدوي ينتظر تحوّلًا.' : 'Every manual task is waiting for a transformation.'}</div><span>{ar ? 'مرّر الصفحة لفتح الكتاب.' : 'Scroll to open the book.'}</span></div>
-    </div></section>
-    <section class="wj-stage ds-book" data-world-stage><div class="wj-stick">
-      <div class="ds-spread" aria-hidden="true"><div><span>ONCE</span><i></i><i></i></div><b></b><div><span>AFTER</span><i></i><i></i></div></div>
-      <div class="ds-book__copy"><h2>{ar ? 'الفصل يتغير، والحقيقة لا.' : 'The chapter changes. The truth does not.'}</h2><p>{ar ? 'تبدأ كل قصة بمهمة تشغيلية، تمر بتحول معماري، وتنتهي بدليل وحد واضح.' : 'Each story begins with operating friction, crosses an architectural transformation, and ends with proof and an honest boundary.'}</p></div>
-    </div></section>
-    <section class="ds-library">
-      <header><span>{ar ? 'المكتبة الكاملة' : 'The complete library'}</span><h2>{ar ? 'ثلاثون حكاية، لا قصة مستنسخة.' : 'Thirty stories. No repeated plot.'}</h2></header>
-      <div class="ds-shelves">{groups.map((group, gi) => <section><h3>{group.title}</h3><div>{group.items.map((project, i) => <a class="kinetic-card" href={workPath(lang, project.slug)} style={`--a:${project.cardA};--turn:${(i % 5) - 2}deg`}><ProjectKinetic project={project} lang={lang} world="disney" compact /><span>{gi + 1}.{String(i + 1).padStart(2,'0')}</span><b>{pick(lang, project.title)}</b><small>{pick(lang, project.blurb)}</small><i>{ar ? 'افتح الفصل' : 'Open chapter'} {arrow}</i></a>)}</div></section>)}</div>
-      <a class="ds-end" href="#contact">{ar ? 'والفصل التالي نكتبه معًا.' : 'The next chapter is the one we build together.'} {arrow}</a>
-    </section>
-  </article>
+  <DisneyBookHome lang={lang} />
 
   <article class="wj wj--cod" data-world-journey="cod" aria-hidden="true">
     <section class="wj-stage cod-brief" data-world-stage><div class="wj-stick">
