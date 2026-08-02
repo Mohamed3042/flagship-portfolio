@@ -2,7 +2,7 @@
   "name": "mohamed-mahmoud-flagship",
   "type": "module",
   "version": "1.0.0",
-  "description": "Mohamed Mahmoud's bilingual Automation Engineer portfolio — 26 evidence-backed project stories in Astro.",
+  "description": "Mohamed Mahmoud's bilingual Automation Engineer portfolio — 30 evidence-backed project stories in Astro.",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",

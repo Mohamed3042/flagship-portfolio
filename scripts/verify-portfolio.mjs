@@ -17,6 +17,9 @@ const automation = [
   'sheep-cycle',
   'resume-builder-skill',
   'polyblast-arena',
+  'petpoint-ops-hub',
+  'relayops',
+  'statement-styler',
 ];
 
 const foundation = [
@@ -32,6 +35,7 @@ const foundation = [
 ];
 
 const lab = [
+  'spaceframe-world',
   'b2mh',
   'artillery3d',
   'war-strikes',
@@ -78,7 +82,8 @@ for (const lang of ['en', 'ar']) {
   }
 
   assert(automation.every((slug) => home.indexOf(`/work/${slug}`) < home.indexOf('id="foundation"')), `${lang} flagship stories are not ahead of the foundation section`);
-  assert(lab.every((slug) => home.indexOf(`/work/${slug}`) > home.indexOf('id="lab"')), `${lang} lab stories are not inside the Engineering Lab section`);
+  const labMarkup = home.slice(home.indexOf('id="lab"'));
+  assert(lab.every((slug) => labMarkup.includes(`/work/${slug}`)), `${lang} lab stories are not inside the Engineering Lab section`);
 }
 
 const sourceFiles = await walkText(join(root, 'src'));
@@ -95,11 +100,13 @@ for (const stale of ['A whole marketing team.', 'فريق تسويقٍ كامل.
 }
 
 const systemSource = await readFile(join(root, 'src', 'data', 'system-projects.ts'), 'utf8');
-assert((systemSource.match(/section: 'automation'/g) ?? []).length === 10, 'automation story count must be 10');
-assert((systemSource.match(/section: 'lab'/g) ?? []).length === 7, 'Engineering Lab story count must be 7');
+assert((systemSource.match(/section: 'automation'/g) ?? []).length === 13, 'automation story count must be 13');
+assert((systemSource.match(/section: 'lab'/g) ?? []).length === 8, 'Engineering Lab story count must be 8');
 
 const allowedRepositoryLinks = new Set([
   'https://github.com/Mohamed3042/polyblast-arena',
+  'https://github.com/Mohamed3042/petpoint-ops-hub',
+  'https://github.com/Mohamed3042/ai-automation-command-center',
 ]);
 const repositoryLinks = [...systemSource.matchAll(/https:\/\/github\.com\/Mohamed3042\/[A-Za-z0-9_.-]+/g)].map((match) => match[0]);
 for (const link of repositoryLinks) {
@@ -120,4 +127,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Static verification passed: ${all.length} stories × 2 languages, correct canonicals, 10/9/7 ordering, and private-safe case studies.`);
+console.log(`Static verification passed: ${all.length} stories × 2 languages, correct canonicals, 13/9/8 ordering, and private-safe case studies.`);

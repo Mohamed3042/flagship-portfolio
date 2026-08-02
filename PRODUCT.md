@@ -26,7 +26,7 @@ The work spans bilingual Kuwait business operations, offline and LAN-only intern
 
 - Astro 5 static site, deployed at the existing Netlify domain.
 - Separate, indexable `/en/` and `/ar/` editions with mirrored story routes.
-- Ten primary Automation Engineer stories, nine preserved foundation stories, and seven secondary Engineering Lab studies.
+- Thirteen primary Automation Engineer stories, nine preserved foundation stories, and eight secondary Engineering Lab studies.
 - Private repositories may inform verified copy but must never expose private URLs, credentials, personal identifiers, code, customer data, or third-party assets.
 - Public repository or demo links appear only when the linked material is intentionally public.
 - Platform status, shipping status, measurements, and limitations must use the exact scope documented by the corresponding repository.
@@ -38,7 +38,7 @@ Preserve the recovered live portfolio’s cinematic cosmic design language as th
 ## Evidence on Hand
 
 - The recovered nine-story portfolio and its Astro source in `flagship-portfolio`.
-- README files from all repositories that make up the ten main and seven Lab project families.
+- README files from all repositories that make up the thirteen main and eight Lab project families.
 - Public demos for Cake Studio and the portfolio design study, plus the public Polyblast Arena source.
 - Repository-documented test counts, measurements, architecture notes, status boundaries, and known limitations.
 - No permission to fabricate testimonials, commercial outcomes, certifications, deployment status, or private source links.

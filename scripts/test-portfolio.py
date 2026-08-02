@@ -24,6 +24,9 @@ AUTOMATION = [
     "sheep-cycle",
     "resume-builder-skill",
     "polyblast-arena",
+    "petpoint-ops-hub",
+    "relayops",
+    "statement-styler",
 ]
 FOUNDATION = [
     "meta-ads",
@@ -37,6 +40,7 @@ FOUNDATION = [
     "my-resume",
 ]
 LAB = [
+    "spaceframe-world",
     "b2mh",
     "artillery3d",
     "war-strikes",
@@ -109,7 +113,7 @@ def main() -> None:
             for slug in ([] if args.screenshots_only else SLUGS):
                 page.goto(home_url, wait_until="networkidle")
                 href = f"/{lang}/work/{slug}"
-                link = page.locator(f'a[href="{href}"]').first
+                link = page.locator(f'a[href="{href}"]:visible').first
                 try:
                     if slug in AUTOMATION:
                         progress = AUTOMATION.index(slug) / (len(AUTOMATION) - 1)

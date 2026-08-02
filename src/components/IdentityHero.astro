@@ -1,6 +1,7 @@
 ---
 import { pick, type Lang } from '../i18n/utils';
 import { profile } from '../data/profile';
+import { projects } from '../data/projects';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -10,6 +11,8 @@ const location = pick(lang, profile.location);
 const work = ar ? 'شاهد الأنظمة' : 'Explore the systems';
 const contact = ar ? 'تواصل معي' : 'Start a conversation';
 const arrow = ar ? '←' : '→';
+const total = projects.length;
+const totalAr = String(total).replace(/\d/g, (digit) => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
 ---
 
 <!--
@@ -35,7 +38,7 @@ const arrow = ar ? '←' : '→';
       <div class="ih-rz__title" role="heading" aria-level="1">{ar ? 'الأنظمة تعمل.' : 'Systems online.'}<br/><em>{ar ? 'والقرار للإنسان.' : 'Human in command.'}</em></div>
       <div class="ih-actions"><a href="#work">{work} <b>{arrow}</b></a><a href="#contact">{contact}</a></div>
     </div>
-    <footer class="ih-rz__status"><span><i></i> LOCAL-FIRST</span><span>26 SYSTEM STORIES</span><span>EN / AR</span></footer>
+    <footer class="ih-rz__status"><span><i></i> LOCAL-FIRST</span><span>{total} SYSTEM STORIES</span><span>EN / AR</span></footer>
   </article>
 
   <article class="ih ih-ds" data-hero-world="disney">
@@ -44,7 +47,7 @@ const arrow = ar ? '←' : '→';
     <div class="ih-ds__book" aria-hidden="true">
       <div class="ih-ds__cover"></div>
       <div class="ih-ds__page ih-ds__page--left"><i></i><i></i><i></i><b>01</b></div>
-      <div class="ih-ds__page ih-ds__page--right"><i></i><i></i><i></i><b>26</b></div>
+      <div class="ih-ds__page ih-ds__page--right"><i></i><i></i><i></i><b>{total}</b></div>
       <span class="ih-ds__spine"></span>
     </div>
     <div class="ih-ds__copy">
@@ -58,7 +61,7 @@ const arrow = ar ? '←' : '→';
 
   <article class="ih ih-cod" data-hero-world="cod">
     <div class="ih-cod__noise" aria-hidden="true"></div>
-    <header class="ih-cod__top"><span>OPERATION // MM-26</span><b>{ar ? 'حالة المهمة: نشطة' : 'MISSION STATUS: ACTIVE'}</b></header>
+    <header class="ih-cod__top"><span>OPERATION // MM-{total}</span><b>{ar ? 'حالة المهمة: نشطة' : 'MISSION STATUS: ACTIVE'}</b></header>
     <div class="ih-cod__brief">
       <p>{ar ? 'موجز المهمة' : 'MISSION BRIEF'}</p>
       <div class="ih-cod__title" role="heading" aria-level="1">{ar ? 'أزِل الحلقة' : 'Remove the'}<br/><em>{ar ? 'اليدوية.' : 'manual loop.'}</em></div>
@@ -76,7 +79,7 @@ const arrow = ar ? '←' : '→';
     <div class="ih-nf__gate">
       <b class="ih-nf__n">N</b>
       <div class="ih-nf__gate-title" role="heading" aria-level="1">{ar ? 'من يشاهد؟' : "Who's watching?"}</div>
-      <div class="ih-nf__profiles"><span class="active"><i>MM</i><b>{ar ? 'محمد' : 'Mohamed'}</b></span><span><i>AI</i><b>Systems</b></span><span><i>26</i><b>Stories</b></span><span><i>+</i><b>{ar ? 'أضف' : 'Add'}</b></span></div>
+      <div class="ih-nf__profiles"><span class="active"><i>MM</i><b>{ar ? 'محمد' : 'Mohamed'}</b></span><span><i>AI</i><b>Systems</b></span><span><i>{total}</i><b>Stories</b></span><span><i>+</i><b>{ar ? 'أضف' : 'Add'}</b></span></div>
     </div>
     <div class="ih-nf__billboard">
       <div class="ih-nf__backdrop" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -84,7 +87,7 @@ const arrow = ar ? '←' : '→';
       <div class="ih-nf__copy">
         <p><b>N</b> {ar ? 'سلسلة أصلية' : 'ORIGINAL SERIES'}</p>
         <div class="ih-nf__title" role="heading" aria-level="1">{ar ? 'مهندس' : 'AUTOMATION'}<br/><em>{ar ? 'الأتمتة' : 'ENGINEER'}</em></div>
-        <span>{ar ? 'محمد محمود · ٢٦ قصة نظام · الكويت' : 'Mohamed Mahmoud · 26 system stories · Kuwait'}</span>
+        <span>{ar ? `محمد محمود · ${totalAr} قصة نظام · الكويت` : `Mohamed Mahmoud · ${total} system stories · Kuwait`}</span>
         <div class="ih-actions"><a href="#work">▶ {ar ? 'تشغيل' : 'Play'}</a><a href="#contact">ⓘ {ar ? 'معلومات' : 'More info'}</a></div>
       </div>
       <div class="ih-nf__row"><p>{ar ? 'الأكثر مشاهدة في أنظمة الأتمتة' : 'Top picks in Automation Systems'}</p><i>01<span>LOCAL AI</span></i><i>02<span>INTERNAL TOOLS</span></i><i>03<span>DOCUMENT OPS</span></i><i>04<span>SYSTEM INTEGRATION</span></i></div>
@@ -98,7 +101,7 @@ const arrow = ar ? '←' : '→';
       <div class="ih-sp__copy">
         <p>{ar ? 'اختيار هذا الشهر' : 'THIS MONTH’S FEATURED ENGINEER'}</p>
         <div class="ih-sp__title" role="heading" aria-level="1">{ar ? 'هذا هو محمد' : 'This Is Mohamed'}</div>
-        <span>{ar ? 'مزيج الأتمتة · ٢٦ قصة · محلي وثنائي اللغة' : 'The Automation Mix · 26 stories · local-first and bilingual'}</span>
+        <span>{ar ? `مزيج الأتمتة · ${totalAr} قصة · محلي وثنائي اللغة` : `The Automation Mix · ${total} stories · local-first and bilingual`}</span>
         <div class="ih-sp__meta"><b>541</b> followers <i>•</i> {ar ? 'مهندس أتمتة' : 'Automation Engineer'}</div>
         <div class="ih-actions"><a href="#work">▶</a><a href="#contact">{ar ? 'متابعة' : 'Follow'}</a><button type="button" aria-label="More">•••</button></div>
       </div>
@@ -133,7 +136,7 @@ const arrow = ar ? '←' : '→';
     <div class="ih-sm__device" aria-hidden="true">
       <div class="ih-sm__screen left"><span>INPUT</span><i></i><i></i><i></i></div>
       <div class="ih-sm__hinge"></div>
-      <div class="ih-sm__screen right"><span>OUTPUT</span><b>26</b><small>VERIFIED<br/>SYSTEM STORIES</small></div>
+      <div class="ih-sm__screen right"><span>OUTPUT</span><b>{total}</b><small>VERIFIED<br/>SYSTEM STORIES</small></div>
       <div class="ih-sm__orbit"><i></i><i></i><i></i></div>
     </div>
     <div class="ih-sm__specs"><span><b>LOCAL</b>{ar ? 'قريب من العمل' : 'close to the work'}</span><span><b>HUMAN</b>{ar ? 'القرار للإنسان' : 'authority retained'}</span><span><b>PROVEN</b>{ar ? 'نتائج قابلة للقراءة' : 'results you can read'}</span></div>

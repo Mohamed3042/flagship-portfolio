@@ -4,6 +4,7 @@ import Hero from '../../components/Hero.astro';
 import Contact from '../../components/Contact.astro';
 import ProjectCollection from '../../components/ProjectCollection.astro';
 import IdentityScene from '../../components/IdentityScene.astro';
+import IdentityHomeWorlds from '../../components/IdentityHomeWorlds.astro';
 import { useTranslations, workPath, pick, type Lang } from '../../i18n/utils';
 import { locales } from '../../i18n/utils';
 import { automationProjects, labProjects } from '../../data/system-projects';
@@ -17,7 +18,7 @@ const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
 const ar = lang === 'ar';
 
-// Primary Automation Engineer strip — ten case stories, in canonical order, deep-linking to
+// Primary Automation Engineer strip — repository-verified case stories, in canonical order, deep-linking to
 // each story page. Built from src/data/projects.ts (single source of truth) so
 // the strip never drifts out of sync with the story routes/copy/numbers.
 const cards = automationProjects.map((p, i) => ({
@@ -75,6 +76,9 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   </div>
 
   <Hero lang={lang} />
+  <IdentityHomeWorlds lang={lang} />
+
+  <div class="astronomy-journey">
 
   <!-- ============ BIOME 01 · PAID SOCIAL · blue nebula bloom ============ -->
   <section data-pin style="position:relative;z-index:1;height:280vh">
@@ -167,7 +171,7 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
       <header class="sw-head">
         <div class="bm-tag" style="--c:#64d2ff;position:static;transform:none;justify-content:flex-start"><span class="bm-num">★</span><span class="bm-sl">/</span><span>{ar ? 'أنظمة الأتمتة' : 'Automation Systems'}</span></div>
         <div class="sw-headrow">
-          <h2 class="sw-title" data-glow>{ar ? 'عشرة أنظمة رئيسية.' : 'Ten systems, end to end.'}</h2>
+          <h2 class="sw-title" data-glow>{ar ? `${cards.length} نظامًا رئيسيًا.` : `${cards.length} systems, end to end.`}</h2>
           <span class="sw-live"><span class="sw-livedot" aria-hidden="true"></span>{ar ? 'مباشر' : 'Live'}<span class="sw-counter"> · <b id="sw-count">01</b> / {String(cards.length).padStart(2, '0')}</span></span>
         </div>
       </header>
@@ -296,6 +300,7 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
 
   <ProjectCollection lang={lang} items={legacyProjects} variant="foundation" />
   <ProjectCollection lang={lang} items={labProjects} variant="lab" />
+  </div>
 
   <Contact lang={lang} />
 </BaseLayout>

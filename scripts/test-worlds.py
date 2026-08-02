@@ -1,6 +1,6 @@
 """Exercise the shared identity-world engine in both languages and viewports.
 
-The 26-story click test proves route/content integrity. This companion test
+The 30-story click test proves route/content integrity. This companion test
 proves that a world can be selected once, survives navigation, preserves the
 same content, remains bilingual, and does not introduce viewport overflow.
 """
@@ -14,9 +14,9 @@ from playwright.sync_api import sync_playwright
 
 
 WORLDS = ["astronomy", "razer", "disney", "cod", "netflix", "spotify", "apple", "samsung"]
-AUTOMATION = ["career-autopilot", "lifeos", "medmac-document-studio", "medmac-box-studio", "cake-studio", "quotations-locker", "reclaim", "sheep-cycle", "resume-builder-skill", "polyblast-arena"]
+AUTOMATION = ["career-autopilot", "lifeos", "medmac-document-studio", "medmac-box-studio", "cake-studio", "quotations-locker", "reclaim", "sheep-cycle", "resume-builder-skill", "polyblast-arena", "petpoint-ops-hub", "relayops", "statement-styler"]
 FOUNDATION = ["meta-ads", "al-maali", "crm", "brand-system", "sheep-app", "hr-system", "medmac-website", "ai-workflow", "my-resume"]
-LAB = ["b2mh", "artillery3d", "war-strikes", "uberstrike-restoration", "cocolani-3d", "job-apply-engine", "portfolio-design-system"]
+LAB = ["spaceframe-world", "b2mh", "artillery3d", "war-strikes", "uberstrike-restoration", "cocolani-3d", "job-apply-engine", "portfolio-design-system"]
 ALL_STORIES = AUTOMATION + FOUNDATION + LAB
 REPRESENTATIVE_STORIES = [AUTOMATION[0], LAB[-1]]
 CHROME = Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe")

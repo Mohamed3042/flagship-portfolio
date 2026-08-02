@@ -5,6 +5,7 @@ import Build from './spine/Build.astro';
 import Proof from './spine/Proof.astro';
 import Honesty from './spine/Honesty.astro';
 import SystemVisual from './SystemVisual.astro';
+import IdentityStoryWorlds from './IdentityStoryWorlds.astro';
 import { homePath, pick, useTranslations, type Lang } from '../../i18n/utils';
 import type { ProjectMeta } from '../../data/projects';
 
@@ -19,7 +20,9 @@ const t = useTranslations(lang);
 const ar = lang === 'ar';
 ---
 
-<article class="system-story" data-spine>
+<IdentityStoryWorlds lang={lang} project={project} />
+
+<article class="system-story system-story--astronomy" data-spine>
   <section class="system-hook" data-screen="hook">
     <Biome kind="nebula" tint={project.cardA} />
     <span class="system-hook__ghost" aria-hidden="true">{story.ghost}</span>

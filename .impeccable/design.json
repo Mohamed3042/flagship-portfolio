@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-02T00:00:00+03:00",
+  "title": "Design System: Mohamed Mahmoud Automation Engineer Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "space-black": { "role": "neutral", "displayName": "Space Black", "canonical": "#000000", "tonalRamp": ["#050505", "#171717", "#2d2d2d", "#484848", "#686868", "#8d8d8d", "#b7b7b7", "#ededed"] },
+      "signal-blue": { "role": "primary", "displayName": "Signal Blue", "canonical": "#2997ff", "tonalRamp": ["#001b35", "#003a6e", "#075da4", "#1680d7", "#42a1ff", "#78bdff", "#aed8ff", "#e7f4ff"] },
+      "razer-green": { "role": "accent", "displayName": "Command Green", "canonical": "#44d62c", "tonalRamp": ["#092700", "#135000", "#217c0b", "#32aa1c", "#58da43", "#83e976", "#b5f5ad", "#edffea"] },
+      "netflix-red": { "role": "accent", "displayName": "Episode Red", "canonical": "#e50914", "tonalRamp": ["#350002", "#6a0005", "#9d000a", "#cf0010", "#ef2630", "#f76970", "#fca7aa", "#ffe8e9"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Cinematic Display", "purpose": "Dominant propositions and section titles." },
+      "body": { "displayName": "Evidence Body", "purpose": "Readable bilingual explanations and boundaries." },
+      "arabic-display": { "displayName": "Arabic Cinematic Display", "purpose": "Large Arabic propositions with correct script rhythm." }
+    },
+    "shadows": [
+      { "name": "cinematic-depth", "value": "0 30px 80px -20px rgba(0,0,0,.7)", "purpose": "Separates physical scene objects from their world surface." }
+    ],
+    "motion": [
+      { "name": "reveal", "value": "700ms cubic-bezier(.16,1,.3,1)", "purpose": "Primary scene reveal." },
+      { "name": "scrub", "value": "cubic-bezier(.83,0,.17,1)", "purpose": "Pinned scroll interpolation." },
+      { "name": "state", "value": "420ms cubic-bezier(.4,0,.2,1)", "purpose": "Controls and project-entry states." }
+    ],
+    "breakpoints": [
+      { "name": "compact", "value": "620px" },
+      { "name": "tablet", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Accent Action",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "Primary route into work or contact using the active world signal.",
+      "html": "<a class=\"ds-action\" href=\"#work\">OPEN THE WORK</a>",
+      "css": ".ds-action{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 21px;background:#2997ff;color:#050607;font:700 13px/1 Inter,sans-serif;text-decoration:none;border:1px solid #2997ff;border-radius:10px;transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s}.ds-action:hover{transform:translateY(-3px);box-shadow:0 18px 38px -18px #2997ff}.ds-action:focus-visible{outline:2px solid #2997ff;outline-offset:3px}"
+    },
+    {
+      "name": "World Control",
+      "kind": "button",
+      "description": "Compact global control for changing identity without changing content.",
+      "html": "<button class=\"ds-world\" type=\"button\">ASTRONOMY</button>",
+      "css": ".ds-world{min-height:40px;padding:0 16px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:#08080a;color:#f5f5f7;font:700 12px/1 Inter,sans-serif;letter-spacing:.02em;transition:border-color .2s,transform .2s}.ds-world:hover{border-color:#2997ff;transform:translateY(-1px)}.ds-world:focus-visible{outline:2px solid #2997ff;outline-offset:3px}"
+    },
+    {
+      "name": "Evidence Cartridge",
+      "kind": "card",
+      "description": "Razer-world project entry expressed as a physical system cartridge.",
+      "html": "<a class=\"ds-cartridge\" href=\"#story\"><span>01</span><strong>CAREER AUTOPILOT</strong><small>HUMAN APPROVAL ONLINE</small></a>",
+      "css": ".ds-cartridge{display:flex;min-height:220px;flex-direction:column;padding:24px;background:#111511;color:#e9f5ec;border:1px solid rgba(160,255,200,.14);clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));text-decoration:none;transition:transform .26s cubic-bezier(.85,0,.15,1),border-color .26s}.ds-cartridge span{color:#44d62c;font:700 12px/1 'Chakra Petch',sans-serif}.ds-cartridge strong{margin:auto 0 14px;font:700 28px/.95 'Chakra Petch',sans-serif}.ds-cartridge small{color:#9fb3a6}.ds-cartridge:hover{transform:translateY(-6px);border-color:#44d62c}.ds-cartridge:focus-visible{outline:2px solid #44d62c;outline-offset:4px}"
+    },
+    {
+      "name": "Evidence Boundary",
+      "kind": "custom",
+      "description": "Project limitation and source boundary at the end of every story.",
+      "html": "<aside class=\"ds-boundary\"><strong>BOUNDARY</strong><p>Private source remains private. Claims stop where the repository evidence stops.</p></aside>",
+      "css": ".ds-boundary{max-width:72ch;padding:24px;background:#15151a;color:#a1a1a6;border-radius:22px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7)}.ds-boundary strong{display:block;margin-bottom:12px;color:#2997ff;font:800 13px/1 Inter,sans-serif}.ds-boundary p{margin:0;font:500 16px/1.55 Inter,sans-serif}"
+    },
+    {
+      "name": "Track Row",
+      "kind": "custom",
+      "description": "Spotify-world project entry with compact service-native hierarchy.",
+      "html": "<a class=\"ds-track\" href=\"#story\"><span>01</span><i></i><strong>Career Autopilot</strong><small>APPROVAL GATES</small></a>",
+      "css": ".ds-track{display:grid;grid-template-columns:28px 44px 1fr auto;align-items:center;gap:12px;padding:9px 12px;border-radius:5px;color:#b3b3b3;text-decoration:none;font:600 13px/1 Montserrat,sans-serif;transition:background .2s,color .2s}.ds-track i{width:40px;aspect-ratio:1;background:#1ed760}.ds-track strong{color:#fff}.ds-track:hover{background:rgba(255,255,255,.08);color:#fff}.ds-track:focus-visible{outline:2px solid #1ed760;outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "One truth, eight operating worlds.",
+    "overview": "The portfolio is a cinematic evidence system. Astronomy remains the original cosmic keynote; each opt-in identity changes the material, interface grammar, display voice, and scroll choreography without changing any project fact or route.",
+    "keyCharacteristics": ["Full-bleed pinned scenes driven by scroll position.", "One unmistakable interface metaphor per identity.", "Repository-backed proof and explicit boundaries in both languages.", "Large typographic propositions paired with tactile system geometry."],
+    "rules": [
+      { "name": "The Shared Truth Rule", "body": "A world may reinterpret presentation, never evidence, status, route structure, or language parity.", "section": "overview" },
+      { "name": "The Native Frame Rule", "body": "Reuse facts and routes, not the astronomy frame or another identity's composition.", "section": "layout" },
+      { "name": "The Material Depth Rule", "body": "Hardware may hinge, pages may turn, and albums may spin; motion must express the chosen object rather than decorate the viewport.", "section": "elevation" },
+      { "name": "The Identity Geometry Rule", "body": "A signature shape belongs to its own world and must not become a global decoration.", "section": "shapes" }
+    ],
+    "dos": ["Do verify every figure and status against the corresponding repository.", "Do preserve equivalent English and Arabic facts, focus behavior, and routes.", "Do make the first viewport unmistakably native to its selected identity.", "Do keep mobile and reduced-motion versions complete and navigable."],
+    "donts": ["Don't expose private repository URLs, customer data, credentials, or rights-restricted assets.", "Don't reuse the astronomy planet scene outside Astronomy.", "Don't change project truth to make a stronger visual claim.", "Don't use monospace as a generic technical costume."]
+  }
+}

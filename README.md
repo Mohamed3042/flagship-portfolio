@@ -1,6 +1,6 @@
 # Mohamed Mahmoud — Automation Engineer Portfolio
 
-A cinematic, bilingual English/Arabic portfolio built with Astro and full RTL support. The site presents 26 evidence-backed project stories: ten Automation Engineering flagships, nine operating-foundation stories, and seven Engineering Lab studies.
+A cinematic, bilingual English/Arabic portfolio built with Astro and full RTL support. The site presents 30 evidence-backed project stories: thirteen Automation Engineering flagships, nine operating-foundation stories, and eight Engineering Lab studies.
 
 Every new story is grounded in its source repository. Private projects are presented as sanitized case studies without repository links, source excerpts, credentials, or rights-restricted assets.
 
@@ -16,7 +16,7 @@ Open `http://localhost:4321`. The root redirects to `/en` or `/ar` from the brow
 Key routes:
 
 - `/en` and `/ar` — bilingual homepages
-- `/en/work/<slug>` and `/ar/work/<slug>` — all 26 project stories
+- `/en/work/<slug>` and `/ar/work/<slug>` — all 30 project stories
 - `#foundation` — nine earlier operating stories
 - `#lab` — seven architecture, restoration, and private-safe Engineering Lab studies
 
