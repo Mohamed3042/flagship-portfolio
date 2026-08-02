@@ -1,199 +1,177 @@
 ---
 import { projects, type ProjectMeta } from '../../../data/projects';
 import { storyForProject } from '../../../data/project-kinetics';
-import { storybookRealmFor } from '../../../data/storybook-realms';
+import { storybookSceneFor } from '../../../data/storybook-scenes';
 import { homePath, pick, type Lang } from '../../../i18n/utils';
-import ProjectKinetic from '../ProjectKinetic.astro';
 
 interface Props { lang: Lang; project: ProjectMeta }
 const { lang, project } = Astro.props;
-const ar = lang === 'ar';
 const story = storyForProject(project, lang);
+const scene = storybookSceneFor(project);
+const ar = lang === 'ar';
 const no = String(projects.findIndex((item) => item.slug === project.slug) + 1).padStart(2, '0');
-const back = homePath(lang) + '#disney-chapters';
+const back = `${homePath(lang)}#work`;
 const arrow = ar ? '←' : '→';
-const realm = storybookRealmFor(project);
-const motes = Array.from({ length: 16 });
+const sceneStyle = `--story-a:${project.cardA};--story-b:${project.cardB};--scene-start:${scene.startX};--scene-end:${scene.endX};--scene-zoom:${scene.zoom};--scene-lift:${scene.lift};--scene-tilt:${scene.tilt}`;
 ---
 
 <article
-  class:list={['sworld', 'sworld--disney', 'dpb-world', `dpb-world--${realm}`]}
+  class:list={['sworld', 'sworld--disney', 'dp-film', `dp-film--${scene.motion}`]}
   data-story-world="disney"
-  data-disney-project-book
-  data-project-realm={realm}
+  data-project-film={project.slug}
+  data-transition={scene.transition}
+  style={sceneStyle}
   aria-hidden="true"
 >
-  <section class="sworld-stage dpb-cover-stage" data-story-stage>
-    <div class="sworld-stick">
-      <div class="dpb-night" aria-hidden="true">
-        <div class="dpb-moon"></div>
-        <div class="dpb-motes">{motes.map((_, i) => <i style={`--i:${i}`}></i>)}</div>
-        <div class="dpb-horizon"><i></i><i></i><i></i></div>
+  <section class="sworld-stage dp-act dp-act--cover" data-story-stage data-film-act="cover" data-from-x={scene.startX} data-to-x={0}>
+    <div class="sworld-stick dp-frame">
+      <div class="dp-camera" aria-hidden="true">
+        <img src={scene.image} alt="" width="1792" height="1024" fetchpriority="high" decoding="async" />
+        <img class="dp-camera__near" src={scene.image} alt="" width="1792" height="1024" decoding="async" />
       </div>
-      <div class="dpb-cover-object" aria-hidden="true">
-        <div class="dpb-page-block"></div>
-        <div class="dpb-cover-face">
-          <span>{ar ? 'الفصل' : 'Chapter'} {no}</span>
-          <i></i>
-          <ProjectKinetic project={project} lang={lang} world="disney" phase="input" compact />
-          <b>{story.ghost}</b>
-          <small>{pick(lang, project.tag)}</small>
-        </div>
-      </div>
-      <div class="dpb-cover-copy">
-        <span>{ar ? 'من مخطوطة الأنظمة' : 'From the systems manuscript'}</span>
+      <div class="dp-wash" aria-hidden="true"></div>
+      <header class="dp-cover-copy">
+        <span>{ar ? 'حكاية تشغيل حقيقية' : 'A true operating story'} · {no}</span>
         <div class="story-heading" role="heading" aria-level="1">{pick(lang, project.title)}</div>
         <p>{pick(lang, story.lead)}</p>
-        <div><a href="#chapter-one">{ar ? 'افتح الفصل' : 'Open this chapter'} {arrow}</a><a href={back}>{ar ? 'كل الفصول' : 'All chapters'}</a></div>
-      </div>
-      <div class="dpb-stage-number" aria-hidden="true">{no}</div>
+        <a href="#the-friction">{ar ? 'ابدأ من المشكلة' : 'Begin with the friction'} ↓</a>
+      </header>
+      <div class="dp-book-edge" aria-hidden="true"><i></i><span>{scene.transition.replaceAll('-', ' ')}</span></div>
     </div>
   </section>
 
-  <section class="sworld-stage dpb-opening-stage" id="chapter-one" data-story-stage>
-    <div class="sworld-stick">
-      <div class="dpb-opening-night" aria-hidden="true"></div>
-      <div class="dpb-opening-book">
-        <div class="dpb-opening-page dpb-opening-page--copy">
-          <span>{pick(lang, story.problemKicker)}</span>
-          <h2>{pick(lang, story.problemHeading)}</h2>
-          <p>{pick(lang, story.problemBody)}</p>
-        </div>
-        <b class="dpb-opening-gutter"></b>
-        <div class="dpb-opening-page dpb-opening-page--scene">
-          <div class="dpb-pop-architecture" aria-hidden="true"><i></i><b></b><i></i></div>
-          <ProjectKinetic project={project} lang={lang} world="disney" phase="run" />
-          <div class="dpb-pop-foreground" aria-hidden="true"><i></i><i></i><i></i></div>
-        </div>
-        <div class="dpb-opening-turn" aria-hidden="true"></div>
+  <section id="the-friction" class="sworld-stage dp-act dp-act--problem" data-story-stage data-film-act="problem" data-from-x={scene.startX} data-to-x={scene.startX * .45}>
+    <div class="sworld-stick dp-frame">
+      <div class="dp-camera" aria-hidden="true">
+        <img src={scene.image} alt="" width="1792" height="1024" loading="lazy" decoding="async" />
+        <img class="dp-camera__near" src={scene.image} alt="" width="1792" height="1024" loading="lazy" decoding="async" />
       </div>
-      <div class="dpb-enter-label">{ar ? 'مرّر لتدخل الآلية' : 'Scroll into the mechanism'}</div>
+      <div class="dp-wash" aria-hidden="true"></div>
+      <div class="dp-caption dp-caption--problem">
+        <small>{ar ? 'الفصل الأول · ما شعر به الناس' : 'Chapter one · What people felt'}</small>
+        <h2>{pick(lang, story.problemHeading)}</h2>
+        <p>{pick(lang, story.problemBody)}</p>
+      </div>
+      <div class="dp-page-turn" aria-hidden="true"><i></i></div>
     </div>
   </section>
 
-  <div class="dpb-story-pages">
-    {story.steps.map((step, index) => (
-      <section class:list={['sworld-stage', 'dpb-step-stage', index % 2 && 'dpb-step-stage--reverse']} data-story-stage data-book-step={index + 1}>
-        <div class="sworld-stick">
-          <div class="dpb-paper-light" aria-hidden="true"></div>
-          <div class="dpb-step-spread">
-            <div class="dpb-step-copy">
-              <span>{ar ? 'المشهد' : 'Scene'} {step.n}</span>
-              <h2>{pick(lang, step.title)}</h2>
-              <p>{pick(lang, step.body)}</p>
-              <small>{index === 0 ? pick(lang, story.problemKicker) : index === story.steps.length - 1 ? pick(lang, story.proofHeading) : pick(lang, story.stepsHeading)}</small>
-            </div>
-            <b class="dpb-step-gutter"></b>
-            <div class="dpb-step-illustration">
-              <div class="dpb-scene-back" aria-hidden="true"><i></i><i></i><b></b></div>
-              <ProjectKinetic project={project} lang={lang} world="disney" phase={index === story.steps.length - 1 ? 'proof' : 'run'} />
-              <div class="dpb-scene-front" aria-hidden="true"><i></i><i></i><i></i></div>
-              <span>{project.slug.replaceAll('-', ' ')}</span>
-            </div>
-            <div class="dpb-step-turn" aria-hidden="true"></div>
-          </div>
-          <div class="dpb-progress" aria-hidden="true"><span>{String(index + 1).padStart(2, '0')}</span><i><b style={`--step:${(index + 1) / story.steps.length}`}></b></i><span>{String(story.steps.length).padStart(2, '0')}</span></div>
-        </div>
-      </section>
-    ))}
-  </div>
+  <section class="sworld-stage dp-act dp-act--intervention" data-story-stage data-film-act="intervention" data-from-x={scene.startX * .3} data-to-x={scene.endX * .3}>
+    <div class="sworld-stick dp-frame">
+      <div class="dp-camera" aria-hidden="true">
+        <img src={scene.image} alt="" width="1792" height="1024" loading="lazy" decoding="async" />
+        <img class="dp-camera__near" src={scene.image} alt="" width="1792" height="1024" loading="lazy" decoding="async" />
+      </div>
+      <div class="dp-wash" aria-hidden="true"></div>
+      <header class="dp-intervention-title">
+        <small>{ar ? 'الفصل الثاني · لحظة التحول' : 'Chapter two · The intervention'}</small>
+        <h2>{pick(lang, story.stepsHeading)}</h2>
+      </header>
+      <ol class="dp-steps">
+        {story.steps.map((step, index) => (
+          <li data-film-step={index}>
+            <span>{step.n}</span>
+            <div><h3>{pick(lang, step.title)}</h3><p>{pick(lang, step.body)}</p></div>
+          </li>
+        ))}
+      </ol>
+      <div class="dp-step-progress" aria-hidden="true"><i></i><b></b></div>
+      <div class="dp-page-turn" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
 
-  <section class="sworld-stage dpb-proof-stage" data-story-stage>
-    <div class="sworld-stick">
-      <div class="dpb-proof-sky" aria-hidden="true">{motes.slice(0, 10).map((_, i) => <i style={`--i:${i}`}></i>)}</div>
-      <div class="dpb-proof-book">
-        <div class="dpb-proof-copy">
-          <span>{ar ? 'الدليل' : 'The evidence'}</span>
-          <h2>{pick(lang, story.proofHeading)}</h2>
-          <p>{pick(lang, story.proofBody)}</p>
-        </div>
-        <b></b>
+  <section class="sworld-stage dp-act dp-act--outcome" data-story-stage data-film-act="outcome" data-from-x={scene.endX * .35} data-to-x={scene.endX}>
+    <div class="sworld-stick dp-frame">
+      <div class="dp-camera" aria-hidden="true">
+        <img src={scene.image} alt="" width="1792" height="1024" loading="lazy" decoding="async" />
+        <img class="dp-camera__near" src={scene.image} alt="" width="1792" height="1024" loading="lazy" decoding="async" />
+      </div>
+      <div class="dp-wash" aria-hidden="true"></div>
+      <div class="dp-caption dp-caption--outcome">
+        <small>{ar ? 'الفصل الثالث · ما تغيّر' : 'Chapter three · What changed'}</small>
+        <h2>{pick(lang, story.proofHeading)}</h2>
+        <p>{pick(lang, story.proofBody)}</p>
         <dl>{story.proof.map((metric) => <div><dt>{metric.value}</dt><dd>{pick(lang, metric.label)}</dd></div>)}</dl>
+        {story.link && <a href={story.link.href} target="_blank" rel="noopener">{pick(lang, story.link.label)} ↗</a>}
       </div>
-      <div class="dpb-proof-seal" aria-hidden="true"><i></i><b>MM</b><span>VERIFIED<br/>CHAPTER</span></div>
+      <div class="dp-page-turn" aria-hidden="true"><i></i></div>
     </div>
   </section>
 
-  <footer class="dpb-back-cover">
-    <div class="dpb-back-emblem" aria-hidden="true"><i></i><b>{story.ghost}</b><i></i></div>
-    <span>{pick(lang, story.boundaryKicker)}</span>
-    <h2>{ar ? 'كل حكاية صادقة تعرف حدودها.' : 'An honest story knows its boundary.'}</h2>
-    <p>{pick(lang, story.boundary)}</p>
-    <div class="dpb-tools">{story.tools.map((tool) => <i>{tool}</i>)}</div>
-    <a href={back}>{ar ? 'أغلق الكتاب وعد إلى الفصول' : 'Close the book and return to the chapters'} {arrow}</a>
-  </footer>
+  <section class="dp-boundary">
+    <div>
+      <small>{ar ? 'الخاتمة · الحد الصادق' : 'Epilogue · The honest boundary'}</small>
+      <h2>{pick(lang, story.boundaryKicker)}</h2>
+      <p>{pick(lang, story.boundary)}</p>
+      <div class="dp-tools">{story.tools.map((tool) => <i>{tool}</i>)}</div>
+    </div>
+    <aside aria-hidden="true"><span>MM</span><i></i><b>{no}</b></aside>
+    <a href={back}>{ar ? 'عد إلى كل الحكايات' : 'Return to every story'} {arrow}</a>
+  </section>
 </article>
 
 <script>
-  let disneyProjectBookCleanup: (() => void) | null = null;
-  function initDisneyProjectBook() {
-    disneyProjectBookCleanup?.();
-    const root = document.querySelector<HTMLElement>('[data-disney-project-book]');
+  let projectFilmCleanup: (() => void) | null = null;
+  function initProjectFilm() {
+    projectFilmCleanup?.();
+    const root = document.querySelector<HTMLElement>('[data-project-film]');
     if (!root) return;
-    const paper = root.querySelector<HTMLElement>('.dpb-story-pages');
-    const proof = root.querySelector<HTMLElement>('.dpb-proof-stage');
+    const acts = [...root.querySelectorAll<HTMLElement>('[data-film-act]')];
     let raf = 0;
+    const clamp = (value: number) => Math.max(0, Math.min(1, value));
     const update = () => {
       raf = 0;
-      if (root.getAttribute('aria-hidden') === 'true') {
-        document.documentElement.removeAttribute('data-disney-book-open');
-        return;
-      }
-      const vh = Math.max(innerHeight, 1);
-      const paperRect = paper?.getBoundingClientRect();
-      const proofRect = proof?.getBoundingClientRect();
-      const insidePaper = Boolean(paperRect && paperRect.top < vh * .55 && paperRect.bottom > vh * .08);
-      const insideProofBook = Boolean(proofRect && proofRect.top < vh * .32 && proofRect.bottom > vh * .72);
-      document.documentElement.toggleAttribute('data-disney-book-open', insidePaper || insideProofBook);
+      if (root.getAttribute('aria-hidden') === 'true') return;
+      acts.forEach((act) => {
+        const rect = act.getBoundingClientRect();
+        const p = clamp(-rect.top / Math.max(rect.height - innerHeight, 1));
+        const eased = p * p * (3 - 2 * p);
+        const from = Number(act.dataset.fromX || 0);
+        const to = Number(act.dataset.toX || 0);
+        const zoom = Number(getComputedStyle(root).getPropertyValue('--scene-zoom')) || 1.22;
+        const lift = Number(getComputedStyle(root).getPropertyValue('--scene-lift')) || 0;
+        const tilt = Number(getComputedStyle(root).getPropertyValue('--scene-tilt')) || 0;
+        const pulse = Math.sin(Math.PI * p);
+        const x = from + (to - from) * eased;
+        act.style.setProperty('--film-p', p.toFixed(4));
+        act.style.setProperty('--frame-x', `${x.toFixed(3)}vw`);
+        act.style.setProperty('--frame-near-x', `${(x * 1.16).toFixed(3)}vw`);
+        act.style.setProperty('--frame-y', `${(lift * pulse).toFixed(3)}vh`);
+        act.style.setProperty('--frame-near-y', `${(lift * pulse * 1.3).toFixed(3)}vh`);
+        act.style.setProperty('--frame-scale', (1.12 + (zoom - 1.08) * pulse).toFixed(4));
+        act.style.setProperty('--frame-near-scale', (1.17 + (zoom - 1.03) * pulse).toFixed(4));
+        act.style.setProperty('--frame-tilt', `${(tilt * (p - .5) * 2).toFixed(3)}deg`);
+        act.style.setProperty('--page-p', clamp((p - .84) / .16).toFixed(4));
+        if (act.dataset.filmAct === 'intervention') {
+          const count = Math.max(act.querySelectorAll('[data-film-step]').length, 1);
+          act.dataset.activeStep = String(Math.min(count - 1, Math.floor(p * count)));
+        }
+      });
     };
     const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
     addEventListener('scroll', queue, { passive: true });
     addEventListener('resize', queue, { passive: true });
     document.addEventListener('mm:worldchange', queue);
     update();
-    disneyProjectBookCleanup = () => {
+    projectFilmCleanup = () => {
       if (raf) cancelAnimationFrame(raf);
       removeEventListener('scroll', queue);
       removeEventListener('resize', queue);
       document.removeEventListener('mm:worldchange', queue);
-      document.documentElement.removeAttribute('data-disney-book-open');
     };
   }
-  initDisneyProjectBook();
-  document.addEventListener('astro:page-load', initDisneyProjectBook);
+  initProjectFilm();
+  document.addEventListener('astro:page-load', initProjectFilm);
 </script>
 
 <style>
-  .dpb-world{--paper:#f5e9c8;--paper-2:#dfcc9c;--gold:#e6c66f;background:#070c27;color:#fff8e4;font-family:var(--font-serif);overflow:clip}.dpb-world h2,.dpb-world p{margin-top:0}
-  .dpb-cover-stage .sworld-stick{background:radial-gradient(circle at 54% 35%,color-mix(in srgb,var(--story-a) 20%,#344b80),#111943 45%,#05091f 78%)}
-  .dpb-night,.dpb-opening-night,.dpb-proof-sky{position:absolute;inset:0;overflow:hidden}.dpb-night::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 19%,#fff4b5 0 1px,transparent 1.8px),radial-gradient(circle at 76% 33%,#c7e2ff 0 1px,transparent 1.8px),radial-gradient(circle at 43% 71%,#fff 0 1px,transparent 1.8px);background-size:149px 171px,223px 207px,269px 287px;transform:translateY(calc(var(--p)*-95px))}
-  .dpb-moon{position:absolute;right:13%;top:13%;width:min(25vw,320px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 38% 34%,#fffce6,#dccf9f 64%,#a69a73);box-shadow:0 0 55px #fff1b788,0 0 180px color-mix(in srgb,var(--story-a) 35%,transparent);transform:translateY(calc(var(--p)*-8vh)) scale(calc(.72 + var(--p)*.46))}
-  .dpb-motes i,.dpb-proof-sky i{position:absolute;left:calc(4% + var(--i)*6.1%);top:calc(8% + (var(--i)%6)*14%);width:5px;aspect-ratio:1;border-radius:50%;background:var(--gold);box-shadow:0 0 15px var(--gold);animation:dpb-mote calc(3s + var(--i)*.17s) ease-in-out infinite alternate;animation-delay:calc(var(--i)*-.29s)}
-  .dpb-horizon i{position:absolute;left:-8%;right:-8%;bottom:-8%;height:38%;background:#060a20;clip-path:polygon(0 70%,9% 51%,16% 65%,25% 28%,34% 67%,43% 38%,53% 69%,62% 23%,73% 62%,84% 35%,92% 65%,100% 45%,100% 100%,0 100%);transform:translateY(calc(var(--p)*var(--d)))}.dpb-horizon i:nth-child(1){--d:24px;bottom:5%;background:color-mix(in srgb,var(--story-a) 15%,#17254c);opacity:.45}.dpb-horizon i:nth-child(2){--d:48px;background:#111735;opacity:.72}.dpb-horizon i:nth-child(3){--d:78px;bottom:-17%}
-  .dpb-cover-object{position:absolute;z-index:3;right:8vw;top:50%;width:min(43vw,610px);aspect-ratio:1.38;transform-style:preserve-3d;transform:translateY(-50%) perspective(1200px) rotateX(calc(50deg - var(--p)*42deg)) rotateY(calc(-16deg + var(--p)*12deg)) rotateZ(calc(5deg - var(--p)*5deg)) scale(calc(.72 + var(--p)*.5));filter:drop-shadow(0 48px 65px #000c)}
-  .dpb-page-block{position:absolute;inset:4% -2% -5% 3%;border-radius:16px 38px 38px 16px;background:repeating-linear-gradient(#f0e3bd 0 2px,#ae9562 3px 4px);transform:translateZ(-17px)}.dpb-cover-face{position:absolute;inset:0;display:grid;place-items:center;padding:11%;border:5px double var(--gold);border-radius:16px 38px 38px 16px;text-align:center;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--story-a) 48%,#344b78),color-mix(in srgb,var(--story-b) 32%,#182146) 58%,#0a1233);box-shadow:inset 0 0 0 12px #10173b,inset 0 0 0 14px #e6c66f55;overflow:hidden}.dpb-cover-face::before,.dpb-cover-face::after{content:"";position:absolute;width:40%;aspect-ratio:1;border:1px solid #e6c66f55;transform:rotate(45deg)}.dpb-cover-face::before{left:-22%;top:-20%}.dpb-cover-face::after{right:-22%;bottom:-20%}.dpb-cover-face span{position:absolute;top:10%;color:var(--gold);font-style:italic}.dpb-cover-face>i{width:42%;aspect-ratio:1;border:1px solid var(--gold);border-radius:50%;box-shadow:0 0 0 10px #e6c66f10,0 0 45px color-mix(in srgb,var(--story-a) 35%,transparent)}.dpb-cover-face b{position:absolute;font-size:clamp(60px,10vw,150px);line-height:.7;color:#fff8e7}.dpb-cover-face small{position:absolute;bottom:10%;max-width:72%;font:700 10px var(--font);letter-spacing:.15em;text-transform:uppercase;color:#e1e7ff}
-  .dpb-cover-face :global(.project-kinetic){position:absolute!important;z-index:2!important;left:14%!important;right:14%!important;top:23%!important;width:72%!important;min-height:0!important;margin:0!important;border-color:#e6c66f55!important;background:#0b123077!important;box-shadow:none!important;opacity:.46;filter:sepia(.3) saturate(.8);mix-blend-mode:screen;transform:scale(calc(.84 + var(--p)*.12)) rotateX(calc((1 - var(--p))*8deg))!important}.dpb-cover-face b{z-index:3;text-shadow:0 4px 28px #07102d}
-  .dpb-cover-copy{position:absolute;z-index:5;left:6vw;top:50%;width:min(650px,50vw);transform:translateY(calc(-50% - var(--p)*25px));opacity:calc(1 - var(--p)*.35)}.dpb-cover-copy>span{color:var(--gold);font-style:italic}.dpb-cover-copy .story-heading{margin:20px 0;font-size:clamp(54px,7.3vw,105px);line-height:.88;font-weight:700;text-wrap:balance}.dpb-cover-copy p{max-width:58ch;color:#d6def6;font:500 clamp(16px,1.35vw,20px)/1.6 var(--font)}.dpb-cover-copy>div{display:flex;gap:18px;align-items:center;margin-top:25px}.dpb-cover-copy a{color:#fff2cc;text-decoration:none;font:700 13px var(--font)}.dpb-cover-copy a:first-child{padding:13px 18px;border:1px solid var(--gold);background:#e6c66f12}.dpb-stage-number{position:absolute;left:2vw;bottom:-.12em;color:#ffffff08;font-size:min(38vw,530px);line-height:.7}
-  .dpb-opening-stage .sworld-stick{background:radial-gradient(circle at 50% 50%,#35497d,#0e153b 64%,#05081c)}.dpb-opening-night{opacity:calc(1 - var(--p)*1.6);background:radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--story-a) 24%,transparent),transparent 44%)}
-  .dpb-opening-book{position:absolute;z-index:2;left:50%;top:50%;width:min(91vw,1320px);height:min(69vw,770px);display:grid;grid-template-columns:1fr 18px 1fr;transform-style:preserve-3d;transform:translate(-50%,-50%) perspective(1400px) rotateX(calc(52deg - var(--p)*51deg)) scale(calc(.68 + var(--p)*1.28));filter:drop-shadow(0 55px 75px #000b)}.dpb-opening-page{position:relative;padding:clamp(28px,6vw,84px);background:var(--paper);color:#33293c;box-shadow:inset 0 0 90px #73531d20;overflow:hidden}.dpb-opening-page::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 20% 20%,#533b140a 0 1px,transparent 1.4px 4px);mix-blend-mode:multiply}.dpb-opening-page--copy{border-radius:28px 4px 4px 28px;transform-origin:right;transform:rotateY(calc((1 - var(--p))*66deg))}.dpb-opening-page--scene{display:grid;place-items:center;border-radius:4px 28px 28px 4px;transform-origin:left;transform:rotateY(calc((1 - var(--p))*-66deg));background:radial-gradient(circle at 50% 43%,color-mix(in srgb,var(--story-a) 18%,#fff1cb),#ddca9c 73%)}.dpb-opening-page--copy>span{color:color-mix(in srgb,var(--story-a) 70%,#795b1d);font-style:italic}.dpb-opening-page--copy h2{margin:22px 0;font-size:clamp(34px,3.8vw,55px);line-height:1.02;overflow-wrap:normal;word-break:normal;hyphens:none}.dpb-opening-page--copy p{color:#5c5260;font:500 clamp(15px,1.28vw,19px)/1.65 var(--font)}.dpb-opening-gutter{background:linear-gradient(90deg,#4c321e,#8d6337,#4b301c);box-shadow:0 0 28px #382219}
-  .dpb-opening-page--scene :global(.project-kinetic){position:relative!important;z-index:4!important;width:92%!important;min-height:0!important;margin:0!important;background:#f0e1b9bd!important;border-color:#735a2e55!important;box-shadow:0 28px 55px #5c3e1c44!important;mix-blend-mode:multiply;filter:sepia(.22) saturate(.84) contrast(1.05);transform:translateY(calc((.5 - var(--p))*50px)) rotateX(calc((1 - var(--p))*11deg)) scale(calc(.84 + var(--p)*.12))!important;transform-origin:center bottom}.dpb-pop-architecture,.dpb-pop-foreground{position:absolute;inset:0;pointer-events:none}.dpb-pop-architecture{z-index:2;transform:translateY(calc((.5 - var(--p))*32px))}.dpb-pop-architecture i{position:absolute;bottom:4%;width:18%;height:62%;border:3px solid color-mix(in srgb,var(--story-a) 58%,#675027);border-bottom:0;border-radius:50% 50% 0 0}.dpb-pop-architecture i:first-child{left:3%}.dpb-pop-architecture i:last-child{right:3%}.dpb-pop-architecture b{position:absolute;left:11%;right:11%;top:7%;height:22%;border:2px solid color-mix(in srgb,var(--story-a) 52%,#675027);border-bottom:0;border-radius:50% 50% 0 0}.dpb-pop-foreground{z-index:5}.dpb-pop-foreground i{position:absolute;bottom:-1%;width:17%;height:30%;background:color-mix(in srgb,var(--story-a) 45%,#766139);clip-path:polygon(50% 0,65% 47%,100% 100%,0 100%,35% 47%);transform-origin:bottom;transform:rotate(calc((.5 - var(--p))*9deg))}.dpb-pop-foreground i:nth-child(1){left:0}.dpb-pop-foreground i:nth-child(2){right:0;height:38%}.dpb-pop-foreground i:nth-child(3){left:44%;width:10%;height:19%;opacity:.55}.dpb-opening-turn{position:absolute;z-index:6;right:0;top:0;width:50%;height:100%;border-radius:4px 28px 28px 4px;background:linear-gradient(100deg,#b99f68,#f6e9c5 17%,#d6bf8d);transform-origin:left;transform:rotateY(calc(-176deg*var(--p)));box-shadow:-30px 0 45px #4e351c44;backface-visibility:hidden}.dpb-enter-label{position:absolute;z-index:8;left:50%;bottom:4vh;transform:translateX(-50%);color:var(--gold);font:700 10px var(--font);letter-spacing:.16em;text-transform:uppercase;opacity:calc(1 - var(--p)*1.5)}
-  .dpb-story-pages{background:var(--paper);color:#32293b}.dpb-step-stage{height:205vh}.dpb-step-stage .sworld-stick{background:var(--paper)}.dpb-step-stage .sworld-stick::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 7% 12%,#5d42120c 0 1px,transparent 1.4px),radial-gradient(circle at 83% 71%,#5d42120a 0 1px,transparent 1.5px);background-size:19px 23px,29px 31px;mix-blend-mode:multiply}.dpb-paper-light{position:absolute;inset:0;background:radial-gradient(circle at calc(15% + var(--p)*70%) 42%,color-mix(in srgb,var(--story-a) 17%,transparent),transparent 43%);transform:scale(calc(1 + var(--p)*.05))}
-  .dpb-step-spread{position:absolute;left:50%;top:50%;width:min(94vw,1420px);height:min(82svh,840px);display:grid;grid-template-columns:1fr 16px 1.18fr;transform:translate(-50%,-50%) perspective(1400px) rotateX(calc((.5 - var(--p))*5deg));border:1px solid #765c2c35;border-radius:27px;background:linear-gradient(90deg,#f3e6c3,#fff2d2);box-shadow:0 40px 85px #6f542b32,0 7px 0 #b79d69;overflow:hidden}.dpb-step-stage--reverse .dpb-step-spread{grid-template-columns:1.18fr 16px 1fr}.dpb-step-copy{position:relative;z-index:4;display:flex;flex-direction:column;justify-content:center;padding:clamp(30px,6vw,86px);background:#f3e6c3;transform-origin:right;transform:rotateY(calc((1 - var(--p))*24deg))}.dpb-step-stage--reverse .dpb-step-copy{grid-column:3;grid-row:1;transform-origin:left;transform:rotateY(calc((1 - var(--p))*-24deg))}.dpb-step-copy>span{color:color-mix(in srgb,var(--story-a) 72%,#78591b);font-style:italic}.dpb-step-copy h2{margin:23px 0;font-size:clamp(48px,6.2vw,88px);line-height:.9;text-wrap:balance}.dpb-step-copy p{color:#5e5361;font:500 clamp(15px,1.28vw,19px)/1.65 var(--font)}.dpb-step-copy small{margin-top:30px;color:#8a7c7c;font:700 10px var(--font);letter-spacing:.14em;text-transform:uppercase}.dpb-step-gutter{background:linear-gradient(90deg,#4f341e,#927042,#50341e);box-shadow:0 0 25px #5a3b20}.dpb-step-stage--reverse .dpb-step-gutter{grid-column:2;grid-row:1}.dpb-step-illustration{position:relative;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--story-a) 24%,#fff1cc),#ddc997 74%);transform-origin:left;transform:rotateY(calc((1 - var(--p))*-24deg))}.dpb-step-stage--reverse .dpb-step-illustration{grid-column:1;grid-row:1;transform-origin:right;transform:rotateY(calc((1 - var(--p))*24deg))}.dpb-step-illustration :global(.project-kinetic){position:relative!important;z-index:4!important;width:88%!important;min-height:0!important;margin:0!important;background:#f1e3bec7!important;border-color:#7760354a!important;box-shadow:0 28px 60px #62451f42!important;mix-blend-mode:multiply;filter:sepia(.2) saturate(.88) contrast(1.05);transform:translateY(calc((.5 - var(--p))*68px)) rotateX(calc((1 - var(--p))*12deg)) scale(calc(.84 + var(--p)*.12))!important;transform-origin:center bottom}.dpb-step-illustration>span{position:absolute;right:4%;top:4%;color:#5e4c2e99;font:700 9px var(--font);letter-spacing:.12em;text-transform:uppercase}.dpb-scene-back,.dpb-scene-front{position:absolute;inset:0;pointer-events:none}.dpb-scene-back{z-index:2;transform:translateY(calc((.5 - var(--p))*34px))}.dpb-scene-back i{position:absolute;bottom:7%;width:17%;height:58%;border:2px solid color-mix(in srgb,var(--story-a) 56%,#6c5428);border-bottom:0;border-radius:50% 50% 0 0}.dpb-scene-back i:first-child{left:4%}.dpb-scene-back i:nth-child(2){right:4%}.dpb-scene-back b{position:absolute;left:13%;right:13%;top:9%;height:19%;border:2px solid color-mix(in srgb,var(--story-a) 46%,#71592a);border-bottom:0;border-radius:50% 50% 0 0}.dpb-scene-front{z-index:6}.dpb-scene-front i{position:absolute;bottom:-1%;width:17%;height:31%;background:color-mix(in srgb,var(--story-a) 48%,#715c35);clip-path:polygon(50% 0,66% 46%,100% 100%,0 100%,34% 46%);transform-origin:bottom;transform:rotate(calc((.5 - var(--p))*10deg))}.dpb-scene-front i:nth-child(1){left:0}.dpb-scene-front i:nth-child(2){right:0;height:38%}.dpb-scene-front i:nth-child(3){left:45%;width:9%;height:18%;opacity:.6}.dpb-step-turn{position:absolute;z-index:8;right:0;top:0;width:54%;height:100%;background:linear-gradient(100deg,#c2aa76,#fff0ce 16%,#ddc596);transform-origin:left;transform:perspective(1200px) rotateY(calc(-118deg + var(--p)*118deg));box-shadow:-28px 0 45px #62451e30;opacity:clamp(0,calc(1 - var(--p)*1.65),1);backface-visibility:hidden}.dpb-step-stage--reverse .dpb-step-turn{right:auto;left:0;transform-origin:right;transform:perspective(1200px) rotateY(calc(118deg - var(--p)*118deg))}.dpb-progress{position:absolute;z-index:10;left:6vw;right:6vw;bottom:3vh;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;color:#746647;font:700 9px var(--font);letter-spacing:.14em}.dpb-progress>i{height:1px;background:#8a754a55}.dpb-progress>i b{display:block;width:calc(var(--step)*100%);height:100%;background:color-mix(in srgb,var(--story-a) 65%,#7e6428)}
-  .dpb-proof-stage .sworld-stick{background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--story-a) 23%,#344b7e),#111943 47%,#05091e)}.dpb-proof-sky::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 10% 18%,#fff 0 1px,transparent 2px),radial-gradient(circle at 76% 37%,#ffe6a1 0 1px,transparent 2px);background-size:167px 191px,239px 267px;transform:translateY(calc(var(--p)*-90px))}.dpb-proof-book{position:absolute;left:50%;top:49%;width:min(89vw,1260px);height:min(66vw,720px);display:grid;grid-template-columns:1fr 16px 1fr;transform:translate(-50%,-50%) perspective(1300px) rotateX(calc(47deg - var(--p)*46deg)) scale(calc(.75 + var(--p)*.33));filter:drop-shadow(0 45px 65px #000a)}.dpb-proof-book>div,.dpb-proof-book>dl{margin:0;padding:clamp(32px,6vw,82px);background:var(--paper);color:#332a3c;box-shadow:inset 0 0 85px #6c4d1922}.dpb-proof-book>div{border-radius:28px 4px 4px 28px}.dpb-proof-book>dl{border-radius:4px 28px 28px 4px}.dpb-proof-book>b{background:linear-gradient(90deg,#4d321d,#8e6738,#4d321d)}.dpb-proof-copy>span{color:color-mix(in srgb,var(--story-a) 70%,#74561c);font-style:italic}.dpb-proof-copy h2{margin:22px 0;font-size:clamp(44px,5.8vw,80px);line-height:.92}.dpb-proof-copy p{color:#5e5461;font:500 clamp(14px,1.2vw,18px)/1.6 var(--font)}.dpb-proof-book dl{display:grid;align-content:center}.dpb-proof-book dl div{padding:18px 0;border-bottom:1px solid #806a3f44}.dpb-proof-book dt{font-size:clamp(30px,4vw,60px);color:var(--story-a);font-weight:700}.dpb-proof-book dd{margin:4px 0 0;color:#6a6067;font:500 12px var(--font)}.dpb-proof-seal{position:absolute;z-index:6;right:5vw;bottom:4vh;width:145px;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#8a1f37;color:#f7dfad;box-shadow:0 14px 35px #0007;transform:rotate(calc(12deg - var(--p)*14deg)) scale(calc(.7 + var(--p)*.3))}.dpb-proof-seal i{position:absolute;inset:10%;border:2px dashed #f7dfad;border-radius:50%}.dpb-proof-seal b{font-size:34px}.dpb-proof-seal span{position:absolute;bottom:23%;font:700 6px var(--font);letter-spacing:.1em;text-align:center}
-  .dpb-back-cover{position:relative;min-height:100svh;display:grid;place-content:center;justify-items:center;padding:12vh 7vw;text-align:center;background:radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--story-a) 34%,#273c71),#10183d 52%,#060a21);color:#fff6df}.dpb-back-cover::before{content:"";position:absolute;inset:5%;border:1px solid #e6c66f55;box-shadow:inset 0 0 0 10px #080d28,inset 0 0 0 11px #e6c66f22;pointer-events:none}.dpb-back-emblem{position:relative;display:flex;align-items:center;gap:20px}.dpb-back-emblem i{width:90px;height:1px;background:var(--gold)}.dpb-back-emblem b{font-size:clamp(48px,7vw,90px);color:var(--gold)}.dpb-back-cover>span{position:relative;margin-top:28px;color:var(--gold);font-style:italic}.dpb-back-cover h2{position:relative;max-width:12ch;margin:20px 0;font-size:clamp(54px,8vw,106px);line-height:.9}.dpb-back-cover p{position:relative;max-width:72ch;color:#d6ddf4;font:500 clamp(16px,1.4vw,20px)/1.65 var(--font)}.dpb-tools{position:relative;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:28px}.dpb-tools i{padding:8px 11px;border:1px solid #e6c66f44;color:#e9ddbb;font:600 10px var(--font);font-style:normal}.dpb-back-cover>a{position:relative;margin-top:34px;padding:14px 20px;border:1px solid var(--gold);color:#fff2cf;text-decoration:none;font:700 13px var(--font)}
-  .dpb-world--observatory .dpb-opening-page--scene,.dpb-world--observatory .dpb-step-illustration{background:radial-gradient(circle,#21365d 0 7%,#b5b5ad 8% 9%,#293c62 10% 49%,#d9c693 50%)}.dpb-world--archive .dpb-scene-back i,.dpb-world--archive .dpb-pop-architecture i{border-radius:0;background:repeating-linear-gradient(90deg,transparent 0 13%,color-mix(in srgb,var(--story-a) 24%,#775d2e) 14% 20%)}.dpb-world--garden .dpb-opening-page--scene,.dpb-world--garden .dpb-step-illustration{background:radial-gradient(circle at 50% 78%,#f0de91,#a6c39a 43%,#c8d3b9 68%)}.dpb-world--forge .dpb-opening-page--scene,.dpb-world--forge .dpb-step-illustration{background:radial-gradient(circle at 50% 62%,#ffe7a0,#b66d4b 22%,#423c49 70%)}.dpb-world--harbor .dpb-opening-page--scene,.dpb-world--harbor .dpb-step-illustration{background:linear-gradient(#a7bdc2 0 57%,#52737e 58% 65%,#d6c18d 66%)}.dpb-world--clocktower .dpb-scene-back b,.dpb-world--clocktower .dpb-pop-architecture b{left:24%;right:24%;height:55%;border:4px double color-mix(in srgb,var(--story-a) 60%,#5f4920);border-radius:50%}.dpb-world--theatre .dpb-scene-back i,.dpb-world--theatre .dpb-pop-architecture i{width:34%;height:100%;bottom:0;border:0;border-radius:0;background:color-mix(in srgb,var(--story-a) 48%,#614326);clip-path:polygon(0 0,100% 0,74% 21%,92% 44%,64% 63%,81% 84%,45% 100%,0 100%)}
-  [dir="rtl"] .dpb-cover-object{right:auto;left:8vw}.dpb-world[dir="rtl"] .dpb-cover-copy,[dir="rtl"] .dpb-cover-copy{left:auto;right:6vw}.dpb-world[dir="rtl"] .dpb-step-copy,[dir="rtl"] .dpb-step-copy{text-align:right}
-  @keyframes dpb-mote{to{transform:translate(17px,-23px) scale(1.5);opacity:.35}}
-  @media(max-width:900px){.dpb-cover-object{right:-8vw;width:57vw;opacity:.72}.dpb-cover-copy{width:62vw}.dpb-step-copy,.dpb-opening-page{padding:34px}.dpb-step-copy p{font-size:14px}}
-  @media(max-width:620px){.dpb-cover-stage,.dpb-opening-stage,.dpb-step-stage,.dpb-proof-stage{height:185vh!important}.dpb-cover-object{right:-33vw;top:34%;width:102vw;opacity:.36}.dpb-cover-copy{left:18px;right:18px;top:66%;width:auto}.dpb-cover-copy .story-heading{font-size:clamp(44px,12.5vw,62px)}.dpb-cover-copy p{font-size:14px}.dpb-cover-copy>div{flex-wrap:wrap}.dpb-moon{right:8%;width:42vw}.dpb-opening-book{width:97vw;height:78svh;grid-template-columns:1fr;grid-template-rows:43% 8px 57%;transform:translate(-50%,-50%) perspective(1000px) rotateX(calc(44deg - var(--p)*43deg)) scale(calc(.73 + var(--p)*1.55))}.dpb-opening-page--copy{border-radius:18px 18px 4px 4px;padding:24px;transform-origin:bottom;transform:rotateX(calc((1 - var(--p))*52deg))}.dpb-opening-page--copy h2{font-size:clamp(35px,10vw,48px)}.dpb-opening-page--copy p{display:-webkit-box;overflow:hidden;-webkit-line-clamp:3;-webkit-box-orient:vertical}.dpb-opening-gutter{background:linear-gradient(#4d321d,#8e6738,#4d321d)}.dpb-opening-page--scene{border-radius:4px 4px 18px 18px;transform-origin:top;transform:rotateX(calc((1 - var(--p))*-52deg))}.dpb-opening-turn{width:100%;height:57%;top:auto;bottom:0;transform-origin:top;transform:rotateX(calc(-160deg*var(--p)))}.dpb-step-spread{width:calc(100vw - 20px);height:calc(100svh - 44px);grid-template-columns:1fr!important;grid-template-rows:43% 8px 57%;border-radius:16px}.dpb-step-copy,.dpb-step-stage--reverse .dpb-step-copy{grid-column:1;grid-row:2/4;padding:28px 22px;justify-content:flex-start;transform-origin:top;transform:rotateX(calc((1 - var(--p))*-18deg));background:linear-gradient(transparent 0 8px,#f3e6c3 8px)}.dpb-step-copy>span{margin-top:8px}.dpb-step-copy h2{margin:12px 0;font-size:clamp(37px,10.5vw,52px)}.dpb-step-copy p{display:-webkit-box;overflow:hidden;-webkit-line-clamp:5;-webkit-box-orient:vertical}.dpb-step-copy small{margin-top:14px}.dpb-step-gutter,.dpb-step-stage--reverse .dpb-step-gutter{grid-column:1;grid-row:2;background:linear-gradient(#4d321d,#8e6738,#4d321d)}.dpb-step-illustration,.dpb-step-stage--reverse .dpb-step-illustration{grid-column:1;grid-row:1;transform-origin:bottom;transform:rotateX(calc((1 - var(--p))*18deg))}.dpb-step-illustration :global(.project-kinetic){width:94%!important}.dpb-step-turn,.dpb-step-stage--reverse .dpb-step-turn{left:0;right:0;top:0;width:100%;height:43%;transform-origin:top;transform:perspective(900px) rotateX(calc(-100deg + var(--p)*100deg))}.dpb-progress{left:18px;right:18px;bottom:2vh}.dpb-proof-book{width:95vw;height:80svh;grid-template-columns:1fr;grid-template-rows:1fr 8px 1fr;transform:translate(-50%,-50%) perspective(1000px) rotateX(calc(43deg - var(--p)*42deg)) scale(calc(.76 + var(--p)*.28))}.dpb-proof-book>div{border-radius:18px 18px 4px 4px;padding:27px}.dpb-proof-book>dl{border-radius:4px 4px 18px 18px;padding:24px}.dpb-proof-copy h2{font-size:clamp(37px,10vw,49px)}.dpb-proof-copy p{display:-webkit-box;overflow:hidden;-webkit-line-clamp:3;-webkit-box-orient:vertical}.dpb-proof-book>b{background:linear-gradient(#4d321d,#8e6738,#4d321d)}.dpb-proof-seal{right:14px;bottom:3vh;width:105px}.dpb-back-cover{padding-inline:24px}.dpb-back-cover::before{inset:14px}.dpb-back-emblem i{width:52px}.dpb-back-cover h2{font-size:clamp(46px,13vw,65px)}}
-  @media(max-width:620px){.dpb-opening-page--copy h2{font-size:clamp(29px,8.4vw,39px);line-height:1.02}}
-  @media(prefers-reduced-motion:reduce){.dpb-cover-stage,.dpb-opening-stage,.dpb-step-stage,.dpb-proof-stage{height:auto!important}.dpb-cover-stage .sworld-stick,.dpb-opening-stage .sworld-stick,.dpb-step-stage .sworld-stick,.dpb-proof-stage .sworld-stick{position:relative}.dpb-cover-object,.dpb-opening-book,.dpb-opening-page,.dpb-opening-turn,.dpb-step-spread,.dpb-step-copy,.dpb-step-illustration,.dpb-step-turn,.dpb-proof-book,.dpb-proof-seal,.dpb-opening-page--scene :global(.project-kinetic),.dpb-step-illustration :global(.project-kinetic){transform:none!important}.dpb-opening-turn,.dpb-step-turn{display:none}.dpb-motes i,.dpb-proof-sky i{animation:none}}
-</style>
-
-<style is:global>
-  html[data-world="disney"] .nav{transition:background-color .55s ease,color .55s ease,border-color .55s ease,box-shadow .55s ease}
-  html[data-world="disney"][data-disney-book-open] .nav{background:#f3e7c5ed!important;color:#352b3c!important;border-bottom-color:#7b633932!important;box-shadow:0 12px 35px #614a2520;backdrop-filter:blur(18px) saturate(.8)}
-  html[data-world="disney"][data-disney-book-open] .nav a,html[data-world="disney"][data-disney-book-open] .nav button{color:#352b3c!important}
-  html[data-world="disney"][data-disney-book-open] .nav .pill{border-color:#79623855!important;background:#fff8e755!important}
-  html[data-world="disney"][data-disney-book-open] .nav .dot{background:#9a7427!important;box-shadow:0 0 16px #9a742777}
+  .dp-film{--paper:#e9dcc0;--ink:#211d19;background:#11100f;color:#f5ecde;font-family:var(--font);overflow:clip}.dp-act{height:225vh;--film-p:0;--page-p:0}.dp-act--cover{height:300vh}.dp-act--intervention{height:340vh}.dp-act .sworld-stick{position:sticky;top:0;height:100svh;min-height:620px;overflow:hidden}.dp-frame{isolation:isolate;background:#15120f;overflow:hidden}.dp-camera{position:absolute;inset:-7%;transform:translate3d(var(--frame-x,0),var(--frame-y,0),0) scale(var(--frame-scale,1.12)) rotate(var(--frame-tilt,0deg));will-change:transform}.dp-camera img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.84) contrast(1.04)}.dp-camera__near{clip-path:polygon(0 63%,18% 57%,42% 66%,63% 55%,82% 62%,100% 56%,100% 100%,0 100%);transform:translate3d(calc(var(--frame-near-x,0vw) - var(--frame-x,0vw)),calc(var(--frame-near-y,0vh) - var(--frame-y,0vh)),0) scale(var(--frame-near-scale,1.17));filter:saturate(.9) contrast(1.08)!important}.dp-wash{position:absolute;z-index:1;inset:0;background:linear-gradient(90deg,#06070bc7 0,transparent 46%,#09090d82 100%),linear-gradient(0deg,#09090dc7,transparent 55%);pointer-events:none}:global([dir="rtl"]) .dp-wash{transform:scaleX(-1)}.dp-frame::after{content:"";position:absolute;z-index:2;inset:0;opacity:.19;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");mix-blend-mode:multiply}
+  .dp-cover-copy{position:absolute;z-index:4;left:clamp(22px,6vw,110px);bottom:clamp(36px,9vh,120px);width:min(860px,84vw);text-shadow:0 3px 30px #000}.dp-cover-copy span,.dp-caption small,.dp-intervention-title small,.dp-boundary small{font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#e4c994}.dp-cover-copy .story-heading{margin:14px 0;font-size:clamp(54px,9vw,140px);font-weight:750;line-height:.82;letter-spacing:-.065em;text-wrap:balance}.dp-cover-copy p{max-width:680px;font-size:clamp(16px,1.7vw,24px);line-height:1.5}.dp-cover-copy a,.dp-caption a{display:inline-flex;margin-top:18px;padding:12px 18px;border:1px solid #e3c68f8c;border-radius:999px;background:#11100db8;color:#fff;text-decoration:none;font-weight:800;backdrop-filter:blur(10px)}.dp-cover-copy a:focus-visible,.dp-caption a:focus-visible,.dp-boundary>a:focus-visible{outline:3px solid #fff;outline-offset:4px}:global([dir="rtl"]) .dp-cover-copy{left:auto;right:clamp(22px,6vw,110px)}
+  .dp-book-edge{position:absolute;z-index:4;right:3vw;top:10vh;bottom:10vh;width:1px;background:#f0d59a38}.dp-book-edge i{position:absolute;inset:0;background:#f0d59a;transform-origin:top;transform:scaleY(var(--film-p))}.dp-book-edge span{position:absolute;right:16px;bottom:0;writing-mode:vertical-rl;color:#e2c58c;font-size:9px;font-weight:800;letter-spacing:.17em;text-transform:uppercase}:global([dir="rtl"]) .dp-book-edge{right:auto;left:3vw}:global([dir="rtl"]) .dp-book-edge span{right:auto;left:16px}
+  .dp-caption{position:absolute;z-index:4;bottom:clamp(34px,9vh,118px);left:clamp(22px,7vw,130px);width:min(690px,84vw);text-shadow:0 3px 28px #000}.dp-caption h2,.dp-intervention-title h2{margin:12px 0;font:600 clamp(46px,7vw,108px)/.88 Georgia,serif;letter-spacing:-.055em;text-wrap:balance}.dp-caption>p{max-width:640px;font-size:clamp(16px,1.55vw,23px);line-height:1.55;text-wrap:pretty}.dp-caption--outcome{left:auto;right:clamp(22px,7vw,130px);text-align:right}.dp-caption dl{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px;margin:24px 0 0}.dp-caption dl div{max-width:240px;padding:14px 18px;border:1px solid #eed8ad55;border-radius:14px;background:#11100dc4;backdrop-filter:blur(9px)}.dp-caption dt{font-size:clamp(27px,4vw,58px);font-weight:850;line-height:1}.dp-caption dd{margin:6px 0 0;color:#e8dece;font-size:12px;line-height:1.4}:global([dir="rtl"]) .dp-caption{left:auto;right:clamp(22px,7vw,130px);text-align:right}:global([dir="rtl"]) .dp-caption--outcome{right:auto;left:clamp(22px,7vw,130px);text-align:left}:global([dir="rtl"]) .dp-caption--outcome dl{justify-content:flex-start}
+  .dp-intervention-title{position:absolute;z-index:4;top:max(82px,11vh);left:clamp(22px,6vw,110px);width:min(760px,82vw);text-shadow:0 3px 28px #000}.dp-intervention-title h2{font-size:clamp(42px,6vw,84px)}:global([dir="rtl"]) .dp-intervention-title{left:auto;right:clamp(22px,6vw,110px)}.dp-steps{position:absolute;z-index:4;right:clamp(20px,6vw,100px);bottom:clamp(30px,7vh,88px);width:min(580px,84vw);list-style:none;margin:0;padding:0}.dp-steps li{display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:start;padding:18px;border:1px solid #ead3a94d;border-radius:15px;background:#11100dcc;box-shadow:0 18px 50px #0005;backdrop-filter:blur(12px);opacity:0;transform:translateY(28px) scale(.98);transition:opacity .3s ease,transform .42s ease;position:absolute;right:0;bottom:0;width:100%}.dp-steps li>span{display:grid;place-items:center;width:38px;aspect-ratio:1;border-radius:50%;background:#e5d2aa;color:#241f18;font-weight:900}.dp-steps h3{margin:0 0 7px;font:600 clamp(24px,3vw,40px)/1 Georgia,serif}.dp-steps p{margin:0;color:#e9dfcf;font-size:14px;line-height:1.5}.dp-act--intervention[data-active-step="0"] [data-film-step="0"],.dp-act--intervention[data-active-step="1"] [data-film-step="1"],.dp-act--intervention[data-active-step="2"] [data-film-step="2"],.dp-act--intervention[data-active-step="3"] [data-film-step="3"]{opacity:1;transform:none}:global([dir="rtl"]) .dp-steps{right:auto;left:clamp(20px,6vw,100px)}.dp-step-progress{position:absolute;z-index:4;right:3vw;top:20vh;bottom:20vh;width:2px;background:#ffffff2b}.dp-step-progress b{position:absolute;inset:0;background:#ebce94;transform-origin:top;transform:scaleY(var(--film-p))}.dp-step-progress i{position:absolute;left:50%;top:calc(var(--film-p)*100%);width:9px;aspect-ratio:1;border-radius:50%;background:#ffe0a5;transform:translate(-50%,-50%)}:global([dir="rtl"]) .dp-step-progress{right:auto;left:3vw}
+  .dp-page-turn{position:absolute;z-index:8;right:-4%;top:-3%;width:60%;height:106%;background:linear-gradient(100deg,#cbbb96,#eee4ce 52%,#ad9a72);box-shadow:-35px 0 75px #0008;transform-origin:right center;transform:perspective(1400px) rotateY(calc(var(--page-p)*-110deg));opacity:clamp(0,calc(var(--page-p)*2),1);pointer-events:none}.dp-page-turn::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(5deg,transparent 0 7px,#6c5a3b0c 8px 9px)}.dp-page-turn i{position:absolute;left:9%;top:8%;bottom:8%;width:1px;background:#5c4a2e33}:global([dir="rtl"]) .dp-page-turn{right:auto;left:-4%;transform-origin:left center;transform:perspective(1400px) rotateY(calc(var(--page-p)*110deg))}
+  .dp-boundary{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,34vw);align-content:center;gap:40px;padding:14vh clamp(22px,8vw,140px);background:radial-gradient(circle at 78% 28%,#f4ebda,#d4c19d);color:var(--ink)}.dp-boundary>div{align-self:center}.dp-boundary h2{margin:12px 0;font:600 clamp(48px,7vw,106px)/.9 Georgia,serif;letter-spacing:-.055em}.dp-boundary p{max-width:740px;font-size:clamp(17px,1.65vw,25px);line-height:1.55}.dp-boundary aside{align-self:center;aspect-ratio:1.45;display:grid;place-items:center;border:2px solid #735e3b;border-radius:10px 28px 28px 10px;box-shadow:inset 0 0 0 9px #e0cfad,inset 0 0 0 11px #735e3b33;background:#1a2a42;color:#e8d7b6;transform:rotate(3deg)}.dp-boundary aside span{position:absolute;font:700 11px Georgia,serif;letter-spacing:.3em}.dp-boundary aside i{width:40%;aspect-ratio:1;border:1px solid #c7a96f;border-radius:50%}.dp-boundary aside b{position:absolute;bottom:14%;font-size:12px;letter-spacing:.18em}.dp-boundary>a{grid-column:1/-1;justify-self:start;padding:14px 20px;border:1px solid #6e5938;border-radius:999px;color:var(--ink);text-decoration:none;font-weight:850}.dp-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}.dp-tools i{padding:7px 10px;border:1px solid #7b684b55;border-radius:999px;font-style:normal;font-size:11px}
+  @media(max-width:760px){.dp-act{height:245vh}.dp-act--cover{height:275vh}.dp-act--intervention{height:360vh}.dp-camera{inset:-4% -66%}.dp-cover-copy{left:20px;right:20px;bottom:max(34px,7vh);width:auto}.dp-cover-copy .story-heading{font-size:clamp(50px,15vw,78px)}:global([dir="rtl"]) .dp-cover-copy{left:20px;right:20px}.dp-caption,.dp-caption--outcome,:global([dir="rtl"]) .dp-caption,:global([dir="rtl"]) .dp-caption--outcome{left:20px;right:20px;bottom:max(30px,6vh);width:auto;text-align:start}.dp-caption h2{font-size:clamp(42px,13vw,68px)}.dp-caption>p{font-size:15px}.dp-caption dl,.dp-caption--outcome dl,:global([dir="rtl"]) .dp-caption--outcome dl{justify-content:flex-start}.dp-intervention-title,:global([dir="rtl"]) .dp-intervention-title{left:20px;right:20px;top:max(78px,10vh);width:auto}.dp-intervention-title h2{font-size:clamp(38px,11vw,58px)}.dp-steps,:global([dir="rtl"]) .dp-steps{left:20px;right:20px;bottom:max(28px,6vh);width:auto}.dp-step-progress{right:10px}:global([dir="rtl"]) .dp-step-progress{left:10px}.dp-page-turn{width:80%}.dp-boundary{grid-template-columns:1fr;padding-left:22px;padding-right:22px}.dp-boundary aside{width:min(78vw,420px)}}
+  @media(prefers-reduced-motion:reduce){.dp-act{height:auto}.dp-frame{position:relative;min-height:110svh;display:flex;flex-direction:column;justify-content:flex-end;padding:22vh 20px 30px}.dp-camera{inset:0;transform:none}.dp-camera__near,.dp-page-turn,.dp-step-progress,.dp-book-edge{display:none}.dp-cover-copy,.dp-caption,.dp-caption--outcome,.dp-intervention-title,.dp-steps{position:relative;left:auto!important;right:auto!important;top:auto;bottom:auto;width:min(760px,100%);text-align:start}.dp-cover-copy,.dp-caption,.dp-intervention-title{padding:18px;border-radius:15px;background:#11100dcc}.dp-steps{display:grid;gap:10px;margin-top:18px}.dp-steps li{position:relative;opacity:1;transform:none}.dp-act--intervention .dp-frame{justify-content:flex-end}.dp-boundary{min-height:auto;padding-top:18vh;padding-bottom:18vh}}
 </style>

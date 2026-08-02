@@ -1,145 +1,142 @@
-"""Fail-closed rendered audit for the cinematic Disney storybook world."""
+"""Fail closed on the rendered bilingual storybook experience."""
 
 from __future__ import annotations
 
-import argparse
 import json
-import sys
+import os
 from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
+BASE = os.environ.get("STORYBOOK_BASE", "http://127.0.0.1:4321").rstrip("/")
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "artifacts" / "storybook-cinema"
 
-CHROME = Path(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
+
+def activate_disney(page) -> None:
+    page.evaluate(
+        """
+        document.documentElement.dataset.world = 'disney';
+        localStorage.setItem('mm-world', 'disney');
+        document.dispatchEvent(new CustomEvent('mm:worldchange', {detail:{world:'disney'}}));
+        """
+    )
+    page.wait_for_timeout(450)
+
+
+def scroll_to_progress(page, selector: str, progress: float) -> None:
+    page.eval_on_selector(
+        selector,
+        """(element, progress) => {
+          const top = element.getBoundingClientRect().top + scrollY;
+          const travel = Math.max(element.offsetHeight - innerHeight, 1);
+          scrollTo({top: top + travel * progress, behavior: 'instant'});
+        }""",
+        progress,
+    )
+    page.wait_for_timeout(500)
+
+
+def capture_home(browser, lang: str, width: int, height: int) -> dict:
+    page = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
+    errors: list[str] = []
+    failed: list[str] = []
+    page.on("console", lambda msg: errors.append(msg.text) if msg.type == "error" else None)
+    page.on("response", lambda response: failed.append(f"{response.status} {response.url}") if response.status >= 400 else None)
+    page.goto(f"{BASE}/{lang}", wait_until="networkidle")
+    activate_disney(page)
+
+    root = page.locator("[data-disney-book-home]")
+    assert root.get_attribute("aria-hidden") == "false", "Disney home did not activate"
+    assert root.locator("[data-story-panorama]").count() == 30
+    sources = root.locator(".sb-panorama:not(.sb-panorama--near)").evaluate_all(
+        "els => els.map(el => new URL(el.getAttribute('src'), location.href).pathname)"
+    )
+    assert len(set(sources)) == 30, f"expected 30 unique panorama sources, got {len(set(sources))}"
+    for src in sources:
+        response = page.request.get(f"{BASE}{src}")
+        assert response.ok, f"art failed: {src} {response.status}"
+
+    film = "[data-book-film]"
+    scroll_to_progress(page, film, 0.02)
+    page.screenshot(path=OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-book-closed.png", full_page=False)
+    scroll_to_progress(page, film, 0.48)
+    page.screenshot(path=OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-book-opening.png", full_page=False)
+
+    first = '[data-project-chapter="career-autopilot"]'
+    scroll_to_progress(page, first, 0.08)
+    before = page.locator(f"{first} .sb-camera").evaluate("el => getComputedStyle(el).transform")
+    assert page.locator(first).get_attribute("data-active-beat") == "problem"
+    scroll_to_progress(page, first, 0.52)
+    middle = page.locator(f"{first} .sb-camera").evaluate("el => getComputedStyle(el).transform")
+    assert before != middle, "camera did not scrub with scroll"
+    assert page.locator(first).get_attribute("data-active-beat") == "intervention"
+    page.screenshot(path=OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-career-intervention.png", full_page=False)
+    scroll_to_progress(page, first, 0.78)
+    assert page.locator(first).get_attribute("data-active-beat") == "outcome"
+
+    reclaim = '[data-project-chapter="reclaim"]'
+    scroll_to_progress(page, reclaim, 0.76)
+    page.screenshot(path=OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-reclaim-outcome.png", full_page=False)
+    overflow = page.evaluate("Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - innerWidth")
+    assert overflow <= 2, f"horizontal overflow: {overflow}px"
+    if lang == "ar":
+        assert page.locator("html").get_attribute("dir") == "rtl"
+    page.close()
+    return {"lang": lang, "viewport": [width, height], "errors": errors, "failed": failed, "unique_art": len(set(sources))}
+
+
+def capture_detail(browser, lang: str, slug: str, width: int, height: int) -> dict:
+    page = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
+    errors: list[str] = []
+    failed: list[str] = []
+    page.on("console", lambda msg: errors.append(msg.text) if msg.type == "error" else None)
+    page.on("response", lambda response: failed.append(f"{response.status} {response.url}") if response.status >= 400 else None)
+    page.goto(f"{BASE}/{lang}/work/{slug}", wait_until="networkidle")
+    activate_disney(page)
+    root = page.locator(f'[data-project-film="{slug}"]')
+    assert root.get_attribute("aria-hidden") == "false"
+    assert root.locator("[data-film-act]").count() == 4
+    assert root.locator("[data-film-step]").count() == 4
+    intervention = '[data-project-film] [data-film-act="intervention"]'
+    scroll_to_progress(page, intervention, 0.62)
+    active_step = page.locator(intervention).get_attribute("data-active-step")
+    geometry = page.locator(intervention).evaluate(
+        "el => ({top:el.getBoundingClientRect().top,height:el.getBoundingClientRect().height,scrollY,viewport:innerHeight,filmP:getComputedStyle(el).getPropertyValue('--film-p')})"
+    )
+    assert active_step == "2", f"expected intervention step 2, got {active_step}; geometry={geometry}"
+    page.screenshot(path=OUT / f"{lang}-{slug}-detail.png", full_page=False)
+    overflow = page.evaluate("Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - innerWidth")
+    assert overflow <= 2, f"detail horizontal overflow: {overflow}px"
+    page.close()
+    return {"lang": lang, "slug": slug, "errors": errors, "failed": failed}
 
 
 def main() -> None:
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--base-url", default="http://127.0.0.1:4327")
-    parser.add_argument("--output", type=Path, default=Path("artifacts/disney-book"))
-    args = parser.parse_args()
-    args.output.mkdir(parents=True, exist_ok=True)
-    base = args.base_url.rstrip("/")
-    failures: list[str] = []
-    evidence: dict[str, object] = {}
-
+    OUT.mkdir(parents=True, exist_ok=True)
+    project_slugs = sorted(path.stem for path in (ROOT / "public" / "images" / "storybook").glob("*.webp") if path.stem != "opening-book")
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(headless=True, executable_path=str(CHROME), args=["--disable-gpu"])
-
-        for lang, viewport in (("en", {"width": 1440, "height": 900}), ("ar", {"width": 390, "height": 844})):
-            context = browser.new_context(viewport=viewport, device_scale_factor=1)
-            context.add_init_script("localStorage.setItem('mm-world','disney')")
-            page = context.new_page()
-            console_errors: list[str] = []
-            bad_responses: list[str] = []
-            page.on("console", lambda message: console_errors.append(message.text) if message.type == "error" else None)
-            page.on("pageerror", lambda error: console_errors.append(str(error)))
-            page.on("response", lambda response: bad_responses.append(f"{response.status} {response.url}") if response.status >= 400 else None)
-
-            page.goto(f"{base}/{lang}", wait_until="networkidle")
-            home = page.locator("[data-disney-book-home]")
-            if home.count() != 1:
-                failures.append(f"{lang}: cinematic book home missing")
-                context.close()
-                continue
-            if home.get_attribute("aria-hidden") != "false":
-                failures.append(f"{lang}: cinematic book home is not active")
-            chapters = home.locator("[data-project-chapter]")
-            slugs = chapters.evaluate_all("els => els.map(el => el.getAttribute('data-project-chapter'))")
-            if len(slugs) != 30 or len(set(slugs)) != 30:
-                failures.append(f"{lang}: expected 30 unique project chapters, found {len(slugs)}/{len(set(slugs))}")
-            scenes = chapters.evaluate_all("els => [...new Set(els.map(el => el.getAttribute('data-scene')))]")
-            if len(scenes) < 8:
-                failures.append(f"{lang}: only {len(scenes)} visual realms found")
-            home_kinetics = home.locator("[data-project-kinetic]").count()
-            if home_kinetics != 30:
-                failures.append(f"{lang}: every home chapter must have one unique kinetic mechanism")
-            if page.locator("main h1").count() != 1:
-                failures.append(f"{lang}: one-h1 contract failed")
-            overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
-            if overflow > 2:
-                failures.append(f"{lang}: home has {overflow}px horizontal overflow")
-
-            first_stage = home.locator("[data-world-stage]").first
-            before = float(first_stage.evaluate("el => getComputedStyle(el).getPropertyValue('--p') || '0'"))
-            page.evaluate("window.scrollTo({top: innerHeight * 1.12, behavior: 'instant'})")
-            page.wait_for_timeout(350)
-            after = float(first_stage.evaluate("el => getComputedStyle(el).getPropertyValue('--p') || '0'"))
-            if after <= before + 0.15:
-                failures.append(f"{lang}: cover camera did not advance enough ({before} -> {after})")
-
-            page.evaluate("window.scrollTo({top: 0, behavior: 'instant'})")
-            page.wait_for_timeout(250)
-            page.screenshot(path=str(args.output / f"{lang}-01-cover.jpg"), type="jpeg", quality=90)
-            portal = home.locator(".db-portal")
-            portal.evaluate("el => scrollTo({top: scrollY + el.getBoundingClientRect().top + (el.offsetHeight - innerHeight) * .56, behavior: 'instant'})")
-            page.wait_for_timeout(350)
-            page.screenshot(path=str(args.output / f"{lang}-02-book-portal.jpg"), type="jpeg", quality=90)
-            manuscript = home.locator(".db-manuscript__title")
-            manuscript.scroll_into_view_if_needed()
-            page.wait_for_timeout(250)
-            page.screenshot(path=str(args.output / f"{lang}-03-manuscript.jpg"), type="jpeg", quality=90)
-            chapter = home.locator('[data-project-chapter="career-autopilot"]')
-            chapter.evaluate("el => scrollTo({top: scrollY + el.getBoundingClientRect().top + (el.offsetHeight - innerHeight) * .48, behavior: 'instant'})")
-            page.wait_for_timeout(400)
-            progress = float(chapter.evaluate("el => getComputedStyle(el).getPropertyValue('--chapter-p') || '0'"))
-            if progress <= 0.05:
-                failures.append(f"{lang}: project page did not receive scroll-linked chapter progress")
-            page.screenshot(path=str(args.output / f"{lang}-04-project-page.jpg"), type="jpeg", quality=90)
-
-            page.goto(f"{base}/{lang}/work/career-autopilot", wait_until="networkidle")
-            story = page.locator("[data-disney-project-book]")
-            if story.count() != 1 or story.get_attribute("aria-hidden") != "false":
-                failures.append(f"{lang}: cinematic project book missing or inactive")
-            step_count = story.locator("[data-book-step]").count()
-            if step_count != 4:
-                failures.append(f"{lang}: expected four story scenes, found {step_count}")
-            kinetic_count = story.locator('[data-project-kinetic][data-kinetic="career-autopilot"]').count()
-            if kinetic_count < 6:
-                failures.append(f"{lang}: expected project-specific art on cover, opening, and four scenes; found {kinetic_count}")
-            if story.locator("[data-story-stage]").count() != 7:
-                failures.append(f"{lang}: storybook must expose seven cinematic scroll stages")
-            story_overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
-            if story_overflow > 2:
-                failures.append(f"{lang}: story has {story_overflow}px horizontal overflow")
-            if page.locator("main h1").count() != 1:
-                failures.append(f"{lang}: story broke the one-h1 contract")
-            page.screenshot(path=str(args.output / f"{lang}-05-story-cover.jpg"), type="jpeg", quality=90)
-            opening = story.locator(".dpb-opening-stage")
-            opening.evaluate("el => scrollTo({top: scrollY + el.getBoundingClientRect().top + (el.offsetHeight - innerHeight) * .56, behavior: 'instant'})")
-            page.wait_for_timeout(400)
-            page.screenshot(path=str(args.output / f"{lang}-06-story-opening.jpg"), type="jpeg", quality=90)
-            first_step = story.locator('[data-book-step="1"]')
-            first_step.evaluate("el => scrollTo({top: scrollY + el.getBoundingClientRect().top + (el.offsetHeight - innerHeight) * .52, behavior: 'instant'})")
-            page.wait_for_timeout(400)
-            page.screenshot(path=str(args.output / f"{lang}-07-story-scene.jpg"), type="jpeg", quality=90)
-
-            if console_errors:
-                failures.append(f"{lang}: console errors: {console_errors}")
-            if bad_responses:
-                failures.append(f"{lang}: bad responses: {bad_responses}")
-            evidence[lang] = {
-                "viewport": viewport,
-                "chapters": len(slugs),
-                "realms": len(scenes),
-                "home_kinetics": home_kinetics,
-                "story_stages": story.locator("[data-story-stage]").count(),
-                "story_kinetics": kinetic_count,
-                "cover_progress": [before, after],
-                "chapter_progress": progress,
-                "console_errors": len(console_errors),
-                "bad_responses": len(bad_responses),
-            }
-            context.close()
-
+        browser = playwright.chromium.launch(headless=True, channel="chrome")
+        results = [
+            capture_home(browser, "en", 1440, 900),
+            capture_home(browser, "ar", 390, 844),
+            capture_detail(browser, "en", "career-autopilot", 1440, 900),
+            capture_detail(browser, "ar", "reclaim", 390, 844),
+        ]
+        page = browser.new_page()
+        for lang in ("en", "ar"):
+            for slug in project_slugs:
+                response = page.request.get(f"{BASE}/{lang}/work/{slug}")
+                assert response.ok, f"route failed: {lang}/{slug} {response.status}"
+                html = response.text()
+                assert f'data-project-film="{slug}"' in html, f"film missing: {lang}/{slug}"
+        page.close()
         browser.close()
-
-    result = {"evidence": evidence, "failures": failures}
-    print(json.dumps(result, indent=2, ensure_ascii=False))
-    if failures:
-        raise SystemExit(1)
+    all_errors = [item for result in results for item in result["errors"]]
+    all_failed = [item for result in results for item in result["failed"]]
+    assert not all_errors, f"console errors: {all_errors}"
+    assert not all_failed, f"failed responses: {all_failed}"
+    print(json.dumps({"passes": len(results), "routes": len(project_slugs) * 2, "screenshots": len(list(OUT.glob('*.png'))), "errors": 0, "failed_responses": 0}, indent=2))
 
 
 if __name__ == "__main__":

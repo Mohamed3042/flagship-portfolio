@@ -110,9 +110,17 @@ def main() -> None:
                         active_story = page.locator(f'[data-story-world="{world}"]')
                         if active_story.count() != 1 or active_story.get_attribute("aria-hidden") != "false":
                             failures.append(f"{args.viewport}: /{lang}/work/{slug} lost its active {world} story")
-                        kinetic_count = active_story.locator(f'[data-project-kinetic][data-kinetic="{slug}"]').count()
-                        if kinetic_count < 2:
-                            failures.append(f"{args.viewport}: /{lang}/work/{slug} has {kinetic_count}/2 project-specific kinetic phases")
+                        if world == "disney":
+                            film_count = active_story.locator('[data-film-act]').count()
+                            art_count = active_story.locator(f'img[src="/images/storybook/{slug}.webp"]').count()
+                            if film_count != 4 or art_count < 4:
+                                failures.append(
+                                    f"{args.viewport}: /{lang}/work/{slug} has {film_count}/4 cinematic acts and {art_count}/4 story-art frames"
+                                )
+                        else:
+                            kinetic_count = active_story.locator(f'[data-project-kinetic][data-kinetic="{slug}"]').count()
+                            if kinetic_count < 2:
+                                failures.append(f"{args.viewport}: /{lang}/work/{slug} has {kinetic_count}/2 project-specific kinetic phases")
                     overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
                     if overflow > 2:
                         failures.append(f"{args.viewport}: /{lang}/work/{slug} has {overflow}px overflow under {world}")
