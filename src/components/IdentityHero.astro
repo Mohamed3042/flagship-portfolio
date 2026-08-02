@@ -1,0 +1,194 @@
+---
+import { pick, type Lang } from '../i18n/utils';
+import { profile } from '../data/profile';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+const name = pick(lang, profile.name);
+const location = pick(lang, profile.location);
+const work = ar ? 'شاهد الأنظمة' : 'Explore the systems';
+const contact = ar ? 'تواصل معي' : 'Start a conversation';
+const arrow = ar ? '←' : '→';
+---
+
+<!--
+  Seven deliberately separate hero compositions. Astronomy never renders this
+  layer: its incumbent canvas, copy, timing and layout remain the default.
+-->
+<div class:list={['ih-shell', { 'is-ar': ar }]} data-identity-heroes aria-hidden="true">
+  <article class="ih ih-rz" data-hero-world="razer">
+    <div class="ih-rz__scan"></div>
+    <header class="ih-rz__top">
+      <span>MOHAMED // SYNAPSE</span><b>{ar ? 'المهندس متصل' : 'ENGINEER ONLINE'}</b>
+    </header>
+    <div class="ih-rz__board" aria-hidden="true">
+      <i class="ih-rz__trace t1"></i><i class="ih-rz__trace t2"></i><i class="ih-rz__trace t3"></i>
+      <div class="ih-rz__module m1"><small>01</small><strong>MAP</strong><span>{ar ? 'العملية' : 'PROCESS'}</span></div>
+      <div class="ih-rz__module m2"><small>02</small><strong>BUILD</strong><span>{ar ? 'الأداة' : 'SYSTEM'}</span></div>
+      <div class="ih-rz__module m3"><small>03</small><strong>GATE</strong><span>{ar ? 'الموافقة' : 'APPROVAL'}</span></div>
+      <div class="ih-rz__module m4"><small>04</small><strong>PROVE</strong><span>{ar ? 'النتيجة' : 'EVIDENCE'}</span></div>
+      <div class="ih-rz__core"><i></i><span>HUMAN<br/>AUTHORITY</span></div>
+    </div>
+    <div class="ih-rz__copy">
+      <p>{name} · {location}</p>
+      <div class="ih-rz__title" role="heading" aria-level="1">{ar ? 'الأنظمة تعمل.' : 'Systems online.'}<br/><em>{ar ? 'والقرار للإنسان.' : 'Human in command.'}</em></div>
+      <div class="ih-actions"><a href="#work">{work} <b>{arrow}</b></a><a href="#contact">{contact}</a></div>
+    </div>
+    <footer class="ih-rz__status"><span><i></i> LOCAL-FIRST</span><span>26 SYSTEM STORIES</span><span>EN / AR</span></footer>
+  </article>
+
+  <article class="ih ih-ds" data-hero-world="disney">
+    <div class="ih-ds__stars" aria-hidden="true"></div>
+    <div class="ih-ds__arc" aria-hidden="true"></div>
+    <div class="ih-ds__book" aria-hidden="true">
+      <div class="ih-ds__cover"></div>
+      <div class="ih-ds__page ih-ds__page--left"><i></i><i></i><i></i><b>01</b></div>
+      <div class="ih-ds__page ih-ds__page--right"><i></i><i></i><i></i><b>26</b></div>
+      <span class="ih-ds__spine"></span>
+    </div>
+    <div class="ih-ds__copy">
+      <p>MOHAMED ORIGINALS · {ar ? 'الفصل الأول' : 'CHAPTER ONE'}</p>
+      <div class="ih-ds__title" role="heading" aria-level="1">{ar ? 'كل مهمة يدوية تستحق' : 'Every manual task deserves'}<br/><em>{ar ? 'نهايةً أفضل.' : 'a better ending.'}</em></div>
+      <span>{ar ? 'أحوّل سير العمل إلى أنظمة موثقة تعمل بهدوء.' : 'I turn operating work into verified systems that keep the story moving.'}</span>
+      <div class="ih-actions"><a href="#work">{ar ? 'ابدأ الحكاية' : 'Begin the story'} <b>{arrow}</b></a><a href="#contact">{contact}</a></div>
+    </div>
+    <div class="ih-ds__chapter"><b>Ⅰ</b><span>{ar ? 'ارسم' : 'MAP'}</span><i></i><b>Ⅱ</b><span>{ar ? 'ابنِ' : 'BUILD'}</span><i></i><b>Ⅲ</b><span>{ar ? 'أثبت' : 'PROVE'}</span></div>
+  </article>
+
+  <article class="ih ih-cod" data-hero-world="cod">
+    <div class="ih-cod__noise" aria-hidden="true"></div>
+    <header class="ih-cod__top"><span>OPERATION // MM-26</span><b>{ar ? 'حالة المهمة: نشطة' : 'MISSION STATUS: ACTIVE'}</b></header>
+    <div class="ih-cod__brief">
+      <p>{ar ? 'موجز المهمة' : 'MISSION BRIEF'}</p>
+      <div class="ih-cod__title" role="heading" aria-level="1">{ar ? 'أزِل الحلقة' : 'Remove the'}<br/><em>{ar ? 'اليدوية.' : 'manual loop.'}</em></div>
+      <dl><div><dt>{ar ? 'المشغّل' : 'OPERATOR'}</dt><dd>{name}</dd></div><div><dt>{ar ? 'الدور' : 'ROLE'}</dt><dd>{ar ? 'مهندس أتمتة' : 'AUTOMATION ENGINEER'}</dd></div><div><dt>{ar ? 'الموقع' : 'AO'}</dt><dd>{location}</dd></div></dl>
+      <div class="ih-actions"><a href="#work">{ar ? 'نشر الأنظمة' : 'Deploy systems'} <b>{arrow}</b></a><a href="#contact">{ar ? 'فتح قناة' : 'Open channel'}</a></div>
+    </div>
+    <div class="ih-cod__map" aria-hidden="true">
+      <span class="ih-cod__cross"></span><i class="p1"></i><i class="p2"></i><i class="p3"></i><i class="p4"></i><b></b>
+      <label>INPUT</label><label>DECISION</label><label>GATE</label><label>OUTPUT</label>
+    </div>
+    <div class="ih-cod__loadout"><p>{ar ? 'حزمة المهمة' : 'SYSTEM LOADOUT'}</p><span class="active">PYTHON<small>PRIMARY</small></span><span>SQL<small>DATA</small></span><span>AI<small>ASSIST</small></span><span>HUMAN<small>AUTHORITY</small></span></div>
+  </article>
+
+  <article class="ih ih-nf" data-hero-world="netflix">
+    <div class="ih-nf__gate">
+      <b class="ih-nf__n">N</b>
+      <div class="ih-nf__gate-title" role="heading" aria-level="1">{ar ? 'من يشاهد؟' : "Who's watching?"}</div>
+      <div class="ih-nf__profiles"><span class="active"><i>MM</i><b>{ar ? 'محمد' : 'Mohamed'}</b></span><span><i>AI</i><b>Systems</b></span><span><i>26</i><b>Stories</b></span><span><i>+</i><b>{ar ? 'أضف' : 'Add'}</b></span></div>
+    </div>
+    <div class="ih-nf__billboard">
+      <div class="ih-nf__backdrop" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="ih-nf__nav"><b>N</b><span>{ar ? 'الرئيسية' : 'Home'}</span><span>{ar ? 'المسلسلات' : 'Series'}</span><span>{ar ? 'قائمتي' : 'My List'}</span></div>
+      <div class="ih-nf__copy">
+        <p><b>N</b> {ar ? 'سلسلة أصلية' : 'ORIGINAL SERIES'}</p>
+        <div class="ih-nf__title" role="heading" aria-level="1">{ar ? 'مهندس' : 'AUTOMATION'}<br/><em>{ar ? 'الأتمتة' : 'ENGINEER'}</em></div>
+        <span>{ar ? 'محمد محمود · ٢٦ قصة نظام · الكويت' : 'Mohamed Mahmoud · 26 system stories · Kuwait'}</span>
+        <div class="ih-actions"><a href="#work">▶ {ar ? 'تشغيل' : 'Play'}</a><a href="#contact">ⓘ {ar ? 'معلومات' : 'More info'}</a></div>
+      </div>
+      <div class="ih-nf__row"><p>{ar ? 'الأكثر مشاهدة في أنظمة الأتمتة' : 'Top picks in Automation Systems'}</p><i>01<span>LOCAL AI</span></i><i>02<span>INTERNAL TOOLS</span></i><i>03<span>DOCUMENT OPS</span></i><i>04<span>SYSTEM INTEGRATION</span></i></div>
+    </div>
+  </article>
+
+  <article class="ih ih-sp" data-hero-world="spotify">
+    <aside class="ih-sp__side"><b>≋</b><span>{ar ? 'الرئيسية' : 'Home'}</span><span>{ar ? 'بحث' : 'Search'}</span><span>{ar ? 'مكتبتك' : 'Your Library'}</span><i></i><span>{ar ? 'أنظمة محلية' : 'Local Systems'}</span><span>{ar ? 'أدوات داخلية' : 'Internal Tools'}</span><span>{ar ? 'ذكاء عملي' : 'Practical AI'}</span></aside>
+    <div class="ih-sp__main">
+      <div class="ih-sp__art" aria-hidden="true"><i></i><i></i><i></i><b>MM</b></div>
+      <div class="ih-sp__copy">
+        <p>{ar ? 'اختيار هذا الشهر' : 'THIS MONTH’S FEATURED ENGINEER'}</p>
+        <div class="ih-sp__title" role="heading" aria-level="1">{ar ? 'هذا هو محمد' : 'This Is Mohamed'}</div>
+        <span>{ar ? 'مزيج الأتمتة · ٢٦ قصة · محلي وثنائي اللغة' : 'The Automation Mix · 26 stories · local-first and bilingual'}</span>
+        <div class="ih-sp__meta"><b>541</b> followers <i>•</i> {ar ? 'مهندس أتمتة' : 'Automation Engineer'}</div>
+        <div class="ih-actions"><a href="#work">▶</a><a href="#contact">{ar ? 'متابعة' : 'Follow'}</a><button type="button" aria-label="More">•••</button></div>
+      </div>
+      <div class="ih-sp__tracks"><p>{ar ? 'الأكثر تشغيلًا' : 'Popular'}</p><span><b>1</b><i></i><em>Career Autopilot</em><small>HUMAN APPROVAL</small></span><span><b>2</b><i></i><em>LifeOS</em><small>LOCAL AI</small></span><span><b>3</b><i></i><em>Reclaim</em><small>NTFS / MFT</small></span></div>
+    </div>
+    <footer class="ih-sp__player"><i></i><span><b>{ar ? 'العمل الجاري' : 'Now building'}</b><small>{name}</small></span><div>↶　◀　<b>Ⅱ</b>　▶　↷</div><meter min="0" max="100" value="68"></meter></footer>
+  </article>
+
+  <article class="ih ih-ap" data-hero-world="apple">
+    <p class="ih-ap__kicker">{name} · {ar ? 'هندسة الأتمتة' : 'Automation Engineering'}</p>
+    <div class="ih-ap__copy">
+      <div class="ih-ap__title" role="heading" aria-level="1">{ar ? 'الأتمتة.' : 'Automation.'}<br/><em>{ar ? 'مدروسة بالكامل.' : 'Thought through.'}</em></div>
+      <p>{ar ? 'من العملية إلى الأداة، ومن الموافقة إلى الدليل.' : 'From process to tool. From approval to evidence.'}</p>
+      <div class="ih-actions"><a href="#work">{ar ? 'شاهد كيف تعمل' : 'See how it works'} <b>{arrow}</b></a><a href="#contact">{contact}</a></div>
+    </div>
+    <div class="ih-ap__product" aria-hidden="true">
+      <div class="ih-ap__halo"></div>
+      <div class="ih-ap__slab s1"><span>INPUT</span></div><div class="ih-ap__slab s2"><span>STATE</span></div><div class="ih-ap__slab s3"><span>DECISION</span></div><div class="ih-ap__slab s4"><span>OUTPUT</span></div>
+      <i class="ih-ap__axis"></i><b class="ih-ap__core">H</b>
+    </div>
+    <footer class="ih-ap__foot"><span>{ar ? 'محلي أولًا' : 'Local-first'}</span><span>{ar ? 'ثنائي اللغة' : 'Bilingual'}</span><span>{ar ? 'تم التحقق' : 'Verified'}</span></footer>
+  </article>
+
+  <article class="ih ih-sm" data-hero-world="samsung">
+    <header class="ih-sm__top"><b>MOHAMED</b><span>{ar ? 'أنظمة متصلة' : 'CONNECTED SYSTEMS'}</span></header>
+    <div class="ih-sm__copy">
+      <p>{ar ? 'مهندس الأتمتة الجديد' : 'THE NEW AUTOMATION ENGINEER'}</p>
+      <div class="ih-sm__title" role="heading" aria-level="1">{ar ? 'الأتمتة،' : 'Automation,'}<br/><em>{ar ? 'تنفتح.' : 'unfolded.'}</em></div>
+      <span>{ar ? 'عملية واحدة. طبقات متصلة. قرار يبقى للإنسان.' : 'One operation. Connected layers. Authority that stays human.'}</span>
+      <div class="ih-actions"><a href="#work">{ar ? 'استكشف التجربة' : 'Explore the experience'} <b>{arrow}</b></a><a href="#contact">{contact}</a></div>
+    </div>
+    <div class="ih-sm__device" aria-hidden="true">
+      <div class="ih-sm__screen left"><span>INPUT</span><i></i><i></i><i></i></div>
+      <div class="ih-sm__hinge"></div>
+      <div class="ih-sm__screen right"><span>OUTPUT</span><b>26</b><small>VERIFIED<br/>SYSTEM STORIES</small></div>
+      <div class="ih-sm__orbit"><i></i><i></i><i></i></div>
+    </div>
+    <div class="ih-sm__specs"><span><b>LOCAL</b>{ar ? 'قريب من العمل' : 'close to the work'}</span><span><b>HUMAN</b>{ar ? 'القرار للإنسان' : 'authority retained'}</span><span><b>PROVEN</b>{ar ? 'نتائج قابلة للقراءة' : 'results you can read'}</span></div>
+  </article>
+</div>
+
+<script>
+  let identityHeroCleanup: (() => void) | null = null;
+
+  function initIdentityHeroes() {
+    identityHeroCleanup?.();
+    const shell = document.querySelector<HTMLElement>('[data-identity-heroes]');
+    const hero = shell?.closest<HTMLElement>('.hh');
+    if (!shell || !hero) return;
+
+    let raf = 0;
+    const sync = () => {
+      const world = document.documentElement.dataset.world || 'astronomy';
+      shell.dataset.activeWorld = world;
+      shell.setAttribute('aria-hidden', world === 'astronomy' ? 'true' : 'false');
+      shell.querySelectorAll<HTMLElement>('[data-hero-world]').forEach((item) => {
+        const active = item.dataset.heroWorld === world;
+        item.setAttribute('aria-hidden', active ? 'false' : 'true');
+        if ('inert' in item) (item as HTMLElement & { inert: boolean }).inert = !active;
+      });
+      shell.classList.remove('is-entering');
+      void shell.offsetWidth;
+      shell.classList.add('is-entering');
+    };
+    const update = () => {
+      raf = 0;
+      const rect = hero.getBoundingClientRect();
+      const p = Math.max(0, Math.min(1, -rect.top / Math.max(1, rect.height)));
+      shell.style.setProperty('--hero-p', p.toFixed(4));
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
+    const pointer = (event: PointerEvent) => {
+      const rect = hero.getBoundingClientRect();
+      shell.style.setProperty('--hero-x', ((event.clientX - rect.left) / rect.width - .5).toFixed(3));
+      shell.style.setProperty('--hero-y', ((event.clientY - rect.top) / rect.height - .5).toFixed(3));
+    };
+
+    sync(); update();
+    window.addEventListener('scroll', queue, { passive: true });
+    hero.addEventListener('pointermove', pointer, { passive: true });
+    document.addEventListener('mm:worldchange', sync);
+    identityHeroCleanup = () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', queue);
+      hero.removeEventListener('pointermove', pointer);
+      document.removeEventListener('mm:worldchange', sync);
+      identityHeroCleanup = null;
+    };
+  }
+
+  initIdentityHeroes();
+  document.addEventListener('astro:page-load', initIdentityHeroes);
+</script>

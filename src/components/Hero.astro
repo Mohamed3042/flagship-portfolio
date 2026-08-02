@@ -1,6 +1,7 @@
 ---
 import { pick, type Lang } from '../i18n/utils';
 import { profile } from '../data/profile';
+import IdentityHero from './IdentityHero.astro';
 
 interface Props {
   lang: Lang;
@@ -30,6 +31,8 @@ const arrow = ar ? '←' : '→';
   <div class="hh-corefb" aria-hidden="true"></div>
   <canvas id="heroFx" class="hh-fx" aria-hidden="true"></canvas>
   <div class="hh-scrim" aria-hidden="true"></div>
+
+  <IdentityHero lang={lang} />
 
   <div class="hh-wrap">
     <p class="hh-eyebrow hh-reveal">{eyebrow}</p>
@@ -168,6 +171,14 @@ const arrow = ar ? '←' : '→';
     if (!cv) return;
     const ctx = cv.getContext('2d');
     if (!ctx) return;
+    const world = document.documentElement.dataset.world || 'astronomy';
+    // The incumbent particle convergence belongs to Astronomy. Alternate
+    // worlds replace this hero completely, and their CSS collapses the canvas
+    // to zero width; do not keep drawing invisible zero-radius particles.
+    if (world !== 'astronomy') {
+      ctx.clearRect(0, 0, cv.width, cv.height);
+      return;
+    }
 
     const section = cv.closest('.hh') as HTMLElement;
     const reveals = Array.from(section.querySelectorAll<HTMLElement>('.hh-reveal'));
@@ -190,7 +201,6 @@ const arrow = ar ? '←' : '→';
       apple: ['#dce5f0', '#7fb9ff', '#9f7aff', '#ffffff'],
       samsung: ['#3562ff', '#12b6ff', '#67e4ff', '#8b7cff'],
     };
-    const world = document.documentElement.dataset.world || 'astronomy';
     const SPECTRUM = palettes[world] || palettes.astronomy;
     type P = { a: number; r: number; v: number; col: string; sz: number; jit: number };
     let parts: P[] = [];

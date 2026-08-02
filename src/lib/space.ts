@@ -120,9 +120,12 @@ export function initSpace(): void {
   }
 
   function resize(): void {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth;
-    H = window.innerHeight;
+    const nextDpr = Number(window.devicePixelRatio);
+    const nextW = Number(window.innerWidth);
+    const nextH = Number(window.innerHeight);
+    DPR = Number.isFinite(nextDpr) && nextDpr > 0 ? Math.min(nextDpr, 2) : 1;
+    W = Number.isFinite(nextW) && nextW > 0 ? nextW : 1;
+    H = Number.isFinite(nextH) && nextH > 0 ? nextH : 1;
     c!.width = Math.round(W * DPR);
     c!.height = Math.round(H * DPR);
     buildPattern();
@@ -336,6 +339,11 @@ export function initSpace(): void {
   }
 
   function draw(ms: number): void {
+    // A responsive viewport can briefly report unusable geometry while a
+    // mobile browser is rotating or an Astro transition is replacing the
+    // document. Canvas gradients throw on NaN/Infinity, so skip that transient
+    // frame and let the next resize/rAF repaint with settled dimensions.
+    if (![W, H, DPR, ms].every(Number.isFinite) || W <= 0 || H <= 0 || DPR <= 0) return;
     x!.setTransform(1, 0, 0, 1, 0, 0);
     x!.clearRect(0, 0, c!.width, c!.height);
     if (mode === 'stars') drawStars(ms);
@@ -378,6 +386,7 @@ export function initSpace(): void {
 
   cleanup = () => {
     pause();
+    clearTimeout(rt);
     window.removeEventListener('resize', onResize);
     document.removeEventListener('visibilitychange', onVisibility);
     document.removeEventListener('mm:themechange', onTheme);
