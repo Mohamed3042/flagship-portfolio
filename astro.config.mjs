@@ -13,8 +13,8 @@ import sitemap from '@astrojs/sitemap';
 // (see `npm run build:ghpages`).
 const GH_PAGES = process.env.DEPLOY_TARGET === 'ghpages';
 const SITE = GH_PAGES
-  ? 'https://engineeringprojectswork-droid.github.io'
-  : 'https://mohamed-khalil-kw.netlify.app';
+  ? 'https://mohamed3042.github.io'
+  : 'https://mohamed-mahmoud-kuwait.netlify.app';
 const BASE = GH_PAGES ? '/flagship-portfolio' : '/';
 
 // https://astro.build/config

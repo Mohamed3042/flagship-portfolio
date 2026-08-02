@@ -1,5 +1,7 @@
+import { automationProjects, labProjects } from './system-projects';
+
 /**
- * The eight project stories — index metadata.
+ * Portfolio story metadata.
  *
  * Order here drives: the homepage projects grid, the prev/next pager on each
  * story page, and the static routes generated under /[lang]/work/[slug].
@@ -23,10 +25,66 @@ export type Accent =
   | 'rose' // B2B Sales Kit
   | 'mint'; // AI Procurement
 
+export type Localized = { en: string; ar: string };
+export type ProjectSection = 'automation' | 'legacy' | 'lab';
+export type StoryVisual =
+  | 'approval-gate'
+  | 'encrypted-vault'
+  | 'document-stack'
+  | 'packaging-dieline'
+  | 'cake-production'
+  | 'audit-locker'
+  | 'mft-radar'
+  | 'ration-matrix'
+  | 'page-fitter'
+  | 'sim-tick'
+  | 'texture-transfer'
+  | 'artillery-graph'
+  | 'module-blueprint'
+  | 'restoration-layers'
+  | 'world-audit'
+  | 'evidence-ledger'
+  | 'theme-engine';
+
+export interface StoryMetric {
+  value: string;
+  label: Localized;
+}
+
+export interface StoryStep {
+  n: string;
+  title: Localized;
+  body: Localized;
+}
+
+export interface ProjectStory {
+  visual: StoryVisual;
+  ghost: string;
+  headline: Localized;
+  lead: Localized;
+  heroValue?: string;
+  heroLabel?: Localized;
+  problemKicker: Localized;
+  problemHeading: Localized;
+  problemBody: Localized;
+  stepsKicker: Localized;
+  stepsHeading: Localized;
+  stepsIntro: Localized;
+  steps: StoryStep[];
+  proofKicker: Localized;
+  proofHeading: Localized;
+  proofBody: Localized;
+  proof: StoryMetric[];
+  boundaryKicker: Localized;
+  boundary: Localized;
+  tools: string[];
+  link?: { href: string; label: Localized };
+}
+
 export interface ProjectMeta {
   slug: string;
   /** filename in /public/films */
-  film: string;
+  film?: string;
   accent: Accent;
   cardA: string;
   cardB: string;
@@ -37,9 +95,11 @@ export interface ProjectMeta {
   stat: { en: string; ar: string };
   /** the muted qualifier after the figure */
   statNote: { en: string; ar: string };
+  section?: ProjectSection;
+  story?: ProjectStory;
 }
 
-export const projects: ProjectMeta[] = [
+const previousProjectStories: ProjectMeta[] = [
   {
     slug: 'meta-ads',
     film: 'meta-ads.html',
@@ -205,6 +265,19 @@ export const projects: ProjectMeta[] = [
     stat: { en: '~6%', ar: '~٦٪' },
     statNote: { en: 'below market on the recommended unit', ar: 'دون سعر السوق للجهاز المُوصى به' },
   },
+];
+
+/** The nine stories on the recovered live portfolio, preserved as its foundation. */
+export const legacyProjects = previousProjectStories.slice(0, 9).map((project) => ({
+  ...project,
+  section: 'legacy' as const,
+}));
+
+/** Canonical order: new automation work, recovered foundation, then Engineering Lab. */
+export const projects: ProjectMeta[] = [
+  ...automationProjects,
+  ...legacyProjects,
+  ...labProjects,
 ];
 
 /** Canonical hex for each domain accent (single source for inline card colours). */

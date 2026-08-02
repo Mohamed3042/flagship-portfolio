@@ -2,9 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import Contact from '../../components/Contact.astro';
+import ProjectCollection from '../../components/ProjectCollection.astro';
 import { useTranslations, workPath, pick, type Lang } from '../../i18n/utils';
 import { locales } from '../../i18n/utils';
-import { projects } from '../../data/projects';
+import { automationProjects, labProjects } from '../../data/system-projects';
+import { legacyProjects } from '../../data/projects';
 
 export function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang } }));
@@ -14,10 +16,10 @@ const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
 const ar = lang === 'ar';
 
-// Selected-work strip — ALL 9 case stories, in canonical order, deep-linking to
+// Primary Automation Engineer strip — ten case stories, in canonical order, deep-linking to
 // each story page. Built from src/data/projects.ts (single source of truth) so
 // the strip never drifts out of sync with the story routes/copy/numbers.
-const cards = projects.map((p, i) => ({
+const cards = automationProjects.map((p, i) => ({
   slug: p.slug,
   n: String(i + 1).padStart(2, '0'),
   tag: pick(lang, p.tag),
@@ -86,10 +88,10 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
         <span class="b1-ring"></span>
         <span class="b1-dot"></span>
       </div>
-      <div class="bm-tag" style="--c:#2997ff"><span class="bm-num">01</span><span class="bm-sl">/</span><span>{ar ? 'إعلانات مدفوعة' : 'Paid Social'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'يقفل على الهدف' : 'lock on target'}</span></div>
+      <div class="bm-tag" style="--c:#2997ff"><span class="bm-num">01</span><span class="bm-sl">/</span><span>{ar ? 'رسم العملية' : 'Process Mapping'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'اعثر على الحلقة' : 'find the loop'}</span></div>
       <div class="bm-copy">
-        <p data-glow class="bm-h" data-fx="lock" data-split="letter">{ar ? 'أُدير الإعلانات.' : 'I run the ads.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? '٢٠٦ عميل واتساب · ٠٫٨٤$ للعميل' : '206 WhatsApp leads · $0.84 each'}</span></div>
+        <p data-glow class="bm-h" data-fx="lock" data-split="letter">{ar ? 'أجد الحلقة اليدوية.' : 'I find the manual loop.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'مدخلات · قرارات · تسليمات' : 'inputs · decisions · hand-offs'}</span></div>
       </div>
     </div>
   </section>
@@ -100,11 +102,11 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
       <div style="position:absolute;left:50%;top:50%;width:200vmax;height:200vmax;transform:translate(-50%,-50%) rotate(calc(var(--p,0)*90deg)) scale(calc(.7 + var(--p,0)*.6));background:repeating-conic-gradient(from 0deg, transparent 0 .5deg, rgba(255,94,138,.5) .5deg .85deg, transparent .85deg 1.9deg);mask:radial-gradient(circle, transparent 10%, #000 46%, transparent 86%);-webkit-mask:radial-gradient(circle, transparent 10%, #000 46%, transparent 86%);opacity:calc(.16 + var(--p,0)*.6);pointer-events:none"></div>
       <div style="position:absolute;left:50%;top:50%;width:200vmax;height:200vmax;transform:translate(-50%,-50%) rotate(calc(var(--p,0)*-70deg)) scale(calc(.6 + var(--p,0)*.7));background:repeating-conic-gradient(from 12deg, transparent 0 .55deg, rgba(162,89,255,.45) .55deg .95deg, transparent .95deg 2.2deg);mask:radial-gradient(circle, transparent 12%, #000 50%, transparent 88%);-webkit-mask:radial-gradient(circle, transparent 12%, #000 50%, transparent 88%);opacity:calc(.12 + var(--p,0)*.5);pointer-events:none"></div>
       <div style="position:absolute;left:50%;top:50%;width:42vw;height:42vw;transform:translate(-50%,-50%) scale(calc(.5 + var(--p,0)*1));border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.55),rgba(255,94,138,.22) 30%,transparent 64%);filter:blur(8px);opacity:calc(.14 + var(--p,0)*.6);pointer-events:none"></div>
-      <div class="bm-tag" style="--c:#ff5e8a"><span class="bm-num">02</span><span class="bm-sl">/</span><span>{ar ? 'نموّ الجمهور' : 'Audience Growth'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'الرقم يتسلّق' : 'the number climbs'}</span></div>
+      <div class="bm-tag" style="--c:#ff5e8a"><span class="bm-num">02</span><span class="bm-sl">/</span><span>{ar ? 'سلسلة الأدلة' : 'Evidence Chain'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'تتبّع الأصل' : 'trace the source'}</span></div>
       <div class="bm-copy">
-        <div data-step data-glow data-climb style="font-size:clamp(64px,15vw,200px);font-weight:900;letter-spacing:-.05em;line-height:.9;font-variant-numeric:tabular-nums;color:var(--ink,#f3f4ff);opacity:0;transform:translateY(34px);will-change:transform,opacity;filter:drop-shadow(0 0 calc(var(--glow,0)*24px) rgba(var(--text-glow,170,195,255), calc(var(--glow,0)*.75)));transition:filter .18s linear">9.2K</div>
-        <p data-step data-glow style="font-size:clamp(26px,5vw,52px);font-weight:850;line-height:1;letter-spacing:-.03em;color:var(--ink,#f3f4ff);margin-top:14px;opacity:0;transform:translateY(34px);will-change:transform,opacity;filter:drop-shadow(0 0 calc(var(--glow,0)*18px) rgba(var(--text-glow,170,195,255), calc(var(--glow,0)*.7)));transition:filter .18s linear">{ar ? 'أُنمّي الجمهور.' : 'I grow the audience.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? '٩٫٢ ألف ← مليون+ متابع · ٢٠٢١–٢٠٢٥' : '9.2K → 1M+ followers · 2021–2025'}</span></div>
+        <div data-step data-glow data-climb style="font-size:clamp(64px,15vw,200px);font-weight:900;letter-spacing:-.05em;line-height:.9;font-variant-numeric:tabular-nums;color:var(--ink,#f3f4ff);opacity:0;transform:translateY(34px);will-change:transform,opacity;filter:drop-shadow(0 0 calc(var(--glow,0)*24px) rgba(var(--text-glow,170,195,255), calc(var(--glow,0)*.75)));transition:filter .18s linear">TRACE</div>
+        <p data-step data-glow style="font-size:clamp(26px,5vw,52px);font-weight:850;line-height:1;letter-spacing:-.03em;color:var(--ink,#f3f4ff);margin-top:14px;opacity:0;transform:translateY(34px);will-change:transform,opacity;filter:drop-shadow(0 0 calc(var(--glow,0)*18px) rgba(var(--text-glow,170,195,255), calc(var(--glow,0)*.7)));transition:filter .18s linear">{ar ? 'أتتبّع الحقيقة.' : 'I trace the truth.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'كل ادعاء ← مصدر ← تحقق' : 'every claim → source → verification'}</span></div>
       </div>
     </div>
   </section>
@@ -119,10 +121,10 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
       <div style="position:absolute;left:50%;top:calc(60% - var(--p,0)*40%);transform:translate(-50%,-50%);width:min(30vw,300px);height:min(30vw,300px);border-radius:50%;background:radial-gradient(circle at 36% 30%, #d7ffe9, #3bd6a0 32%, #1f8f7a 56%, #123a52 80%, #0a1f33);box-shadow:0 0 80px -6px rgba(48,209,88,.5), inset -18px -12px 56px rgba(0,0,0,.55);pointer-events:none">
         <div style="position:absolute;left:50%;top:50%;width:154%;height:42%;transform:translate(-50%,-50%) rotate(-22deg);border-radius:50%;border:2px solid rgba(120,230,200,.42);box-shadow:0 0 20px rgba(100,210,255,.3)"></div>
       </div>
-      <div class="bm-tag" style="--c:#30d158"><span class="bm-num">03</span><span class="bm-sl">/</span><span>{ar ? 'عمليات التسويق · CRM' : 'Marketing Ops · CRM'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'الكوكب يرتفع' : 'the planet rises'}</span></div>
+      <div class="bm-tag" style="--c:#30d158"><span class="bm-num">03</span><span class="bm-sl">/</span><span>{ar ? 'معمارية النظام' : 'System Architecture'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'ربط الطبقات' : 'connect the layers'}</span></div>
       <div class="bm-copy">
-        <p data-glow class="bm-h" data-fx="build">{ar ? 'أبني الأنظمة.' : 'I build the systems.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'نظام CRM ثنائي اللغة بـ١٢ جدولًا' : 'a 12-tab bilingual CRM'}</span></div>
+        <p data-glow class="bm-h" data-fx="build">{ar ? 'أربط الطبقات.' : 'I connect the layers.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'مدخل ← حالة ← قرار ← مخرج' : 'input → state → decision → output'}</span></div>
       </div>
     </div>
   </section>
@@ -140,10 +142,10 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
         ))}
         <span class="b4-core"></span>
       </div>
-      <div class="bm-tag" style="--c:#a259ff"><span class="bm-num">04</span><span class="bm-sl">/</span><span>{ar ? 'العلامة والمحتوى' : 'Brand & Content'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'يتشكّل' : 'it takes shape'}</span></div>
+      <div class="bm-tag" style="--c:#a259ff"><span class="bm-num">04</span><span class="bm-sl">/</span><span>{ar ? 'الضوابط' : 'Guardrails'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'صمّم الحد' : 'design the boundary'}</span></div>
       <div class="bm-copy">
-        <p data-glow class="bm-h" data-fx="shape">{ar ? 'أصوغ العلامة.' : 'I shape the brand.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'الصوت · القصة · الإخراج الفني' : 'voice · story · art direction'}</span></div>
+        <p data-glow class="bm-h" data-fx="shape">{ar ? 'أصمّم حدود النظام.' : 'I design the boundary.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'موافقة · تراجع · تدقيق · فشل آمن' : 'approval · rollback · audit · fail closed'}</span></div>
       </div>
     </div>
   </section>
@@ -152,9 +154,9 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
   <section id="work" data-pin class="sw" style="position:relative;z-index:1;height:560vh">
     <div data-stage class="sw-stage" style="position:sticky;top:0;height:100svh;min-height:580px;display:flex;flex-direction:column;overflow:hidden">
       <header class="sw-head">
-        <div class="bm-tag" style="--c:#64d2ff;position:static;transform:none;justify-content:flex-start"><span class="bm-num">★</span><span class="bm-sl">/</span><span>{ar ? 'أعمال مختارة' : 'Selected Work'}</span></div>
+        <div class="bm-tag" style="--c:#64d2ff;position:static;transform:none;justify-content:flex-start"><span class="bm-num">★</span><span class="bm-sl">/</span><span>{ar ? 'أنظمة الأتمتة' : 'Automation Systems'}</span></div>
         <div class="sw-headrow">
-          <h2 class="sw-title" data-glow>{ar ? 'أعمال مختارة.' : 'Selected work.'}</h2>
+          <h2 class="sw-title" data-glow>{ar ? 'عشرة أنظمة رئيسية.' : 'Ten systems, end to end.'}</h2>
           <span class="sw-live"><span class="sw-livedot" aria-hidden="true"></span>{ar ? 'مباشر' : 'Live'}<span class="sw-counter"> · <b id="sw-count">01</b> / {String(cards.length).padStart(2, '0')}</span></span>
         </div>
       </header>
@@ -205,10 +207,10 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
           </g>
         </svg>
       </div>
-      <div class="bm-tag" style="--c:#64d2ff"><span class="bm-num">05</span><span class="bm-sl">/</span><span>{ar ? 'البرمجيات' : 'Software'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'الكرة تتجمّع' : 'the globe assembles'}</span></div>
+      <div class="bm-tag" style="--c:#64d2ff"><span class="bm-num">05</span><span class="bm-sl">/</span><span>{ar ? 'محلي أولًا' : 'Local First'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'قريب من العمل' : 'close to the work'}</span></div>
       <div class="bm-copy">
-        <p data-glow class="bm-h" data-fx="compile">{ar ? 'أُطلق التطبيقات.' : 'I ship the software.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'تطبيق سطح مكتب بـ١٥ جدولًا · ٥٩/٥٩ اختبارًا' : 'a 15-table desktop app · 59/59 tests'}</span></div>
+        <p data-glow class="bm-h" data-fx="compile">{ar ? 'أُبقي البيانات قريبة.' : 'I keep the data close.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'دون إنترنت · مشفّر · داخل الشبكة' : 'offline · encrypted · LAN-only'}</span></div>
       </div>
     </div>
   </section>
@@ -227,10 +229,10 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
         <span class="b6-node out"></span>
         <span class="b6-core"><i></i></span>
       </div>
-      <div class="bm-tag" style="--c:#ffd60a"><span class="bm-num">06</span><span class="bm-sl">/</span><span>{ar ? 'الأتمتة' : 'Automation'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'يعمل تلقائيًا' : 'it runs itself'}</span></div>
+      <div class="bm-tag" style="--c:#ffd60a"><span class="bm-num">06</span><span class="bm-sl">/</span><span>{ar ? 'الإنسان في الحلقة' : 'Human in the Loop'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'القرار يبقى بشريًا' : 'authority stays human'}</span></div>
       <div class="bm-copy">
-        <p data-glow class="bm-h" data-fx="pipeline" style="font-size:clamp(38px,8vw,100px)">{ar ? 'وأُشغّل الباقي آليًا بالذكاء الاصطناعي.' : 'I automate the rest with AI.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? '١٤٢ سيرة ذاتية · ٧ نصوص برمجية · ٣ مهام مجدولة' : '142 résumés · 7 scripts · 3 scheduled jobs'}</span></div>
+        <p data-glow class="bm-h" data-fx="pipeline" style="font-size:clamp(38px,8vw,100px)">{ar ? 'أُؤتمت العمل، لا القرار.' : 'I automate the work, not the authority.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'حضّر تلقائيًا · نفّذ بموافقة' : 'prepare automatically · execute with approval'}</span></div>
       </div>
     </div>
   </section>
@@ -251,10 +253,10 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
           <span class="b7-live">{ar ? '● مباشر' : '● LIVE'}</span>
         </div>
       </div>
-      <div class="bm-tag" style="--c:#7574ee"><span class="bm-num">07</span><span class="bm-sl">/</span><span>{ar ? 'الويب · مباشر' : 'Web · Live'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'يُنشر مباشرةً' : 'deploys live'}</span></div>
+      <div class="bm-tag" style="--c:#7574ee"><span class="bm-num">07</span><span class="bm-sl">/</span><span>{ar ? 'عربي · إنجليزي' : 'Arabic · English'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'حقيقة واحدة' : 'one truth model'}</span></div>
       <div class="bm-copy">
-        <p data-glow class="bm-h" data-fx="render">{ar ? 'وأنشره على الويب.' : 'I put it on the web.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'مباشر · مُطلق · في الإنتاج' : 'live · shipped · in production'}</span></div>
+        <p data-glow class="bm-h" data-fx="render">{ar ? 'أُطلقه في الاتجاهين.' : 'I ship in both directions.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'عربي RTL ↔ English LTR' : 'English LTR ↔ Arabic RTL'}</span></div>
       </div>
     </div>
   </section>
@@ -269,13 +271,16 @@ const brandDots = Array.from({ length: 16 }, (_, i) => {
         <div style="position:absolute;left:50%;top:50%;width:18px;height:18px;border-radius:50%;background:#2997ff;box-shadow:0 0 22px 5px rgba(41,151,255,.7);transform:translate(-50%,-50%) translate(calc((1 - var(--p,0)) * 310px), calc((1 - var(--p,0)) * -120px))"></div>
         <div style="position:absolute;left:50%;top:50%;width:18px;height:18px;border-radius:50%;background:#ff9f0a;box-shadow:0 0 22px 5px rgba(255,159,10,.7);transform:translate(-50%,-50%) translate(calc((1 - var(--p,0)) * 30px), calc((1 - var(--p,0)) * 300px))"></div>
       </div>
-      <div class="bm-tag" style="--c:#ff9f0a"><span class="bm-num">08</span><span class="bm-sl">/</span><span>{ar ? 'نموذج تشغيل بالذكاء' : 'AI Operating Model'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'كلٌّ يتلاقى' : 'everything converges'}</span></div>
+      <div class="bm-tag" style="--c:#ff9f0a"><span class="bm-num">08</span><span class="bm-sl">/</span><span>{ar ? 'التحقق' : 'Verification'}</span><span class="bm-sl">·</span><span style="opacity:.7">{ar ? 'أثبت النتيجة' : 'prove the result'}</span></div>
       <div class="bm-copy">
-        <p data-glow class="bm-h" data-fx="unify">{ar ? 'نموذج تشغيلٍ واحد.' : 'One operating model.'}</p>
-        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'إعلانات · جمهور · أنظمة · أتمتة ← شخص واحد' : 'paid · audience · systems · automation → one'}</span></div>
+        <p data-glow class="bm-h" data-fx="unify">{ar ? 'ثم أُثبت أنه يعمل.' : 'Then I prove it works.'}</p>
+        <div data-step class="bm-pillrow"><span data-glow class="bm-pill">{ar ? 'اختبارات · قياسات · قراءة راجعة · حدود' : 'tests · measurements · readback · limits'}</span></div>
       </div>
     </div>
   </section>
+
+  <ProjectCollection lang={lang} items={legacyProjects} variant="foundation" />
+  <ProjectCollection lang={lang} items={labProjects} variant="lab" />
 
   <Contact lang={lang} />
 </BaseLayout>

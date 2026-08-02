@@ -16,3 +16,6 @@ Thumbs.db
 .netlify
 
 .vercel
+
+# local browser-test captures
+artifacts/

@@ -53,10 +53,12 @@ function card(lang) {
   const font = ar ? 'Tahoma, Segoe UI, sans-serif' : 'Segoe UI, Arial, sans-serif';
   const anchor = ar ? 'end' : 'start';
   const x = ar ? 1120 : 80;
-  const eyebrow = ar ? 'محمد محمود · الكويت' : 'MOHAMED MAHMOUD · KUWAIT';
-  const l1 = ar ? 'فريق تسويقٍ كامل.' : 'A whole marketing team.';
-  const l2 = ar ? 'في شخصٍ واحد.' : 'In one person.';
-  const proof = ['1M+ followers', '$0.84 / lead', '59 / 59 tests'];
+  const eyebrow = ar ? 'محمد محمود · مهندس أتمتة · الكويت' : 'MOHAMED MAHMOUD · AUTOMATION ENGINEER · KUWAIT';
+  const l1 = ar ? 'العمل اليدوي.' : 'Manual work.';
+  const l2 = ar ? 'نحو أنظمة تعمل.' : 'Into systems that run.';
+  const proof = ar
+    ? ['٢٦ قصة موثقة', '١٧ عائلة جديدة', 'عربي + إنجليزي']
+    : ['26 verified stories', '17 new families', 'English + Arabic'];
   return `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
     ${defs}
     <rect width="1200" height="630" fill="#000000"/>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Pager from '../../../components/work/Pager.astro';
+import SystemStory from '../../../components/work/SystemStory.astro';
 import { getProject, projectSlugs } from '../../../data/projects';
 import { profile } from '../../../data/profile';
 import { pick, workPath, locales, type Lang } from '../../../i18n/utils';
@@ -15,8 +16,6 @@ import HrSystem from '../../../components/work/HrSystem.astro';
 import MedmacWebsite from '../../../components/work/MedmacWebsite.astro';
 import AiWorkflow from '../../../components/work/AiWorkflow.astro';
 import MyResume from '../../../components/work/MyResume.astro';
-import BrandEcosystem from '../../../components/work/BrandEcosystem.astro';
-import ProcurementAutomated from '../../../components/work/ProcurementAutomated.astro';
 
 const components: Record<string, typeof SheepApp> = {
   'meta-ads': MetaAds,
@@ -28,8 +27,6 @@ const components: Record<string, typeof SheepApp> = {
   'medmac-website': MedmacWebsite,
   'ai-workflow': AiWorkflow,
   'my-resume': MyResume,
-  'brand-ecosystem': BrandEcosystem,
-  'procurement-automated': ProcurementAutomated,
 };
 
 export function getStaticPaths() {
@@ -64,6 +61,6 @@ const creativeWork = {
   accent={project.accent}
   jsonLd={creativeWork}
 >
-  <Story lang={lang} />
+  {Story ? <Story lang={lang} /> : <SystemStory lang={lang} project={project} />}
   <Pager lang={lang} slug={slug} />
 </BaseLayout>

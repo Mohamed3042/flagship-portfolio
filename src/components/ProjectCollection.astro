@@ -1,0 +1,76 @@
+---
+import { pick, workPath, type Lang } from '../i18n/utils';
+import type { ProjectMeta } from '../data/projects';
+import SystemVisual from './work/SystemVisual.astro';
+
+interface Props {
+  lang: Lang;
+  items: ProjectMeta[];
+  variant: 'foundation' | 'lab';
+}
+
+const { lang, items, variant } = Astro.props;
+const ar = lang === 'ar';
+const copy = variant === 'lab'
+  ? {
+      eyebrow: ar ? 'المختبر الهندسي' : 'ENGINEERING LAB',
+      title: ar ? 'المعمارية قبل الادعاء.' : 'Architecture before spectacle.',
+      lead: ar
+        ? 'دراسات ثانوية في المحاكاة والهندسة العكسية والحفظ وأنظمة التصميم. نعرض ما يمكن إثباته، ونسمّي ما ليس منتجًا منشورًا، ونحجب الكود والأصول التي يجب أن تبقى خاصة.'
+        : 'Secondary studies in simulation, reverse engineering, preservation, and design systems. They show what can be proven, name what is not a shipped product, and keep private code and rights-restricted assets private.',
+    }
+  : {
+      eyebrow: ar ? 'الأساس المهني' : 'OPERATING FOUNDATION',
+      title: ar ? 'التسعة التي بنت طريقة العمل.' : 'The nine that built the operating instinct.',
+      lead: ar
+        ? 'الإعلانات والنمو والهوية ونظام العملاء والتوظيف والويب — ليست العنوان المهني الجديد، لكنها توضح من أين جاء فهم العمليات الذي يجعل الأتمتة مفيدة.'
+        : 'Paid media, audience growth, brand, CRM, hiring, and web delivery are no longer the headline. They remain the operating foundation that makes the automation useful.',
+    };
+---
+
+<section class:list={['project-collection', `project-collection--${variant}`]} id={variant === 'lab' ? 'lab' : 'foundation'}>
+  <header class="collection-head">
+    <span>{copy.eyebrow} · {String(items.length).padStart(2, '0')}</span>
+    <h2>{copy.title}</h2>
+    <p>{copy.lead}</p>
+  </header>
+
+  {variant === 'lab' ? (
+    <div class="lab-list">
+      {items.map((project, index) => (
+        <a class="lab-story" href={workPath(lang, project.slug)} style={`--story-accent:${project.cardA}`}>
+          <div class="lab-story__copy">
+            <span class="lab-story__index">LAB / {String(index + 1).padStart(2, '0')}</span>
+            <h3>{pick(lang, project.title)}</h3>
+            <p>{pick(lang, project.blurb)}</p>
+            <div class="lab-story__proof"><b>{pick(lang, project.stat)}</b><i>{pick(lang, project.statNote)}</i></div>
+            <span class="lab-story__open">{ar ? 'افتح الدراسة ←' : 'Open the study →'}</span>
+          </div>
+          {project.story && <SystemVisual lang={lang} story={project.story} compact={true} />}
+        </a>
+      ))}
+    </div>
+  ) : (
+    <div class="foundation-grid">
+      {items.map((project, index) => (
+        <a class="foundation-story" href={workPath(lang, project.slug)} style={`--story-accent:${project.cardA};--story-accent-2:${project.cardB}`}>
+          <span class="foundation-story__number">{String(index + 1).padStart(2, '0')}</span>
+          <span class="foundation-story__tag">{pick(lang, project.tag)}</span>
+          <h3>{pick(lang, project.title)}</h3>
+          <p>{pick(lang, project.blurb)}</p>
+          <div><b>{pick(lang, project.stat)}</b><i>{pick(lang, project.statNote)}</i></div>
+        </a>
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .project-collection{position:relative;z-index:2;padding:clamp(100px,15vw,210px) clamp(20px,5vw,72px);overflow:hidden}.project-collection::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 10% 8%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 38%),linear-gradient(180deg,transparent,color-mix(in srgb,var(--surface) 72%,transparent) 12% 88%,transparent)}
+  .collection-head{width:min(1120px,100%);margin:0 auto clamp(58px,8vw,108px)}.collection-head>span{display:block;color:var(--accent);font:10px var(--font-mono);letter-spacing:.16em}.collection-head h2{max-width:13ch;margin:22px 0 24px;font-size:clamp(46px,8vw,112px);line-height:.94;letter-spacing:-.035em;text-wrap:balance}.collection-head p{max-width:70ch;color:var(--ink-2);font-size:clamp(16px,1.7vw,21px);line-height:1.65}:global([dir="rtl"]) .collection-head h2{letter-spacing:0;line-height:1.12}
+  .foundation-grid{width:min(1280px,100%);margin:auto;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}.foundation-story{position:relative;grid-column:span 4;min-height:360px;padding:clamp(24px,3vw,38px);display:flex;flex-direction:column;text-decoration:none;color:inherit;border-radius:18px;background:linear-gradient(150deg,color-mix(in srgb,var(--story-accent) 10%,var(--surface)),color-mix(in srgb,var(--surface) 96%,transparent));box-shadow:0 24px 70px rgba(0,0,0,.24);overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}.foundation-story:nth-child(1),.foundation-story:nth-child(6){grid-column:span 8}.foundation-story::before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--story-accent),var(--story-accent-2),transparent)}.foundation-story::after{content:"";position:absolute;width:220px;aspect-ratio:1;right:-90px;top:-90px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--story-accent) 28%,transparent),transparent 68%);transition:transform .5s var(--ease)}.foundation-story:hover{transform:translateY(-6px);box-shadow:0 34px 90px rgba(0,0,0,.34)}.foundation-story:hover::after{transform:scale(1.2)}.foundation-story__number{position:absolute;inset-inline-end:22px;top:14px;font:900 clamp(72px,10vw,142px)/1 var(--font-display);color:color-mix(in srgb,var(--story-accent) 13%,transparent);letter-spacing:-.04em}.foundation-story__tag{position:relative;z-index:1;color:var(--story-accent);font:10px var(--font-mono);letter-spacing:.12em;text-transform:uppercase}.foundation-story h3{position:relative;z-index:1;max-width:14ch;margin:auto 0 12px;font-size:clamp(26px,3vw,44px);line-height:1.02;letter-spacing:-.025em}.foundation-story p{position:relative;z-index:1;max-width:52ch;margin:0;color:var(--ink-2);font-size:14px;line-height:1.55}.foundation-story div{position:relative;z-index:1;display:flex;align-items:baseline;gap:10px;margin-top:22px;padding-top:17px;border-top:1px solid color-mix(in srgb,var(--ink-3) 18%,transparent)}.foundation-story b{font-size:24px;color:var(--story-accent)}.foundation-story i{font:9px var(--font-mono);font-style:normal;color:var(--ink-3)}
+  .lab-list{width:min(1380px,100%);margin:auto;display:grid;gap:clamp(62px,9vw,132px)}.lab-story{--story-accent:var(--accent);display:grid;grid-template-columns:minmax(280px,.72fr) minmax(520px,1.28fr);gap:clamp(34px,6vw,94px);align-items:center;text-decoration:none;color:inherit}.lab-story:nth-child(even) .lab-story__copy{order:2}.lab-story__copy{padding:clamp(8px,3vw,36px)}.lab-story__index{color:var(--story-accent);font:10px var(--font-mono);letter-spacing:.15em}.lab-story h3{max-width:13ch;margin:20px 0;font-size:clamp(38px,6vw,82px);line-height:.98;letter-spacing:-.035em;text-wrap:balance}.lab-story p{max-width:58ch;margin:0;color:var(--ink-2);font-size:clamp(15px,1.5vw,19px);line-height:1.62}.lab-story__proof{display:flex;align-items:baseline;gap:12px;margin-top:24px;padding-top:18px;border-top:1px solid color-mix(in srgb,var(--story-accent) 25%,transparent)}.lab-story__proof b{color:var(--story-accent);font-size:clamp(22px,3vw,34px)}.lab-story__proof i{font:9px var(--font-mono);font-style:normal;color:var(--ink-3)}.lab-story__open{display:block;margin-top:25px;color:var(--ink);font-size:13px}.lab-story :global(.system-visual){transition:transform .5s var(--ease),box-shadow .5s var(--ease)}.lab-story:hover :global(.system-visual){transform:translateY(-8px) rotate(.35deg);box-shadow:0 60px 150px rgba(0,0,0,.42)}
+  @media(max-width:980px){.foundation-story,.foundation-story:nth-child(1),.foundation-story:nth-child(6){grid-column:span 6}.lab-story{grid-template-columns:1fr}.lab-story:nth-child(even) .lab-story__copy{order:0}.lab-story h3{max-width:16ch}}
+  @media(max-width:620px){.project-collection{padding-inline:16px}.foundation-grid{display:block}.foundation-story{margin-bottom:14px;min-height:320px}.lab-list{gap:82px}.lab-story__copy{padding-inline:4px}.lab-story__proof{align-items:flex-start;flex-direction:column}.collection-head h2{font-size:clamp(43px,14vw,72px)}}
+  @media(prefers-reduced-motion:reduce){.foundation-story,.lab-story :global(.system-visual){transition:none}}
+</style>
