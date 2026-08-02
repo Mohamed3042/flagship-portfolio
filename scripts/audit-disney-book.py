@@ -37,6 +37,16 @@ def scroll_to_progress(page, selector: str, progress: float) -> None:
     page.wait_for_timeout(500)
 
 
+def wait_for_art(page, selector: str) -> None:
+    image = page.locator(f"{selector} img").first
+    image.wait_for(state="attached")
+    page.wait_for_function(
+        "img => img.complete && img.naturalWidth > 0",
+        arg=image.element_handle(),
+        timeout=15000,
+    )
+
+
 def capture_home(browser, lang: str, width: int, height: int) -> dict:
     page = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
     errors: list[str] = []
@@ -68,6 +78,7 @@ def capture_home(browser, lang: str, width: int, height: int) -> dict:
     before = page.locator(f"{first} .sb-camera").evaluate("el => getComputedStyle(el).transform")
     assert page.locator(first).get_attribute("data-active-beat") == "problem"
     scroll_to_progress(page, first, 0.52)
+    wait_for_art(page, first)
     middle = page.locator(f"{first} .sb-camera").evaluate("el => getComputedStyle(el).transform")
     assert before != middle, "camera did not scrub with scroll"
     assert page.locator(first).get_attribute("data-active-beat") == "intervention"
@@ -77,6 +88,7 @@ def capture_home(browser, lang: str, width: int, height: int) -> dict:
 
     reclaim = '[data-project-chapter="reclaim"]'
     scroll_to_progress(page, reclaim, 0.76)
+    wait_for_art(page, reclaim)
     page.screenshot(path=OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-reclaim-outcome.png", full_page=False)
     overflow = page.evaluate("Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) - innerWidth")
     assert overflow <= 2, f"horizontal overflow: {overflow}px"
@@ -100,6 +112,7 @@ def capture_detail(browser, lang: str, slug: str, width: int, height: int) -> di
     assert root.locator("[data-film-step]").count() == 4
     intervention = '[data-project-film] [data-film-act="intervention"]'
     scroll_to_progress(page, intervention, 0.62)
+    wait_for_art(page, intervention)
     active_step = page.locator(intervention).get_attribute("data-active-step")
     geometry = page.locator(intervention).evaluate(
         "el => ({top:el.getBoundingClientRect().top,height:el.getBoundingClientRect().height,scrollY,viewport:innerHeight,filmP:getComputedStyle(el).getPropertyValue('--film-p')})"
