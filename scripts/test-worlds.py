@@ -113,9 +113,10 @@ def main() -> None:
                         if world == "disney":
                             film_count = active_story.locator('[data-film-act]').count()
                             art_count = active_story.locator(f'img[src="/images/storybook/{slug}.webp"]').count()
-                            if film_count != 4 or art_count < 4:
+                            action_count = active_story.locator(f'img[src="/images/storybook-motion/{slug}-action.webp"]').count()
+                            if film_count != 4 or art_count < 4 or action_count < 4:
                                 failures.append(
-                                    f"{args.viewport}: /{lang}/work/{slug} has {film_count}/4 cinematic acts and {art_count}/4 story-art frames"
+                                    f"{args.viewport}: /{lang}/work/{slug} has {film_count}/4 cinematic acts, {art_count}/4 base frames, and {action_count}/4 action frames"
                                 )
                         else:
                             kinetic_count = active_story.locator(f'[data-project-kinetic][data-kinetic="{slug}"]').count()

@@ -4,6 +4,7 @@ export type StorybookMotion = 'pan' | 'dolly' | 'track' | 'crane' | 'orbit' | 'r
 
 export interface StorybookScene {
   readonly image?: string;
+  readonly actionImage: string;
   readonly transition?: string;
   readonly motion: StorybookMotion;
   readonly startX: number;
@@ -14,7 +15,7 @@ export interface StorybookScene {
   readonly focal: 'left' | 'center' | 'right';
 }
 
-const scenes: Record<string, StorybookScene> = {
+const scenes: Record<string, Omit<StorybookScene, 'actionImage'>> = {
   'career-autopilot': { image: '/images/storybook/career-autopilot.webp', transition: 'approval-lever', motion: 'track', startX: 10, endX: -10, lift: -2, zoom: 1.22, tilt: -0.35, focal: 'center' },
   'lifeos': { image: '/images/storybook/lifeos.webp', transition: 'closing-shutters', motion: 'dolly', startX: 8, endX: -8, lift: 1, zoom: 1.28, tilt: 0.18, focal: 'center' },
   'medmac-document-studio': { image: '/images/storybook/medmac-document-studio.webp', transition: 'press-impression', motion: 'sweep', startX: 11, endX: -11, lift: -1, zoom: 1.2, tilt: -0.18, focal: 'center' },
@@ -48,9 +49,13 @@ const scenes: Record<string, StorybookScene> = {
 };
 
 export function storybookSceneFor(project: ProjectMeta): StorybookScene {
-  return scenes[project.slug] ?? {
+  const scene = scenes[project.slug] ?? {
     image: `/images/storybook/${project.slug}.webp`,
     transition: 'page-turn',
     motion: 'pan', startX: 10, endX: -10, lift: 0, zoom: 1.22, tilt: 0, focal: 'center',
+  };
+  return {
+    ...scene,
+    actionImage: `/images/storybook-motion/${project.slug}-action.webp`,
   };
 }

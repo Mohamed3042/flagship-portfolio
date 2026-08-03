@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 
+from PIL import Image, ImageChops, ImageStat
 from playwright.sync_api import sync_playwright
 
 BASE = os.environ.get("STORYBOOK_BASE", "http://127.0.0.1:4321").rstrip("/")
@@ -47,6 +48,13 @@ def wait_for_art(page, selector: str) -> None:
     )
 
 
+def rendered_difference(before: Path, after: Path) -> float:
+    with Image.open(before).convert("RGB") as first, Image.open(after).convert("RGB") as second:
+        assert first.size == second.size, f"motion frames changed canvas size: {first.size} != {second.size}"
+        difference = ImageChops.difference(first, second)
+        return sum(ImageStat.Stat(difference).rms) / 3
+
+
 def capture_home(browser, lang: str, width: int, height: int) -> dict:
     page = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
     errors: list[str] = []
@@ -59,13 +67,20 @@ def capture_home(browser, lang: str, width: int, height: int) -> dict:
     root = page.locator("[data-disney-book-home]")
     assert root.get_attribute("aria-hidden") == "false", "Disney home did not activate"
     assert root.locator("[data-story-panorama]").count() == 30
-    sources = root.locator(".sb-panorama:not(.sb-panorama--near)").evaluate_all(
+    sources = root.locator(".sb-panorama:not(.sb-panorama--near):not(.sb-panorama--action):not(.sb-panorama--action-echo)").evaluate_all(
         "els => els.map(el => new URL(el.getAttribute('src'), location.href).pathname)"
     )
     assert len(set(sources)) == 30, f"expected 30 unique panorama sources, got {len(set(sources))}"
     for src in sources:
         response = page.request.get(f"{BASE}{src}")
         assert response.ok, f"art failed: {src} {response.status}"
+    action_sources = root.locator("[data-action-frame]").evaluate_all(
+        "els => els.map(el => new URL(el.getAttribute('src'), location.href).pathname)"
+    )
+    assert len(set(action_sources)) == 30, f"expected 30 unique action sources, got {len(set(action_sources))}"
+    for src in action_sources:
+        response = page.request.get(f"{BASE}{src}")
+        assert response.ok, f"action art failed: {src} {response.status}"
 
     film = "[data-book-film]"
     scroll_to_progress(page, film, 0.02)
@@ -74,13 +89,29 @@ def capture_home(browser, lang: str, width: int, height: int) -> dict:
     page.screenshot(path=OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-book-opening.png", full_page=False)
 
     first = '[data-project-chapter="career-autopilot"]'
+    page.add_style_tag(content=".sb-panorama--near,.sb-panorama--action-echo,.sb-beat,.sb-folio,.sb-page-turn,.sb-grain{display:none!important}.sb-shot::after{display:none!important}")
     scroll_to_progress(page, first, 0.08)
-    before = page.locator(f"{first} .sb-camera").evaluate("el => getComputedStyle(el).transform")
+    action_frame = page.locator(f"{first} [data-action-frame]")
+    page.wait_for_function("img => img.complete && img.naturalWidth > 0", arg=action_frame.element_handle(), timeout=15000)
+    before_opacity = float(action_frame.evaluate("el => getComputedStyle(el).opacity"))
+    assert before_opacity <= 0.02, f"actor moved before the intervention: opacity={before_opacity}"
+    camera = page.locator(f"{first} .sb-camera")
+    before = camera.evaluate("el => getComputedStyle(el).transform")
+    before_frame = OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-career-action-before.png"
+    page.screenshot(path=before_frame, full_page=False)
     assert page.locator(first).get_attribute("data-active-beat") == "problem"
     scroll_to_progress(page, first, 0.52)
     wait_for_art(page, first)
-    middle = page.locator(f"{first} .sb-camera").evaluate("el => getComputedStyle(el).transform")
+    middle = camera.evaluate("el => getComputedStyle(el).transform")
     assert before != middle, "camera did not scrub with scroll"
+    action_opacity = float(action_frame.evaluate("el => getComputedStyle(el).opacity"))
+    assert action_opacity >= 0.75, f"character action did not scrub into view: opacity={action_opacity}"
+    camera.evaluate("(el, frozen) => { el.style.transform = frozen; }", before)
+    after_frame = OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-career-action-after.png"
+    page.screenshot(path=after_frame, full_page=False)
+    difference = rendered_difference(before_frame, after_frame)
+    assert difference >= 2.5, f"fixed-camera character frame did not visibly change: RMS={difference:.3f}"
+    camera.evaluate("el => { el.style.removeProperty('transform'); }")
     assert page.locator(first).get_attribute("data-active-beat") == "intervention"
     page.screenshot(path=OUT / f"{lang}-{'mobile' if width < 700 else 'desktop'}-career-intervention.png", full_page=False)
     scroll_to_progress(page, first, 0.78)
@@ -95,7 +126,7 @@ def capture_home(browser, lang: str, width: int, height: int) -> dict:
     if lang == "ar":
         assert page.locator("html").get_attribute("dir") == "rtl"
     page.close()
-    return {"lang": lang, "viewport": [width, height], "errors": errors, "failed": failed, "unique_art": len(set(sources))}
+    return {"lang": lang, "viewport": [width, height], "errors": errors, "failed": failed, "unique_art": len(set(sources)), "action_art": len(set(action_sources)), "actor_motion_rms": round(difference, 3)}
 
 
 def capture_detail(browser, lang: str, slug: str, width: int, height: int) -> dict:
@@ -114,6 +145,10 @@ def capture_detail(browser, lang: str, slug: str, width: int, height: int) -> di
     scroll_to_progress(page, intervention, 0.62)
     wait_for_art(page, intervention)
     active_step = page.locator(intervention).get_attribute("data-active-step")
+    action = page.locator(f"{intervention} [data-action-frame]")
+    page.wait_for_function("img => img.complete && img.naturalWidth > 0", arg=action.element_handle(), timeout=15000)
+    action_opacity = float(action.evaluate("el => getComputedStyle(el).opacity"))
+    assert action_opacity >= 0.6, f"detail character action did not scrub into view: opacity={action_opacity}"
     geometry = page.locator(intervention).evaluate(
         "el => ({top:el.getBoundingClientRect().top,height:el.getBoundingClientRect().height,scrollY,viewport:innerHeight,filmP:getComputedStyle(el).getPropertyValue('--film-p')})"
     )
@@ -143,13 +178,21 @@ def main() -> None:
                 assert response.ok, f"route failed: {lang}/{slug} {response.status}"
                 html = response.text()
                 assert f'data-project-film="{slug}"' in html, f"film missing: {lang}/{slug}"
+                assert f'/images/storybook-motion/{slug}-action.webp' in html, f"action frame missing: {lang}/{slug}"
         page.close()
         browser.close()
     all_errors = [item for result in results for item in result["errors"]]
     all_failed = [item for result in results for item in result["failed"]]
     assert not all_errors, f"console errors: {all_errors}"
     assert not all_failed, f"failed responses: {all_failed}"
-    print(json.dumps({"passes": len(results), "routes": len(project_slugs) * 2, "screenshots": len(list(OUT.glob('*.png'))), "errors": 0, "failed_responses": 0}, indent=2))
+    print(json.dumps({
+        "passes": len(results),
+        "routes": len(project_slugs) * 2,
+        "screenshots": len(list(OUT.glob('*.png'))),
+        "fixed_camera_actor_motion_rms": [item["actor_motion_rms"] for item in results if "actor_motion_rms" in item],
+        "errors": 0,
+        "failed_responses": 0,
+    }, indent=2))
 
 
 if __name__ == "__main__":
