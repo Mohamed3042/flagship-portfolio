@@ -16,9 +16,11 @@ body {
 }
 
 /* ---------- language: author copy twice, CSS picks one ---------- */
-.L.ar { display: none; }
-.lang-ar .L.en { display: none; }
-.lang-ar .L.ar { display: inline; }
+/* !important: language visibility is an invariant — scoped display rules
+   (e.g. `#x .meter span{display:block}`) must never resurface the hidden language */
+.L.ar { display: none !important; }
+.lang-ar .L.en { display: none !important; }
+.lang-ar .L.ar { display: inline !important; }
 .lang-ar { --dirflip: -1; }
 
 /* ---------- top chrome ---------- */

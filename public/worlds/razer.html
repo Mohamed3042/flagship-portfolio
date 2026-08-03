@@ -113,6 +113,7 @@ body{letter-spacing:.01em}
 #s-trace .dead{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1.5}
 #s-trace .head{stroke:#d9ffcf;stroke-width:6;fill:none;stroke-linecap:round;
   stroke-dasharray:.012 .988;stroke-dashoffset:calc(var(--draw)*-.988);
+  opacity:clamp(0,calc(var(--draw)*24),1);
   filter:drop-shadow(0 0 10px rgba(68,214,44,.9))}
 
 /* ---------- S04 · Loop closes — Static hold ---------- */
@@ -168,8 +169,7 @@ body{letter-spacing:.01em}
 #s-wave .devices{margin-top:clamp(20px,4vh,44px);display:flex;justify-content:space-between;align-items:flex-end;gap:4vw}
 #s-wave .dev{--x:1.05;height:clamp(38px,7vh,64px);flex:1;border-radius:12px;background:linear-gradient(180deg,#121517,#0a0c0e);
   border:1px solid var(--edge);position:relative;
-  --dst:max(calc(var(--x) - var(--p)*1.3),calc(var(--p)*1.3 - var(--x)));
-  --lit:clamp(0,calc(1 - var(--dst)*4),1)}
+  --lit:clamp(0,calc((var(--p)*1.3 - var(--x))/.06),1)}
 #s-wave .dev::after{content:"";position:absolute;left:8%;right:8%;bottom:6px;height:2px;border-radius:2px;
   background:var(--w-accent);opacity:var(--lit);
   box-shadow:0 0 12px 2px rgba(68,214,44,calc(var(--lit)*.55))}
@@ -230,9 +230,10 @@ body{letter-spacing:.01em}
   background:color-mix(in srgb,var(--warn) calc((1 - var(--go))*100%),var(--w-accent) calc(var(--go)*100%));
   transform:translateY(calc(var(--touch)*4px));
   box-shadow:0 0 12px 4px color-mix(in srgb,rgba(255,51,68,.55) calc((1 - var(--go))*100%),rgba(68,214,44,.6) calc(var(--go)*100%))}
-#s-auth .ringy{position:absolute;left:50%;top:44%;width:16px;height:16px;border-radius:50%;
+#s-auth .ringy{position:absolute;left:50%;top:44%;border-radius:50%;
+  width:calc(16px + var(--rip)*min(52vw,560px));height:calc(16px + var(--rip)*min(52vw,560px));
   border:2px solid rgba(68,214,44,calc(.9 - var(--rip)*.9));
-  transform:translate(-50%,-50%) scale(calc(1 + var(--rip)*22));opacity:calc(var(--go))}
+  transform:translate(-50%,-50%);opacity:var(--go)}
 #s-auth .finger{position:absolute;left:calc(50% - 17px);top:100%;width:34px;height:52vh;
   transform:translateY(calc((1 - var(--rise))*30vh - 46vh*var(--rise) - 6vh));
   background:linear-gradient(180deg,#15181b,#0a0c0d 40%);border:1px solid var(--edge);border-bottom:0;
@@ -298,5 +299,464 @@ body{letter-spacing:.01em}
 </style>
 </head>
 <body>
+<div class="rail" data-rail><i></i></div>
+<header class="chrome">
+  <nav class="grp" aria-label="Site">
+    <a href="./"><span class="L en">Worlds</span><span class="L ar">العوالم</span></a>
+    <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
+  </nav>
+  <div class="grp">
+    <button type="button" data-lang-toggle aria-label="Switch language / تبديل اللغة"><span class="L en">العربية</span><span class="L ar">English</span></button>
+  </div>
+</header>
+
+<main>
+<!-- ============ S01 · PROLOGUE — the sleeping machine (Breathing 7 s) ============ -->
+<section id="s-sleep" class="scene" data-scene="pin" style="height:270vh" aria-label="Prologue">
+  <div class="stage">
+    <div class="rig" aria-hidden="true">
+      <div class="console"><span class="led"></span></div>
+    </div>
+    <div class="title">
+      <p class="over"><span class="L en">A scroll-cinema motion study · Chroma grammar</span><span class="L ar">دراسة حركية بالتمرير · قواعد كروما</span></p>
+      <h1><span class="L en">System Ascension</span><span class="L ar">صعود المنظومة</span></h1>
+      <p><span class="L en">A matte-black machine sleeps in a lightless room. Every photon in this film has a cause — scroll, and supply the first one.</span><span class="L ar">آلة سوداء مطفيّة تنام في غرفة بلا ضوء. لكل فوتون في هذا الفيلم سببٌ — مرّر لتمنحه سببه الأول.</span></p>
+    </div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Breathing — 7s period</b></span><span class="L ar">المؤثر · <b>تنفّس — دورة ٧ ثوانٍ</b></span></div>
+    <p class="hint"><span class="L en">Scroll</span><span class="L ar">مرّر</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Prologue · Off</span><span class="L ar">التمهيد · إطفاء</span></p>
+      <h2><span class="L en">The machine sleeps</span><span class="L ar">الآلة نائمة</span></h2>
+      <p><span class="L en">One indicator breathes on a documented seven-second period. Nothing else is lit — in this world, light must be earned by an input.</span><span class="L ar">مؤشّر واحد يتنفّس بدورةٍ موثّقة من سبع ثوانٍ. لا شيء آخر مضاء — في هذا العالم لا يُمنح الضوء إلا بمدخل يسبقه.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S02 · INPUT — explicit actuation (Reactive) ============ -->
+<section id="s-key" class="scene" data-scene="pin" style="height:300vh" aria-label="Actuation">
+  <div class="stage">
+    <div class="graze" aria-hidden="true"></div>
+    <div class="macro" aria-hidden="true">
+      <div class="keywell">
+        <span class="stem"></span>
+        <div class="keycap"></div>
+        <span class="contact"></span>
+        <span class="trail"></span>
+      </div>
+    </div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Reactive</b></span><span class="L ar">المؤثر · <b>تفاعلي</b></span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Input · 100&nbsp;mm macro</span><span class="L ar">المدخل · ماكرو ١٠٠ مم</span></p>
+      <h2><span class="L en">Nothing glows before its press</span><span class="L ar">لا توهّج قبل الضغطة</span></h2>
+      <p><span class="L en">A key travels half its depth. At contact — and only at contact — one green point is born, then decays behind its own motion.</span><span class="L ar">ينزل المفتاح نصف مسافته. وعند التلامس — وعند التلامس فقط — تولد نقطة خضراء واحدة، ثم يخفت أثرها خلف حركتها.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <p class="no"><span class="L en">Act I</span><span class="L ar">الفصل الأول</span></p>
+  <h2><span class="L en">Map</span><span class="L ar">الخريطة</span></h2>
+  <p><span class="L en">The signal searches unlit hardware. Dead ends go dark; one routed loop earns the right to hold.</span><span class="L ar">تبحث الإشارة في عتاد غير مضاء. تنطفئ الطرق المسدودة، وتكسب حلقة واحدة موصولة حقَّ الثبات.</span></p>
+  <p class="fx"><span class="L en">Reactive trace → Static hold</span><span class="L ar">تتبّع تفاعلي ← ثبات ساكن</span></p>
+</div>
+
+<!-- ============ S03 · MAP — trace search (Reactive) ============ -->
+<section id="s-trace" class="scene" data-scene="pin" style="height:340vh" aria-label="Trace search">
+  <div class="stage">
+    <svg viewBox="0 0 1140 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- cold, unlit copper -->
+      <path class="cold" d="M0 80 H340 V150 H620 M0 480 H260 V430 H540 V500 H900 M980 0 V120 H1140 M60 600 V520 H180"/>
+      <path class="cold" d="M470 600 V470 M820 600 V420 H1000 M120 300 V180 H40"/>
+      <rect class="pad" x="228" y="198" width="24" height="24" rx="4"/>
+      <rect class="pad" x="458" y="378" width="24" height="24" rx="4"/>
+      <rect class="pad" x="688" y="248" width="24" height="24" rx="4"/>
+      <rect class="pad" x="918" y="318" width="24" height="24" rx="4"/>
+      <!-- dead-end stubs -->
+      <path class="dead" d="M240 90 H330 M700 140 H610"/>
+      <!-- tried-and-abandoned branches (light fades where the route dies) -->
+      <path class="branch b1" pathLength="1" d="M240 210 V90 H326"/>
+      <path class="branch b2" pathLength="1" d="M700 260 V140 H614"/>
+      <!-- the living route -->
+      <path class="route" pathLength="1" d="M-40 300 H240 V210 H470 V390 H700 V260 H930 V330 H1180"/>
+      <path class="head" pathLength="1" d="M-40 300 H240 V210 H470 V390 H700 V260 H930 V330 H1180"/>
+    </svg>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Reactive</b> · one moving cause</span><span class="L ar">المؤثر · <b>تفاعلي</b> · سببٌ واحد يتحرك</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Map · macro trace</span><span class="L ar">الخريطة · تتبّع ماكرو</span></p>
+      <h2><span class="L en">The signal searches the dark</span><span class="L ar">الإشارة تبحث في العتمة</span></h2>
+      <p><span class="L en">Branches are tried and abandoned; light fades where a route dies. The board is mapped by cause, never by decoration.</span><span class="L ar">تُجرَّب الفروع ثم تُهجَر؛ يخفت الضوء حيث يموت المسار. تُرسَم خريطة اللوحة بالسبب لا بالزخرفة.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S04 · MAP — the loop closes (Static) ============ -->
+<section id="s-loop" class="scene" data-scene="pin" style="height:280vh" aria-label="Closed loop">
+  <div class="stage">
+    <svg viewBox="0 0 1140 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="cold" d="M0 120 H1140 M0 500 H1140"/>
+      <g class="bays">
+        <rect class="bay" x="150" y="452" width="60" height="26" rx="4"/><rect class="bay" x="222" y="452" width="60" height="26" rx="4"/>
+        <rect class="bay" x="294" y="452" width="60" height="26" rx="4"/><rect class="bay" x="366" y="452" width="60" height="26" rx="4"/>
+        <rect class="bay" x="438" y="452" width="60" height="26" rx="4"/><rect class="bay" x="510" y="452" width="60" height="26" rx="4"/>
+        <rect class="bay" x="582" y="452" width="60" height="26" rx="4"/><rect class="bay" x="654" y="452" width="60" height="26" rx="4"/>
+        <rect class="bay" x="726" y="452" width="60" height="26" rx="4"/><rect class="bay" x="798" y="452" width="60" height="26" rx="4"/>
+        <rect class="bay" x="870" y="452" width="60" height="26" rx="4"/><rect class="bay" x="942" y="452" width="60" height="26" rx="4"/>
+      </g>
+      <path class="ring" pathLength="1" d="M330 300 H470 V220 H810 V380 H470 V300 H330"/>
+      <path class="ring ring2" pathLength="1" d="M350 300 H470 V240 H790 V360 H470 V300 H350"/>
+    </svg>
+    <p class="verify"><span class="L en">Circuit · closed</span><span class="L ar">الدارة · مكتملة</span></p>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Static</b> · 2% luminance breath only</span><span class="L ar">المؤثر · <b>ساكن</b> · نَفَس ضوئي ٢٪ فقط</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Map · verification</span><span class="L ar">الخريطة · التحقق</span></p>
+      <h2><span class="L en">One loop closes</span><span class="L ar">حلقة واحدة تكتمل</span></h2>
+      <p><span class="L en">The routed circuit holds in steady green — camera and light lock. Below it, twelve dark module bays wait for a reason.</span><span class="L ar">تثبت الدارة الموصولة على أخضر مستقر — تنغلق الكاميرا والضوء معاً. وتحتها اثنا عشر مِحضناً معتماً تنتظر سبباً.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <p class="no"><span class="L en">Act II</span><span class="L ar">الفصل الثاني</span></p>
+  <h2><span class="L en">Build</span><span class="L ar">البناء</span></h2>
+  <p><span class="L en">Project modules wake as the ripple reaches them; the board syncs the desk, and the desk syncs the room.</span><span class="L ar">تستيقظ وحدات المشاريع حين تبلغها الموجة؛ فتُزامن اللوحةُ المكتبَ، ويُزامن المكتبُ الغرفة.</span></p>
+  <p class="fx"><span class="L en">Ripple → Wave, one direction</span><span class="L ar">تموّج ← موجة باتجاه واحد</span></p>
+</div>
+
+<!-- ============ S05 · BUILD — ripple wakes twelve bays (Ripple) ============ -->
+<section id="s-ripple" class="scene" data-scene="pin" style="height:330vh" aria-label="Module ripple">
+  <div class="stage">
+    <canvas class="fxcanvas" data-fx="ripple" aria-hidden="true"></canvas>
+    <span class="socket" aria-hidden="true"></span>
+    <div class="grid" aria-hidden="true">
+      <div class="cell" style="--d:.10"><i></i></div>
+      <div class="cell" style="--d:.24"><i></i></div>
+      <div class="cell lane-c" style="--d:.38"><i></i></div>
+      <div class="cell" style="--d:.52"><i></i></div>
+      <div class="cell" style="--d:.66"><i></i></div>
+      <div class="cell" style="--d:.80"><i></i></div>
+      <div class="cell" style="--d:.14"><i></i></div>
+      <div class="cell" style="--d:.27"><i></i></div>
+      <div class="cell" style="--d:.41"><i></i></div>
+      <div class="cell lane-v" style="--d:.55"><i></i></div>
+      <div class="cell" style="--d:.69"><i></i></div>
+      <div class="cell" style="--d:.83"><i></i></div>
+    </div>
+    <div class="count"><span data-counter data-from="0" data-to="12">0</span>
+      <small><span class="L en">Anchor modules awake</span><span class="L ar">وحدات مرساة مستيقظة</span></small></div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Ripple</b> · one origin, radial travel</span><span class="L ar">المؤثر · <b>تموّج</b> · أصل واحد وانتشار شعاعي</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Build · discovery</span><span class="L ar">البناء · الاكتشاف</span></p>
+      <h2><span class="L en">One origin, twelve answers</span><span class="L ar">أصل واحد واثنتا عشرة إجابة</span></h2>
+      <p><span class="L en">A single ripple leaves the bus socket and travels radially. Bays light only as the ring crosses them — two data lanes, plus green.</span><span class="L ar">تموّجٌ واحد يغادر مقبس الناقل وينتشر شعاعياً. لا تضيء المحاضن إلا حين تعبرها الحلقة — مساران للبيانات، والأخضر.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S06 · BUILD — device sync (Wave, left→right) ============ -->
+<section id="s-wave" class="scene" data-scene="pin" style="height:300vh" aria-label="Device sync">
+  <div class="stage">
+    <div class="field" aria-hidden="true">
+      <div class="deck">
+        <div class="keys" data-keys></div>
+        <div class="devices">
+          <div class="dev d1" style="--x:1.02"></div>
+          <div class="dev d2" style="--x:1.12"></div>
+          <div class="dev d3" style="--x:1.22"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Wave</b> · left → right</span><span class="L ar">المؤثر · <b>موجة</b> · من اليسار إلى اليمين</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Build · sync</span><span class="L ar">البناء · التزامن</span></p>
+      <h2><span class="L en">The board teaches the desk</span><span class="L ar">اللوحة تعلّم المكتب</span></h2>
+      <p><span class="L en">One wave, one direction, unchanged. It crosses the key field, then hands the same phase to every device on the rail.</span><span class="L ar">موجة واحدة باتجاه واحد لا يتغيّر. تعبر حقل المفاتيح ثم تسلّم الطور نفسه إلى كل جهاز على الحافة.</span></p>
+    </div>
+  </div>
+</section>
+<!-- ============ S07 · SYNC — room wave (Wave, device→room) ============ -->
+<section id="s-room" class="scene" data-scene="pin" style="height:310vh" aria-label="Room wave">
+  <div class="stage">
+    <div class="space3" aria-hidden="true">
+      <div class="floor"></div>
+      <div class="horizon"></div>
+      <div class="rigline"></div>
+      <span class="strip" style="--x:.12;left:30%;width:40%;top:52%"></span>
+      <span class="strip" style="--x:.34;left:14%;width:22%;top:64%"></span>
+      <span class="strip" style="--x:.52;left:64%;width:22%;top:64%"></span>
+      <span class="strip" style="--x:.70;left:8%;width:26%;top:30%"></span>
+      <span class="strip" style="--x:.88;left:66%;width:26%;top:30%"></span>
+      <div class="band"></div>
+      <div class="wallglow"></div>
+    </div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Wave</b> · device → room</span><span class="L ar">المؤثر · <b>موجة</b> · من الجهاز إلى الغرفة</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Sync · 24&nbsp;mm room</span><span class="L ar">التزامن · غرفة ٢٤ مم</span></p>
+      <h2><span class="L en">Light reaches the room</span><span class="L ar">الضوء يبلغ الغرفة</span></h2>
+      <p><span class="L en">Only after the devices agree does the room receive light — the same band, the same direction, at architectural scale.</span><span class="L ar">لا تتلقى الغرفة الضوء إلا بعد اتفاق الأجهزة — الحزمة نفسها، والاتجاه نفسه، بمقياسٍ معماري.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act gate-act">
+  <p class="no"><span class="L en">Act III</span><span class="L ar">الفصل الثالث</span></p>
+  <h2><span class="L en">Gate</span><span class="L ar">البوّابة</span></h2>
+  <p><span class="L en">The cascade is halted by design. Warning red exists only here — and no automation can cross it.</span><span class="L ar">يتوقف التسلسل عمداً. الأحمر التحذيري لا يوجد إلا هنا — ولا تستطيع أيّ أتمتة عبوره.</span></p>
+  <p class="fx"><span class="L en">Spectrum drain → red interlock</span><span class="L ar">تفريغ الطيف ← قفل أحمر</span></p>
+</div>
+
+<!-- ============ S08 · GATE — spectrum drain (Spectrum Cycling, draining) ============ -->
+<section id="s-drain" class="scene" data-scene="pin" style="height:380vh" aria-label="Spectrum drain">
+  <div class="stage">
+    <div class="lanes" aria-hidden="true">
+      <div class="lane lc"><i></i></div>
+      <div class="lane lg"><i></i></div>
+      <div class="lane lv"><i></i></div>
+    </div>
+    <div class="core" aria-hidden="true"><i></i></div>
+    <p class="haltlbl"><span class="L en">Interlock · halted</span><span class="L ar">القفل · متوقف</span></p>
+    <div class="fxchip is-warn"><span class="L en">EFFECT · <b>Spectrum drain</b> · red arrives last</span><span class="L ar">المؤثر · <b>تفريغ الطيف</b> · الأحمر يصل أخيراً</span></div>
+    <div class="caption">
+      <p class="kick" style="color:var(--warn)"><span class="L en">Gate · security state</span><span class="L ar">البوّابة · حالة أمنية</span></p>
+      <h2><span class="L en">The system halts itself</span><span class="L ar">المنظومة توقف نفسها</span></h2>
+      <p><span class="L en">Channels extinguish in sequence; red arrives last, alone, never as a wash. Automation may not pass this square.</span><span class="L ar">تنطفئ القنوات تباعاً؛ ويصل الأحمر أخيراً وحيداً، لا غسيلَ لونٍ فوق المشهد. لا يُسمح للأتمتة بعبور هذا المربّع.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S09 · GATE — human authorization (Reactive contact → Ripple) ============ -->
+<section id="s-auth" class="scene" data-scene="pin" style="height:420vh" aria-label="Human authorization">
+  <div class="stage">
+    <div class="nolight" aria-hidden="true"></div>
+    <span class="ringy" aria-hidden="true"></span>
+    <div class="plate" aria-hidden="true"><i></i></div>
+    <div class="finger" aria-hidden="true"></div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Reactive</b> · bare-skin contact</span><span class="L ar">المؤثر · <b>تفاعلي</b> · تلامسٌ ببشرةٍ عارية</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Gate · authorization</span><span class="L ar">البوّابة · التفويض</span></p>
+      <h2><span class="L en">A human hand authorizes</span><span class="L ar">يدٌ بشرية تمنح الإذن</span></h2>
+      <p><span class="L en">The glove comes off. One bare fingertip closes the final millimetre — and green replaces red exactly beneath the contact, one ripple, one origin.</span><span class="L ar">يُخلَع القفّاز. إصبعٌ عارية تقطع المليمتر الأخير — فيحلّ الأخضر محلّ الأحمر تحت نقطة التلامس تماماً: تموّجٌ واحد من أصلٍ واحد.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <p class="no"><span class="L en">Act IV</span><span class="L ar">الفصل الرابع</span></p>
+  <h2><span class="L en">Prove</span><span class="L ar">البرهان</span></h2>
+  <p><span class="L en">Performance returns as controlled light architecture. The copy stays honest: real structure, no invented numbers.</span><span class="L ar">يعود الأداء بوصفه عمارةً ضوئية منضبطة. ويبقى النص أميناً: بنيةٌ حقيقية بلا أرقام مُختلَقة.</span></p>
+  <p class="fx"><span class="L en">Wave lanes → Starlight archive</span><span class="L ar">مسارات موجية ← أرشيف متلألئ</span></p>
+</div>
+
+<!-- ============ S10 · PROVE — evidence lanes (Wave) ============ -->
+<section id="s-prove" class="scene" data-scene="pin" style="height:340vh" aria-label="Evidence lanes">
+  <div class="stage">
+    <div class="stack">
+      <p class="lanehdr"><span class="L en">Evidence, by lane</span><span class="L ar">البرهان مساراً مساراً</span></p>
+      <div class="plane" style="--x:.05"><p class="lbl"><span class="L en">Human gates kept</span><span class="L ar">بوابات بشرية مُصانة</span></p><div class="bar"><i></i></div></div>
+      <div class="plane" style="--x:.20"><p class="lbl"><span class="L en">Offline cores honored</span><span class="L ar">نوى غير متصلة محترمة</span></p><div class="bar"><i></i></div></div>
+      <div class="plane" style="--x:.35"><p class="lbl"><span class="L en">Public paths shown</span><span class="L ar">مسارات علنية معروضة</span></p><div class="bar"><i></i></div></div>
+      <div class="plane" style="--x:.50"><p class="lbl"><span class="L en">Synthetic data declared</span><span class="L ar">بيانات اصطناعية مُصرَّح بها</span></p><div class="bar"><i></i></div></div>
+      <div class="plane" style="--x:.65"><p class="lbl"><span class="L en">Private work shuttered</span><span class="L ar">أعمال خاصة مُغلَقة</span></p><div class="bar"><i></i></div></div>
+      <div class="plane" style="--x:.80"><p class="lbl"><span class="L en">Boundaries stated</span><span class="L ar">حدود مُعلَنة</span></p><div class="bar"><i></i></div></div>
+      <p class="tally"><span data-counter data-from="0" data-to="30">0</span>
+        <small><span class="L en">Project modules answered the cascade</span><span class="L ar">وحدة مشروع أجابت نداء التسلسل</span></small></p>
+    </div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Wave</b> · one direction, measured</span><span class="L ar">المؤثر · <b>موجة</b> · اتجاه واحد بلا استعجال</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Prove · architecture</span><span class="L ar">البرهان · العمارة</span></p>
+      <h2><span class="L en">Performance becomes light</span><span class="L ar">الأداء يصير ضوءاً</span></h2>
+      <p><span class="L en">Evidence lanes fill in one direction. The film claims only its own architecture — thirty modules, and the rules they obey.</span><span class="L ar">تمتلئ مسارات البرهان في اتجاه واحد. لا يدّعي الفيلم إلا بنيته — ثلاثون وحدة والقواعد التي تُطيعها.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ S11 · PROVE — starlight archive (Starlight) ============ -->
+<section id="s-star" class="scene" data-scene="pin" style="height:300vh" aria-label="Starlight archive">
+  <div class="stage">
+    <div class="wall" aria-hidden="true"></div>
+    <canvas class="fxcanvas" data-fx="star" aria-hidden="true"></canvas>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Starlight</b> · random wake &amp; rest</span><span class="L ar">المؤثر · <b>ضوء النجوم</b> · استيقاظ وخفوت عشوائيان</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Prove · the archive wall</span><span class="L ar">البرهان · جدار الأرشيف</span></p>
+      <h2><span class="L en">An archive of small lights</span><span class="L ar">أرشيف من أضواء صغيرة</span></h2>
+      <p><span class="L en">Points wake and rest at random across the wall — each one a finished piece of work, none shining brighter than the truth of it.</span><span class="L ar">نقاطٌ تستيقظ وتخبو عشوائياً على الجدار — كلٌّ منها عملٌ مكتمل، ولا يزيد بريق أيٍّ منها على حقيقته.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <p class="no"><span class="L en">Finale</span><span class="L ar">الختام</span></p>
+  <h2><span class="L en">System</span><span class="L ar">المنظومة</span></h2>
+  <p><span class="L en">Room folds into rig, rig into board, board into one indicator — and the phase returns to zero.</span><span class="L ar">تنطوي الغرفة في الجهاز، والجهاز في اللوحة، واللوحة في مؤشّرٍ واحد — ويعود الطور إلى الصفر.</span></p>
+  <p class="fx"><span class="L en">Controlled collapse → Breathing 7s</span><span class="L ar">انطواء منضبط ← تنفّس ٧ ثوانٍ</span></p>
+</div>
+
+<!-- ============ S12 · FINALE — collapse to breath (Breathing 7 s) ============ -->
+<section id="s-fin" class="scene" data-scene="pin" style="height:330vh" aria-label="Finale">
+  <div class="stage">
+    <div class="roomframe" aria-hidden="true"></div>
+    <div class="rig2" aria-hidden="true">
+      <div class="console"><span class="led"></span></div>
+    </div>
+    <div class="edgefade" aria-hidden="true"></div>
+    <p class="loopnote"><span class="L en">Breathing phase 0.0 · loop closed</span><span class="L ar">طور التنفّس ٠٫٠ · اكتملت الحلقة</span></p>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Breathing — 7s period</b></span><span class="L ar">المؤثر · <b>تنفّس — دورة ٧ ثوانٍ</b></span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Finale · loop</span><span class="L ar">الختام · الحلقة</span></p>
+      <h2><span class="L en">Back to one breath</span><span class="L ar">عودةٌ إلى نَفَسٍ واحد</span></h2>
+      <p><span class="L en">The same geometry, the same phase, the same single light that began the film. Scroll up, and every transition plays credibly backward.</span><span class="L ar">الهندسة نفسها، والطور نفسه، والضوء الوحيد الذي بدأ به الفيلم. مرّر إلى الأعلى تجد كل انتقالٍ يُعرَض عكسياً بمصداقية.</span></p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="disclosure">
+  <p><b><span class="L en">System Ascension</span><span class="L ar">صعود المنظومة</span></b> —
+    <span class="L en">an original, brand-inspired motion study rendered entirely as live code (CSS, SVG, canvas), AI-assisted, by Mohamed Mahmoud. Not affiliated with, sponsored by, or endorsed by Razer Inc. No logos, wordmarks, or product replicas appear — only an original grammar study of synchronized, reactive illumination. No performance figures are claimed.</span>
+    <span class="L ar">دراسة حركية أصلية مستوحاة من هوية علامة تجارية، منفّذة بالكامل ككود حي (CSS وSVG وCanvas) بمساعدة الذكاء الاصطناعي، من إعداد محمد محمود. لا صلة لها بشركة Razer ولا ترعاها الشركة ولا تُقرّها. لا تظهر فيها شعارات ولا علامات ولا نسخ من منتجات — بل دراسة أصلية لقواعد الإضاءة التفاعلية المتزامنة، ومن دون أي أرقام أداء مزعومة.</span></p>
+  <p><a href="../"><span class="L en">← Back to the portfolio</span><span class="L ar">→ العودة إلى الموقع</span></a></p>
+</footer>
+
+<script src="./cinema.js" defer></script>
+<script>
+/* SYSTEM ASCENSION — world script.
+   cinema.js owns scroll/--p/lang; this file owns: the S06 key grid,
+   and two canvases (Ripple, Starlight) that draw only while their scene .is-live. */
+(() => {
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- S06: build the 14×5 key field (wave positions on --x) ---- */
+  const keys = document.querySelector('[data-keys]');
+  if (keys) {
+    const frag = document.createDocumentFragment();
+    for (let r = 0; r < 5; r++) for (let c = 0; c < 14; c++) {
+      const k = document.createElement('div');
+      k.className = 'k';
+      k.style.setProperty('--x', (c / 13 + r * 0.006).toFixed(3));
+      frag.appendChild(k);
+    }
+    keys.appendChild(frag);
+  }
+
+  /* ---- canvas director: dpr ≤ 2, loop only while a scene is live ---- */
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+  const units = [];
+  const getP = (scene) => parseFloat(scene.style.getPropertyValue('--p') || '0');
+
+  const fit = (u) => {
+    const w = u.cv.clientWidth, h = u.cv.clientHeight;
+    if (w && h && (u.w !== w || u.h !== h)) {
+      u.w = w; u.h = h;
+      u.cv.width = Math.round(w * DPR);
+      u.cv.height = Math.round(h * DPR);
+      u.ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      return true;
+    }
+    return false;
+  };
+
+  /* Ripple — one origin (the bus socket), radial travel, fades with age */
+  const drawRipple = (u, p) => {
+    const { ctx, w, h } = u;
+    ctx.clearRect(0, 0, w, h);
+    if (p <= 0.02) return;
+    const sock = u.scene.querySelector('.socket');
+    let ox = w * 0.12, oy = h * 0.5;
+    if (sock) {
+      const a = sock.getBoundingClientRect(), b = u.cv.getBoundingClientRect();
+      ox = a.left - b.left + a.width / 2;
+      oy = a.top - b.top + a.height / 2;
+    }
+    const maxR = Math.hypot(w, h) * 0.62;
+    const rings = [ [p * 1.25, 1], [p * 1.25 - 0.16, 0.45] ];  // main front + echo
+    for (const [k, gain] of rings) {
+      if (k <= 0) continue;
+      const r = k * maxR;
+      const a = Math.max(0, (1 - k * 0.8)) * 0.85 * gain;
+      if (a <= 0.01 || r > maxR * 1.1) continue;
+      ctx.beginPath();
+      ctx.arc(ox, oy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(68,214,44,${a.toFixed(3)})`;
+      ctx.lineWidth = 2;
+      ctx.shadowColor = 'rgba(68,214,44,.8)';
+      ctx.shadowBlur = 18;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+  };
+
+  /* Starlight — random wake & rest; green plus one amber lane, density earns with p */
+  const stars = [];
+  const seedStars = () => {
+    if (stars.length) return;
+    for (let i = 0; i < 130; i++) stars.push({
+      x: 0.07 + Math.random() * 0.86,
+      y: 0.10 + Math.random() * 0.80,
+      ph: Math.random() * Math.PI * 2,
+      sp: 0.5 + Math.random() * 1.1,
+      amber: Math.random() < 0.18,
+    });
+  };
+  const drawStar = (u, p, t) => {
+    const { ctx, w, h } = u;
+    ctx.clearRect(0, 0, w, h);
+    seedStars();
+    const density = Math.min(1, p * 1.7);
+    if (density <= 0) return;
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      if (i / stars.length > density) break;          // stars earn their place with scroll
+      const tw = Math.max(0, Math.sin(t * 0.001 * s.sp + s.ph));
+      const a = tw * tw * 0.9 * Math.min(1, density * 1.2);
+      if (a < 0.02) continue;
+      const x = s.x * w, y = s.y * h;
+      const [r, g, b] = s.amber ? [255, 176, 0] : [68, 214, 44];
+      ctx.fillStyle = `rgba(${r},${g},${b},${(a * 0.22).toFixed(3)})`;
+      ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `rgba(${r},${g},${b},${a.toFixed(3)})`;
+      ctx.beginPath(); ctx.arc(x, y, 1.6, 0, Math.PI * 2); ctx.fill();
+    }
+  };
+
+  document.querySelectorAll('canvas[data-fx]').forEach(cv => {
+    const ctx = cv.getContext('2d');
+    const scene = cv.closest('[data-scene]');
+    if (!ctx || !scene) return;
+    units.push({ cv, ctx, scene, w: 0, h: 0,
+      draw: cv.dataset.fx === 'star' ? drawStar : drawRipple });
+  });
+
+  if (units.length) {
+    let rafId = 0;
+    const live = new Set();
+    const frame = (t) => {
+      rafId = 0;
+      let any = false;
+      for (const u of units) {
+        if (!u.scene.classList.contains('is-live')) continue;
+        any = true;
+        fit(u);
+        u.draw(u, getP(u.scene), t);
+      }
+      if (any && !reduced) rafId = requestAnimationFrame(frame);
+    };
+    const kick = () => { if (!rafId) rafId = requestAnimationFrame(frame); };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => { en.isIntersecting ? live.add(en.target) : live.delete(en.target); });
+      if (live.size) kick();
+    }, { threshold: 0.1 });
+    units.forEach(u => io.observe(u.scene));
+    if (reduced) {
+      /* one legible still per canvas: mid-effect frame, no loop */
+      addEventListener('load', () => {
+        units.forEach(u => { fit(u); u.draw(u, 0.7, 1200); });
+      });
+    } else {
+      addEventListener('scroll', () => { if (live.size) kick(); }, { passive: true });
+      kick();
+    }
+  }
+})();
+</script>
 </body>
 </html>

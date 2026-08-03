@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE FOLD IN SPACE — a scroll-cinema film · Mohamed Mahmoud</title>
+<meta name="description" content="THE FOLD IN SPACE — an original bilingual scroll-cinema study: a cobalt-violet light folds a cosmos of thirty portfolio stories into order, and one human palm opens the gate. Hand-authored HTML, CSS, SVG and canvas — no footage, no libraries.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070912'/%3E%3Cpath d='M10 46C26 46 24 20 40 20c8 0 10 6 14 9' fill='none' stroke='%236D5BDB' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='54' cy='29' r='4' fill='%238CCBFF'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="cinema.css">
+<style>
+/* ============ THE FOLD IN SPACE — world sheet ============
+   Palette (locked): galaxy black #070912 · Cobalt Violet #6D5BDB ·
+   Sky Blue #8CCBFF · hardware black #090A0D · white #F4F6F8 ·
+   Silver Shadow #A9AFBB · Pink Gold #D7AAA2 (one act) · icy #C6F0FF (edges only) */
+:root {
+  --w-bg: #070912;
+  --w-ink: #F4F6F8;
+  --w-accent: #6D5BDB;
+  --w-dim: #A9AFBB;
+  --sky: #8CCBFF;
+  --hw: #090A0D;
+  --silver: #A9AFBB;
+  --gold: #D7AAA2;
+  --ice: #C6F0FF;
+  --w-display: 'SF Pro Rounded', ui-rounded, 'Hiragino Maru Gothic ProN',
+               'Arial Rounded MT Bold', 'Vazirmatn', 'Geeza Pro', system-ui, sans-serif;
+  --w-body: 'SF Pro Rounded', ui-rounded, 'Avenir Next', 'Geeza Pro',
+            system-ui, -apple-system, sans-serif;
+  --w-ui: 'SF Pro Rounded', ui-rounded, system-ui, -apple-system, sans-serif;
+}
+html { background: var(--w-bg); }
+body { letter-spacing: .01em; }
+
+/* ---------- shared scene fabric ---------- */
+.cv { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.vig {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background:
+    radial-gradient(120% 90% at 50% 42%, transparent 55%, rgba(7,9,18,.55) 100%),
+    linear-gradient(180deg, rgba(7,9,18,.42), transparent 18% 82%, rgba(7,9,18,.5));
+}
+.full { position: absolute; inset: 0; }
+svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* scroll-window fade utility: in over --fa→--fb, out over --fc→--fd (all on --p) */
+.fio {
+  opacity: calc(
+    clamp(0, (var(--p,0) - var(--fa, 0)) / max(.0001, var(--fb, .2) - var(--fa, 0)), 1) *
+    clamp(0, (var(--fd, 9) - var(--p,0)) / max(.0001, var(--fd, 9) - var(--fc, 8)), 1)
+  );
+}
+.rise {
+  transform: translateY(calc((1 - clamp(0,
+    (var(--p,0) - var(--fa, 0)) / max(.0001, var(--fb, .2) - var(--fa, 0)), 1)) * 26px));
+}
+
+/* captions: this film manages its own timing windows (engine .is-live stays) */
+.scene .caption { transition: none; opacity: 1; transform: none; max-width: min(600px, 86vw); }
+.caption .kick { color: var(--sky); }
+.caption.center {
+  inset-inline: 0; margin-inline: auto; text-align: center; bottom: clamp(20px, 10vh, 110px);
+}
+.caption.hi { bottom: auto; top: clamp(70px, 12vh, 130px); }
+
+/* translucent glass recipe (colored-edge translucency, one hierarchy) */
+.glass {
+  background:
+    linear-gradient(135deg, rgba(198,240,255,.075), rgba(109,91,219,.14) 46%, rgba(9,10,13,.42));
+  border: 1px solid rgba(198,240,255,.20);
+  border-radius: 22px;
+  box-shadow:
+    inset 0 1px 0 rgba(198,240,255,.16),
+    inset 0 -18px 40px rgba(109,91,219,.10),
+    0 30px 70px rgba(0,0,0,.5);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+
+/* act dividers */
+.act { position: relative; min-height: 52vh; }
+.act::before {
+  content: ""; position: absolute; top: 14%; left: 50%; translate: -50% 0;
+  width: min(320px, 42vw); height: 1px;
+  background: linear-gradient(90deg, transparent, var(--w-accent) 35%, var(--sky) 65%, transparent);
+  opacity: .6;
+}
+.act .no { color: var(--sky); }
+.act h2 { color: var(--w-ink); }
+.act p { font-size: clamp(14px, 1.6vw, 17px); }
+
+/* ============ S1 · PROLOGUE — curve alone ============ */
+#sc-curve  { height: 300vh; }
+#sc-edge   { height: 260vh; }
+#sc-frags  { height: 280vh; }
+#sc-orbit  { height: 300vh; }
+#sc-fold   { height: 300vh; }
+#sc-anchor { height: 340vh; }
+#sc-island { height: 250vh; }
+#sc-shield { height: 300vh; }
+#sc-palm   { height: 430vh; }
+#sc-prove  { height: 330vh; }
+#sc-home   { height: 340vh; }
+
+.scurve { z-index: 1; }
+.scurve .trace {
+  fill: none; stroke: url(#lgCurve); stroke-width: 3; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw, 0));
+}
+.scurve .halo {
+  fill: none; stroke: url(#lgCurve); stroke-width: 16; stroke-linecap: round; opacity: .10;
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--draw, 0));
+}
+.scurve .comet {
+  fill: none; stroke: var(--sky); stroke-width: 6; stroke-linecap: round; opacity: .9;
+  stroke-dasharray: .012 1; stroke-dashoffset: calc(1.012 - var(--draw, 0));
+  filter: drop-shadow(0 0 6px rgba(140,203,255,.8));
+}
+#sc-curve .scurve { --draw: clamp(0, (var(--p,0) - .10) / .52, 1); }
+#sc-curve .scurve .comet { opacity: calc(.9 * clamp(0, (.98 - var(--p,0)) / .2, 1)); }
+
+.title {
+  position: absolute; inset: 0; z-index: 4;
+  display: grid; place-content: center; text-align: center; padding: 0 6vw;
+}
+.title .kick {
+  font: 700 12px/1 var(--w-ui); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--sky); margin-bottom: 18px;
+}
+.title h1 {
+  font: 700 clamp(40px, 8.6vw, 108px)/1.02 var(--w-display);
+  letter-spacing: .01em; text-wrap: balance;
+  background: linear-gradient(105deg, var(--w-ink) 20%, var(--ice) 42%, var(--w-accent) 72%, var(--sky));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 6px 40px rgba(109,91,219,.35));
+}
+.title .sub {
+  margin-top: 20px; font: 400 clamp(15px, 2vw, 19px)/1.6 var(--w-body);
+  color: color-mix(in srgb, var(--w-ink) 78%, transparent);
+}
+.hint {
+  position: absolute; bottom: 26px; inset-inline: 0; z-index: 4; text-align: center;
+  font: 600 11px/1 var(--w-ui); letter-spacing: .28em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--w-ink) 55%, transparent);
+}
+.hint i {
+  display: block; width: 1px; height: 34px; margin: 10px auto 0;
+  background: linear-gradient(180deg, var(--sky), transparent);
+}
+
+/* ============ S2 · edge becomes layer (macro glass) ============ */
+.macro {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  perspective: 1200px; z-index: 1;
+}
+.pane {
+  position: absolute; width: min(64vw, 760px); aspect-ratio: 16 / 9.5; border-radius: 26px;
+  --k: clamp(0, (var(--p,0) - .12) / .55, 1);
+}
+.pane.a { transform: translate3d(calc(var(--k) * -9vw),  calc(var(--k) * -8vh), 0) rotate(calc(var(--k) * -4deg)) scale(calc(1 + var(--k) * .06)); }
+.pane.b { transform: translate3d(calc(var(--k) *  1vw),  calc(var(--k) *  1vh), 0) rotate(calc(var(--k) * 1.5deg)); }
+.pane.c { transform: translate3d(calc(var(--k) * 10vw),  calc(var(--k) *  9vh), 0) rotate(calc(var(--k) * 5deg)) scale(calc(1 - var(--k) * .05)); }
+.pane.a { z-index: 3; }
+.pane.b { z-index: 2; filter: blur(calc(var(--k) * 1.2px)); }
+.pane.c { z-index: 1; filter: blur(calc(var(--k) * 2.6px)); }
+.pane::after { /* icy translucent edge — the only place ice lives */
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  border: 1px solid rgba(198,240,255,.28);
+  -webkit-mask: linear-gradient(125deg, #000 22%, transparent 60%);
+  mask: linear-gradient(125deg, #000 22%, transparent 60%);
+}
+.pane.b { border-color: rgba(109,91,219,.35); }
+.pane.c { border-color: rgba(140,203,255,.22); }
+
+/* ============ S3 / S4 · fragments + orbit are canvas ============ */
+
+/* fold-axis hint at the end of S4 */
+.axis {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 3;
+  width: 1px; height: min(58vh, 480px);
+  background: linear-gradient(180deg, transparent, var(--w-accent) 30% 70%, transparent);
+  opacity: clamp(0, (var(--p,0) - .78) / .16, 1);
+  box-shadow: 0 0 18px rgba(109,91,219,.55);
+}
+
+/* ============ S5 · the first fold ============ */
+.foldwrap {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  perspective: 1500px; z-index: 1;
+  --fold: clamp(0, (var(--p,0) - .22) / .44, 1);
+}
+.foldscene { position: relative; width: min(80vw, 960px); aspect-ratio: 16/9; transform-style: preserve-3d; }
+.behind {
+  position: absolute; inset: 4% 6%; border-radius: 20px; overflow: hidden;
+  opacity: var(--fold);
+  background:
+    radial-gradient(80% 90% at 30% 70%, rgba(109,91,219,.24), transparent 60%),
+    radial-gradient(70% 80% at 74% 26%, rgba(140,203,255,.16), transparent 60%),
+    #0a0d1c;
+  box-shadow: 0 0 0 1px rgba(198,240,255,.10) inset, 0 0 90px rgba(109,91,219,.25) inset;
+}
+.behind svg { width: 100%; height: 100%; }
+.fp {
+  position: absolute; top: 0; bottom: 0; width: 50%;
+  background:
+    linear-gradient(115deg, rgba(169,175,187,.14), rgba(9,10,13,.78) 55%),
+    linear-gradient(0deg, rgba(109,91,219,.08), rgba(109,91,219,.08));
+  border: 1px solid rgba(169,175,187,.22);
+  backface-visibility: visible;
+}
+.fp.l { left: 0;  border-radius: 20px 0 0 20px; transform-origin: 100% 50%; transform: rotateY(calc(var(--fold) * 76deg)); }
+.fp.r { right: 0; border-radius: 0 20px 20px 0; transform-origin: 0% 50%;   transform: rotateY(calc(var(--fold) * -76deg)); }
+.fp::after { /* satin sweep on the moving panel */
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(100deg, transparent 30%, rgba(198,240,255,.10) 50%, transparent 68%);
+  opacity: calc(var(--fold) * (1 - var(--fold)) * 4);
+}
+.crease {
+  position: absolute; left: 50%; top: -4%; bottom: -4%; width: 2px; translate: -50% 0;
+  background: linear-gradient(180deg, transparent, var(--w-accent) 25% 75%, transparent);
+  box-shadow: 0 0 22px 2px rgba(109,91,219,.65);
+  opacity: calc(.25 + var(--fold) * (1 - var(--fold)) * 3);
+}
+
+/* ============ S6 · anchor worlds ============ */
+.linkline .trace2 {
+  fill: none; stroke: url(#lgLink); stroke-width: 2.5; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--dw, 0));
+}
+.linkline .halo2 {
+  fill: none; stroke: url(#lgLink); stroke-width: 14; opacity: .09; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--dw, 0));
+}
+.linkline .comet2 {
+  fill: none; stroke: var(--sky); stroke-width: 5; stroke-linecap: round;
+  stroke-dasharray: .01 1; stroke-dashoffset: calc(1.01 - var(--dw, 0));
+  filter: drop-shadow(0 0 6px rgba(140,203,255,.9));
+  opacity: calc(clamp(0, var(--dw,0) * 30, 1) * clamp(0, (1 - var(--dw,0)) * 30, 1));
+}
+#sc-anchor .linkline { --dw: clamp(0, (var(--p,0) - .10) / .62, 1); }
+.node {
+  position: absolute; z-index: 3; translate: -50% -50%;
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px 7px 9px; border-radius: 999px;
+  background: linear-gradient(120deg, rgba(198,240,255,.06), rgba(109,91,219,.16) 60%, rgba(9,10,13,.55));
+  border: 1px solid rgba(198,240,255,.18);
+  box-shadow: inset 0 1px 0 rgba(198,240,255,.14), 0 12px 30px rgba(0,0,0,.45);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  font: 600 clamp(9px, 1.05vw, 12px)/1 var(--w-ui); letter-spacing: .06em; color: var(--w-ink);
+  white-space: nowrap;
+  opacity: clamp(0, (var(--p,0) - var(--fa)) / .07, 1);
+  transform: translateY(calc((1 - clamp(0, (var(--p,0) - var(--fa)) / .07, 1)) * 14px));
+}
+.node b { font-weight: 700; color: var(--sky); letter-spacing: .1em; font-size: .82em; }
+.node i {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--w-accent);
+  box-shadow: 0 0 10px 2px rgba(109,91,219,.7); flex: none; font-style: normal;
+}
+
+/* ============ S7 · ambient island (original rim) ============ */
+.islandwrap { position: absolute; inset: 0; display: grid; place-items: center; z-index: 1; }
+.island {
+  position: relative; width: min(74vw, 720px); aspect-ratio: 7 / 2.7; border-radius: 999px;
+  --lift: clamp(0, (var(--p,0) - .12) / .5, 1);
+  transform: translateY(calc((1 - var(--lift)) * 9vh));
+  background:
+    linear-gradient(160deg, rgba(198,240,255,.05), rgba(109,91,219,.10) 55%, rgba(9,10,13,.30));
+  border: 1.5px solid rgba(198,240,255,.26);
+  box-shadow:
+    inset 0 1px 0 rgba(198,240,255,.2),
+    inset 0 -24px 60px rgba(109,91,219,.14),
+    0 40px 90px rgba(0,0,0,.55);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.island::before { /* inner rim band */
+  content: ""; position: absolute; inset: 12px; border-radius: 999px;
+  border: 1px solid rgba(169,175,187,.28);
+  background: linear-gradient(115deg, rgba(169,175,187,.07), transparent 45%);
+}
+.island .sheen { /* traveling ambient light on the rim */
+  position: absolute; inset: 0; border-radius: 999px; overflow: hidden;
+}
+.island .sheen::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 38%, rgba(140,203,255,.28) 50%, rgba(198,240,255,.20) 53%, transparent 64%);
+  background-size: 260% 100%;
+  background-position-x: calc(130% - var(--p,0) * 200%);
+}
+.island .core { /* soft internal glow, no copied module */
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-evenly;
+}
+.island .core i {
+  width: clamp(28px, 6vw, 54px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, rgba(198,240,255,.30), rgba(109,91,219,.22) 45%, rgba(9,10,13,.1) 75%);
+  border: 1px solid rgba(198,240,255,.18);
+  box-shadow: inset 0 2px 8px rgba(198,240,255,.18), 0 10px 26px rgba(0,0,0,.4);
+}
+.island .shadow {
+  position: absolute; left: 10%; right: 10%; bottom: -18%; height: 26%;
+  background: radial-gradient(50% 100% at 50% 0%, rgba(0,0,0,.55), transparent 70%);
+  filter: blur(6px);
+  transform: scaleX(calc(.8 + var(--lift) * .2));
+}
+
+/* ============ S8 · shields refuse probes ============ */
+.shieldwrap { position: absolute; inset: 0; display: grid; place-items: center; z-index: 1; }
+.shieldsvg { width: min(88vmin, 760px); height: min(88vmin, 760px); overflow: visible; }
+.ringF { fill: rgba(109,91,219,.035); stroke: rgba(169,175,187,.5); stroke-width: 1.6; }
+.ringF.s2 { fill: rgba(140,203,255,.03); stroke: rgba(169,175,187,.36); }
+.ringF.s3 { fill: rgba(109,91,219,.025); stroke: rgba(169,175,187,.28); }
+.ringF.s4 { fill: transparent; stroke: rgba(169,175,187,.2); }
+.coreD { fill: #090A0D; stroke: rgba(169,175,187,.5); stroke-width: 1.5; }
+.coreW { fill: #F4F6F8; filter: drop-shadow(0 0 10px rgba(244,246,248,.55)); }
+@keyframes tremor { 0%,100% { transform: rotate(-.5deg); } 50% { transform: rotate(.5deg); } }
+.trem { transform-box: fill-box; transform-origin: center; animation: tremor 2.8s ease-in-out infinite; }
+.trem.t2 { animation-duration: 3.6s; animation-delay: -.9s; }
+.trem.t3 { animation-duration: 4.4s; animation-delay: -1.7s; }
+.trem.t4 { animation-duration: 5.2s; animation-delay: -2.4s; }
+.probe {
+  position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 2;
+  transform: rotate(var(--ang, 0deg));
+}
+.probe .arm {
+  position: absolute; left: 0; top: -1px; height: 2px; width: 30vmin;
+  transform-origin: 0 50%;
+  /* triangle travel: in, refused, back out */
+  --tri: min(calc(2 * var(--pw, 0)), calc(2 - 2 * var(--pw, 0)));
+  transform: translateX(calc(60vmin - var(--tri) * 27vmin)) ;
+  background: linear-gradient(90deg, var(--silver), transparent 85%);
+  opacity: calc(min(var(--tri) * 4, 1) * .75);
+}
+.probe .arm::before { /* probe head */
+  content: ""; position: absolute; left: -5px; top: 50%; translate: 0 -50%;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--silver); box-shadow: 0 0 12px 2px rgba(169,175,187,.6);
+}
+.probe .deny { /* refusal flash at the shield boundary */
+  position: absolute; left: 32.4vmin; top: 50%; translate: -50% -50%;
+  width: 12vmin; height: 12vmin; border-radius: 50%;
+  border: 1.5px solid rgba(140,203,255,.9);
+  opacity: calc(max(0, var(--tri) * 2.4 - 1.6) * .9);
+  transform: scale(calc(.6 + var(--tri) * .5));
+  filter: blur(.4px);
+}
+#p1 { --pw: clamp(0, (var(--p,0) - .08) / .26, 1); --ang: 14deg; }
+#p2 { --pw: clamp(0, (var(--p,0) - .32) / .26, 1); --ang: 132deg; }
+#p3 { --pw: clamp(0, (var(--p,0) - .56) / .26, 1); --ang: 253deg; }
+
+/* ============ S9 · the palm (SIGNATURE) ============ */
+#sc-palm .stage { perspective: 1200px; }
+.gatewrap { position: absolute; inset: 0; display: grid; place-items: center; z-index: 1; }
+.gatesvg { width: min(92vmin, 800px); height: min(92vmin, 800px); overflow: visible; }
+.rg { transform-box: fill-box; transform-origin: center; will-change: transform; }
+.rg1 { transform: rotate(var(--r1, 52deg)); }
+.rg2 { transform: rotate(var(--r2, -38deg)); }
+.rg3 { transform: rotate(var(--r3, 24deg)); }
+.rg4 { transform: rotate(var(--r4, -64deg)); }
+.rarc { fill: none; stroke-width: 2.4; stroke-linecap: round; stroke: rgba(169,175,187,.55); }
+.rg2 .rarc { stroke: rgba(169,175,187,.42); }
+.rg3 .rarc { stroke: rgba(169,175,187,.32); }
+.rg4 .rarc { stroke: rgba(169,175,187,.24); }
+.rarc.gold { stroke: var(--gold); opacity: var(--bloom, 0); filter: drop-shadow(0 0 8px rgba(215,170,162,.6)); }
+.key { fill: var(--silver); }
+.key.gold { fill: var(--gold); opacity: var(--bloom, 0); filter: drop-shadow(0 0 8px rgba(215,170,162,.8)); }
+.gtrem { transform-box: fill-box; transform-origin: center; animation: tremor 3.1s ease-in-out infinite; }
+.gtrem.g2 { animation-duration: 3.9s; animation-delay: -1.2s; }
+.gtrem.g3 { animation-duration: 4.6s; animation-delay: -.5s; }
+.gtrem.g4 { animation-duration: 5.4s; animation-delay: -2.1s; }
+.settled .gtrem { animation: none; }
+.gcore { fill: #090A0D; stroke: rgba(169,175,187,.55); stroke-width: 1.5; }
+.gproof {
+  fill: #F4F6F8;
+  filter: drop-shadow(0 0 calc(6px + var(--bloom, 0) * 18px) rgba(244,246,248,.75));
+}
+.lastprobe { /* one final automated attempt, refused before the palm arrives */
+  position: absolute; left: 50%; top: 50%; z-index: 2; transform: rotate(-24deg);
+}
+.lastprobe .arm { --tri: min(calc(2 * var(--pw, 0)), calc(2 - 2 * var(--pw, 0))); }
+#sc-palm .lastprobe { --pw: clamp(0, (var(--p,0) - .04) / .18, 1); }
+.palm {
+  position: absolute; inset-inline: 0; bottom: 0; z-index: 3;
+  display: grid; justify-items: center;
+  transform: translateY(calc((1 - var(--palm, 0)) * 52vh));
+  opacity: min(calc(var(--palm, 0) * 3), 1);
+}
+.palm svg { width: clamp(170px, 30vmin, 300px); height: auto; overflow: visible; }
+.palmbody {
+  fill: url(#lgPalm); stroke: rgba(198,240,255,.34); stroke-width: 1.6;
+}
+.touchpt {
+  fill: var(--gold);
+  opacity: calc(.25 + var(--bloom, 0) * .75);
+  filter: drop-shadow(0 0 calc(4px + var(--bloom, 0) * 16px) rgba(215,170,162,.9));
+}
+.bloom { /* Pink Gold answer — the single warm act */
+  position: absolute; left: 50%; top: 50%; z-index: 2; translate: -50% -50%;
+  width: 120vmin; height: 120vmin; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(215,170,162,.34), rgba(215,170,162,.10) 34%, transparent 62%);
+  opacity: var(--bloom, 0);
+  transform: scale(calc(.55 + var(--bloom, 0) * .65));
+}
+.gatecap .kick { color: var(--gold); }
+
+/* ============ S10 · proof ============ */
+.proof {
+  position: absolute; z-index: 5;
+  inset-inline-end: clamp(18px, 7vw, 110px); bottom: clamp(20px, 10vh, 110px);
+  width: min(400px, 86vw); padding: 24px 26px;
+}
+.proof h3 {
+  font: 700 clamp(17px, 2vw, 21px)/1.25 var(--w-display); margin-bottom: 14px; text-wrap: balance;
+}
+.proof .row {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 9px 0; border-top: 1px solid rgba(198,240,255,.12);
+}
+.proof .row:first-of-type { border-top: 0; }
+.proof .num {
+  font: 700 clamp(26px, 3.4vw, 36px)/1 var(--w-display); min-width: 2.1ch;
+  color: var(--sky); font-variant-numeric: tabular-nums;
+}
+.proof .row.human .num { color: var(--gold); }
+.proof .lbl { font: 400 clamp(12.5px, 1.4vw, 14.5px)/1.45 var(--w-body); color: color-mix(in srgb, var(--w-ink) 80%, transparent); }
+.proof .foot {
+  margin-top: 14px; font: 400 11.5px/1.55 var(--w-ui);
+  color: color-mix(in srgb, var(--w-ink) 52%, transparent);
+}
+
+/* ============ S11 · fold home ============ */
+.homewrap {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  perspective: 1300px; z-index: 1;
+}
+.stack { position: relative; width: min(70vw, 780px); aspect-ratio: 16/8; transform-style: preserve-3d; }
+.lay {
+  position: absolute; inset: 0; border-radius: 20px;
+  transform-origin: 50% 0%;
+  --k: clamp(0, (var(--p,0) - var(--ka)) / .14, 1);
+  transform: translateY(calc(var(--i) * 30px - 60px)) rotateX(calc(var(--k) * -88deg));
+  opacity: calc(1 - var(--k) * .92);
+}
+.lay:nth-child(1) { --i: 0; --ka: .06; }
+.lay:nth-child(2) { --i: 1; --ka: .14; }
+.lay:nth-child(3) { --i: 2; --ka: .22; }
+.lay:nth-child(4) { --i: 3; --ka: .30; }
+.lay:nth-child(5) { --i: 4; --ka: .38; }
+#sc-home .scurve { --draw: clamp(0, (var(--p,0) - .52) / .38, 1); }
+.endcard {
+  position: absolute; inset: 0; z-index: 4; display: grid; place-content: center; text-align: center;
+}
+.endcard .t {
+  font: 700 clamp(20px, 3.2vw, 34px)/1.2 var(--w-display); letter-spacing: .04em;
+  color: color-mix(in srgb, var(--w-ink) 92%, transparent);
+}
+.endcard .s {
+  margin-top: 10px; font: 400 clamp(13px, 1.6vw, 16px)/1.6 var(--w-body);
+  color: color-mix(in srgb, var(--w-ink) 62%, transparent);
+}
+
+/* ---------- reduced motion: hold the poster, keep the words ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .rise, .node { transform: none !important; }
+  .pane, .fp, .lay, .island, .palm, .bloom, .probe .arm { transform: none !important; }
+  .fio, .node { opacity: 1 !important; }
+  .lay { opacity: .5 !important; }
+  .scurve .trace, .scurve .halo { stroke-dashoffset: 0 !important; }
+  .linkline .trace2, .linkline .halo2 { stroke-dashoffset: 0 !important; }
+  .scurve .comet, .linkline .comet2 { display: none; }
+  .behind { opacity: 1 !important; }
+  #sc-palm { --bloom: 1; --palm: 1; --r1: 0deg; --r2: 0deg; --r3: 0deg; --r4: 0deg; }
+  .axis { opacity: .6 !important; }
+}
+@media (max-width: 640px) {
+  .proof { inset-inline: 16px; width: auto; }
+  .caption.hi { top: clamp(58px, 9vh, 110px); }
+}
+</style>
+</head>
+<body>
+
+<div class="rail" data-rail aria-hidden="true"><i></i></div>
+<header class="chrome">
+  <nav class="grp" aria-label="Back">
+    <a href="./"><span class="L en">← Worlds</span><span class="L ar">← العوالم</span></a>
+    <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
+  </nav>
+  <div class="grp">
+    <button type="button" data-lang-toggle aria-pressed="false">
+      <span class="L en">العربية</span><span class="L ar">English</span>
+    </button>
+  </div>
+</header>
+
+<main>
+<!-- ======== S1 · PROLOGUE — curve alone ======== -->
+<section class="scene" id="sc-curve" data-scene="pin" aria-label="Prologue">
+  <div class="stage">
+    <canvas class="cv" id="cv-cosmos" aria-hidden="true"></canvas>
+    <svg class="wide scurve" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="lgCurve" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#6D5BDB"/>
+          <stop offset="1" stop-color="#8CCBFF"/>
+        </linearGradient>
+        <linearGradient id="lgLink" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#6D5BDB"/>
+          <stop offset="1" stop-color="#8CCBFF"/>
+        </linearGradient>
+        <linearGradient id="lgPalm" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="rgba(169,175,187,.16)"/>
+          <stop offset="1" stop-color="rgba(109,91,219,.22)"/>
+        </linearGradient>
+      </defs>
+      <path class="halo"  pathLength="1" d="M-80 640 C 240 660, 330 430, 600 405 C 870 380, 950 150, 1280 170"/>
+      <path class="trace" pathLength="1" d="M-80 640 C 240 660, 330 430, 600 405 C 870 380, 950 150, 1280 170"/>
+      <path class="comet" pathLength="1" d="M-80 640 C 240 660, 330 430, 600 405 C 870 380, 950 150, 1280 170"/>
+    </svg>
+    <div class="title fio" style="--fa:.16;--fb:.30;--fc:.72;--fd:.88">
+      <p class="kick"><span class="L en">A scroll-cinema film · Mohamed Mahmoud</span><span class="L ar">فيلم سينمائي بالتمرير · محمد محمود</span></p>
+      <h1><span class="L en">THE FOLD IN SPACE</span><span class="L ar">الطيّة في الفضاء</span></h1>
+      <p class="sub"><span class="L en">One luminous curve. Thirty stories. A single human touch.</span><span class="L ar">انحناءة ضوءٍ واحدة. ثلاثون قصة. لمسةٌ بشريةٌ واحدة.</span></p>
+    </div>
+    <div class="hint fio" style="--fa:0;--fb:.02;--fc:.1;--fd:.2">
+      <span class="L en">Scroll</span><span class="L ar">مرِّر</span><i></i>
+    </div>
+    <div class="caption fio rise" style="--fa:.86;--fb:.95;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">Prologue — Curve</span><span class="L ar">التمهيد — الانحناءة</span></p>
+      <h2><span class="L en">A soft light bends through the black</span><span class="L ar">ضوءٌ رقيق ينحني عبر السواد</span></h2>
+      <p><span class="L en">Cobalt at its head, sky at its tail. It is not searching yet — it is breathing. The scan begins without a flash.</span><span class="L ar">كوبالتيٌّ عند رأسه، سماويٌّ عند ذيله. إنه لا يبحث بعد — إنما يتنفّس. ويبدأ المسح من غير وميض.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
+<!-- ======== S2 · edge becomes layer ======== -->
+<section class="scene" id="sc-edge" data-scene="pin" aria-label="The edge becomes a layer">
+  <div class="stage">
+    <div class="macro">
+      <div class="pane glass c"></div>
+      <div class="pane glass b"></div>
+      <div class="pane glass a"></div>
+    </div>
+    <div class="caption fio rise" style="--fa:.3;--fb:.45;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">Prologue — Material</span><span class="L ar">التمهيد — المادة</span></p>
+      <h2><span class="L en">The edge becomes a layer</span><span class="L ar">الحافة تصير طبقة</span></h2>
+      <p><span class="L en">Seen close, the light has a body: glass over glass, each edge answering in ice. Distance is only a fold not yet made.</span><span class="L ar">عن قربٍ يتبيّن أن للضوء جسدًا: زجاجٌ فوق زجاج، وكل حافةٍ تجيب بومضةٍ جليدية. فما المسافةُ إلا طيّةٌ لم تُطْوَ بعد.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
+<!-- ======== ACT · MAP ======== -->
+<div class="act">
+  <div>
+    <p class="no"><span class="L en">Act I — Map</span><span class="L ar">الفصل الأول — الخريطة</span></p>
+    <h2><span class="L en">A field of fragments</span><span class="L ar">حقلٌ من الشظايا</span></h2>
+    <p><span class="L en">Out in the dark, the work of years drifts unsorted. The curve goes out to read it.</span><span class="L ar">هناك في العتمة، يسبح عملُ سنواتٍ دون ترتيب. فيخرج الضوءُ المنحني ليقرأه.</span></p>
+  </div>
+</div>
+
+<!-- ======== S3 · the scan ======== -->
+<section class="scene" id="sc-frags" data-scene="pin" aria-label="The scan">
+  <div class="stage">
+    <canvas class="cv" id="cv-frags" aria-hidden="true"></canvas>
+    <div class="caption fio rise" style="--fa:.28;--fb:.42;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">The scan</span><span class="L ar">المسح</span></p>
+      <h2><span class="L en">Nothing here is lost — only unsorted</span><span class="L ar">لا شيء هنا ضائع — إنما هو غيرُ مُرتَّب</span></h2>
+      <p><span class="L en">A curved light passes through the field. Whatever it touches keeps its place but gains an edge of sky.</span><span class="L ar">يمرّ الضوءُ المنحني في الحقل، فكلُّ ما يلمسه يحتفظ بموضعه ويكتسب حافةً سماوية.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
+<!-- ======== S4 · alignment ======== -->
+<section class="scene" id="sc-orbit" data-scene="pin" aria-label="Alignment">
+  <div class="stage">
+    <canvas class="cv" id="cv-orbit" aria-hidden="true"></canvas>
+    <div class="axis" aria-hidden="true"></div>
+    <div class="caption fio rise" style="--fa:.34;--fb:.48;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">Alignment</span><span class="L ar">المحاذاة</span></p>
+      <h2><span class="L en">Distance folds into order</span><span class="L ar">المسافةُ تنطوي إلى نظام</span></h2>
+      <p><span class="L en">Thirty stories are drawn into one orbit. Twelve of them burn a little brighter — the anchors. Then, across the ring, a crease of violet light: the first fold announcing itself.</span><span class="L ar">تُساق ثلاثون قصةً إلى مدارٍ واحد، تتوهّج اثنتا عشرة منها أكثر قليلًا — وهي المراسي. ثم يظهر عبر الحلقة خطُّ ثنيةٍ بنفسجي: الطيّةُ الأولى تعلن عن نفسها.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+<!-- ======== ACT · BUILD ======== -->
+<div class="act">
+  <div>
+    <p class="no"><span class="L en">Act II — Build</span><span class="L ar">الفصل الثاني — البناء</span></p>
+    <h2><span class="L en">The fold changes meaning</span><span class="L ar">الطيُّ يغيّر المعنى</span></h2>
+    <p><span class="L en">Compact becomes expansive. Separate becomes connected. One hinge, one crease, one doorway at a time.</span><span class="L ar">المضغوطُ يصير رحبًا، والمنفصلُ يصير موصولًا. مفصلٌ واحد، وثنيةٌ واحدة، وبابٌ واحد في كل مرة.</span></p>
+  </div>
+</div>
+
+<!-- ======== S5 · the first fold ======== -->
+<section class="scene" id="sc-fold" data-scene="pin" aria-label="The first fold">
+  <div class="stage">
+    <div class="foldwrap">
+      <div class="foldscene">
+        <div class="behind">
+          <svg viewBox="0 0 880 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path d="M-40 380 C 200 400, 260 220, 440 210 C 620 200, 680 90, 920 100"
+                  fill="none" stroke="url(#lgLink)" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M-40 380 C 200 400, 260 220, 440 210 C 620 200, 680 90, 920 100"
+                  fill="none" stroke="url(#lgLink)" stroke-width="13" opacity=".1" stroke-linecap="round"/>
+            <circle cx="230" cy="332" r="5" fill="#8CCBFF" opacity=".9"/>
+            <circle cx="440" cy="210" r="7" fill="#F4F6F8"/>
+            <circle cx="440" cy="210" r="14" fill="none" stroke="#6D5BDB" opacity=".7"/>
+            <circle cx="672" cy="122" r="5" fill="#8CCBFF" opacity=".9"/>
+          </svg>
+        </div>
+        <div class="fp l"></div>
+        <div class="fp r"></div>
+        <div class="crease"></div>
+      </div>
+    </div>
+    <div class="caption fio rise" style="--fa:.4;--fb:.54;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">The first fold</span><span class="L ar">الطيّة الأولى</span></p>
+      <h2><span class="L en">A crease becomes a doorway</span><span class="L ar">الثنيةُ تصير بابًا</span></h2>
+      <p><span class="L en">The hinge is declared: near panel, far panel, one violet axis. As the panels open, a path is already waiting behind them.</span><span class="L ar">يُعلَن المفصل: لوحٌ قريب، ولوحٌ بعيد، ومحورٌ بنفسجيٌّ واحد. وما إن ينفتح اللوحان حتى يتبيّن أن الطريق كان منتظرًا خلفهما.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
+<!-- ======== S6 · anchor worlds ======== -->
+<section class="scene" id="sc-anchor" data-scene="pin" aria-label="Anchor worlds">
+  <div class="stage">
+    <svg class="wide linkline" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="halo2" pathLength="1" d="M-80 620 C -32 620, 48 496, 96 496 C 144 496, 144 288, 192 288 C 240 288, 252 464, 300 464 C 348 464, 348 256, 396 256 C 444 256, 444 448, 492 448 C 540 448, 540 240, 588 240 C 636 240, 636 440, 684 440 C 732 440, 732 248, 780 248 C 828 248, 828 456, 876 456 C 924 456, 924 264, 972 264 C 1020 264, 1008 448, 1056 448 C 1104 448, 1080 240, 1128 240 C 1176 240, 1240 180, 1280 180"/>
+      <path class="trace2" pathLength="1" d="M-80 620 C -32 620, 48 496, 96 496 C 144 496, 144 288, 192 288 C 240 288, 252 464, 300 464 C 348 464, 348 256, 396 256 C 444 256, 444 448, 492 448 C 540 448, 540 240, 588 240 C 636 240, 636 440, 684 440 C 732 440, 732 248, 780 248 C 828 248, 828 456, 876 456 C 924 264, 924 264, 972 264 C 1020 264, 1008 448, 1056 448 C 1104 448, 1080 240, 1128 240 C 1176 240, 1240 180, 1280 180"/>
+      <path class="comet2" pathLength="1" d="M-80 620 C -32 620, 48 496, 96 496 C 144 496, 144 288, 192 288 C 240 288, 252 464, 300 464 C 348 464, 348 256, 396 256 C 444 256, 444 448, 492 448 C 540 448, 540 240, 588 240 C 636 240, 636 440, 684 440 C 732 440, 732 248, 780 248 C 828 248, 828 456, 876 456 C 924 264, 924 264, 972 264 C 1020 264, 1008 448, 1056 448 C 1104 448, 1080 240, 1128 240 C 1176 240, 1240 180, 1280 180"/>
+    </svg>
+    <div class="node" style="left:8%;  top:62%; --fa:.15"><i></i><b>01</b><span>Career Autopilot</span></div>
+    <div class="node" style="left:16%; top:36%; --fa:.20"><i></i><b>02</b><span>LifeOS</span></div>
+    <div class="node" style="left:25%; top:58%; --fa:.24"><i></i><b>04</b><span>Box Studio</span></div>
+    <div class="node" style="left:33%; top:32%; --fa:.29"><i></i><b>05</b><span>Cake Studio</span></div>
+    <div class="node" style="left:41%; top:56%; --fa:.34"><i></i><b>07</b><span>Reclaim</span></div>
+    <div class="node" style="left:49%; top:30%; --fa:.39"><i></i><b>10</b><span>Polyblast Arena</span></div>
+    <div class="node" style="left:57%; top:55%; --fa:.43"><i></i><b>11</b><span>PetPoint Ops Hub</span></div>
+    <div class="node" style="left:65%; top:31%; --fa:.48"><i></i><b>12</b><span>RelayOps</span></div>
+    <div class="node" style="left:73%; top:57%; --fa:.53"><i></i><b>13</b><span>Statement Styler</span></div>
+    <div class="node" style="left:81%; top:33%; --fa:.58"><i></i><b>23</b><span>Spaceframe World</span></div>
+    <div class="node" style="left:88%; top:56%; --fa:.62"><i></i><b>24</b><span>B2MH</span></div>
+    <div class="node" style="left:94%; top:30%; --fa:.67"><i></i><b>28</b><span>Cocolani 3D</span></div>
+    <div class="caption fio rise" style="--fa:.72;--fb:.84;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">Anchor worlds</span><span class="L ar">العوالم المرساة</span></p>
+      <h2><span class="L en">Curved light connects</span><span class="L ar">الضوءُ المنحني يَصِل</span></h2>
+      <p><span class="L en">Cobalt at the head, sky at the tail, the sweep hands focus from world to world. Twelve anchors join; the other eighteen stories ride the same current.</span><span class="L ar">كوبالتيُّ الرأس سماويُّ الذيل، يُسلِّم الشعاعُ البؤرةَ من عالمٍ إلى عالم. تنضمّ المراسي الاثنتا عشرة، وتجري القصصُ الثماني عشرة الأخرى في التيّار نفسه.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
+<!-- ======== S7 · ambient island ======== -->
+<section class="scene" id="sc-island" data-scene="pin" aria-label="Ambient island">
+  <div class="stage">
+    <div class="islandwrap">
+      <div class="island">
+        <div class="sheen" aria-hidden="true"></div>
+        <div class="core" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="shadow" aria-hidden="true"></div>
+      </div>
+    </div>
+    <div class="caption fio rise" style="--fa:.36;--fb:.5;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">Ambient island</span><span class="L ar">الجزيرة المضيئة</span></p>
+      <h2><span class="L en">A rim of quiet light</span><span class="L ar">إطارٌ من ضوءٍ هادئ</span></h2>
+      <p><span class="L en">A floating translucent rim, carrying its own dawn across its edge. Light and shadow soften the technical mass; nothing here is a machine's silhouette.</span><span class="L ar">إطارٌ شفّافٌ طافٍ يحمل فجرَه الخاص على حافته. الضوءُ والظلُّ يُليّنان الكتلةَ التقنية، وما من شيءٍ هنا هو ظلُّ آلة.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+<!-- ======== ACT · GATE ======== -->
+<div class="act">
+  <div>
+    <p class="no"><span class="L en">Act III — Gate</span><span class="L ar">الفصل الثالث — البوابة</span></p>
+    <h2><span class="L en">At the core, the light slows</span><span class="L ar">عند النواة، يتمهّل الضوء</span></h2>
+    <p><span class="L en">Here the S-curve straightens into inspection. Nested shields hold the proof core, and they answer to no machine.</span><span class="L ar">هنا يستقيم المنحنى لأجل الفحص. دروعٌ متداخلة تحرس نواةَ البرهان، وهي لا تُجيب أيَّ آلة.</span></p>
+  </div>
+</div>
+
+<!-- ======== S8 · probes refused ======== -->
+<section class="scene" id="sc-shield" data-scene="pin" aria-label="Probes refused">
+  <div class="stage">
+    <div class="shieldwrap">
+      <svg class="shieldsvg" viewBox="0 0 800 800" aria-hidden="true">
+        <g class="trem t4"><circle class="ringF s4" cx="400" cy="400" r="330"/></g>
+        <g class="trem t3"><circle class="ringF s3" cx="400" cy="400" r="270"/></g>
+        <g class="trem t2"><circle class="ringF s2" cx="400" cy="400" r="210"/></g>
+        <g class="trem"><circle class="ringF" cx="400" cy="400" r="150"/></g>
+        <circle class="coreD" cx="400" cy="400" r="86"/>
+        <circle class="coreW" cx="400" cy="400" r="10"/>
+      </svg>
+    </div>
+    <div class="probe" id="p1" aria-hidden="true"><div class="arm"></div><div class="deny"></div></div>
+    <div class="probe" id="p2" aria-hidden="true"><div class="arm"></div><div class="deny"></div></div>
+    <div class="probe" id="p3" aria-hidden="true"><div class="arm"></div><div class="deny"></div></div>
+    <div class="caption fio rise" style="--fa:.3;--fb:.44;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">The shields</span><span class="L ar">الدروع</span></p>
+      <h2><span class="L en">Every probe is refused</span><span class="L ar">كلُّ مِجَسٍّ يُرَدّ</span></h2>
+      <p><span class="L en">Silver instruments arrive on straight lines — and straight lines are exactly what this core does not trust. Each one meets the boundary, flexes it, and is turned away.</span><span class="L ar">تصل الأدواتُ الفضّية على خطوطٍ مستقيمة — والخطوطُ المستقيمة هي بالضبط ما لا تثق به هذه النواة. يبلغ كلُّ مِجَسٍّ الحدَّ فيُثنيه قليلًا، ثم يُرَدُّ على أعقابه.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
+<!-- ======== S9 · the palm — SIGNATURE ======== -->
+<section class="scene" id="sc-palm" data-scene="pin" aria-label="A human palm aligns the shields">
+  <div class="stage">
+    <div class="bloom" aria-hidden="true"></div>
+    <div class="gatewrap">
+      <svg class="gatesvg" viewBox="0 0 800 800" aria-hidden="true">
+        <g class="rg rg4"><g class="gtrem g4">
+          <path class="rarc" d="M 454.89 141.77 A 264 264 0 1 1 345.11 141.77"/>
+          <path class="rarc gold" d="M 454.89 141.77 A 264 264 0 1 1 345.11 141.77"/>
+          <circle class="key" cx="400" cy="136" r="6"/>
+          <circle class="key gold" cx="400" cy="136" r="6"/>
+        </g></g>
+        <g class="rg rg3"><g class="gtrem g3">
+          <path class="rarc" d="M 444.91 188.72 A 216 216 0 1 1 355.09 188.72"/>
+          <path class="rarc gold" d="M 444.91 188.72 A 216 216 0 1 1 355.09 188.72"/>
+          <circle class="key" cx="400" cy="184" r="6"/>
+          <circle class="key gold" cx="400" cy="184" r="6"/>
+        </g></g>
+        <g class="rg rg2"><g class="gtrem g2">
+          <path class="rarc" d="M 434.93 235.67 A 168 168 0 1 1 365.07 235.67"/>
+          <path class="rarc gold" d="M 434.93 235.67 A 168 168 0 1 1 365.07 235.67"/>
+          <circle class="key" cx="400" cy="232" r="6"/>
+          <circle class="key gold" cx="400" cy="232" r="6"/>
+        </g></g>
+        <g class="rg rg1"><g class="gtrem">
+          <path class="rarc" d="M 424.95 282.62 A 120 120 0 1 1 375.05 282.62"/>
+          <path class="rarc gold" d="M 424.95 282.62 A 120 120 0 1 1 375.05 282.62"/>
+          <circle class="key" cx="400" cy="280" r="6"/>
+          <circle class="key gold" cx="400" cy="280" r="6"/>
+        </g></g>
+        <circle class="gcore" cx="400" cy="400" r="78"/>
+        <circle class="gproof" cx="400" cy="400" r="9"/>
+      </svg>
+    </div>
+    <div class="probe" aria-hidden="true" style="--ang:-24deg; --pw: clamp(0, (var(--p,0) - .05) / .2, 1)">
+      <div class="arm"></div><div class="deny"></div>
+    </div>
+    <div class="palm" aria-hidden="true">
+      <svg viewBox="0 0 260 300">
+        <g class="palmbody" stroke="none">
+          <rect x="78"  y="58" width="26" height="112" rx="13"/>
+          <rect x="110" y="42" width="26" height="128" rx="13"/>
+          <rect x="142" y="52" width="26" height="118" rx="13"/>
+          <rect x="172" y="76" width="24" height="94"  rx="12"/>
+          <rect x="28"  y="148" width="26" height="88" rx="13" transform="rotate(38 41 192)"/>
+          <rect x="66"  y="140" width="132" height="132" rx="46"/>
+        </g>
+        <rect x="66" y="140" width="132" height="132" rx="46" fill="none" stroke="rgba(198,240,255,.28)" stroke-width="1.4"/>
+        <circle class="touchpt" cx="123" cy="46" r="7"/>
+      </svg>
+    </div>
+    <div class="caption hi fio rise" style="--fa:.06;--fb:.14;--fc:.3;--fd:.4">
+      <p class="kick"><span class="L en">Automation ends here</span><span class="L ar">هنا تنتهي الأتمتة</span></p>
+      <h2><span class="L en">The rings resist</span><span class="L ar">الحلقاتُ تُقاوِم</span></h2>
+      <p><span class="L en">One last probe tries the lock. The nested shields shiver, hold their misalignment, and keep the core dark.</span><span class="L ar">مِجَسٌّ أخيرٌ يجرّب القفل. ترتجف الدروعُ المتداخلة، وتُبقي على انحرافها، وتُبقي النواةَ معتمة.</span></p>
+    </div>
+    <div class="caption gatecap fio rise" style="--fa:.5;--fb:.6;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">One human touch</span><span class="L ar">لمسةُ إنسانٍ واحدة</span></p>
+      <h2><span class="L en">A palm aligns them</span><span class="L ar">كفٌّ تُحاذيها</span></h2>
+      <p><span class="L en">Ring by ring, the gaps turn to meet a fingertip. When the last keystone settles, the system answers the only way it knows a person: with warmth.</span><span class="L ar">حلقةً بعد حلقة، تدور الفجواتُ لتلاقي طرفَ الإصبع. وحين يستقرّ آخرُ حجرِ عقد، تُجيب المنظومةُ بالطريقة الوحيدة التي تَعرِف بها الإنسان: بالدفء.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+<!-- ======== ACT · PROVE ======== -->
+<div class="act">
+  <div>
+    <p class="no"><span class="L en">Act IV — Prove</span><span class="L ar">الفصل الرابع — البرهان</span></p>
+    <h2><span class="L en">The system answers</span><span class="L ar">المنظومةُ تُجيب</span></h2>
+    <p><span class="L en">No sirens, no dashboards shouting. Evidence travels as ambient light, and the numbers stay live in the page itself.</span><span class="L ar">لا صفّاراتِ إنذارٍ ولا لوحاتٍ صاخبة. يسافر البرهانُ ضوءًا محيطًا، وتبقى الأرقامُ حيّةً في الصفحة نفسها.</span></p>
+  </div>
+</div>
+
+<!-- ======== S10 · evidence as ambient light ======== -->
+<section class="scene" id="sc-prove" data-scene="pin" aria-label="Evidence">
+  <div class="stage">
+    <canvas class="cv" id="cv-aurora" aria-hidden="true"></canvas>
+    <div class="caption hi fio rise" style="--fa:.16;--fb:.28;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">The response</span><span class="L ar">الاستجابة</span></p>
+      <h2><span class="L en">Evidence as ambient light</span><span class="L ar">البرهانُ ضوءٌ محيط</span></h2>
+    </div>
+    <aside class="proof glass fio rise" style="--fa:.3;--fb:.44;--fc:8;--fd:9">
+      <h3><span class="L en">What this cosmology holds</span><span class="L ar">ما تحمله هذه الكونيّة</span></h3>
+      <div class="row">
+        <span class="num" data-counter data-from="0" data-to="30">0</span>
+        <span class="lbl"><span class="L en">portfolio stories connected by one curve</span><span class="L ar">قصةً في الملف يصلها منحنًى واحد</span></span>
+      </div>
+      <div class="row">
+        <span class="num" data-counter data-from="0" data-to="12">0</span>
+        <span class="lbl"><span class="L en">anchor worlds opened along the sweep</span><span class="L ar">عالمًا مرساةً تنفتح على مسار الشعاع</span></span>
+      </div>
+      <div class="row">
+        <span class="num" data-counter data-from="0" data-to="144">0</span>
+        <span class="lbl"><span class="L en">clips planned in the 12:00 master chain</span><span class="L ar">لقطةً مخطَّطةً في السلسلة الأمّ ذات الدقائق الاثنتي عشرة</span></span>
+      </div>
+      <div class="row">
+        <span class="num">0</span>
+        <span class="lbl"><span class="L en">automated probes admitted past the gate</span><span class="L ar">من المِجسّات الآلية عبَرَ البوابة</span></span>
+      </div>
+      <div class="row human">
+        <span class="num">1</span>
+        <span class="lbl"><span class="L en">human touch — the only key the core accepts</span><span class="L ar">لمسةٌ بشرية — المفتاحُ الوحيد الذي تقبله النواة</span></span>
+      </div>
+      <p class="foot"><span class="L en">Figures describe this film's own design plan — nothing else is claimed.</span><span class="L ar">تصف هذه الأرقامُ خطةَ تصميم هذا الفيلم نفسِه — ولا تدّعي شيئًا سواها.</span></p>
+    </aside>
+    <div class="vig"></div>
+  </div>
+</section>
+
+<!-- ======== ACT · FINALE ======== -->
+<div class="act">
+  <div>
+    <p class="no"><span class="L en">Finale — Fold home</span><span class="L ar">الختام — العودة بالطيّ</span></p>
+    <h2><span class="L en">Not a collapse. A fold.</span><span class="L ar">ليس انهيارًا. إنه طَيّ.</span></h2>
+    <p><span class="L en">Connections retract without breaking. Worlds become layers, layers become a single line of light.</span><span class="L ar">تنكمش الوصلاتُ دون أن تنقطع. تصير العوالمُ طبقاتٍ، وتصير الطبقاتُ خطَّ ضوءٍ واحدًا.</span></p>
+  </div>
+</div>
+
+<!-- ======== S11 · fold home ======== -->
+<section class="scene" id="sc-home" data-scene="pin" aria-label="Fold home">
+  <div class="stage">
+    <div class="homewrap">
+      <div class="stack">
+        <div class="lay glass"></div>
+        <div class="lay glass"></div>
+        <div class="lay glass"></div>
+        <div class="lay glass"></div>
+        <div class="lay glass"></div>
+      </div>
+    </div>
+    <svg class="wide scurve" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="halo"  pathLength="1" d="M-80 640 C 240 660, 330 430, 600 405 C 870 380, 950 150, 1280 170"/>
+      <path class="trace" pathLength="1" d="M-80 640 C 240 660, 330 430, 600 405 C 870 380, 950 150, 1280 170"/>
+    </svg>
+    <div class="endcard fio" style="--fa:.78;--fb:.9;--fc:8;--fd:9">
+      <p class="t"><span class="L en">THE FOLD IN SPACE</span><span class="L ar">الطيّة في الفضاء</span></p>
+      <p class="s"><span class="L en">The film ends exactly where it began: one luminous curve, breathing.</span><span class="L ar">ينتهي الفيلم حيث بدأ تمامًا: انحناءةُ ضوءٍ واحدة، تتنفّس.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
+</main>
+
+
+<footer class="disclosure">
+  <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — cosmic-flagship visual grammar rendered live in code. Not affiliated with, endorsed by, or representing Samsung; no marks, products, or interfaces are depicted. Real project figures live on the <a href="../">portfolio story pages</a>.</span>
+  <span class="L ar">دراسة حركية أصلية مستلهَمة لملف أعمال محمد محمود — بقواعد «الرائد الكوني» البصرية معروضةً حيًّا بالشيفرة. لا انتساب لشركة سامسونج ولا تأييد منها ولا تمثيل لها، ولا تظهر علامات أو منتجات أو واجهات. الأرقام الحقيقية في <a href="../">صفحات قصص الموقع</a>.</span></p>
+</footer>
+
+<script src="cinema.js?v=2"></script>
+<script>
+(() => {
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+
+  /* one tiny runtime for the four canvases; each draw() reads its scene --p */
+  const units = [];
+  const mk = (id, draw, seed) => {
+    const cv = document.getElementById(id);
+    if (!cv) return;
+    const scene = cv.closest('[data-scene]');
+    const u = { cv, scene, ctx: cv.getContext('2d'), draw, raf: 0, W: 0, H: 0, st: seed() };
+    const size = () => { u.W = cv.clientWidth; u.H = cv.clientHeight;
+      cv.width = u.W * DPR; cv.height = u.H * DPR; u.ctx.setTransform(DPR, 0, 0, DPR, 0, 0); };
+    const loop = (t) => { u.draw(u, t); u.raf = requestAnimationFrame(loop); };
+    const start = () => { if (!u.raf) { size(); u.raf = requestAnimationFrame(loop); } };
+    const stop = () => { cancelAnimationFrame(u.raf); u.raf = 0; };
+    scene.addEventListener('scene:live', () => reduced ? (size(), u.draw(u, 0)) : start());
+    scene.addEventListener('scene:idle', stop);
+    if (scene.classList.contains('is-live')) (reduced ? (size(), u.draw(u, 0)) : start());
+    addEventListener('resize', () => { if (u.raf) size(); }, { passive: true });
+    units.push(u);
+  };
+  const P = (u) => parseFloat(u.scene.style.getPropertyValue('--p') || '0');
+  const rand = (n) => { let s = n; return () => (s = (s * 16807 + 19) % 2147483647) / 2147483647; };
+
+  /* Prologue — sparse cosmos, violet-to-sky drift */
+  mk('cv-cosmos', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    for (const s of u.st) {
+      const x = (s.x + Math.sin(t / 9000 + s.ph) * 0.012) * W;
+      const y = (s.y + Math.cos(t / 11000 + s.ph * 2) * 0.01) * H;
+      const tw = 0.5 + 0.5 * Math.sin(t / (800 + s.ph * 900) + s.ph * 7);
+      ctx.fillStyle = s.c === 0 ? `rgba(244,246,248,${0.5 * tw * s.a})`
+        : s.c === 1 ? `rgba(109,91,219,${0.6 * tw * s.a})` : `rgba(140,203,255,${0.55 * tw * s.a})`;
+      ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.2832); ctx.fill();
+    }
+  }, () => { const r = rand(7); return Array.from({ length: 110 }, () => ({
+    x: r(), y: r(), r: 0.5 + r() * 1.6, a: 0.35 + r() * 0.65, ph: r() * 6.28, c: (r() * 3) | 0 })); });
+
+  /* The scan — fragment field; curved light band grants sky edges */
+  mk('cv-frags', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    const bandX = (p * 1.35 - 0.15) * W;
+    for (const f of u.st) {
+      const x = f.x * W, y = f.y * H;
+      const touched = x < bandX;
+      const wob = Math.sin(t / 2400 + f.ph) * 2;
+      ctx.save();
+      ctx.translate(x, y + wob); ctx.rotate(f.rot);
+      ctx.fillStyle = `rgba(169,175,187,${0.16 + f.a * 0.2})`;
+      ctx.fillRect(-f.w / 2, -f.h / 2, f.w, f.h);
+      if (touched) {
+        ctx.strokeStyle = `rgba(140,203,255,${0.5 + 0.3 * Math.sin(t / 700 + f.ph)})`;
+        ctx.lineWidth = 1.1;
+        ctx.strokeRect(-f.w / 2, -f.h / 2, f.w, f.h);
+      }
+      ctx.restore();
+    }
+    // the curved passing light
+    const g = ctx.createLinearGradient(bandX - 90, 0, bandX + 8, 0);
+    g.addColorStop(0, 'rgba(109,91,219,0)');
+    g.addColorStop(0.8, 'rgba(109,91,219,.14)');
+    g.addColorStop(1, 'rgba(140,203,255,.22)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(bandX - 100, 0);
+    ctx.quadraticCurveTo(bandX + 40, H * 0.5, bandX - 100, H);
+    ctx.lineTo(bandX + 20, H);
+    ctx.quadraticCurveTo(bandX + 140, H * 0.5, bandX + 20, 0);
+    ctx.closePath(); ctx.fill();
+  }, () => { const r = rand(23); return Array.from({ length: 64 }, () => ({
+    x: r(), y: 0.12 + r() * 0.76, w: 10 + r() * 26, h: 7 + r() * 15,
+    rot: (r() - 0.5) * 0.9, a: r(), ph: r() * 6.28 })); });
+
+  /* Alignment — thirty stories into one orbit; twelve anchors brighter */
+  mk('cv-orbit', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2, cy = H * 0.46, R = Math.min(W, H) * 0.3;
+    const settle = Math.min(1, Math.max(0, (p - 0.1) * 1.8));
+    if (settle > 0.3) {
+      ctx.strokeStyle = `rgba(140,203,255,${0.3 * (settle - 0.3) / 0.7})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.ellipse(cx, cy, R, R * 0.62, -0.14, 0, 6.2832); ctx.stroke();
+    }
+    u.st.forEach((s, i) => {
+      const a = s.ang + t / 60000;
+      const tx = cx + Math.cos(a) * R, ty = cy + Math.sin(a) * R * 0.62;
+      const wx = s.x * W, wy = s.y * H;
+      const x = wx + (tx - wx) * settle, y = wy + (ty - wy) * settle;
+      const anchor = i % 5 === 0 && i < 60 && s.anchor;
+      const tw = 0.6 + 0.4 * Math.sin(t / 900 + s.ph);
+      ctx.fillStyle = anchor ? `rgba(244,246,248,${0.9 * tw})` : `rgba(140,203,255,${0.55 * tw})`;
+      ctx.beginPath(); ctx.arc(x, y, anchor ? 2.6 : 1.7, 0, 6.2832); ctx.fill();
+      if (anchor) {
+        ctx.fillStyle = `rgba(109,91,219,${0.25 * tw})`;
+        ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.2832); ctx.fill();
+      }
+    });
+    const crease = Math.max(0, (p - 0.72) * 4);
+    if (crease > 0) {
+      ctx.strokeStyle = `rgba(109,91,219,${Math.min(0.85, crease)})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx - R * 1.1, cy + R * 0.5);
+      ctx.quadraticCurveTo(cx, cy - R * 0.9 * Math.min(1, crease), cx + R * 1.1, cy + R * 0.5);
+      ctx.stroke();
+    }
+  }, () => { const r = rand(41); const arr = Array.from({ length: 30 }, (_, i) => ({
+    x: r(), y: r(), ang: (i / 30) * 6.2832, ph: r() * 6.28, anchor: true })); return arr; });
+
+  /* Evidence — ambient aurora curtains, violet to sky */
+  mk('cv-aurora', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    const bands = 3;
+    for (let b = 0; b < bands; b++) {
+      ctx.beginPath();
+      const base = H * (0.3 + b * 0.16);
+      for (let x = 0; x <= W; x += 16) {
+        const y = base + Math.sin(x / (140 + b * 60) + t / (2600 + b * 800)) * 34
+                + Math.sin(x / 60 + t / 1500) * 8;
+        x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+      const g = ctx.createLinearGradient(0, base - 60, 0, H);
+      const a = 0.1 * (0.5 + p) * (1 - b * 0.24);
+      g.addColorStop(0, b % 2 ? `rgba(140,203,255,${a})` : `rgba(109,91,219,${a})`);
+      g.addColorStop(1, 'rgba(7,9,18,0)');
+      ctx.fillStyle = g; ctx.fill();
+    }
+  }, () => ({}));
+})();
+</script>
+\n</body>
+</html>
