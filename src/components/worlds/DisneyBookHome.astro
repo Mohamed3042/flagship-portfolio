@@ -8,6 +8,8 @@ import { pick, workPath, type Lang } from '../../i18n/utils';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const ar = lang === 'ar';
+const publicBase = import.meta.env.BASE_URL.replace(/\/$/, '');
+const asset = (path: string) => `${publicBase}${path}`;
 const all = [...automationProjects, ...legacyProjects, ...labProjects];
 const groups = [
   { title: ar ? 'أنظمة الأتمتة' : 'Automation systems', kicker: ar ? 'الفصل الأول' : 'Act one', items: automationProjects },
@@ -22,8 +24,8 @@ const arrow = ar ? '←' : '→';
   <section class="wj-stage sb-book-film" data-book-film data-world-stage>
     <div class="wj-stick">
       <div class="sb-desk" aria-hidden="true">
-        <img src="/images/storybook/opening-book.webp" alt="" width="1792" height="1024" fetchpriority="high" decoding="async" />
-        <img class="sb-desk__near" src="/images/storybook/opening-book.webp" alt="" width="1792" height="1024" decoding="async" />
+        <img src={asset('/images/storybook/opening-book.webp')} alt="" width="1792" height="1024" fetchpriority="high" decoding="async" />
+        <img class="sb-desk__near" src={asset('/images/storybook/opening-book.webp')} alt="" width="1792" height="1024" decoding="async" />
       </div>
       <div class="sb-cover-lid" aria-hidden="true">
         <i></i><span>MM</span><b>{ar ? 'حكايات الأنظمة' : 'Systems, made human'}</b><small>{all.length} {ar ? 'حكاية حقيقية' : 'true stories'}</small>

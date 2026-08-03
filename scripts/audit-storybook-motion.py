@@ -40,8 +40,8 @@ def main() -> None:
                     f"action frame breaks registration for {slug}: {base_image.size} != {action_image.size}")
 
     scenes = SCENES.read_text(encoding="utf-8")
-    require("actionImage: `/images/storybook-motion/${project.slug}-action.webp`" in scenes,
-            "scene data does not derive each project's paired action frame")
+    require("actionImage: withBase(`/images/storybook-motion/${project.slug}-action.webp`)" in scenes,
+            "scene data does not derive a base-aware paired action frame for each project")
     declared_slugs = set(re.findall(r"^\s{2}'([^']+)':", scenes, re.MULTILINE))
     require(declared_slugs == set(base), "scene data does not map every project to its action frame")
 

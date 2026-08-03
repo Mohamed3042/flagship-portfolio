@@ -12,6 +12,7 @@
     "og": "node scripts/generate-og.mjs",
     "verify:static": "node scripts/verify-portfolio.mjs",
     "verify:storybook": "python scripts/audit-storybook-cinema.py && python scripts/audit-storybook-motion.py",
+    "verify:github-pages": "python scripts/audit-github-pages.py",
     "verify:browser": "python scripts/test-portfolio.py",
     "verify:worlds": "python scripts/test-worlds.py",
     "astro": "astro"

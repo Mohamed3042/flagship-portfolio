@@ -48,6 +48,9 @@ const scenes: Record<string, Omit<StorybookScene, 'actionImage'>> = {
   'portfolio-design-system': { image: '/images/storybook/portfolio-design-system.webp', transition: 'stage-change', motion: 'crane', startX: 13, endX: -11, lift: -4, zoom: 1.29, tilt: 0.24, focal: 'center' },
 };
 
+const publicBase = import.meta.env.BASE_URL.replace(/\/$/, '');
+const withBase = (path: string) => `${publicBase}${path}`;
+
 export function storybookSceneFor(project: ProjectMeta): StorybookScene {
   const scene = scenes[project.slug] ?? {
     image: `/images/storybook/${project.slug}.webp`,
@@ -56,6 +59,7 @@ export function storybookSceneFor(project: ProjectMeta): StorybookScene {
   };
   return {
     ...scene,
-    actionImage: `/images/storybook-motion/${project.slug}-action.webp`,
+    image: scene.image ? withBase(scene.image) : undefined,
+    actionImage: withBase(`/images/storybook-motion/${project.slug}-action.webp`),
   };
 }
