@@ -220,6 +220,21 @@ The Cosmic Keynote is **live on both hosts** (`npm run build` green, 22 pages). 
 
 **Full architecture + DOM contract + verification status:** see `continue.md` (self-contained handoff).
 
+9. **The Worlds — eight scroll-cinema films (2026-08-03).** `public/worlds/` — self-contained
+   scroll-cinema layer finishing the WAN production bible without further generation: shared
+   dependency-free engine (`cinema.js` — scroll-loop scene liveness + `scene:live/idle` events,
+   no IntersectionObserver; `?solo=N&p=X` QA harness; `.L en/.L ar` bilingual span system with
+   !important visibility invariants; assets versioned `?v=2`), lobby (`index.html`), and eight
+   films. Disney Storybook is the flagship: the owner's 32 real WAN 2.7 clips (DSN-H-001..032,
+   re-encoded 1280×648 — bottom crop removes the WAN watermark) chain-play in 6 chapters, then
+   code renders the remaining acts; 160 s master in theater mode. The other seven worlds
+   (astronomy, razer, cod, netflix, spotify, apple, samsung) are fully code-rendered to their
+   `wan-production-bible` creative briefs. Nav gained a base-aware **Worlds/العوالم** entry
+   (`nav.worlds`). AssetSlot now prefixes `BASE_URL` on root-absolute `src` (fixed live 404s of
+   `/img/work/*` on the Pages subpath). Three iteration passes per film logged in
+   `WORLDS-ITERATION-LOG.md`; plan in `PLAN.md`. Deployed to `gh-pages` (worktree publish),
+   verified live at https://mohamed3042.github.io/flagship-portfolio/worlds/ .
+
 ## 9. Companion docs
 - `NOTES.md` — the engineering rationale & "what I improved over the original".
 - `README.md` — quickstart (preview/build/deploy).
