@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
+<meta name="description" content="A scroll-cinema film cut from 32 real WAN 2.7 shots — a golden book opens, ink becomes fireflies, a thread proves a loop, and the system takes over the storytelling.">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%2314213D"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23F3E8C8"/><path d="M15 7h2v18h-2z" fill="%23F2BC3B"/></svg>'>
+<link rel="stylesheet" href="cinema.css?v=2">
+<style>
+  :root{
+    --w-bg:#14213D; --w-ink:#F3E8C8; --w-accent:#F2BC3B; --w-dim:#BFD0DE;
+    --sepia:#35271F; --parch:#F3E8C8; --moon:#BFD0DE; --rose:#D9829B; --mint:#8FCFB5; --lilac:#A897CF;
+    --w-display:"Iowan Old Style","Palatino Nova",Palatino,"Book Antiqua","Times New Roman",Georgia,serif;
+    --w-body:"Iowan Old Style",Palatino,"Book Antiqua",Georgia,serif;
+    --w-ui:ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+  }
+  .lang-ar body, .lang-ar .caption h2, .lang-ar .act h2{
+    --w-display:"Geeza Pro","Al Bayan","Traditional Arabic",serif;
+  }
+  body{ background:
+    radial-gradient(120% 90% at 50% -10%, #1b2b4e 0%, var(--w-bg) 55%, #0d1730 100%);
+  }
+
+  /* ————— paper grain unifier ————— */
+  .grain{ position:fixed; inset:-2%; z-index:40; pointer-events:none; opacity:.5; mix-blend-mode:overlay;
+    background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer></filter><rect width="240" height="240" filter="url(%23n)"/></svg>');
+  }
+
+  /* ————— cold open ————— */
+  .open .stage{ display:grid; place-items:center; text-align:center;
+    background:radial-gradient(80% 60% at 72% 30%, rgba(242,188,59,.16), transparent 60%), #0d1730; }
+  .open .plate{ position:absolute; inset:0; background:url('disney/cold-open.jpg') center/cover no-repeat;
+    opacity:calc(.34 - var(--p,0)*.2); filter:sepia(.3) brightness(.8); }
+  .open .veil{ position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 50%, transparent 30%, rgba(9,14,28,.88) 78%); }
+  .open .card{ position:relative; z-index:3; padding:0 6vw; transform:translateY(calc(var(--p,0)*-6vh)); }
+  .open .kick{ font:700 12px/1 var(--w-ui); letter-spacing:.28em; text-transform:uppercase; color:var(--w-accent); }
+  .open h1{ font:700 clamp(38px,8vw,92px)/1.04 var(--w-display); margin:18px 0 10px; text-wrap:balance;
+    text-shadow:0 3px 40px rgba(0,0,0,.6); }
+  .open .sub{ max-width:62ch; margin:0 auto; color:color-mix(in srgb, var(--w-ink) 82%, transparent); line-height:1.65; font-size:clamp(14px,1.7vw,18px); }
+  .open .candle{ position:absolute; top:12%; inset-inline-end:14%; width:10px; height:10px; border-radius:50%;
+    background:var(--w-accent); box-shadow:0 0 30px 12px rgba(242,188,59,.55), 0 0 90px 44px rgba(242,188,59,.22);
+    animation:flick 3.2s ease-in-out infinite; }
+  @keyframes flick{ 0%,100%{transform:scale(1);opacity:.92} 38%{transform:scale(.86) translateX(-1px);opacity:.75} 62%{transform:scale(1.08);opacity:1} }
+  .open .hintwrap{ position:absolute; bottom:26px; left:0; right:0; display:grid; place-items:center; gap:8px; z-index:3; }
+  .open .hint{ font:600 11px/1 var(--w-ui); letter-spacing:.22em; text-transform:uppercase; color:var(--w-dim); }
+  .open .quill{ width:1px; height:44px; background:linear-gradient(var(--w-accent), transparent); animation:drip 2.2s ease-in-out infinite; }
+  @keyframes drip{ 0%{transform:scaleY(.2); transform-origin:top} 55%{transform:scaleY(1)} 100%{transform:scaleY(.2); opacity:.2} }
+
+  /* ————— chapters (real footage) ————— */
+  .chapter{ height:300vh; }
+  .chapter .stage{ background:#0b1226; }
+  .chapter video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .28s ease; }
+  .chapter video.on{ opacity:1; }
+  .chapter .vig{ position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(115% 95% at 50% 42%, transparent 55%, rgba(9,13,26,.62) 100%); }
+  .chapter .chip{ position:absolute; z-index:6; top:clamp(56px,7vh,74px); inset-inline-start:clamp(18px,6vw,84px);
+    display:flex; gap:10px; align-items:center;
+    font:700 11px/1 var(--w-ui); letter-spacing:.18em; text-transform:uppercase; color:var(--w-ink); }
+  .chapter .chip .id{ color:var(--w-accent); }
+  .chapter .chip .t{ opacity:.85; letter-spacing:.1em; }
+  .chapter .dots{ position:absolute; z-index:6; bottom:clamp(18px,4vh,40px); inset-inline-end:clamp(18px,6vw,84px);
+    display:flex; gap:7px; }
+  .chapter .dots i{ width:7px; height:7px; border-radius:50%;
+    background:color-mix(in srgb, var(--w-ink) 30%, transparent); transition:background .3s, transform .3s; }
+  .chapter .dots i.on{ background:var(--w-accent); transform:scale(1.25); }
+  .chapter .playbtn{ position:absolute; z-index:7; inset:0; margin:auto; width:86px; height:86px; border-radius:50%;
+    display:none; place-items:center; cursor:pointer; border:1px solid rgba(243,232,200,.5);
+    background:rgba(13,19,38,.55); color:var(--w-ink); backdrop-filter:blur(6px); }
+  .chapter .playbtn svg{ width:26px; height:26px; fill:currentColor; margin-inline-start:4px; }
+  .chapter.needs-tap .playbtn{ display:grid; }
+
+  /* ————— acts styling ————— */
+  .act{ position:relative; }
+  .act .rule{ width:64px; height:1px; margin:18px auto 0; background:linear-gradient(90deg, transparent, var(--w-accent), transparent); }
+
+  /* ————— handoff ————— */
+  .handoff{ height:260vh; }
+  .handoff .stage{ background:#0d1730; }
+  .handoff .plate{ position:absolute; inset:0; background:url('disney/handoff.jpg') center/cover no-repeat;
+    filter:sepia(calc(var(--p,0)*.55)) contrast(calc(1 - var(--p,0)*.12)) brightness(calc(1 - var(--p,0)*.22)); }
+  .handoff .paperize{ position:absolute; inset:0; background:var(--parch);
+    opacity:calc(max(0, var(--p,0) - .72) * 2.6); mix-blend-mode:soft-light; }
+  .handoff svg.thread{ position:absolute; inset:0; width:100%; height:100%; z-index:4; }
+  .handoff svg.thread path{ fill:none; stroke:var(--w-accent); stroke-width:2.6; stroke-linecap:round;
+    filter:drop-shadow(0 0 6px rgba(242,188,59,.65));
+    stroke-dasharray:1; stroke-dashoffset:calc(1 - min(1, var(--p,0)*1.25)); }
+  .handoff .caption{ bottom:auto; top:clamp(72px,12vh,140px); }
+
+  /* ————— BUILD: the paper kingdom (code) ————— */
+  .build{ height:320vh; }
+  .build .stage{ background:linear-gradient(#0d1730 0%, #1b2b4e 46%, #3a3122 100%); }
+  .build .layer{ position:absolute; inset:auto 0 0 0; height:62vh; pointer-events:none; }
+  .build .layer svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .build .l4{ transform:translateY(calc((1 - var(--p,0)) * 12vh)); opacity:.5; }   /* distant painted field .12 */
+  .build .l3{ transform:translateY(calc((1 - var(--p,0)) * 30vh)); opacity:.72; }  /* set plane .30 */
+  .build .l2{ transform:translateY(calc((1 - var(--p,0)) * 58vh)); opacity:.9; }   /* action plane .58 */
+  .build .l1{ transform:translateY(calc((1 - var(--p,0)) * 100vh)); }              /* foreground 1.0 */
+  .build svg.weave{ position:absolute; inset:0; width:100%; height:100%; z-index:5; }
+  .build svg.weave path{ fill:none; stroke:var(--w-accent); stroke-width:2.2; stroke-linecap:round;
+    filter:drop-shadow(0 0 7px rgba(242,188,59,.6));
+    stroke-dasharray:1; stroke-dashoffset:calc(1 - min(1, max(0, var(--p,0) - .1) * 1.35)); }
+  .build .caption{ z-index:8; }
+  .district{ position:absolute; z-index:6; font:600 11.5px/1.3 var(--w-ui); letter-spacing:.06em;
+    color:var(--w-ink); background:rgba(20,33,61,.72); border:1px solid rgba(242,188,59,.4);
+    padding:8px 11px; border-radius:8px; backdrop-filter:blur(4px);
+    opacity:calc(max(0, var(--p,0) - var(--at,.4)) * 4); transform:translateY(calc((1 - min(1,(var(--p,0) - var(--at,.4)) * 4)) * 14px)); }
+  .district b{ color:var(--w-accent); font-weight:700; }
+
+  /* ————— GATE: the signet (code) ————— */
+  .gate{ height:300vh; }
+  .gate .stage{ background:radial-gradient(90% 70% at 50% 38%, #4a3c2a 0%, #241c14 62%, #17110c 100%); }
+  .gate .field{ position:absolute; inset:0; display:grid; place-items:center; }
+  .gate .paper{ width:min(520px,74vw); aspect-ratio:4/3; background:
+      radial-gradient(120% 100% at 50% 0%, #f7eed3 0%, var(--parch) 60%, #e4d5ac 100%);
+    border-radius:6px; box-shadow:0 30px 80px rgba(0,0,0,.5), inset 0 0 60px rgba(53,39,31,.18);
+    position:relative; overflow:hidden; }
+  .gate .paper .script{ position:absolute; inset:12% 10%;
+    background:repeating-linear-gradient(180deg, transparent 0 26px, rgba(53,39,31,.24) 26px 27px);
+    -webkit-mask:linear-gradient(90deg,#000 0%,#000 calc(var(--p,0)*130%),transparent calc(var(--p,0)*130% + 8%));
+            mask:linear-gradient(90deg,#000 0%,#000 calc(var(--p,0)*130%),transparent calc(var(--p,0)*130% + 8%)); }
+  .gate .signet{ position:absolute; z-index:4; left:50%; top:50%; width:110px; height:150px;
+    transform:translate(-50%, calc(-140% + min(1, max(0, var(--p,0) - .45) * 2.2) * 74%))
+              scale(calc(1 + (1 - min(1, max(0, var(--p,0) - .45) * 2.2)) * .06));
+    transition:transform .05s linear; }
+  .gate .wax{ position:absolute; z-index:3; left:50%; top:58%; width:96px; height:96px; border-radius:50%;
+    transform:translate(-50%,-50%) scale(calc(min(1, max(0, var(--p,0) - .70) * 5.6)));
+    background:radial-gradient(circle at 36% 32%, #ffd977 0%, var(--w-accent) 42%, #b88a1f 100%);
+    box-shadow:0 4px 26px rgba(242,188,59,.5), inset 0 2px 8px rgba(255,255,255,.45); }
+  .gate .wax::after{ content:""; position:absolute; inset:16%; border-radius:50%;
+    border:2px solid rgba(53,39,31,.4);
+    background:conic-gradient(from 40deg, transparent 0 20%, rgba(53,39,31,.35) 20% 24%, transparent 24% 47%, rgba(53,39,31,.35) 47% 52%, transparent 52% 78%, rgba(53,39,31,.35) 78% 83%, transparent 83%); }
+  .gate .caption{ z-index:8; }
+
+  /* ————— PROVE: thirty lanterns (code) ————— */
+  .prove{ height:300vh; }
+  .prove .stage{ background:radial-gradient(100% 80% at 50% 20%, #1b2b4e 0%, var(--w-bg) 52%, #0a1226 100%); }
+  .prove canvas{ position:absolute; inset:0; width:100%; height:100%; }
+  .prove .caption a{ color:var(--w-accent); }
+
+  /* ————— finale: the book closes ————— */
+  .finale{ height:280vh; }
+  .finale .stage{ display:grid; place-items:center; perspective:1400px;
+    background:radial-gradient(80% 60% at 68% 28%, rgba(242,188,59,.14), transparent 60%), #0d1730; }
+  .finale .book{ position:relative; width:min(540px,78vw); aspect-ratio:16/10; transform-style:preserve-3d; }
+  .finale .pageimg{ position:absolute; inset:0; border-radius:6px; overflow:hidden;
+    background:url('disney/posters/dsn-h-001.jpg') center/cover; box-shadow:0 40px 90px rgba(0,0,0,.55);
+    filter:sepia(.25) brightness(.94); }
+  .finale .cover{ position:absolute; inset:0; border-radius:6px; transform-origin:left center;
+    transform:rotateY(calc((1 - min(1, var(--p,0) * 1.5)) * -168deg));
+    background:linear-gradient(115deg, #1d2f57 0%, #14213D 55%, #0e1830 100%);
+    box-shadow:inset 0 0 0 2px rgba(242,188,59,.35), inset 0 0 44px rgba(0,0,0,.45);
+    backface-visibility:hidden; display:grid; place-items:center; }
+  .lang-ar .finale .cover{ transform-origin:right center;
+    transform:rotateY(calc((1 - min(1, var(--p,0) * 1.5)) * 168deg)); }
+  .finale .cover .mark{ width:34%; aspect-ratio:1; border-radius:50%;
+    border:2px solid rgba(242,188,59,.6); display:grid; place-items:center; }
+  .finale .cover .mark i{ width:44%; height:1px; background:var(--w-accent); box-shadow:0 6px 0 var(--w-accent), 0 -6px 0 var(--w-accent); }
+  .finale .latch{ position:absolute; inset-inline-end:-8px; top:50%; width:22px; height:56px; translate:0 -50%;
+    background:linear-gradient(#d9b04b, #a97e22); border-radius:4px;
+    opacity:calc(max(0, var(--p,0) - .68) * 4); box-shadow:0 0 18px rgba(242,188,59,.55); }
+  .finale .caption{ text-align:center; inset-inline:0; margin-inline:auto; max-width:640px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .open .candle, .open .quill{ animation:none; }
+    .chapter video{ transition:none; }
+  }
+  @media (max-width:640px){
+    .chapter{ height:260vh; }
+    .district{ display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="rail" data-rail><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav class="chrome" aria-label="Film chrome">
+  <div class="grp">
+    <a href="./"><span class="L en">◂ Worlds</span><span class="L ar">◂ العوالم</span></a>
+    <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
+  </div>
+  <div class="grp">
+    <button type="button" data-theater="disney/disney-master.mp4"><span class="L en">▸ Master cut · 2:40</span><span class="L ar">▸ الفيلم الكامل · ٢:٤٠</span></button>
+    <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
+  </div>
+</nav>
+
+<!-- ============ COLD OPEN ============ -->
+<section class="scene open" data-scene="pin" id="top">
+  <div class="stage">
+    <div class="plate" aria-hidden="true"></div>
+    <div class="veil" aria-hidden="true"></div>
+    <div class="candle" aria-hidden="true"></div>
+    <div class="card">
+      <p class="kick"><span class="L en">World 03 · Disney Storybook · 32 real WAN 2.7 shots</span><span class="L ar">العالم ٠٣ · حكاية مصوّرة · ٣٢ لقطة حقيقية من WAN 2.7</span></p>
+      <h1><span class="L en">The Kingdom of&nbsp;Running&nbsp;Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h1>
+      <p class="sub"><span class="L en">A golden book opens in a candlelit workshop. Ink becomes fireflies, fireflies find a looping thread — and when the footage runs out, the system keeps telling the story. Every frame until the handoff was generated shot-by-shot from a 144-clip production bible.</span><span class="L ar">كتاب مذهّب يُفتح في ورشة على ضوء شمعة. يصير الحبر يراعاتٍ، وتجد اليراعات خيطًا يدور في حلقة — وحين ينفد المشهد المصوّر، يواصل النظام سرد الحكاية بنفسه. كل إطار حتى لحظة التسليم وُلِّد لقطةً لقطةً من «كتاب إنتاج» يضم ١٤٤ مقطعًا.</span></p>
+    </div>
+    <div class="hintwrap"><div class="quill" aria-hidden="true"></div><p class="hint"><span class="L en">Scroll to open the book</span><span class="L ar">مرِّر لفتح الكتاب</span></p></div>
+  </div>
+</section>
+
+<!-- ============ ACT I ============ -->
+<section class="act">
+  <p class="no"><span class="L en">Act I · Prologue — shots 001–012</span><span class="L ar">الفصل الأول · الافتتاح — اللقطات ٠٠١–٠١٢</span></p>
+  <h2><span class="L en">The Book Wakes</span><span class="L ar">الكتاب يستيقظ</span></h2>
+  <p><span class="L en">Cause precedes magic. The Maker touches, winds, and stamps — only then may ink, thread, and light respond.</span><span class="L ar">السبب يسبق السحر. الصانع يلمس ويلفّ ويختم — وعندها فقط يُسمح للحبر والخيط والضوء أن تستجيب.</span></p>
+  <div class="rule"></div>
+</section>
+
+<section class="scene chapter" data-scene="pin" data-chain="dsn-h-001,dsn-h-002,dsn-h-003,dsn-h-004,dsn-h-005,dsn-h-006">
+  <div class="stage">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+    <div class="vig"></div>
+    <p class="chip"><span class="id">DSN-H-001</span><span class="t">…</span></p>
+    <div class="dots" aria-hidden="true"></div>
+    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="caption">
+      <p class="kick"><span class="L en">Chapter one</span><span class="L ar">الفصل الأول</span></p>
+      <h2><span class="L en">The Waking</span><span class="L ar">الاستيقاظ</span></h2>
+      <p><span class="L en">One candle, one closed volume, one anonymous Maker. The latch is convinced — never forced.</span><span class="L ar">شمعة واحدة، ومجلّد مغلق، وصانع بلا ملامح. المزلاج يُقنَع إقناعًا — ولا يُكسَر أبدًا.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="scene chapter" data-scene="pin" data-chain="dsn-h-007,dsn-h-008,dsn-h-009,dsn-h-010,dsn-h-011,dsn-h-012">
+  <div class="stage">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+    <div class="vig"></div>
+    <p class="chip"><span class="id">DSN-H-007</span><span class="t">…</span></p>
+    <div class="dots" aria-hidden="true"></div>
+    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="caption">
+      <p class="kick"><span class="L en">Chapter two</span><span class="L ar">الفصل الثاني</span></p>
+      <h2><span class="L en">First Page</span><span class="L ar">الصفحة الأولى</span></h2>
+      <p><span class="L en">A quill draws a cause; the ink answers with three paper fireflies — and the page turns into a forest.</span><span class="L ar">ريشةٌ ترسم سببًا؛ فيجيب الحبر بثلاث يراعاتٍ ورقية — وتنقلب الصفحة غابةً.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT II ============ -->
+<section class="act">
+  <p class="no"><span class="L en">Act II · MAP — shots 013–032</span><span class="L ar">الفصل الثاني · الخريطة — اللقطات ٠١٣–٠٣٢</span></p>
+  <h2><span class="L en">Survey the Disorder, Find the Loop</span><span class="L ar">امسحِ الفوضى، جِدِ الحلقة</span></h2>
+  <p><span class="L en">Three routes die in the paper forest. One golden thread survives — because it returns to where it began.</span><span class="L ar">ثلاثُ طرقٍ تموت في غابة الورق. خيطٌ ذهبيٌّ واحد ينجو — لأنه يعود إلى حيث بدأ.</span></p>
+  <div class="rule"></div>
+</section>
+
+<section class="scene chapter" data-scene="pin" data-chain="dsn-h-013,dsn-h-014,dsn-h-015,dsn-h-016,dsn-h-017">
+  <div class="stage">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+    <div class="vig"></div>
+    <p class="chip"><span class="id">DSN-H-013</span><span class="t">…</span></p>
+    <div class="dots" aria-hidden="true"></div>
+    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="caption">
+      <p class="kick"><span class="L en">Chapter three</span><span class="L ar">الفصل الثالث</span></p>
+      <h2><span class="L en">The Living Map</span><span class="L ar">الخريطة الحيّة</span></h2>
+      <p><span class="L en">The open-book forest stands in finite paper layers. The fireflies divide — and three paths go dark.</span><span class="L ar">غابة الكتاب المفتوح تقوم على طبقاتٍ ورقيةٍ معدودة. تتفرّق اليراعات — فتُظلم ثلاث طرق.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="scene chapter" data-scene="pin" data-chain="dsn-h-018,dsn-h-019,dsn-h-020,dsn-h-021,dsn-h-022">
+  <div class="stage">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+    <div class="vig"></div>
+    <p class="chip"><span class="id">DSN-H-018</span><span class="t">…</span></p>
+    <div class="dots" aria-hidden="true"></div>
+    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="caption">
+      <p class="kick"><span class="L en">Chapter four</span><span class="L ar">الفصل الرابع</span></p>
+      <h2><span class="L en">The Golden Thread</span><span class="L ar">الخيط الذهبي</span></h2>
+      <p><span class="L en">The Maker points; one firefly is chosen. Under its light, a gold thread pulls free of the page and leads on.</span><span class="L ar">يشير الصانع؛ فتُختار يراعةٌ واحدة. وعلى ضوئها ينسلّ خيطٌ ذهبيٌّ من الصفحة ويمضي دليلًا.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="scene chapter" data-scene="pin" data-chain="dsn-h-023,dsn-h-024,dsn-h-025,dsn-h-026,dsn-h-027">
+  <div class="stage">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+    <div class="vig"></div>
+    <p class="chip"><span class="id">DSN-H-023</span><span class="t">…</span></p>
+    <div class="dots" aria-hidden="true"></div>
+    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="caption">
+      <p class="kick"><span class="L en">Chapter five</span><span class="L ar">الفصل الخامس</span></p>
+      <h2><span class="L en">The False Knot</span><span class="L ar">العقدة الزائفة</span></h2>
+      <p><span class="L en">The thread snarls. Under glass, the signet pin finds the one fiber that matters — and the knot releases.</span><span class="L ar">يتشابك الخيط. وتحت العدسة يجد دبّوسُ الخاتم الليفةَ الوحيدة المهمّة — فتنحلّ العقدة.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="scene chapter" data-scene="pin" data-chain="dsn-h-028,dsn-h-029,dsn-h-030,dsn-h-031,dsn-h-032">
+  <div class="stage">
+    <video muted playsinline preload="none"></video>
+    <video muted playsinline preload="none"></video>
+    <div class="vig"></div>
+    <p class="chip"><span class="id">DSN-H-028</span><span class="t">…</span></p>
+    <div class="dots" aria-hidden="true"></div>
+    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="caption">
+      <p class="kick"><span class="L en">Chapter six</span><span class="L ar">الفصل السادس</span></p>
+      <h2><span class="L en">The Loop</span><span class="L ar">الحلقة</span></h2>
+      <p><span class="L en">The route is circular. The journey repeats without the Maker's hand — and a hidden spool keeps feeding it. A system.</span><span class="L ar">المسار دائري. الرحلة تتكرّر دون يد الصانع — وبكرةٌ خفيّة تُمِدّها بلا توقّف. إنها منظومة.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE HANDOFF ============ -->
+<section class="scene handoff" data-scene="pin">
+  <div class="stage">
+    <div class="plate" aria-hidden="true"></div>
+    <svg class="thread" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path pathLength="1" d="M 492 300 C 560 250, 640 210, 700 240 S 810 340, 870 300 S 960 190, 1000 170" />
+      <path pathLength="1" d="M 492 300 C 430 350, 350 400, 280 380 S 150 300, 90 340 S 20 430, 0 450" style="stroke-width:1.6; opacity:.7" />
+    </svg>
+    <div class="paperize" aria-hidden="true"></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Shot 32 of 144 · the handoff</span><span class="L ar">اللقطة ٣٢ من ١٤٤ · التسليم</span></p>
+      <h2><span class="L en">The footage ends. The kingdom keeps running.</span><span class="L ar">ينتهي المشهد المصوَّر. وتبقى المملكة تجري.</span></h2>
+      <p><span class="L en">Every frame above was generated shot-by-shot, each end-frame feeding the next beginning. From this exact frame onward, the film is rendered live by code — same palette, same laws, no more footage needed. That is the whole thesis: the human proves the loop, then the system runs it.</span><span class="L ar">كل إطارٍ أعلاه وُلِّد لقطةً بعد لقطة، وكل إطارِ نهايةٍ يغذّي البداية التالية. ومن هذا الإطار بالذات فصاعدًا يُعرَض الفيلم حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. وهذه هي الأطروحة كلها: الإنسان يثبت الحلقة، ثم يديرها النظام.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT III · BUILD (code) ============ -->
+<section class="act">
+  <p class="no"><span class="L en">Act III · BUILD — rendered live by code</span><span class="L ar">الفصل الثالث · البناء — يُعرَض حيًّا بالشيفرة</span></p>
+  <h2><span class="L en">The Paper Kingdom Rises</span><span class="L ar">مملكة الورق تنهض</span></h2>
+  <p><span class="L en">Thirty districts — every one a real, shipped system from this portfolio, wearing storybook paper.</span><span class="L ar">ثلاثون حيًّا — كلٌّ منها منظومة حقيقية مُنجزة من هذا الملف، تلبس ورق الحكايات.</span></p>
+  <div class="rule"></div>
+</section>
+
+<section class="scene build" data-scene="pin">
+  <div class="stage">
+    <div class="layer l4" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
+      <path d="M0 400 L0 300 L60 290 L90 240 L120 296 L200 280 L240 210 L285 285 L370 270 L420 230 L470 278 L560 262 L610 200 L662 270 L760 258 L820 214 L868 268 L940 250 L1000 262 L1000 400 Z" fill="#22345e"/>
+    </svg></div>
+    <div class="layer l3" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
+      <path d="M0 400 L0 320 L80 310 L110 250 L150 315 L230 300 L268 235 L310 305 L400 292 L448 240 L500 300 L590 285 L640 225 L695 295 L790 280 L850 235 L905 292 L1000 278 L1000 400 Z" fill="#2c3f6b" stroke="#F2BC3B" stroke-width="1" stroke-opacity=".25"/>
+      <g fill="#F2BC3B" opacity=".8"><circle cx="268" cy="252" r="2.4"/><circle cx="640" cy="243" r="2.4"/><circle cx="850" cy="252" r="2.4"/></g>
+    </svg></div>
+    <div class="layer l2" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
+      <path d="M0 400 L0 336 L70 330 L105 268 L146 332 L240 320 L286 252 L332 326 L430 312 L484 258 L540 320 L636 305 L692 243 L748 315 L845 300 L900 255 L950 312 L1000 300 L1000 400 Z" fill="#35486f" stroke="#F2BC3B" stroke-width="1.2" stroke-opacity=".35"/>
+      <g fill="#FFE49A"><circle cx="105" cy="280" r="2.8"/><circle cx="332" cy="338" r="0"/><circle cx="286" cy="266" r="2.8"/><circle cx="692" cy="257" r="2.8"/><circle cx="900" cy="268" r="2.8"/></g>
+    </svg></div>
+    <div class="layer l1" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
+      <path d="M0 400 L0 352 L90 346 L130 286 L175 350 L285 338 L340 270 L395 344 L505 330 L565 274 L625 338 L730 322 L790 262 L850 334 L1000 320 L1000 400 Z" fill="#3f527a" stroke="#F2BC3B" stroke-width="1.4" stroke-opacity=".5"/>
+      <g fill="#FFE49A"><circle cx="130" cy="300" r="3.2"/><circle cx="340" cy="284" r="3.2"/><circle cx="790" cy="276" r="3.2"/></g>
+    </svg></div>
+    <svg class="weave" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path pathLength="1" d="M 0 450 C 120 430, 180 360, 260 350 S 420 380, 500 340 S 660 250, 740 260 S 900 320, 1000 280"/>
+    </svg>
+    <p class="district" style="--at:.30; top:34%; inset-inline-start:12%"><b>P01</b> <span class="L en">Career Autopilot — a paper route-map that packages applications, then waits for the signet: 0 auto-sends.</span><span class="L ar">الطيّار المهني — خريطةُ طرقٍ ورقية تجهّز الطلبات ثم تنتظر الخاتم: صفر إرسال تلقائي.</span></p>
+    <p class="district" style="--at:.45; top:26%; inset-inline-end:14%"><b>P02</b> <span class="L en">LifeOS — a sealed cottage; memories stay local behind one key. No cloud road exists.</span><span class="L ar">نظام الحياة — كوخٌ مختوم؛ الذكريات محلية خلف مفتاح واحد. لا طريق سحابيًا هناك.</span></p>
+    <p class="district" style="--at:.60; top:52%; inset-inline-start:46%"><b>P04</b> <span class="L en">Box Studio — the gift-wright table folds packaging while 117 inspection lanterns test the path.</span><span class="L ar">استوديو الصناديق — طاولة صانع الهدايا تطوي العبوات بينما ١١٧ فانوسَ فحصٍ تختبر الطريق.</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Live-rendered · no footage</span><span class="L ar">عرضٌ حيّ · بلا مشهد مصوَّر</span></p>
+      <h2><span class="L en">Built district by district</span><span class="L ar">تُبنى حيًّا بعد حيّ</span></h2>
+      <p><span class="L en">The thread the fireflies proved now weaves the skyline. Four paper layers, exactly as the production bible staged them: 1.0 / 0.58 / 0.30 / 0.12.</span><span class="L ar">الخيط الذي أثبتته اليراعات ينسج الآن أفقَ المدينة. أربع طبقاتٍ ورقية كما رسمها كتاب الإنتاج تمامًا: ١٫٠ / ٠٫٥٨ / ٠٫٣٠ / ٠٫١٢.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT IV · GATE (code) ============ -->
+<section class="act">
+  <p class="no"><span class="L en">Act IV · GATE</span><span class="L ar">الفصل الرابع · البوّابة</span></p>
+  <h2><span class="L en">One Decision No Machine May Make</span><span class="L ar">قرارٌ واحد لا يملكه أي نظام</span></h2>
+  <p><span class="L en">Every system in this portfolio keeps a human gate. The kingdom stops at the seal — on purpose.</span><span class="L ar">كل منظومة في هذا الملف تحتفظ ببوّابة بشرية. المملكة تتوقف عند الختم — عن قصد.</span></p>
+  <div class="rule"></div>
+</section>
+
+<section class="scene gate" data-scene="pin">
+  <div class="stage">
+    <div class="field">
+      <div class="paper">
+        <div class="script" aria-hidden="true"></div>
+      </div>
+      <svg class="signet" viewBox="0 0 110 150" aria-hidden="true">
+        <rect x="42" y="0" width="26" height="86" rx="9" fill="#8a6a2a"/>
+        <rect x="38" y="6" width="34" height="14" rx="7" fill="#b88e3e"/>
+        <rect x="20" y="86" width="70" height="44" rx="8" fill="#b88e3e"/>
+        <rect x="26" y="92" width="58" height="32" rx="5" fill="#8a6a2a"/>
+      </svg>
+      <div class="wax" aria-hidden="true"></div>
+    </div>
+    <div class="caption">
+      <p class="kick"><span class="L en">The signet descends as you scroll</span><span class="L ar">الخاتم يهبط مع تمريرك</span></p>
+      <h2><span class="L en">Approved — by a hand</span><span class="L ar">مُعتمَد — بيدٍ بشرية</span></h2>
+      <p><span class="L en">Anticipation, press, follow-through, hold. The wax carries no words — approval is an act, not a caption.</span><span class="L ar">تأهُّبٌ، فضغطةٌ، فمتابعةٌ، فسكون. لا كلماتِ على الشمع — فالاعتماد فعلٌ لا عبارة.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT V · PROVE (code) ============ -->
+<section class="act">
+  <p class="no"><span class="L en">Act V · PROVE</span><span class="L ar">الفصل الخامس · البرهان</span></p>
+  <h2><span class="L en">Thirty Lanterns Answer</span><span class="L ar">ثلاثون فانوسًا تُجيب</span></h2>
+  <p><span class="L en">Each light is one verified story from the live portfolio — no invented numbers, ever.</span><span class="L ar">كل ضوءٍ قصةٌ موثَّقة من الموقع الحيّ — لا أرقامَ مخترعة، أبدًا.</span></p>
+  <div class="rule"></div>
+</section>
+
+<section class="scene prove" data-scene="pin" id="prove">
+  <div class="stage">
+    <canvas id="lanterns"></canvas>
+    <div class="caption">
+      <p class="kick"><span class="L en">The constellation is the loop</span><span class="L ar">الكوكبة هي الحلقة</span></p>
+      <h2><span class="L en">Proof, then rest</span><span class="L ar">برهانٌ، ثم سكينة</span></h2>
+      <p><span class="L en">Thirty lanterns rise and settle into the same circular route the thread drew. <a href="../"><span class="L en">Read the true stories on the portfolio →</span></a></span><span class="L ar">ثلاثون فانوسًا تصعد ثم تستقر على المسار الدائري نفسه الذي رسمه الخيط. <a href="../">اقرأ القصص الحقيقية في الموقع ←</a></span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINALE ============ -->
+<section class="act">
+  <p class="no"><span class="L en">Finale</span><span class="L ar">الخاتمة</span></p>
+  <h2><span class="L en">Fold Safely Home</span><span class="L ar">عودةٌ آمنة إلى الرفّ</span></h2>
+  <p><span class="L en">The finale restores the opening frame — the loop closes, as the continuity spec demands.</span><span class="L ar">الخاتمة تُعيد إطارَ البداية — فتنغلق الحلقة كما يشترط عقد الاستمرارية.</span></p>
+  <div class="rule"></div>
+</section>
+
+<section class="scene finale" data-scene="pin">
+  <div class="stage">
+    <div class="book">
+      <div class="pageimg" aria-hidden="true"></div>
+      <div class="cover" aria-hidden="true"><div class="mark"><i></i></div></div>
+      <div class="latch" aria-hidden="true"></div>
+    </div>
+    <div class="caption" style="position:absolute; bottom:clamp(20px,8vh,80px);">
+      <h2><span class="L en">The book waits for the next story</span><span class="L ar">الكتاب ينتظر الحكاية القادمة</span></h2>
+      <p><span class="L en">112 shots remain scripted in the bible, ready if generation ever resumes. Until then — the kingdom runs.</span><span class="L ar">ما زالت ١١٢ لقطة مكتوبةً في كتاب الإنتاج، جاهزةً إن عاد التوليد يومًا. وحتى ذلك الحين — المملكة تجري.</span></p>
+    </div>
+  </div>
+</section>
+
+<footer class="disclosure">
+  <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — handcrafted-storybook visual grammar, informed by Walt Disney Animation's published process material. Not affiliated with, endorsed by, or representing The Walt Disney Company. No characters, marks, or logos are depicted. Shots DSN-H-001–032 generated with WAN 2.7 from an original 144-clip production bible; Acts III–V rendered live in code. All project claims live on the <a href="../">portfolio's story pages</a>.</span>
+  <span class="L ar">دراسة حركية أصلية مستلهَمة لأغراض ملف أعمال محمد محمود — بقواعد «الحكاية المصوَّرة» البصرية، مستنيرةً بمواد عملية منشورة لاستوديوهات الرسوم المتحركة. لا انتساب ولا تأييد ولا تمثيل لشركة ديزني، ولا تظهر فيها شخصيات أو علامات أو شعارات. اللقطات ٠٠١–٠٣٢ مولَّدة بـ WAN 2.7 من كتاب إنتاج أصلي من ١٤٤ مقطعًا؛ والفصول الثالث إلى الخامس تُعرَض حيًّا بالشيفرة. جميع الأرقام والادّعاءات في <a href="../">صفحات القصص بالموقع</a>.</span></p>
+</footer>
+
+<script src="cinema.js?v=2"></script>
+<script>
+(() => {
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- shot titles (chip) ---------- */
+  const T = {
+    'dsn-h-001':['The Closed Volume','المجلّد المغلق'], 'dsn-h-002':['Maker at the Table','الصانع إلى الطاولة'],
+    'dsn-h-003':['Square Signet','الخاتم المربّع'], 'dsn-h-004':['Latch Fiber','ليف المزلاج'],
+    'dsn-h-005':['Latch Releases','المزلاج ينفتح'], 'dsn-h-006':['Cover Anticipates','الغلاف يتأهّب'],
+    'dsn-h-007':['Pages Breathe','الصفحات تتنفّس'], 'dsn-h-008':['First Page','الصفحة الأولى'],
+    'dsn-h-009':['Drawn Cause','السبب المرسوم'], 'dsn-h-010':['Ink Answers','الحبر يستجيب'],
+    'dsn-h-011':['First Fireflies','اليراعات الأولى'], 'dsn-h-012':['Page into Forest','صفحةٌ تصير غابة'],
+    'dsn-h-013':['Forest from the Page','الغابة من الصفحة'], 'dsn-h-014':['Layered Geography','جغرافيا من طبقات'],
+    'dsn-h-015':['Fireflies Divide','اليراعات تتفرّق'], 'dsn-h-016':['Three Dead Paths','ثلاث طرقٍ ميّتة'],
+    'dsn-h-017':['Maker Points','الصانع يشير'], 'dsn-h-018':['Chosen Firefly','اليراعة المختارة'],
+    'dsn-h-019':['Thread Glint','لمعة الخيط'], 'dsn-h-020':['Thread Pulled Free','انسلال الخيط'],
+    'dsn-h-021':['Follow the Thread','اتّبع الخيط'], 'dsn-h-022':['Creek Fold','طيّة الجدول'],
+    'dsn-h-023':['False Knot','العقدة الزائفة'], 'dsn-h-024':['Knot under Glass','العقدة تحت العدسة'],
+    'dsn-h-025':['Signet Pin','دبّوس الخاتم'], 'dsn-h-026':['Knot Releases','العقدة تنحلّ'],
+    'dsn-h-027':['Map Clearing','الخريطة تصفو'], 'dsn-h-028':['Circular Route','المسار الدائري'],
+    'dsn-h-029':['Loop Almost Closes','الحلقة تكاد تكتمل'], 'dsn-h-030':['Return Point','نقطة العودة'],
+    'dsn-h-031':['Repeat Journey','الرحلة تتكرّر'], 'dsn-h-032':['Hidden Spool','البكرة الخفيّة'],
+  };
+  const isAr = () => document.documentElement.lang === 'ar';
+
+  /* ---------- chapter chain player (double-buffered) ---------- */
+  document.querySelectorAll('.chapter[data-chain]').forEach(section => {
+    const ids = section.dataset.chain.split(',');
+    const vids = section.querySelectorAll('video');
+    const chipId = section.querySelector('.chip .id');
+    const chipT = section.querySelector('.chip .t');
+    const dots = section.querySelector('.dots');
+    const playbtn = section.querySelector('.playbtn');
+    ids.forEach(() => dots.appendChild(document.createElement('i')));
+
+    let idx = 0, active = 0, started = false, wanted = false;
+    const src = i => `disney/clips/${ids[i]}.mp4`;
+    const poster = i => `disney/posters/${ids[i]}.jpg`;
+    vids[0].poster = poster(0);
+
+    const show = (v) => { vids.forEach(x => x.classList.toggle('on', x === v)); };
+    const updateChrome = () => {
+      chipId.textContent = ids[idx].toUpperCase();
+      chipT.textContent = ' · ' + (T[ids[idx]] ? T[ids[idx]][isAr() ? 1 : 0] : '');
+      [...dots.children].forEach((d, i) => d.classList.toggle('on', i === idx));
+    };
+    const arm = (v, i) => {
+      if (i >= ids.length) return;
+      if (v.dataset.for !== ids[i]) { v.dataset.for = ids[i]; v.src = src(i); v.load(); }
+    };
+    const playIdx = () => {
+      const v = vids[active];
+      arm(v, idx);
+      show(v); updateChrome();
+      const p = v.play(); if (p) p.catch(() => { section.classList.add('needs-tap'); });
+      arm(vids[1 - active], idx + 1);            // prefetch next into standby
+    };
+    vids.forEach(v => v.addEventListener('ended', () => {
+      if (idx + 1 >= ids.length) return;         // hold last frame of chapter
+      idx += 1; active = 1 - active; playIdx();
+    }));
+    playbtn.addEventListener('click', () => {
+      section.classList.remove('needs-tap'); wanted = true; playIdx();
+    });
+
+    // liveness comes from the engine (scene:live / scene:idle) — no IO here
+    section.addEventListener('scene:live', () => {
+      wanted = true;
+      if (reduced && !started) { arm(vids[0], 0); show(vids[0]); updateChrome(); section.classList.add('needs-tap'); return; }
+      started = true; playIdx();
+    });
+    section.addEventListener('scene:idle', () => {
+      wanted = false; vids.forEach(v => v.pause());
+    });
+    updateChrome();
+    // re-title chips when language flips
+    document.addEventListener('click', (e) => { if (e.target.closest('[data-lang-toggle]')) updateChrome(); });
+  });
+
+  /* ---------- PROVE: thirty lanterns settle into the loop ---------- */
+  const cv = document.getElementById('lanterns');
+  if (cv) {
+    const scene = cv.closest('[data-scene]');
+    const ctx = cv.getContext('2d');
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const N = 30;
+    const pts = [];
+    let W = 0, H = 0, raf = 0;
+    const size = () => {
+      W = cv.clientWidth; H = cv.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2;
+      pts.push({ a, seed: Math.sin(i * 999) * 0.5 + 0.5, ph: (i * 0.61803) % 1 });
+    }
+    const draw = (t) => {
+      const p = parseFloat(scene.style.getPropertyValue('--p') || '0');
+      ctx.clearRect(0, 0, W, H);
+      const cx = W / 2, cy = H * 0.44;
+      const R = Math.min(W, H) * 0.30;
+      const settle = Math.min(1, Math.max(0, (p - 0.15) * 1.7));
+      // the loop path, drawn as the lanterns settle
+      if (settle > 0.35) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(242,188,59,' + (0.35 * (settle - 0.35) / 0.65) + ')';
+        ctx.lineWidth = 1.2;
+        ctx.ellipse(cx, cy, R, R * 0.72, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      for (const q of pts) {
+        const wanderX = cx + (q.seed - 0.5) * W * 0.9 + Math.sin(t / 1400 + q.ph * 9) * 30;
+        const wanderY = H * (0.25 + q.ph * 0.6) + Math.cos(t / 1700 + q.a * 3) * 24;
+        const tx = cx + Math.cos(q.a) * R;
+        const ty = cy + Math.sin(q.a) * R * 0.72;
+        const x = wanderX + (tx - wanderX) * settle;
+        const y = wanderY + (ty - wanderY) * settle;
+        const tw = 0.72 + 0.28 * Math.sin(t / 600 + q.ph * 20);
+        const r = 2 + q.seed * 2.2;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r * 6);
+        g.addColorStop(0, 'rgba(255,228,154,' + (0.85 * tw) + ')');
+        g.addColorStop(0.35, 'rgba(242,188,59,' + (0.4 * tw) + ')');
+        g.addColorStop(1, 'rgba(242,188,59,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(x, y, r * 6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,240,200,' + (0.9 * tw) + ')';
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    const start = () => { if (!raf) { size(); raf = requestAnimationFrame(draw); } };
+    const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+    if (reduced) {
+      size();
+      // one static settled frame
+      const p1 = { style: scene.style }; scene.style.setProperty('--p', '0.8');
+      requestAnimationFrame((t) => { draw(t); stop(); });
+    } else {
+      scene.addEventListener('scene:live', start);
+      scene.addEventListener('scene:idle', stop);
+      if (scene.classList.contains('is-live')) start();
+      addEventListener('resize', () => { if (raf) size(); }, { passive: true });
+    }
+  }
+})();
+</script>
+</body>
+</html>

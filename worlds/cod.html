@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPERATION CLOCKWORK — COD Tactical World · Mohamed Mahmoud</title>
+<meta name="description" content="A nonviolent scroll-cinema motion study in tactical visual language: at 02:00 a specialist team enters a city stalled by dead process, maps the repeating failure loop, builds a forward system, halts at a two-person authorization, and proves the change at dawn. All visuals are code.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171A1C'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%23E5A13A' stroke-width='4'/%3E%3Cpath d='M32 20v12l9 6' fill='none' stroke='%23A7AAA4' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="cinema.css">
+<style>
+/* ================= OPERATION CLOCKWORK — world sheet =================
+   Palette is law: graphite #171A1C · olive #454938 · chalk #A7AAA4 ·
+   phosphor #78D96B (sensor scenes only) · amber #E5A13A (pending) ·
+   cleared #53B878 (post-GATE only) · dawn ember #D97843 (finale horizon). */
+:root{
+  --graphite:#171A1C; --olive:#454938; --chalk:#A7AAA4; --phos:#78D96B;
+  --amber:#E5A13A; --clear:#53B878; --ember:#D97843;
+  --w-bg:var(--graphite);
+  --w-ink:#E8EAE6;
+  --w-accent:var(--amber);
+  --w-dim:color-mix(in srgb, var(--chalk) 55%, transparent);
+  --w-display:'Avenir Next Condensed','Arial Narrow Bold','Arial Narrow',
+              'Helvetica Neue',ui-sans-serif,system-ui,sans-serif;
+  --w-body:ui-sans-serif,system-ui,'Segoe UI',Roboto,'Noto Sans Arabic',sans-serif;
+  --w-ui:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,'Noto Sans Arabic',monospace;
+}
+html{ background:var(--w-bg); }
+body{ font-family:var(--w-body); }
+.lang-ar body, .lang-ar .caption h2, .lang-ar .act h2{ letter-spacing:0; }
+
+/* stencil display: condensed caps, wide tracking */
+.caption h2,.act h2,.tcard h1{
+  font-family:var(--w-display); text-transform:uppercase; letter-spacing:.06em;
+}
+.lang-ar .caption h2,.lang-ar .act h2,.lang-ar .tcard h1{ text-transform:none; }
+.caption .kick,.act .no{ font-family:var(--w-ui); }
+
+/* generic stage helpers */
+.stage{ background:var(--graphite); }
+.stage svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.stage canvas{ position:absolute; inset:0; width:100%; height:100%; }
+.vig{ position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 44%, transparent 55%, rgba(0,0,0,.42) 100%); }
+
+/* telemetry chip (mono, top corners; DOM copy, never baked into art) */
+.tele{
+  position:absolute; z-index:6; top:clamp(56px,8vh,84px); inset-inline-start:clamp(18px,6vw,84px);
+  font:600 11px/1.7 var(--w-ui); letter-spacing:.14em; text-transform:uppercase;
+  color:var(--w-dim); white-space:pre-line;
+}
+.lang-ar .tele{ letter-spacing:0; }
+.tele b{ color:var(--amber); font-weight:600; }
+.tele .ok{ color:var(--clear); }
+
+/* step captions: appear inside a --p window [--a,--b] */
+.cap{
+  position:absolute; z-index:6; max-width:min(480px,80vw);
+  inset-inline-start:clamp(18px,6vw,84px); bottom:clamp(20px,9vh,96px);
+  opacity:calc(clamp(0,(var(--p,0) - var(--a,0))/.05,1) - clamp(0,(var(--p,0) - var(--b,1))/.05,1));
+  transform:translateY(calc((1 - clamp(0,(var(--p,0) - var(--a,0))/.08,1)) * 18px));
+}
+.cap .kick{
+  font:700 11px/1 var(--w-ui); letter-spacing:.22em; text-transform:uppercase;
+  color:var(--amber); margin-bottom:10px;
+}
+.lang-ar .cap .kick{ letter-spacing:.04em; }
+.cap h3{
+  font:700 clamp(22px,3.6vw,38px)/1.1 var(--w-display); text-transform:uppercase;
+  letter-spacing:.05em; text-wrap:balance; text-shadow:0 2px 24px rgba(0,0,0,.6);
+}
+.lang-ar .cap h3{ text-transform:none; letter-spacing:0; }
+.cap p{
+  margin-top:8px; max-width:44ch; font-size:clamp(13px,1.5vw,16px); line-height:1.55;
+  color:color-mix(in srgb, var(--w-ink) 84%, transparent); text-shadow:0 1px 12px rgba(0,0,0,.55);
+}
+.cap.hi{ inset-inline-start:auto; inset-inline-end:clamp(18px,6vw,84px); text-align:end; }
+
+/* segment progress: window [a,b] of --p, exposed as --s (0..1) via style attr calc */
+/* handheld: motivated micro-displacement, settles; <1.5% frame height */
+@keyframes steps{
+  0%{ transform:translate(0,0) rotate(0deg) }
+  18%{ transform:translate(2px,-5px) rotate(.14deg) }
+  38%{ transform:translate(-3px,3px) rotate(-.1deg) }
+  58%{ transform:translate(2px,-3px) rotate(.08deg) }
+  78%{ transform:translate(-1px,2px) rotate(-.05deg) }
+  100%{ transform:translate(0,0) rotate(0deg) }
+}
+.hand{ position:absolute; inset:0; }
+.is-live .hand.walk{ animation:steps 5.2s ease-in-out 2; }
+.is-live .hand.rotor{ animation:steps 2.6s ease-in-out 3; }
+@media (prefers-reduced-motion: reduce){ .hand{ animation:none !important; } }
+
+/* act dividers */
+.act{ background:
+  linear-gradient(180deg, transparent, color-mix(in srgb, var(--olive) 16%, transparent) 50%, transparent); }
+.act .no{ color:var(--amber); }
+.act h2{ color:var(--w-ink); }
+.act p{ font-family:var(--w-body); }
+
+/* ---------- S01 title card ---------- */
+#s01 .stage{ background:
+  radial-gradient(90% 70% at 50% 30%, color-mix(in srgb, var(--olive) 14%, var(--graphite)), var(--graphite) 70%); }
+.tcard{ position:absolute; inset:0; z-index:5; display:grid; place-items:center; text-align:center; padding:0 6vw; }
+.tcard .inner{ transform:translateY(calc(var(--p,0) * -6vh)); }
+.tcard .clock{
+  font:600 clamp(13px,1.6vw,17px)/1 var(--w-ui); letter-spacing:.5em; color:var(--amber);
+  opacity:calc(clamp(0,(var(--p,0) - .08)/.06,1));
+}
+.lang-ar .tcard .clock{ letter-spacing:.18em; }
+.tcard h1{
+  margin-top:18px; font-size:clamp(40px,8.4vw,104px); line-height:.98; color:var(--w-ink);
+  letter-spacing:.1em;
+  opacity:calc(clamp(0,(var(--p,0) - .14)/.1,1));
+  transform:translateY(calc((1 - clamp(0,(var(--p,0) - .14)/.14,1)) * 26px));
+  text-shadow:0 4px 60px rgba(0,0,0,.7);
+}
+.tcard .sub{
+  margin-top:16px; font:500 clamp(12px,1.5vw,15px)/1.7 var(--w-ui); letter-spacing:.2em;
+  text-transform:uppercase; color:var(--w-dim);
+  opacity:calc(clamp(0,(var(--p,0) - .3)/.1,1));
+}
+.lang-ar .tcard .sub{ letter-spacing:.04em; }
+.tcard .rule{
+  width:min(320px,50vw); height:1px; margin:22px auto 0;
+  background:linear-gradient(90deg, transparent, var(--amber), transparent);
+  transform:scaleX(var(--p,0));
+}
+#g-aerial{ opacity:calc(.5 + var(--p,0)*.3); }
+#s01 .scroll-cue{
+  position:absolute; bottom:26px; left:50%; transform:translateX(-50%); z-index:6;
+  font:600 10px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase; color:var(--w-dim);
+  opacity:calc(1 - clamp(0,var(--p,0)/.2,1) + .0001);
+  animation:cuepulse 2.4s ease-in-out infinite;
+}
+.lang-ar #s01 .scroll-cue{ letter-spacing:.06em; }
+@keyframes cuepulse{ 0%,100%{ opacity:.45 } 50%{ opacity:1 } }
+
+/* ---------- S02 insertion ---------- */
+#s02 .stage{ background:linear-gradient(180deg,
+  color-mix(in srgb, var(--graphite) 88%, black) 0%, var(--graphite) 55%,
+  color-mix(in srgb, var(--olive) 20%, var(--graphite)) 100%); }
+#heli{ transform:
+  translate(calc(-34vw + var(--p,0) * 52vw), calc(16vh - clamp(0,calc(var(--p,0)/.6),1) * 10vh)); }
+#heli .blades{ transform-origin:50% 50%; animation:rotor .09s linear infinite; opacity:.85; }
+@keyframes rotor{ to{ transform:rotate(180deg) } }
+@media (prefers-reduced-motion: reduce){ #heli .blades{ animation:none } }
+#heli .navlight{ animation:nav 1.6s step-end infinite; }
+@keyframes nav{ 0%,55%{ opacity:0 } 60%,100%{ opacity:1 } }
+#obj-pulse{ transform-origin:center; animation:objp 2.8s ease-in-out infinite; }
+@keyframes objp{ 0%,100%{ opacity:.55 } 50%{ opacity:1 } }
+#rope{ transform:scaleY(clamp(0,calc((var(--p,0) - .35)/.25),1)); transform-origin:top; transform-box:fill-box; }
+#operators{ opacity:clamp(0,calc((var(--p,0) - .55)/.15),1);
+  transform:translateY(calc((1 - clamp(0,calc((var(--p,0) - .55)/.2),1)) * -30px)); }
+</style>
+<style>
+/* ---------- S03 signature: NVG phosphor reveal + route plot ---------- */
+/* mode flip window .12–.30 · route draw .38–.78 · loop stamp .82+ */
+#s03 .stage{ background:var(--graphite); }
+#s03 .optical{ opacity:calc(1 - clamp(0,(var(--p,0) - .12)/.18,1) * .92); }
+#s03 .sensor{ opacity:clamp(0,(var(--p,0) - .12)/.18,1); }
+#s03 .sensor-fx{ opacity:clamp(0,(var(--p,0) - .14)/.16,1); pointer-events:none; }
+#s03 .scope{ position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(118% 96% at 50% 46%, transparent 58%,
+    color-mix(in srgb, black 62%, transparent) 96%);
+  opacity:clamp(0,(var(--p,0) - .12)/.18,1); }
+#s03 .scan{ position:absolute; inset:0; pointer-events:none; mix-blend-mode:screen;
+  background:repeating-linear-gradient(180deg,
+    transparent 0 2px, color-mix(in srgb, var(--phos) 7%, transparent) 2px 3px); }
+#route-loop{
+  stroke-dasharray:2600; stroke-dashoffset:calc(2600 * (1 - clamp(0,(var(--p,0) - .38)/.4,1)));
+}
+#route-head{ opacity:clamp(0,(var(--p,0) - .4)/.1,1);
+  offset-path:path('M180,690 L392,690 L392,540 L620,540 L620,410 L836,410 L836,560 L668,560 L668,690 L1020,690 L1020,470 L1120,470');
+  offset-distance:calc(clamp(0,(var(--p,0) - .38)/.4,1) * 100%);
+  offset-rotate:0deg; }
+#s03 .stamp{
+  position:absolute; z-index:7; top:clamp(56px,9vh,96px); inset-inline-end:clamp(18px,6vw,84px);
+  font:700 clamp(12px,1.4vw,15px)/1.5 var(--w-ui); letter-spacing:.24em; text-transform:uppercase;
+  color:var(--amber); border:1px solid color-mix(in srgb, var(--amber) 65%, transparent);
+  padding:10px 14px; background:color-mix(in srgb, black 35%, transparent);
+  opacity:clamp(0,(var(--p,0) - .82)/.08,1);
+  transform:translateY(calc((1 - clamp(0,(var(--p,0) - .82)/.1,1)) * -12px)); }
+.lang-ar #s03 .stamp{ letter-spacing:.05em; }
+#s03 .mode-tag{
+  position:absolute; z-index:7; top:clamp(56px,9vh,96px); inset-inline-start:clamp(18px,6vw,84px);
+  font:600 11px/1.6 var(--w-ui); letter-spacing:.2em; text-transform:uppercase; }
+.lang-ar #s03 .mode-tag{ letter-spacing:.04em; }
+#s03 .mode-tag .opt{ color:var(--chalk); opacity:calc(1 - clamp(0,(var(--p,0) - .12)/.14,1)); }
+#s03 .mode-tag .nvg{ color:var(--phos); position:absolute; inset:0;
+  opacity:clamp(0,(var(--p,0) - .16)/.14,1); }
+
+/* ---------- S04 top-down plot (neutral relief after phosphor) ---------- */
+#s04 .stage{ background:
+  radial-gradient(100% 80% at 50% 40%, color-mix(in srgb, var(--chalk) 7%, var(--graphite)), var(--graphite)); }
+#loop-iso{ stroke-dasharray:1520; stroke-dashoffset:calc(1520 * (1 - clamp(0,(var(--p,0) - .1)/.3,1))); }
+#loop-glow{ opacity:calc(clamp(0,(var(--p,0) - .42)/.14,1) * .5); }
+#fault-tag{ opacity:clamp(0,(var(--p,0) - .5)/.1,1);
+  transform:scale(calc(1.25 - clamp(0,(var(--p,0) - .5)/.12,1) * .25));
+  transform-origin:836px 485px; transform-box:view-box; }
+#bypass-preview{ stroke-dasharray:8 10;
+  opacity:clamp(0,(var(--p,0) - .66)/.12,1); }
+#s04 .counter-chip{
+  position:absolute; z-index:6; top:clamp(56px,9vh,96px); inset-inline-end:clamp(18px,6vw,84px);
+  text-align:end; font:600 11px/1.8 var(--w-ui); letter-spacing:.18em; text-transform:uppercase;
+  color:var(--w-dim); }
+.lang-ar #s04 .counter-chip{ letter-spacing:.04em; }
+#s04 .counter-chip .n{ display:block; font-size:clamp(30px,4.4vw,52px); line-height:1;
+  color:var(--amber); font-family:var(--w-display); letter-spacing:.04em; }
+
+/* ---------- S05 field case ---------- */
+#s05 .stage{ background:linear-gradient(200deg,
+  color-mix(in srgb, var(--olive) 26%, var(--graphite)), var(--graphite) 66%); }
+#lid{ transform:rotate(calc(-104deg * clamp(0,(var(--p,0) - .08)/.3,1)));
+  transform-origin:600px 372px; transform-box:view-box; }
+#rake{ opacity:calc(clamp(0,(var(--p,0) - .3)/.2,1) * .85);
+  transform:translateX(calc((1 - clamp(0,(var(--p,0) - .3)/.4,1)) * -14%)); }
+.tool{ opacity:clamp(0,(var(--p,0) - var(--t,.45))/.12,1);
+  transform:translateY(calc((1 - clamp(0,(var(--p,0) - var(--t,.45))/.16,1)) * 16px)); }
+.tool-label{ font:600 10.5px var(--w-ui); letter-spacing:.14em; fill:var(--chalk); opacity:.85; }
+.lang-ar .tool-label{ letter-spacing:0; }
+
+/* ---------- S06 assembly ---------- */
+#s06 .stage{ background:var(--graphite); }
+#trunk{ stroke-dasharray:2400; stroke-dashoffset:calc(2400 * (1 - clamp(0,(var(--p,0) - .06)/.5,1))); }
+.sock{ --k:calc(clamp(0,(var(--p,0) - var(--i,.5))/.06,1));
+  opacity:calc(.28 + var(--k) * .72); }
+.sock .lamp{ fill:color-mix(in srgb, var(--amber) calc(var(--k) * 100%), var(--olive)); }
+.sock .ring{ transform:scale(calc(2 - var(--k)));
+  transform-origin:center; transform-box:fill-box; opacity:var(--k); }
+#pulse{ opacity:calc(clamp(0,(var(--p,0) - .62)/.06,1) - clamp(0,(var(--p,0) - .96)/.04,1));
+  offset-path:path('M120,600 C300,600 300,430 520,430 S760,560 940,560 S1160,430 1240,430');
+  offset-distance:calc(clamp(0,(var(--p,0) - .6)/.36,1) * 100%); offset-rotate:0deg; }
+#s06 .verify{
+  position:absolute; z-index:6; bottom:clamp(20px,9vh,96px); inset-inline-end:clamp(18px,6vw,84px);
+  font:700 12px/1.6 var(--w-ui); letter-spacing:.22em; text-transform:uppercase; color:var(--amber);
+  border:1px solid color-mix(in srgb, var(--amber) 55%, transparent); padding:10px 14px;
+  background:color-mix(in srgb, black 35%, transparent);
+  opacity:clamp(0,(var(--p,0) - .9)/.08,1); }
+.lang-ar #s06 .verify{ letter-spacing:.05em; }
+
+/* ---------- S07 forward-base wide ---------- */
+#s07 .stage{ background:linear-gradient(180deg, var(--graphite) 30%,
+  color-mix(in srgb, var(--olive) 22%, var(--graphite)) 100%); }
+#s07 .board{
+  position:absolute; z-index:6; inset-inline-start:clamp(18px,6vw,84px); top:50%;
+  transform:translateY(-50%); display:grid; gap:14px; }
+#s07 .cell{ border-inline-start:2px solid var(--amber); padding-inline-start:16px;
+  opacity:clamp(0,(var(--p,0) - var(--a,.2))/.12,1);
+  transform:translateX(calc((1 - clamp(0,(var(--p,0) - var(--a,.2))/.16,1)) * -14px)); }
+.lang-ar #s07 .cell{ transform:translateX(calc((1 - clamp(0,(var(--p,0) - var(--a,.2))/.16,1)) * 14px)); }
+#s07 .cell .n{ font:700 clamp(34px,5vw,58px)/1 var(--w-display); letter-spacing:.04em; color:var(--w-ink); }
+#s07 .cell .n b{ color:var(--amber); font-weight:700; }
+#s07 .cell .t{ margin-top:6px; font:600 11px/1.5 var(--w-ui); letter-spacing:.18em;
+  text-transform:uppercase; color:var(--w-dim); }
+.lang-ar #s07 .cell .t{ letter-spacing:.04em; }
+#base-lights .bl{ opacity:calc(.25 + clamp(0,(var(--p,0) - var(--i,.3))/.1,1) * .75); }
+</style>
+<style>
+/* ---------- S08 GATE: blackout -> amber wakes ---------- */
+#s08 .stage{ background:color-mix(in srgb, var(--graphite) 92%, black); }
+#s08 .amberkey{ position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(60% 48% at 50% 44%,
+    color-mix(in srgb, var(--amber) 13%, transparent), transparent 72%);
+  opacity:clamp(0,(var(--p,0) - .1)/.18,1); }
+#gate-svg{ opacity:clamp(0,(var(--p,0) - .08)/.14,1); }
+#cred-a{ transform:translateY(calc((1 - clamp(0,(var(--p,0) - .3)/.18,1)) * -90px));
+  opacity:clamp(0,(var(--p,0) - .28)/.1,1); }
+#cred-b{ transform:translateY(calc((1 - clamp(0,(var(--p,0) - .52)/.18,1)) * -90px));
+  opacity:clamp(0,(var(--p,0) - .5)/.1,1); }
+.keylamp{ fill:var(--olive); }
+#lamp-a{ fill:color-mix(in srgb, var(--amber) calc(clamp(0,(var(--p,0) - .46)/.06,1) * 100%), var(--olive)); }
+#lamp-b{ fill:color-mix(in srgb, var(--amber) calc(clamp(0,(var(--p,0) - .68)/.06,1) * 100%), var(--olive)); }
+#interlock{ opacity:clamp(0,(var(--p,0) - .74)/.1,1); }
+#s08 .holdline{
+  position:absolute; z-index:6; left:50%; bottom:clamp(20px,9vh,96px); transform:translateX(-50%);
+  text-align:center; font:700 clamp(13px,1.6vw,17px)/1.7 var(--w-ui); letter-spacing:.2em;
+  text-transform:uppercase; color:var(--amber);
+  opacity:clamp(0,(var(--p,0) - .82)/.1,1); }
+.lang-ar #s08 .holdline{ letter-spacing:.05em; }
+
+/* ---------- S09 GATE: synchronized release · first cleared green ---------- */
+#s09 .stage{ background:color-mix(in srgb, var(--graphite) 94%, black); }
+#s09 .amberkey{ position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(56% 44% at 50% 46%,
+    color-mix(in srgb, var(--amber) 12%, transparent), transparent 70%);
+  opacity:calc(1 - clamp(0,(var(--p,0) - .55)/.2,1)); }
+#s09 .clearkey{ position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(56% 44% at 50% 46%,
+    color-mix(in srgb, var(--clear) 14%, transparent), transparent 70%);
+  opacity:clamp(0,(var(--p,0) - .55)/.2,1); }
+#key-l{ transform:rotate(calc(clamp(0,(var(--p,0) - .3)/.25,1) * 90deg));
+  transform-origin:470px 430px; transform-box:view-box; }
+#key-r{ transform:rotate(calc(clamp(0,(var(--p,0) - .3)/.25,1) * 90deg));
+  transform-origin:810px 430px; transform-box:view-box; }
+#state-pending{ opacity:calc(1 - clamp(0,(var(--p,0) - .55)/.08,1)); }
+#state-clear{ opacity:clamp(0,(var(--p,0) - .55)/.08,1); }
+#s09 .decree{
+  position:absolute; z-index:6; inset:0; display:grid; place-items:center; text-align:center;
+  pointer-events:none; }
+#s09 .decree .box{ margin-top:38vh;
+  opacity:clamp(0,(var(--p,0) - .62)/.1,1);
+  transform:translateY(calc((1 - clamp(0,(var(--p,0) - .62)/.14,1)) * 16px)); }
+#s09 .decree .word{
+  font:700 clamp(34px,6.4vw,72px)/1 var(--w-display); letter-spacing:.16em;
+  text-transform:uppercase; color:var(--clear);
+  text-shadow:0 0 44px color-mix(in srgb, var(--clear) 45%, transparent); }
+.lang-ar #s09 .decree .word{ letter-spacing:.02em; }
+#s09 .decree .under{
+  margin-top:12px; font:600 11.5px/1.7 var(--w-ui); letter-spacing:.22em;
+  text-transform:uppercase; color:var(--w-dim); }
+.lang-ar #s09 .decree .under{ letter-spacing:.05em; }
+
+/* ---------- S10 PROVE: before/after wipe ---------- */
+#s10 .stage{ background:var(--graphite); }
+#after-wrap{ clip-path:inset(0 0 0 calc((1 - clamp(0,(var(--p,0) - .12)/.6,1)) * 100%)); }
+#s10 .blade{ position:absolute; top:0; bottom:0; width:2px; z-index:5;
+  left:calc((1 - clamp(0,(var(--p,0) - .12)/.6,1)) * 100%);
+  background:linear-gradient(180deg, transparent, var(--chalk) 30% 70%, transparent);
+  opacity:calc(clamp(0,(var(--p,0) - .1)/.08,1) - clamp(0,(var(--p,0) - .78)/.08,1)); }
+#s10 .side{ position:absolute; z-index:6; top:clamp(56px,9vh,96px);
+  font:700 11px/1.5 var(--w-ui); letter-spacing:.22em; text-transform:uppercase;
+  padding:8px 12px; background:color-mix(in srgb, black 40%, transparent);
+  border:1px solid color-mix(in srgb, var(--chalk) 30%, transparent); }
+.lang-ar #s10 .side{ letter-spacing:.04em; }
+#s10 .side.before{ inset-inline-start:clamp(18px,6vw,84px); color:var(--amber);
+  opacity:calc(1 - clamp(0,(var(--p,0) - .6)/.15,1)); }
+#s10 .side.after{ inset-inline-end:clamp(18px,6vw,84px); color:var(--clear);
+  opacity:clamp(0,(var(--p,0) - .3)/.15,1); }
+.flow{ stroke:var(--clear); stroke-dasharray:3 14; animation:flowdash 1.1s linear infinite; }
+@keyframes flowdash{ to{ stroke-dashoffset:-17 } }
+@media (prefers-reduced-motion: reduce){ .flow{ animation:none } }
+
+/* ---------- S11 after-action wall ---------- */
+#s11 .stage{ background:
+  radial-gradient(110% 85% at 50% 30%, color-mix(in srgb, var(--chalk) 8%, var(--graphite)), var(--graphite)); }
+#s11 .wall{ position:absolute; inset:0; z-index:5; display:grid; place-items:center; padding:10vh 6vw; }
+#s11 .grid{ display:grid; grid-template-columns:repeat(4, minmax(150px, 1fr));
+  gap:14px; width:min(1020px, 92vw); }
+@media (max-width:760px){ #s11 .grid{ grid-template-columns:repeat(2, 1fr); } }
+#s11 .card{
+  border:1px solid color-mix(in srgb, var(--chalk) 24%, transparent);
+  background:color-mix(in srgb, black 26%, transparent);
+  padding:18px 16px 16px; position:relative;
+  opacity:clamp(0,(var(--p,0) - var(--a,.2))/.1,1);
+  transform:translateY(calc((1 - clamp(0,(var(--p,0) - var(--a,.2))/.14,1)) * 22px)); }
+#s11 .card::before{ content:""; position:absolute; top:0; inset-inline:0; height:3px;
+  background:var(--olive); }
+#s11 .card.ok::before{ background:var(--clear); }
+#s11 .card .n{ font:700 clamp(26px,3.6vw,44px)/1 var(--w-display); letter-spacing:.03em;
+  color:var(--w-ink); }
+#s11 .card.ok .n{ color:var(--clear); }
+#s11 .card.amb .n{ color:var(--amber); }
+#s11 .card .t{ margin-top:8px; font:600 10.5px/1.6 var(--w-ui); letter-spacing:.14em;
+  text-transform:uppercase; color:var(--w-dim); }
+.lang-ar #s11 .card .t{ letter-spacing:.02em; }
+#s11 .wallkick{ grid-column:1 / -1; text-align:center; margin-bottom:10px;
+  font:700 12px/1.6 var(--w-ui); letter-spacing:.26em; text-transform:uppercase; color:var(--chalk);
+  opacity:clamp(0,(var(--p,0) - .12)/.1,1); }
+.lang-ar #s11 .wallkick{ letter-spacing:.06em; }
+
+/* ---------- S12 finale: dawn ---------- */
+#s12 .stage{ background:var(--graphite); }
+#s12 .sky{ position:absolute; inset:0;
+  background:linear-gradient(180deg,
+    var(--graphite) 0%,
+    var(--graphite) 34%,
+    color-mix(in srgb, var(--ember) 16%, var(--graphite)) 56%,
+    color-mix(in srgb, var(--ember) 38%, var(--graphite)) 66%,
+    color-mix(in srgb, var(--olive) 30%, var(--graphite)) 70%,
+    var(--graphite) 100%);
+  opacity:clamp(0,(var(--p,0) - .05)/.35,1); }
+#heli-out{ transform:translate(calc(var(--p,0) * 46vw), calc(var(--p,0) * -22vh)); }
+#s12 .endcard{ position:absolute; z-index:6; inset:0; display:grid; place-items:center;
+  text-align:center; padding:0 6vw; pointer-events:none; }
+#s12 .endcard .in{ transform:translateY(14vh);
+  opacity:clamp(0,(var(--p,0) - .5)/.14,1); }
+#s12 .endcard .clock{ font:600 clamp(13px,1.6vw,17px)/1 var(--w-ui); letter-spacing:.5em;
+  color:var(--ember); }
+.lang-ar #s12 .endcard .clock{ letter-spacing:.18em; }
+#s12 .endcard h2{ margin-top:16px; font:700 clamp(26px,4.6vw,54px)/1.12 var(--w-display);
+  letter-spacing:.08em; text-transform:uppercase; color:var(--w-ink); text-wrap:balance;
+  text-shadow:0 2px 30px rgba(0,0,0,.6); }
+.lang-ar #s12 .endcard h2{ letter-spacing:0; text-transform:none; }
+#s12 .endcard p{ margin-top:12px; font:500 clamp(13px,1.5vw,16px)/1.7 var(--w-body);
+  color:color-mix(in srgb, var(--w-ink) 78%, transparent); max-width:52ch; margin-inline:auto; }
+.citypulse{ animation:cp 2.2s ease-in-out infinite; }
+@keyframes cp{ 0%,100%{ opacity:.4 } 50%{ opacity:.95 } }
+@media (prefers-reduced-motion: reduce){ .citypulse{ animation:none; opacity:.8 } }
+
+/* travel heights: GATE slowest per choreography */
+#s01{ height:260vh } #s02{ height:280vh } #s03{ height:420vh } #s04{ height:320vh }
+#s05{ height:280vh } #s06{ height:360vh } #s07{ height:260vh }
+#s08{ height:380vh } #s09{ height:380vh }
+#s10{ height:340vh } #s11{ height:300vh } #s12{ height:300vh }
+@media (max-width:760px){
+  #s03{ height:360vh } #s06{ height:300vh } #s08{ height:320vh } #s09{ height:320vh }
+  .cap{ max-width:86vw } .cap.hi{ text-align:start; inset-inline-end:auto; inset-inline-start:clamp(18px,6vw,84px) }
+}
+.act{ min-height:52vh }
+</style>
+</head>
+<body>
+<div class="rail" data-rail aria-hidden="true"><i></i></div>
+<header class="chrome">
+  <nav class="grp" aria-label="Site">
+    <a href="./"><span class="L en">Worlds</span><span class="L ar">العوالم</span></a>
+    <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
+  </nav>
+  <div class="grp">
+    <button type="button" data-lang-toggle aria-label="Switch language / تبديل اللغة">
+      <span class="L en">عربي</span><span class="L ar">EN</span>
+    </button>
+  </div>
+</header>
+
+<main>
+<!-- ============ PROLOGUE · S01 title card ============ -->
+<section id="s01" class="scene" data-scene="pin" aria-label="Title — Operation Clockwork">
+  <div class="stage">
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g id="g-aerial" data-city="dark"></g>
+      <g id="obj-glyph">
+        <rect x="822" y="396" width="28" height="28" fill="none" stroke="#E5A13A" stroke-width="2" opacity=".9"/>
+        <rect x="830" y="404" width="12" height="12" fill="#E5A13A" opacity=".55"/>
+      </g>
+    </svg>
+    <canvas id="fx-rain" aria-hidden="true"></canvas>
+    <div class="vig"></div>
+    <div class="tcard">
+      <div class="inner">
+        <div class="clock"><span class="L en">02:00 · GRID DARK</span><span class="L ar">٠٢:٠٠ · الشبكة معتمة</span></div>
+        <h1><span class="L en">Operation Clockwork</span><span class="L ar">عملية عقارب الساعة</span></h1>
+        <div class="rule"></div>
+        <p class="sub">
+          <span class="L en">A tactical motion study · the adversary is entropy · no shot is fired</span>
+          <span class="L ar">دراسة حركة تكتيكية · الخصم هو الفوضى · لا تُطلق رصاصة واحدة</span>
+        </p>
+      </div>
+    </div>
+    <div class="tele">
+      <span class="L en">CITY STALLED — DEAD PROCESS
+ROUTES REPEAT · WORK DUPLICATES</span>
+      <span class="L ar">المدينة متوقفة — إجراءات ميتة
+المسارات تتكرر · والعمل يتضاعف بلا جدوى</span>
+    </div>
+    <div class="scroll-cue"><span class="L en">Scroll to insert</span><span class="L ar">مرّر للدخول</span></div>
+  </div>
+</section>
+
+<!-- ============ PROLOGUE · S02 insertion ============ -->
+<section id="s02" class="scene" data-scene="pin" aria-label="Rotor approach and ridge insertion">
+  <div class="stage">
+    <div class="hand rotor">
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- distant stalled grid -->
+      <g opacity=".5">
+        <rect x="0" y="600" width="1300" height="160" fill="#101214"/>
+        <g fill="#454938" opacity=".5">
+          <rect x="90" y="612" width="60" height="10"/><rect x="230" y="628" width="90" height="8"/>
+          <rect x="420" y="616" width="46" height="12"/><rect x="600" y="632" width="120" height="8"/>
+          <rect x="850" y="618" width="70" height="10"/><rect x="1050" y="630" width="100" height="8"/>
+        </g>
+        <g id="obj-pulse">
+          <rect x="826" y="606" width="20" height="20" fill="none" stroke="#E5A13A" stroke-width="2"/>
+        </g>
+      </g>
+      <!-- ridge silhouette -->
+      <path d="M0,760 L0,560 L180,520 L340,556 L520,500 L700,548 L900,496 L1080,540 L1300,510 L1300,760 Z"
+            fill="#0E1011"/>
+      <path d="M0,560 L180,520 L340,556 L520,500 L700,548 L900,496 L1080,540 L1300,510"
+            fill="none" stroke="#454938" stroke-width="2" opacity=".5"/>
+      <!-- helicopter (abstract, no insignia) -->
+      <g id="heli">
+        <g transform="translate(420,150)">
+          <ellipse class="blades" cx="0" cy="-26" rx="120" ry="7" fill="#A7AAA4" opacity=".22"/>
+          <rect x="-16" y="-30" width="10" height="10" fill="#171A1C" stroke="#454938" stroke-width="2"/>
+          <path d="M-58,-6 Q-30,-22 6,-20 L58,-14 Q66,-4 54,6 L-20,12 Q-52,10 -58,-6 Z"
+                fill="#171A1C" stroke="#454938" stroke-width="2.5"/>
+          <path d="M54,-12 L118,-20 L122,-10 L60,-2 Z" fill="#171A1C" stroke="#454938" stroke-width="2"/>
+          <rect x="112" y="-34" width="6" height="22" fill="#454938"/>
+          <line x1="-40" y1="14" x2="-40" y2="24" stroke="#454938" stroke-width="3"/>
+          <line x1="26" y1="14" x2="26" y2="24" stroke="#454938" stroke-width="3"/>
+          <line x1="-52" y1="24" x2="40" y2="24" stroke="#454938" stroke-width="3"/>
+          <circle class="navlight" cx="-56" cy="-8" r="3.4" fill="#E5A13A"/>
+          <g id="rope"><line x1="-6" y1="24" x2="-6" y2="180" stroke="#A7AAA4" stroke-width="2" opacity=".6"/></g>
+        </g>
+      </g>
+      <!-- operators on ridge: silhouettes only, carrying cases -->
+      <g id="operators" fill="#0B0D0E" stroke="#454938" stroke-width="1.6">
+        <g transform="translate(560,478)">
+          <path d="M8,0 a8,9 0 1 1 .1,0 M-2,8 L-8,44 L-2,46 L4,20 L10,46 L16,44 L12,8 Z"/>
+          <rect x="14" y="26" width="26" height="15" rx="2"/>
+        </g>
+        <g transform="translate(640,506)">
+          <path d="M8,0 a8,9 0 1 1 .1,0 M-2,8 L-8,44 L-2,46 L4,20 L10,46 L16,44 L12,8 Z"/>
+          <rect x="-30" y="26" width="26" height="15" rx="2"/>
+        </g>
+        <g transform="translate(724,486)">
+          <path d="M8,0 a8,9 0 1 1 .1,0 M-2,8 L-8,44 L-2,46 L4,20 L10,46 L16,44 L12,8 Z"/>
+        </g>
+      </g>
+    </svg>
+    <canvas id="fx-dust2" aria-hidden="true"></canvas>
+    </div>
+    <div class="vig"></div>
+    <div class="cap" style="--a:.18;--b:.5">
+      <div class="kick"><span class="L en">Prologue · Insertion</span><span class="L ar">التمهيد · الإنزال</span></div>
+      <h3><span class="L en">Quiet approach, stable horizon</span><span class="L ar">اقترابٌ هادئ وأفقٌ ثابت</span></h3>
+      <p><span class="L en">Rotor wash kicks the only dust in a city that stopped moving. The camera shakes for the wash — then settles.</span>
+         <span class="L ar">دفعُ المروحة يثير الغبار الوحيد في مدينةٍ توقفت عن الحركة. تهتزّ الكاميرا لأجل العاصفة الهوائية ثم تستقرّ.</span></p>
+    </div>
+    <div class="cap hi" style="--a:.6;--b:.95">
+      <div class="kick"><span class="L en">Boots on the ridge</span><span class="L ar">أقدامٌ على الحافّة</span></div>
+      <h3><span class="L en">Three specialists, field cases, one objective</span><span class="L ar">ثلاثة اختصاصيين وحقائب ميدانية وهدفٌ واحد</span></h3>
+      <p><span class="L en">The amber square below is not a target. It is a junction where process goes to die.</span>
+         <span class="L ar">المربّع الكهرماني في الأسفل ليس هدفًا للرمي، بل تقاطعٌ تذهب إليه الإجراءات لتموت.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <div>
+    <div class="no"><span class="L en">Act I · 02:14</span><span class="L ar">الفصل الأول · ٠٢:١٤</span></div>
+    <h2><span class="L en">MAP — find the loop</span><span class="L ar">الخريطة — جِد الحلقة</span></h2>
+    <p><span class="L en">Recon does not guess. It watches until the failure repeats itself, then draws it.</span>
+       <span class="L ar">الاستطلاع لا يُخمّن، بل يراقب حتى يكرّر العطل نفسه، ثم يرسمه كما هو.</span></p>
+  </div>
+</div>
+<!-- ============ MAP · S03 signature: phosphor reveal ============ -->
+<section id="s03" class="scene" data-scene="pin" aria-label="Night vision reveal — the failure route draws itself">
+  <div class="stage">
+    <div class="hand walk">
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <g id="street-geo">
+          <!-- roads -->
+          <rect x="0" y="640" width="1300" height="120" fill="var(--f-road)"/>
+          <rect x="560" y="300" width="120" height="360" fill="var(--f-road)"/>
+          <g stroke="var(--s-edge)" stroke-width="2" opacity=".6">
+            <line x1="0" y1="644" x2="1300" y2="644"/>
+            <line x1="560" y1="300" x2="560" y2="640"/><line x1="680" y1="300" x2="680" y2="640"/>
+          </g>
+          <g stroke="var(--s-edge)" stroke-dasharray="18 22" stroke-width="2" opacity=".35">
+            <line x1="0" y1="700" x2="1300" y2="700"/><line x1="620" y1="310" x2="620" y2="630"/>
+          </g>
+          <!-- building faces -->
+          <g stroke="var(--s-edge)" stroke-width="2.5">
+            <rect x="40"  y="120" width="220" height="520" fill="var(--f-bldg)"/>
+            <rect x="300" y="200" width="220" height="440" fill="var(--f-bldg)"/>
+            <rect x="720" y="150" width="250" height="490" fill="var(--f-bldg)"/>
+            <rect x="1010" y="230" width="250" height="410" fill="var(--f-bldg)"/>
+            <rect x="40" y="120" width="220" height="26" fill="var(--f-clut)"/>
+            <rect x="720" y="150" width="250" height="26" fill="var(--f-clut)"/>
+          </g>
+          <g id="win-slots"></g>
+          <!-- junction box: where process dies -->
+          <g stroke="var(--s-edge)" stroke-width="2.5">
+            <rect x="806" y="430" width="60" height="110" fill="var(--f-clut)"/>
+            <rect x="814" y="444" width="44" height="26" fill="var(--f-bldg)"/>
+            <line x1="820" y1="486" x2="852" y2="486"/><line x1="820" y1="500" x2="852" y2="500"/>
+            <line x1="820" y1="514" x2="852" y2="514"/>
+          </g>
+          <!-- sagging cable runs -->
+          <g fill="none" stroke="var(--s-wire)" stroke-width="2">
+            <path d="M60,150 C300,230 420,190 700,240 S1000,200 1240,260"/>
+            <path d="M260,220 C420,300 560,270 836,430"/>
+            <path d="M866,470 C980,470 1060,430 1240,450"/>
+          </g>
+          <!-- inert clutter: pallets, drums, paper drifts -->
+          <g stroke="var(--s-edge)" stroke-width="2" fill="var(--f-clut)">
+            <rect x="120" y="660" width="90" height="22" rx="2"/>
+            <rect x="132" y="640" width="66" height="20" rx="2"/>
+            <circle cx="420" cy="672" r="20"/><circle cx="462" cy="676" r="20"/>
+            <rect x="900" y="660" width="110" height="24" rx="2"/>
+            <path d="M700,662 l40,-8 8,18 -40,10 Z"/><path d="M760,676 l34,-4 4,12 -34,6 Z"/>
+            <path d="M240,600 l30,-6 6,14 -30,8 Z"/><path d="M1100,600 l36,-8 6,16 -34,8 Z"/>
+          </g>
+          <!-- dead vehicle silhouette (no one inside) -->
+          <g stroke="var(--s-edge)" stroke-width="2.5" fill="var(--f-clut)">
+            <path d="M180,708 q10,-24 44,-24 l70,0 q30,0 40,20 l6,12 -166,0 Z"/>
+            <circle cx="216" cy="722" r="12" fill="var(--f-bldg)"/>
+            <circle cx="308" cy="722" r="12" fill="var(--f-bldg)"/>
+          </g>
+        </g>
+      </defs>
+
+      <g class="optical" style="--f-road:#121416;--f-bldg:#1D2124;--f-clut:#20241F;
+        --s-edge:#454938;--s-wire:#3A3E33;--f-win:rgba(167,170,164,.10)">
+        <use href="#street-geo"/>
+      </g>
+      <g class="sensor" style="--f-road:#08100A;--f-bldg:#0C160D;--f-clut:#101E12;
+        --s-edge:rgba(120,217,107,.75);--s-wire:rgba(120,217,107,.55);--f-win:rgba(120,217,107,.30)">
+        <use href="#street-geo"/>
+      </g>
+      <!-- the plotted failure loop: amber, draws with scroll (sensor stage only) -->
+      <g class="sensor-fx">
+        <path id="route-loop" d="M180,690 L392,690 L392,540 L620,540 L620,410 L836,410 L836,560 L668,560 L668,690 L1020,690 L1020,470 L1120,470"
+              fill="none" stroke="#E5A13A" stroke-width="4" stroke-linejoin="round"
+              stroke-linecap="round"/>
+        <circle id="route-head" r="7" fill="#E5A13A"/>
+        <g fill="none" stroke="rgba(120,217,107,.5)" stroke-width="1.5">
+          <path d="M392,690 l-10,-10 m10,10 l-10,10"/>
+          <path d="M620,540 l-10,-10 m10,10 l10,-10"/>
+        </g>
+      </g>
+    </svg>
+    <canvas id="fx-grain" class="sensor-fx" aria-hidden="true"></canvas>
+    </div>
+    <div class="scan sensor-fx" aria-hidden="true"></div>
+    <div class="scope" aria-hidden="true"></div>
+    <div class="vig"></div>
+
+    <div class="mode-tag" aria-hidden="true">
+      <span class="opt"><span class="L en">CAM 01 · OPTICAL · 02:31</span><span class="L ar">كاميرا ٠١ · بصري · ٠٢:٣١</span></span>
+      <span class="nvg"><span class="L en">CAM 01 · NVG PHOSPHOR · GAIN 6</span><span class="L ar">كاميرا ٠١ · فوسفور ليلي · كسب ٦</span></span>
+    </div>
+    <div class="stamp">
+      <span class="L en">FAILURE LOOP ISOLATED · ×7</span>
+      <span class="L ar">حلقة العطل معزولة · ×٧</span>
+    </div>
+
+    <div class="cap" style="--a:.01;--b:.11">
+      <div class="kick"><span class="L en">Map · Street level</span><span class="L ar">الخريطة · مستوى الشارع</span></div>
+      <h3><span class="L en">Nothing moves. That is the evidence.</span><span class="L ar">لا شيء يتحرّك. وهذا هو الدليل.</span></h3>
+      <p><span class="L en">Inert pallets, a cold vehicle, paperwork drifted against the junction box. The block stalled mid-task.</span>
+         <span class="L ar">منصّاتٌ خاملة، ومركبةٌ باردة، وأوراقٌ تراكمت عند صندوق التوصيل. توقّف الحيّ في منتصف مهمّته.</span></p>
+    </div>
+    <div class="cap" style="--a:.3;--b:.46">
+      <div class="kick"><span class="L en">Sensor-mode switch</span><span class="L ar">تبديل نمط الاستشعار</span></div>
+      <h3><span class="L en">Same geometry. New truth.</span><span class="L ar">الهندسة ذاتها، وحقيقةٌ جديدة.</span></h3>
+      <p><span class="L en">The scene flips to phosphor without moving a single line — exposure changes, the city does not.</span>
+         <span class="L ar">ينقلب المشهد إلى الفوسفور دون أن يتحرّك خطٌّ واحد — تتغيّر الإضاءة، ولا تتغيّر المدينة.</span></p>
+    </div>
+    <div class="cap" style="--a:.52;--b:.82">
+      <div class="kick"><span class="L en">Recon plot</span><span class="L ar">مخطّط الاستطلاع</span></div>
+      <h3><span class="L en">The failure route draws itself</span><span class="L ar">مسار العطل يرسم نفسه بنفسه</span></h3>
+      <p><span class="L en">Seven passes, one amber circuit: out, around, back through the same dead junction. Entropy has a shape now.</span>
+         <span class="L ar">سبع دورات في دائرةٍ كهرمانية واحدة: خروجٌ والتفافٌ وعودةٌ عبر التقاطع الميت نفسه. صار للفوضى شكلٌ يُرى.</span></p>
+    </div>
+  </div>
+</section>
+<!-- ============ MAP · S04 top-down plot ============ -->
+<section id="s04" class="scene" data-scene="pin" aria-label="Top-down route plot — loop isolated, bypass proposed">
+  <div class="stage">
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- chalk city blocks, top-down -->
+      <g fill="none" stroke="#A7AAA4" stroke-width="1.5" opacity=".38">
+        <rect x="120" y="120" width="150" height="170"/><rect x="120" y="330" width="150" height="160"/>
+        <rect x="330" y="120" width="200" height="170"/><rect x="330" y="360" width="280" height="130"/>
+        <rect x="590" y="120" width="200" height="50"/><rect x="880" y="120" width="180" height="240"/>
+        <rect x="880" y="420" width="180" height="110"/><rect x="120" y="560" width="290" height="90"/>
+        <rect x="470" y="560" width="340" height="90"/><rect x="960" y="590" width="200" height="60"/>
+        <rect x="660" y="240" width="130" height="110"/><rect x="1120" y="120" width="90" height="410"/>
+      </g>
+      <g stroke="#A7AAA4" stroke-width="1" opacity=".18">
+        <line x1="60" y1="100" x2="60" y2="680"/><line x1="1240" y1="100" x2="1240" y2="680"/>
+        <line x1="60" y1="100" x2="1240" y2="100"/><line x1="60" y1="680" x2="1240" y2="680"/>
+      </g>
+      <!-- ticks -->
+      <g stroke="#A7AAA4" stroke-width="1.5" opacity=".3">
+        <line x1="60" y1="200" x2="72" y2="200"/><line x1="60" y1="390" x2="72" y2="390"/>
+        <line x1="60" y1="580" x2="72" y2="580"/><line x1="300" y1="680" x2="300" y2="668"/>
+        <line x1="640" y1="680" x2="640" y2="668"/><line x1="980" y1="680" x2="980" y2="668"/>
+      </g>
+      <!-- glow under the loop -->
+      <path id="loop-glow" d="M300,520 L300,320 L560,320 L560,200 L820,200 L820,380 L640,380 L640,520 Z"
+            fill="none" stroke="#E5A13A" stroke-width="14" stroke-linejoin="round" opacity="0"
+            style="filter:blur(6px)"/>
+      <!-- the isolated loop -->
+      <path id="loop-iso" d="M300,520 L300,320 L560,320 L560,200 L820,200 L820,380 L640,380 L640,520 Z"
+            fill="none" stroke="#E5A13A" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- fault bracket at the dead junction -->
+      <g id="fault-tag" fill="none" stroke="#E5A13A" stroke-width="3">
+        <path d="M796,356 h-24 v24 M844,356 h24 v24 M796,404 h-24 v-24 M844,404 h24 v-24"
+              transform="translate(-120,10)"/>
+      </g>
+      <!-- proposed bypass -->
+      <path id="bypass-preview" d="M300,520 L300,584 L900,584 L900,200 L820,200"
+            fill="none" stroke="#E5A13A" stroke-width="3" stroke-linejoin="round" opacity="0"/>
+    </svg>
+    <div class="vig"></div>
+    <div class="counter-chip">
+      <span class="n"><span data-counter data-from="1" data-to="7">1</span>×</span>
+      <span class="L en">Loop repetitions logged</span><span class="L ar">تكرارات الحلقة المسجّلة</span>
+    </div>
+    <div class="cap" style="--a:.08;--b:.4">
+      <div class="kick"><span class="L en">Map · Top-down</span><span class="L ar">الخريطة · من الأعلى</span></div>
+      <h3><span class="L en">One circuit, drawn to scale</span><span class="L ar">دائرةٌ واحدة مرسومة بمقياسها</span></h3>
+      <p><span class="L en">Stabilized plot, neutral light — the eye rests after phosphor. The loop is measured, not imagined.</span>
+         <span class="L ar">مخطّطٌ مثبّت وإضاءةٌ محايدة — تستريح العين بعد الفوسفور. الحلقة مُقاسة لا مُتخيَّلة.</span></p>
+    </div>
+    <div class="cap" style="--a:.48;--b:.62">
+      <div class="kick"><span class="L en">Fault tagged</span><span class="L ar">تحديد موضع العطل</span></div>
+      <h3><span class="L en">The junction that eats work</span><span class="L ar">التقاطع الذي يبتلع العمل</span></h3>
+      <p><span class="L en">Every pass re-enters here and leaves with less than it carried in.</span>
+         <span class="L ar">كلّ دورةٍ تدخل من هنا وتخرج بأقلّ ممّا حملت.</span></p>
+    </div>
+    <div class="cap" style="--a:.68;--b:.94">
+      <div class="kick"><span class="L en">Bypass proposed</span><span class="L ar">اقتراح مسار بديل</span></div>
+      <h3><span class="L en">Route approved for build</span><span class="L ar">اعتماد المسار للبناء</span></h3>
+      <p><span class="L en">Dashed amber: pending. Nothing is cleared yet — clearance is a human act, two acts down.</span>
+         <span class="L ar">الخطّ الكهرماني المتقطّع يعني الانتظار. لم يُعتمد شيءٌ بعد — فالاعتماد فعلٌ بشريّ يأتي بعد فصلين.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <div>
+    <div class="no"><span class="L en">Act II · 03:05</span><span class="L ar">الفصل الثاني · ٠٣:٠٥</span></div>
+    <h2><span class="L en">BUILD — a forward system</span><span class="L ar">البناء — منظومة متقدمة</span></h2>
+    <p><span class="L en">Engineers do not argue with entropy. They assemble something that works beside it.</span>
+       <span class="L ar">المهندسون لا يجادلون الفوضى، بل يركّبون إلى جوارها شيئًا يعمل.</span></p>
+  </div>
+</div>
+
+<!-- ============ BUILD · S05 field case ============ -->
+<section id="s05" class="scene" data-scene="pin" aria-label="Field case opens under raking work light">
+  <div class="stage">
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- raking work light -->
+      <polygon id="rake" points="0,80 620,320 620,560 0,760" fill="#A7AAA4" opacity="0"
+               style="mix-blend-mode:screen; filter:blur(2px)"/>
+      <!-- ground plane -->
+      <rect x="0" y="560" width="1300" height="200" fill="#101214"/>
+      <line x1="0" y1="560" x2="1300" y2="560" stroke="#454938" stroke-width="2" opacity=".6"/>
+      <!-- case body -->
+      <g stroke="#454938" stroke-width="3">
+        <rect x="320" y="372" width="560" height="188" rx="10" fill="#23271F"/>
+        <line x1="320" y1="420" x2="880" y2="420" stroke-width="2" opacity=".7"/>
+        <rect x="410" y="404" width="34" height="30" rx="4" fill="#171A1C"/>
+        <rect x="756" y="404" width="34" height="30" rx="4" fill="#171A1C"/>
+      </g>
+      <!-- lid: rotates open on hinge -->
+      <g id="lid">
+        <rect x="320" y="316" width="560" height="56" rx="10" fill="#2A2F24" stroke="#454938" stroke-width="3"/>
+        <rect x="560" y="330" width="80" height="12" rx="6" fill="#171A1C" stroke="#454938" stroke-width="2"/>
+      </g>
+      <!-- foam + tools -->
+      <g>
+        <rect x="344" y="430" width="512" height="112" rx="6" fill="#171A1C" stroke="#454938" stroke-width="2" opacity=".9"/>
+        <g class="tool" style="--t:.42">
+          <rect x="368" y="452" width="120" height="26" rx="6" fill="none" stroke="#A7AAA4" stroke-width="2.5"/>
+          <circle cx="380" cy="465" r="5" fill="#A7AAA4"/><circle cx="476" cy="465" r="5" fill="#A7AAA4"/>
+        </g>
+        <g class="tool" style="--t:.5">
+          <circle cx="560" cy="486" r="34" fill="none" stroke="#A7AAA4" stroke-width="3"/>
+          <circle cx="560" cy="486" r="12" fill="none" stroke="#A7AAA4" stroke-width="2.5"/>
+        </g>
+        <g class="tool" style="--t:.58">
+          <path d="M640,510 l70,-44 m0,0 l14,8 -8,14 -14,-8" fill="none" stroke="#A7AAA4" stroke-width="3"/>
+        </g>
+        <g class="tool" style="--t:.66">
+          <rect x="748" y="452" width="84" height="20" rx="4" fill="none" stroke="#A7AAA4" stroke-width="2.5"/>
+          <rect x="748" y="482" width="84" height="20" rx="4" fill="none" stroke="#A7AAA4" stroke-width="2.5"/>
+        </g>
+      </g>
+      <!-- labels as DOM text (never baked) -->
+      <g class="tool" style="--t:.74">
+        <text class="tool-label" x="428" y="590" text-anchor="middle">
+          <tspan class="L en">COUPLER</tspan><tspan class="L ar">وصلة</tspan></text>
+        <text class="tool-label" x="560" y="590" text-anchor="middle">
+          <tspan class="L en">SPOOL</tspan><tspan class="L ar">بكرة</tspan></text>
+        <text class="tool-label" x="690" y="590" text-anchor="middle">
+          <tspan class="L en">PROBE</tspan><tspan class="L ar">مسبار</tspan></text>
+        <text class="tool-label" x="790" y="590" text-anchor="middle">
+          <tspan class="L en">PLATES</tspan><tspan class="L ar">صفائح</tspan></text>
+      </g>
+    </svg>
+    <div class="vig"></div>
+    <div class="cap" style="--a:.1;--b:.4">
+      <div class="kick"><span class="L en">Build · 50–65mm</span><span class="L ar">البناء · عدسة ٥٠–٦٥مم</span></div>
+      <h3><span class="L en">Field case down, latches up</span><span class="L ar">الحقيبة على الأرض والأقفال تُفتح</span></h3>
+      <p><span class="L en">A deliberate push toward hands and tools. The raking light exists so labels read as shapes.</span>
+         <span class="L ar">دفعةُ كاميرا متأنّية نحو الأيدي والأدوات. الإضاءة الجانبية موجودة لتُقرأ المعالم كأشكالٍ واضحة.</span></p>
+    </div>
+    <div class="cap hi" style="--a:.55;--b:.92">
+      <div class="kick"><span class="L en">Inventory</span><span class="L ar">الجرد</span></div>
+      <h3><span class="L en">Everything needed. Nothing aimed.</span><span class="L ar">كلّ ما يلزم، ولا شيء يُصوَّب</span></h3>
+      <p><span class="L en">Coupler, spool, probe, patch plates. The kit of a team whose only enemy is decay.</span>
+         <span class="L ar">وصلةٌ وبكرةٌ ومسبارٌ وصفائح ترقيع: عتاد فريقٍ عدوّه الوحيد هو التآكل.</span></p>
+    </div>
+  </div>
+</section>
+<!-- ============ BUILD · S06 assembly ============ -->
+<section id="s06" class="scene" data-scene="pin" aria-label="Forward system assembles — trunk line, twelve anchors, test pulse">
+  <div class="stage">
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="0" y="620" width="1300" height="140" fill="#101214"/>
+      <line x1="0" y1="620" x2="1300" y2="620" stroke="#454938" stroke-width="2" opacity=".5"/>
+      <!-- trunk line draws with scroll -->
+      <path id="trunk" d="M120,600 C300,600 300,430 520,430 S760,560 940,560 S1160,430 1240,430"
+            fill="none" stroke="#A7AAA4" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- 12 anchor sockets latch in sequence -->
+      <g id="anchors">
+        <g class="sock" style="--i:.08" transform="translate(170,585)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.12" transform="translate(255,552)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.16" transform="translate(330,500)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.20" transform="translate(420,452)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.24" transform="translate(520,430)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.28" transform="translate(614,458)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.32" transform="translate(700,502)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.36" transform="translate(790,540)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.40" transform="translate(866,556)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.44" transform="translate(940,560)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.48" transform="translate(1030,528)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+        <g class="sock" style="--i:.52" transform="translate(1120,478)"><circle class="ring" r="16" fill="none" stroke="#E5A13A" stroke-width="2"/><circle class="lamp" r="7"/></g>
+      </g>
+      <!-- 18 supporting sockets register (bottom strip) -->
+      <g id="minis">
+        <g class="sock mini" style="--i:.30" transform="translate(280,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.32" transform="translate(320,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.34" transform="translate(360,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.36" transform="translate(400,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.38" transform="translate(440,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.40" transform="translate(480,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.42" transform="translate(520,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.44" transform="translate(560,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.46" transform="translate(600,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.48" transform="translate(640,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.50" transform="translate(680,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.52" transform="translate(720,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.54" transform="translate(760,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.56" transform="translate(800,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.58" transform="translate(840,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.60" transform="translate(880,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.62" transform="translate(920,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+        <g class="sock mini" style="--i:.64" transform="translate(960,676)"><rect class="lamp" x="-7" y="-7" width="14" height="14" rx="2"/></g>
+      </g>
+      <!-- amber test pulse travels the trunk -->
+      <circle id="pulse" r="8" fill="#E5A13A" style="filter:drop-shadow(0 0 8px rgba(229,161,58,.8))"/>
+    </svg>
+    <div class="vig"></div>
+    <div class="verify"><span class="L en">TEST PULSE · RETURN VERIFIED</span><span class="L ar">نبضة اختبار · تأكّد الرجوع</span></div>
+    <div class="cap" style="--a:.06;--b:.34">
+      <div class="kick"><span class="L en">Build · Trunk line</span><span class="L ar">البناء · الخطّ الرئيسي</span></div>
+      <h3><span class="L en">Plant, brace, lift, latch</span><span class="L ar">تثبيتٌ وشدٌّ ورفعٌ وإقفال</span></h3>
+      <p><span class="L en">The forward system rises in physical stages. Every socket clicks once and stays.</span>
+         <span class="L ar">تنهض المنظومة المتقدمة على مراحل ملموسة، وكلّ مقبسٍ يستقرّ بنقرةٍ واحدة ثم يبقى.</span></p>
+    </div>
+    <div class="cap hi" style="--a:.4;--b:.6">
+      <div class="kick"><span class="L en">Anchors and sockets</span><span class="L ar">المراسي والمقابس</span></div>
+      <h3><span class="L en">12 anchors live · 18 registered</span><span class="L ar">١٢ مرساةً تعمل · ١٨ مقبسًا مسجّلًا</span></h3>
+      <p><span class="L en">Anchors operate now; supporting sockets register for later proof. Nothing pretends.</span>
+         <span class="L ar">المراسي تعمل الآن، والمقابس المساندة تُسجَّل لإثباتٍ لاحق. لا شيء يدّعي ما ليس فيه.</span></p>
+    </div>
+    <div class="cap" style="--a:.66;--b:.94">
+      <div class="kick"><span class="L en">Test pulse</span><span class="L ar">نبضة الاختبار</span></div>
+      <h3><span class="L en">One light down the whole line</span><span class="L ar">ضوءٌ واحد يقطع الخطّ كلّه</span></h3>
+      <p><span class="L en">Amber still — the system works, but works is not the same as cleared.</span>
+         <span class="L ar">ما زال اللون كهرمانيًّا — المنظومة تعمل، لكنّ «تعمل» ليست «معتمَدة».</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BUILD · S07 forward-base wide ============ -->
+<section id="s07" class="scene" data-scene="pin" aria-label="Forward base wide — dust settles, numbers hold">
+  <div class="stage">
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect x="0" y="580" width="1300" height="180" fill="#0E1011"/>
+      <line x1="0" y1="580" x2="1300" y2="580" stroke="#454938" stroke-width="2" opacity=".6"/>
+      <!-- assembled forward base, silhouette -->
+      <g stroke="#454938" stroke-width="2.5" fill="#171A1C">
+        <rect x="700" y="470" width="150" height="110"/>
+        <rect x="880" y="500" width="110" height="80"/>
+        <rect x="1020" y="460" width="70" height="120"/>
+        <path d="M760,470 L760,380 L764,380 L764,470 Z" fill="#454938"/>
+        <path d="M1050,460 L1050,350 L1054,350 L1054,460 Z" fill="#454938"/>
+        <rect x="742" y="366" width="40" height="14" rx="3"/>
+        <rect x="1036" y="336" width="34" height="14" rx="3"/>
+        <rect x="620" y="540" width="60" height="40"/>
+        <path d="M120,580 C320,560 420,566 620,572" fill="none" stroke="#A7AAA4" stroke-width="3"/>
+      </g>
+      <g id="base-lights">
+        <circle class="bl" style="--i:.2" cx="762" cy="360" r="5" fill="#E5A13A"/>
+        <circle class="bl" style="--i:.3" cx="1052" cy="330" r="5" fill="#E5A13A"/>
+        <circle class="bl" style="--i:.4" cx="775" cy="525" r="4" fill="#E5A13A"/>
+        <circle class="bl" style="--i:.5" cx="935" cy="540" r="4" fill="#E5A13A"/>
+      </g>
+    </svg>
+    <canvas id="fx-dust7" aria-hidden="true"></canvas>
+    <div class="vig"></div>
+    <div class="board">
+      <div class="cell" style="--a:.18">
+        <div class="n"><b><span data-counter data-from="0" data-to="12">0</span></b></div>
+        <div class="t"><span class="L en">Anchor assets operating</span><span class="L ar">أصول مرساة تعمل</span></div>
+      </div>
+      <div class="cell" style="--a:.32">
+        <div class="n"><b><span data-counter data-from="0" data-to="18">0</span></b></div>
+        <div class="t"><span class="L en">Support sockets registered</span><span class="L ar">مقابس مساندة مسجّلة</span></div>
+      </div>
+      <div class="cell" style="--a:.46">
+        <div class="n">0</div>
+        <div class="t"><span class="L en">Shots fired · by design</span><span class="L ar">طلقات أُطلقت · هذا هو التصميم</span></div>
+      </div>
+    </div>
+    <div class="cap hi" style="--a:.55;--b:.95">
+      <div class="kick"><span class="L en">Build complete</span><span class="L ar">اكتمال البناء</span></div>
+      <h3><span class="L en">Dust settles for the handoff</span><span class="L ar">يهدأ الغبار استعدادًا للتسليم</span></h3>
+      <p><span class="L en">The wide frame holds. What was assembled can now be judged — by people, at the gate.</span>
+         <span class="L ar">تثبت اللقطة الواسعة. ما جرى تركيبه صار قابلًا للحكم عليه — من بشرٍ عند البوّابة.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <div>
+    <div class="no"><span class="L en">Act III · 04:26</span><span class="L ar">الفصل الثالث · ٠٤:٢٦</span></div>
+    <h2><span class="L en">GATE — two-person authorization</span><span class="L ar">البوّابة — تفويض ثنائيّ</span></h2>
+    <p><span class="L en">Deployment halts here on purpose. No machine releases itself.</span>
+       <span class="L ar">هنا يتوقّف النشر عمدًا. لا آلة تُطلق نفسها بنفسها.</span></p>
+  </div>
+</div>
+<!-- ============ GATE · S08 bunker amber wakes ============ -->
+<section id="s08" class="scene" data-scene="pin" aria-label="Bunker authorization — two credentials, no automatic release">
+  <div class="stage">
+    <div class="amberkey" aria-hidden="true"></div>
+    <svg id="gate-svg" viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- bunker wall + console (85mm close: simplified background) -->
+      <rect x="0" y="520" width="1300" height="240" fill="#101214"/>
+      <g stroke="#454938" stroke-width="3">
+        <rect x="330" y="380" width="640" height="150" rx="10" fill="#1B1F19"/>
+        <line x1="650" y1="380" x2="650" y2="530" stroke-width="2" opacity=".7"/>
+      </g>
+      <!-- two key stations -->
+      <g stroke="#454938" stroke-width="3" fill="#171A1C">
+        <rect x="420" y="410" width="120" height="86" rx="8"/>
+        <rect x="760" y="410" width="120" height="86" rx="8"/>
+        <rect x="466" y="398" width="28" height="8" rx="2" fill="#454938"/>
+        <rect x="806" y="398" width="28" height="8" rx="2" fill="#454938"/>
+      </g>
+      <circle id="lamp-a" class="keylamp" cx="480" cy="453" r="12"/>
+      <circle id="lamp-b" class="keylamp" cx="820" cy="453" r="12"/>
+      <!-- credentials descend -->
+      <g id="cred-a" stroke="#A7AAA4" stroke-width="2.5" fill="#23271F">
+        <rect x="462" y="330" width="36" height="58" rx="4"/>
+        <line x1="470" y1="344" x2="490" y2="344"/><line x1="470" y1="356" x2="490" y2="356"/>
+      </g>
+      <g id="cred-b" stroke="#A7AAA4" stroke-width="2.5" fill="#23271F">
+        <rect x="802" y="330" width="36" height="58" rx="4"/>
+        <line x1="810" y1="344" x2="830" y2="344"/><line x1="810" y1="356" x2="830" y2="356"/>
+      </g>
+      <!-- interlock bridge -->
+      <g id="interlock" stroke="#E5A13A" stroke-width="3" fill="none" opacity="0">
+        <path d="M540,453 H760"/>
+        <circle cx="650" cy="453" r="10" fill="#171A1C"/>
+        <path d="M644,453 l4,5 8,-10" stroke-width="2.5"/>
+      </g>
+      <!-- gloved hands only: olive sleeves entering frame -->
+      <g fill="#2A2F24" stroke="#454938" stroke-width="2.5">
+        <path d="M300,760 q30,-140 130,-190 l40,24 q-80,60 -96,166 Z"/>
+        <path d="M1000,760 q-30,-140 -130,-190 l-40,24 q80,60 96,166 Z"/>
+      </g>
+    </svg>
+    <div class="vig"></div>
+    <div class="tele">
+      <span class="L en">DEPLOYMENT PACKAGE: READY
+STATE: <b>PENDING · AMBER</b></span>
+      <span class="L ar">حزمة النشر: جاهزة
+الحالة: <b>قيد الانتظار · كهرماني</b></span>
+    </div>
+    <div class="cap" style="--a:.1;--b:.28">
+      <div class="kick"><span class="L en">Gate · 85mm</span><span class="L ar">البوّابة · عدسة ٨٥مم</span></div>
+      <h3><span class="L en">Practical blackout, then one amber key</span><span class="L ar">إظلامٌ مقصود ثم مفتاح ضوءٍ كهرماني واحد</span></h3>
+      <p><span class="L en">Movement quiets. Interface quiets. The room is built for a decision, not a spectacle.</span>
+         <span class="L ar">تسكن الحركة وتسكن الواجهات. هذه الغرفة بُنيت لقرارٍ لا لاستعراض.</span></p>
+    </div>
+    <div class="cap" style="--a:.34;--b:.64">
+      <div class="kick"><span class="L en">Two credentials</span><span class="L ar">اعتمادان اثنان</span></div>
+      <h3><span class="L en">Each specialist inserts their own</span><span class="L ar">كلّ اختصاصيّ يُدخل اعتماده بنفسه</span></h3>
+      <p><span class="L en">First station, then the second. Half a state is not a state — the lamp stays amber.</span>
+         <span class="L ar">المحطّة الأولى ثم الثانية. نصف الحالة ليس حالةً — فيبقى المصباح كهرمانيًّا.</span></p>
+    </div>
+    <div class="holdline">
+      <span class="L en">NO AUTOMATIC RELEASE</span>
+      <span class="L ar">لا إطلاق تلقائيًّا أبدًا</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GATE · S09 synchronized release ============ -->
+<section id="s09" class="scene" data-scene="pin" aria-label="Synchronized turn — state changes amber to cleared green">
+  <div class="stage">
+    <div class="amberkey" aria-hidden="true"></div>
+    <div class="clearkey" aria-hidden="true"></div>
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- close on the two locks -->
+      <g stroke="#454938" stroke-width="3" fill="#1B1F19">
+        <rect x="360" y="330" width="220" height="200" rx="14"/>
+        <rect x="700" y="330" width="220" height="200" rx="14"/>
+      </g>
+      <circle cx="470" cy="430" r="58" fill="#171A1C" stroke="#454938" stroke-width="3"/>
+      <circle cx="810" cy="430" r="58" fill="#171A1C" stroke="#454938" stroke-width="3"/>
+      <!-- keys rotate together -->
+      <g id="key-l" stroke="#A7AAA4" stroke-width="4" stroke-linecap="round">
+        <line x1="470" y1="392" x2="470" y2="468"/>
+        <circle cx="470" cy="384" r="10" fill="none"/>
+      </g>
+      <g id="key-r" stroke="#A7AAA4" stroke-width="4" stroke-linecap="round">
+        <line x1="810" y1="392" x2="810" y2="468"/>
+        <circle cx="810" cy="384" r="10" fill="none"/>
+      </g>
+      <!-- state panel -->
+      <g id="state-pending">
+        <rect x="560" y="240" width="160" height="46" rx="6" fill="none" stroke="#E5A13A" stroke-width="2.5"/>
+        <circle cx="588" cy="263" r="8" fill="#E5A13A"/>
+        <line x1="608" y1="263" x2="696" y2="263" stroke="#E5A13A" stroke-width="3" stroke-dasharray="6 6"/>
+      </g>
+      <g id="state-clear" opacity="0">
+        <rect x="560" y="240" width="160" height="46" rx="6" fill="none" stroke="#53B878" stroke-width="2.5"/>
+        <circle cx="588" cy="263" r="8" fill="#53B878"/>
+        <path d="M620,263 l10,10 22,-24" fill="none" stroke="#53B878" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <!-- braced gloved hands, silhouettes -->
+      <g fill="#2A2F24" stroke="#454938" stroke-width="2.5">
+        <path d="M380,760 q-4,-160 60,-240 l46,18 q-52,90 -50,222 Z"/>
+        <path d="M900,760 q4,-160 -60,-240 l-46,18 q52,90 50,222 Z"/>
+      </g>
+    </svg>
+    <div class="vig"></div>
+    <div class="cap" style="--a:.08;--b:.42">
+      <div class="kick"><span class="L en">Synchronized release</span><span class="L ar">إطلاقٌ متزامن</span></div>
+      <h3><span class="L en">Two hands brace. One breath. Turn.</span><span class="L ar">تستقرّ اليدان، نفَسٌ واحد، ثم الإدارة</span></h3>
+      <p><span class="L en">The push-in is under six percent. Intimacy at breath level; the background stays simple.</span>
+         <span class="L ar">دفعة الكاميرا أقلّ من ستّة في المئة. حميميةٌ بمستوى النفَس، والخلفية تبقى بسيطة.</span></p>
+    </div>
+    <div class="decree">
+      <div class="box">
+        <div class="word"><span class="L en">Cleared</span><span class="L ar">مُعتمَد</span></div>
+        <div class="under">
+          <span class="L en">Two people · one turn · logged 04:41</span>
+          <span class="L ar">شخصان · إدارةٌ واحدة · سُجّلت ٠٤:٤١</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <div>
+    <div class="no"><span class="L en">Act IV · 05:12</span><span class="L ar">الفصل الرابع · ٠٥:١٢</span></div>
+    <h2><span class="L en">PROVE — show the change</span><span class="L ar">الإثبات — أَرِ التغيير</span></h2>
+    <p><span class="L en">Cleared green may speak now. Everything it says must be measurable.</span>
+       <span class="L ar">صار مسموحًا للأخضر المعتمَد أن يتكلّم، وكلّ ما يقوله يجب أن يكون قابلًا للقياس.</span></p>
+  </div>
+</div>
+<!-- ============ PROVE · S10 before/after wipe ============ -->
+<section id="s10" class="scene" data-scene="pin" aria-label="Stabilized aerial comparison — stalled grid against working grid">
+  <div class="stage">
+    <div class="frame" aria-hidden="true">
+      <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice">
+        <g data-city="stalled"></g>
+        <path d="M300,520 L300,320 L560,320 L560,200 L820,200 L820,380 L640,380 L640,520 Z"
+              fill="none" stroke="#E5A13A" stroke-width="3" opacity=".5" stroke-dasharray="6 8"/>
+      </svg>
+    </div>
+    <div class="frame" id="after-wrap" aria-hidden="true">
+      <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice">
+        <g data-city="working"></g>
+        <g fill="none" stroke-width="3">
+          <path class="flow" d="M300,520 L300,584 L900,584 L900,200 L820,200"/>
+          <path class="flow" d="M120,140 L560,140 L560,320"/>
+          <path class="flow" d="M640,660 L1160,660 L1160,420"/>
+        </g>
+      </svg>
+    </div>
+    <div class="blade" aria-hidden="true"></div>
+    <div class="vig"></div>
+    <div class="side before"><span class="L en">02:00 · STALLED</span><span class="L ar">٠٢:٠٠ · متوقفة</span></div>
+    <div class="side after"><span class="L en">05:20 · WORKING</span><span class="L ar">٠٥:٢٠ · تعمل</span></div>
+    <div class="cap" style="--a:.16;--b:.5">
+      <div class="kick"><span class="L en">Prove · Stabilized aerial</span><span class="L ar">الإثبات · لقطة جوية مثبّتة</span></div>
+      <h3><span class="L en">Same city, split by one blade of light</span><span class="L ar">المدينة نفسها يشطرها خيطُ ضوءٍ واحد</span></h3>
+      <p><span class="L en">Left: the amber ghost of the old loop. Right: traffic moving through the bypass, in cleared green.</span>
+         <span class="L ar">إلى اليسار شبحُ الحلقة القديمة كهرمانيًّا، وإلى اليمين حركةٌ تمرّ عبر المسار البديل بالأخضر المعتمَد.</span></p>
+    </div>
+    <div class="cap hi" style="--a:.62;--b:.94">
+      <div class="kick"><span class="L en">No trick cut</span><span class="L ar">بلا خدعة مونتاج</span></div>
+      <h3><span class="L en">The wipe is the argument</span><span class="L ar">المسحُ نفسه هو الحجّة</span></h3>
+      <p><span class="L en">Geometry locked, exposure honest. Scroll back and the change reverses exactly.</span>
+         <span class="L ar">الهندسة مثبّتة والإضاءة صادقة. مرّر إلى الوراء فيرتدّ التغيير كما هو تمامًا.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROVE · S11 after-action wall ============ -->
+<section id="s11" class="scene" data-scene="pin" aria-label="After-action wall — exactly what changed">
+  <div class="stage">
+    <div class="vig"></div>
+    <div class="wall">
+      <div class="grid">
+        <div class="wallkick"><span class="L en">After-action wall · 05:40 · exactly what changed</span><span class="L ar">جدار ما بعد العملية · ٠٥:٤٠ · ما الذي تغيّر بالضبط</span></div>
+        <div class="card ok" style="--a:.16">
+          <div class="n">1</div>
+          <div class="t"><span class="L en">Failure loop retired</span><span class="L ar">حلقة عطل أُخرجت من الخدمة</span></div>
+        </div>
+        <div class="card ok" style="--a:.22">
+          <div class="n"><span data-counter data-from="0" data-to="12">0</span></div>
+          <div class="t"><span class="L en">Anchor assets operating</span><span class="L ar">أصول مرساة تعمل</span></div>
+        </div>
+        <div class="card ok" style="--a:.28">
+          <div class="n"><span data-counter data-from="0" data-to="18">0</span></div>
+          <div class="t"><span class="L en">Support sockets verified</span><span class="L ar">مقابس مساندة تحقّق منها</span></div>
+        </div>
+        <div class="card amb" style="--a:.34">
+          <div class="n">2</div>
+          <div class="t"><span class="L en">Human turns still required</span><span class="L ar">إدارتان بشريّتان تظلّان شرطًا</span></div>
+        </div>
+        <div class="card ok" style="--a:.4">
+          <div class="n"><span data-counter data-from="7" data-to="0">7</span></div>
+          <div class="t"><span class="L en">Repeat passes since fix</span><span class="L ar">تكرارات الحلقة بعد الإصلاح</span></div>
+        </div>
+        <div class="card" style="--a:.46">
+          <div class="n">1</div>
+          <div class="t"><span class="L en">Bypass route in service</span><span class="L ar">مسار بديل في الخدمة</span></div>
+        </div>
+        <div class="card ok" style="--a:.52">
+          <div class="n">0</div>
+          <div class="t"><span class="L en">Harm to anyone — the adversary was entropy</span><span class="L ar">أذى لأيّ إنسان — كان الخصم هو الفوضى</span></div>
+        </div>
+        <div class="card amb" style="--a:.58">
+          <div class="n">4</div>
+          <div class="t"><span class="L en">Hours, insertion to proof</span><span class="L ar">ساعات من الإنزال إلى الإثبات</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cap" style="--a:.66;--b:.95">
+      <div class="kick"><span class="L en">Receipts, not glyphs</span><span class="L ar">إيصالات لا زخارف</span></div>
+      <h3><span class="L en">Every number is a DOM element</span><span class="L ar">كلّ رقمٍ هنا عنصرٌ حيّ في الصفحة</span></h3>
+      <p><span class="L en">Nothing on this wall is baked into a picture. Select it, translate it, audit it.</span>
+         <span class="L ar">لا شيء على هذا الجدار مطبوعٌ داخل صورة. يمكنك تحديده وترجمته وتدقيقه.</span></p>
+    </div>
+  </div>
+</section>
+
+<div class="act">
+  <div>
+    <div class="no"><span class="L en">Finale · 05:58</span><span class="L ar">الخاتمة · ٠٥:٥٨</span></div>
+    <h2><span class="L en">Extraction at first light</span><span class="L ar">الانسحاب مع أول الضوء</span></h2>
+    <p><span class="L en">Overlays clear before the aircraft does. The grid keeps working without an audience.</span>
+       <span class="L ar">تنطفئ الطبقات قبل أن تقلع الطائرة، وتواصل الشبكة عملها بلا جمهور.</span></p>
+  </div>
+</div>
+<!-- ============ FINALE · S12 dawn ============ -->
+<section id="s12" class="scene" data-scene="pin" aria-label="Dawn extraction over a working grid">
+  <div class="stage">
+    <div class="sky" aria-hidden="true"></div>
+    <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- working grid below, small and alive -->
+      <g transform="translate(0,540) scale(1,0.28)" opacity=".85">
+        <g data-city="dawn"></g>
+      </g>
+      <g id="grid-pulses">
+        <circle class="citypulse" cx="300" cy="600" r="4" fill="#53B878"/>
+        <circle class="citypulse" cx="520" cy="620" r="4" fill="#53B878" style="animation-delay:.5s"/>
+        <circle class="citypulse" cx="760" cy="590" r="4" fill="#53B878" style="animation-delay:1.1s"/>
+        <circle class="citypulse" cx="980" cy="615" r="4" fill="#53B878" style="animation-delay:1.6s"/>
+      </g>
+      <!-- ridge foreground -->
+      <path d="M0,760 L0,660 L220,610 L420,650 L640,600 L880,646 L1100,598 L1300,630 L1300,760 Z" fill="#0B0D0E"/>
+      <!-- departing aircraft -->
+      <g id="heli-out">
+        <g transform="translate(300,430) scale(.7)">
+          <ellipse class="blades" cx="0" cy="-26" rx="120" ry="7" fill="#A7AAA4" opacity=".2"/>
+          <path d="M-58,-6 Q-30,-22 6,-20 L58,-14 Q66,-4 54,6 L-20,12 Q-52,10 -58,-6 Z"
+                fill="#171A1C" stroke="#454938" stroke-width="2.5"/>
+          <path d="M54,-12 L118,-20 L122,-10 L60,-2 Z" fill="#171A1C" stroke="#454938" stroke-width="2"/>
+          <circle class="navlight" cx="-56" cy="-8" r="3.4" fill="#E5A13A"/>
+        </g>
+      </g>
+    </svg>
+    <div class="vig"></div>
+    <div class="endcard">
+      <div class="in">
+        <div class="clock"><span class="L en">06:00 · GRID LIVE</span><span class="L ar">٠٦:٠٠ · الشبكة حيّة</span></div>
+        <h2><span class="L en">The city runs. The team was never the story.</span>
+            <span class="L ar">المدينة تعمل، ولم يكن الفريق يومًا هو الحكاية.</span></h2>
+        <p><span class="L en">Operation Clockwork ends where it began: an aerial grid, a ridge, and darkness thinning at the horizon — ready to loop.</span>
+           <span class="L ar">تنتهي عملية عقارب الساعة حيث بدأت: شبكةٌ من الجوّ، وحافّةُ جبل، وعتمةٌ تترقّق عند الأفق — جاهزةً للدوران من جديد.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="disclosure">
+  <p>
+    <span class="L en">An original scroll-cinema motion study inspired by the visual language of tactical cinema.
+    AI-assisted, built entirely in code (CSS, SVG, canvas) — no footage, no game assets, and no affiliation
+    with Call of Duty, Activision, or any studio. Nonviolent by design: the adversary is entropy, and no
+    weapon is ever aimed at a person. Part of the <a href="../">Mohamed Mahmoud portfolio</a>.</span>
+    <span class="L ar">دراسة حركة أصلية بأسلوب «سينما التمرير» مستوحاة من اللغة البصرية للسينما التكتيكية.
+    أُنجزت بمساعدة الذكاء الاصطناعي وبالشيفرة وحدها (CSS وSVG وCanvas) — بلا لقطات مصوّرة ولا أصول ألعاب،
+    ومن غير أيّ ارتباط بـCall of Duty أو Activision أو أيّ استوديو. لاعنفيّة بالتصميم: الخصم هو الفوضى،
+    ولا يُصوَّب سلاحٌ نحو إنسانٍ أبدًا. جزء من <a href="../">موقع محمد محمود</a>.</span>
+  </p>
+</footer>
+
+<script src="cinema.js"></script>
+<script>
+(() => {
+  'use strict';
+  /* ---------- deterministic city builder ---------- */
+  const rng = (seed) => () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a) => { const e = document.createElementNS(NS, n);
+    for (const k in a) e.setAttribute(k, a[k]); return e; };
+
+  const CITY = {
+    dark:    { block:'#1B1F21', edge:'#2A2F32', win:'rgba(167,170,164,.10)', lit:.10, road:'#121416' },
+    stalled: { block:'#1B1F21', edge:'#454938', win:'rgba(229,161,58,.14)',  lit:.12, road:'#121416' },
+    working: { block:'#20241F', edge:'#454938', win:'rgba(167,170,164,.30)', lit:.42, road:'#14171A' },
+    dawn:    { block:'#141518', edge:'#454938', win:'rgba(167,170,164,.24)', lit:.34, road:'#101214' }
+  };
+  const buildCity = (g, mode) => {
+    const c = CITY[mode], r = rng(mode === 'working' ? 77 : 41); // before/after share seed? no: same layout needs same seed
+    const rr = rng(41); // layout seed shared by ALL cities so geometry matches across scenes
+    g.appendChild(el('rect', { x:0, y:0, width:1300, height:760, fill:c.road, opacity:.6 }));
+    for (let gy = 0; gy < 6; gy++) for (let gx = 0; gx < 10; gx++) {
+      const x = 40 + gx * 126, y = 40 + gy * 120;
+      const w = 86 + rr() * 30, h = 78 + rr() * 32;
+      if (rr() < .12) continue;                    // empty lot
+      g.appendChild(el('rect', { x, y, width:w, height:h, fill:c.block,
+        stroke:c.edge, 'stroke-width':1.4, opacity:.9 }));
+      const wins = 2 + Math.floor(rr() * 4);
+      for (let i = 0; i < wins; i++) {
+        const lit = r() < c.lit;
+        g.appendChild(el('rect', { x:x + 8 + i * 16, y:y + 10, width:8, height:8,
+          fill: lit ? c.win : 'rgba(0,0,0,.35)' }));
+      }
+    }
+  };
+  document.querySelectorAll('[data-city]').forEach(g => buildCity(g, g.dataset.city));
+
+  /* windows for the S03 street facades (shared defs geometry, var-colored) */
+  const slots = document.getElementById('win-slots');
+  if (slots) {
+    const faces = [[40,120,220,520],[300,200,220,440],[720,150,250,490],[1010,230,250,410]];
+    const wr = rng(9);
+    faces.forEach(([fx, fy, fw, fh]) => {
+      for (let y = fy + 34; y < fy + fh - 30; y += 46)
+        for (let x = fx + 20; x < fx + fw - 24; x += 40)
+          if (wr() < .8) slots.appendChild(el('rect',
+            { x, y, width:16, height:22, fill: wr() < .3 ? 'var(--f-win)' : 'rgba(0,0,0,.3)' }));
+    });
+  }
+
+  /* exact path lengths for draw-on strokes */
+  ['route-loop', 'loop-iso'].forEach(id => {
+    const p = document.getElementById(id);
+    if (p && p.getTotalLength) p.style.setProperty('--len', p.getTotalLength().toFixed(0));
+  });
+
+  /* ---------- canvas volumetrics: one rAF, live scenes only, dpr<=2 ---------- */
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const parts = [];                       // {cv,ctx,scene,seed:[],draw}
+  const P = (scene) => parseFloat(scene.style.getPropertyValue('--p') || '0');
+
+  const reg = (id, init, draw) => {
+    const cv = document.getElementById(id);
+    if (!cv) return;
+    const u = { cv, ctx: cv.getContext('2d'), scene: cv.closest('[data-scene]'), s: [], draw };
+    init(u);
+    parts.push(u);
+  };
+  const size = (u) => {
+    const w = u.cv.clientWidth, h = u.cv.clientHeight;
+    if (u.cv.width !== w * dpr || u.cv.height !== h * dpr) {
+      u.cv.width = w * dpr; u.cv.height = h * dpr;
+      u.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    u.w = w; u.h = h;
+  };
+
+  /* rain: sparse chalk streaks, slight wind */
+  reg('fx-rain', (u) => {
+    for (let i = 0; i < 90; i++) u.s.push({ x: Math.random(), y: Math.random(), v: .35 + Math.random() * .5 });
+  }, (u, t) => {
+    u.ctx.clearRect(0, 0, u.w, u.h);
+    u.ctx.strokeStyle = 'rgba(167,170,164,.16)'; u.ctx.lineWidth = 1;
+    for (const d of u.s) {
+      d.y += d.v * .012; d.x += .0012;
+      if (d.y > 1.05) { d.y = -.05; d.x = Math.random(); }
+      const x = d.x * u.w, y = d.y * u.h;
+      u.ctx.beginPath(); u.ctx.moveTo(x, y); u.ctx.lineTo(x - 3, y + 13 * d.v); u.ctx.stroke();
+    }
+  });
+
+  /* rotor dust: kicked from the ridge, densest mid-scene, settles */
+  reg('fx-dust2', (u) => {
+    for (let i = 0; i < 70; i++) u.s.push({ a: Math.random() * 6.28, r: Math.random(), s: .2 + Math.random() * .8 });
+  }, (u, t) => {
+    u.ctx.clearRect(0, 0, u.w, u.h);
+    const p = P(u.scene), k = Math.sin(Math.min(p / .7, 1) * Math.PI); // rises then settles
+    u.ctx.fillStyle = 'rgba(167,170,164,.10)';
+    for (const d of u.s) {
+      d.a += .004 * d.s;
+      const cx = u.w * (.28 + p * .5), cy = u.h * .78;
+      const x = cx + Math.cos(d.a) * d.r * u.w * .3;
+      const y = cy + Math.sin(d.a) * d.r * u.h * .1 - d.s * k * u.h * .12;
+      u.ctx.beginPath(); u.ctx.arc(x, y, 1.2 + d.s * 2.2 * k, 0, 6.28); u.ctx.fill();
+    }
+  });
+
+  /* NVG grain: phosphor specks, only once sensor mode is up */
+  reg('fx-grain', () => {}, (u, t) => {
+    u.ctx.clearRect(0, 0, u.w, u.h);
+    const p = P(u.scene), on = Math.max(0, Math.min((p - .12) / .18, 1));
+    if (on <= 0) return;
+    u.ctx.fillStyle = `rgba(120,217,107,${.05 * on})`;
+    const n = 260 * on;
+    for (let i = 0; i < n; i++)
+      u.ctx.fillRect(Math.random() * u.w, Math.random() * u.h, 2, 2);
+    /* slow scan shimmer */
+    const y = ((t * .02) % (u.h * 1.4)) - u.h * .2;
+    const gr = u.ctx.createLinearGradient(0, y, 0, y + 90);
+    gr.addColorStop(0, 'rgba(120,217,107,0)');
+    gr.addColorStop(.5, `rgba(120,217,107,${.05 * on})`);
+    gr.addColorStop(1, 'rgba(120,217,107,0)');
+    u.ctx.fillStyle = gr; u.ctx.fillRect(0, y, u.w, 90);
+  });
+
+  /* base dust: drifting motes that settle as --p completes */
+  reg('fx-dust7', (u) => {
+    for (let i = 0; i < 50; i++) u.s.push({ x: Math.random(), y: Math.random(), s: .3 + Math.random() * .7 });
+  }, (u, t) => {
+    u.ctx.clearRect(0, 0, u.w, u.h);
+    const settle = 1 - P(u.scene);
+    u.ctx.fillStyle = 'rgba(167,170,164,.12)';
+    for (const d of u.s) {
+      d.x += .0006 * d.s * settle; d.y += .0002 * d.s * settle;
+      if (d.x > 1.02) d.x = -.02;
+      u.ctx.beginPath();
+      u.ctx.arc(d.x * u.w, d.y * u.h, .8 + d.s * 1.6 * (.3 + settle * .7), 0, 6.28);
+      u.ctx.fill();
+    }
+  });
+
+  let running = false, liveCount = 0;
+  const frame = (t) => {
+    if (!liveCount) { running = false; return; }
+    for (const u of parts) {
+      if (!u.scene.classList.contains('is-live')) continue;
+      size(u); u.draw(u, t);
+    }
+    requestAnimationFrame(frame);
+  };
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { liveCount += e.isIntersecting ? 1 : -1; });
+    liveCount = Math.max(0, liveCount);
+    if (liveCount && !running && !reduced) { running = true; requestAnimationFrame(frame); }
+  }, { threshold: .15 });
+  parts.forEach(u => io.observe(u.scene));
+  if (reduced) parts.forEach(u => { size(u); u.draw(u, 0); }); // one static frame
+})();
+</script>
+</body>
+</html>

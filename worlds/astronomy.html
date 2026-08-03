@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE OBSERVATORY · المرصد — an astronomy scroll film</title>
+<meta name="description" content="A scroll-cinema film built entirely in code: a lone desert observatory detects order inside cosmic noise, maps the signal, builds an orbital answer, and holds the one decision no machine may make.">
+<meta name="theme-color" content="#070B18">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070B18'/%3E%3Cpath d='M14 41a18 18 0 0 1 36 0Z' fill='%23B88E3E'/%3E%3Crect x='30' y='20' width='4' height='21' fill='%2343D9D1'/%3E%3Crect x='11' y='41' width='42' height='6' rx='2' fill='%23252A35'/%3E%3Ccircle cx='49' cy='14' r='1.8' fill='%23F4F0E7'/%3E%3Ccircle cx='18' cy='11' r='1.2' fill='%23F4F0E7' opacity='.7'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./cinema.css">
+<style>
+/* ══════════ THE OBSERVATORY — world palette & typography ══════════ */
+:root{
+  --void:#070B18; --basalt:#252A35; --star:#F4F0E7;
+  --cyan:#43D9D1; --violet:#7667D8; --brass:#B88E3E; --amber:#E9A23B;
+  --w-bg:var(--void); --w-ink:var(--star); --w-accent:var(--brass); --w-dim:var(--basalt);
+  --w-display:'Optima','Candara','Gill Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+  --w-body:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+  --w-ui:ui-sans-serif,system-ui,'Segoe UI','Helvetica Neue',Arial,sans-serif;
+  --w-mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+}
+html{background:var(--void)}
+body{overscroll-behavior-y:none}
+::selection{background:rgba(67,217,209,.28);color:var(--star)}
+/* Arabic never inherits latin tracking — keeps shaping intact */
+.L.ar{letter-spacing:0}
+
+/* film grain — one static feTurbulence pass, no requests */
+.grain{position:fixed;inset:0;z-index:44;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:220px 220px}
+
+/* ══════════ scene scaffolding ══════════ */
+.scene .stage{background:var(--void)}
+.fill{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scene .stage canvas{opacity:0;transition:opacity .9s ease .05s}
+.scene.is-live .stage canvas{opacity:1}
+.layer{position:absolute;inset:0;pointer-events:none;will-change:transform}
+.cam{position:absolute;inset:0;transform:scale(calc(1 + var(--p,0)*var(--push,.1)));transform-origin:50% 58%;will-change:transform}
+.vig::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:radial-gradient(130% 100% at 50% 42%,transparent 58%,rgba(3,5,11,.5) 100%)}
+
+/* act dividers */
+.act{min-height:58vh;position:relative;padding-top:14vh}
+.act::before{content:"";position:absolute;top:0;left:50%;translate:-50% 0;width:1px;height:9vh;
+  background:linear-gradient(transparent,var(--brass));opacity:.55}
+.act h2{letter-spacing:.3em;text-transform:uppercase;font-weight:600;color:var(--star)}
+.act p{font-family:var(--w-body)}
+.act-gate .no{color:var(--amber)}
+.act-gate::before{background:linear-gradient(transparent,var(--amber))}
+
+/* instrument chips (honest DOM copy, never fake telemetry) */
+.chip{position:absolute;top:64px;inset-inline-end:clamp(16px,4vw,46px);z-index:6;display:flex;gap:14px;align-items:center;
+  font:500 10px/1.5 var(--w-mono);letter-spacing:.22em;text-transform:uppercase;pointer-events:none}
+.chip .dot{letter-spacing:0;color:rgba(244,240,231,.35)}
+
+/* ══════════ S1 · title — the sleeping dome ══════════ */
+.s-title{--push:.12}
+.s-title .stage{background:linear-gradient(180deg,#070B18 0%,#0A0F20 68%,#0C1120 100%)}
+.l-far{transform:translateY(calc(var(--p,0)*2.2vh))}
+.l-set{transform:translateY(calc(var(--p,0)*6vh))}
+.l-near{transform:translateY(calc(var(--p,0)*11vh))}
+.ridge{position:absolute;left:-5%;right:-5%;pointer-events:none}
+.ridge-far{bottom:24%;height:22%;background:linear-gradient(180deg,#12161F,#0B0E17 80%);
+  clip-path:polygon(0 68%,7% 52%,16% 60%,26% 40%,38% 55%,52% 34%,66% 52%,78% 44%,90% 58%,100% 50%,100% 100%,0 100%)}
+.ridge-set{bottom:0;height:36%;background:linear-gradient(180deg,#171C27,#0A0D15 72%);
+  clip-path:polygon(0 40%,12% 34%,24% 38%,40% 30%,58% 36%,74% 28%,88% 34%,100% 30%,100% 100%,0 100%)}
+.ridge-near{bottom:-2%;height:24%;background:linear-gradient(180deg,#0B0E15,#05070D);
+  clip-path:polygon(0 55%,10% 62%,22% 48%,34% 66%,47% 52%,60% 70%,72% 56%,86% 68%,100% 58%,100% 100%,0 100%)}
+.obs-wrap{position:absolute;left:13%;bottom:33%;width:clamp(150px,21vw,300px)}
+.obs{display:block;width:100%;height:auto}
+.obs .seamlight{opacity:calc(clamp(0,(var(--p,0) - .7)*4,1)*.85)}
+.s-title .obs-lamp-halo{opacity:.16}
+.title-card{position:absolute;inset:0;z-index:6;display:grid;place-content:center;text-align:center;padding:0 6vw;pointer-events:none}
+.title-kick{font:600 11px/1.6 var(--w-ui);letter-spacing:.34em;text-transform:uppercase;color:var(--brass);
+  margin-bottom:20px;opacity:clamp(0,(var(--p,0) - .2)*4,1)}
+.title{font:600 clamp(38px,8.4vw,102px)/1.06 var(--w-display);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--star);text-shadow:0 2px 44px rgba(0,0,0,.65);text-wrap:balance;
+  opacity:clamp(0,(var(--p,0) - .3)*3.2,1);
+  transform:translateY(calc(clamp(0,1 - (var(--p,0) - .26)*3,1)*20px))}
+.title-sub{margin:18px auto 0;max-width:56ch;font:400 clamp(14px,1.7vw,18px)/1.65 var(--w-body);
+  color:rgba(244,240,231,.74);opacity:clamp(0,(var(--p,0) - .44)*3.5,1)}
+.scrollhint{position:absolute;bottom:4.5vh;left:0;right:0;z-index:6;display:grid;place-items:center;
+  opacity:clamp(0,1 - var(--p,0)*7,1);pointer-events:none}
+.scrollhint b{font:600 10px/1 var(--w-ui);letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(244,240,231,.55);animation:hint 2.8s ease-in-out infinite}
+@keyframes hint{0%,100%{opacity:.4;transform:translateY(0)}50%{opacity:1;transform:translateY(5px)}}
+
+/* ══════════ S2 · the dome takes one mechanical breath ══════════ */
+.s-wake{--push:.06}
+.wake-sky{position:absolute;inset:0;background:
+  radial-gradient(1.4px 1.4px at 46% 12%,rgba(244,240,231,.95),transparent 60%),
+  radial-gradient(1.1px 1.1px at 52% 30%,rgba(244,240,231,.8),transparent 60%),
+  radial-gradient(1.8px 1.8px at 49% 20%,rgba(244,240,231,.9),transparent 60%),
+  radial-gradient(1px 1px at 55% 8%,rgba(244,240,231,.65),transparent 60%),
+  radial-gradient(1.2px 1.2px at 43% 26%,rgba(244,240,231,.7),transparent 60%),
+  radial-gradient(2px 2px at 50.5% 15%,rgba(244,240,231,.55),transparent 60%),
+  linear-gradient(180deg,#0A101F,#070B18)}
+.shell{position:absolute;top:-4%;bottom:-2%;width:60%;will-change:transform;
+  background:linear-gradient(180deg,#12100C 0%,#0B0A08 40%,#060606 100%)}
+.shell i{position:absolute;inset:0;display:block;
+  background:repeating-linear-gradient(180deg,transparent 0 64px,rgba(184,142,62,.07) 64px 66px)}
+.shell-l{left:-4%;border-top-right-radius:38% 55%;transform:translateX(calc(var(--p,0)*-9%));
+  box-shadow:inset -2px 0 0 rgba(184,142,62,.3),inset -18px 0 40px rgba(0,0,0,.6)}
+.shell-r{right:-4%;border-top-left-radius:38% 55%;transform:translateX(calc(var(--p,0)*9%));
+  box-shadow:inset 2px 0 0 rgba(184,142,62,.3),inset 18px 0 40px rgba(0,0,0,.6)}
+.shaft{position:absolute;top:-2%;left:50%;translate:-50% 0;height:80%;width:min(30vw,340px);
+  transform:scaleX(calc(.22 + var(--p,0)*.95));transform-origin:50% 0;
+  background:linear-gradient(180deg,rgba(244,240,231,.13),rgba(244,240,231,.03) 68%,transparent);
+  clip-path:polygon(42% 0,58% 0,80% 100%,20% 100%);opacity:calc(.1 + var(--p,0)*.8);mix-blend-mode:screen}
+.scope-wrap{position:absolute;bottom:4%;left:50%;translate:-50% 0;width:min(56vw,560px);z-index:3}
+.scope{display:block;width:100%;height:auto}
+.scope .tube{transform-box:fill-box;transform-origin:50% 50%;rotate:calc(-16deg + var(--p,0)*20deg)}
+.scope .gear{transform-box:fill-box;transform-origin:center}
+.scope .g1{rotate:calc(var(--p,0)*70deg)}
+.scope .g2{rotate:calc(var(--p,0)*-52deg)}
+.scope .eye{opacity:calc(clamp(0,(var(--p,0) - .78)*5,1)*.9)}
+.wake-floor{position:absolute;left:0;right:0;bottom:0;height:28%;z-index:2;
+  background:linear-gradient(180deg,transparent,#04060C 58%),
+  radial-gradient(42% 34% at 28% 100%,rgba(184,142,62,.16),transparent 70%),
+  radial-gradient(30% 26% at 74% 100%,rgba(184,142,62,.1),transparent 70%)}
+
+/* ══════════ S3 · signal in the noise (macro) ══════════ */
+.s-signal{--push:.08}
+
+/* ══════════ S5 · MAP — noise becomes a route (signature) ══════════ */
+.s-map{--push:.06}
+.phases span{color:var(--cyan)}
+.ph-a{opacity:calc(.22 + clamp(0,1.6 - var(--p,0)*2.6,1)*.78)}
+.ph-b{opacity:calc(.22 + clamp(0,(var(--p,0) - .3)*5,1)*clamp(0,(.84 - var(--p,0))*6,1)*.78)}
+.ph-c{opacity:calc(.22 + clamp(0,(var(--p,0) - .58)*5,1)*.78)}
+
+/* ══════════ S6 · chart to ignition ══════════ */
+.s-forge{--push:.1}
+.astro-wrap{position:absolute;inset:0;display:grid;place-items:center}
+.astro{width:min(74vmin,640px);height:auto;display:block}
+.astro g,.astro path,.astro circle{transform-box:fill-box;transform-origin:center}
+.astro .ring1{rotate:calc((1 - clamp(0,var(--p,0)*2.2,1))*38deg)}
+.astro .ring2{rotate:calc((1 - clamp(0,var(--p,0)*2.2,1))*-26deg)}
+.astro .lever{transform-origin:8% 50%;rotate:calc((1 - clamp(0,(var(--p,0) - .4)*6,1))*-26deg)}
+.astro .conduit{stroke-dasharray:100;stroke-dashoffset:calc(100 - clamp(0,(var(--p,0) - .18)*3.2,1)*100)}
+.astro .loopmini{scale:calc(1 - clamp(0,(var(--p,0) - .5)*3.4,1)*.82);opacity:calc(.9 - clamp(0,(var(--p,0) - .62)*6,1)*.9)}
+.astro .shut-l{rotate:calc(clamp(0,(var(--p,0) - .58)*4.5,1)*-52deg)}
+.astro .shut-r{rotate:calc(clamp(0,(var(--p,0) - .58)*4.5,1)*52deg)}
+.astro .corewarm{scale:calc(.1 + clamp(0,(var(--p,0) - .62)*3,1)*.9);opacity:clamp(0,(var(--p,0) - .62)*4,1)}
+.astro .cyanring{opacity:calc(clamp(0,(var(--p,0) - .85)*7,1)*.9)}
+.core-halo{position:absolute;left:50%;top:50%;translate:-50% -50%;width:56vmin;height:56vmin;border-radius:50%;
+  background:radial-gradient(circle,rgba(244,240,231,.2),rgba(184,142,62,.08) 45%,transparent 70%);
+  opacity:clamp(0,(var(--p,0) - .66)*3,1);pointer-events:none}
+
+/* ══════════ S8 · BUILD — orbital assembly ══════════ */
+.s-build{--push:.05}
+
+/* ══════════ S10 · GATE — amber, exclusive ══════════ */
+.s-gate{--push:.06}
+.gate-stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:radial-gradient(105% 85% at 42% 50%,transparent 40%,rgba(2,2,5,.78) 100%)}
+.pool{position:absolute;inset:0;
+  background:radial-gradient(58% 62% at 32% 55%,rgba(233,162,59,.3),rgba(233,162,59,.05) 55%,transparent 76%);
+  opacity:calc(clamp(0,var(--p,0)*7,1)*clamp(0,(.97 - var(--p,0))*9,1))}
+.console-wrap{position:absolute;inset:0;display:grid;place-items:center;padding:0 5vw}
+.console{width:min(88vw,780px);height:auto;display:block}
+.console g,.console rect,.console path,.console circle{transform-box:fill-box;transform-origin:center}
+.console .keyrot{rotate:calc(clamp(0,(var(--p,0) - .14)*7,1)*45deg + clamp(0,(var(--p,0) - .58)*12,1)*45deg)}
+.console .cover{translate:calc(clamp(0,(var(--p,0) - .26)*8,1)*-46px) 0;opacity:calc(1 - clamp(0,(var(--p,0) - .26)*8,1)*.85)}
+.console .shut{translate:0 calc(clamp(0,(var(--p,0) - .3)*9,1)*-10px)}
+.console .reflection{opacity:calc(clamp(0,(var(--p,0) - .36)*8,1)*clamp(0,(.7 - var(--p,0))*9,1))}
+.console .palmglow{opacity:calc(clamp(0,(var(--p,0) - .68)*9,1)*clamp(0,(.94 - var(--p,0))*8,1)*.9)}
+.console .pulse{stroke-dasharray:100;stroke-dashoffset:calc(100 - clamp(0,(var(--p,0) - .76)*9,1)*100);
+  opacity:calc(clamp(0,(var(--p,0) - .76)*9,1)*clamp(0,(.96 - var(--p,0))*9,1))}
+.console .releasering{opacity:calc(clamp(0,(var(--p,0) - .9)*9,1)*.95)}
+.gate-label{position:absolute;z-index:6;font:500 9.5px/1.6 var(--w-mono);letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(244,240,231,.42);pointer-events:none;opacity:clamp(0,(var(--p,0) - .2)*4,1)}
+
+/* ══════════ S12 · PROVE — the dish field ══════════ */
+.s-prove{--push:.05}
+.legend span{color:rgba(244,240,231,.6)}
+.legend .a{color:var(--cyan)}
+.legend{opacity:clamp(0,(var(--p,0) - .12)*4,1)}
+
+/* ══════════ S14 · finale — return to the ridge ══════════ */
+.s-dawn{--push:.04}
+.s-dawn .stage{background:linear-gradient(180deg,#070B18 0%,#0A0F20 68%,#0C1120 100%)}
+.s-dawn .obs .seamlight{opacity:calc(clamp(0,(.34 - var(--p,0))*4,1)*.85)}
+.s-dawn .obs .obs-lamp,.s-dawn .obs .obs-lamp-halo{opacity:calc(.05 + clamp(0,(.72 - var(--p,0))*3,1)*.6)}
+.dawnwash{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(205deg,transparent 42%,rgba(244,240,231,.05) 66%,rgba(244,240,231,.16) 100%);
+  opacity:clamp(0,(var(--p,0) - .5)*2.2,1)}
+
+/* ══════════ shared caption polish ══════════ */
+.caption .kick{font-family:var(--w-ui)}
+.caption p{font-family:var(--w-body)}
+.act .p-lead{margin-top:12px}
+
+/* ══════════ scene heights (≤265vh so .is-live can fire at IO .35) ══════════ */
+.s-title{height:250vh}.s-wake{height:240vh}.s-signal{height:240vh}.s-map{height:265vh}
+.s-forge{height:245vh}.s-build{height:260vh}.s-gate{height:265vh}.s-prove{height:260vh}.s-dawn{height:250vh}
+
+/* ══════════ reduced motion: hold the postcards ══════════ */
+@media (prefers-reduced-motion: reduce){
+  .cam,.layer,.shell-l,.shell-r{transform:none}
+  .shaft{transform:scaleX(1)}
+  .scrollhint b{animation:none}
+  .title,.title-kick,.title-sub{opacity:1;transform:none}
+}
+
+/* ══════════ small screens ══════════ */
+@media (max-width:640px){
+  .title{letter-spacing:.08em}
+  .chip{top:58px;gap:10px;font-size:9px}
+  .obs-wrap{left:8%;width:38vw;bottom:34%}
+  .scope-wrap{width:86vw}
+  .astro{width:88vmin}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="rail" data-rail aria-hidden="true"><i></i></div>
+
+<header class="chrome">
+  <a href="./"><span class="L en">◂ Worlds</span><span class="L ar">◂ العوالم</span></a>
+  <div class="grp">
+    <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
+    <button type="button" data-lang-toggle aria-pressed="false" title="English / العربية">EN·ع</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ══════════ S1 · TITLE — the sleeping dome ══════════ -->
+<section class="scene s-title vig" data-scene="pin" aria-label="Title">
+  <div class="stage">
+    <div class="cam">
+      <div class="layer l-far"><div class="ridge ridge-far"></div></div>
+      <div class="layer l-set"><div class="ridge ridge-set"></div></div>
+      <div class="obs-wrap">
+        <svg class="obs" viewBox="0 0 300 220" aria-hidden="true">
+          <path d="M150 30 a86 86 0 0 1 86 86 v10 h-172 v-10 a86 86 0 0 1 86 -86Z" fill="#171B24"/>
+          <path d="M150 30 a86 86 0 0 1 86 86 v10 h-172 v-10 a86 86 0 0 1 86 -86Z" fill="none" stroke="#B88E3E" stroke-opacity=".34"/>
+          <path class="seamlight" d="M146 32 h8 v104 h-8 Z" fill="#43D9D1" opacity="0"/>
+          <rect x="58" y="126" width="184" height="52" rx="6" fill="#12151D"/>
+          <rect x="58" y="126" width="184" height="52" rx="6" fill="none" stroke="#B88E3E" stroke-opacity=".22"/>
+          <rect class="obs-lamp" x="206" y="146" width="10" height="14" rx="2" fill="#E9A23B" opacity=".6"/>
+          <circle class="obs-lamp-halo" cx="211" cy="153" r="26" fill="#E9A23B" opacity=".16" style="filter:blur(6px)"/>
+          <rect x="70" y="178" width="160" height="8" rx="3" fill="#0B0E15"/>
+        </svg>
+      </div>
+      <div class="layer l-near"><div class="ridge ridge-near"></div></div>
+    </div>
+    <div class="title-card">
+      <p class="title-kick"><span class="L en">World 01 · Astronomy · rendered live in code</span><span class="L ar">العالم ٠١ · الفلك · يُعرَض حيًّا بالشيفرة</span></p>
+      <h1 class="title"><span class="L en">The Observatory</span><span class="L ar">المرصد</span></h1>
+      <p class="title-sub"><span class="L en">A lone station on a desert ridge detects order inside cosmic noise — and holds the one decision no machine may make.</span><span class="L ar">محطة وحيدة على حافة الصحراء تلتقط نظامًا داخل الضجيج الكوني — وتُمسك بالقرار الوحيد الذي لا يملكه أي جهاز.</span></p>
+    </div>
+    <p class="chip"><span>AST · 28MM WIDE</span><span class="dot">·</span><span><span class="L en">PROLOGUE</span><span class="L ar">الافتتاح</span></span></p>
+    <div class="scrollhint"><b><span class="L en">Scroll — the dome wakes</span><span class="L ar">مرِّر — القبّة تستيقظ</span></b></div>
+  </div>
+</section>
+
+<!-- ══════════ S2 · the dome takes one mechanical breath ══════════ -->
+<section class="scene s-wake vig" data-scene="pin" aria-label="The dome wakes">
+  <div class="stage">
+    <div class="wake-sky"></div>
+    <div class="shaft"></div>
+    <div class="shell shell-l"><i></i></div>
+    <div class="shell shell-r"><i></i></div>
+    <div class="scope-wrap">
+      <svg class="scope" viewBox="0 0 560 300" aria-hidden="true">
+        <rect x="230" y="196" width="100" height="70" rx="8" fill="#171B24" stroke="#B88E3E" stroke-opacity=".3"/>
+        <circle class="gear g1" cx="238" cy="230" r="26" fill="none" stroke="#B88E3E" stroke-width="5" stroke-dasharray="6 7"/>
+        <circle class="gear g2" cx="318" cy="242" r="18" fill="none" stroke="#B88E3E" stroke-width="4" stroke-dasharray="5 6"/>
+        <g class="tube">
+          <rect x="150" y="118" width="260" height="44" rx="16" fill="#20242E"/>
+          <rect x="150" y="118" width="260" height="44" rx="16" fill="none" stroke="#B88E3E" stroke-opacity=".45"/>
+          <rect x="150" y="121" width="260" height="3" fill="#F4F0E7" opacity=".14"/>
+          <rect x="396" y="126" width="26" height="28" rx="6" fill="#B88E3E" opacity=".8"/>
+          <circle class="eye" cx="164" cy="140" r="7" fill="#43D9D1" opacity="0"/>
+        </g>
+        <rect x="262" y="158" width="36" height="46" fill="#171B24"/>
+      </svg>
+    </div>
+    <div class="wake-floor"></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Prologue · the first motion</span><span class="L ar">الافتتاح · الحركة الأولى</span></p>
+      <h2><span class="L en">The dome takes one breath</span><span class="L ar">القبّة تأخذ نفَسًا واحدًا</span></h2>
+      <p><span class="L en">Shutter halves part, a column of starlight enters, gears take the load, and the instrument leans toward the sky. Every move is mechanical, earned, and reversible.</span><span class="L ar">ينفرج نصفا الغالق، فيدخل عمودٌ من ضوء النجوم، وتتلقّى التروس الحمل، ويميل المنظار نحو السماء. كل حركةٍ ميكانيكية، مُستحقّة، وقابلة للعكس.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- act: MAP -->
+<section class="act" data-scene>
+  <p class="no"><span class="L en">Act · MAP</span><span class="L ar">الفصل · الخريطة</span></p>
+  <h2><span class="L en">Noise, surveyed</span><span class="L ar">الضجيج، ممسوحًا</span></h2>
+  <p class="p-lead"><span class="L en">Color arrives only when a sensor reveals information — never as decoration.</span><span class="L ar">لا يصل اللون إلا حين يكشف مستشعرٌ معلومةً — لا زينةً أبدًا.</span></p>
+</section>
+
+<!-- ══════════ S3 · signal in the noise (macro) ══════════ -->
+<section class="scene s-signal vig" data-scene="pin" aria-label="Signal in the noise">
+  <div class="stage">
+    <div class="cam"><canvas class="fill" id="cv-signal" aria-hidden="true"></canvas></div>
+    <p class="chip"><span>100MM MACRO</span><span class="dot">·</span><span><span class="L en">SENSOR VIEW</span><span class="L ar">عرض المستشعر</span></span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Map · macro</span><span class="L ar">الخريطة · عن قرب</span></p>
+      <h2><span class="L en">A repetition inside the static</span><span class="L ar">تكرارٌ داخل التشويش</span></h2>
+      <p><span class="L en">The trace is mostly noise — until the same interval returns, and returns, and returns. The instrument marks each return in spectral cyan.</span><span class="L ar">الأثر ضجيجٌ في معظمه — حتى تعود الفترةُ نفسها، وتعود، وتعود. فيُعلّم الجهاز كلَّ عودةٍ بالسماوي الطيفي.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ S5 · MAP — noise becomes a route (signature) ══════════ -->
+<section class="scene s-map vig" data-scene="pin" aria-label="The signal resolves into a route">
+  <div class="stage">
+    <div class="cam"><canvas class="fill" id="cv-map" aria-hidden="true"></canvas></div>
+    <p class="chip phases">
+      <span class="ph-a"><span class="L en">NOISE</span><span class="L ar">ضجيج</span></span><span class="dot">→</span>
+      <span class="ph-b"><span class="L en">PATTERN</span><span class="L ar">نمط</span></span><span class="dot">→</span>
+      <span class="ph-c"><span class="L en">ROUTE</span><span class="L ar">مسار</span></span>
+    </p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Map · the signature</span><span class="L ar">الخريطة · اللحظة المميِّزة</span></p>
+      <h2><span class="L en">The noise becomes a constellation route</span><span class="L ar">يصير الضجيجُ مسارَ كوكبة</span></h2>
+      <p><span class="L en">Scroll resolves the field: scattered detections align, dead candidates dim, and one closed cyan route survives — because it returns to where it began.</span><span class="L ar">يحسم التمريرُ الحقلَ: تتحاذى الالتقاطات المبعثرة، وتخفت المرشّحات الميتة، ولا ينجو إلا مسارٌ سماويٌّ مغلقٌ واحد — لأنه يعود إلى حيث بدأ.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- act: BUILD -->
+<section class="act" data-scene>
+  <p class="no"><span class="L en">Act · BUILD</span><span class="L ar">الفصل · البناء</span></p>
+  <h2><span class="L en">An orbital answer</span><span class="L ar">جوابٌ مداري</span></h2>
+  <p class="p-lead"><span class="L en">Brass carries what hands built; cyan carries what the sky confirmed.</span><span class="L ar">النحاس يحمل ما بنته الأيدي؛ والسماوي يحمل ما أكّدته السماء.</span></p>
+</section>
+
+<!-- ══════════ S6 · chart to ignition ══════════ -->
+<section class="scene s-forge vig" data-scene="pin" aria-label="Chart to ignition">
+  <div class="stage">
+    <div class="astro-wrap">
+      <div class="core-halo"></div>
+      <svg class="astro" viewBox="-320 -320 640 640" aria-hidden="true">
+        <circle class="ring1" cx="0" cy="0" r="236" fill="none" stroke="#B88E3E" stroke-width="2" stroke-dasharray="10 14" opacity=".7"/>
+        <circle class="ring2" cx="0" cy="0" r="168" fill="none" stroke="#B88E3E" stroke-width="1.6" stroke-dasharray="4 9" opacity=".6"/>
+        <path class="conduit" pathLength="100" d="M-236 0 A236 236 0 0 1 0 -236 L0 -168 A168 168 0 0 0 -168 0 Z" fill="none" stroke="#43D9D1" stroke-width="2"/>
+        <g class="loopmini">
+          <ellipse cx="0" cy="0" rx="70" ry="46" fill="none" stroke="#43D9D1" stroke-width="2"/>
+          <circle cx="70" cy="0" r="4" fill="#43D9D1"/>
+        </g>
+        <g class="lever">
+          <rect x="-8" y="-250" width="16" height="70" rx="7" fill="#B88E3E"/>
+          <circle cx="0" cy="-250" r="12" fill="#171B24" stroke="#B88E3E" stroke-width="3"/>
+        </g>
+        <g class="shut-l"><path d="M-96 0 a96 96 0 0 1 96 -96 v34 a62 62 0 0 0 -62 62 Z" fill="#20242E" stroke="#B88E3E" stroke-opacity=".4"/></g>
+        <g class="shut-r"><path d="M96 0 a96 96 0 0 0 -96 -96 v34 a62 62 0 0 1 62 62 Z" fill="#20242E" stroke="#B88E3E" stroke-opacity=".4"/></g>
+        <circle class="corewarm" cx="0" cy="0" r="52" fill="#F4F0E7" opacity="0"/>
+        <circle class="cyanring" cx="0" cy="0" r="66" fill="none" stroke="#43D9D1" stroke-width="2" opacity="0"/>
+      </svg>
+    </div>
+    <p class="chip"><span>50MM</span><span class="dot">·</span><span><span class="L en">ASSEMBLY BAY</span><span class="L ar">حظيرة التجميع</span></span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Build · ignition</span><span class="L ar">البناء · الإشعال</span></p>
+      <h2><span class="L en">The chart becomes a machine</span><span class="L ar">يتحوّل المخطّط إلى آلة</span></h2>
+      <p><span class="L en">The route is wound into rings, a lever arms the core, shutters part — and the machine warms from paper-chart to working starlight.</span><span class="L ar">يُلَفّ المسار حلقاتٍ، وتُذخِّر رافعةٌ القلبَ، وينفرج الغالقان — فتدفأ الآلة من مخطّطٍ ورقي إلى ضوءِ نجومٍ عامل.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ S8 · BUILD — orbital assembly ══════════ -->
+<section class="scene s-build vig" data-scene="pin" aria-label="Orbital assembly">
+  <div class="stage">
+    <div class="cam"><canvas class="fill" id="cv-build" aria-hidden="true"></canvas></div>
+    <p class="chip"><span>24MM WIDE</span><span class="dot">·</span><span><span class="L en">ORBITAL FRAME</span><span class="L ar">الإطار المداري</span></span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Build · wide</span><span class="L ar">البناء · لقطة واسعة</span></p>
+      <h2><span class="L en">Twelve stations take orbit</span><span class="L ar">اثنتا عشرة محطةً تتّخذ مدارها</span></h2>
+      <p><span class="L en">Anchor stations dock along the proven route; connective spans light only after both ends hold. Nothing orbits that was not measured first.</span><span class="L ar">ترسو محطات المراسي على المسار المُثبَت، ولا تُضاء الوصلات إلا بعد أن يثبت الطرفان. لا شيء يدور ولم يُقَس أولًا.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- act: GATE (amber) -->
+<section class="act act-gate" data-scene>
+  <p class="no"><span class="L en">Act · GATE</span><span class="L ar">الفصل · البوّابة</span></p>
+  <h2><span class="L en">One decision, kept human</span><span class="L ar">قرارٌ واحد يبقى بشريًّا</span></h2>
+  <p class="p-lead"><span class="L en">Amber exists in this world for exactly one thing: a person, deciding.</span><span class="L ar">العنبري في هذا العالم لشيءٍ واحد فقط: إنسانٌ يُقرِّر.</span></p>
+</section>
+
+<!-- ══════════ S10 · GATE ══════════ -->
+<section class="scene s-gate" data-scene="pin" aria-label="The gate">
+  <div class="stage gate-stage">
+    <div class="pool"></div>
+    <div class="console-wrap">
+      <svg class="console" viewBox="0 0 780 420" aria-hidden="true">
+        <rect x="90" y="120" width="600" height="200" rx="18" fill="#141821"/>
+        <rect x="90" y="120" width="600" height="200" rx="18" fill="none" stroke="#B88E3E" stroke-opacity=".5"/>
+        <rect x="120" y="150" width="240" height="10" rx="4" fill="#252A35"/>
+        <rect x="120" y="176" width="180" height="10" rx="4" fill="#252A35"/>
+        <g class="reflection"><ellipse cx="390" cy="330" rx="220" ry="16" fill="#E9A23B" opacity=".12"/></g>
+        <g class="cover"><rect x="470" y="150" width="150" height="110" rx="10" fill="#20242E" stroke="#B88E3E" stroke-opacity=".6"/></g>
+        <g class="shut">
+          <circle cx="545" cy="205" r="40" fill="#171B24" stroke="#E9A23B" stroke-width="3"/>
+          <g class="keyrot">
+            <rect x="541" y="175" width="8" height="60" rx="4" fill="#E9A23B"/>
+            <circle cx="545" cy="205" r="9" fill="#B88E3E"/>
+          </g>
+        </g>
+        <circle class="palmglow" cx="545" cy="205" r="64" fill="#E9A23B" opacity="0" style="filter:blur(10px)"/>
+        <path class="pulse" pathLength="100" d="M545 245 V 300 H 240 V 262" fill="none" stroke="#E9A23B" stroke-width="3"/>
+        <circle class="releasering" cx="240" cy="248" r="18" fill="none" stroke="#43D9D1" stroke-width="3" opacity="0"/>
+      </svg>
+    </div>
+    <p class="gate-label" style="top:16%; inset-inline-start:8%"><span class="L en">AUTOMATION HOLDS — AWAITING HAND</span><span class="L ar">الأتمتة متوقفة — بانتظار اليد</span></p>
+    <div class="caption">
+      <p class="kick" style="color:var(--amber)"><span class="L en">Gate · 85mm close</span><span class="L ar">البوّابة · عن قرب</span></p>
+      <h2><span class="L en">The key turns twice, or not at all</span><span class="L ar">يُدار المفتاح مرّتين، أو لا يُدار</span></h2>
+      <p><span class="L en">The cover slides, a hand's warmth pools on the brass, the key completes its two turns — and only then does one amber pulse travel to the release. The machine never touches this key.</span><span class="L ar">يُزاح الغطاء، ويتجمّع دفء اليد على النحاس، ويُتمّ المفتاحُ دورتيه — وعندها فقط تسري نبضةٌ عنبرية واحدة نحو الإطلاق. الآلة لا تمسّ هذا المفتاح أبدًا.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- act: PROVE -->
+<section class="act" data-scene>
+  <p class="no"><span class="L en">Act · PROVE</span><span class="L ar">الفصل · البرهان</span></p>
+  <h2><span class="L en">Proof returns as light</span><span class="L ar">يعود البرهان ضوءًا</span></h2>
+  <p class="p-lead"><span class="L en">The dish field listens; verified returns rise as a new constellation.</span><span class="L ar">حقل الأطباق يُنصت؛ والعوائد المُتحقَّق منها تصعد كوكبةً جديدة.</span></p>
+</section>
+
+<!-- ══════════ S12 · PROVE — the dish field ══════════ -->
+<section class="scene s-prove vig" data-scene="pin" aria-label="The dish field answers">
+  <div class="stage">
+    <div class="cam"><canvas class="fill" id="cv-prove" aria-hidden="true"></canvas></div>
+    <p class="chip legend"><span class="a">●</span><span><span class="L en">VERIFIED RETURN</span><span class="L ar">عائد مُتحقَّق</span></span><span class="dot">·</span><span>●</span><span><span class="L en">LISTENING</span><span class="L ar">إنصات</span></span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Prove · before dawn</span><span class="L ar">البرهان · قبيل الفجر</span></p>
+      <h2><span class="L en">A constellation that was not there</span><span class="L ar">كوكبةٌ لم تكن هناك</span></h2>
+      <p><span class="L en">Dish by dish, the field tilts to the same coordinates. Each verified return becomes one fixed star — thirty in all, drawing the route the noise once hid.</span><span class="L ar">طبقًا فطبقًا يميل الحقل إلى الإحداثيات نفسها، ويصير كل عائدٍ مُتحقَّقٍ نجمًا ثابتًا — ثلاثين نجمًا ترسم المسار الذي أخفاه الضجيج يومًا.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ S14 · FINALE — return to the ridge ══════════ -->
+<section class="scene s-dawn vig" data-scene="pin" aria-label="Finale — dawn restores the ridge">
+  <div class="stage">
+    <div class="cam">
+      <div class="layer l-far"><div class="ridge ridge-far"></div></div>
+      <div class="layer l-set"><div class="ridge ridge-set"></div></div>
+      <div class="obs-wrap">
+        <svg class="obs" viewBox="0 0 300 220" aria-hidden="true">
+          <path d="M150 30 a86 86 0 0 1 86 86 v10 h-172 v-10 a86 86 0 0 1 86 -86Z" fill="#171B24"/>
+          <path d="M150 30 a86 86 0 0 1 86 86 v10 h-172 v-10 a86 86 0 0 1 86 -86Z" fill="none" stroke="#B88E3E" stroke-opacity=".34"/>
+          <path class="seamlight" d="M146 32 h8 v104 h-8 Z" fill="#43D9D1" opacity=".85"/>
+          <rect x="58" y="126" width="184" height="52" rx="6" fill="#12151D"/>
+          <rect x="58" y="126" width="184" height="52" rx="6" fill="none" stroke="#B88E3E" stroke-opacity=".22"/>
+          <rect class="obs-lamp" x="206" y="146" width="10" height="14" rx="2" fill="#E9A23B" opacity=".6"/>
+          <circle class="obs-lamp-halo" cx="211" cy="153" r="26" fill="#E9A23B" opacity=".16" style="filter:blur(6px)"/>
+          <rect x="70" y="178" width="160" height="8" rx="3" fill="#0B0E15"/>
+        </svg>
+      </div>
+      <div class="layer l-near"><div class="ridge ridge-near"></div></div>
+      <div class="dawnwash"></div>
+    </div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Finale · the loop closes</span><span class="L ar">الخاتمة · تنغلق الحلقة</span></p>
+      <h2><span class="L en">Dawn restores the opening frame</span><span class="L ar">يُعيد الفجرُ إطارَ البداية</span></h2>
+      <p><span class="L en">The slit closes, the lamp dims, first light climbs the ridge. The station sleeps; the constellation it proved keeps working. That is the whole film.</span><span class="L ar">يُغلَق الشقّ، ويخفت المصباح، ويتسلّق أولُ الضوء الحافة. تنام المحطة، وتبقى الكوكبة التي أثبتتها تعمل. هذا هو الفيلم كله.</span></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="disclosure">
+  <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — observatory realism rendered live in code, informed by NASA's published visualization practice. Not affiliated with, endorsed by, or representing NASA or any agency; no marks, patches, or likenesses appear. Real project figures live on the <a href="../">portfolio story pages</a>.</span>
+  <span class="L ar">دراسة حركية أصلية مستلهَمة لملف أعمال محمد محمود — واقعية المرصد معروضةً حيًّا بالشيفرة، مستنيرةً بممارسات التصوير العلمي المنشورة. لا انتساب لناسا أو لأي وكالة ولا تأييد منها ولا تمثيل لها، ولا تظهر علامات أو شارات أو أشباه. الأرقام الحقيقية في <a href="../">صفحات قصص الموقع</a>.</span></p>
+</footer>
+
+<script src="cinema.js?v=2"></script>
+<script>
+(() => {
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+  const mk = (id, draw, seed) => {
+    const cv = document.getElementById(id);
+    if (!cv) return;
+    const scene = cv.closest('[data-scene]');
+    const u = { cv, scene, ctx: cv.getContext('2d'), draw, raf: 0, W: 0, H: 0, st: seed ? seed() : null };
+    const size = () => { u.W = cv.clientWidth; u.H = cv.clientHeight;
+      cv.width = u.W * DPR; cv.height = u.H * DPR; u.ctx.setTransform(DPR, 0, 0, DPR, 0, 0); };
+    const loop = (t) => { u.draw(u, t); u.raf = requestAnimationFrame(loop); };
+    const start = () => { if (!u.raf) { size(); u.raf = requestAnimationFrame(loop); } };
+    const stop = () => { cancelAnimationFrame(u.raf); u.raf = 0; };
+    scene.addEventListener('scene:live', () => reduced ? (size(), u.draw(u, 0)) : start());
+    scene.addEventListener('scene:idle', stop);
+    if (scene.classList.contains('is-live')) (reduced ? (size(), u.draw(u, 0)) : start());
+    addEventListener('resize', () => { if (u.raf) size(); }, { passive: true });
+  };
+  const P = (u) => parseFloat(u.scene.style.getPropertyValue('--p') || '0');
+  const rand = (n) => { let s = n; return () => (s = (s * 16807 + 19) % 2147483647) / 2147483647; };
+
+  /* S3 — macro sensor trace: noise line, repeating interval marked cyan */
+  mk('cv-signal', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    const mid = H * 0.52, amp = H * 0.1;
+    ctx.strokeStyle = 'rgba(244,240,231,.5)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    const r = rand(97); const vals = [];
+    for (let x = 0; x <= W; x += 3) {
+      const n = (r() - 0.5) * 2;
+      const period = Math.sin((x / W) * Math.PI * 2 * 6 + t / 1400);
+      const burst = period > 0.86 ? (period - 0.86) * 7 : 0;
+      const y = mid + n * amp * 0.5 - burst * amp * 1.6;
+      vals.push([x, y, burst]);
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    const reveal = Math.min(1, Math.max(0, (p - 0.25) * 2.2));
+    if (reveal > 0) {
+      for (const [x, y, b] of vals) if (b > 0.25) {
+        ctx.fillStyle = `rgba(67,217,209,${0.75 * reveal})`;
+        ctx.beginPath(); ctx.arc(x, y - 6, 2.2, 0, 6.2832); ctx.fill();
+      }
+      ctx.strokeStyle = `rgba(67,217,209,${0.28 * reveal})`;
+      ctx.setLineDash([2, 6]);
+      for (let i = 1; i <= 6; i++) {
+        const gx = (i / 6) * W - W / 24;
+        ctx.beginPath(); ctx.moveTo(gx, mid - amp * 2); ctx.lineTo(gx, mid + amp); ctx.stroke();
+      }
+      ctx.setLineDash([]);
+    }
+  });
+
+  /* S5 — signature: scattered detections resolve into one closed cyan route */
+  mk('cv-map', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2, cy = H * 0.47, R = Math.min(W, H) * 0.3;
+    const settle = Math.min(1, Math.max(0, (p - 0.12) * 1.9));
+    u.st.pts.forEach((s, i) => {
+      const a = s.ang;
+      const tx = cx + Math.cos(a) * R * (1 + s.rj * 0.12);
+      const ty = cy + Math.sin(a) * R * 0.74 * (1 + s.rj * 0.12);
+      const x = s.x * W + (tx - s.x * W) * settle;
+      const y = s.y * H + (ty - s.y * H) * settle;
+      const tw = 0.55 + 0.45 * Math.sin(t / 800 + s.ph * 9);
+      ctx.fillStyle = `rgba(67,217,209,${(0.28 + 0.62 * settle) * tw})`;
+      ctx.beginPath(); ctx.arc(x, y, 1.8 + settle * 1.2, 0, 6.2832); ctx.fill();
+      s._x = x; s._y = y;
+    });
+    for (const d of u.st.dead) {
+      const fade = 1 - Math.min(1, Math.max(0, (p - 0.35) * 2.4));
+      if (fade <= 0.02) continue;
+      const tw = 0.4 + 0.3 * Math.sin(t / 1100 + d.ph);
+      ctx.fillStyle = `rgba(118,103,216,${0.4 * fade * tw})`;
+      ctx.beginPath(); ctx.arc(d.x * W, d.y * H, 1.6, 0, 6.2832); ctx.fill();
+    }
+    const route = Math.min(1, Math.max(0, (p - 0.55) * 2.6));
+    if (route > 0) {
+      ctx.strokeStyle = `rgba(67,217,209,${0.8 * route})`;
+      ctx.lineWidth = 1.6;
+      ctx.shadowColor = 'rgba(67,217,209,.7)';
+      ctx.shadowBlur = 8 * route;
+      ctx.beginPath();
+      const n = u.st.pts.length, upto = Math.floor(n * route);
+      u.st.pts.slice(0, Math.max(2, upto)).forEach((s, i) => {
+        i === 0 ? ctx.moveTo(s._x, s._y) : ctx.lineTo(s._x, s._y);
+      });
+      if (route >= 1) ctx.closePath();
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+  }, () => { const r = rand(53);
+    return { pts: Array.from({ length: 26 }, (_, i) => ({
+        x: r(), y: r(), ang: (i / 26) * 6.2832, rj: r() - 0.5, ph: r() })),
+      dead: Array.from({ length: 40 }, () => ({ x: r(), y: r(), ph: r() * 6.28 })) }; });
+
+  /* S8 — orbital assembly: stations dock, spans light when both ends hold */
+  mk('cv-build', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    const cx = W / 2, cy = H * 0.5, R = Math.min(W, H) * 0.34;
+    ctx.strokeStyle = 'rgba(184,142,62,.3)';
+    ctx.setLineDash([3, 9]);
+    ctx.beginPath(); ctx.ellipse(cx, cy, R, R * 0.66, -0.1, 0, 6.2832); ctx.stroke();
+    ctx.setLineDash([]);
+    const N = 12;
+    const st = [];
+    for (let i = 0; i < N; i++) {
+      const dockAt = 0.08 + (i / N) * 0.6;
+      const d = Math.min(1, Math.max(0, (p - dockAt) * 4));
+      const a = (i / N) * 6.2832 - 0.5 + t / 90000;
+      const drift = 1.8 - 0.8 * d;
+      const x = cx + Math.cos(a) * R * drift * (d < 1 ? 1 : 1);
+      const y = cy + Math.sin(a) * R * 0.66 * drift;
+      const fx = cx + Math.cos(a) * R, fy = cy + Math.sin(a) * R * 0.66;
+      const X = x + (fx - x) * d, Y = y + (fy - y) * d;
+      st.push([X, Y, d]);
+      ctx.fillStyle = `rgba(184,142,62,${0.3 + 0.7 * d})`;
+      ctx.fillRect(X - 3, Y - 3, 6, 6);
+      if (d >= 1) {
+        ctx.fillStyle = 'rgba(244,240,231,.9)';
+        ctx.fillRect(X - 1, Y - 1, 2, 2);
+      }
+    }
+    ctx.lineWidth = 1.2;
+    for (let i = 0; i < N; i++) {
+      const [x1, y1, d1] = st[i], [x2, y2, d2] = st[(i + 1) % N];
+      if (d1 >= 1 && d2 >= 1) {
+        const glow = 0.5 + 0.3 * Math.sin(t / 700 + i);
+        ctx.strokeStyle = `rgba(67,217,209,${glow})`;
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      }
+    }
+  });
+
+  /* S12 — the dish field: silhouettes tilt; verified returns become stars */
+  mk('cv-prove', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    // stars appear
+    const starN = Math.floor(30 * Math.min(1, Math.max(0, (p - 0.15) * 1.6)));
+    u.st.stars.forEach((s, i) => {
+      if (i >= starN) return;
+      const tw = 0.6 + 0.4 * Math.sin(t / (700 + s.ph * 500) + s.ph * 8);
+      ctx.fillStyle = `rgba(67,217,209,${0.85 * tw})`;
+      ctx.beginPath(); ctx.arc(s.x * W, s.y * H * 0.5 + H * 0.06, 1.8 + s.r, 0, 6.2832); ctx.fill();
+    });
+    if (starN >= 30) {
+      ctx.strokeStyle = 'rgba(67,217,209,.3)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      u.st.stars.forEach((s, i) => {
+        const x = s.x * W, y = s.y * H * 0.5 + H * 0.06;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    }
+    // dish silhouettes along the bottom ridge
+    const tilt = Math.min(1, p * 1.4);
+    u.st.dishes.forEach((d, i) => {
+      const bx = d.x * W, by = H * (0.78 + d.dy);
+      const ang = -0.9 + tilt * (0.5 + d.j * 0.2);
+      ctx.save();
+      ctx.translate(bx, by); ctx.scale(d.s, d.s);
+      ctx.fillStyle = '#12151D';
+      ctx.fillRect(-3, -16, 6, 34);
+      ctx.rotate(ang);
+      ctx.beginPath(); ctx.ellipse(0, -20, 26, 9, 0, 0, 6.2832);
+      ctx.fillStyle = '#1A1F2A'; ctx.fill();
+      ctx.strokeStyle = 'rgba(184,142,62,.5)'; ctx.lineWidth = 1.2; ctx.stroke();
+      const lit = tilt > 0.75 ? 0.75 : 0;
+      if (lit) { ctx.fillStyle = `rgba(67,217,209,${lit * (0.4 + 0.3 * Math.sin(t / 600 + i))})`;
+        ctx.beginPath(); ctx.arc(0, -20, 2.4, 0, 6.2832); ctx.fill(); }
+      ctx.restore();
+    });
+  }, () => { const r = rand(71);
+    return { stars: Array.from({ length: 30 }, () => ({ x: 0.1 + r() * 0.8, y: 0.1 + r() * 0.8, r: r() * 1.4, ph: r() })),
+      dishes: Array.from({ length: 9 }, (_, i) => ({ x: 0.06 + i * 0.11 + r() * 0.02, dy: (r() - 0.5) * 0.05, s: 0.8 + r() * 0.9, j: r() })) }; });
+})();
+</script>
+
+</body>
+</html>
