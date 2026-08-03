@@ -18,7 +18,11 @@ interface Props {
   src?: string;
   alt?: string;
 }
-const { lang, ratio = '16/10', label, src, alt } = Astro.props;
+const { lang, ratio = '16/10', label, src: rawSrc, alt } = Astro.props;
+// public/ assets are referenced root-absolute by callers; prefix the deploy base
+// so the GitHub Pages subpath build resolves them (BASE_URL has no trailing slash here)
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+const src = rawSrc && rawSrc.startsWith('/') ? BASE + rawSrc : rawSrc;
 ---
 
 <div class="asset-slot" style={`aspect-ratio:${ratio}`}>
