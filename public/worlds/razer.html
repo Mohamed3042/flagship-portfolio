@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SYSTEM ASCENSION — a Chroma-grammar scroll film · Mohamed Mahmoud</title>
+<meta name="description" content="A matte-black machine sleeps in a lightless room. One keypress starts a controlled signal cascade — key, board, rig, room, thirty project modules — halted by a red security gate until a human hand authorizes. An original, brand-inspired scroll-cinema motion study.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000000'/%3E%3Crect x='14' y='14' width='36' height='36' rx='6' fill='%23101214' stroke='%231d2226' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%2344D62C'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./cinema.css">
+<style>
+/* ============ SYSTEM ASCENSION — world palette & physics ============ */
+:root{
+  --w-bg:#000000;            /* black field */
+  --w-ink:#E8F0EC;           /* readable neutral */
+  --w-accent:#44D62C;        /* identity / healthy state */
+  --w-dim:#8A949D;           /* cool conductor metal */
+  --hw:#101214;              /* hardware black */
+  --edge:#1d2226;            /* preserved edge detail on hardware */
+  --warn:#FF3344;            /* GATE only */
+  --cyan:#00D9FF; --violet:#7047EB; --pink:#FF2D95; --amber:#FFB000;
+  --w-display:"Avenir Next Condensed","Arial Narrow","Helvetica Neue",Impact,system-ui,sans-serif;
+  --w-body:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
+  --w-ui:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+html{background:var(--w-bg)}
+body{letter-spacing:.01em}
+.caption .kick{color:var(--w-accent)}
+.caption h2{font-family:var(--w-display);letter-spacing:.02em;text-transform:uppercase}
+.lang-ar .caption h2,.lang-ar .act h2{font-family:var(--w-body);text-transform:none;letter-spacing:0}
+.act h2{font-family:var(--w-display);text-transform:uppercase;letter-spacing:.03em}
+.act{min-height:56vh}
+.act .fx{margin-top:14px;display:inline-block;font:600 10px/1 var(--w-ui);letter-spacing:.24em;text-transform:uppercase;
+  color:var(--w-dim);border:1px solid var(--edge);border-radius:999px;padding:8px 14px}
+.gate-act .no,.gate-act .fx{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 35%,transparent)}
+
+/* per-scene eased progress helpers (0..1 windows of --p) */
+.scene .stage{background:var(--w-bg)}
+.scene{--p:0}
+.hint{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:6;
+  font:600 10px/1 var(--w-ui);letter-spacing:.3em;text-transform:uppercase;color:var(--w-dim);
+  opacity:calc(1 - var(--p)*6);display:flex;align-items:center;gap:10px}
+.hint::after{content:"";width:1px;height:34px;background:linear-gradient(var(--w-accent),transparent);
+  animation:drip 2.2s ease-in-out infinite}
+@keyframes drip{0%{transform:scaleY(.1);transform-origin:top}55%{transform:scaleY(1)}100%{transform:scaleY(.1);transform-origin:bottom}}
+
+/* effect chip pinned per scene — names the ONE Chroma effect on stage */
+.fxchip{position:absolute;z-index:6;top:64px;inset-inline-end:clamp(16px,4vw,48px);
+  font:600 10px/1 var(--w-ui);letter-spacing:.22em;text-transform:uppercase;color:var(--w-dim);
+  border:1px solid var(--edge);border-radius:999px;padding:8px 13px;background:rgba(0,0,0,.5);
+  opacity:0;transition:opacity .6s ease .2s}
+.scene.is-live .fxchip{opacity:1}
+.fxchip b{color:var(--w-accent);font-weight:600}
+.fxchip.is-warn b{color:var(--warn)}
+
+/* ---------- S01 · PROLOGUE — Breathing (7 s) ---------- */
+#s-sleep .rig{position:absolute;inset:0;display:grid;place-items:center;
+  transform:scale(calc(1 + var(--p)*.08));transform-origin:50% 60%}
+.console{width:min(520px,72vw);aspect-ratio:5/2;background:linear-gradient(180deg,#14171a,#0b0d0f 60%,#08090b);
+  border:1px solid var(--edge);border-radius:14px;position:relative;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.9), inset 0 1px 0 rgba(138,148,157,.14)}
+.console::before{content:"";position:absolute;inset:12px;border:1px solid rgba(138,148,157,.08);border-radius:9px}
+.console::after{content:"";position:absolute;left:-14%;top:-30%;width:1px;height:160%;
+  background:linear-gradient(rgba(138,148,157,.0),rgba(138,148,157,.22),rgba(138,148,157,0))}
+.led{position:absolute;left:8%;bottom:16%;width:10px;height:10px;border-radius:50%;
+  background:var(--w-accent);animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{
+  0%,100%{opacity:.08;box-shadow:0 0 4px 0 rgba(68,214,44,.12)}
+  50%{opacity:1;box-shadow:0 0 10px 2px rgba(68,214,44,.55),0 0 46px 10px rgba(68,214,44,.28),0 0 120px 30px rgba(68,214,44,.10)}}
+#s-sleep .title{position:absolute;z-index:5;top:clamp(72px,12vh,120px);inset-inline-start:clamp(18px,6vw,84px);max-width:min(640px,86vw)}
+#s-sleep .title .over{font:600 11px/1 var(--w-ui);letter-spacing:.3em;text-transform:uppercase;color:var(--w-dim)}
+#s-sleep .title h1{margin-top:14px;font:700 clamp(40px,8.4vw,104px)/0.96 var(--w-display);
+  text-transform:uppercase;letter-spacing:.015em;color:var(--w-ink)}
+.lang-ar #s-sleep .title h1{font-family:var(--w-body);text-transform:none;line-height:1.15}
+#s-sleep .title p{margin-top:14px;max-width:44ch;color:color-mix(in srgb,var(--w-ink) 70%,transparent);
+  font-size:clamp(14px,1.6vw,17px);line-height:1.6}
+#s-sleep .title{opacity:calc(1 - (var(--p) - .55)/.2)}
+
+/* ---------- S02 · Actuation — Reactive ---------- */
+#s-key{--press:calc(min(var(--p),.34)/.34);--hit:clamp(0,(var(--p) - .34)/.05,1);
+  --run:clamp(0,(var(--p) - .4)/.45,1)}
+#s-key .macro{position:absolute;inset:0;display:grid;place-items:center}
+#s-key .keywell{position:relative;width:min(300px,54vw);aspect-ratio:1}
+.keycap{position:absolute;inset:0 0 22% 0;background:linear-gradient(180deg,#181c1f,#0d0f11 70%);
+  border:1px solid var(--edge);border-radius:18px;
+  transform:translateY(calc(var(--press)*26px));
+  box-shadow:inset 0 2px 0 rgba(138,148,157,.16),0 24px 40px -20px #000}
+.keycap::after{content:"";position:absolute;inset:14% 12%;border-radius:10px;border:1px solid rgba(138,148,157,.09)}
+.stem{position:absolute;left:50%;bottom:8%;width:26%;height:16%;transform:translateX(-50%);
+  background:#0a0c0d;border:1px solid var(--edge);border-radius:4px}
+.contact{position:absolute;left:50%;bottom:9%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,50%);
+  background:var(--w-accent);opacity:var(--hit);
+  box-shadow:0 0 10px 3px rgba(68,214,44,.6),0 0 60px 16px rgba(68,214,44,.25)}
+.trail{position:absolute;left:calc(50% + 8px);bottom:9%;height:3px;transform:translateY(50%);border-radius:2px;
+  width:calc(var(--run)*min(34vw,420px));opacity:calc(var(--hit)*1);
+  background:linear-gradient(90deg,rgba(68,214,44,.95),rgba(68,214,44,.28) 55%,transparent);
+  box-shadow:0 0 14px 2px rgba(68,214,44,.35)}
+[dir="rtl"] #s-key .trail{left:auto;right:calc(50% + 8px);background:linear-gradient(-90deg,rgba(68,214,44,.95),rgba(68,214,44,.28) 55%,transparent)}
+#s-key .graze{position:absolute;top:0;bottom:0;left:12%;width:1px;background:linear-gradient(transparent,rgba(138,148,157,.25),transparent)}
+
+/* ---------- S03 · MAP — Reactive trace search ---------- */
+#s-trace{--draw:clamp(0,calc(var(--p)/.85),1);
+  --b1:clamp(0,(var(--p) - .18)/.1,1);--b1f:clamp(0,(var(--p) - .34)/.12,1);
+  --b2:clamp(0,(var(--p) - .45)/.1,1);--b2f:clamp(0,(var(--p) - .6)/.12,1)}
+#s-trace svg{position:absolute;inset:0;width:100%;height:100%}
+#s-trace .cold{stroke:#171b1e;stroke-width:2;fill:none}
+#s-trace .pad{fill:#14181b;stroke:var(--edge)}
+#s-trace .route{stroke:var(--w-accent);stroke-width:2.5;fill:none;stroke-linecap:round;
+  stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--draw));
+  filter:drop-shadow(0 0 6px rgba(68,214,44,.65))}
+#s-trace .branch{stroke:var(--w-accent);stroke-width:2;fill:none;stroke-linecap:round;stroke-dasharray:1}
+#s-trace .b1{stroke-dashoffset:calc(1 - var(--b1));opacity:calc(.9 - var(--b1f)*.9)}
+#s-trace .b2{stroke-dashoffset:calc(1 - var(--b2));opacity:calc(.9 - var(--b2f)*.9)}
+#s-trace .dead{fill:none;stroke:rgba(255,255,255,.12);stroke-width:1.5}
+#s-trace .head{stroke:#d9ffcf;stroke-width:6;fill:none;stroke-linecap:round;
+  stroke-dasharray:.012 .988;stroke-dashoffset:calc(var(--draw)*-.988);
+  filter:drop-shadow(0 0 10px rgba(68,214,44,.9))}
+
+/* ---------- S04 · Loop closes — Static hold ---------- */
+#s-loop{--close:clamp(0,calc(var(--p)/.55),1);--hold:clamp(0,(var(--p) - .6)/.2,1)}
+#s-loop svg{position:absolute;inset:0;width:100%;height:100%}
+#s-loop .ring{stroke:var(--w-accent);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-dasharray:1;
+  stroke-dashoffset:calc(1 - var(--close));
+  filter:drop-shadow(0 0 8px rgba(68,214,44,.5))}
+#s-loop .ring2{opacity:var(--hold);animation:staticBreath 7s ease-in-out infinite}
+@keyframes staticBreath{0%,100%{opacity:.97}50%{opacity:1}}
+#s-loop .bay{fill:#0d1012;stroke:var(--edge);stroke-width:1}
+#s-loop .bays{opacity:var(--hold)}
+#s-loop .verify{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  font:600 11px/1 var(--w-ui);letter-spacing:.3em;text-transform:uppercase;color:var(--w-accent);
+  opacity:var(--hold)}
+
+/* ---------- S05 · BUILD — Ripple wakes twelve bays ---------- */
+#s-ripple .grid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(8px,1.4vw,16px);
+  width:min(880px,88vw)}
+#s-ripple .cell{--d:0;aspect-ratio:4/3;border-radius:10px;background:#0c0f11;border:1px solid var(--edge);
+  position:relative;overflow:hidden;
+  --on:clamp(0,calc((var(--p)*1.25 - var(--d))/.06),1)}
+#s-ripple .cell::before{content:"";position:absolute;inset:0;border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(68,214,44,.85),inset 0 0 22px rgba(68,214,44,.28);
+  opacity:var(--on)}
+#s-ripple .cell i{position:absolute;left:12%;bottom:14%;width:6px;height:6px;border-radius:50%;
+  background:var(--w-accent);opacity:var(--on);
+  box-shadow:0 0 8px 2px rgba(68,214,44,.6)}
+#s-ripple .cell.lane-c::before{box-shadow:inset 0 0 0 1px rgba(0,217,255,.7),inset 0 0 22px rgba(0,217,255,.2)}
+#s-ripple .cell.lane-c i{background:var(--cyan);box-shadow:0 0 8px 2px rgba(0,217,255,.55)}
+#s-ripple .cell.lane-v::before{box-shadow:inset 0 0 0 1px rgba(112,71,235,.75),inset 0 0 22px rgba(112,71,235,.22)}
+#s-ripple .cell.lane-v i{background:var(--violet);box-shadow:0 0 8px 2px rgba(112,71,235,.55)}
+#s-ripple canvas,.fxcanvas{position:absolute;inset:0;width:100%;height:100%}
+#s-ripple .socket{position:absolute;left:calc(50% - min(440px,44vw) - 26px);top:50%;width:12px;height:12px;border-radius:50%;
+  transform:translateY(-50%);background:var(--w-accent);
+  box-shadow:0 0 12px 3px rgba(68,214,44,.6);opacity:clamp(0,calc(var(--p)*8),1)}
+#s-ripple .count{position:absolute;z-index:6;top:64px;inset-inline-start:clamp(18px,6vw,84px);
+  font:700 clamp(28px,4.4vw,52px)/1 var(--w-display);color:var(--w-ink)}
+#s-ripple .count small{display:block;margin-top:8px;font:600 10px/1.5 var(--w-ui);letter-spacing:.24em;
+  text-transform:uppercase;color:var(--w-dim)}
+
+/* ---------- S06 · Device sync — Wave (left→right) ---------- */
+#s-wave .field{position:absolute;inset:0;display:grid;place-items:center}
+#s-wave .deck{width:min(940px,92vw)}
+#s-wave .keys{display:grid;grid-template-columns:repeat(14,1fr);gap:6px}
+#s-wave .k{--x:0;aspect-ratio:1;border-radius:6px;background:#0c0f11;border:1px solid #15191c;
+  --dst:max(calc(var(--x) - var(--p)*1.3),calc(var(--p)*1.3 - var(--x)));
+  --lit:clamp(0,calc(1 - var(--dst)*5),1);
+  box-shadow:inset 0 0 0 1px rgba(68,214,44,calc(var(--lit)*.9)),
+             inset 0 0 14px rgba(68,214,44,calc(var(--lit)*.4)),
+             0 0 calc(var(--lit)*18px) rgba(68,214,44,calc(var(--lit)*.28))}
+#s-wave .devices{margin-top:clamp(20px,4vh,44px);display:flex;justify-content:space-between;align-items:flex-end;gap:4vw}
+#s-wave .dev{--x:1.05;height:clamp(38px,7vh,64px);flex:1;border-radius:12px;background:linear-gradient(180deg,#121517,#0a0c0e);
+  border:1px solid var(--edge);position:relative;
+  --dst:max(calc(var(--x) - var(--p)*1.3),calc(var(--p)*1.3 - var(--x)));
+  --lit:clamp(0,calc(1 - var(--dst)*4),1)}
+#s-wave .dev::after{content:"";position:absolute;left:8%;right:8%;bottom:6px;height:2px;border-radius:2px;
+  background:var(--w-accent);opacity:var(--lit);
+  box-shadow:0 0 12px 2px rgba(68,214,44,calc(var(--lit)*.55))}
+#s-wave .dev.d2{border-radius:50% 50% 14px 14px / 70% 70% 14px 14px}
+#s-wave .dev.d3{border-radius:16px 16px 50% 50%/16px 16px 90% 90%}
+
+/* ---------- S07 · Room wave — Wave (device→room) ---------- */
+#s-room .space3{position:absolute;inset:0;overflow:hidden}
+#s-room .floor{position:absolute;left:-10%;right:-10%;bottom:0;height:44%;
+  background:
+   repeating-linear-gradient(90deg,rgba(138,148,157,.07) 0 1px,transparent 1px 90px),
+   repeating-linear-gradient(0deg,rgba(138,148,157,.05) 0 1px,transparent 1px 60px),
+   linear-gradient(180deg,#060708,#000);
+  transform:perspective(700px) rotateX(58deg);transform-origin:50% 0}
+#s-room .horizon{position:absolute;left:0;right:0;top:56%;height:1px;background:rgba(138,148,157,.16)}
+#s-room .rigline{position:absolute;left:50%;top:38%;transform:translateX(-50%);width:min(420px,60vw);aspect-ratio:5/2;
+  background:linear-gradient(180deg,#111417,#08090b);border:1px solid var(--edge);border-radius:10px}
+#s-room .band{position:absolute;top:0;bottom:0;width:16vw;
+  left:calc(-18vw + var(--p)*136%);
+  background:linear-gradient(90deg,transparent,rgba(68,214,44,.14) 45%,rgba(68,214,44,.30) 50%,rgba(68,214,44,.14) 55%,transparent);
+  filter:blur(2px);mix-blend-mode:screen}
+#s-room .strip{--x:0;position:absolute;height:2px;border-radius:2px;background:var(--w-accent);
+  --dlt:clamp(0,calc((var(--p)*1.18 - var(--x))/.05),1);
+  opacity:calc(var(--dlt)*.9);
+  box-shadow:0 0 14px 3px rgba(68,214,44,calc(var(--dlt)*.5))}
+#s-room .wallglow{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 46%,rgba(68,214,44,.10),transparent 70%);
+  opacity:clamp(0,calc((var(--p) - .8)/.2),1)}
+
+/* ---------- S08 · GATE — spectrum drain → warning red ---------- */
+#s-drain{--d1:clamp(0,calc(var(--p)/.3),1);--d2:clamp(0,(var(--p) - .28)/.3,1);
+  --dg:clamp(0,(var(--p) - .55)/.22,1);--red:clamp(0,(var(--p) - .78)/.14,1)}
+#s-drain .lanes{position:absolute;inset:0;display:flex;justify-content:center;gap:clamp(30px,8vw,120px);align-items:stretch}
+#s-drain .lane{width:3px;margin:10vh 0;border-radius:3px;position:relative}
+#s-drain .lane i{position:absolute;inset:0;border-radius:inherit;transform-origin:top}
+#s-drain .lc i{background:linear-gradient(var(--cyan),rgba(0,217,255,.25));box-shadow:0 0 18px 2px rgba(0,217,255,.4);
+  transform:scaleY(calc(1 - var(--d1)))}
+#s-drain .lv i{background:linear-gradient(var(--violet),rgba(112,71,235,.25));box-shadow:0 0 18px 2px rgba(112,71,235,.4);
+  transform:scaleY(calc(1 - var(--d2)))}
+#s-drain .lg i{background:linear-gradient(var(--w-accent),rgba(68,214,44,.25));box-shadow:0 0 18px 2px rgba(68,214,44,.4);
+  transform:scaleY(calc(1 - var(--dg)))}
+#s-drain .core{position:absolute;left:50%;top:50%;width:min(180px,30vw);aspect-ratio:1;transform:translate(-50%,-50%);
+  border:2px solid rgba(255,51,68,calc(var(--red)*.95));border-radius:14px;
+  box-shadow:0 0 30px rgba(255,51,68,calc(var(--red)*.35)),inset 0 0 26px rgba(255,51,68,calc(var(--red)*.22));
+  display:grid;place-items:center}
+#s-drain .core i{width:14px;height:14px;border-radius:50%;background:var(--warn);opacity:var(--red);
+  box-shadow:0 0 14px 4px rgba(255,51,68,.6)}
+#s-drain .haltlbl{position:absolute;left:50%;top:calc(50% + min(120px,20vw));transform:translateX(-50%);
+  font:600 11px/1 var(--w-ui);letter-spacing:.34em;text-transform:uppercase;color:var(--warn);opacity:var(--red)}
+
+/* ---------- S09 · GATE — human authorization (Reactive→Ripple) ---------- */
+#s-auth{--rise:clamp(0,calc(var(--p)/.5),1);--touch:clamp(0,(var(--p) - .52)/.06,1);
+  --go:clamp(0,(var(--p) - .6)/.08,1);--rip:clamp(0,(var(--p) - .64)/.3,1)}
+#s-auth .plate{position:absolute;left:50%;top:44%;width:min(150px,26vw);aspect-ratio:1;transform:translate(-50%,-50%);
+  border-radius:12px;border:2px solid;display:grid;place-items:center;
+  border-color:color-mix(in srgb,var(--warn) calc((1 - var(--go))*90%),var(--w-accent) calc(var(--go)*90%));
+  box-shadow:0 0 26px color-mix(in srgb,rgba(255,51,68,.35) calc((1 - var(--go))*100%),rgba(68,214,44,.4) calc(var(--go)*100%))}
+#s-auth .plate i{width:12px;height:12px;border-radius:50%;
+  background:color-mix(in srgb,var(--warn) calc((1 - var(--go))*100%),var(--w-accent) calc(var(--go)*100%));
+  transform:translateY(calc(var(--touch)*4px));
+  box-shadow:0 0 12px 4px color-mix(in srgb,rgba(255,51,68,.55) calc((1 - var(--go))*100%),rgba(68,214,44,.6) calc(var(--go)*100%))}
+#s-auth .ringy{position:absolute;left:50%;top:44%;width:16px;height:16px;border-radius:50%;
+  border:2px solid rgba(68,214,44,calc(.9 - var(--rip)*.9));
+  transform:translate(-50%,-50%) scale(calc(1 + var(--rip)*22));opacity:calc(var(--go))}
+#s-auth .finger{position:absolute;left:calc(50% - 17px);top:100%;width:34px;height:52vh;
+  transform:translateY(calc((1 - var(--rise))*30vh - 46vh*var(--rise) - 6vh));
+  background:linear-gradient(180deg,#15181b,#0a0c0d 40%);border:1px solid var(--edge);border-bottom:0;
+  border-radius:17px 17px 0 0}
+#s-auth .nolight{position:absolute;inset:0;background:radial-gradient(50% 40% at 50% 44%,rgba(255,51,68,.08),transparent 70%);
+  opacity:calc(1 - var(--go))}
+
+/* ---------- S10 · PROVE — Wave proof lanes ---------- */
+#s-prove .stack{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(860px,88vw);display:grid;gap:clamp(12px,2.4vh,22px)}
+#s-prove .lanehdr{font:700 clamp(22px,3.4vw,40px)/1.1 var(--w-display);text-transform:uppercase;color:var(--w-ink)}
+.lang-ar #s-prove .lanehdr{font-family:var(--w-body);text-transform:none}
+#s-prove .plane{--x:0;display:grid;grid-template-columns:minmax(150px,32%) 1fr;align-items:center;gap:16px}
+#s-prove .plane .lbl{font:600 clamp(11px,1.3vw,13px)/1.4 var(--w-ui);letter-spacing:.12em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--w-ink) 78%,transparent)}
+.lang-ar #s-prove .plane .lbl{letter-spacing:0}
+#s-prove .bar{height:4px;border-radius:4px;background:#0d1113;border:1px solid #14181b;position:relative;overflow:hidden}
+#s-prove .bar i{position:absolute;inset:0;transform-origin:left;border-radius:inherit;
+  --f:clamp(0,calc((var(--p)*1.15 - var(--x))/.28),1);
+  transform:scaleX(var(--f));
+  background:linear-gradient(90deg,rgba(68,214,44,.9),rgba(68,214,44,.5));
+  box-shadow:0 0 14px rgba(68,214,44,.4)}
+[dir="rtl"] #s-prove .bar i{transform-origin:right;background:linear-gradient(-90deg,rgba(68,214,44,.9),rgba(68,214,44,.5))}
+#s-prove .tally{margin-top:6px;font:700 clamp(30px,5vw,56px)/1 var(--w-display);color:var(--w-accent)}
+#s-prove .tally small{font:600 10px/1.6 var(--w-ui);letter-spacing:.24em;text-transform:uppercase;color:var(--w-dim);display:block;margin-top:6px}
+
+/* ---------- S11 · Starlight archive ---------- */
+#s-star .wall{position:absolute;inset:8% 6%;border:1px solid var(--edge);border-radius:16px;
+  background:
+    repeating-linear-gradient(90deg,rgba(138,148,157,.05) 0 1px,transparent 1px 11.11%),
+    repeating-linear-gradient(0deg,rgba(138,148,157,.05) 0 1px,transparent 1px 16.66%),
+    #060809}
+
+/* ---------- S12 · FINALE — collapse to breath ---------- */
+#s-fin{--shrink:clamp(0,calc(var(--p)/.7),1);--rest:clamp(0,(var(--p) - .72)/.2,1)}
+#s-fin .roomframe{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(calc(1.9 - var(--shrink)*.9));
+  width:min(760px,86vw);aspect-ratio:16/9;border:1px solid rgba(138,148,157,.14);border-radius:18px;
+  opacity:calc(1 - var(--shrink))}
+#s-fin .rig2{position:absolute;inset:0;display:grid;place-items:center;
+  transform:scale(calc(1.16 - var(--shrink)*.16))}
+#s-fin .edgefade{position:absolute;inset:0;background:radial-gradient(80% 70% at 50% 55%,transparent 40%,rgba(0,0,0,.85));
+  opacity:var(--rest)}
+#s-fin .loopnote{position:absolute;left:50%;bottom:12vh;transform:translateX(-50%);
+  font:600 10px/1.8 var(--w-ui);letter-spacing:.26em;text-transform:uppercase;text-align:center;
+  color:var(--w-dim);opacity:var(--rest)}
+
+/* seams: scene entry/exit keeps black; no flash */
+.scene .stage::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.9),transparent 8%,transparent 92%,rgba(0,0,0,.9))}
+
+.disclosure{border-top:1px solid var(--edge)}
+.disclosure b{color:color-mix(in srgb,var(--w-ink) 80%,transparent);font-weight:600}
+
+@media (max-width:640px){
+  #s-ripple .grid{grid-template-columns:repeat(4,1fr)}
+  #s-prove .plane{grid-template-columns:minmax(110px,40%) 1fr}
+  .fxchip{top:56px}
+}
+@media (prefers-reduced-motion: reduce){
+  .led,#s-loop .ring2{animation:none;opacity:1}
+  .hint::after{animation:none}
+}
+</style>
+</head>
+<body>
+</body>
+</html>

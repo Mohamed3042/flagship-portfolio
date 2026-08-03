@@ -14,6 +14,7 @@ export const ui = {
     'site.description':
       'Mohamed Mahmoud is an Automation Engineer in Kuwait building local AI, internal tools, bilingual document systems, desktop software, and verified system integrations. 26 project stories in English and Arabic.',
     'nav.work': 'Work',
+    'nav.worlds': 'Worlds',
     'nav.team': 'Engineering Lab',
     'nav.about': 'Foundation',
     'nav.contact': 'Contact',
@@ -45,6 +46,7 @@ export const ui = {
     'site.description':
       'محمد محمود مهندس أتمتة في الكويت يبني ذكاءً محليًا وأدوات داخلية وأنظمة مستندات ثنائية وبرمجيات سطح مكتب وتكاملات موثقة. ٢٦ قصة مشروع بالعربية والإنجليزية.',
     'nav.work': 'الأعمال',
+    'nav.worlds': 'العوالم',
     'nav.team': 'المختبر الهندسي',
     'nav.about': 'الأساس',
     'nav.contact': 'تواصل',

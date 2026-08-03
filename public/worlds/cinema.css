@@ -1,0 +1,124 @@
+/* cinema.css — shared theater chrome for the Worlds pages.
+   World pages own their palette via these hooks:
+     --w-bg  --w-ink  --w-accent  --w-dim  (set on :root per world)
+   Layout language: full-bleed pinned scenes, live-DOM copy over footage. */
+
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  background: var(--w-bg, #060606);
+  color: var(--w-ink, #f2efe8);
+  font-family: var(--w-body, Georgia, 'Times New Roman', serif);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ---------- language: author copy twice, CSS picks one ---------- */
+.L.ar { display: none; }
+.lang-ar .L.en { display: none; }
+.lang-ar .L.ar { display: inline; }
+.lang-ar { --dirflip: -1; }
+
+/* ---------- top chrome ---------- */
+.rail {
+  position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 60;
+  background: color-mix(in srgb, var(--w-ink, #fff) 12%, transparent);
+}
+.rail i {
+  display: block; height: 100%; transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+  background: var(--w-accent, #d9a83e);
+  transition: transform .08s linear;
+}
+[dir="rtl"] .rail i { transform-origin: 100% 50%; }
+
+.chrome {
+  position: fixed; z-index: 50; inset: 10px 14px auto 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  pointer-events: none; mix-blend-mode: normal;
+}
+.chrome > * { pointer-events: auto; }
+.chrome a, .chrome button {
+  font: 600 11px/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--w-ink, #fff); background: color-mix(in srgb, var(--w-bg, #000) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--w-ink, #fff) 25%, transparent);
+  padding: 9px 13px; border-radius: 999px; text-decoration: none; cursor: pointer;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.chrome a:hover, .chrome button:hover { border-color: var(--w-accent, #d9a83e); color: var(--w-accent, #d9a83e); }
+.chrome .grp { display: flex; gap: 8px; }
+
+/* ---------- scenes ---------- */
+.scene { position: relative; }
+.scene .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.frame { position: absolute; inset: 0; display: grid; place-items: center; }
+.frame > video, .frame > img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+/* caption card: live-DOM copy over footage */
+.caption {
+  position: absolute; z-index: 5; max-width: min(560px, 82vw);
+  inset-inline-start: clamp(18px, 6vw, 84px); bottom: clamp(20px, 9vh, 96px);
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .7s ease .15s, transform .7s ease .15s;
+}
+.scene.is-live .caption { opacity: 1; transform: none; }
+.caption .kick {
+  font: 700 11px/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: .22em; text-transform: uppercase; color: var(--w-accent, #d9a83e);
+  margin-bottom: 10px;
+}
+.caption h2 {
+  font: 700 clamp(26px, 4.6vw, 46px)/1.08 var(--w-display, inherit);
+  text-wrap: balance; text-shadow: 0 2px 24px rgba(0,0,0,.55);
+}
+.caption p {
+  margin-top: 10px; max-width: 46ch;
+  font-size: clamp(14px, 1.6vw, 17px); line-height: 1.55;
+  color: color-mix(in srgb, var(--w-ink, #fff) 86%, transparent);
+  text-shadow: 0 1px 14px rgba(0,0,0,.5);
+}
+
+/* act divider chip */
+.act {
+  min-height: 46vh; display: grid; place-items: center; text-align: center; padding: 12vh 6vw;
+}
+.act .no {
+  font: 700 11px/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: .3em; text-transform: uppercase; color: var(--w-accent, #d9a83e);
+}
+.act h2 { font: 700 clamp(30px, 6vw, 64px)/1.05 var(--w-display, inherit); margin-top: 12px; text-wrap: balance; }
+.act p { margin-top: 12px; max-width: 58ch; margin-inline: auto; color: color-mix(in srgb, var(--w-ink,#fff) 75%, transparent); line-height: 1.6; }
+
+/* ---------- theater dialog ---------- */
+.theater { border: 0; padding: 0; background: #000; width: min(1120px, 94vw); border-radius: 10px; overflow: hidden; }
+.theater::backdrop { background: rgba(0,0,0,.82); backdrop-filter: blur(6px); }
+.theater video { width: 100%; display: block; aspect-ratio: 16/9; }
+.theater__close {
+  position: absolute; top: 8px; inset-inline-end: 8px; z-index: 2;
+  background: rgba(0,0,0,.55); color: #fff; border: 1px solid rgba(255,255,255,.3);
+  border-radius: 999px; width: 34px; height: 34px; cursor: pointer; font-size: 14px;
+}
+
+/* ---------- disclosure footer ---------- */
+.disclosure {
+  padding: 9vh 6vw 12vh; text-align: center;
+  font: 400 12.5px/1.7 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  color: color-mix(in srgb, var(--w-ink, #fff) 55%, transparent);
+}
+.disclosure a { color: var(--w-accent, #d9a83e); }
+
+/* ---------- a11y & motion safety ---------- */
+:focus-visible { outline: 2px solid var(--w-accent, #d9a83e); outline-offset: 3px; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .caption { transition: none; opacity: 1; transform: none; }
+  * { animation-duration: .001s !important; animation-iteration-count: 1 !important; }
+}
