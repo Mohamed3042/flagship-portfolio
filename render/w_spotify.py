@@ -110,14 +110,14 @@ g_l = H.point(loc=(0.06, 1.55, 0.35), energy=0.0, color=GREEN, radius=0.25)
 H.keyframe(g_l.data, 'energy',
            [(1, 0.0), (int(FRAMES * 0.70), 0.0), (int(FRAMES * 0.77), 140.0), (FRAMES, 55.0)])
 
-# ── camera: macro slide across the groove, ending on the stylus ──
-cam, tgt = H.camera(loc=(-2.6, -3.5, 1.55), target=(-0.4, 0.2, 0.12), focal=62, fstop=2.0)
-H.cam_move(cam, tgt,
-           keys=[(1,           (-4.30, -5.40, 2.45), (-0.40, 0.20, 0.14)),
-                 (FRAMES // 2, (-2.10, -4.10, 1.35), (0.10, 0.60, 0.12)),
-                 (FRAMES,      (0.55, -3.05, 0.66), (0.55, 1.35, 0.11))],
-           focal_keys=[(1, 46), (FRAMES, 84)],
-           focus_keys=[(1, 7.0), (FRAMES, 3.2)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['spotify'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.import_assets('spotify')
 
 H.grade(hi=(1.02, 1.0, 1.02), mid=(1.0, 1.0, 1.0), lo=(0.006, 0.002, 0.006),
         glare=0.16, vignette=0.0)

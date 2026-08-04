@@ -87,14 +87,14 @@ for sx in (-1, 1):
     H.point(loc=(sx * 6.6, -1.0, 1.1), energy=90, color=(1.0, 0.62, 0.30), radius=0.25)
     H.point(loc=(sx * 6.6, -7.0, 1.1), energy=70, color=(1.0, 0.62, 0.30), radius=0.25)
 
-# ── camera: low push from behind the seats, up toward the beam ──
-cam, tgt = H.camera(loc=(2.4, -13.5, 2.0), target=(0, -6.0, 3.2), focal=34, fstop=2.6)
-H.cam_move(cam, tgt,
-           keys=[(1,           (2.60, -13.9, 1.85), (0.0, -6.6, 3.05)),
-                 (FRAMES // 2, (1.60, -12.2, 2.55), (0.0, -2.0, 3.60)),
-                 (FRAMES,      (0.55, -11.0, 3.20), (0.0, 6.0, 4.30))],
-           focal_keys=[(1, 34), (FRAMES, 42)],
-           focus_keys=[(1, 6.2), (int(FRAMES * 0.5), 11.0), (FRAMES, 22.0)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['netflix'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.dressing('netflix', [(0.95, (-1.35, -2.0, 0.0), 4)])
 
 H.grade(hi=(1.05, 1.0, 0.99), mid=(1.0, 1.0, 1.0), lo=(0.010, 0.003, 0.004),
         glare=0.18, vignette=0.0)

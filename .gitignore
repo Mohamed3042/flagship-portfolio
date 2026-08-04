@@ -24,3 +24,4 @@ artifacts/
 # the shipped artifact; the PNG sequences behind them are reproducible
 render/out/
 render/*.log
+render/assets/

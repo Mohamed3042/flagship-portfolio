@@ -87,14 +87,14 @@ H.area(loc=(0, 7.5, 2.0), rot=(math.radians(96), 0, 0),
        size=9, energy=260, color=VIOLET)
 H.point(loc=(0, 0, 0.55), energy=45, color=(0.85, 0.9, 1.0), radius=0.12)
 
-# ── camera: orbit-and-descend, the fold closing toward the lens ──
-cam, tgt = H.camera(loc=(6.6, -6.4, 3.1), target=(0, 0, 0.55), focal=44, fstop=2.4)
-H.cam_move(cam, tgt,
-           keys=[(1,           (7.20, -6.90, 3.35), (0, 0, 0.52)),
-                 (FRAMES // 2, (3.40, -7.60, 1.95), (0, 0, 0.55)),
-                 (FRAMES,      (-0.90, -6.40, 0.95), (0, 0, 0.58))],
-           focal_keys=[(1, 40), (FRAMES, 58)],
-           focus_keys=[(1, 10.2), (FRAMES, 6.5)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['samsung'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.import_assets('samsung')
 
 H.grade(hi=(1.0, 1.0, 1.06), mid=(1.0, 1.0, 1.0), lo=(0.004, 0.004, 0.014),
         glare=0.20, vignette=0.0)

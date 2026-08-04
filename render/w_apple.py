@@ -72,14 +72,14 @@ H.area(loc=(4.6, -1.6, 1.5), rot=(math.radians(84), 0, math.radians(74)),
 neg = H.plane(loc=(-7.6, 2.2, 2.2), size=6, rot=(math.radians(90), 0, math.radians(-16)))
 H.assign(neg, H.pbr('Flag', base=(0.01, 0.01, 0.01), rough=1.0))
 
-# ── camera: slow push down the bar, focus riding the tool ──
-cam, tgt = H.camera(loc=(-3.9, -6.2, 1.9), target=(0, 0.1, 0.35), focal=58, fstop=2.2)
-H.cam_move(cam, tgt,
-           keys=[(1,           (-4.3, -6.6, 2.05), (-1.9, 0.1, 0.42)),
-                 (FRAMES // 2, (-1.1, -5.4, 1.55), (0.20, 0.1, 0.34)),
-                 (FRAMES,      (2.40, -4.9, 1.25), (2.10, 0.1, 0.28))],
-           focal_keys=[(1, 52), (FRAMES, 76)],
-           focus_keys=[(1, 7.2), (FRAMES, 5.2)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['apple'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.import_assets('apple')
 
 H.grade(hi=(1.0, 1.0, 1.01), mid=(1.0, 1.0, 1.0), lo=(0.0, 0.0, 0.002),
         glare=0.10, vignette=0.0)

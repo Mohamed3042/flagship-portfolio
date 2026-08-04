@@ -112,14 +112,15 @@ H.area(loc=(4.2, -2.6, 3.4), rot=(math.radians(56), 0, math.radians(62)),
        size=3.0, energy=90, color=(0.42, 0.55, 0.95))
 H.area(loc=(0, -1.0, 3.0), rot=(0, 0, 0), size=5, energy=30, color=(1.0, 0.80, 0.55))
 
-# ── camera: low push across the bench onto the open book ──
-cam, tgt = H.camera(loc=(3.9, -4.6, 2.35), target=(-0.2, 0.0, 0.24), focal=40, fstop=2.4)
-H.cam_move(cam, tgt,
-           keys=[(1,           (4.20, -5.00, 2.55), (-0.15, 0.00, 0.22)),
-                 (FRAMES // 2, (3.05, -4.10, 1.95), (-0.20, 0.02, 0.30)),
-                 (FRAMES,      (1.95, -3.30, 1.45), (-0.30, 0.05, 0.42))],
-           focal_keys=[(1, 38), (FRAMES, 50)],
-           focus_keys=[(1, 6.8), (FRAMES, 4.4)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['disney'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.dressing('disney', [(0.62, (-2.05, -1.25, 0.0), 24), (0.42, (1.72, 0.55, 0.0), -14),
+                      (1.05, (2.55, 1.45, 0.0), -62)])
 
 H.grade(hi=(1.06, 1.0, 0.94), mid=(1.0, 1.0, 0.99), lo=(0.012, 0.007, 0.003),
         glare=0.24, vignette=0.0)

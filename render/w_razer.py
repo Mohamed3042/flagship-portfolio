@@ -82,15 +82,14 @@ row_l = H.area(loc=(0, 1.4, 0.5), rot=(0, 0, 0), size=10, size_y=1.2,
                energy=0.0, color=GREEN, shape='RECTANGLE')
 H.keyframe(row_l.data, 'energy', [(1, 0.0), (int(FRAMES * 0.5), 0.0), (FRAMES, 60.0)])
 
-# ── camera: macro slide along the row, focus racking to the hero key ──
-hx = (HERO[0] - 6) * 0.92
-cam, tgt = H.camera(loc=(hx - 4.2, -4.4, 1.5), target=(hx, 0.4, 0.0), focal=68, fstop=2.0)
-H.cam_move(cam, tgt,
-           keys=[(1,           (hx - 4.6, -4.6, 1.75), (hx - 1.2, 0.5, 0.05)),
-                 (FRAMES // 2, (hx - 2.4, -3.4, 1.05), (hx + 0.1, 0.4, 0.02)),
-                 (FRAMES,      (hx + 1.4, -3.1, 0.80), (hx + 1.6, 0.4, 0.00))],
-           focal_keys=[(1, 62), (FRAMES, 85)],
-           focus_keys=[(1, 6.4), (int(FRAMES * 0.4), 4.6), (FRAMES, 3.9)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['razer'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.dressing('razer', [(6.4, (0.4, 2.6, -0.62), 0)])
 
 H.grade(hi=(0.99, 1.05, 0.99), mid=(1.0, 1.0, 1.0), lo=(0.002, 0.006, 0.003),
         glare=0.14, vignette=0.0)

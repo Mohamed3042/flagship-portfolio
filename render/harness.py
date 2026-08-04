@@ -625,3 +625,124 @@ def out_arg(default):
         if rest:
             return rest[0]
     return default
+
+
+# ───────────────────────── sequence direction ─────────────────────────
+
+def shot_no():
+    """Which shot of this world's sequence to render (SHOT=1..n)."""
+    return int(os.environ.get('SHOT', '1'))
+
+
+def stage_shot(cam, tgt, spec, frames):
+    """Apply one shot's camera language. spec keys:
+         keys   [(t, cam_loc, target_loc)] with t in 0..1 across the shot
+         focal  [(t, mm)]      focus [(t, metres)]
+         fstop  float          shutter float (motion blur, 0 = off)
+         roll   [(t, degrees)] — a hand-held or dutch tilt on the lens axis
+    """
+    n = frames
+    f = lambda t: max(1, round(1 + t * (n - 1)))
+    cam.data.dof.aperture_fstop = spec.get('fstop', cam.data.dof.aperture_fstop)
+    cam_move(cam, tgt,
+             keys=[(f(t), a, b) for t, a, b in spec['keys']],
+             focal_keys=[(f(t), v) for t, v in spec.get('focal', [])],
+             focus_keys=[(f(t), v) for t, v in spec.get('focus', [])])
+    if spec.get('roll'):
+        keyframe(cam, 'rotation_euler',
+                 [(f(t), math.radians(v)) for t, v in spec['roll']], index=2)
+    sh = spec.get('shutter', 0.0)
+    sc = bpy.context.scene
+    sc.render.use_motion_blur = sh > 0
+    if sh > 0:
+        sc.render.motion_blur_shutter = sh
+    return cam
+
+
+def import_assets(world, root=None, scale=1.0, at=(0, 0, 0)):
+    """Append/import anything the owner dropped in render/assets/<world>/.
+    Returns the objects added, so a world script can place or hide them.
+    Missing folder is not an error — the set simply renders as authored."""
+    root = root or os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', world)
+    if not os.path.isdir(root):
+        return []
+    before = set(bpy.data.objects)
+    for name in sorted(os.listdir(root)):
+        p = os.path.join(root, name)
+        low = name.lower()
+        try:
+            if low.endswith('.blend'):
+                with bpy.data.libraries.load(p, link=False) as (src, dst):
+                    dst.objects = src.objects
+                for ob in dst.objects:
+                    if ob is not None:
+                        bpy.context.collection.objects.link(ob)
+            elif low.endswith('.fbx'):
+                bpy.ops.import_scene.fbx(filepath=p)
+            elif low.endswith(('.glb', '.gltf')):
+                bpy.ops.import_scene.gltf(filepath=p)
+            elif low.endswith('.obj'):
+                bpy.ops.wm.obj_import(filepath=p)
+            else:
+                continue
+            print('ASSET_IMPORTED ' + name)
+        except Exception as e:
+            print('ASSET_FAILED %s: %s' % (name, str(e)[:90]))
+    added = [o for o in bpy.data.objects if o not in before]
+    for o in added:
+        o.scale = (o.scale[0] * scale, o.scale[1] * scale, o.scale[2] * scale)
+        o.location = (o.location[0] + at[0], o.location[1] + at[1], o.location[2] + at[2])
+    return added
+
+
+def _roots(objs):
+    """Top-level mesh objects — the things worth placing individually."""
+    s = set(objs)
+    return [o for o in objs if o.type == 'MESH' and (o.parent is None or o.parent not in s)]
+
+
+def dressing(world, slots, hide_extra=True):
+    """Import render/assets/<world>/ and dress the set with it.
+
+    slots: [(size_m, (x, y, z), rot_z_deg), ...] — each imported root is
+    normalised to `size_m` on its longest axis, dropped so its base sits on z,
+    and placed. Library models arrive at wildly different scales and origins;
+    measuring the bounds is the only reliable way to make them share a set
+    with hand-built geometry. Anything past the last slot is hidden rather
+    than left floating at the origin.
+    """
+    objs = import_assets(world)
+    if not objs:
+        return []
+    roots = _roots(objs)
+    placed = []
+    dg = bpy.context.evaluated_depsgraph_get()
+    for i, ob in enumerate(roots):
+        if i >= len(slots):
+            if hide_extra:
+                ob.hide_render = True
+                for c in ob.children_recursive:
+                    c.hide_render = True
+            continue
+        size_m, loc, rz = slots[i]
+        ob.rotation_mode = 'XYZ'
+        bpy.context.view_layer.update()
+        ev = ob.evaluated_get(dg)
+        bb = [ob.matrix_world @ Vector(c) for c in ev.bound_box]
+        dims = [max(v[k] for v in bb) - min(v[k] for v in bb) for k in range(3)]
+        longest = max(dims) or 1.0
+        f = size_m / longest
+        ob.scale = tuple(s * f for s in ob.scale)
+        bpy.context.view_layer.update()
+        bb = [ob.matrix_world @ Vector(c) for c in ob.evaluated_get(dg).bound_box]
+        cx = (max(v[0] for v in bb) + min(v[0] for v in bb)) / 2
+        cy = (max(v[1] for v in bb) + min(v[1] for v in bb)) / 2
+        zmin = min(v[2] for v in bb)
+        ob.location = (ob.location[0] + loc[0] - cx,
+                       ob.location[1] + loc[1] - cy,
+                       ob.location[2] + loc[2] - zmin)
+        ob.rotation_euler = (ob.rotation_euler[0], ob.rotation_euler[1],
+                             ob.rotation_euler[2] + math.radians(rz))
+        placed.append(ob)
+        print('DRESSED %s -> %.2fm at %s' % (ob.name[:28], size_m, loc))
+    return placed

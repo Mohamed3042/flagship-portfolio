@@ -110,14 +110,15 @@ H.keyframe(amb.data, 'energy',
            [(1, 12.0), (int(FRAMES * 0.45), 55.0), (int(FRAMES * 0.55), 18.0), (FRAMES, 70.0)])
 H.point(loc=(-5.0, 24.0, 7.7), energy=900, color=(1.0, 0.66, 0.30), radius=0.4)
 
-# ── camera: a low handheld-feeling push toward the junction ──
-cam, tgt = H.camera(loc=(-3.4, -6.0, 1.75), target=(1.6, 4.0, 1.5), focal=30, fstop=2.8)
-H.cam_move(cam, tgt,
-           keys=[(1,           (-4.40, -8.60, 2.10), (1.50, 4.0, 1.60)),
-                 (FRAMES // 2, (-3.20, -6.00, 1.90), (1.60, 4.1, 1.55)),
-                 (FRAMES,      (-2.05, -3.60, 1.70), (1.70, 4.2, 1.50))],
-           focal_keys=[(1, 30), (FRAMES, 40)],
-           focus_keys=[(1, 14.5), (FRAMES, 9.0)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['cod'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.dressing('cod', [(0.9, (-4.6, 6.2, 0.02), 18), (0.9, (-4.0, 7.0, 0.02), -32),
+                   (2.2, (6.6, 9.5, 0.02), 96), (3.0, (-6.9, 12.0, 0.02), 8)])
 
 H.grade(hi=(1.04, 1.0, 0.97), mid=(1.0, 1.0, 1.0), lo=(0.006, 0.006, 0.012),
         glare=0.16, vignette=0.0)

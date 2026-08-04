@@ -155,14 +155,14 @@ H.area(loc=(4, -30, 22), rot=(math.radians(30), 0, 0), size=46,
 H.atmosphere(density=0.075, color=(0.70, 0.80, 1.0), anisotropy=0.74,
              size=11, loc=(0.2, -0.8, 9.0))
 
-# ── camera: wide dolly-in, rising, focus racking onto the slit ──
-cam, tgt = H.camera(loc=(26.0, -37.0, 3.2), target=(0, 0, 3.0), focal=32, fstop=3.2)
-H.cam_move(cam, tgt,
-           keys=[(1,            (26.5, -37.6, 3.10), (0.00, 0.0, 3.00)),
-                 (FRAMES // 2,  (20.0, -29.0, 4.20), (0.10, 0.0, 3.30)),
-                 (FRAMES,       (14.5, -21.5, 5.40), (0.20, -0.2, 3.60))],
-           focal_keys=[(1, 32), (FRAMES, 44)],
-           focus_keys=[(1, 46.0), (FRAMES, 26.0)])
+# ── camera: this shot's coverage, from the sequence table ──
+import shots as SH
+_spec = SH.SHOTS['astronomy'][H.shot_no() - 1]
+cam, tgt = H.camera(loc=_spec['keys'][0][1], target=_spec['keys'][0][2],
+                    focal=_spec.get('focal', [(0, 45)])[0][1],
+                    fstop=_spec.get('fstop', 2.8))
+H.stage_shot(cam, tgt, _spec, FRAMES)
+H.dressing('astronomy', [(2.6, (-6.4, -9.0, 0.0), 22), (5.5, (12.5, 9.0, 0.0), -40)])
 
 H.grade(hi=(1.03, 1.05, 1.12), mid=(1.00, 1.00, 1.02), lo=(0.004, 0.008, 0.018),
         glare=0.10, vignette=0.0)
