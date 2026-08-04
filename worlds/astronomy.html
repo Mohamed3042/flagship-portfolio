@@ -7,7 +7,7 @@
 <meta name="description" content="A scroll-cinema film built entirely in code: a lone desert observatory detects order inside cosmic noise, maps the signal, builds an orbital answer, and holds the one decision no machine may make.">
 <meta name="theme-color" content="#070B18">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070B18'/%3E%3Cpath d='M14 41a18 18 0 0 1 36 0Z' fill='%23B88E3E'/%3E%3Crect x='30' y='20' width='4' height='21' fill='%2343D9D1'/%3E%3Crect x='11' y='41' width='42' height='6' rx='2' fill='%23252A35'/%3E%3Ccircle cx='49' cy='14' r='1.8' fill='%23F4F0E7'/%3E%3Ccircle cx='18' cy='11' r='1.2' fill='%23F4F0E7' opacity='.7'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./cinema.css?v=3.1">
+<link rel="stylesheet" href="./cinema.css?v=4">
 <style>
 /* ══════════ THE OBSERVATORY — world palette & typography ══════════ */
 :root{
@@ -256,6 +256,23 @@ body{overscroll-behavior-y:none}
     <div class="iris" aria-hidden="true"></div>
   </div>
 </section>
+
+<!-- ============ THE RENDERED PLATE (Cycles) ============ -->
+<section class="scene rplate" data-scene="pin" data-slate="The rendered plate" style="height:300vh"
+         data-plate="render/astronomy.mp4" data-plate-poster="render/astronomy.jpg"
+         aria-label="Rendered plate">
+  <div class="stage">
+    <p class="rtag"><span class="L en">72 FRAMES · CYCLES OPTIX · 1280×640
+35→44 MM · f/3.2 · AGX</span><span class="L ar">٧٢ إطارًا · CYCLES OPTIX · ١٢٨٠×٦٤٠
+٣٥→٤٤ مم · f/3.2 · AGX</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · Cycles path trace</span><span class="L ar">عرضٌ مُصيَّر · تتبُّع مسار Cycles</span></p>
+      <h2><span class="L en">The dome cracks its slit</span><span class="L ar">القبّة تفتح شقّها</span></h2>
+      <p><span class="L en">Not a drawing of an observatory — an observatory: real geometry, a real f/3.2 lens with real depth of field, starlight scattering through real haze. You are scrubbing a camera move, one ray-traced frame per pixel of scroll.</span><span class="L ar">ليست رسمًا لمرصد — بل مرصدٌ حقيقي: هندسةٌ حقيقية، وعدسةٌ حقيقية بفتحة f/3.2 لها عمقُ ميدانٍ حقيقي، وضوءُ نجومٍ يتبعثر في ضبابٍ حقيقي. أنت تُمرِّر حركةَ كاميرا، إطارًا مُصيَّرًا بتتبُّع الأشعة لكل بكسل تمرير.</span></p>
+    </div>
+  </div>
+</section>
+
 
 <!-- ══════════ S1 · TITLE — the sleeping dome ══════════ -->
 <section class="scene s-title vig" data-scene="pin" data-slate="Title · the sleeping dome" aria-label="Title">
@@ -541,7 +558,7 @@ body{overscroll-behavior-y:none}
   <span class="L ar">دراسة حركية أصلية مستلهَمة لملف أعمال محمد محمود — واقعية المرصد معروضةً حيًّا بالشيفرة، مستنيرةً بممارسات التصوير العلمي المنشورة. لا انتساب لناسا أو لأي وكالة ولا تأييد منها ولا تمثيل لها، ولا تظهر علامات أو شارات أو أشباه. الأرقام الحقيقية في <a href="../">صفحات قصص الموقع</a>.</span></p>
 </footer>
 
-<script src="cinema.js?v=3.1"></script>
+<script src="cinema.js?v=4"></script>
 <script>
 (() => {
   'use strict';
