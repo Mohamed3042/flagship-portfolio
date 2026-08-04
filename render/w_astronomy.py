@@ -150,10 +150,11 @@ H.assign(fixture, H.emissive('LampGlass', (1.0, 0.68, 0.33), 5.0))
 H.area(loc=(4, -30, 22), rot=(math.radians(30), 0, 0), size=46,
        energy=520, color=(0.30, 0.42, 0.72))
 
-# a dense pocket over the station so the shaft through the slit reads as a
-# beam; small enough that its container never enters frame
+# a dense pocket for the shaft through the slit. It sits ABOVE the dome on
+# purpose: at 0.075 density any camera inside it sees only milk, and the
+# close shots in this sequence work at z ≈ 6-7.
 H.atmosphere(density=0.075, color=(0.70, 0.80, 1.0), anisotropy=0.74,
-             size=11, loc=(0.2, -0.8, 9.0))
+             size=8, loc=(0.2, -0.5, 12.0))
 
 # ── camera: this shot's coverage, from the sequence table ──
 import shots as SH
