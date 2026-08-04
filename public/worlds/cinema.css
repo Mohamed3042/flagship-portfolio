@@ -184,6 +184,10 @@ html.boxed .matte { transform: scaleY(1); }
    `.scene .stage > *` position overrides (e.g. THE ANTHOLOGY) */
 .scene.ident .iris, .scene.ident .beam,
 .scene.credits .roll, .scene.credits .vig { position: absolute; }
+/* default pin runways — a pinned scene with no travel never scrubs.
+   Worlds may override (inline style or higher-specificity rule). */
+.scene.ident { height: 200vh; }
+.scene.credits { height: 320vh; }
 .ident .iris {
   position: absolute; inset: 0; display: grid; place-items: center;
   background:
