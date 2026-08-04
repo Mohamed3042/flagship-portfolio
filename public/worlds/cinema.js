@@ -346,6 +346,12 @@
       u.seeking = false;
       if (u.want >= 0) { const t = u.want; u.want = -1; seek(u, t); }
     });
+    // a plate that will not load must not leave a black stage behind the
+    // caption — hand the scene back to CSS and let its poster stand in
+    u.v.addEventListener('error', () => {
+      u.scene.classList.add('plate-missing');
+      u.scene.classList.remove('plate-ready');
+    }, { once: true });
     u.v.src = u.scene.dataset.plate;
     u.v.load();
   };

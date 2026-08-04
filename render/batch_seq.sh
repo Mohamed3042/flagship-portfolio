@@ -8,6 +8,7 @@ F=${FRAMES:-48}; S=${SAMPLES:-36}
 for w in astronomy razer disney cod netflix spotify apple samsung; do
   for n in 1 2 3 4; do
     tag="${w}-s${n}"
+    if [ -f "$DEST/$tag.mp4" ]; then echo "### HAVE $tag"; continue; fi
     echo "### RENDER $tag $(date +%T)"
     rm -rf "$R/out/$tag"
     SHOT=$n RES_X=960 RES_Y=480 FRAMES=$F SAMPLES=$S "$BL" --background --factory-startup \
