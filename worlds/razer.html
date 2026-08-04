@@ -6,7 +6,7 @@
 <title>SYSTEM ASCENSION — a Chroma-grammar scroll film · Mohamed Mahmoud</title>
 <meta name="description" content="A matte-black machine sleeps in a lightless room. One keypress starts a controlled signal cascade — key, board, rig, room, thirty project modules — halted by a red security gate until a human hand authorizes. An original, brand-inspired scroll-cinema motion study.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000000'/%3E%3Crect x='14' y='14' width='36' height='36' rx='6' fill='%23101214' stroke='%231d2226' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%2344D62C'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./cinema.css">
+<link rel="stylesheet" href="./cinema.css?v=3">
 <style>
 /* ============ SYSTEM ASCENSION — world palette & physics ============ */
 :root{
@@ -280,6 +280,24 @@ body{letter-spacing:.01em}
   font:600 10px/1.8 var(--w-ui);letter-spacing:.26em;text-transform:uppercase;text-align:center;
   color:var(--w-dim);opacity:var(--rest)}
 
+/* ---------- S04b · Firmware bootlog — light earned line by line ---------- */
+#s-boot .term{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(680px,88vw);border:1px solid var(--edge);border-radius:12px;
+  background:linear-gradient(180deg,#0a0c0d,#060708);padding:clamp(18px,3vw,30px);
+  box-shadow:0 40px 80px -40px #000, inset 0 1px 0 rgba(138,148,157,.1)}
+#s-boot .term::before{content:"BOOT · FIRMWARE";display:block;margin-bottom:14px;
+  font:600 10px/1 var(--w-ui);letter-spacing:.3em;color:var(--w-dim)}
+#s-boot .ln{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:baseline;
+  font:500 clamp(11px,1.4vw,13.5px)/2.1 var(--w-ui);letter-spacing:.06em;color:color-mix(in srgb,var(--w-ink) 82%,transparent);
+  opacity:calc(clamp(0,(var(--p) - var(--at,.2))*9,1));
+  transform:translateY(calc((1 - clamp(0,(var(--p) - var(--at,.2))*9,1))*6px))}
+#s-boot .ln b{font-weight:600;color:var(--w-accent);letter-spacing:.12em}
+#s-boot .ln.warn b{color:var(--warn)}
+#s-boot .ln i{font-style:normal;color:var(--w-dim)}
+#s-boot .caret{margin-top:8px;width:9px;height:15px;background:var(--w-accent);
+  opacity:calc(clamp(0,(var(--p) - .78)*9,1));animation:caret 1.1s steps(2) infinite}
+@keyframes caret{50%{opacity:.1}}
+
 /* seams: scene entry/exit keeps black; no flash */
 .scene .stage::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(180deg,rgba(0,0,0,.9),transparent 8%,transparent 92%,rgba(0,0,0,.9))}
@@ -298,7 +316,7 @@ body{letter-spacing:.01em}
 }
 </style>
 </head>
-<body>
+<body data-film="RZR · REEL 01" data-runtime="560" data-ticks data-letterbox>
 <div class="rail" data-rail><i></i></div>
 <header class="chrome">
   <nav class="grp" aria-label="Site">
@@ -311,8 +329,22 @@ body{letter-spacing:.01em}
 </header>
 
 <main>
+<!-- ============ S00 · STUDIO IDENT ============ -->
+<section class="scene ident" data-scene="pin" data-slate="Studio ident" style="height:200vh" aria-label="Studio ident">
+  <div class="stage">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="card">
+      <div class="mark" aria-hidden="true"><i></i></div>
+      <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+      <p class="film-title"><span class="L en">System Ascension</span><span class="L ar">صعود المنظومة</span></p>
+    </div>
+    <div class="iris" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- ============ S01 · PROLOGUE — the sleeping machine (Breathing 7 s) ============ -->
-<section id="s-sleep" class="scene" data-scene="pin" style="height:270vh" aria-label="Prologue">
+<section id="s-sleep" class="scene" data-scene="pin" data-slate="The machine sleeps" style="height:270vh" aria-label="Prologue">
   <div class="stage">
     <div class="rig" aria-hidden="true">
       <div class="console"><span class="led"></span></div>
@@ -333,7 +365,7 @@ body{letter-spacing:.01em}
 </section>
 
 <!-- ============ S02 · INPUT — explicit actuation (Reactive) ============ -->
-<section id="s-key" class="scene" data-scene="pin" style="height:300vh" aria-label="Actuation">
+<section id="s-key" class="scene" data-scene="pin" data-slate="The keypress" style="height:300vh" aria-label="Actuation">
   <div class="stage">
     <div class="graze" aria-hidden="true"></div>
     <div class="macro" aria-hidden="true">
@@ -361,7 +393,7 @@ body{letter-spacing:.01em}
 </div>
 
 <!-- ============ S03 · MAP — trace search (Reactive) ============ -->
-<section id="s-trace" class="scene" data-scene="pin" style="height:340vh" aria-label="Trace search">
+<section id="s-trace" class="scene" data-scene="pin" data-slate="Trace search" style="height:340vh" aria-label="Trace search">
   <div class="stage">
     <svg viewBox="0 0 1140 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <!-- cold, unlit copper -->
@@ -390,7 +422,7 @@ body{letter-spacing:.01em}
 </section>
 
 <!-- ============ S04 · MAP — the loop closes (Static) ============ -->
-<section id="s-loop" class="scene" data-scene="pin" style="height:280vh" aria-label="Closed loop">
+<section id="s-loop" class="scene" data-scene="pin" data-slate="The loop closes" style="height:280vh" aria-label="Closed loop">
   <div class="stage">
     <svg viewBox="0 0 1140 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path class="cold" d="M0 120 H1140 M0 500 H1140"/>
@@ -415,6 +447,30 @@ body{letter-spacing:.01em}
   </div>
 </section>
 
+<!-- ============ S04b · MAP — firmware bootlog (light earned line by line) ============ -->
+<section id="s-boot" class="scene" data-scene="pin" data-slate="Firmware bootlog" style="height:300vh" aria-label="Firmware bootlog">
+  <div class="stage">
+    <div class="term" aria-hidden="true">
+      <p class="ln" style="--at:.08"><span>POST · POWER-ON SELF TEST</span><b>OK</b></p>
+      <p class="ln" style="--at:.16"><span>CLOCK · PHASE 0.0 <i>· 7S BREATH REFERENCE</i></span><b>LOCK</b></p>
+      <p class="ln" style="--at:.24"><span>ROUTE · CLOSED LOOP VERIFIED</span><b>HOLD</b></p>
+      <p class="ln" style="--at:.32"><span>BUS · ENUMERATION <i>· 12 BAYS FOUND</i></span><b>OK</b></p>
+      <p class="ln" style="--at:.40"><span>LANE C · DATA <i>· CYAN</i></span><b>READY</b></p>
+      <p class="ln" style="--at:.48"><span>LANE V · DATA <i>· VIOLET</i></span><b>READY</b></p>
+      <p class="ln" style="--at:.56"><span>CAUSE ENGINE · PHOTON BUDGET</span><b>STRICT</b></p>
+      <p class="ln warn" style="--at:.64"><span>INTERLOCK · HUMAN GATE</span><b>ARMED</b></p>
+      <p class="ln" style="--at:.72"><span>CASCADE · RIPPLE ORIGIN SET <i>· BUS SOCKET</i></span><b>WAIT</b></p>
+      <div class="caret"></div>
+    </div>
+    <div class="fxchip"><span class="L en">EFFECT · <b>Static</b> · text is light too</span><span class="L ar">المؤثر · <b>ساكن</b> · النص ضوءٌ أيضًا</span></div>
+    <div class="caption">
+      <p class="kick"><span class="L en">Map · firmware</span><span class="L ar">الخريطة · البرنامج الثابت</span></p>
+      <h2><span class="L en">The system reads itself awake</span><span class="L ar">المنظومة تقرأ نفسها مستيقظةً</span></h2>
+      <p><span class="L en">Before any bay may glow, the firmware speaks its checklist — one earned line per scroll beat. The red interlock arms here, long before you meet it.</span><span class="L ar">قبل أن يُسمح لأي محضنٍ بالتوهّج، يتلو البرنامجُ الثابت قائمتَه — سطرٌ مُستحَق مع كل دفعة تمرير. والقفل الأحمر يتذخّر هنا، قبل أن تقابله بكثير.</span></p>
+    </div>
+  </div>
+</section>
+
 <div class="act">
   <p class="no"><span class="L en">Act II</span><span class="L ar">الفصل الثاني</span></p>
   <h2><span class="L en">Build</span><span class="L ar">البناء</span></h2>
@@ -423,7 +479,7 @@ body{letter-spacing:.01em}
 </div>
 
 <!-- ============ S05 · BUILD — ripple wakes twelve bays (Ripple) ============ -->
-<section id="s-ripple" class="scene" data-scene="pin" style="height:330vh" aria-label="Module ripple">
+<section id="s-ripple" class="scene" data-scene="pin" data-slate="Twelve bays wake" style="height:330vh" aria-label="Module ripple">
   <div class="stage">
     <canvas class="fxcanvas" data-fx="ripple" aria-hidden="true"></canvas>
     <span class="socket" aria-hidden="true"></span>
@@ -453,7 +509,7 @@ body{letter-spacing:.01em}
 </section>
 
 <!-- ============ S06 · BUILD — device sync (Wave, left→right) ============ -->
-<section id="s-wave" class="scene" data-scene="pin" style="height:300vh" aria-label="Device sync">
+<section id="s-wave" class="scene" data-scene="pin" data-slate="Device sync" style="height:300vh" aria-label="Device sync">
   <div class="stage">
     <div class="field" aria-hidden="true">
       <div class="deck">
@@ -474,7 +530,7 @@ body{letter-spacing:.01em}
   </div>
 </section>
 <!-- ============ S07 · SYNC — room wave (Wave, device→room) ============ -->
-<section id="s-room" class="scene" data-scene="pin" style="height:310vh" aria-label="Room wave">
+<section id="s-room" class="scene" data-scene="pin" data-slate="The room wave" style="height:310vh" aria-label="Room wave">
   <div class="stage">
     <div class="space3" aria-hidden="true">
       <div class="floor"></div>
@@ -505,7 +561,7 @@ body{letter-spacing:.01em}
 </div>
 
 <!-- ============ S08 · GATE — spectrum drain (Spectrum Cycling, draining) ============ -->
-<section id="s-drain" class="scene" data-scene="pin" style="height:380vh" aria-label="Spectrum drain">
+<section id="s-drain" class="scene" data-scene="pin" data-slate="Spectrum drain" style="height:380vh" aria-label="Spectrum drain">
   <div class="stage">
     <div class="lanes" aria-hidden="true">
       <div class="lane lc"><i></i></div>
@@ -524,7 +580,7 @@ body{letter-spacing:.01em}
 </section>
 
 <!-- ============ S09 · GATE — human authorization (Reactive contact → Ripple) ============ -->
-<section id="s-auth" class="scene" data-scene="pin" style="height:420vh" aria-label="Human authorization">
+<section id="s-auth" class="scene" data-scene="pin" data-slate="Human authorization" style="height:420vh" aria-label="Human authorization">
   <div class="stage">
     <div class="nolight" aria-hidden="true"></div>
     <span class="ringy" aria-hidden="true"></span>
@@ -547,7 +603,7 @@ body{letter-spacing:.01em}
 </div>
 
 <!-- ============ S10 · PROVE — evidence lanes (Wave) ============ -->
-<section id="s-prove" class="scene" data-scene="pin" style="height:340vh" aria-label="Evidence lanes">
+<section id="s-prove" class="scene" data-scene="pin" data-slate="Evidence lanes" style="height:340vh" aria-label="Evidence lanes">
   <div class="stage">
     <div class="stack">
       <p class="lanehdr"><span class="L en">Evidence, by lane</span><span class="L ar">البرهان مساراً مساراً</span></p>
@@ -570,7 +626,7 @@ body{letter-spacing:.01em}
 </section>
 
 <!-- ============ S11 · PROVE — starlight archive (Starlight) ============ -->
-<section id="s-star" class="scene" data-scene="pin" style="height:300vh" aria-label="Starlight archive">
+<section id="s-star" class="scene" data-scene="pin" data-slate="Starlight archive" style="height:300vh" aria-label="Starlight archive">
   <div class="stage">
     <div class="wall" aria-hidden="true"></div>
     <canvas class="fxcanvas" data-fx="star" aria-hidden="true"></canvas>
@@ -591,7 +647,7 @@ body{letter-spacing:.01em}
 </div>
 
 <!-- ============ S12 · FINALE — collapse to breath (Breathing 7 s) ============ -->
-<section id="s-fin" class="scene" data-scene="pin" style="height:330vh" aria-label="Finale">
+<section id="s-fin" class="scene" data-scene="pin" data-slate="Collapse to breath" style="height:330vh" aria-label="Finale">
   <div class="stage">
     <div class="roomframe" aria-hidden="true"></div>
     <div class="rig2" aria-hidden="true">
@@ -607,6 +663,27 @@ body{letter-spacing:.01em}
     </div>
   </div>
 </section>
+<!-- ============ END CREDITS ============ -->
+<section class="scene credits" data-scene="pin" data-slate="End credits" style="height:320vh" aria-label="End credits">
+  <div class="stage">
+    <div class="roll">
+      <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <h3><span class="L en">System Ascension</span><span class="L ar">صعود المنظومة</span></h3>
+      <dl class="duo">
+        <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live — CSS, SVG, 2 canvases, no footage</span><span class="L ar">حيًّا — CSS وSVG ولوحتان، بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+        <dt><span class="L en">Lighting law</span><span class="L ar">قانون الإضاءة</span></dt><dd><span class="L en">Every photon has a cause</span><span class="L ar">لكل فوتونٍ سبب</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+      </dl>
+      <p class="fine"><span class="L en">A brand-inspired study. No logos, wordmarks or product replicas appear; no performance figures are claimed. The red gate is the point: automation halts, a human decides.</span><span class="L ar">دراسة مستلهَمة. لا تظهر فيها شعاراتٌ أو علاماتٌ أو نسخُ منتجات، ولا تُدَّعى أرقامُ أداء. البوابة الحمراء هي الفكرة: تتوقف الأتمتة، ويقرّر إنسان.</span></p>
+      <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+    </div>
+    <div class="vig" aria-hidden="true"></div>
+  </div>
+</section>
 </main>
 
 <footer class="disclosure">
@@ -616,7 +693,7 @@ body{letter-spacing:.01em}
   <p><a href="../"><span class="L en">← Back to the portfolio</span><span class="L ar">→ العودة إلى الموقع</span></a></p>
 </footer>
 
-<script src="./cinema.js" defer></script>
+<script src="./cinema.js?v=3" defer></script>
 <script>
 /* SYSTEM ASCENSION — world script.
    cinema.js owns scroll/--p/lang; this file owns: the S06 key grid,

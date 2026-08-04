@@ -6,7 +6,7 @@
 <title>CRAFTED — مَصنوع · a titanium scroll film</title>
 <meta name="description" content="CRAFTED — an original, material-first product-cinema study told in code. A hairline of titanium is mapped, milled, polished and assembled into one calm portfolio instrument; its last control stays human. AI-assisted, affiliated with no company.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B0B0C'/%3E%3Crect x='10' y='31' width='44' height='2' rx='1' fill='%23B9BBB8'/%3E%3Crect x='26' y='31' width='12' height='2' rx='1' fill='%23FFE8C2'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./cinema.css">
+<link rel="stylesheet" href="./cinema.css?v=3">
 <style>
 /* ============ CRAFTED — palette + type ============ */
 :root{
@@ -226,6 +226,29 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
   letter-spacing:.32em; text-transform:uppercase; color:var(--gold); }
 #s12 .caption{ opacity:clamp(0, calc((var(--p,0) - .30) / .14), calc(1 - clamp(0, calc((var(--p,0) - .56) / .1), 1))); transform:none; transition:none; }
 
+/* ============ S5b · BUILD — measured, not assumed ============ */
+#s5b{ height:320vh; }
+#s5b .stage{ background:var(--white); }
+#s5b .fig{ aspect-ratio:16/10; width:min(88vmin,820px); }
+#s5b .jawT{ --cl:clamp(0, calc((var(--p,0) - .12) / .4), 1);
+  transform:translateY(calc((1 - var(--cl)) * var(--mf) * -60px)); }
+#s5b .jawB{ --cl:clamp(0, calc((var(--p,0) - .12) / .4), 1);
+  transform:translateY(calc((1 - var(--cl)) * var(--mf) * 60px)); }
+#s5b .readout{ position:absolute; inset-inline-end:clamp(18px,7vw,90px); top:clamp(70px,12vh,120px);
+  text-align:end; z-index:5; opacity:clamp(0, calc((var(--p,0) - .2) / .16), 1); }
+#s5b .readout b{ display:block; font:200 clamp(40px,7vw,84px)/1 var(--w-display);
+  letter-spacing:-.02em; color:var(--inkd); font-variant-numeric:tabular-nums; }
+#s5b .readout b::after{ content:" mm"; font-size:.32em; letter-spacing:0; color:color-mix(in srgb,#1D1D1F 55%, transparent); }
+#s5b .readout span{ display:block; margin-top:8px; font:500 10px/1.5 var(--w-ui);
+  letter-spacing:.24em; text-transform:uppercase; color:color-mix(in srgb,#D8C5A4 62%, #1D1D1F); }
+#s5b .tolband{ --ok:clamp(0, calc((var(--p,0) - .62) / .14), 1); }
+#s5b .tolband .win{ opacity:calc(.25 + .75 * var(--ok)); }
+#s5b .tolband .needle{ transform:translateX(calc((1 - var(--ok)) * var(--mf) * -46px)); }
+#s5b .verdict{ opacity:clamp(0, calc((var(--p,0) - .78) / .12), 1);
+  font:500 10px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase;
+  color:color-mix(in srgb,#D8C5A4 70%, #1D1D1F); position:absolute; left:0; right:0;
+  bottom:16vh; text-align:center; }
+
 /* ============ chrome + disclosure on this film ============ */
 .chrome a, .chrome button{ font-weight:500; }
 .disclosure{ background:var(--black); color:color-mix(in srgb,#F5F5F7 55%, transparent); }
@@ -240,7 +263,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 }
 </style>
 </head>
-<body>
+<body data-film="TIT · REEL 01" data-runtime="560" data-ticks data-letterbox>
 
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 
@@ -291,8 +314,22 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 
 <main>
 
+<!-- ============ S0 · STUDIO IDENT ============ -->
+<section class="scene ident" data-scene="pin" data-slate="Studio ident" style="height:200vh" aria-label="Studio ident">
+  <div class="stage">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="card">
+      <div class="mark" aria-hidden="true"><i></i></div>
+      <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+      <p class="film-title"><span class="L en">Crafted</span><span class="L ar">مَصنوع</span></p>
+    </div>
+    <div class="iris" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- ============ S1 · PROLOGUE — the line waits ============ -->
-<section class="scene f-black" id="s1" data-scene="pin" aria-label="Prologue">
+<section class="scene f-black" id="s1" data-scene="pin" data-slate="The line waits" aria-label="Prologue">
   <div class="stage">
     <div class="fig">
       <div class="hairline" aria-hidden="true"></div>
@@ -308,7 +345,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ S2 · PROLOGUE — white arrives by reflection ============ -->
-<section class="scene f-black" id="s2" data-scene="pin" aria-label="White arrives by reflection">
+<section class="scene f-black" id="s2" data-scene="pin" data-slate="White by reflection" aria-label="White arrives by reflection">
   <div class="stage">
     <div class="white" aria-hidden="true"></div>
     <div class="fig">
@@ -330,14 +367,14 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ ACT I ============ -->
-<section class="act f-white" data-scene>
+<section class="act f-white" data-scene data-slate="Act I · Map">
   <p class="no"><span class="L en">Act I — Map</span><span class="L ar">الفصل الأول — الخريطة</span></p>
   <h2><span class="L en">Light maps the need.</span><span class="L ar">الضوء يرسم خريطة الحاجة.</span></h2>
   <p><span class="L en">Before any tool touches metal, a warm point walks every route — and keeps only the ones that earn their place.</span><span class="L ar">قبل أن تلمس الأداةُ المعدن، تمشي نقطةٌ دافئة في كل مسار، ولا تُبقي إلا ما يستحق مكانه.</span></p>
 </section>
 
 <!-- ============ S3 · MAP — light traces the need ============ -->
-<section class="scene f-white" id="s3" data-scene="pin" aria-label="Light maps the need">
+<section class="scene f-white" id="s3" data-scene="pin" data-slate="Light maps the need" aria-label="Light maps the need">
   <div class="stage">
     <div class="fig">
       <svg viewBox="-140 -140 280 280" aria-hidden="true">
@@ -364,7 +401,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ S4 · MAP — one clean system, twelve blanks ============ -->
-<section class="scene f-white" id="s4" data-scene="pin" aria-label="Twelve stations appear">
+<section class="scene f-white" id="s4" data-scene="pin" data-slate="Twelve stations" aria-label="Twelve stations appear">
   <div class="stage">
     <div class="fig">
       <svg viewBox="-160 -160 320 320" aria-hidden="true">
@@ -404,14 +441,14 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ ACT II ============ -->
-<section class="act f-white" data-scene>
+<section class="act f-white" data-scene data-slate="Act II · Build">
   <p class="no"><span class="L en">Act II — Build</span><span class="L ar">الفصل الثاني — البناء</span></p>
   <h2><span class="L en">Tools thin, mill, and polish.</span><span class="L ar">الأدوات تُرقِّق وتَخرِط وتَصقُل.</span></h2>
   <p><span class="L en">One axis per operation. Contact ends without recoil.</span><span class="L ar">محورٌ واحد لكل عملية، والتلامس ينتهي دون ارتداد.</span></p>
 </section>
 
 <!-- ============ S5 · BUILD — thinned to tolerance ============ -->
-<section class="scene f-white" id="s5" data-scene="pin" aria-label="Thinned to tolerance">
+<section class="scene f-white" id="s5" data-scene="pin" data-slate="Thinned to tolerance" aria-label="Thinned to tolerance">
   <div class="stage">
     <div class="fig cut">
       <svg viewBox="-200 -125 400 250" aria-hidden="true">
@@ -440,8 +477,50 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
   </div>
 </section>
 
+<!-- ============ S5b · BUILD — measured, not assumed ============ -->
+<section class="scene f-white" id="s5b" data-scene="pin" data-slate="Measured, not assumed" aria-label="Measured, not assumed">
+  <div class="stage">
+    <div class="fig">
+      <svg viewBox="-200 -125 400 250" aria-hidden="true">
+        <ellipse cx="0" cy="66" rx="150" ry="8" fill="#0B0B0C" opacity=".10" style="filter:blur(4px)"/>
+        <g>
+          <rect x="-110" y="-13" width="220" height="26" rx="6" fill="url(#gTi)"/>
+          <rect x="-110" y="-12.4" width="220" height="1.4" fill="#FFE8C2" opacity=".5"/>
+        </g>
+        <g class="jawT">
+          <rect x="-30" y="-92" width="60" height="14" rx="4" fill="#1D1D1F"/>
+          <rect x="-4" y="-80" width="8" height="64" rx="3" fill="#1D1D1F"/>
+          <rect x="-16" y="-22" width="32" height="7" rx="2" fill="#B9BBB8"/>
+        </g>
+        <g class="jawB">
+          <rect x="-30" y="78" width="60" height="14" rx="4" fill="#1D1D1F"/>
+          <rect x="-4" y="16" width="8" height="64" rx="3" fill="#1D1D1F"/>
+          <rect x="-16" y="15" width="32" height="7" rx="2" fill="#B9BBB8"/>
+        </g>
+        <g class="tolband">
+          <rect x="-160" y="100" width="320" height="2" rx="1" fill="#1D1D1F" opacity=".2"/>
+          <rect class="win" x="-24" y="96" width="48" height="10" rx="3" fill="#D8C5A4" opacity=".25"/>
+          <g class="needle">
+            <rect x="-1" y="92" width="2" height="18" rx="1" fill="#1D1D1F"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="readout" aria-hidden="true">
+      <b data-counter data-from="14.0" data-to="9.6">14.0</b>
+      <span><span class="L en">profile height · target 9.6</span><span class="L ar">ارتفاع المقطع · الهدف ٩٫٦</span></span>
+    </div>
+    <p class="verdict"><span class="L en">Within tolerance — carry forward</span><span class="L ar">ضمن السماحية — تُمرَّر للمرحلة التالية</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Build · shot 044</span><span class="L ar">البناء · لقطة ٠٤٤</span></p>
+      <h2><span class="L en">Measured, not assumed.</span><span class="L ar">تُقاس، لا تُفترَض.</span></h2>
+      <p><span class="L en">The jaws close until the metal answers. The needle must enter the window before any part may continue — the same rule every system on the portfolio obeys.</span><span class="L ar">ينغلق الفكّان حتى يجيب المعدن. وعلى الإبرة أن تدخل النافذة قبل أن يُسمح لأي قطعةٍ بالمتابعة — وهي القاعدة نفسها التي تُطيعها كل منظومة في الموقع.</span></p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ S6 · BUILD — chamfer study ============ -->
-<section class="scene f-white" id="s6" data-scene="pin" aria-label="Chamfer study">
+<section class="scene f-white" id="s6" data-scene="pin" data-slate="Chamfer study" aria-label="Chamfer study">
   <div class="stage pull">
     <div class="plane bg">
       <svg viewBox="-140 -140 280 280" aria-hidden="true">
@@ -470,7 +549,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ S7 · BUILD — process marks resolve ============ -->
-<section class="scene f-white" id="s7" data-scene="pin" aria-label="Process marks resolve">
+<section class="scene f-white" id="s7" data-scene="pin" data-slate="Marks resolve" aria-label="Process marks resolve">
   <div class="stage">
     <div class="fig pol">
       <svg viewBox="-200 -125 400 250" aria-hidden="true">
@@ -496,7 +575,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ S8 · BUILD — one instrument, aligned ============ -->
-<section class="scene f-white" id="s8" data-scene="pin" aria-label="One instrument, aligned">
+<section class="scene f-white" id="s8" data-scene="pin" data-slate="One instrument" aria-label="One instrument, aligned">
   <div class="stage">
     <div class="fig asm" style="margin-inline:auto">
       <svg viewBox="-170 -170 340 340" aria-hidden="true">
@@ -534,14 +613,14 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ ACT III ============ -->
-<section class="act f-white" data-scene>
+<section class="act f-white" data-scene data-slate="Act III · Gate">
   <p class="no"><span class="L en">Act III — Gate</span><span class="L ar">الفصل الثالث — البوّابة</span></p>
   <h2><span class="L en">The last control stays physical.</span><span class="L ar">آخر زرٍّ يبقى ماديًّا.</span></h2>
   <p><span class="L en">Luminance passes to black. The machine reaches its boundary and stops.</span><span class="L ar">تُسلَّم الإضاءةُ إلى السواد؛ يبلغ الجهازُ حدَّه فيتوقّف.</span></p>
 </section>
 
 <!-- ============ S9 · GATE — luminance passage, machine refusal ============ -->
-<section class="scene f-white" id="s9" data-scene="pin" aria-label="Machine refusal">
+<section class="scene f-white" id="s9" data-scene="pin" data-slate="Machine refusal" aria-label="Machine refusal">
   <div class="stage">
     <div class="dark" aria-hidden="true"></div>
     <div class="fig">
@@ -568,7 +647,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ S10 · GATE — the hand completes the circuit ============ -->
-<section class="scene f-black" id="s10" data-scene="pin" aria-label="The hand completes the circuit">
+<section class="scene f-black" id="s10" data-scene="pin" data-slate="The hand" aria-label="The hand completes the circuit">
   <div class="stage">
     <div class="fig">
       <svg viewBox="-200 -150 400 300" aria-hidden="true">
@@ -602,14 +681,14 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ ACT IV ============ -->
-<section class="act f-black" data-scene>
+<section class="act f-black" data-scene data-slate="Act IV · Prove">
   <p class="no"><span class="L en">Act IV — Prove</span><span class="L ar">الفصل الرابع — البرهان</span></p>
   <h2><span class="L en">Evidence appears as light.</span><span class="L ar">يظهر الدليل ضوءًا.</span></h2>
   <p><span class="L en">Not noise. Twelve calibration marks, one measured line.</span><span class="L ar">لا ضجيج: اثنتا عشرة علامةَ معايرة، وخطٌّ مقيسٌ واحد.</span></p>
 </section>
 
 <!-- ============ S11 · PROVE — evidence appears as light ============ -->
-<section class="scene f-black" id="s11" data-scene="pin" aria-label="Evidence as light">
+<section class="scene f-black" id="s11" data-scene="pin" data-slate="Light, counted" aria-label="Evidence as light">
   <div class="stage">
     <div class="fig">
       <svg viewBox="-170 -170 340 340" aria-hidden="true">
@@ -645,7 +724,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
 </section>
 
 <!-- ============ S12 · FINALE — resolve to the line ============ -->
-<section class="scene f-black" id="s12" data-scene="pin" aria-label="Finale">
+<section class="scene f-black" id="s12" data-scene="pin" data-slate="Resolve to the line" aria-label="Finale">
   <div class="stage">
     <div class="fig turn" style="margin-inline:auto">
       <div class="collapse">
@@ -681,6 +760,28 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
   </div>
 </section>
 
+<!-- ============ END CREDITS ============ -->
+<section class="scene credits" data-scene="pin" data-slate="End credits" style="height:320vh" aria-label="End credits">
+  <div class="stage">
+    <div class="roll">
+      <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <h3><span class="L en">Crafted</span><span class="L ar">مَصنوع</span></h3>
+      <dl class="duo">
+        <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live — SVG, 4 canvases, no footage</span><span class="L ar">حيًّا — SVG وأربع لوحات، بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+        <dt><span class="L en">Material law</span><span class="L ar">قانون المادة</span></dt><dd><span class="L en">Measured, not assumed</span><span class="L ar">تُقاس ولا تُفترَض</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+      </dl>
+      <p class="fine"><span class="L en">A brand-inspired study. No logos, devices or interfaces are depicted; the instrument is original and unbranded. The last control stays physical — by design, here and in the real work.</span><span class="L ar">دراسة مستلهَمة. لا شعارات ولا أجهزة ولا واجهات؛ فالأداة أصلية بلا علامة. وآخر زرٍّ يبقى ماديًّا — عن قصد، هنا وفي العمل الحقيقي.</span></p>
+      <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+    </div>
+    <div class="vig" aria-hidden="true"></div>
+  </div>
+</section>
+
 </main>
 
 <footer class="disclosure">
@@ -688,7 +789,7 @@ html[lang="ar"] #s1 .title strong{ letter-spacing:0; font-weight:300; }
   <span class="L ar">دراسة سينمائية أصلية قوامها المادة أولًا لملف أعمال محمد محمود، تُعرَض حيًّا بالشيفرة. لا انتساب لشركة آبل ولا تأييد منها ولا تمثيل لها؛ لا شعارات ولا أجهزة ولا واجهات — فالأداة أصلية بلا علامة. الأرقام الحقيقية في <a href="../">صفحات قصص الموقع</a>.</span></p>
 </footer>
 
-<script src="cinema.js?v=2"></script>
+<script src="cinema.js?v=3"></script>
 <script>
 (() => {
   'use strict';

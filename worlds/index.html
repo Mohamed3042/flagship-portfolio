@@ -4,22 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Worlds — Eight Scroll-Cinema Films · Mohamed Mahmoud</title>
-<meta name="description" content="Eight brand-inspired scroll-cinema films: one cut from 32 real WAN 2.7 shots, seven rendered live in code. An original portfolio production.">
+<meta name="description" content="Eight brand-inspired scroll-cinema films, second edition: one cut from 32 real WAN 2.7 shots, seven rendered live in code — with studio idents, end credits and a projection-booth manifest. An original portfolio production.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%23090B10"/><circle cx="16" cy="16" r="9" fill="none" stroke="%23D9A83E" stroke-width="2"/><circle cx="16" cy="16" r="3" fill="%23D9A83E"/></svg>'>
-<link rel="stylesheet" href="cinema.css?v=2">
+<link rel="stylesheet" href="cinema.css?v=3">
 <style>
   :root{
     --w-bg:#090B10; --w-ink:#EFEAE0; --w-accent:#D9A83E; --w-dim:#8b8fa0;
     --w-display:"Iowan Old Style",Palatino,"Book Antiqua",Georgia,serif;
     --w-body:Georgia,serif;
     --w-ui:ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+    --grade-a:rgba(6,8,14,.55); --grade-b:rgba(23,27,40,.35); --grain:.28;
   }
   body{ background:
     radial-gradient(90% 55% at 50% -8%, #171b28 0%, transparent 60%),
     var(--w-bg); }
   .lobby{ max-width:1180px; margin:0 auto; padding:clamp(84px,14vh,150px) clamp(18px,5vw,44px) 40px; }
-  .lede .kick{ font:700 12px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase; color:var(--w-accent); }
-  .lede h1{ font:700 clamp(40px,7vw,84px)/1.02 var(--w-display); margin:16px 0 14px; text-wrap:balance; }
+
+  /* ——— marquee ——— */
+  .marquee{ display:inline-flex; align-items:center; gap:14px; margin-bottom:22px;
+    border:1px solid rgba(217,168,62,.4); border-radius:999px; padding:10px 18px;
+    background:linear-gradient(180deg, rgba(217,168,62,.08), transparent);
+    box-shadow:0 0 40px rgba(217,168,62,.1), inset 0 1px 0 rgba(239,234,224,.08); }
+  .marquee .bulbs{ width:64px; height:6px; border-radius:3px;
+    background-image:radial-gradient(circle 2.2px, var(--w-accent) 55%, transparent 60%);
+    background-size:12.8px 6px; background-position:0 50%;
+    animation:chase 1.4s steps(2) infinite; opacity:.9; }
+  @keyframes chase{ to{ background-position:12.8px 50%; } }
+  .marquee b{ font:700 11px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase; color:var(--w-accent); }
+  .marquee s{ text-decoration:none; font:600 11px/1 var(--w-ui); letter-spacing:.2em; text-transform:uppercase; color:var(--w-dim); }
+
+  .lede h1{ font:700 clamp(40px,7vw,84px)/1.02 var(--w-display); margin:6px 0 14px; text-wrap:balance;
+    text-shadow:0 0 70px rgba(217,168,62,.22); }
   .lede p{ max-width:70ch; color:color-mix(in srgb, var(--w-ink) 78%, transparent); line-height:1.7; font-size:clamp(14.5px,1.6vw,17.5px); }
   .lede .note{ margin-top:10px; font:600 12px/1.6 var(--w-ui); letter-spacing:.04em; color:var(--w-dim); }
 
@@ -37,6 +52,11 @@
   .card .no{ font:700 10.5px/1 var(--w-ui); letter-spacing:.24em; color:var(--wc,#D9A83E); }
   .card h2{ font:700 clamp(21px,2.4vw,27px)/1.12 var(--w-display); margin:7px 0 7px; }
   .card p{ font-size:13.5px; line-height:1.6; color:color-mix(in srgb, var(--w-ink) 72%, transparent); }
+  .card .spec{ display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:11px; padding-top:11px;
+    border-top:1px solid rgba(239,234,224,.1);
+    font:600 10.5px/1 var(--w-ui); letter-spacing:.12em; text-transform:uppercase;
+    color:color-mix(in srgb, var(--w-ink) 55%, transparent); font-variant-numeric:tabular-nums; }
+  .card .spec i{ font-style:normal; color:var(--wc,#D9A83E); }
   .badge{ position:absolute; z-index:3; top:10px; inset-inline-start:10px;
     font:700 9.5px/1 var(--w-ui); letter-spacing:.14em; text-transform:uppercase;
     color:#0b0d12; background:var(--wc,#D9A83E); padding:6px 9px; border-radius:999px; }
@@ -46,25 +66,35 @@
 
   .feature{ grid-column:1 / -1; }
   .feature .art{ aspect-ratio:21/9; }
-  .feature .art img{ width:100%; height:100%; object-fit:cover; display:block; filter:sepia(.18) brightness(.92); transition:transform 6s ease; }
+  .feature .art img{ width:100%; height:100%; object-fit:cover; display:block; filter:sepia(.18) brightness(.92);
+    transition:transform 6s ease; animation:kenburns 26s ease-in-out infinite alternate; }
+  @keyframes kenburns{ from{ transform:scale(1) translateY(0); } to{ transform:scale(1.06) translateY(-1.5%); } }
   .feature:hover .art img{ transform:scale(1.05); }
   .feature .art .shade{ background:linear-gradient(180deg, rgba(9,11,16,.1) 40%, rgba(9,11,16,.72) 100%); }
   .feature .meta{ position:absolute; z-index:4; left:0; right:0; bottom:0; padding:20px 22px; }
   .feature h2{ font-size:clamp(26px,4vw,44px); }
+  .feature .spec{ border-top-color:rgba(239,234,224,.18); }
 
-  /* ——— poster art (pure CSS/SVG per world) ——— */
+  /* ——— poster art (pure CSS/SVG per world) — now alive ——— */
   .a-astro{ background:radial-gradient(120% 100% at 50% 110%, #252A35 0%, #070B18 55%);}
   .a-astro::before{ content:""; position:absolute; inset:0;
-    background-image:radial-gradient(1px 1px at 12% 30%, #F4F0E7 50%, transparent 51%), radial-gradient(1.4px 1.4px at 34% 14%, #F4F0E7cc 50%, transparent 51%), radial-gradient(1px 1px at 58% 40%, #F4F0E7aa 50%, transparent 51%), radial-gradient(1.2px 1.2px at 76% 18%, #F4F0E7 50%, transparent 51%), radial-gradient(1px 1px at 88% 52%, #F4F0E799 50%, transparent 51%), radial-gradient(1px 1px at 22% 62%, #F4F0E7bb 50%, transparent 51%); }
+    background-image:radial-gradient(1px 1px at 12% 30%, #F4F0E7 50%, transparent 51%), radial-gradient(1.4px 1.4px at 34% 14%, #F4F0E7cc 50%, transparent 51%), radial-gradient(1px 1px at 58% 40%, #F4F0E7aa 50%, transparent 51%), radial-gradient(1.2px 1.2px at 76% 18%, #F4F0E7 50%, transparent 51%), radial-gradient(1px 1px at 88% 52%, #F4F0E799 50%, transparent 51%), radial-gradient(1px 1px at 22% 62%, #F4F0E7bb 50%, transparent 51%);
+    animation:twinkle 4.6s ease-in-out infinite alternate; }
+  @keyframes twinkle{ from{ opacity:.55; } to{ opacity:1; } }
   .a-astro::after{ content:""; position:absolute; inset:0;
     background:radial-gradient(60% 46% at 50% 108%, transparent 58%, rgba(67,217,209,.5) 59.5%, transparent 62%),
-               radial-gradient(46% 34% at 50% 108%, transparent 62%, rgba(118,103,216,.4) 64%, transparent 67%); }
+               radial-gradient(46% 34% at 50% 108%, transparent 62%, rgba(118,103,216,.4) 64%, transparent 67%);
+    animation:domepulse 7s ease-in-out infinite alternate; }
+  @keyframes domepulse{ from{ opacity:.7; } to{ opacity:1; } }
   .a-razer{ background:#000; }
   .a-razer::before{ content:""; position:absolute; inset:12% 18%;
     background:repeating-linear-gradient(90deg, #101214 0 26px, #060708 26px 30px),
                repeating-linear-gradient(0deg, transparent 0 26px, #060708cc 26px 30px); border-radius:8px; }
   .a-razer::after{ content:""; position:absolute; left:44%; top:46%; width:34px; height:30px; border-radius:5px;
-    background:#101214; box-shadow:0 0 22px 6px rgba(68,214,44,.75), inset 0 0 8px rgba(68,214,44,.9); }
+    background:#101214; box-shadow:0 0 22px 6px rgba(68,214,44,.75), inset 0 0 8px rgba(68,214,44,.9);
+    animation:keypulse 2.6s ease-in-out infinite; }
+  @keyframes keypulse{ 0%,100%{ box-shadow:0 0 22px 6px rgba(68,214,44,.75), inset 0 0 8px rgba(68,214,44,.9); }
+    50%{ box-shadow:0 0 34px 10px rgba(68,214,44,.95), inset 0 0 12px rgba(68,214,44,1); } }
   .a-cod{ background:linear-gradient(180deg, #171A1C 0%, #1c2022 100%); }
   .a-cod::before{ content:""; position:absolute; inset:0; opacity:.9;
     background:
@@ -73,38 +103,87 @@
       repeating-conic-gradient(from 0deg at 72% 34%, transparent 0 88deg, #78D96B22 88deg 90deg); }
   .a-cod::after{ content:""; position:absolute; inset:0;
     background:radial-gradient(3px 3px at 72% 34%, #78D96B 40%, transparent 60%),
-      linear-gradient(115deg, transparent 30%, #E5A13A55 30.4% 30.8%, transparent 31.2%, transparent 44%, #E5A13A55 44.4% 44.8%, transparent 45.2%); }
+      linear-gradient(115deg, transparent 30%, #E5A13A55 30.4% 30.8%, transparent 31.2%, transparent 44%, #E5A13A55 44.4% 44.8%, transparent 45.2%);
+    animation:blip 3.4s ease-in-out infinite; }
+  @keyframes blip{ 0%,72%,100%{ opacity:1; } 82%{ opacity:.45; } 90%{ opacity:1; } }
   .a-netflix{ background:#030303; }
   .a-netflix::before{ content:""; position:absolute; left:50%; top:-6%; bottom:-6%; width:3px; translate:-50% 0;
-    background:linear-gradient(#D81F2A, #D81F2Acc, #D81F2A44); box-shadow:0 0 26px 7px rgba(216,31,42,.55); border-radius:3px; }
+    background:linear-gradient(#D81F2A, #D81F2Acc, #D81F2A44); box-shadow:0 0 26px 7px rgba(216,31,42,.55); border-radius:3px;
+    animation:filament 5.2s ease-in-out infinite; }
+  @keyframes filament{ 0%,100%{ opacity:1; } 46%{ opacity:.7; } 52%{ opacity:.95; } 58%{ opacity:.65; } 64%{ opacity:1; } }
   .a-netflix::after{ content:""; position:absolute; inset:auto 12% 14%; height:34%;
     background:radial-gradient(70% 100% at 50% 100%, rgba(238,233,223,.13), transparent 70%); }
   .a-spotify{ background:#191414; }
-  .a-spotify::before{ content:""; position:absolute; inset:18% 14%;
+  .a-spotify::before{ content:""; position:absolute; inset:18% 14%; transform-origin:50% 100%;
     background:
       linear-gradient(90deg, #FF4FA3 0 7%, transparent 7% 11%, #FF4FA3cc 11% 15%, transparent 15% 22%, #7B5CFF 22% 32%, transparent 32% 36%, #FF4FA3 36% 41%, transparent 41% 50%, #7B5CFFcc 50% 58%, transparent 58% 63%, #FF4FA3 63% 67%, transparent 67% 76%, #7B5CFF 76% 88%, transparent 88% 93%, #FF4FA388 93% 100%);
     -webkit-mask:linear-gradient(0deg, #000 0%, #000 22%, transparent 22.5%, transparent 26%, #000 26.5%, #000 52%, transparent 52.5%, transparent 57%, #000 57.5%, #000 78%, transparent 78.5%, transparent 83%, #000 83.5%);
-            mask:linear-gradient(0deg, #000 0%, #000 22%, transparent 22.5%, transparent 26%, #000 26.5%, #000 52%, transparent 52.5%, transparent 57%, #000 57.5%, #000 78%, transparent 78.5%, transparent 83%, #000 83.5%); opacity:.92; }
+            mask:linear-gradient(0deg, #000 0%, #000 22%, transparent 22.5%, transparent 26%, #000 26.5%, #000 52%, transparent 52.5%, transparent 57%, #000 57.5%, #000 78%, transparent 78.5%, transparent 83%, #000 83.5%); opacity:.92;
+    animation:eq 1.9s ease-in-out infinite alternate; }
+  @keyframes eq{ from{ transform:scaleY(.94); } to{ transform:scaleY(1.03); } }
   .a-spotify::after{ content:""; position:absolute; left:8%; bottom:10%; width:10px; height:10px; border-radius:50%;
-    background:#1ED760; box-shadow:0 0 16px 4px rgba(30,215,96,.6); }
+    background:#1ED760; box-shadow:0 0 16px 4px rgba(30,215,96,.6);
+    animation:beat 1.9s ease-in-out infinite; }
+  @keyframes beat{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.25); } }
   .a-apple{ background:linear-gradient(105deg, #F5F5F7 0 52%, #0B0B0C 52% 100%); }
   .a-apple::before{ content:""; position:absolute; left:8%; right:8%; top:49%; height:2px;
     background:linear-gradient(90deg, #9a9c9a, #B9BBB8 30%, #fff 50%, #B9BBB8 66%, #6d6f6e);
     box-shadow:0 1px 6px rgba(0,0,0,.28); }
   .a-apple::after{ content:""; position:absolute; left:56%; top:calc(49% - 7px); width:44px; height:16px; border-radius:8px;
-    background:linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent); filter:blur(2px); }
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.85), transparent); filter:blur(2px);
+    animation:sheen 6s cubic-bezier(.6,.05,.28,.91) infinite; }
+  @keyframes sheen{ 0%,55%,100%{ left:8%; opacity:0; } 62%{ opacity:1; } 86%{ left:80%; opacity:1; } 92%{ opacity:0; } }
   .a-samsung{ background:radial-gradient(110% 90% at 30% 110%, #101530 0%, #070912 60%); }
   .a-samsung::before{ content:""; position:absolute; inset:0;
     background:radial-gradient(46% 60% at 50% 50%, transparent 58%, rgba(109,91,219,.55) 60%, transparent 66%),
                radial-gradient(30% 42% at 50% 50%, transparent 60%, rgba(140,203,255,.5) 63%, transparent 70%);
-    transform:rotate(-18deg); }
+    transform:rotate(-18deg); animation:orbit 12s linear infinite; }
+  @keyframes orbit{ from{ transform:rotate(-18deg); } to{ transform:rotate(342deg); } }
   .a-samsung::after{ content:""; position:absolute; left:18%; top:24%; width:8px; height:8px; border-radius:50%;
-    background:#8CCBFF; box-shadow:0 0 18px 5px rgba(140,203,255,.5); }
+    background:#8CCBFF; box-shadow:0 0 18px 5px rgba(140,203,255,.5);
+    animation:beat 3.4s ease-in-out infinite; }
+
+  /* ——— the projection booth (production manifest) ——— */
+  .booth{ margin-top:clamp(64px,11vh,120px); }
+  .booth header .kick, .filmo header .kick{ font:700 12px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase; color:var(--w-accent); }
+  .booth header h2, .filmo header h2{ font:700 clamp(28px,4.4vw,52px)/1.05 var(--w-display); margin:12px 0 10px; text-wrap:balance; }
+  .booth header p, .filmo header p{ max-width:66ch; color:color-mix(in srgb, var(--w-ink) 74%, transparent); line-height:1.7; }
+  .manifest{ margin-top:26px; border:1px solid rgba(239,234,224,.14); border-radius:14px; overflow:hidden;
+    background:linear-gradient(180deg, #0d1017, #0a0d14); }
+  .manifest .line{ display:grid; grid-template-columns:minmax(120px,220px) 1fr; gap:10px 22px;
+    padding:15px clamp(14px,3vw,26px); border-top:1px solid rgba(239,234,224,.08); align-items:baseline; }
+  .manifest .line:first-child{ border-top:0; }
+  .manifest .k{ font:700 11px/1.5 var(--w-ui); letter-spacing:.18em; text-transform:uppercase; color:var(--w-accent); }
+  .manifest .v{ font-size:14.5px; line-height:1.65; color:color-mix(in srgb, var(--w-ink) 84%, transparent); }
+  .manifest .v b{ color:var(--w-ink); font-weight:700; font-variant-numeric:tabular-nums; }
+  @media (max-width:640px){ .manifest .line{ grid-template-columns:1fr; gap:4px; } }
+
+  /* ——— filmography: the real work ——— */
+  .filmo{ margin-top:clamp(64px,11vh,120px); }
+  .filmo ol{ list-style:none; margin:26px 0 0; padding:0; counter-reset:f; }
+  .filmo li{ counter-increment:f; }
+  .filmo a.entry{ display:grid; grid-template-columns:56px 1fr auto; gap:8px 18px; align-items:baseline;
+    padding:16px 6px; text-decoration:none; color:var(--w-ink);
+    border-top:1px solid rgba(239,234,224,.12); transition:background .3s, translate .3s; }
+  .filmo li:last-child a.entry{ border-bottom:1px solid rgba(239,234,224,.12); }
+  .filmo a.entry:hover{ background:linear-gradient(90deg, rgba(217,168,62,.07), transparent 70%); translate:10px 0; }
+  .lang-ar .filmo a.entry:hover{ translate:-10px 0; }
+  .filmo a.entry::before{ content:counter(f, decimal-leading-zero); grid-row:span 2;
+    font:700 13px/1 var(--w-ui); letter-spacing:.1em; color:var(--w-accent); font-variant-numeric:tabular-nums; }
+  .filmo .t{ font:700 clamp(17px,2vw,21px)/1.2 var(--w-display); }
+  .filmo .arrow{ font:600 12px/1 var(--w-ui); letter-spacing:.14em; text-transform:uppercase; color:var(--w-dim);
+    transition:color .3s; }
+  .filmo a.entry:hover .arrow{ color:var(--w-accent); }
+  .filmo .d{ grid-column:2 / -1; font-size:13.5px; line-height:1.6; color:color-mix(in srgb, var(--w-ink) 66%, transparent); }
+  @media (max-width:640px){ .filmo a.entry{ grid-template-columns:40px 1fr; } .filmo .arrow{ display:none; } }
 
   footer.disclosure{ max-width:900px; margin:0 auto; }
 </style>
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
+<div class="grade" aria-hidden="true"></div>
+
 <nav class="chrome" aria-label="Lobby chrome">
   <div class="grp">
     <a href="../"><span class="L en">◂ Portfolio</span><span class="L ar">◂ الموقع</span></a>
@@ -116,10 +195,10 @@
 
 <main class="lobby">
   <header class="lede">
-    <p class="kick"><span class="L en">Scroll Cinema · Eight Films</span><span class="L ar">سينما التمرير · ثمانية أفلام</span></p>
+    <p class="marquee"><span class="bulbs" aria-hidden="true"></span><b><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></b><s><span class="L en">Second edition · Tonight's programme</span><span class="L ar">الإصدار الثاني · برنامج الليلة</span></s></p>
     <h1><span class="L en">The Worlds</span><span class="L ar">العوالم</span></h1>
-    <p><span class="L en">Eight brand-inspired motion studies from one production bible. The Disney Storybook world is cut from 32 real WAN 2.7 shots, generated end-frame-to-first-frame; the other seven are rendered live in code — no footage, same laws. Scroll each one like a film.</span><span class="L ar">ثماني دراساتٍ حركية مستلهَمة من كتاب إنتاجٍ واحد. عالم «الحكاية المصوَّرة» مقصوصٌ من ٣٢ لقطة حقيقية من WAN 2.7 وُلِّدت إطارَ نهايةٍ إلى إطارِ بداية؛ والعوالم السبعة الأخرى تُعرَض حيًّا بالشيفرة — بلا مشهدٍ مصوَّر وبالقوانين نفسها. مرِّر في كلٍّ منها كأنه فيلم.</span></p>
-    <p class="note"><span class="L en">Original studies · no third-party marks · all real numbers live on the story pages</span><span class="L ar">دراسات أصلية · بلا علامات لأطراف ثالثة · الأرقام الحقيقية كلها في صفحات القصص</span></p>
+    <p><span class="L en">Eight brand-inspired motion studies from one production bible — now in their second edition, each with a studio ident, a running slate, projector mattes and end credits. The Disney Storybook world is cut from 32 real WAN 2.7 shots, generated end-frame-to-first-frame; the other seven are rendered live in code — no footage, same laws. Scroll each one like a film.</span><span class="L ar">ثماني دراساتٍ حركية مستلهَمة من كتاب إنتاجٍ واحد — في إصدارها الثاني الآن، لكلٍّ منها شعارُ استوديو افتتاحي، ولوحُ تصويرٍ جارٍ، وسِتارا عرضٍ سينمائيان، وشارةُ نهاية. عالم «الحكاية المصوَّرة» مقصوصٌ من ٣٢ لقطة حقيقية من WAN 2.7 وُلِّدت إطارَ نهايةٍ إلى إطارِ بداية؛ والعوالم السبعة الأخرى تُعرَض حيًّا بالشيفرة — بلا مشهدٍ مصوَّر وبالقوانين نفسها. مرِّر في كلٍّ منها كأنه فيلم.</span></p>
+    <p class="note"><span class="L en">Original studies · no third-party marks · all real numbers live on the story pages · ← → step scenes inside any film</span><span class="L ar">دراسات أصلية · بلا علامات لأطراف ثالثة · الأرقام الحقيقية كلها في صفحات القصص · السهمان ← و→ ينقلان بين المشاهد داخل أي فيلم</span></p>
   </header>
 
   <div class="grid">
@@ -134,6 +213,7 @@
         <p class="no">03 · DISNEY STORYBOOK</p>
         <h2><span class="L en">The Kingdom of Running Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h2>
         <p><span class="L en">A golden book opens; ink becomes fireflies; a thread proves a loop — and when the footage ends, the code keeps the kingdom running.</span><span class="L ar">كتابٌ مذهّب يُفتح؛ الحبر يصير يراعات؛ خيطٌ يثبت حلقة — وحين ينتهي المشهد المصوَّر، تُبقي الشيفرةُ المملكةَ تجري.</span></p>
+        <p class="spec"><span><i>6</i> <span class="L en">footage chapters</span><span class="L ar">فصول مصوَّرة</span></span><span><i>32</i> <span class="L en">real shots</span><span class="L ar">لقطة حقيقية</span></span><span><span class="L en">master cut</span><span class="L ar">النسخة الكاملة</span> <i>2:40</i></span><span><span class="L en">then live code</span><span class="L ar">ثم شيفرة حيّة</span></span></p>
       </div>
     </a>
 
@@ -145,6 +225,7 @@
         <p class="no">01 · ASTRONOMY</p>
         <h2><span class="L en">The Observatory</span><span class="L ar">المرصد</span></h2>
         <p><span class="L en">A desert-ridge station finds order inside cosmic noise — and one decision no machine may make.</span><span class="L ar">محطة على حافة الصحراء تجد نظامًا داخل الضجيج الكوني — وقرارًا واحدًا لا يملكه أي جهاز.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
       </div>
     </a>
 
@@ -156,6 +237,7 @@
         <p class="no">02 · RAZER CHROMA</p>
         <h2><span class="L en">System Ascension</span><span class="L ar">صعود المنظومة</span></h2>
         <p><span class="L en">One keypress starts a controlled cascade: key, board, rig, room — halted by a red gate until a hand allows it.</span><span class="L ar">ضغطة واحدة تبدأ تتابعًا منضبطًا: زرّ، فلوحة، فجهاز، فغرفة — توقفه بوابة حمراء حتى تأذن يد.</span></p>
+        <p class="spec"><span><i>2</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
       </div>
     </a>
 
@@ -167,6 +249,7 @@
         <p class="no">04 · COD TACTICAL</p>
         <h2><span class="L en">Operation Clockwork</span><span class="L ar">عملية عقارب الساعة</span></h2>
         <p><span class="L en">02:00. A specialist team versus entropy itself — dead process, broken routing — resolved by dawn.</span><span class="L ar">الثانية فجرًا. فريق متخصص في مواجهة الفوضى نفسها — إجراءات ميتة ومسارات مقطوعة — حتى يحسمها الفجر.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
       </div>
     </a>
 
@@ -178,6 +261,7 @@
         <p class="no">05 · NETFLIX CINEMA</p>
         <h2><span class="L en">The Anthology</span><span class="L ar">الأنطولوجيا</span></h2>
         <p><span class="L en">A red filament powers a projection room; genre portals arrive — all frozen at one human release.</span><span class="L ar">فتيلٌ أحمر يوقظ غرفة عرض؛ بواباتُ أنواعٍ تتوالى — وتتجمّد كلها عند إذنِ إنسانٍ واحد.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
       </div>
     </a>
 
@@ -189,6 +273,7 @@
         <p class="no">06 · SPOTIFY PULSE</p>
         <h2><span class="L en">The Album</span><span class="L ar">الألبوم</span></h2>
         <p><span class="L en">Silence acquires a pulse; the pulse becomes a studio; a human hand rides the master fader to unity.</span><span class="L ar">الصمت يكتسب نبضة؛ والنبضة تصير استوديو؛ ويدٌ بشرية تقود خافضَ الصوت الرئيس إلى الوحدة.</span></p>
+        <p class="spec"><span><i>3</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
       </div>
     </a>
 
@@ -200,6 +285,7 @@
         <p class="no">07 · APPLE TITANIUM</p>
         <h2><span class="L en">Crafted</span><span class="L ar">مَصنوع</span></h2>
         <p><span class="L en">A titanium hairline is thinned, milled, and polished into one calm instrument — its last control stays physical.</span><span class="L ar">شعرةُ تيتانيوم تُرقَّق وتُخرَط وتُصقَل حتى تصير أداةً هادئة — ويبقى آخر أزرارها ماديًّا.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
       </div>
     </a>
 
@@ -211,9 +297,82 @@
         <p class="no">08 · SAMSUNG GALAXY</p>
         <h2><span class="L en">The Fold in Space</span><span class="L ar">الطيّة في الفضاء</span></h2>
         <p><span class="L en">A violet light folds distance into order; nested shields wait for one aligned human palm.</span><span class="L ar">ضوءٌ بنفسجي يطوي المسافةَ نظامًا؛ ودروعٌ متداخلة تنتظر راحةَ يدٍ واحدة تُحاذيها.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
       </div>
     </a>
   </div>
+
+  <!-- ——— the projection booth ——— -->
+  <section class="booth">
+    <header>
+      <p class="kick"><span class="L en">The Projection Booth</span><span class="L ar">غرفة العرض</span></p>
+      <h2><span class="L en">How eight films run on zero dependencies</span><span class="L ar">كيف تعمل ثمانية أفلام بلا أي اعتماديات</span></h2>
+      <p><span class="L en">Everything on this floor is projected by one hand-written engine. No frameworks, no libraries, no build step — the same discipline as the systems on the portfolio: small, inspectable, and honest about what it does.</span><span class="L ar">كل ما في هذا الطابق يُعرَض بمحرّكٍ واحد مكتوبٍ يدويًّا. لا أُطر عمل، ولا مكتبات، ولا خطوة بناء — الانضباط نفسه الذي بُنيت به الأنظمة في الموقع: صغيرٌ، قابلٌ للفحص، وصادقٌ فيما يفعل.</span></p>
+    </header>
+    <div class="manifest">
+      <div class="line"><p class="k"><span class="L en">The engine</span><span class="L ar">المحرّك</span></p>
+        <p class="v"><span class="L en"><b>cinema.js</b> — one passive scroll listener + requestAnimationFrame; CSS custom properties are the animation bus. Scenes get a <b>--p</b> progress value from 0 to 1 and the stylesheets do the cinematography.</span><span class="L ar"><b>cinema.js</b> — مستمعُ تمريرٍ سلبيّ واحد مع requestAnimationFrame؛ ومتغيّرات CSS هي ناقلُ الحركة. يتلقّى كل مشهدٍ قيمةَ تقدّمٍ <b>--p</b> من صفر إلى واحد، وتتولى أوراقُ الأنماط التصويرَ السينمائي.</span></p></div>
+      <div class="line"><p class="k"><span class="L en">The footage</span><span class="L ar">المشاهد المصوَّرة</span></p>
+        <p class="v"><span class="L en"><b>32</b> real WAN 2.7 shots power the Disney flagship, generated end-frame-to-first-frame from an original <b>144-clip</b> production bible; <b>112</b> shots remain scripted and unproduced. The other seven worlds use no footage at all.</span><span class="L ar"><b>٣٢</b> لقطة حقيقية من WAN 2.7 تشغّل الفيلم الرئيس، وُلِّدت إطارَ نهايةٍ إلى إطارِ بداية من كتاب إنتاجٍ أصلي من <b>١٤٤</b> مقطعًا؛ وما زالت <b>١١٢</b> لقطة مكتوبةً لم تُنتَج. أما العوالم السبعة الأخرى فلا تستخدم أي مشهدٍ مصوَّر.</span></p></div>
+      <div class="line"><p class="k"><span class="L en">The projector</span><span class="L ar">آلة العرض</span></p>
+        <p class="v"><span class="L en">Videos load poster-first and lazy; the next clip prefetches while the current one plays; scenes far from the viewport skip their maths. Second edition adds projector mattes, a running slate with timecode, a scene tick rail, and ← → keyboard stepping.</span><span class="L ar">تُحمَّل المقاطع بالملصق أولًا وعند الاقتراب فقط؛ ويُجلَب المقطع التالي مسبقًا أثناء تشغيل الحالي؛ وتتخطى المشاهدُ البعيدة عن الشاشة حساباتها. ويضيف الإصدار الثاني ستارَي العرض، ولوحَ تصويرٍ جارٍ برمزٍ زمني، ومسطرةَ مشاهدَ جانبية، وتنقّلًا بالمفتاحين ← ←.</span></p></div>
+      <div class="line"><p class="k"><span class="L en">The languages</span><span class="L ar">اللغتان</span></p>
+        <p class="v"><span class="L en">Every caption is authored twice — English and Arabic in the same DOM — and one toggle swaps language and direction live. One truth, two scripts.</span><span class="L ar">كل تعليقٍ مكتوبٌ مرتين — بالإنجليزية والعربية في الشجرة نفسها — وزرٌّ واحد يبدّل اللغةَ والاتجاه حيًّا. حقيقةٌ واحدة بخطّين.</span></p></div>
+      <div class="line"><p class="k"><span class="L en">The safety rails</span><span class="L ar">قضبان الأمان</span></p>
+        <p class="v"><span class="L en">Reduced-motion visitors get posters, full copy and near-still scenes; keyboard focus stays visible; no third-party marks, characters or product replicas appear anywhere on this floor.</span><span class="L ar">زوّارُ «الحركة المخفَّفة» يحصلون على الملصقات والنصوص كاملةً ومشاهدَ شبه ساكنة؛ ويبقى تركيزُ لوحة المفاتيح ظاهرًا؛ ولا تظهر في هذا الطابق أي علاماتٍ أو شخصياتٍ أو نسخِ منتجاتٍ لأطراف ثالثة.</span></p></div>
+    </div>
+  </section>
+
+  <!-- ——— filmography: the real work ——— -->
+  <section class="filmo">
+    <header>
+      <p class="kick"><span class="L en">Also from this studio</span><span class="L ar">من الاستوديو نفسه أيضًا</span></p>
+      <h2><span class="L en">The real work behind the fiction</span><span class="L ar">العمل الحقيقي وراء الخيال</span></h2>
+      <p><span class="L en">The worlds are craft demonstrations. These are the shipped, public systems they advertise — every claim below matches the public repository it links to.</span><span class="L ar">العوالم عروضُ حِرفة. وهذه هي الأنظمة العلنية المُنجَزة التي تُعلن عنها — وكل وصفٍ أدناه مطابق للمستودع العلني الذي يشير إليه.</span></p>
+    </header>
+    <ol>
+      <li><a class="entry" href="../">
+        <span class="t"><span class="L en">The Portfolio</span><span class="L ar">الموقع الرئيس</span></span>
+        <span class="arrow"><span class="L en">Open →</span><span class="L ar">افتح ←</span></span>
+        <span class="d"><span class="L en">This site — a bilingual Astro 5 build with 11 project story pages, an aurora hero, six switchable themes and every number sourced from one data file.</span><span class="L ar">هذا الموقع — بناءُ Astro 5 ثنائيُّ اللغة يضم ١١ صفحة قصةِ مشروع، وواجهةَ شفقٍ متحركة، وستة أنماطٍ قابلة للتبديل، وكلُّ رقمٍ فيه مصدرُه ملفُّ بياناتٍ واحد.</span></span>
+      </a></li>
+      <li><a class="entry" href="https://github.com/Mohamed3042/god-mode-portfolio">
+        <span class="t">God Mode Portfolio</span>
+        <span class="arrow">GitHub →</span>
+        <span class="d"><span class="L en">One Astro codebase, seven distinct brand-identity studies plus a themed hub.</span><span class="L ar">قاعدة Astro واحدة، وسبع دراسات هوية بصرية متمايزة مع بوابةٍ موحَّدة.</span></span>
+      </a></li>
+      <li><a class="entry" href="https://github.com/Mohamed3042/Flagship-One-Page">
+        <span class="t">Flagship One-Page</span>
+        <span class="arrow">GitHub →</span>
+        <span class="d"><span class="L en">A bilingual Arabic/English scroll-driven portfolio: nine real marketing, operations and automation systems in one self-contained site.</span><span class="L ar">موقعُ صفحةٍ واحدة ثنائيُّ اللغة يقوده التمرير: تسعة أنظمة حقيقية في التسويق والتشغيل والأتمتة في موقعٍ مكتفٍ بذاته.</span></span>
+      </a></li>
+      <li><a class="entry" href="https://github.com/Mohamed3042/polyblast-arena">
+        <span class="t">Polyblast Arena</span>
+        <span class="arrow">GitHub →</span>
+        <span class="d"><span class="L en">An original Godot 4.7 arena FPS with a 60 Hz authoritative simulation, bots, 4 maps, 9 weapons, and a procedural Blender asset pipeline.</span><span class="L ar">لعبة تصويبٍ أصلية على Godot 4.7 بمحاكاةٍ مرجعية ٦٠ هرتز، وروبوتات، و٤ خرائط، و٩ أسلحة، وخطِّ أصولٍ إجرائي على Blender.</span></span>
+      </a></li>
+      <li><a class="entry" href="https://github.com/Mohamed3042/ai-automation-command-center">
+        <span class="t">AI Automation Command Center</span>
+        <span class="arrow">GitHub →</span>
+        <span class="d"><span class="L en">A self-contained retail AI automation, integration, KPI, reporting and alert command center.</span><span class="L ar">مركزُ قيادةٍ مكتفٍ بذاته لأتمتة الذكاء الاصطناعي في التجزئة: تكامل ومؤشرات وتقارير وتنبيهات.</span></span>
+      </a></li>
+      <li><a class="entry" href="https://github.com/Mohamed3042/petpoint-ops-hub">
+        <span class="t">Retail Ops Hub</span>
+        <span class="arrow">GitHub →</span>
+        <span class="d"><span class="L en">A dependency-free retail operations command centre demo — POS, commerce, inventory and alerts in one local SQLite-backed web app, on synthetic data.</span><span class="L ar">عرضُ مركزِ عملياتِ تجزئةٍ بلا اعتماديات — نقاطُ بيعٍ وتجارةٌ ومخزونٌ وتنبيهات في تطبيق ويب محليٍّ يقوم على SQLite، ببياناتٍ اصطناعية.</span></span>
+      </a></li>
+      <li><a class="entry" href="https://github.com/Mohamed3042/bakery-cake-studio-demo">
+        <span class="t">Cake Studio Demo</span>
+        <span class="arrow">GitHub →</span>
+        <span class="d"><span class="L en">An offline cake design-to-production demo with a WebGL editor, procedural assets, Arabic shaping and true-size print layouts.</span><span class="L ar">عرضٌ يعمل دون اتصال من تصميم الكعك إلى إنتاجه: محرّر WebGL، وأصولٌ إجرائية، وتشكيلُ حروفٍ عربي، ومخططاتُ طباعةٍ بالحجم الحقيقي.</span></span>
+      </a></li>
+      <li><a class="entry" href="https://github.com/Mohamed3042">
+        <span class="t"><span class="L en">Everything public</span><span class="L ar">كل ما هو علني</span></span>
+        <span class="arrow">github.com/Mohamed3042 →</span>
+        <span class="d"><span class="L en">The full public profile — including this site's own source.</span><span class="L ar">الملف العلني كاملًا — بما فيه مصدرُ هذا الموقع نفسه.</span></span>
+      </a></li>
+    </ol>
+  </section>
 </main>
 
 <footer class="disclosure">
@@ -221,6 +380,6 @@
   <span class="L ar">دراسات حركية أصلية مستلهَمة لملف أعمال محمد محمود، منتَجة من «كتاب إنتاج WAN». لا انتساب لأي شركةٍ وردت كمصدر إلهام ولا تأييد منها؛ ولا تظهر علاماتٌ أو شخصياتٌ أو نسخُ منتجاتٍ لأطراف ثالثة. الأرقام الحقيقية للمشاريع في <a href="../">صفحات قصص الموقع</a>.</span></p>
 </footer>
 
-<script src="cinema.js?v=2"></script>
+<script src="cinema.js?v=3"></script>
 </body>
 </html>

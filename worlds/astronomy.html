@@ -7,11 +7,12 @@
 <meta name="description" content="A scroll-cinema film built entirely in code: a lone desert observatory detects order inside cosmic noise, maps the signal, builds an orbital answer, and holds the one decision no machine may make.">
 <meta name="theme-color" content="#070B18">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070B18'/%3E%3Cpath d='M14 41a18 18 0 0 1 36 0Z' fill='%23B88E3E'/%3E%3Crect x='30' y='20' width='4' height='21' fill='%2343D9D1'/%3E%3Crect x='11' y='41' width='42' height='6' rx='2' fill='%23252A35'/%3E%3Ccircle cx='49' cy='14' r='1.8' fill='%23F4F0E7'/%3E%3Ccircle cx='18' cy='11' r='1.2' fill='%23F4F0E7' opacity='.7'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./cinema.css">
+<link rel="stylesheet" href="./cinema.css?v=3">
 <style>
 /* ══════════ THE OBSERVATORY — world palette & typography ══════════ */
 :root{
   --void:#070B18; --basalt:#252A35; --star:#F4F0E7;
+  --grade-a:rgba(4,7,16,.55); --grade-b:rgba(14,20,38,.3);
   --cyan:#43D9D1; --violet:#7667D8; --brass:#B88E3E; --amber:#E9A23B;
   --w-bg:var(--void); --w-ink:var(--star); --w-accent:var(--brass); --w-dim:var(--basalt);
   --w-display:'Optima','Candara','Gill Sans','Segoe UI',system-ui,-apple-system,sans-serif;
@@ -123,6 +124,17 @@ body{overscroll-behavior-y:none}
 /* ══════════ S3 · signal in the noise (macro) ══════════ */
 .s-signal{--push:.08}
 
+/* ══════════ S4 · the spectrograph — light confesses ══════════ */
+.s-spec{--push:.07}
+.spec-tag{position:absolute;z-index:6;translate:-50% 0;text-align:center;
+  font:500 9.5px/1.5 var(--w-mono);letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(244,240,231,.78);pointer-events:none;
+  opacity:calc(clamp(0,(var(--p,0) - var(--at,.55))*6,1))}
+.lang-ar .spec-tag{translate:50% 0}
+.spec-tag::before{content:"";display:block;width:1px;height:34px;margin:0 auto 7px;
+  background:linear-gradient(transparent,var(--cyan))}
+.spec-tag b{display:block;color:var(--cyan);font-weight:600;letter-spacing:.08em}
+
 /* ══════════ S5 · MAP — noise becomes a route (signature) ══════════ */
 .s-map{--push:.06}
 .phases span{color:var(--cyan)}
@@ -195,6 +207,7 @@ body{overscroll-behavior-y:none}
 /* ══════════ scene heights (≤265vh so .is-live can fire at IO .35) ══════════ */
 .s-title{height:250vh}.s-wake{height:240vh}.s-signal{height:240vh}.s-map{height:265vh}
 .s-forge{height:245vh}.s-build{height:260vh}.s-gate{height:265vh}.s-prove{height:260vh}.s-dawn{height:250vh}
+.ident{height:200vh}.s-spec{height:250vh}.credits{height:320vh}
 
 /* ══════════ reduced motion: hold the postcards ══════════ */
 @media (prefers-reduced-motion: reduce){
@@ -214,9 +227,10 @@ body{overscroll-behavior-y:none}
 }
 </style>
 </head>
-<body>
+<body data-film="AST · REEL 01" data-runtime="540" data-ticks data-letterbox>
 
 <div class="grain" aria-hidden="true"></div>
+<div class="grade" aria-hidden="true"></div>
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 
 <header class="chrome">
@@ -229,8 +243,22 @@ body{overscroll-behavior-y:none}
 
 <main>
 
+<!-- ══════════ S0 · STUDIO IDENT ══════════ -->
+<section class="scene ident" data-scene="pin" data-slate="Studio ident" aria-label="Studio ident">
+  <div class="stage">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="card">
+      <div class="mark" aria-hidden="true"><i></i></div>
+      <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+      <p class="film-title"><span class="L en">The Observatory</span><span class="L ar">المرصد</span></p>
+    </div>
+    <div class="iris" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- ══════════ S1 · TITLE — the sleeping dome ══════════ -->
-<section class="scene s-title vig" data-scene="pin" aria-label="Title">
+<section class="scene s-title vig" data-scene="pin" data-slate="Title · the sleeping dome" aria-label="Title">
   <div class="stage">
     <div class="cam">
       <div class="layer l-far"><div class="ridge ridge-far"></div></div>
@@ -260,7 +288,7 @@ body{overscroll-behavior-y:none}
 </section>
 
 <!-- ══════════ S2 · the dome takes one mechanical breath ══════════ -->
-<section class="scene s-wake vig" data-scene="pin" aria-label="The dome wakes">
+<section class="scene s-wake vig" data-scene="pin" data-slate="The dome wakes" aria-label="The dome wakes">
   <div class="stage">
     <div class="wake-sky"></div>
     <div class="shaft"></div>
@@ -291,14 +319,14 @@ body{overscroll-behavior-y:none}
 </section>
 
 <!-- act: MAP -->
-<section class="act" data-scene>
+<section class="act" data-scene data-slate="Act · Map">
   <p class="no"><span class="L en">Act · MAP</span><span class="L ar">الفصل · الخريطة</span></p>
   <h2><span class="L en">Noise, surveyed</span><span class="L ar">الضجيج، ممسوحًا</span></h2>
   <p class="p-lead"><span class="L en">Color arrives only when a sensor reveals information — never as decoration.</span><span class="L ar">لا يصل اللون إلا حين يكشف مستشعرٌ معلومةً — لا زينةً أبدًا.</span></p>
 </section>
 
 <!-- ══════════ S3 · signal in the noise (macro) ══════════ -->
-<section class="scene s-signal vig" data-scene="pin" aria-label="Signal in the noise">
+<section class="scene s-signal vig" data-scene="pin" data-slate="Signal in the noise" aria-label="Signal in the noise">
   <div class="stage">
     <div class="cam"><canvas class="fill" id="cv-signal" aria-hidden="true"></canvas></div>
     <p class="chip"><span>100MM MACRO</span><span class="dot">·</span><span><span class="L en">SENSOR VIEW</span><span class="L ar">عرض المستشعر</span></span></p>
@@ -310,8 +338,24 @@ body{overscroll-behavior-y:none}
   </div>
 </section>
 
+<!-- ══════════ S4 · the spectrograph — light confesses ══════════ -->
+<section class="scene s-spec vig" data-scene="pin" data-slate="The spectrograph" aria-label="The spectrograph">
+  <div class="stage">
+    <div class="cam"><canvas class="fill" id="cv-spec" aria-hidden="true"></canvas></div>
+    <p class="chip"><span>SPECTROGRAPH</span><span class="dot">·</span><span><span class="L en">380–750 NM</span><span class="L ar">٣٨٠–٧٥٠ نانومتر</span></span></p>
+    <p class="spec-tag" style="--at:.5; left:32.6%; top:26%"><b>Hβ</b><span class="L en">Hydrogen</span><span class="L ar">هيدروجين</span></p>
+    <p class="spec-tag" style="--at:.58; left:53.5%; top:22%"><b>Na D</b><span class="L en">Sodium</span><span class="L ar">صوديوم</span></p>
+    <p class="spec-tag" style="--at:.66; left:67%; top:27%"><b>Hα</b><span class="L en">Hydrogen</span><span class="L ar">هيدروجين</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Map · the confession</span><span class="L ar">الخريطة · الاعتراف</span></p>
+      <h2><span class="L en">The light confesses its elements</span><span class="L ar">الضوء يعترف بعناصره</span></h2>
+      <p><span class="L en">A prism opens the return beam into a band. Dark absorption lines fall exactly where hydrogen and sodium always put them — the source is a real star, not an echo. Nothing here is decorated; every line is a fact of physics.</span><span class="L ar">يفتح الموشورُ الحزمةَ العائدة طيفًا. تسقط خطوط الامتصاص الداكنة حيث يضعها الهيدروجين والصوديوم دائمًا — فالمصدر نجمٌ حقيقي لا صدى. لا زخرفةَ هنا؛ كلُّ خطٍّ حقيقةٌ فيزيائية.</span></p>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ S5 · MAP — noise becomes a route (signature) ══════════ -->
-<section class="scene s-map vig" data-scene="pin" aria-label="The signal resolves into a route">
+<section class="scene s-map vig" data-scene="pin" data-slate="The constellation route" aria-label="The signal resolves into a route">
   <div class="stage">
     <div class="cam"><canvas class="fill" id="cv-map" aria-hidden="true"></canvas></div>
     <p class="chip phases">
@@ -328,14 +372,14 @@ body{overscroll-behavior-y:none}
 </section>
 
 <!-- act: BUILD -->
-<section class="act" data-scene>
+<section class="act" data-scene data-slate="Act · Build">
   <p class="no"><span class="L en">Act · BUILD</span><span class="L ar">الفصل · البناء</span></p>
   <h2><span class="L en">An orbital answer</span><span class="L ar">جوابٌ مداري</span></h2>
   <p class="p-lead"><span class="L en">Brass carries what hands built; cyan carries what the sky confirmed.</span><span class="L ar">النحاس يحمل ما بنته الأيدي؛ والسماوي يحمل ما أكّدته السماء.</span></p>
 </section>
 
 <!-- ══════════ S6 · chart to ignition ══════════ -->
-<section class="scene s-forge vig" data-scene="pin" aria-label="Chart to ignition">
+<section class="scene s-forge vig" data-scene="pin" data-slate="Chart to ignition" aria-label="Chart to ignition">
   <div class="stage">
     <div class="astro-wrap">
       <div class="core-halo"></div>
@@ -367,7 +411,7 @@ body{overscroll-behavior-y:none}
 </section>
 
 <!-- ══════════ S8 · BUILD — orbital assembly ══════════ -->
-<section class="scene s-build vig" data-scene="pin" aria-label="Orbital assembly">
+<section class="scene s-build vig" data-scene="pin" data-slate="Orbital assembly" aria-label="Orbital assembly">
   <div class="stage">
     <div class="cam"><canvas class="fill" id="cv-build" aria-hidden="true"></canvas></div>
     <p class="chip"><span>24MM WIDE</span><span class="dot">·</span><span><span class="L en">ORBITAL FRAME</span><span class="L ar">الإطار المداري</span></span></p>
@@ -380,14 +424,14 @@ body{overscroll-behavior-y:none}
 </section>
 
 <!-- act: GATE (amber) -->
-<section class="act act-gate" data-scene>
+<section class="act act-gate" data-scene data-slate="Act · Gate">
   <p class="no"><span class="L en">Act · GATE</span><span class="L ar">الفصل · البوّابة</span></p>
   <h2><span class="L en">One decision, kept human</span><span class="L ar">قرارٌ واحد يبقى بشريًّا</span></h2>
   <p class="p-lead"><span class="L en">Amber exists in this world for exactly one thing: a person, deciding.</span><span class="L ar">العنبري في هذا العالم لشيءٍ واحد فقط: إنسانٌ يُقرِّر.</span></p>
 </section>
 
 <!-- ══════════ S10 · GATE ══════════ -->
-<section class="scene s-gate" data-scene="pin" aria-label="The gate">
+<section class="scene s-gate" data-scene="pin" data-slate="The gate" aria-label="The gate">
   <div class="stage gate-stage">
     <div class="pool"></div>
     <div class="console-wrap">
@@ -420,14 +464,14 @@ body{overscroll-behavior-y:none}
 </section>
 
 <!-- act: PROVE -->
-<section class="act" data-scene>
+<section class="act" data-scene data-slate="Act · Prove">
   <p class="no"><span class="L en">Act · PROVE</span><span class="L ar">الفصل · البرهان</span></p>
   <h2><span class="L en">Proof returns as light</span><span class="L ar">يعود البرهان ضوءًا</span></h2>
   <p class="p-lead"><span class="L en">The dish field listens; verified returns rise as a new constellation.</span><span class="L ar">حقل الأطباق يُنصت؛ والعوائد المُتحقَّق منها تصعد كوكبةً جديدة.</span></p>
 </section>
 
 <!-- ══════════ S12 · PROVE — the dish field ══════════ -->
-<section class="scene s-prove vig" data-scene="pin" aria-label="The dish field answers">
+<section class="scene s-prove vig" data-scene="pin" data-slate="The dish field" aria-label="The dish field answers">
   <div class="stage">
     <div class="cam"><canvas class="fill" id="cv-prove" aria-hidden="true"></canvas></div>
     <p class="chip legend"><span class="a">●</span><span><span class="L en">VERIFIED RETURN</span><span class="L ar">عائد مُتحقَّق</span></span><span class="dot">·</span><span>●</span><span><span class="L en">LISTENING</span><span class="L ar">إنصات</span></span></p>
@@ -440,7 +484,7 @@ body{overscroll-behavior-y:none}
 </section>
 
 <!-- ══════════ S14 · FINALE — return to the ridge ══════════ -->
-<section class="scene s-dawn vig" data-scene="pin" aria-label="Finale — dawn restores the ridge">
+<section class="scene s-dawn vig" data-scene="pin" data-slate="Dawn · the loop closes" aria-label="Finale — dawn restores the ridge">
   <div class="stage">
     <div class="cam">
       <div class="layer l-far"><div class="ridge ridge-far"></div></div>
@@ -468,6 +512,28 @@ body{overscroll-behavior-y:none}
   </div>
 </section>
 
+<!-- ══════════ END CREDITS ══════════ -->
+<section class="scene credits" data-scene="pin" data-slate="End credits" aria-label="End credits">
+  <div class="stage">
+    <div class="roll">
+      <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <h3><span class="L en">The Observatory</span><span class="L ar">المرصد</span></h3>
+      <dl class="duo">
+        <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live, in code — 5 canvases, no footage</span><span class="L ar">حيًّا بالشيفرة — ٥ لوحات، بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+        <dt><span class="L en">Spectral lines</span><span class="L ar">الخطوط الطيفية</span></dt><dd><span class="L en">Hβ · Na D · Hα — real physics</span><span class="L ar">Hβ · Na D · Hα — فيزياء حقيقية</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+      </dl>
+      <p class="fine"><span class="L en">A brand-inspired study. No third-party marks, patches or likenesses appear. The one decision stays human — here, and in every real system on the portfolio.</span><span class="L ar">دراسة مستلهَمة. لا تظهر فيها علاماتٌ أو شاراتٌ أو أشباه لأطراف ثالثة. القرار الواحد يبقى بشريًّا — هنا، وفي كل نظامٍ حقيقي في الموقع.</span></p>
+      <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+    </div>
+    <div class="vig" aria-hidden="true"></div>
+  </div>
+</section>
+
 </main>
 
 <footer class="disclosure">
@@ -475,7 +541,7 @@ body{overscroll-behavior-y:none}
   <span class="L ar">دراسة حركية أصلية مستلهَمة لملف أعمال محمد محمود — واقعية المرصد معروضةً حيًّا بالشيفرة، مستنيرةً بممارسات التصوير العلمي المنشورة. لا انتساب لناسا أو لأي وكالة ولا تأييد منها ولا تمثيل لها، ولا تظهر علامات أو شارات أو أشباه. الأرقام الحقيقية في <a href="../">صفحات قصص الموقع</a>.</span></p>
 </footer>
 
-<script src="cinema.js?v=2"></script>
+<script src="cinema.js?v=3"></script>
 <script>
 (() => {
   'use strict';
@@ -530,6 +596,60 @@ body{overscroll-behavior-y:none}
         ctx.beginPath(); ctx.moveTo(gx, mid - amp * 2); ctx.lineTo(gx, mid + amp); ctx.stroke();
       }
       ctx.setLineDash([]);
+    }
+  });
+
+  /* S4 — spectrograph: continuum band + real absorption lines (Hβ, Na D, Hα) */
+  mk('cv-spec', (u, t) => {
+    const { ctx, W, H } = u, p = P(u);
+    ctx.clearRect(0, 0, W, H);
+    const bx = W * 0.08, bw = W * 0.84, by = H * 0.42, bh = H * 0.16;
+    const open = Math.min(1, Math.max(0, p * 2.4));
+    // continuum band, revealed left→right like a slit opening
+    const g = ctx.createLinearGradient(bx, 0, bx + bw, 0);
+    g.addColorStop(0, '#5b3fd4'); g.addColorStop(0.18, '#3d6fe0');
+    g.addColorStop(0.36, '#37c6a9'); g.addColorStop(0.52, '#b8d24a');
+    g.addColorStop(0.68, '#e8a63b'); g.addColorStop(0.85, '#d95b35'); g.addColorStop(1, '#b23227');
+    ctx.save();
+    ctx.beginPath(); ctx.rect(bx, by, bw * open, bh); ctx.clip();
+    ctx.globalAlpha = 0.9;
+    ctx.fillStyle = g; ctx.fillRect(bx, by, bw, bh);
+    // slit texture
+    ctx.globalAlpha = 0.22;
+    ctx.fillStyle = '#070B18';
+    for (let y = by; y < by + bh; y += 3) ctx.fillRect(bx, y, bw, 1);
+    ctx.restore();
+    ctx.globalAlpha = 1;
+    // absorption lines: λ 486 (Hβ), 518 (Mg), 589 (Na D), 656 (Hα) over 380–750
+    const lines = [[486, 3], [518, 2], [589, 3], [656, 3.4]];
+    const dark = Math.min(1, Math.max(0, (p - 0.32) * 3.4));
+    if (dark > 0) for (const [nm, wpx] of lines) {
+      const lx = bx + ((nm - 380) / 370) * bw;
+      if (lx > bx + bw * open) continue;
+      ctx.fillStyle = `rgba(7,11,24,${0.92 * dark})`;
+      ctx.fillRect(lx - wpx / 2, by, wpx, bh);
+    }
+    // measuring rule beneath
+    ctx.strokeStyle = 'rgba(244,240,231,.3)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(bx, by + bh + 18); ctx.lineTo(bx + bw * open, by + bh + 18); ctx.stroke();
+    ctx.fillStyle = 'rgba(244,240,231,.45)';
+    ctx.font = '10px ui-monospace, Consolas, monospace';
+    ctx.textAlign = 'center';
+    for (let nm = 400; nm <= 740; nm += 50) {
+      const lx = bx + ((nm - 380) / 370) * bw;
+      if (lx > bx + bw * open) continue;
+      ctx.fillRect(lx - 0.5, by + bh + 12, 1, 6);
+      ctx.fillText(String(nm), lx, by + bh + 32);
+    }
+    // faint prism beam entering from the left
+    const beam = Math.min(1, Math.max(0, (0.5 - Math.abs(p - 0.28)) * 3));
+    if (beam > 0) {
+      const bg = ctx.createLinearGradient(0, 0, bx, 0);
+      bg.addColorStop(0, 'rgba(244,240,231,0)'); bg.addColorStop(1, `rgba(244,240,231,${0.35 * beam})`);
+      ctx.fillStyle = bg;
+      ctx.beginPath();
+      ctx.moveTo(0, by + bh * 0.44); ctx.lineTo(bx, by + bh * 0.28);
+      ctx.lineTo(bx, by + bh * 0.72); ctx.lineTo(0, by + bh * 0.56); ctx.closePath(); ctx.fill();
     }
   });
 

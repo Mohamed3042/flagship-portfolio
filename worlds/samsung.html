@@ -6,7 +6,7 @@
 <title>THE FOLD IN SPACE — a scroll-cinema film · Mohamed Mahmoud</title>
 <meta name="description" content="THE FOLD IN SPACE — an original bilingual scroll-cinema study: a cobalt-violet light folds a cosmos of thirty portfolio stories into order, and one human palm opens the gate. Hand-authored HTML, CSS, SVG and canvas — no footage, no libraries.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23070912'/%3E%3Cpath d='M10 46C26 46 24 20 40 20c8 0 10 6 14 9' fill='none' stroke='%236D5BDB' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='54' cy='29' r='4' fill='%238CCBFF'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="cinema.css">
+<link rel="stylesheet" href="cinema.css?v=3">
 <style>
 /* ============ THE FOLD IN SPACE — world sheet ============
    Palette (locked): galaxy black #070912 · Cobalt Violet #6D5BDB ·
@@ -219,6 +219,33 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
   box-shadow: 0 0 22px 2px rgba(109,91,219,.65);
   opacity: calc(.25 + var(--fold) * (1 - var(--fold)) * 3);
 }
+
+/* ============ S5b · eight folds ============ */
+.eightwrap { position: absolute; inset: 0; display: grid; place-items: center;
+  perspective: 1400px; z-index: 1; }
+.eightstack { position: relative; width: min(64vw, 700px); aspect-ratio: 16/9;
+  transform-style: preserve-3d; transform: rotateX(14deg); }
+.ef { position: absolute; inset: 0; border-radius: 18px;
+  transform-origin: 50% 100%;
+  --k: clamp(0, (var(--p,0) - var(--ka)) / .09, 1);
+  transform: translateZ(calc(var(--i) * -14px)) scaleY(calc(1 - var(--k) * .5))
+             translateY(calc(var(--k) * -25%));
+  opacity: calc(.9 - var(--i) * .09); }
+.foldcount { position: absolute; z-index: 5; inset-inline-start: clamp(18px, 6vw, 84px);
+  top: clamp(70px, 12vh, 130px); font-family: var(--w-ui); }
+.foldcount b { font: 700 clamp(44px, 7vw, 92px)/1 var(--w-display); color: var(--w-ink);
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(105deg, var(--w-ink) 30%, var(--sky));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.foldcount span { display: block; margin-top: 8px; font: 600 10.5px/1.5 var(--w-ui);
+  letter-spacing: .24em; text-transform: uppercase; color: var(--w-dim); }
+.thickbar { position: absolute; z-index: 5; inset-inline-start: clamp(18px, 6vw, 84px);
+  bottom: clamp(120px, 22vh, 220px); width: min(300px, 40vw); height: 4px; border-radius: 2px;
+  background: color-mix(in srgb, var(--w-ink) 10%, transparent); overflow: hidden; }
+.thickbar i { position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(90deg, var(--w-accent), var(--sky));
+  transform-origin: 0 50%; transform: scaleX(calc(1 - clamp(0, var(--p,0) * 1.15, 1) * .996)); }
+[dir="rtl"] .thickbar i { transform-origin: 100% 50%; }
 
 /* ============ S6 · anchor worlds ============ */
 .linkline .trace2 {
@@ -474,7 +501,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 }
 </style>
 </head>
-<body>
+<body data-film="FLD · REEL 01" data-runtime="560" data-ticks data-letterbox>
 
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 <header class="chrome">
@@ -490,8 +517,22 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </header>
 
 <main>
+<!-- ======== S0 · STUDIO IDENT ======== -->
+<section class="scene ident" data-scene="pin" data-slate="Studio ident" aria-label="Studio ident">
+  <div class="stage">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="card">
+      <div class="mark" aria-hidden="true"><i></i></div>
+      <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+      <p class="film-title"><span class="L en">The Fold in Space</span><span class="L ar">الطيّة في الفضاء</span></p>
+    </div>
+    <div class="iris" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- ======== S1 · PROLOGUE — curve alone ======== -->
-<section class="scene" id="sc-curve" data-scene="pin" aria-label="Prologue">
+<section class="scene" id="sc-curve" data-scene="pin" data-slate="Curve alone" aria-label="Prologue">
   <div class="stage">
     <canvas class="cv" id="cv-cosmos" aria-hidden="true"></canvas>
     <svg class="wide scurve" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -531,7 +572,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </section>
 
 <!-- ======== S2 · edge becomes layer ======== -->
-<section class="scene" id="sc-edge" data-scene="pin" aria-label="The edge becomes a layer">
+<section class="scene" id="sc-edge" data-scene="pin" data-slate="Edge becomes layer" aria-label="The edge becomes a layer">
   <div class="stage">
     <div class="macro">
       <div class="pane glass c"></div>
@@ -557,7 +598,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </div>
 
 <!-- ======== S3 · the scan ======== -->
-<section class="scene" id="sc-frags" data-scene="pin" aria-label="The scan">
+<section class="scene" id="sc-frags" data-scene="pin" data-slate="The scan" aria-label="The scan">
   <div class="stage">
     <canvas class="cv" id="cv-frags" aria-hidden="true"></canvas>
     <div class="caption fio rise" style="--fa:.28;--fb:.42;--fc:8;--fd:9">
@@ -570,7 +611,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </section>
 
 <!-- ======== S4 · alignment ======== -->
-<section class="scene" id="sc-orbit" data-scene="pin" aria-label="Alignment">
+<section class="scene" id="sc-orbit" data-scene="pin" data-slate="Alignment" aria-label="Alignment">
   <div class="stage">
     <canvas class="cv" id="cv-orbit" aria-hidden="true"></canvas>
     <div class="axis" aria-hidden="true"></div>
@@ -592,7 +633,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </div>
 
 <!-- ======== S5 · the first fold ======== -->
-<section class="scene" id="sc-fold" data-scene="pin" aria-label="The first fold">
+<section class="scene" id="sc-fold" data-scene="pin" data-slate="The first fold" aria-label="The first fold">
   <div class="stage">
     <div class="foldwrap">
       <div class="foldscene">
@@ -622,8 +663,37 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
   </div>
 </section>
 
+<!-- ======== S5b · eight folds ======== -->
+<section class="scene" id="sc-eight" data-scene="pin" data-slate="Eight folds" aria-label="Eight folds">
+  <div class="stage">
+    <div class="eightwrap">
+      <div class="eightstack" aria-hidden="true">
+        <div class="ef glass" style="--i:0;--ka:.08"></div>
+        <div class="ef glass" style="--i:1;--ka:.17"></div>
+        <div class="ef glass" style="--i:2;--ka:.26"></div>
+        <div class="ef glass" style="--i:3;--ka:.35"></div>
+        <div class="ef glass" style="--i:4;--ka:.44"></div>
+        <div class="ef glass" style="--i:5;--ka:.53"></div>
+        <div class="ef glass" style="--i:6;--ka:.62"></div>
+        <div class="ef glass" style="--i:7;--ka:.71"></div>
+      </div>
+    </div>
+    <div class="foldcount" aria-hidden="true">
+      <b data-counter data-from="0" data-to="8">0</b>
+      <span><span class="L en">folds · 256:1 compression</span><span class="L ar">طيّات · ضغط ٢٥٦:١</span></span>
+    </div>
+    <div class="thickbar" aria-hidden="true"><i></i></div>
+    <div class="caption fio rise" style="--fa:.4;--fb:.54;--fc:8;--fd:9">
+      <p class="kick"><span class="L en">Eight folds</span><span class="L ar">ثماني طيّات</span></p>
+      <h2><span class="L en">Each fold halves the distance</span><span class="L ar">كلُّ طيّةٍ تُنصِّف المسافة</span></h2>
+      <p><span class="L en">Fold a sheet of space once and two points touch sooner; fold it eight times and what stood 256 lengths apart stands side by side. Nothing is torn — order is only geometry, patiently applied.</span><span class="L ar">اطوِ صفحةَ الفضاء مرةً تقتربْ نقطتان؛ واطوِها ثماني مراتٍ يصبح ما بينهما ٢٥٦ طولًا جنبًا إلى جنب. لا شيء يتمزّق — فما النظامُ إلا هندسةٌ تُطبَّق بصبر.</span></p>
+    </div>
+    <div class="vig"></div>
+  </div>
+</section>
+
 <!-- ======== S6 · anchor worlds ======== -->
-<section class="scene" id="sc-anchor" data-scene="pin" aria-label="Anchor worlds">
+<section class="scene" id="sc-anchor" data-scene="pin" data-slate="Anchor worlds" aria-label="Anchor worlds">
   <div class="stage">
     <svg class="wide linkline" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path class="halo2" pathLength="1" d="M-80 620 C -32 620, 48 496, 96 496 C 144 496, 144 288, 192 288 C 240 288, 252 464, 300 464 C 348 464, 348 256, 396 256 C 444 256, 444 448, 492 448 C 540 448, 540 240, 588 240 C 636 240, 636 440, 684 440 C 732 440, 732 248, 780 248 C 828 248, 828 456, 876 456 C 924 456, 924 264, 972 264 C 1020 264, 1008 448, 1056 448 C 1104 448, 1080 240, 1128 240 C 1176 240, 1240 180, 1280 180"/>
@@ -652,7 +722,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </section>
 
 <!-- ======== S7 · ambient island ======== -->
-<section class="scene" id="sc-island" data-scene="pin" aria-label="Ambient island">
+<section class="scene" id="sc-island" data-scene="pin" data-slate="Ambient island" aria-label="Ambient island">
   <div class="stage">
     <div class="islandwrap">
       <div class="island">
@@ -679,7 +749,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </div>
 
 <!-- ======== S8 · probes refused ======== -->
-<section class="scene" id="sc-shield" data-scene="pin" aria-label="Probes refused">
+<section class="scene" id="sc-shield" data-scene="pin" data-slate="Probes refused" aria-label="Probes refused">
   <div class="stage">
     <div class="shieldwrap">
       <svg class="shieldsvg" viewBox="0 0 800 800" aria-hidden="true">
@@ -704,7 +774,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </section>
 
 <!-- ======== S9 · the palm — SIGNATURE ======== -->
-<section class="scene" id="sc-palm" data-scene="pin" aria-label="A human palm aligns the shields">
+<section class="scene" id="sc-palm" data-scene="pin" data-slate="The palm" aria-label="A human palm aligns the shields">
   <div class="stage">
     <div class="bloom" aria-hidden="true"></div>
     <div class="gatewrap">
@@ -777,7 +847,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </div>
 
 <!-- ======== S10 · evidence as ambient light ======== -->
-<section class="scene" id="sc-prove" data-scene="pin" aria-label="Evidence">
+<section class="scene" id="sc-prove" data-scene="pin" data-slate="Evidence as light" aria-label="Evidence">
   <div class="stage">
     <canvas class="cv" id="cv-aurora" aria-hidden="true"></canvas>
     <div class="caption hi fio rise" style="--fa:.16;--fb:.28;--fc:8;--fd:9">
@@ -822,7 +892,7 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
 </div>
 
 <!-- ======== S11 · fold home ======== -->
-<section class="scene" id="sc-home" data-scene="pin" aria-label="Fold home">
+<section class="scene" id="sc-home" data-scene="pin" data-slate="Fold home" aria-label="Fold home">
   <div class="stage">
     <div class="homewrap">
       <div class="stack">
@@ -845,15 +915,36 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
   </div>
 </section>
 
-</main>
+<!-- ======== END CREDITS ======== -->
+<section class="scene credits" data-scene="pin" data-slate="End credits" aria-label="End credits">
+  <div class="stage">
+    <div class="roll">
+      <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <h3><span class="L en">The Fold in Space</span><span class="L ar">الطيّة في الفضاء</span></h3>
+      <dl class="duo">
+        <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live — 4 canvases + CSS 3D, no footage</span><span class="L ar">حيًّا — ٤ لوحات وCSS ثلاثي الأبعاد، بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+        <dt><span class="L en">Gate law</span><span class="L ar">قانون البوابة</span></dt><dd><span class="L en">Zero probes pass · one palm opens</span><span class="L ar">صفر مِجسّات تعبر · كفٌّ واحدة تفتح</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+      </dl>
+      <p class="fine"><span class="L en">A brand-inspired study; no marks, products or interfaces are depicted. The warmth at the end is deliberate: systems should answer people, not the other way around.</span><span class="L ar">دراسة مستلهَمة؛ لا علاماتَ ولا منتجاتٍ ولا واجهات. والدفء في الخاتمة مقصود: على الأنظمة أن تُجيب الناس، لا العكس.</span></p>
+      <p><a href="./" style="color:var(--sky)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+    </div>
+    <div class="vig" aria-hidden="true"></div>
+  </div>
+</section>
 
+</main>
 
 <footer class="disclosure">
   <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — cosmic-flagship visual grammar rendered live in code. Not affiliated with, endorsed by, or representing Samsung; no marks, products, or interfaces are depicted. Real project figures live on the <a href="../">portfolio story pages</a>.</span>
   <span class="L ar">دراسة حركية أصلية مستلهَمة لملف أعمال محمد محمود — بقواعد «الرائد الكوني» البصرية معروضةً حيًّا بالشيفرة. لا انتساب لشركة سامسونج ولا تأييد منها ولا تمثيل لها، ولا تظهر علامات أو منتجات أو واجهات. الأرقام الحقيقية في <a href="../">صفحات قصص الموقع</a>.</span></p>
 </footer>
 
-<script src="cinema.js?v=2"></script>
+<script src="cinema.js?v=3"></script>
 <script>
 (() => {
   'use strict';
@@ -992,5 +1083,5 @@ svg.wide { position: absolute; inset: 0; width: 100%; height: 100%; }
   }, () => ({}));
 })();
 </script>
-\n</body>
+</body>
 </html>
