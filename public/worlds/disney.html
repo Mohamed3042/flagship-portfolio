@@ -6,10 +6,11 @@
 <title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
 <meta name="description" content="A scroll-cinema film cut from 32 real WAN 2.7 shots — a golden book opens, ink becomes fireflies, a thread proves a loop, and the system takes over the storytelling.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%2314213D"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23F3E8C8"/><path d="M15 7h2v18h-2z" fill="%23F2BC3B"/></svg>'>
-<link rel="stylesheet" href="cinema.css?v=2">
+<link rel="stylesheet" href="cinema.css?v=3">
 <style>
   :root{
     --w-bg:#14213D; --w-ink:#F3E8C8; --w-accent:#F2BC3B; --w-dim:#BFD0DE;
+    --grade-a:rgba(10,13,26,.5); --grade-b:rgba(38,30,12,.22);
     --sepia:#35271F; --parch:#F3E8C8; --moon:#BFD0DE; --rose:#D9829B; --mint:#8FCFB5; --lilac:#A897CF;
     --w-display:"Iowan Old Style","Palatino Nova",Palatino,"Book Antiqua","Times New Roman",Georgia,serif;
     --w-body:"Iowan Old Style",Palatino,"Book Antiqua",Georgia,serif;
@@ -161,19 +162,48 @@
     opacity:calc(max(0, var(--p,0) - .68) * 4); box-shadow:0 0 18px rgba(242,188,59,.55); }
   .finale .caption{ text-align:center; inset-inline:0; margin-inline:auto; max-width:640px; }
 
+  /* ————— VAULT: the unmade shots (code) ————— */
+  .vault{ height:300vh; }
+  .vault .stage{ background:radial-gradient(110% 85% at 50% 0%, #1a2647 0%, #0c142c 55%, #080f22 100%); }
+  .vault .drawer{ position:absolute; inset:14% 8% 24%; display:grid; align-content:center;
+    grid-template-columns:repeat(auto-fill, minmax(52px, 1fr)); gap:7px;
+    transform:perspective(900px) rotateX(calc(18deg - min(1, var(--p,0)*1.4) * 14deg));
+    transform-origin:50% 100%; }
+  .vault .slate{ aspect-ratio:16/10; border-radius:3px; position:relative;
+    background:linear-gradient(160deg, #1d2b52 0%, #131f3e 70%);
+    border:1px solid rgba(191,208,222,.16);
+    opacity:calc(min(1, max(0, var(--p,0)*1.15 - var(--i,0)) * 8));
+    transform:translateY(calc((1 - min(1, max(0, var(--p,0)*1.15 - var(--i,0)) * 8)) * 12px)); }
+  .vault .slate::before{ content:""; position:absolute; inset:0 0 auto; height:22%;
+    background:repeating-linear-gradient(115deg, #F2BC3B 0 6px, #131f3e 6px 12px);
+    border-radius:3px 3px 0 0; opacity:.5; }
+  .vault .slate.lit{ background:linear-gradient(160deg, #4a3c1a 0%, #2c250f 70%);
+    border-color:rgba(242,188,59,.7); box-shadow:0 0 22px rgba(242,188,59,.35); }
+  .vault .slate.lit::after{ content:""; position:absolute; left:50%; top:60%; width:5px; height:5px;
+    border-radius:50%; translate:-50% -50%; background:#FFE49A; box-shadow:0 0 12px 4px rgba(242,188,59,.6); }
+  .vault .tally{ position:absolute; z-index:6; top:clamp(56px,7vh,80px); inset-inline-end:clamp(18px,6vw,84px);
+    text-align:end; font:700 clamp(30px,5vw,54px)/1 var(--w-ui); color:var(--w-accent);
+    font-variant-numeric:tabular-nums; text-shadow:0 2px 30px rgba(0,0,0,.5); }
+  .vault .tally small{ display:block; margin-top:8px; font:700 10.5px/1.5 var(--w-ui);
+    letter-spacing:.22em; text-transform:uppercase; color:var(--w-dim); }
+  .vault .caption{ z-index:8; }
+
   @media (prefers-reduced-motion: reduce){
     .open .candle, .open .quill{ animation:none; }
     .chapter video{ transition:none; }
+    .vault .drawer{ transform:none; }
   }
   @media (max-width:640px){
     .chapter{ height:260vh; }
     .district{ display:none; }
+    .vault .drawer{ inset:16% 5% 30%; grid-template-columns:repeat(auto-fill, minmax(38px, 1fr)); gap:5px; }
   }
 </style>
 </head>
-<body>
+<body data-film="DSN · REEL 01" data-runtime="520" data-ticks data-letterbox>
 <div class="rail" data-rail><i></i></div>
 <div class="grain" aria-hidden="true"></div>
+<div class="grade" aria-hidden="true"></div>
 
 <nav class="chrome" aria-label="Film chrome">
   <div class="grp">
@@ -186,8 +216,22 @@
   </div>
 </nav>
 
+<!-- ============ STUDIO IDENT ============ -->
+<section class="scene ident" data-scene="pin" data-slate="Studio ident">
+  <div class="stage">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="card">
+      <div class="mark" aria-hidden="true"><i></i></div>
+      <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+      <p class="film-title"><span class="L en">The Kingdom of Running Things</span><span class="L ar">مملكة الأشياء التي تجري</span></p>
+    </div>
+    <div class="iris" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- ============ COLD OPEN ============ -->
-<section class="scene open" data-scene="pin" id="top">
+<section class="scene open" data-scene="pin" id="top" data-slate="Cold open">
   <div class="stage">
     <div class="plate" aria-hidden="true"></div>
     <div class="veil" aria-hidden="true"></div>
@@ -209,7 +253,7 @@
   <div class="rule"></div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-chain="dsn-h-001,dsn-h-002,dsn-h-003,dsn-h-004,dsn-h-005,dsn-h-006">
+<section class="scene chapter" data-scene="pin" data-slate="Ch.1 · The Waking" data-chain="dsn-h-001,dsn-h-002,dsn-h-003,dsn-h-004,dsn-h-005,dsn-h-006">
   <div class="stage">
     <video muted playsinline preload="none"></video>
     <video muted playsinline preload="none"></video>
@@ -225,7 +269,7 @@
   </div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-chain="dsn-h-007,dsn-h-008,dsn-h-009,dsn-h-010,dsn-h-011,dsn-h-012">
+<section class="scene chapter" data-scene="pin" data-slate="Ch.2 · First Page" data-chain="dsn-h-007,dsn-h-008,dsn-h-009,dsn-h-010,dsn-h-011,dsn-h-012">
   <div class="stage">
     <video muted playsinline preload="none"></video>
     <video muted playsinline preload="none"></video>
@@ -249,7 +293,7 @@
   <div class="rule"></div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-chain="dsn-h-013,dsn-h-014,dsn-h-015,dsn-h-016,dsn-h-017">
+<section class="scene chapter" data-scene="pin" data-slate="Ch.3 · The Living Map" data-chain="dsn-h-013,dsn-h-014,dsn-h-015,dsn-h-016,dsn-h-017">
   <div class="stage">
     <video muted playsinline preload="none"></video>
     <video muted playsinline preload="none"></video>
@@ -265,7 +309,7 @@
   </div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-chain="dsn-h-018,dsn-h-019,dsn-h-020,dsn-h-021,dsn-h-022">
+<section class="scene chapter" data-scene="pin" data-slate="Ch.4 · The Golden Thread" data-chain="dsn-h-018,dsn-h-019,dsn-h-020,dsn-h-021,dsn-h-022">
   <div class="stage">
     <video muted playsinline preload="none"></video>
     <video muted playsinline preload="none"></video>
@@ -281,7 +325,7 @@
   </div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-chain="dsn-h-023,dsn-h-024,dsn-h-025,dsn-h-026,dsn-h-027">
+<section class="scene chapter" data-scene="pin" data-slate="Ch.5 · The False Knot" data-chain="dsn-h-023,dsn-h-024,dsn-h-025,dsn-h-026,dsn-h-027">
   <div class="stage">
     <video muted playsinline preload="none"></video>
     <video muted playsinline preload="none"></video>
@@ -297,7 +341,7 @@
   </div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-chain="dsn-h-028,dsn-h-029,dsn-h-030,dsn-h-031,dsn-h-032">
+<section class="scene chapter" data-scene="pin" data-slate="Ch.6 · The Loop" data-chain="dsn-h-028,dsn-h-029,dsn-h-030,dsn-h-031,dsn-h-032">
   <div class="stage">
     <video muted playsinline preload="none"></video>
     <video muted playsinline preload="none"></video>
@@ -314,7 +358,7 @@
 </section>
 
 <!-- ============ THE HANDOFF ============ -->
-<section class="scene handoff" data-scene="pin">
+<section class="scene handoff" data-scene="pin" data-slate="The handoff">
   <div class="stage">
     <div class="plate" aria-hidden="true"></div>
     <svg class="thread" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -338,7 +382,7 @@
   <div class="rule"></div>
 </section>
 
-<section class="scene build" data-scene="pin">
+<section class="scene build" data-scene="pin" data-slate="The paper kingdom">
   <div class="stage">
     <div class="layer l4" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
       <path d="M0 400 L0 300 L60 290 L90 240 L120 296 L200 280 L240 210 L285 285 L370 270 L420 230 L470 278 L560 262 L610 200 L662 270 L760 258 L820 214 L868 268 L940 250 L1000 262 L1000 400 Z" fill="#22345e"/>
@@ -377,7 +421,7 @@
   <div class="rule"></div>
 </section>
 
-<section class="scene gate" data-scene="pin">
+<section class="scene gate" data-scene="pin" data-slate="The signet">
   <div class="stage">
     <div class="field">
       <div class="paper">
@@ -407,13 +451,33 @@
   <div class="rule"></div>
 </section>
 
-<section class="scene prove" data-scene="pin" id="prove">
+<section class="scene prove" data-scene="pin" id="prove" data-slate="Thirty lanterns">
   <div class="stage">
     <canvas id="lanterns"></canvas>
     <div class="caption">
       <p class="kick"><span class="L en">The constellation is the loop</span><span class="L ar">الكوكبة هي الحلقة</span></p>
       <h2><span class="L en">Proof, then rest</span><span class="L ar">برهانٌ، ثم سكينة</span></h2>
-      <p><span class="L en">Thirty lanterns rise and settle into the same circular route the thread drew. <a href="../"><span class="L en">Read the true stories on the portfolio →</span></a></span><span class="L ar">ثلاثون فانوسًا تصعد ثم تستقر على المسار الدائري نفسه الذي رسمه الخيط. <a href="../">اقرأ القصص الحقيقية في الموقع ←</a></span></p>
+      <p><span class="L en">Thirty lanterns rise and settle into the same circular route the thread drew. <a href="../">Read the true stories on the portfolio →</a></span><span class="L ar">ثلاثون فانوسًا تصعد ثم تستقر على المسار الدائري نفسه الذي رسمه الخيط. <a href="../">اقرأ القصص الحقيقية في الموقع ←</a></span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT VI · THE VAULT (code) ============ -->
+<section class="act">
+  <p class="no"><span class="L en">Act VI · THE VAULT</span><span class="L ar">الفصل السادس · الخزانة</span></p>
+  <h2><span class="L en">One Hundred Twelve Unmade Shots</span><span class="L ar">مئة واثنتا عشرة لقطةً لم تُصنَع بعد</span></h2>
+  <p><span class="L en">The bible scripts 144 clips; 32 were produced. The rest wait in the vault — written, numbered, honest about being unmade.</span><span class="L ar">كتاب الإنتاج يكتب ١٤٤ مقطعًا؛ صُنع منها ٣٢. والبقية تنتظر في الخزانة — مكتوبةً، مرقَّمةً، صريحةً في أنها لم تُصنَع.</span></p>
+  <div class="rule"></div>
+</section>
+
+<section class="scene vault" data-scene="pin" data-slate="The vault">
+  <div class="stage">
+    <div class="drawer" id="vault-drawer" aria-hidden="true"></div>
+    <p class="tally"><span data-counter data-from="0" data-to="112">0</span><small><span class="L en">scripted shots, unproduced</span><span class="L ar">لقطة مكتوبة لم تُنتَج</span></small></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">DSN-H-033 → DSN-H-144</span><span class="L ar">DSN-H-033 ← DSN-H-144</span></p>
+      <h2><span class="L en">The vault stays honest</span><span class="L ar">الخزانة تبقى صادقة</span></h2>
+      <p><span class="L en">Every slate you see is a real entry in the production bible — storyboarded, captioned, never generated. No pretend footage; the drawer glows only where film truly exists.</span><span class="L ar">كل لوحٍ تراه قيدٌ حقيقي في كتاب الإنتاج — مرسومٌ مشهديًّا، ومُعنوَن، ولم يُولَّد قط. لا مشاهدَ مزعومة؛ فالدُّرج لا يتوهّج إلا حيث يوجد فيلمٌ فعلًا.</span></p>
     </div>
   </div>
 </section>
@@ -426,7 +490,7 @@
   <div class="rule"></div>
 </section>
 
-<section class="scene finale" data-scene="pin">
+<section class="scene finale" data-scene="pin" data-slate="The book closes">
   <div class="stage">
     <div class="book">
       <div class="pageimg" aria-hidden="true"></div>
@@ -440,16 +504,52 @@
   </div>
 </section>
 
+<!-- ============ END CREDITS ============ -->
+<section class="scene credits" data-scene="pin" data-slate="End credits" style="height:340vh">
+  <div class="stage">
+    <div class="roll">
+      <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <h3><span class="L en">The Kingdom of Running Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h3>
+      <dl class="duo">
+        <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">32 WAN 2.7 shots, end-frame → first-frame</span><span class="L ar">٣٢ لقطة WAN 2.7، إطار نهايةٍ إلى إطار بداية</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+        <dt><span class="L en">Acts III–VI rendered</span><span class="L ar">عرض الفصول الثالث–السادس</span></dt><dd><span class="L en">Live, in code — no footage</span><span class="L ar">حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Production bible</span><span class="L ar">كتاب الإنتاج</span></dt><dd><span class="L en">144 scripted clips · 112 unproduced</span><span class="L ar">١٤٤ مقطعًا مكتوبًا · ١١٢ لم تُنتَج</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+      </dl>
+      <p class="fine"><span class="L en">A brand-inspired study. No third-party marks, characters or product replicas appear. Every number above is real; every claim traces to the production files. The true stories — with their own receipts — live on the portfolio.</span><span class="L ar">دراسة مستلهَمة. لا تظهر فيها علاماتٌ أو شخصياتٌ أو نسخُ منتجاتٍ لأطراف ثالثة. كل رقمٍ أعلاه حقيقي، وكل ادّعاءٍ يعود إلى ملفات الإنتاج. أما القصص الحقيقية — بإيصالاتها — ففي الموقع.</span></p>
+      <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+    </div>
+    <div class="vig" aria-hidden="true"></div>
+  </div>
+</section>
+
 <footer class="disclosure">
   <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — handcrafted-storybook visual grammar, informed by Walt Disney Animation's published process material. Not affiliated with, endorsed by, or representing The Walt Disney Company. No characters, marks, or logos are depicted. Shots DSN-H-001–032 generated with WAN 2.7 from an original 144-clip production bible; Acts III–V rendered live in code. All project claims live on the <a href="../">portfolio's story pages</a>.</span>
   <span class="L ar">دراسة حركية أصلية مستلهَمة لأغراض ملف أعمال محمد محمود — بقواعد «الحكاية المصوَّرة» البصرية، مستنيرةً بمواد عملية منشورة لاستوديوهات الرسوم المتحركة. لا انتساب ولا تأييد ولا تمثيل لشركة ديزني، ولا تظهر فيها شخصيات أو علامات أو شعارات. اللقطات ٠٠١–٠٣٢ مولَّدة بـ WAN 2.7 من كتاب إنتاج أصلي من ١٤٤ مقطعًا؛ والفصول الثالث إلى الخامس تُعرَض حيًّا بالشيفرة. جميع الأرقام والادّعاءات في <a href="../">صفحات القصص بالموقع</a>.</span></p>
 </footer>
 
-<script src="cinema.js?v=2"></script>
+<script src="cinema.js?v=3"></script>
 <script>
 (() => {
   'use strict';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- VAULT: 144 slates, the 32 produced ones lit ---------- */
+  const drawer = document.getElementById('vault-drawer');
+  if (drawer) {
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < 144; i++) {
+      const s = document.createElement('i');
+      s.className = 'slate' + (i < 32 ? ' lit' : '');
+      s.style.setProperty('--i', (i / 144 * 0.82).toFixed(3));
+      frag.appendChild(s);
+    }
+    drawer.appendChild(frag);
+  }
 
   /* ---------- shot titles (chip) ---------- */
   const T = {

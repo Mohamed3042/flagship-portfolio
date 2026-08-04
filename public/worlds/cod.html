@@ -6,7 +6,7 @@
 <title>OPERATION CLOCKWORK — COD Tactical World · Mohamed Mahmoud</title>
 <meta name="description" content="A nonviolent scroll-cinema motion study in tactical visual language: at 02:00 a specialist team enters a city stalled by dead process, maps the repeating failure loop, builds a forward system, halts at a two-person authorization, and proves the change at dawn. All visuals are code.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23171A1C'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%23E5A13A' stroke-width='4'/%3E%3Cpath d='M32 20v12l9 6' fill='none' stroke='%23A7AAA4' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="cinema.css">
+<link rel="stylesheet" href="cinema.css?v=3">
 <style>
 /* ================= OPERATION CLOCKWORK — world sheet =================
    Palette is law: graphite #171A1C · olive #454938 · chalk #A7AAA4 ·
@@ -89,6 +89,33 @@ body{ font-family:var(--w-body); }
 .is-live .hand.walk{ animation:steps 5.2s ease-in-out 2; }
 .is-live .hand.rotor{ animation:steps 2.6s ease-in-out 3; }
 @media (prefers-reduced-motion: reduce){ .hand{ animation:none !important; } }
+
+/* ---------- S02b comms check ---------- */
+#s02b{ height:300vh }
+#s02b .stage{ background:color-mix(in srgb, var(--graphite) 94%, black); }
+#s02b .net{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:min(680px,88vw); border:1px solid color-mix(in srgb, var(--chalk) 26%, transparent);
+  background:color-mix(in srgb, black 30%, transparent); padding:clamp(18px,3vw,30px); }
+#s02b .net::before{ content:"TACNET · ROLL CALL"; display:block; margin-bottom:14px;
+  font:600 10px/1 var(--w-ui); letter-spacing:.3em; color:var(--w-dim); }
+#s02b .ln{ display:grid; grid-template-columns:1fr auto; gap:18px; align-items:center;
+  font:600 clamp(11px,1.4vw,13.5px)/2.2 var(--w-ui); letter-spacing:.12em; text-transform:uppercase;
+  color:color-mix(in srgb, var(--w-ink) 82%, transparent);
+  opacity:calc(clamp(0,(var(--p,0) - var(--at,.2))*9,1));
+  transform:translateX(calc((1 - clamp(0,(var(--p,0) - var(--at,.2))*9,1)) * -10px)); }
+.lang-ar #s02b .ln{ letter-spacing:.02em;
+  transform:translateX(calc((1 - clamp(0,(var(--p,0) - var(--at,.2))*9,1)) * 10px)); }
+#s02b .ln b{ color:var(--amber); font-weight:600; letter-spacing:.16em; }
+#s02b .ln .wave{ position:relative; height:12px; width:100%; max-width:220px; justify-self:start;
+  grid-column:1 / -1; margin-top:-6px; opacity:.55;
+  background:repeating-linear-gradient(90deg, var(--chalk) 0 2px, transparent 2px 7px);
+  -webkit-mask:linear-gradient(90deg,#000 calc(clamp(0,(var(--p,0) - var(--at,.2))*6,1)*100%), transparent 0);
+          mask:linear-gradient(90deg,#000 calc(clamp(0,(var(--p,0) - var(--at,.2))*6,1)*100%), transparent 0); }
+#s02b .lock{ margin-top:16px; font:700 12px/1.6 var(--w-ui); letter-spacing:.24em; text-transform:uppercase;
+  color:var(--amber); border:1px solid color-mix(in srgb, var(--amber) 55%, transparent);
+  padding:10px 14px; display:inline-block; background:color-mix(in srgb, black 35%, transparent);
+  opacity:clamp(0,(var(--p,0) - .72)*8,1); }
+.lang-ar #s02b .lock{ letter-spacing:.05em; }
 
 /* act dividers */
 .act{ background:
@@ -399,7 +426,7 @@ body{ font-family:var(--w-body); }
 .act{ min-height:52vh }
 </style>
 </head>
-<body>
+<body data-film="CLK · REEL 01" data-runtime="600" data-ticks data-letterbox>
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 <header class="chrome">
   <nav class="grp" aria-label="Site">
@@ -414,8 +441,22 @@ body{ font-family:var(--w-body); }
 </header>
 
 <main>
+<!-- ============ S00 · STUDIO IDENT ============ -->
+<section class="scene ident" data-scene="pin" data-slate="Studio ident" style="height:200vh" aria-label="Studio ident">
+  <div class="stage">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="card">
+      <div class="mark" aria-hidden="true"><i></i></div>
+      <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+      <p class="film-title"><span class="L en">Operation Clockwork</span><span class="L ar">عملية عقارب الساعة</span></p>
+    </div>
+    <div class="iris" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- ============ PROLOGUE · S01 title card ============ -->
-<section id="s01" class="scene" data-scene="pin" aria-label="Title — Operation Clockwork">
+<section id="s01" class="scene" data-scene="pin" data-slate="Title · 02:00" aria-label="Title — Operation Clockwork">
   <div class="stage">
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <g id="g-aerial" data-city="dark"></g>
@@ -448,7 +489,7 @@ ROUTES REPEAT · WORK DUPLICATES</span>
 </section>
 
 <!-- ============ PROLOGUE · S02 insertion ============ -->
-<section id="s02" class="scene" data-scene="pin" aria-label="Rotor approach and ridge insertion">
+<section id="s02" class="scene" data-scene="pin" data-slate="Insertion" aria-label="Rotor approach and ridge insertion">
   <div class="stage">
     <div class="hand rotor">
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -518,6 +559,27 @@ ROUTES REPEAT · WORK DUPLICATES</span>
   </div>
 </section>
 
+<!-- ============ PROLOGUE · S02b comms check ============ -->
+<section id="s02b" class="scene" data-scene="pin" data-slate="Comms check" aria-label="Comms check — the net locks">
+  <div class="stage">
+    <div class="net" aria-hidden="true">
+      <p class="ln" style="--at:.08"><span>ENG-1 · SYSTEMS</span><b>COPY</b><span class="wave"></span></p>
+      <p class="ln" style="--at:.22"><span>ENG-2 · ROUTES</span><b>COPY</b><span class="wave"></span></p>
+      <p class="ln" style="--at:.36"><span>ENG-3 · EVIDENCE</span><b>COPY</b><span class="wave"></span></p>
+      <p class="ln" style="--at:.50"><span>OVERWATCH · CLOCK</span><b>SYNC 02:09</b><span class="wave"></span></p>
+      <p class="ln" style="--at:.62"><span>RULE OF ENGAGEMENT · ENTROPY ONLY</span><b>ACK ×3</b><span class="wave"></span></p>
+      <span class="lock"><span class="L en">NET LOCKED · EVERY VOICE ANSWERS</span><span class="L ar">الشبكة مُقفلة · كل صوت يُجيب</span></span>
+    </div>
+    <div class="vig"></div>
+    <div class="cap" style="--a:.3;--b:.95">
+      <div class="kick"><span class="L en">Prologue · Comms</span><span class="L ar">التمهيد · الاتصالات</span></div>
+      <h3><span class="L en">No one moves until every voice answers</span><span class="L ar">لا أحد يتحرّك حتى يُجيب كلّ صوت</span></h3>
+      <p><span class="L en">Three specialists, one clock, one rule of engagement — acknowledged three times before a single tool leaves its case. Discipline is the first system deployed.</span>
+         <span class="L ar">ثلاثة اختصاصيين، وساعةٌ واحدة، وقاعدةُ اشتباكٍ واحدة — تُقَرّ ثلاث مرات قبل أن تغادر أداةٌ واحدة حقيبتها. الانضباط هو أول منظومةٍ تُنشر.</span></p>
+    </div>
+  </div>
+</section>
+
 <div class="act">
   <div>
     <div class="no"><span class="L en">Act I · 02:14</span><span class="L ar">الفصل الأول · ٠٢:١٤</span></div>
@@ -527,7 +589,7 @@ ROUTES REPEAT · WORK DUPLICATES</span>
   </div>
 </div>
 <!-- ============ MAP · S03 signature: phosphor reveal ============ -->
-<section id="s03" class="scene" data-scene="pin" aria-label="Night vision reveal — the failure route draws itself">
+<section id="s03" class="scene" data-scene="pin" data-slate="NVG · the failure loop" aria-label="Night vision reveal — the failure route draws itself">
   <div class="stage">
     <div class="hand walk">
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -640,7 +702,7 @@ ROUTES REPEAT · WORK DUPLICATES</span>
   </div>
 </section>
 <!-- ============ MAP · S04 top-down plot ============ -->
-<section id="s04" class="scene" data-scene="pin" aria-label="Top-down route plot — loop isolated, bypass proposed">
+<section id="s04" class="scene" data-scene="pin" data-slate="Top-down plot" aria-label="Top-down route plot — loop isolated, bypass proposed">
   <div class="stage">
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <!-- chalk city blocks, top-down -->
@@ -714,7 +776,7 @@ ROUTES REPEAT · WORK DUPLICATES</span>
 </div>
 
 <!-- ============ BUILD · S05 field case ============ -->
-<section id="s05" class="scene" data-scene="pin" aria-label="Field case opens under raking work light">
+<section id="s05" class="scene" data-scene="pin" data-slate="Field case" aria-label="Field case opens under raking work light">
   <div class="stage">
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <!-- raking work light -->
@@ -782,7 +844,7 @@ ROUTES REPEAT · WORK DUPLICATES</span>
   </div>
 </section>
 <!-- ============ BUILD · S06 assembly ============ -->
-<section id="s06" class="scene" data-scene="pin" aria-label="Forward system assembles — trunk line, twelve anchors, test pulse">
+<section id="s06" class="scene" data-scene="pin" data-slate="Assembly" aria-label="Forward system assembles — trunk line, twelve anchors, test pulse">
   <div class="stage">
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <rect x="0" y="620" width="1300" height="140" fill="#101214"/>
@@ -853,7 +915,7 @@ ROUTES REPEAT · WORK DUPLICATES</span>
 </section>
 
 <!-- ============ BUILD · S07 forward-base wide ============ -->
-<section id="s07" class="scene" data-scene="pin" aria-label="Forward base wide — dust settles, numbers hold">
+<section id="s07" class="scene" data-scene="pin" data-slate="Forward base" aria-label="Forward base wide — dust settles, numbers hold">
   <div class="stage">
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <rect x="0" y="580" width="1300" height="180" fill="#0E1011"/>
@@ -911,7 +973,7 @@ ROUTES REPEAT · WORK DUPLICATES</span>
   </div>
 </div>
 <!-- ============ GATE · S08 bunker amber wakes ============ -->
-<section id="s08" class="scene" data-scene="pin" aria-label="Bunker authorization — two credentials, no automatic release">
+<section id="s08" class="scene" data-scene="pin" data-slate="Two credentials" aria-label="Bunker authorization — two credentials, no automatic release">
   <div class="stage">
     <div class="amberkey" aria-hidden="true"></div>
     <svg id="gate-svg" viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -978,7 +1040,7 @@ STATE: <b>PENDING · AMBER</b></span>
 </section>
 
 <!-- ============ GATE · S09 synchronized release ============ -->
-<section id="s09" class="scene" data-scene="pin" aria-label="Synchronized turn — state changes amber to cleared green">
+<section id="s09" class="scene" data-scene="pin" data-slate="Synchronized release" aria-label="Synchronized turn — state changes amber to cleared green">
   <div class="stage">
     <div class="amberkey" aria-hidden="true"></div>
     <div class="clearkey" aria-hidden="true"></div>
@@ -1044,7 +1106,7 @@ STATE: <b>PENDING · AMBER</b></span>
   </div>
 </div>
 <!-- ============ PROVE · S10 before/after wipe ============ -->
-<section id="s10" class="scene" data-scene="pin" aria-label="Stabilized aerial comparison — stalled grid against working grid">
+<section id="s10" class="scene" data-scene="pin" data-slate="Before / after" aria-label="Stabilized aerial comparison — stalled grid against working grid">
   <div class="stage">
     <div class="frame" aria-hidden="true">
       <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice">
@@ -1083,7 +1145,7 @@ STATE: <b>PENDING · AMBER</b></span>
 </section>
 
 <!-- ============ PROVE · S11 after-action wall ============ -->
-<section id="s11" class="scene" data-scene="pin" aria-label="After-action wall — exactly what changed">
+<section id="s11" class="scene" data-scene="pin" data-slate="After-action wall" aria-label="After-action wall — exactly what changed">
   <div class="stage">
     <div class="vig"></div>
     <div class="wall">
@@ -1141,7 +1203,7 @@ STATE: <b>PENDING · AMBER</b></span>
   </div>
 </div>
 <!-- ============ FINALE · S12 dawn ============ -->
-<section id="s12" class="scene" data-scene="pin" aria-label="Dawn extraction over a working grid">
+<section id="s12" class="scene" data-scene="pin" data-slate="Dawn extraction" aria-label="Dawn extraction over a working grid">
   <div class="stage">
     <div class="sky" aria-hidden="true"></div>
     <svg viewBox="0 0 1300 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -1180,6 +1242,27 @@ STATE: <b>PENDING · AMBER</b></span>
     </div>
   </div>
 </section>
+<!-- ============ END CREDITS ============ -->
+<section class="scene credits" data-scene="pin" data-slate="End credits" style="height:320vh" aria-label="End credits">
+  <div class="stage">
+    <div class="roll">
+      <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <h3><span class="L en">Operation Clockwork</span><span class="L ar">عملية عقارب الساعة</span></h3>
+      <dl class="duo">
+        <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live — SVG city builder + 4 canvases, no footage</span><span class="L ar">حيًّا — باني مدينة SVG وأربع لوحات، بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+        <dt><span class="L en">Rules of engagement</span><span class="L ar">قواعد الاشتباك</span></dt><dd><span class="L en">Adversary: entropy · shots fired: 0</span><span class="L ar">الخصم: الفوضى · الطلقات: صفر</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+      </dl>
+      <p class="fine"><span class="L en">A brand-inspired, nonviolent study; no game assets, no affiliation with any studio. The two-person turn is the point: no machine releases itself — here or in the real systems.</span><span class="L ar">دراسة مستلهَمة لاعنفية؛ لا أصول ألعاب ولا ارتباط بأي استوديو. الإدارة الثنائية هي الفكرة: لا آلة تُطلق نفسها بنفسها — هنا أو في الأنظمة الحقيقية.</span></p>
+      <p><a href="./" style="color:var(--amber)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+    </div>
+    <div class="vig" aria-hidden="true"></div>
+  </div>
+</section>
 </main>
 
 <footer class="disclosure">
@@ -1195,7 +1278,7 @@ STATE: <b>PENDING · AMBER</b></span>
   </p>
 </footer>
 
-<script src="cinema.js"></script>
+<script src="cinema.js?v=3"></script>
 <script>
 (() => {
   'use strict';

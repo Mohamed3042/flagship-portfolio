@@ -6,7 +6,7 @@
 <title>THE ALBUM · الألبوم — Spotify Pulse | Mohamed Mahmoud</title>
 <meta name="description" content="THE ALBUM — a scroll-cinema motion study in the language of music culture: one pulse finds a groove, project tracks cut a visual mixtape, a hand rides the master fader to unity. Drawn entirely in code.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23191414'/><path d='M10 34h11l5-13 8 26 6-19 4 6h10' fill='none' stroke='%231ED760' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>">
-<link rel="stylesheet" href="./cinema.css">
+<link rel="stylesheet" href="./cinema.css?v=3">
 <style>
 /* ================= THE ALBUM — world sheet ================= */
 :root{
@@ -93,6 +93,12 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   letter-spacing:.3em;text-transform:uppercase}
 .lane-tags i{font-style:normal;padding:8px 12px;border:1px solid color-mix(in srgb,var(--w-ink) 22%,transparent);
   border-radius:999px;background:color-mix(in srgb,var(--w-bg) 60%,transparent)}
+
+/* ---------- 04b · the groove canyon (flythrough) ---------- */
+.sc-canyon{--k:var(--or)}
+.sc-canyon .horizon{position:absolute;left:0;right:0;top:50%;height:2px;z-index:2;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--w-accent) 55%,transparent) 50%,transparent);
+  opacity:clamp(0,calc(var(--p,0)*3),0.8)}
 
 /* ---------- track scenes (black + two accents + white) ---------- */
 .track .caption .kick{--k:var(--a1)}
@@ -301,7 +307,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
 }
 </style>
 </head>
-<body>
+<body data-film="ALB · REEL 01" data-runtime="560" data-ticks data-letterbox>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <filter id="tooth"><feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="2" seed="7" stitchTiles="stitch"/>
@@ -324,8 +330,22 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 <main>
 
+  <!-- 00 · STUDIO IDENT -->
+  <section class="scene ident" data-scene="pin" data-slate="Studio ident" style="--h:200vh" aria-label="Studio ident">
+    <div class="stage">
+      <div class="beam" aria-hidden="true"></div>
+      <div class="card">
+        <div class="mark" aria-hidden="true"><i></i></div>
+        <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+        <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+        <p class="film-title"><span class="L en">The Album</span><span class="L ar">الألبوم</span></p>
+      </div>
+      <div class="iris" aria-hidden="true"></div>
+    </div>
+  </section>
+
   <!-- 01 · PROLOGUE — silence has a line -->
-  <section class="scene sc-pro" data-scene="pin" style="--h:270vh" aria-label="Prologue — silence has a line">
+  <section class="scene sc-pro" data-scene="pin" style="--h:270vh" data-slate="Silence has a line" aria-label="Prologue — silence has a line">
     <div class="stage">
       <canvas class="film" id="cv-pulse" aria-hidden="true"></canvas>
       <div class="title-card">
@@ -349,7 +369,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 02 · needle down -->
-  <section class="scene sc-needle" data-scene="pin" style="--h:240vh" aria-label="Needle down">
+  <section class="scene sc-needle" data-scene="pin" style="--h:240vh" data-slate="Needle down" aria-label="Needle down">
     <div class="stage">
       <div class="frame">
         <svg viewBox="0 0 1000 760" role="img" aria-label="A vinyl groove and a tonearm descending to contact">
@@ -408,7 +428,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 03 · MAP — quantize -->
-  <section class="scene sc-noise" data-scene="pin" style="--h:250vh" aria-label="Map — noise quantizes to the beat">
+  <section class="scene sc-noise" data-scene="pin" style="--h:250vh" data-slate="Quantize" aria-label="Map — noise quantizes to the beat">
     <div class="stage">
       <canvas class="film" id="cv-noise" aria-hidden="true"></canvas>
       <div class="tex tex--tooth"></div>
@@ -427,7 +447,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 04 · MAP — lanes -->
-  <section class="scene sc-lanes" data-scene="pin" style="--h:240vh" aria-label="Map — three lanes separate">
+  <section class="scene sc-lanes" data-scene="pin" style="--h:240vh" data-slate="Three lanes" aria-label="Map — three lanes separate">
     <div class="stage">
       <div class="frame">
         <svg viewBox="0 0 1200 600" role="img" aria-label="Three tangled waveforms separating into bass, mid and high lanes">
@@ -461,6 +481,26 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     </div>
   </section>
 
+<!-- 04b · MAP — the groove canyon -->
+  <section class="scene sc-canyon" data-scene="pin" data-slate="The groove canyon" style="--h:270vh" aria-label="Map — flying down the groove">
+    <div class="stage">
+      <canvas class="film" id="cv-canyon" aria-hidden="true"></canvas>
+      <div class="horizon" aria-hidden="true"></div>
+      <div class="meter-chip" aria-label="Bars travelled">
+        <b data-counter data-from="0" data-to="16">0</b>
+        <span><span class="L en">bars · one take</span><span class="L ar">مازورة · لقطة واحدة</span></span>
+      </div>
+      <div class="tex tex--half" style="--hc:rgba(30,215,96,.05)"></div>
+      <div class="vig"></div>
+      <div class="caption">
+        <div class="kick"><span class="L en">Map · The canyon</span><span class="L ar">الخريطة · الوادي</span></div>
+        <h2><span class="L en">Fly down the groove</span><span class="L ar">حلِّق في الأخدود</span></h2>
+        <p><span class="L en">The camera drops between the two waveform walls and rides the record inward — sixteen bars in one unbroken take, a green marker on every downbeat.</span>
+           <span class="L ar">تهبط الكاميرا بين جداري الموجة وتركب الأسطوانة نحو الداخل — ست عشرة مازورة في لقطة واحدة متصلة، وعلامة خضراء على كل نبضة أولى.</span></p>
+      </div>
+    </div>
+  </section>
+
   <!-- ACT II -->
   <section class="act" style="--k:var(--pk)">
     <div>
@@ -472,7 +512,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 05 · TRACK 01 — consent downbeat -->
-  <section class="scene track sc-t1" data-scene="pin" style="--h:260vh" aria-label="Track 01 — Consent Downbeat">
+  <section class="scene track sc-t1" data-scene="pin" style="--h:260vh" data-slate="T01 · Consent downbeat" aria-label="Track 01 — Consent Downbeat">
     <div class="stage">
       <div class="tabs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="tno" aria-hidden="true">01</div>
@@ -512,7 +552,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 06 · TRACK 02 — delete is a word -->
-  <section class="scene track sc-t2" data-scene="pin" style="--h:260vh" aria-label="Track 02 — Delete Is a Word">
+  <section class="scene track sc-t2" data-scene="pin" style="--h:260vh" data-slate="T02 · Delete is a word" aria-label="Track 02 — Delete Is a Word">
     <div class="stage">
       <div class="tapeline" aria-hidden="true"></div>
       <div class="tno" aria-hidden="true">02</div>
@@ -545,7 +585,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 07 · TRACK 03 — sixty hertz -->
-  <section class="scene track sc-t3" data-scene="pin" style="--h:260vh" aria-label="Track 03 — Sixty Hertz">
+  <section class="scene track sc-t3" data-scene="pin" style="--h:260vh" data-slate="T03 · Sixty hertz" aria-label="Track 03 — Sixty Hertz">
     <div class="stage">
       <div class="tno" aria-hidden="true">03</div>
       <div class="frame">
@@ -577,7 +617,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 08 · green spine -->
-  <section class="scene sc-spine" data-scene="pin" style="--h:200vh" aria-label="Green spine — accents drain, identity resets">
+  <section class="scene sc-spine" data-scene="pin" style="--h:200vh" data-slate="Side B · green spine" aria-label="Green spine — accents drain, identity resets">
     <div class="stage">
       <div class="sheets" aria-hidden="true">
         <i style="--c:#FF4FA3;--d:0"></i><i style="--c:#7B5CFF;--d:.12"></i><i style="--c:#FF7A18;--d:.24"></i>
@@ -606,7 +646,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 09 · GATE — ride the master fader (signature) -->
-  <section class="scene sc-gate" data-scene="pin" style="--h:360vh" aria-label="Gate — ride the master fader to unity">
+  <section class="scene sc-gate" data-scene="pin" style="--h:360vh" data-slate="The master fader" aria-label="Gate — ride the master fader to unity">
     <div class="stage">
       <div class="desk" aria-hidden="true"></div>
       <div class="db" aria-label="Master level rising to zero decibels">
@@ -658,7 +698,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 10 · PROVE — data-lit chorus -->
-  <section class="scene sc-chorus" data-scene="pin" style="--h:310vh" aria-label="Prove — thirty tracks return as a data-lit chorus">
+  <section class="scene sc-chorus" data-scene="pin" style="--h:310vh" data-slate="Data-lit chorus" aria-label="Prove — thirty tracks return as a data-lit chorus">
     <div class="stage">
       <div class="totals">
         <div><b data-counter data-from="0" data-to="30">0</b>
@@ -724,7 +764,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 11 · FINALE — silence, reconstructed -->
-  <section class="scene sc-fin" data-scene="pin" style="--h:270vh" aria-label="Finale — the groove narrows to a heartbeat">
+  <section class="scene sc-fin" data-scene="pin" style="--h:270vh" data-slate="Needle up" aria-label="Finale — the groove narrows to a heartbeat">
     <div class="stage">
       <canvas class="film" id="cv-fin" aria-hidden="true"></canvas>
       <div class="peel" aria-hidden="true">
@@ -747,6 +787,28 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     </div>
   </section>
 
+<!-- END CREDITS -->
+  <section class="scene credits" data-scene="pin" data-slate="End credits" style="--h:320vh" aria-label="End credits">
+    <div class="stage">
+      <div class="roll">
+        <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+        <h3><span class="L en">The Album</span><span class="L ar">الألبوم</span></h3>
+        <dl class="duo">
+          <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+          <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+          <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live — 4 canvases + CSS, no footage, no audio</span><span class="L ar">حيًّا — ٤ لوحات وCSS، بلا مشهدٍ مصوَّر وبلا صوت</span></dd>
+          <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+          <dt><span class="L en">Tempo</span><span class="L ar">الإيقاع</span></dt><dd><span class="L en">84 BPM — one tempo, every layer</span><span class="L ar">٨٤ نبضة في الدقيقة — إيقاعٌ واحد لكل الطبقات</span></dd>
+          <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+        </dl>
+        <p class="fine"><span class="L en">A brand-inspired study; no official artwork, interface or audio is reproduced. The send fader stays welded at zero auto-sends — here and in the real systems.</span><span class="L ar">دراسة مستلهَمة؛ لم يُعَد إنتاج أي عملٍ فني أو واجهة أو صوت رسمي. ويبقى مِقبض الإرسال مُثبَّتًا عند صفر إرسالٍ تلقائي — هنا وفي الأنظمة الحقيقية.</span></p>
+        <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+        <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+      </div>
+      <div class="vig" aria-hidden="true"></div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="disclosure">
@@ -762,7 +824,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </p>
 </footer>
 
-<script src="./cinema.js"></script>
+<script src="./cinema.js?v=3"></script>
 <script>
 (() => {
   'use strict';
@@ -894,6 +956,47 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     ctx.globalAlpha = lineA;
     drawPulseLine(ctx, w, h, cy, head, amp, t);
     ctx.globalAlpha = 1;
+  });
+
+  /* 04b — the groove canyon: mirrored waveform walls, dolly-in */
+  add('cv-canyon', (u, t, p) => {
+    const { ctx, w, h } = u;
+    ctx.clearRect(0, 0, w, h);
+    const cy = h / 2;
+    const travel = p * 16;                       /* bars travelled */
+    const layers = [[.28, .5, 'rgba(255,79,163,'], [.5, .75, 'rgba(123,92,255,'], [.8, 1, 'rgba(255,255,255,']];
+    for (const [depth, gain, col] of layers) {
+      const seg = 26 * DPR / depth;
+      const off = (travel * 260 * DPR * depth) % seg;
+      const amp = h * .3 * depth * gain;
+      ctx.lineWidth = (depth >= .8 ? 2.4 : 1.5) * DPR;
+      ctx.strokeStyle = col + (0.16 + .5 * depth) + ')';
+      for (const dir of [-1, 1]) {
+        ctx.beginPath();
+        for (let x = -seg; x <= w + seg; x += seg) {
+          const i = Math.round((x + off) / seg) + (travel * 260 * DPR * depth - off) / seg;
+          const hgt = (0.25 + .75 * rnd(i * (dir === 1 ? 1.7 : 2.3))) * amp;
+          const y = cy + dir * (h * .08 / depth + hgt);
+          const xx = x - off;
+          x === -seg ? ctx.moveTo(xx, y) : ctx.lineTo(xx, y);
+        }
+        ctx.stroke();
+      }
+    }
+    /* downbeat pillars: one per bar, marching toward the lens */
+    const barGap = w / 4;
+    const shift = (travel % 1) * barGap;
+    for (let b = 0; b < 6; b++) {
+      const x = w - b * barGap + shift - barGap;
+      if (x < -20 || x > w + 20) continue;
+      const near = x / w;
+      ctx.strokeStyle = 'rgba(30,215,96,' + (0.18 + .5 * near) + ')';
+      ctx.lineWidth = (1 + 2 * near) * DPR;
+      ctx.shadowColor = 'rgba(30,215,96,.7)'; ctx.shadowBlur = 10 * near * DPR;
+      ctx.beginPath(); ctx.moveTo(x, cy - h * .3 * near - h * .06);
+      ctx.lineTo(x, cy + h * .3 * near + h * .06); ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
   });
 
   units.forEach(size);

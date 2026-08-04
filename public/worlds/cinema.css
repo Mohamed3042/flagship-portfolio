@@ -124,3 +124,179 @@ body {
   .caption { transition: none; opacity: 1; transform: none; }
   * { animation-duration: .001s !important; animation-iteration-count: 1 !important; }
 }
+
+/* ════════════════════════════════════════════════════════════════════
+   CINEMA v3 — the Second Edition layer.
+   Everything below is opt-in per page (body[data-*] hooks + pattern
+   classes). Pages that ignore it render exactly as before.
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ---------- letterbox mattes (body[data-letterbox]) ----------
+   Engine injects .matte.top/.matte.btm; html.boxed while a scene is
+   live. Bars close like a projector matte, retract over act dividers. */
+.matte {
+  position: fixed; left: 0; right: 0; height: clamp(22px, 4.2vh, 46px); z-index: 45;
+  background: #020202; pointer-events: none;
+  transform: scaleY(0);
+  transition: transform .9s cubic-bezier(.22, .8, .18, 1);
+}
+.matte.top { top: 0; transform-origin: 50% 0; box-shadow: 0 1px 0 rgba(255,255,255,.04); }
+.matte.btm { bottom: 0; transform-origin: 50% 100%; box-shadow: 0 -1px 0 rgba(255,255,255,.04); }
+html.boxed .matte { transform: scaleY(1); }
+@media (max-width: 640px) { .matte { height: 16px; } }
+
+/* ---------- film-slate HUD (body[data-film]) ----------
+   Engine injects: reel id · scene counter · running timecode. */
+.hud {
+  position: fixed; z-index: 56; bottom: 12px; inset-inline-end: 14px;
+  display: flex; gap: 10px; align-items: baseline; pointer-events: none;
+  font: 600 10.5px/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: .16em; color: color-mix(in srgb, var(--w-ink, #fff) 72%, transparent);
+  background: color-mix(in srgb, var(--w-bg, #000) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--w-ink, #fff) 16%, transparent);
+  padding: 8px 11px; border-radius: 999px;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font-variant-numeric: tabular-nums;
+}
+.hud .reel { color: var(--w-accent, #d9a83e); }
+.hud .tc { min-width: 8.5ch; text-align: end; }
+@media (max-width: 640px) { .hud { bottom: 8px; inset-inline-end: 8px; padding: 6px 9px; gap: 7px; } }
+
+/* ---------- scene ticks rail (body[data-ticks]) ----------
+   One tick per scene, engine keeps .on current; click = jump. */
+.ticks {
+  position: fixed; z-index: 56; top: 50%; inset-inline-end: 10px;
+  translate: 0 -50%; display: grid; gap: 7px; padding: 6px 4px;
+}
+.ticks button {
+  width: 16px; height: 3px; padding: 0; border: 0; cursor: pointer; border-radius: 2px;
+  background: color-mix(in srgb, var(--w-ink, #fff) 26%, transparent);
+  transition: background .3s;
+}
+.ticks button:hover { background: color-mix(in srgb, var(--w-ink, #fff) 60%, transparent); }
+.ticks button.on { width: 26px; background: var(--w-accent, #d9a83e); }
+@media (max-width: 900px) { .ticks { display: none; } }
+
+/* ---------- studio ident (scene pattern .ident) ----------
+   the studio mark · iris-in monogram · beam sweep. All --p driven. */
+.ident .stage { display: grid; place-items: center; background: #050506; }
+/* .scene.ident/.scene.credits selectors out-rank world-level
+   `.scene .stage > *` position overrides (e.g. THE ANTHOLOGY) */
+.scene.ident .iris, .scene.ident .beam,
+.scene.credits .roll, .scene.credits .vig { position: absolute; }
+.ident .iris {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background:
+    radial-gradient(closest-side at 50% 50%,
+      transparent calc(var(--p, 0) * 130%),
+      rgba(2,2,3,.985) calc(var(--p, 0) * 130% + 2%));
+}
+.ident .beam {
+  position: absolute; inset: -20%; pointer-events: none; opacity: calc(.5 - var(--p, 0) * .3);
+  background: conic-gradient(from calc(var(--p, 0) * 140deg) at 50% 46%,
+    transparent 0 7deg, color-mix(in srgb, var(--w-accent, #d9a83e) 16%, transparent) 10deg 13deg,
+    transparent 16deg 174deg, color-mix(in srgb, var(--w-accent, #d9a83e) 10%, transparent) 178deg 181deg,
+    transparent 184deg);
+  filter: blur(6px);
+}
+.ident .mark {
+  position: relative; width: clamp(84px, 12vw, 128px); aspect-ratio: 1;
+  border-radius: 50%; display: grid; place-items: center;
+  border: 2px solid color-mix(in srgb, var(--w-accent, #d9a83e) 72%, transparent);
+  box-shadow: 0 0 60px color-mix(in srgb, var(--w-accent, #d9a83e) 22%, transparent),
+              inset 0 0 26px rgba(0,0,0,.5);
+  transform: scale(calc(.86 + min(1, var(--p, 0) * 2) * .14));
+}
+.ident .mark::before {
+  content: ""; position: absolute; inset: 14%; border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--w-accent, #d9a83e) 34%, transparent);
+}
+.ident .mark i {
+  width: 46%; height: 2px; background: var(--w-accent, #d9a83e);
+  box-shadow: 0 8px 0 var(--w-accent, #d9a83e), 0 -8px 0 var(--w-accent, #d9a83e);
+}
+.ident .word {
+  margin-top: 26px; text-align: center;
+  font: 700 clamp(15px, 2.1vw, 22px)/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: calc(.55em - min(1, var(--p, 0) * 1.6) * .22em);
+  text-transform: uppercase; color: var(--w-ink, #fff);
+  text-indent: calc(.55em - min(1, var(--p, 0) * 1.6) * .22em); /* optical center vs tracking */
+}
+.ident .pres {
+  margin-top: 12px; text-align: center;
+  font: 600 11px/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: .34em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--w-ink, #fff) 55%, transparent);
+  opacity: calc(min(1, max(0, var(--p, 0) - .28) * 3));
+}
+.ident .film-title {
+  margin-top: 30px; text-align: center;
+  font: 700 clamp(20px, 3.4vw, 38px)/1.15 var(--w-display, inherit);
+  color: var(--w-accent, #d9a83e);
+  opacity: calc(min(1, max(0, var(--p, 0) - .45) * 2.6));
+  transform: translateY(calc((1 - min(1, max(0, var(--p, 0) - .45) * 2.6)) * 18px));
+  text-wrap: balance;
+}
+.ident .card { position: relative; z-index: 3; padding: 0 6vw; display: grid; justify-items: center; }
+
+/* ---------- end credits (scene pattern .credits) ----------
+   A --p-scrubbed roll: names rise through the frame like a reel tail. */
+.credits .stage { background: #040405; overflow: hidden; }
+.credits .roll {
+  position: absolute; left: 50%; top: 0; translate: -50% 0; width: min(680px, 88vw);
+  text-align: center; padding: 4vh 0 30vh;
+  transform: translateY(calc(100vh - var(--p, 0) * (100% + 118vh)));
+  will-change: transform;
+}
+.credits .roll .sec {
+  margin-top: 7.5vh;
+  font: 700 11px/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  letter-spacing: .3em; text-transform: uppercase; color: var(--w-accent, #d9a83e);
+}
+.credits .roll h3 {
+  margin-top: 12px;
+  font: 700 clamp(19px, 2.6vw, 28px)/1.25 var(--w-display, inherit); color: var(--w-ink, #fff);
+}
+.credits .roll .duo {
+  margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px;
+  font: 400 13.5px/1.7 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+}
+.credits .roll .duo dt { text-align: end; color: color-mix(in srgb, var(--w-ink, #fff) 55%, transparent); }
+.credits .roll .duo dd { text-align: start; margin: 0; color: var(--w-ink, #fff); }
+.credits .roll .fine {
+  margin-top: 6.5vh; font: 400 12px/1.8 var(--w-ui, ui-sans-serif, system-ui, sans-serif);
+  color: color-mix(in srgb, var(--w-ink, #fff) 52%, transparent); max-width: 54ch; margin-inline: auto;
+}
+.credits .roll .fin {
+  margin-top: 9vh; display: inline-grid; place-items: center; width: 74px; aspect-ratio: 1;
+  border-radius: 50%; border: 1.5px solid color-mix(in srgb, var(--w-accent, #d9a83e) 66%, transparent);
+  font: 700 12px/1 var(--w-ui, ui-sans-serif, system-ui, sans-serif); letter-spacing: .22em;
+  color: var(--w-accent, #d9a83e);
+}
+.credits .vig {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(#040405 0%, transparent 22% 78%, #040405 100%);
+}
+
+/* ---------- film grain (shared, was disney-only) ---------- */
+.grain {
+  position: fixed; inset: -2%; z-index: 40; pointer-events: none;
+  opacity: var(--grain, .4); mix-blend-mode: overlay;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer></filter><rect width="240" height="240" filter="url(%23n)"/></svg>');
+}
+
+/* ---------- colour grade + vignette (shared) ----------
+   Per-world tint pair: set --grade-a (shadow wash) / --grade-b (light
+   wash) on :root. Sits under the grain, over the sets. */
+.grade {
+  position: fixed; inset: 0; z-index: 39; pointer-events: none;
+  background:
+    radial-gradient(120% 100% at 50% 46%, transparent 58%, var(--grade-a, rgba(0,0,0,.5)) 125%),
+    linear-gradient(180deg, var(--grade-b, transparent) 0%, transparent 30% 70%, var(--grade-a, rgba(0,0,0,.35)) 100%);
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matte { transition: none; }
+  .credits .roll { transform: translateY(calc(30vh - var(--p, 0) * (100% - 20vh))); }
+}

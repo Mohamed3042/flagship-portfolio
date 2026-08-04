@@ -6,7 +6,7 @@
 <title>THE ANTHOLOGY — A Prestige Anthology Motion Study · Mohamed Mahmoud</title>
 <meta name="description" content="THE ANTHOLOGY — a scroll-cinema film. A red filament wakes a projection room, thirty project worlds arrive as genre portals, everything freezes at one human release decision, and evidence lights an empty theater. An original, AI-assisted motion study.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20fill='%23030303'/%3E%3Crect%20x='9'%20y='30'%20width='46'%20height='3'%20rx='1.5'%20fill='%23D81F2A'/%3E%3Crect%20x='26'%20y='29'%20width='12'%20height='5'%20rx='2.5'%20fill='%23F2B8BC'%20opacity='.55'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="./cinema.css">
+<link rel="stylesheet" href="./cinema.css?v=3">
 <style>
 /* ============ THE ANTHOLOGY — world palette ============ */
 :root{
@@ -181,6 +181,23 @@ body{overflow-x:clip}
 .geo-run{animation:geo-push 6.5s cubic-bezier(.3,0,.2,1) infinite;transform-origin:50% 50%}
 @keyframes geo-push{from{transform:scale(1);opacity:0}12%{opacity:.9}to{transform:scale(.16);opacity:0}}
 
+/* ============ S8b · BUILD — the carousel (tracking shot) ============ */
+#s-rail{height:300vh}
+.railroom{position:absolute;inset:0;overflow:hidden;display:grid;align-items:center}
+.railtrack{position:relative;display:flex;gap:clamp(16px,3vw,34px);padding-inline:8vw;
+  transform:translateX(calc(var(--p,0)*(-1)*var(--dirflip,1)*52%));will-change:transform}
+.lang-ar .railtrack{transform:translateX(calc(var(--p,0)*52%))}
+.mini{position:relative;flex:0 0 auto;width:clamp(150px,17vw,230px);aspect-ratio:2/3;
+  border:1px solid rgba(238,233,223,.16);background:#050504;overflow:hidden}
+.mini::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(3,3,3,.8))}
+.mini .tag{position:absolute;z-index:2;left:10px;bottom:8px;
+  font:600 9px/1.4 var(--w-ui);letter-spacing:.22em;text-transform:uppercase;color:var(--w-dim)}
+.mini.m-red i{position:absolute;left:50%;top:12%;bottom:12%;width:2px;translate:-50% 0;
+  background:linear-gradient(#D81F2A,rgba(216,31,42,.3));box-shadow:0 0 14px rgba(216,31,42,.5)}
+.railfloor{position:absolute;left:0;right:0;bottom:16%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(238,233,223,.14),transparent)}
+
 /* ============ S9 · THE GATE — global freeze ============ */
 #s-gate{height:540vh}
 #s-gate .stage{background:#020202}
@@ -316,7 +333,7 @@ html.frozen #grain{opacity:.035}
 }
 </style>
 </head>
-<body>
+<body data-film="ANT · REEL 01" data-runtime="580" data-ticks data-letterbox>
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 <header class="chrome">
   <nav class="grp" aria-label="Site">
@@ -333,8 +350,22 @@ html.frozen #grain{opacity:.035}
 <canvas id="grain" aria-hidden="true"></canvas>
 
 <main>
+<!-- ============ S0 · STUDIO IDENT ============ -->
+<section class="scene ident" data-scene="pin" data-slate="Studio ident" style="height:200vh" aria-label="Studio ident">
+  <div class="stage">
+    <div class="beam" aria-hidden="true"></div>
+    <div class="card">
+      <div class="mark" aria-hidden="true"><i></i></div>
+      <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <p class="pres"><span class="L en">presents · a scroll-cinema production</span><span class="L ar">يقدّم · إنتاج سينما التمرير</span></p>
+      <p class="film-title"><span class="L en">The Anthology</span><span class="L ar">الأنطولوجيا</span></p>
+    </div>
+    <div class="iris" aria-hidden="true"></div>
+  </div>
+</section>
+
 <!-- ============ S1 · PROLOGUE — A Red Hairline ============ -->
-<section class="scene" data-scene="pin" id="s-fil" aria-label="Prologue — a red filament wakes">
+<section class="scene" data-scene="pin" id="s-fil" data-slate="A red hairline" aria-label="Prologue — a red filament wakes">
   <div class="stage">
     <canvas class="cv" data-paint="filament" aria-hidden="true"></canvas>
     <div class="fil-title">
@@ -347,7 +378,7 @@ html.frozen #grain{opacity:.035}
 </section>
 
 <!-- ============ S2 · PROLOGUE — Beam Begins ============ -->
-<section class="scene" data-scene="pin" id="s-beam" aria-label="Prologue — the beam carves a screening hall">
+<section class="scene" data-scene="pin" id="s-beam" data-slate="The beam begins" aria-label="Prologue — the beam carves a screening hall">
   <div class="stage">
     <canvas class="cv" data-paint="beam" aria-hidden="true"></canvas>
     <div class="screenplane" aria-hidden="true"><i></i></div>
@@ -370,7 +401,7 @@ html.frozen #grain{opacity:.035}
 </div>
 
 <!-- ============ S3 · MAP — Unlabelled Archive ============ -->
-<section class="scene" data-scene="pin" id="s-arch" aria-label="Map — the unlabelled archive">
+<section class="scene" data-scene="pin" id="s-arch" data-slate="Unlabelled archive" aria-label="Map — the unlabelled archive">
   <div class="stage">
     <div class="shelfwall" aria-hidden="true">
       <div class="shelf arch-depth1"><i class="sweep"></i><i class="patt"></i></div>
@@ -387,7 +418,7 @@ html.frozen #grain{opacity:.035}
 </section>
 
 <!-- ============ S4 · MAP — Thirty Dark Slots ============ -->
-<section class="scene" data-scene="pin" id="s-slots" aria-label="Map — thirty dark slots">
+<section class="scene" data-scene="pin" id="s-slots" data-slate="Thirty dark slots" aria-label="Map — thirty dark slots">
   <div class="stage">
     <div class="slotroom">
       <div class="slotfield" aria-hidden="true">
@@ -413,7 +444,7 @@ html.frozen #grain{opacity:.035}
 </div>
 
 <!-- ============ S5 · BUILD — noir portal ============ -->
-<section class="scene pscene" data-scene="pin" id="s-noir" aria-label="Build — a film-noir portal">
+<section class="scene pscene" data-scene="pin" id="s-noir" data-slate="Portal 01 · Noir" aria-label="Build — a film-noir portal">
   <div class="stage">
     <div class="pwrap">
       <div class="portal" aria-hidden="true">
@@ -432,7 +463,7 @@ html.frozen #grain{opacity:.035}
 </section>
 
 <!-- ============ S6 · BUILD — thriller fog portal ============ -->
-<section class="scene pscene" data-scene="pin" id="s-fog" aria-label="Build — a forensic thriller portal">
+<section class="scene pscene" data-scene="pin" id="s-fog" data-slate="Portal 02 · Fog" aria-label="Build — a forensic thriller portal">
   <div class="stage">
     <div class="pwrap">
       <div class="portal" aria-hidden="true">
@@ -451,7 +482,7 @@ html.frozen #grain{opacity:.035}
 </section>
 
 <!-- ============ S7 · BUILD — dramedy portal ============ -->
-<section class="scene pscene" data-scene="pin" id="s-warm" aria-label="Build — a warm ensemble dramedy portal">
+<section class="scene pscene" data-scene="pin" id="s-warm" data-slate="Portal 03 · Warm" aria-label="Build — a warm ensemble dramedy portal">
   <div class="stage">
     <div class="pwrap">
       <div class="portal" aria-hidden="true">
@@ -470,7 +501,7 @@ html.frozen #grain{opacity:.035}
 </section>
 
 <!-- ============ S8 · BUILD — control-room geometry portal ============ -->
-<section class="scene pscene" data-scene="pin" id="s-geo" aria-label="Build — a control-room procedural portal">
+<section class="scene pscene" data-scene="pin" id="s-geo" data-slate="Portal 04 · Geometry" aria-label="Build — a control-room procedural portal">
   <div class="stage">
     <div class="pwrap">
       <div class="portal" aria-hidden="true">
@@ -498,6 +529,30 @@ html.frozen #grain{opacity:.035}
   </div>
 </section>
 
+<!-- ============ S8b · BUILD — the carousel (tracking shot) ============ -->
+<section class="scene" data-scene="pin" id="s-rail" data-slate="The carousel" aria-label="Build — the anthology rail">
+  <div class="stage">
+    <div class="railroom" aria-hidden="true">
+      <div class="railtrack">
+        <div class="mini"><div class="noir-fill"></div><span class="tag">01 · NOIR</span></div>
+        <div class="mini"><div class="fog-fill"></div><span class="tag">02 · FOG</span></div>
+        <div class="mini"><div class="warm-fill"><i></i><i></i><i></i></div><span class="tag">03 · WARM</span></div>
+        <div class="mini"><svg class="geo-svg" viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice"><rect x="10" y="15" width="180" height="270" stroke-opacity=".5"/><rect x="44" y="66" width="112" height="168" stroke-opacity=".3"/><rect x="70" y="105" width="60" height="90" stroke-opacity=".2"/></svg><span class="tag">04 · GEO</span></div>
+        <div class="mini m-red"><i></i><span class="tag">05 · SIGNAL</span></div>
+        <div class="mini"><div class="noir-fill" style="filter:hue-rotate(160deg) saturate(.6)"></div><span class="tag">06 · ARCHIVE</span></div>
+        <div class="mini"><div class="fog-fill" style="filter:hue-rotate(-90deg)"></div><span class="tag">07 · RELAY</span></div>
+        <div class="mini"><div class="warm-fill" style="filter:hue-rotate(-24deg)"><i></i><i></i></div><span class="tag">08 · FLOOR</span></div>
+      </div>
+      <div class="railfloor"></div>
+    </div>
+    <div class="caption pcap" style="--k:clamp(0,calc((var(--p,0) - .4)*4),1)">
+      <p class="kick"><span class="L en">Build · Tracking shot</span><span class="L ar">البناء · لقطة تتبّع</span></p>
+      <h2><span class="L en">One lateral move reads the whole shelf.</span><span class="L ar">حركةٌ جانبية واحدة تقرأ الرفَّ كلَّه.</span></h2>
+      <p><span class="L en">The camera dollies past the anthology on one straight rail — every doorway keeps its own weather, and the red signal sits in its place among them, never louder than its neighbours.</span><span class="L ar">تنزلق الكاميرا أمام الأنطولوجيا على قضيبٍ مستقيمٍ واحد — كلُّ بابٍ يحتفظ بطقسه، ويجلس الأحمرُ في مكانه بينها دون أن يعلوَ على جيرانه.</span></p>
+    </div>
+  </div>
+</section>
+
 <div class="act">
   <div>
     <p class="no"><span class="L en">Act III · The Gate</span><span class="L ar">الفصل الثالث · البوّابة</span></p>
@@ -507,7 +562,7 @@ html.frozen #grain{opacity:.035}
 </div>
 
 <!-- ============ S9 · THE GATE — global freeze, one breathing light ============ -->
-<section class="scene" data-scene="pin" id="s-gate" aria-label="The Gate — everything freezes for one human release decision">
+<section class="scene" data-scene="pin" id="s-gate" data-slate="The gate · freeze" aria-label="The Gate — everything freezes for one human release decision">
   <div class="stage">
     <div class="g-echo" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <div class="g-seat" aria-hidden="true"><b></b><u></u></div>
@@ -553,7 +608,7 @@ html.frozen #grain{opacity:.035}
 </div>
 
 <!-- ============ S10 · PROVE — tungsten evidence theater ============ -->
-<section class="scene" data-scene="pin" id="s-prove" aria-label="Proof — an evidence-lit theater">
+<section class="scene" data-scene="pin" id="s-prove" data-slate="Evidence theater" aria-label="Proof — an evidence-lit theater">
   <div class="stage">
     <div class="thtr" aria-hidden="true">
       <div class="thtr-screen"></div>
@@ -588,7 +643,7 @@ html.frozen #grain{opacity:.035}
 </div>
 
 <!-- ============ S11 · FINALE — credits as light / spectrum collapse ============ -->
-<section class="scene" data-scene="pin" id="s-credits" aria-label="Finale — abstract credits and spectrum collapse">
+<section class="scene" data-scene="pin" id="s-credits" data-slate="Spectrum collapse" aria-label="Finale — abstract credits and spectrum collapse">
   <div class="stage">
     <div class="cr-lights" aria-hidden="true">
       <i style="--o:0"></i><i style="--o:14"></i><i style="--o:27"></i><i style="--o:39"></i>
@@ -612,13 +667,34 @@ html.frozen #grain{opacity:.035}
 </section>
 
 <!-- ============ S12 · FINALE — Exact Filament ============ -->
-<section class="scene" data-scene="pin" id="s-loop" aria-label="Finale — the exact filament returns">
+<section class="scene" data-scene="pin" id="s-loop" data-slate="The exact filament" aria-label="Finale — the exact filament returns">
   <div class="stage">
     <canvas class="cv" data-paint="loopfil" aria-hidden="true"></canvas>
     <div class="loop-note">
       <p><span class="L en">The reel cools to a hairline. Where this film ends is exactly where it began.</span><span class="L ar">تبرُد البكرة حتى تصير خيطاً شعريّاً؛ فحيث ينتهي هذا الفيلم يبدأ من جديدٍ تماماً.</span></p>
       <p class="fr"><span class="L en">Frame 001 returns</span><span class="L ar">تعود اللقطة ٠٠١</span></p>
     </div>
+  </div>
+</section>
+<!-- ============ END CREDITS ============ -->
+<section class="scene credits" data-scene="pin" data-slate="End credits" style="height:320vh" aria-label="End credits">
+  <div class="stage">
+    <div class="roll">
+      <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
+      <h3><span class="L en">The Anthology</span><span class="L ar">الأنطولوجيا</span></h3>
+      <dl class="duo">
+        <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live — 4 canvases + CSS, no footage</span><span class="L ar">حيًّا — ٤ لوحات وCSS، بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+        <dt><span class="L en">House rule</span><span class="L ar">قاعدة الدار</span></dt><dd><span class="L en">Nothing ships while it moves</span><span class="L ar">لا يصدر عملٌ وهو يتحرّك</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+      </dl>
+      <p class="fine"><span class="L en">A brand-inspired study; not affiliated with any streaming service. The freeze is the thesis: thirty worlds hold their pose until one human hand releases them.</span><span class="L ar">دراسة مستلهَمة؛ لا صلة لها بأي خدمة بث. التجميدُ هو الأطروحة: ثلاثون عالمًا تثبت على هيئتها حتى تُطلقها يدُ إنسانٍ واحدة.</span></p>
+      <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
+      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+    </div>
+    <div class="vig" aria-hidden="true"></div>
   </div>
 </section>
 </main>
@@ -631,7 +707,7 @@ html.frozen #grain{opacity:.035}
   </p>
 </footer>
 
-<script src="./cinema.js"></script>
+<script src="./cinema.js?v=3"></script>
 <script>
 /* film.js — THE ANTHOLOGY: canvas painters + the GATE freeze controller */
 (() => {
