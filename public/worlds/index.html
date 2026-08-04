@@ -6,7 +6,7 @@
 <title>The Worlds — Eight Scroll-Cinema Films · Mohamed Mahmoud</title>
 <meta name="description" content="Eight brand-inspired scroll-cinema films, second edition: one cut from 32 real WAN 2.7 shots, seven rendered live in code — with studio idents, end credits and a projection-booth manifest. An original portfolio production.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%23090B10"/><circle cx="16" cy="16" r="9" fill="none" stroke="%23D9A83E" stroke-width="2"/><circle cx="16" cy="16" r="3" fill="%23D9A83E"/></svg>'>
-<link rel="stylesheet" href="cinema.css?v=3.1">
+<link rel="stylesheet" href="cinema.css?v=4">
 <style>
   :root{
     --w-bg:#090B10; --w-ink:#EFEAE0; --w-accent:#D9A83E; --w-dim:#8b8fa0;
@@ -195,9 +195,9 @@
 
 <main class="lobby">
   <header class="lede">
-    <p class="marquee"><span class="bulbs" aria-hidden="true"></span><b><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></b><s><span class="L en">Second edition · Tonight's programme</span><span class="L ar">الإصدار الثاني · برنامج الليلة</span></s></p>
+    <p class="marquee"><span class="bulbs" aria-hidden="true"></span><b><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></b><s><span class="L en">Third edition · Now ray-traced</span><span class="L ar">الإصدار الثالث · بتتبُّع الأشعة الآن</span></s></p>
     <h1><span class="L en">The Worlds</span><span class="L ar">العوالم</span></h1>
-    <p><span class="L en">Eight brand-inspired motion studies from one production bible — now in their second edition, each with a studio ident, a running slate, projector mattes and end credits. The Disney Storybook world is cut from 32 real WAN 2.7 shots, generated end-frame-to-first-frame; the other seven are rendered live in code — no footage, same laws. Scroll each one like a film.</span><span class="L ar">ثماني دراساتٍ حركية مستلهَمة من كتاب إنتاجٍ واحد — في إصدارها الثاني الآن، لكلٍّ منها شعارُ استوديو افتتاحي، ولوحُ تصويرٍ جارٍ، وسِتارا عرضٍ سينمائيان، وشارةُ نهاية. عالم «الحكاية المصوَّرة» مقصوصٌ من ٣٢ لقطة حقيقية من WAN 2.7 وُلِّدت إطارَ نهايةٍ إلى إطارِ بداية؛ والعوالم السبعة الأخرى تُعرَض حيًّا بالشيفرة — بلا مشهدٍ مصوَّر وبالقوانين نفسها. مرِّر في كلٍّ منها كأنه فيلم.</span></p>
+    <p><span class="L en">Eight brand-inspired motion studies from one production bible — now in their third edition, each opening on a ray-traced Cycles plate rendered on my own GPU, then carrying a studio ident, a running slate, projector mattes and end credits. The Disney Storybook world is cut from 32 real WAN 2.7 shots, generated end-frame-to-first-frame; the other seven are rendered live in code — no footage, same laws. Scroll each one like a film.</span><span class="L ar">ثماني دراساتٍ حركية مستلهَمة من كتاب إنتاجٍ واحد — في إصدارها الثاني الآن، لكلٍّ منها شعارُ استوديو افتتاحي، ولوحُ تصويرٍ جارٍ، وسِتارا عرضٍ سينمائيان، وشارةُ نهاية. عالم «الحكاية المصوَّرة» مقصوصٌ من ٣٢ لقطة حقيقية من WAN 2.7 وُلِّدت إطارَ نهايةٍ إلى إطارِ بداية؛ والعوالم السبعة الأخرى تُعرَض حيًّا بالشيفرة — بلا مشهدٍ مصوَّر وبالقوانين نفسها. مرِّر في كلٍّ منها كأنه فيلم.</span></p>
     <p class="note"><span class="L en">Original studies · no third-party marks · all real numbers live on the story pages · ← → step scenes inside any film</span><span class="L ar">دراسات أصلية · بلا علامات لأطراف ثالثة · الأرقام الحقيقية كلها في صفحات القصص · السهمان ← و→ ينقلان بين المشاهد داخل أي فيلم</span></p>
   </header>
 
@@ -310,6 +310,8 @@
       <p><span class="L en">Everything on this floor is projected by one hand-written engine. No frameworks, no libraries, no build step — the same discipline as the systems on the portfolio: small, inspectable, and honest about what it does.</span><span class="L ar">كل ما في هذا الطابق يُعرَض بمحرّكٍ واحد مكتوبٍ يدويًّا. لا أُطر عمل، ولا مكتبات، ولا خطوة بناء — الانضباط نفسه الذي بُنيت به الأنظمة في الموقع: صغيرٌ، قابلٌ للفحص، وصادقٌ فيما يفعل.</span></p>
     </header>
     <div class="manifest">
+      <div class="line"><p class="k"><span class="L en">The rendered plates</span><span class="L ar">اللقطات المُصيَّرة</span></p>
+        <p class="v"><span class="L en">Every world now opens on a real <b>Cycles</b> path-traced shot — modelled geometry, physically-based materials, real depth of field and real volumetric light, rendered on an <b>RTX 5070 Ti</b> over OptiX and scrubbed frame-by-frame by your scroll. Eight shots, <b>48</b> frames each, <b>40</b> samples with OptiX denoise.</span><span class="L ar">يبدأ كل عالم الآن بلقطةٍ حقيقية مُصيَّرة بتتبُّع المسار في <b>Cycles</b> — هندسةٌ منمذجة، ومواد فيزيائية، وعمقُ ميدانٍ حقيقي، وضوءٌ حجميٌّ حقيقي، صُيِّرت على بطاقة <b>RTX 5070 Ti</b> عبر OptiX وتُمرَّر إطارًا إطارًا بتمريرك. ثماني لقطات، <b>٤٨</b> إطارًا لكلٍّ منها، <b>٤٠</b> عيّنة مع مزيل ضجيج OptiX.</span></p></div>
       <div class="line"><p class="k"><span class="L en">The engine</span><span class="L ar">المحرّك</span></p>
         <p class="v"><span class="L en"><b>cinema.js</b> — one passive scroll listener + requestAnimationFrame; CSS custom properties are the animation bus. Scenes get a <b>--p</b> progress value from 0 to 1 and the stylesheets do the cinematography.</span><span class="L ar"><b>cinema.js</b> — مستمعُ تمريرٍ سلبيّ واحد مع requestAnimationFrame؛ ومتغيّرات CSS هي ناقلُ الحركة. يتلقّى كل مشهدٍ قيمةَ تقدّمٍ <b>--p</b> من صفر إلى واحد، وتتولى أوراقُ الأنماط التصويرَ السينمائي.</span></p></div>
       <div class="line"><p class="k"><span class="L en">The footage</span><span class="L ar">المشاهد المصوَّرة</span></p>
@@ -380,6 +382,6 @@
   <span class="L ar">دراسات حركية أصلية مستلهَمة لملف أعمال محمد محمود، منتَجة من «كتاب إنتاج WAN». لا انتساب لأي شركةٍ وردت كمصدر إلهام ولا تأييد منها؛ ولا تظهر علاماتٌ أو شخصياتٌ أو نسخُ منتجاتٍ لأطراف ثالثة. الأرقام الحقيقية للمشاريع في <a href="../">صفحات قصص الموقع</a>.</span></p>
 </footer>
 
-<script src="cinema.js?v=3.1"></script>
+<script src="cinema.js?v=4"></script>
 </body>
 </html>

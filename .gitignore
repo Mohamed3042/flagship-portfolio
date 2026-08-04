@@ -19,3 +19,8 @@ Thumbs.db
 
 # local browser-test captures
 artifacts/
+
+# Blender render intermediates — the encoded plates in public/worlds/render are
+# the shipped artifact; the PNG sequences behind them are reproducible
+render/out/
+render/*.log

@@ -290,3 +290,91 @@
   addEventListener('resize', onScroll, { passive: true });
   boothPaint();
 })();
+
+/* ════════════════════════════════════════════════════════════════════
+   CINEMA v4 — rendered plates.
+   A scene carrying data-plate="render/<world>.mp4" gets a <video> whose
+   currentTime is driven by that scene's --p. The file is a Cycles path
+   trace of real geometry, so the visitor is scrubbing an actual camera
+   move rather than watching a loop. Poster-first, lazy, reduced-motion
+   safe, and it honours the ?solo=N&p=X QA harness so a still can be
+   captured headlessly.
+   ════════════════════════════════════════════════════════════════════ */
+(() => {
+  'use strict';
+  const scenes = [...document.querySelectorAll('[data-plate]')];
+  if (!scenes.length) return;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const q = new URLSearchParams(location.search);
+  const solo = q.has('solo');
+
+  const wired = scenes.map(scene => {
+    const wrap = document.createElement('div');
+    wrap.className = 'plate';
+    wrap.setAttribute('aria-hidden', 'true');
+    const v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'none';
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+    if (scene.dataset.platePoster) v.poster = scene.dataset.platePoster;
+    wrap.appendChild(v);
+    const stage = scene.querySelector('.stage') || scene;
+    stage.insertBefore(wrap, stage.firstChild);
+    return { scene, v, armed: false, ready: false, want: -1, seeking: false };
+  });
+
+  const seek = (u, t) => {
+    if (!u.ready) return;
+    if (u.seeking) { u.want = t; return; }
+    if (Math.abs(u.v.currentTime - t) < 0.012) return;
+    u.seeking = true;
+    try { u.v.currentTime = t; } catch { u.seeking = false; }
+  };
+  const at = (u) => {
+    const p = parseFloat(u.scene.style.getPropertyValue('--p') || '0');
+    const d = u.v.duration;
+    return d ? Math.min(d - 0.04, Math.max(0, p * d)) : 0;
+  };
+  const arm = (u) => {
+    if (u.armed) return;
+    u.armed = true;
+    u.v.addEventListener('loadedmetadata', () => {
+      u.ready = true;
+      u.scene.classList.add('plate-ready');
+      seek(u, reduced ? 0.001 : at(u));
+    }, { once: true });
+    u.v.addEventListener('seeked', () => {
+      u.seeking = false;
+      if (u.want >= 0) { const t = u.want; u.want = -1; seek(u, t); }
+    });
+    u.v.src = u.scene.dataset.plate;
+    u.v.load();
+  };
+
+  if (solo) {                       // QA harness: mount and hold one frame
+    wired.forEach(u => {
+      arm(u);
+      const hold = () => u.ready ? seek(u, at(u)) : setTimeout(hold, 60);
+      hold();
+    });
+    return;
+  }
+
+  const paint = () => {
+    const vh = innerHeight;
+    for (const u of wired) {
+      const r = u.scene.getBoundingClientRect();
+      if (r.bottom < -vh * 1.5 || r.top > vh * 2.5) continue;
+      arm(u);
+      if (u.ready && !reduced) seek(u, at(u));
+    }
+  };
+  let tick = false;
+  const onScroll = () => {
+    if (tick) return;
+    tick = true;
+    requestAnimationFrame(() => { tick = false; paint(); });
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll, { passive: true });
+  paint();
+})();

@@ -6,7 +6,7 @@
 <title>THE ALBUM · الألبوم — Spotify Pulse | Mohamed Mahmoud</title>
 <meta name="description" content="THE ALBUM — a scroll-cinema motion study in the language of music culture: one pulse finds a groove, project tracks cut a visual mixtape, a hand rides the master fader to unity. Drawn entirely in code.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23191414'/><path d='M10 34h11l5-13 8 26 6-19 4 6h10' fill='none' stroke='%231ED760' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>">
-<link rel="stylesheet" href="./cinema.css?v=3.1">
+<link rel="stylesheet" href="./cinema.css?v=4">
 <style>
 /* ================= THE ALBUM — world sheet ================= */
 :root{
@@ -343,6 +343,23 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
       <div class="iris" aria-hidden="true"></div>
     </div>
   </section>
+
+<!-- ============ THE RENDERED PLATE (Cycles) ============ -->
+<section class="scene rplate" data-scene="pin" data-slate="The rendered plate" style="height:300vh"
+         data-plate="render/spotify.mp4" data-plate-poster="render/spotify.jpg"
+         aria-label="Rendered plate">
+  <div class="stage">
+    <p class="rtag"><span class="L en">72 FRAMES · CYCLES OPTIX · 1280×640
+46→84 MM · f/2.0 · REAL GROOVE</span><span class="L ar">٧٢ إطارًا · CYCLES OPTIX · ١٢٨٠×٦٤٠
+٤٦→٨٤ مم · f/2.0 · أخدودٌ حقيقي</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · Cycles path trace</span><span class="L ar">عرضٌ مُصيَّر · تتبُّع مسار Cycles</span></p>
+      <h2><span class="L en">The needle comes down</span><span class="L ar">الإبرة تنزل</span></h2>
+      <p><span class="L en">The groove is real relief — a sine of the radius driving the surface normal — so the specular sweep across the record is doing exactly what light does on vinyl. Contact lands on the downbeat.</span><span class="L ar">الأخدود نتوءٌ حقيقي — جيبُ نصف القطر يقود مُتَّجهَ السطح — فيفعل الوميضُ المنساب على الأسطوانة ما يفعله الضوء على الفينيل تمامًا. ويقع التلامس على النبضة الأولى.</span></p>
+    </div>
+  </div>
+</section>
+
 
   <!-- 01 · PROLOGUE — silence has a line -->
   <section class="scene sc-pro" data-scene="pin" style="--h:270vh" data-slate="Silence has a line" aria-label="Prologue — silence has a line">
@@ -824,7 +841,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </p>
 </footer>
 
-<script src="./cinema.js?v=3.1"></script>
+<script src="./cinema.js?v=4"></script>
 <script>
 (() => {
   'use strict';

@@ -235,6 +235,40 @@ The Cosmic Keynote is **live on both hosts** (`npm run build` green, 22 pages). 
    `WORLDS-ITERATION-LOG.md`; plan in `PLAN.md`. Deployed to `gh-pages` (worktree publish),
    verified live at https://mohamed3042.github.io/flagship-portfolio/worlds/ .
 
+10. **Worlds Second Edition (2026-08-04).** `cinema.js`/`cinema.css` gained an opt-in
+    projection-booth layer (`body[data-film|data-ticks|data-letterbox]`): slate HUD with
+    scene counter + running timecode, scene tick rail, projector mattes, RTL-aware
+    arrow-key scene stepping. New shared scene patterns `.ident` (studio ident) and
+    `.credits` (end-credits roll), plus shared `.grain`/`.grade`. Every film got an ident,
+    an end-credits roll, slate labels and one new bespoke set piece (disney vault ·
+    astronomy spectrograph · razer bootlog · apple caliper · netflix carousel · spotify
+    groove canyon · samsung eight folds · cod comms check). Lobby gained a marquee, living
+    posters, per-film spec rows, a projection-booth manifest and a public filmography.
+    **Brand correction: the studio mark is Mohamed Mahmoud — Medmac is a former employer
+    and must never brand personal work.** Gotcha found the hard way: a pinned scene with
+    no travel never scrubs (`span = height - vh = 0`), so `.scene.ident`/`.scene.credits`
+    ship default runways in `cinema.css`.
+
+11. **Worlds Third Edition — rendered plates (2026-08-04).** `render/` holds a headless
+    Blender pipeline: `harness.py` (GPU/OptiX setup, AgX, physical camera with DOF,
+    area/spot/point rigs, world sky + star field + participating medium, PBR helpers with
+    roughness break-up and brushed-metal normals, bevel/subsurf, compositor grade) and one
+    `w_<world>.py` scene script per world. `batch.sh` renders every world and encodes each
+    to `public/worlds/render/<world>.mp4` (h264, `-g 4` dense keyframes so scroll-seeking
+    lands frame-accurately) plus a poster jpg. `cinema.js` v4 adds the **plate** module:
+    a scene carrying `data-plate="render/<world>.mp4"` mounts a lazy `<video>` whose
+    `currentTime` tracks that scene's `--p` — the visitor scrubs a real ray-traced camera
+    move. Solo-aware, so `?solo=N&p=X` can capture a still headlessly.
+    Blender 5.x API gotchas encoded in the harness: the compositor is a **node group** on
+    the scene (`scene.compositing_node_group`) and its source must be a Render Layers node
+    or Blender skips the render entirely (black frames at ~1 s); most compositor options
+    are now **menu sockets** taking UI labels (`'Bloom'`, not `'BLOOM'` — the default
+    `Streaks` stamps a fake anamorphic cross on every highlight); node-socket keyframes
+    live on the owning node tree, not the socket; and a bright emissive star world lights
+    the set like a dome light unless gated behind `Is Camera Ray`.
+    Budget: 48 frames, 960×480, 40 samples + OptiX denoise ≈ 10 min/world on an RTX 5070
+    Ti; all eight plates together weigh well under 2 MB.
+
 ## 9. Companion docs
 - `NOTES.md` — the engineering rationale & "what I improved over the original".
 - `README.md` — quickstart (preview/build/deploy).
