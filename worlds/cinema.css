@@ -297,6 +297,12 @@ html.boxed .matte { transform: scaleY(1); }
   filter: brightness(1.06) saturate(1.04);
 }
 .scene.plate-ready .plate video { opacity: 1; }
+/* poster stands in if the plate itself cannot load */
+.scene.plate-missing .plate {
+  background: radial-gradient(120% 100% at 50% 40%,
+    color-mix(in srgb, var(--w-accent, #d9a83e) 9%, transparent), transparent 68%),
+    linear-gradient(180deg, #0a0b0e, #050506);
+}
 .scene.rplate .stage::after {
   content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background:
