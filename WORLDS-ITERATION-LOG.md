@@ -35,6 +35,40 @@ in a real browser.
   crease); netflix portal fog, spotify track duotone, cod inventory, razer room wave all
   screenshot-verified, consoles clean.
 
+## Pass 4 — Spotify becomes a rendered film (2026-08-06)
+
+The four 960×480 scroll plates were a turntable on an infinite floor. Replaced by
+**"The Album" — 15 shots, 1,860 frames, 2.39:1 at 1280×536**, one built set (Room 6:
+concrete shell, slat ceiling, parquet, bench, deck, monitors, 19" rack) at TRUE METRIC
+SCALE, plus a separate 46 m groove-canyon set for shot 9. `render/film_spotify.py` +
+`render/filmlib.py`; `render/film_batch.sh` renders, encodes and cuts the master.
+Every shot is woven into the page beside the code scene that makes the same claim, and
+`data-theater` plays the master cut.
+
+Six things that were wrong and what they cost:
+
+- **The tonearm's stylus rendered below the record.** Pivot height was guessed. It has to be
+  SOLVED: the tip hangs 33.9 mm under the bearing, so the bearing sits at deck + 64.1 mm.
+  Two macro shots were framed on the arm *post* before this surfaced.
+- **f/1.8 on a 135 mm macro is 0.4 mm of depth of field.** At real scale the lens is real:
+  nothing can be sharp at portrait stops. The macro shots are f/6.3–f/11 now. Note that
+  Cycles' `aperture_fstop` changes blur ONLY — it does not meter — so stopping down must
+  NOT be paid back with exposure. Doing that once cost every macro two stops.
+- **A 1.6 m softbox hung over a glossy disc is not a room light, it is a reflection the size
+  of the record.** The key moved off the mirror axis; the deck gets a spot instead.
+- **A 42 W raking light 5 cm above the bench renders the bench white**, not the grooves.
+  Raking macro light has to be a tight spot, aimed.
+- **`harness.grade()` rebuilds the compositor node group on every call**, so a second pass
+  silently discards the first. Dispersion had to move INTO `grade()`.
+- **The compositor vignette stamps a hard-edged oval** across the frame (its Blur size does
+  not take on 5.x). Removed; lens shading comes from the rig.
+
+Cost, measured not guessed: 101 s/frame at 1440 with 4K textures and a world volume →
+**21 s/frame** at 1280 with the same sets mirrored to 2048. Box projection samples every
+map three times per shading event, so a 4K map that a 1280-wide delivery cannot resolve is
+paid for on every ray. `HAZE`, `BOUNCE`, `MB` and `RES_X` are env knobs on the film script
+so the next person can measure instead of guess.
+
 ## Pass 3 — live (after gh-pages deploy)
 - Recorded in DEPLOY-STATUS notes / final session report: full scroll-through of lobby +
   all 8 films on https://mohamed3042.github.io/flagship-portfolio/worlds/ in a real

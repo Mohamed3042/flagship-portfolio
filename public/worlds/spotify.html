@@ -322,6 +322,7 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </nav>
   <div class="grp">
+    <button type="button" data-theater="spotify/spotify-film.mp4"><span class="L en">▸ The film · 1:17</span><span class="L ar">▸ الفيلم · ١:١٧</span></button>
     <button type="button" data-lang-toggle aria-pressed="false">
       <span class="L en">عربي</span><span class="L ar">English</span>
     </button>
@@ -345,13 +346,37 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
 <!-- ============ THE RENDERED PLATE (Cycles) ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 1 · the plate" style="height:300vh"
-         data-plate="render/spotify-s1.mp4" data-plate-poster="render/spotify-s1.jpg"
+
+<section class="scene rplate" data-scene="pin" data-slate="Shot 1 · the room before anything" style="height:300vh"
+         data-plate="spotify/shots/s01-line.mp4" data-plate-poster="spotify/shots/s01-line.jpg"
+         aria-label="Rendered plate — Shot 1 · the room before anything">
+  <div class="stage">
+    <p class="rtag"><span class="L en">120 FRAMES · 1280×536 · 32→38 MM · f/2.8</span><span class="L ar">١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ٣٢→٣٨ مم · f/2.8</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · before the first bar</span><span class="L ar">مُصيَّر · قبل أول مازورة</span></p>
+      <h2><span class="L en">The room, and one green line</span><span class="L ar">الغرفة، وخطٌّ أخضر واحد</span></h2>
+      <p><span class="L en">Room 6 at night: concrete, a slat ceiling, a bench, a deck. Nothing is playing yet. The line on the wall is what silence looks like when something is still listening.</span><span class="L ar">الغرفة ٦ ليلًا: خرسانة، وسقفٌ من الشرائح، وطاولة، وجهاز. لا شيء يُعزف بعد. والخطُّ على الجدار هو شكلُ الصمت حين يبقى أحدٌ منصتًا.</span></p>
+    </div>
+  </div>
+</section>
+
+<section class="scene rplate" data-scene="pin" data-slate="Shot 3 · the room states itself" style="height:300vh"
+         data-plate="spotify/shots/s03-room.mp4" data-plate-poster="spotify/shots/s03-room.jpg"
+         aria-label="Rendered plate — Shot 3 · the room states itself">
+  <div class="stage">
+    <p class="rtag"><span class="L en">144 FRAMES · 1280×536 · 24→28 MM · f/5.6</span><span class="L ar">١٤٤ إطارًا · ١٢٨٠×٥٣٦ · ٢٤→٢٨ مم · f/5.6</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · 24 mm, the whole set</span><span class="L ar">مُصيَّر · ٢٤ مم، المشهد كاملًا</span></p>
+      <h2><span class="L en">Everything here is a real object</span><span class="L ar">كلُّ شيءٍ هنا جسمٌ حقيقي</span></h2>
+      <p><span class="L en">Bench, monitors, rack, stool, cable — geometry at true metric scale, lit by six practicals and photographed on a physical camera, so the shadows are solved rather than drawn.</span><span class="L ar">الطاولة، والسمّاعات، والرفّ، والمقعد، والكابل — هندسةٌ بمقياسٍ متريٍّ حقيقي، يضيئها ستةُ مصادر وتصوّرها كاميرا فيزيائية، فالظلالُ محسوبةٌ لا مرسومة.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene rplate" data-scene="pin" data-slate="Shot 4 · the needle comes down" style="height:300vh"
+         data-plate="spotify/shots/s04-arm.mp4" data-plate-poster="spotify/shots/s04-arm.jpg"
          aria-label="Rendered plate">
   <div class="stage">
-    <p class="rtag"><span class="L en">48 FRAMES · CYCLES OPTIX · 960×480
-46→84 MM · f/2.0 · REAL GROOVE</span><span class="L ar">٤٨ إطارًا · CYCLES OPTIX · ٩٦٠×٤٨٠
-٤٦→٨٤ مم · f/2.0 · أخدودٌ حقيقي</span></p>
+    <p class="rtag"><span class="L en">108 FRAMES · 1280×536 · 65→85 MM · f/4</span><span class="L ar">١٠٨ إطارًا · ١٢٨٠×٥٣٦ · ٦٥→٨٥ مم · f/4</span></p>
     <div class="caption">
       <p class="kick"><span class="L en">Rendered · Cycles path trace</span><span class="L ar">عرضٌ مُصيَّر · تتبُّع مسار Cycles</span></p>
       <h2><span class="L en">The needle comes down</span><span class="L ar">الإبرة تنزل</span></h2>
@@ -390,7 +415,20 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 02 · needle down -->
-  <section class="scene sc-needle" data-scene="pin" style="--h:240vh" data-slate="Needle down" aria-label="Needle down">
+  
+<section class="scene rplate" data-scene="pin" data-slate="Shot 2 · one beat crosses" style="height:300vh"
+         data-plate="spotify/shots/s02-pulse.mp4" data-plate-poster="spotify/shots/s02-pulse.jpg"
+         aria-label="Rendered plate — Shot 2 · one beat crosses">
+  <div class="stage">
+    <p class="rtag"><span class="L en">96 FRAMES · 1280×536 · 85→105 MM · f/4</span><span class="L ar">٩٦ إطارًا · ١٢٨٠×٥٣٦ · ٨٥→١٠٥ مم · f/4</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · 105 mm on the wall</span><span class="L ar">مُصيَّر · ١٠٥ مم على الجدار</span></p>
+      <h2><span class="L en">One beat crosses the line</span><span class="L ar">نبضةٌ واحدة تعبر الخطّ</span></h2>
+      <p><span class="L en">The heartbeat is a moving emitter, not a texture: it lights the concrete it passes and goes dark again. Everything the wall does is the wall answering a light.</span><span class="L ar">النبضةُ باعثُ ضوءٍ متحرك لا نقشةٌ مرسومة: تُضيء الخرسانةَ التي تمرّ بها ثم تخبو. وكلُّ ما يفعله الجدارُ هو ردُّه على ضوء.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene sc-needle" data-scene="pin" style="--h:240vh" data-slate="Needle down" aria-label="Needle down">
     <div class="stage">
       <div class="frame">
         <svg viewBox="0 0 1000 760" role="img" aria-label="A vinyl groove and a tonearm descending to contact">
@@ -439,7 +477,20 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- ACT I -->
-  <section class="act" style="--k:var(--vi)">
+  
+<section class="scene rplate" data-scene="pin" data-slate="Shot 5 · contact at cartridge scale" style="height:300vh"
+         data-plate="spotify/shots/s05-needle.mp4" data-plate-poster="spotify/shots/s05-needle.jpg"
+         aria-label="Rendered plate — Shot 5 · contact at cartridge scale">
+  <div class="stage">
+    <p class="rtag"><span class="L en">120 FRAMES · 1280×536 · 90→125 MM · f/9</span><span class="L ar">١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ٩٠→١٢٥ مم · f/9</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · 125 mm at f/9</span><span class="L ar">مُصيَّر · ١٢٥ مم عند f/9</span></p>
+      <h2><span class="L en">Contact, at cartridge scale</span><span class="L ar">التلامس، بمقياس الحاملة</span></h2>
+      <p><span class="L en">The arm is solved, not posed: the bearing sits 33.9 mm above the playing surface because that is where a 0.238 m arm has to sit for the stylus to reach the groove at all.</span><span class="L ar">الذراعُ محسوبةٌ لا موضوعة: المحملُ يعلو سطحَ العزف ٣٣٫٩ مم، لأنّ ذراعًا طولها ٠٫٢٣٨ م لا تبلغ الأخدودَ إلا من هناك.</span></p>
+    </div>
+  </div>
+</section>
+<section class="act" style="--k:var(--vi)">
     <div>
       <div class="no"><span class="L en">Act I — Map</span><span class="L ar">الفصل الأول — الخريطة</span></div>
       <h2><span class="L en">Find the groove</span><span class="L ar">اعثر على الإيقاع</span></h2>
@@ -468,7 +519,20 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 04 · MAP — lanes -->
-  <section class="scene sc-lanes" data-scene="pin" style="--h:240vh" data-slate="Three lanes" aria-label="Map — three lanes separate">
+  
+<section class="scene rplate" data-scene="pin" data-slate="Shot 7 · the grid answers" style="height:300vh"
+         data-plate="spotify/shots/s07-quantize.mp4" data-plate-poster="spotify/shots/s07-quantize.jpg"
+         aria-label="Rendered plate — Shot 7 · the grid answers">
+  <div class="stage">
+    <p class="rtag"><span class="L en">132 FRAMES · 1280×536 · 50→70 MM · f/4</span><span class="L ar">١٣٢ إطارًا · ١٢٨٠×٥٣٦ · ٥٠→٧٠ مم · f/4</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · forty-six motes</span><span class="L ar">مُصيَّر · ستٌّ وأربعون ذرّة</span></p>
+      <h2><span class="L en">Noise auditions, the grid answers</span><span class="L ar">الضجيجُ يتقدّم، والشبكةُ تُجيب</span></h2>
+      <p><span class="L en">Scattered emitters drift over the platter until the beat lands, then take their places in a ring turning with the record. What resists the grid scales to nothing — on the downbeat, not near it.</span><span class="L ar">بواعثُ متناثرة تسبح فوق القرص حتى تحلَّ النبضة، فتأخذ مواضعها في حلقةٍ تدور مع الأسطوانة. وما يقاوم الشبكةَ يتلاشى — على النبضة تمامًا، لا قربها.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene sc-lanes" data-scene="pin" style="--h:240vh" data-slate="Three lanes" aria-label="Map — three lanes separate">
     <div class="stage">
       <div class="frame">
         <svg viewBox="0 0 1200 600" role="img" aria-label="Three tangled waveforms separating into bass, mid and high lanes">
@@ -503,7 +567,20 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
 <!-- 04b · MAP — the groove canyon -->
-  <section class="scene sc-canyon" data-scene="pin" data-slate="The groove canyon" style="--h:270vh" aria-label="Map — flying down the groove">
+  
+<section class="scene rplate" data-scene="pin" data-slate="Shot 8 · one line becomes three" style="height:300vh"
+         data-plate="spotify/shots/s08-lanes.mp4" data-plate-poster="spotify/shots/s08-lanes.jpg"
+         aria-label="Rendered plate — Shot 8 · one line becomes three">
+  <div class="stage">
+    <p class="rtag"><span class="L en">120 FRAMES · 1280×536 · 40→48 MM · f/4</span><span class="L ar">١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ٤٠→٤٨ مم · f/4</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · three channels</span><span class="L ar">مُصيَّر · ثلاث قنوات</span></p>
+      <h2><span class="L en">One line becomes three</span><span class="L ar">خطٌّ واحد يصير ثلاثة</span></h2>
+      <p><span class="L en">Bass, mids, highs: a single strip of light on the bench splits into three, and each one keeps its own lane and its own colour spill across the wood.</span><span class="L ar">الجهيرُ والوسطُ والحادّ: شريطُ ضوءٍ واحدٍ على الطاولة ينقسم ثلاثةً، ويحتفظ كلٌّ بمساره وبلونِ انسكابهِ على الخشب.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene sc-canyon" data-scene="pin" data-slate="The groove canyon" style="--h:270vh" aria-label="Map — flying down the groove">
     <div class="stage">
       <canvas class="film" id="cv-canyon" aria-hidden="true"></canvas>
       <div class="horizon" aria-hidden="true"></div>
@@ -525,11 +602,24 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   <!-- ACT II -->
 
 <!-- ============ RENDERED PLATE · Shot 2 · the groove ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 2 · the groove" style="height:300vh"
-         data-plate="render/spotify-s2.mp4" data-plate-poster="render/spotify-s2.jpg"
+
+<section class="scene rplate" data-scene="pin" data-slate="Shot 9 · inside the groove" style="height:300vh"
+         data-plate="spotify/shots/s09-canyon.mp4" data-plate-poster="spotify/shots/s09-canyon.jpg"
+         aria-label="Rendered plate — Shot 9 · inside the groove">
+  <div class="stage">
+    <p class="rtag"><span class="L en">168 FRAMES · 1280×536 · 30→38 MM · f/2.8</span><span class="L ar">١٦٨ إطارًا · ١٢٨٠×٥٣٦ · ٣٠→٣٨ مم · f/2.8</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · forty-six metres</span><span class="L ar">مُصيَّر · ستةٌ وأربعون مترًا</span></p>
+      <h2><span class="L en">Sixteen bars in one unbroken take</span><span class="L ar">ستَّ عشرة مازورةً في لقطةٍ واحدة</span></h2>
+      <p><span class="L en">The walls are not a picture of a waveform — they are the waveform, built vertex by vertex along the length so they modulate down the trench and stay flat up its height. A green marker fires on every downbeat as the lens passes it.</span><span class="L ar">الجدرانُ ليست صورةً لموجة — هي الموجةُ نفسها، مبنيّةً رأسًا رأسًا على امتداد الطول، فتتموّج في اتجاه المسير وتستوي في اتجاه الارتفاع. وعند كل نبضةٍ أولى تشتعل علامةٌ خضراء لحظةَ مرور العدسة.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene rplate" data-scene="pin" data-slate="Shot 6 · the groove" style="height:300vh"
+         data-plate="spotify/shots/s06-groove.mp4" data-plate-poster="spotify/shots/s06-groove.jpg"
          aria-label="Rendered plate 2">
   <div class="stage">
-    <p class="rtag"><span class="L en">SHOT 2 · f/1.8 · FOCUS 3.1→1.7 M</span><span class="L ar">اللقطة ٢ · f/1.8 · تركيز ٣٫١→١٫٧ م</span></p>
+    <p class="rtag"><span class="L en">120 FRAMES · 1280×536 · 100→135 MM · f/11</span><span class="L ar">١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ١٠٠→١٣٥ مم · f/11</span></p>
     <div class="caption">
       <p class="kick"><span class="L en">Shot 2 · 78→108 mm macro</span><span class="L ar">اللقطة ٢ · ماكرو ٧٨→١٠٨ مم</span></p>
       <h2><span class="L en">Close enough to see the relief</span><span class="L ar">قريبًا بما يكفي لرؤية النتوء</span></h2>
@@ -588,7 +678,20 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 06 · TRACK 02 — delete is a word -->
-  <section class="scene track sc-t2" data-scene="pin" style="--h:260vh" data-slate="T02 · Delete is a word" aria-label="Track 02 — Delete Is a Word">
+  
+<section class="scene rplate" data-scene="pin" data-slate="Shot 10 · Track 01 · the send fader" style="height:300vh"
+         data-plate="spotify/shots/s10-t01.mp4" data-plate-poster="spotify/shots/s10-t01.jpg"
+         aria-label="Rendered plate — Shot 10 · Track 01 · the send fader">
+  <div class="stage">
+    <p class="rtag"><span class="L en">108 FRAMES · 1280×536 · 85→110 MM · f/6.3</span><span class="L ar">١٠٨ إطارًا · ١٢٨٠×٥٣٦ · ٨٥→١١٠ مم · f/6.3</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · Track 01</span><span class="L ar">مُصيَّر · المقطع الأول</span></p>
+      <h2><span class="L en">Seven faders ride. The eighth does not.</span><span class="L ar">سبعةُ مقابضَ ترتفع. والثامنُ لا.</span></h2>
+      <p><span class="L en">The send fader is welded at zero and its lamp stays red for the whole shot. Nothing on this bench sends without a human, and the shot refuses to show it happening.</span><span class="L ar">مقبضُ الإرسال ملحومٌ عند الصفر، ومصباحه أحمرُ طوال اللقطة. لا شيءَ على هذه الطاولة يُرسِل بلا إنسان، واللقطةُ ترفض أن تُظهر عكسَ ذلك.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene track sc-t2" data-scene="pin" style="--h:260vh" data-slate="T02 · Delete is a word" aria-label="Track 02 — Delete Is a Word">
     <div class="stage">
       <div class="tapeline" aria-hidden="true"></div>
       <div class="tno" aria-hidden="true">02</div>
@@ -621,7 +724,20 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 07 · TRACK 03 — sixty hertz -->
-  <section class="scene track sc-t3" data-scene="pin" style="--h:260vh" data-slate="T03 · Sixty hertz" aria-label="Track 03 — Sixty Hertz">
+  
+<section class="scene rplate" data-scene="pin" data-slate="Shot 11 · Track 02 · the red gate" style="height:300vh"
+         data-plate="spotify/shots/s11-t02.mp4" data-plate-poster="spotify/shots/s11-t02.jpg"
+         aria-label="Rendered plate — Shot 11 · Track 02 · the red gate">
+  <div class="stage">
+    <p class="rtag"><span class="L en">108 FRAMES · 1280×536 · 85→112 MM · f/6.3</span><span class="L ar">١٠٨ إطارًا · ١٢٨٠×٥٣٦ · ٨٥→١١٢ مم · f/6.3</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · Track 02</span><span class="L ar">مُصيَّر · المقطع الثاني</span></p>
+      <h2><span class="L en">The red gate needs a hand</span><span class="L ar">البوابةُ الحمراء تنتظر يدًا</span></h2>
+      <p><span class="L en">One key travels three and a half millimetres. The gate brightens and holds amber — it never turns green on its own. Discovery is instant here; destruction waits for a typed word.</span><span class="L ar">مفتاحٌ واحد يهبط ثلاثةً ونصفَ مليمتر. تتوهّج البوابةُ وتثبت عند الكهرماني — ولا تصير خضراءَ من تلقاء نفسها. الاكتشافُ هنا فوريّ، أمّا الهدمُ فينتظر كلمةً تُكتب.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene track sc-t3" data-scene="pin" style="--h:260vh" data-slate="T03 · Sixty hertz" aria-label="Track 03 — Sixty Hertz">
     <div class="stage">
       <div class="tno" aria-hidden="true">03</div>
       <div class="frame">
@@ -653,7 +769,20 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   </section>
 
   <!-- 08 · green spine -->
-  <section class="scene sc-spine" data-scene="pin" style="--h:200vh" data-slate="Side B · green spine" aria-label="Green spine — accents drain, identity resets">
+  
+<section class="scene rplate" data-scene="pin" data-slate="Shot 12 · Track 03 · sixty hertz" style="height:300vh"
+         data-plate="spotify/shots/s12-t03.mp4" data-plate-poster="spotify/shots/s12-t03.jpg"
+         aria-label="Rendered plate — Shot 12 · Track 03 · sixty hertz">
+  <div class="stage">
+    <p class="rtag"><span class="L en">96 FRAMES · 1280×536 · 62→85 MM · f/4</span><span class="L ar">٩٦ إطارًا · ١٢٨٠×٥٣٦ · ٦٢→٨٥ مم · f/4</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · Track 03</span><span class="L ar">مُصيَّر · المقطع الثالث</span></p>
+      <h2><span class="L en">Sixty hertz, sampled at twenty-four</span><span class="L ar">ستون هرتزًا، مُلتقَطةً عند أربعةٍ وعشرين</span></h2>
+      <p><span class="L en">The rack meters step on a fixed 60 Hz clock while the camera runs at 24 fps, so what you see is the shimmer a real sampled meter gives — the beat between two clocks, not motion eased to look nice.</span><span class="L ar">مؤشراتُ الرفّ تخطو على ساعةٍ ثابتة عند ٦٠ هرتز والكاميرا تدور عند ٢٤ إطارًا، فما تراه هو ارتعاشُ مقياسٍ حقيقيٍّ مُلتقَط — الفرقُ بين ساعتين، لا حركةٌ مُنعّمة لتبدو جميلة.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene sc-spine" data-scene="pin" style="--h:200vh" data-slate="Side B · green spine" aria-label="Green spine — accents drain, identity resets">
     <div class="stage">
       <div class="sheets" aria-hidden="true">
         <i style="--c:#FF4FA3;--d:0"></i><i style="--c:#7B5CFF;--d:.12"></i><i style="--c:#FF7A18;--d:.24"></i>
@@ -726,14 +855,14 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   <!-- ACT IV -->
 
 <!-- ============ RENDERED PLATE · Shot 3 · the stylus ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 3 · the stylus" style="height:300vh"
-         data-plate="render/spotify-s3.mp4" data-plate-poster="render/spotify-s3.jpg"
+<section class="scene rplate" data-scene="pin" data-slate="Shot 13 · the master fader" style="height:300vh"
+         data-plate="spotify/shots/s13-master.mp4" data-plate-poster="spotify/shots/s13-master.jpg"
          aria-label="Rendered plate 3">
   <div class="stage">
-    <p class="rtag"><span class="L en">SHOT 3 · f/1.8 · 118 MM</span><span class="L ar">اللقطة ٣ · f/1.8 · ١١٨ مم</span></p>
+    <p class="rtag"><span class="L en">144 FRAMES · 1280×536 · 62→105 MM · f/5.6</span><span class="L ar">١٤٤ إطارًا · ١٢٨٠×٥٣٦ · ٦٢→١٠٥ مم · f/5.6</span></p>
     <div class="caption">
       <p class="kick"><span class="L en">Shot 3 · 84→118 mm macro</span><span class="L ar">اللقطة ٣ · ماكرو ٨٤→١١٨ مم</span></p>
-      <h2><span class="L en">Contact, on the downbeat</span><span class="L ar">التلامس، على النبضة الأولى</span></h2>
+      <h2><span class="L en">The colours leave the room</span><span class="L ar">الألوانُ تغادر الغرفة</span></h2>
       <p><span class="L en">The longest lens in the film, wide open. The arm descends, the stylus meets the lead-in, and the green answers at the exact frame of contact — not before it.</span><span class="L ar">أطولُ عدسةٍ في الفيلم، مفتوحةً على آخرها. تهبط الذراع، ويلاقي الإبرةُ أخدودَ الدخول، فيجيب الأخضر في إطار التلامس بالضبط — لا قبله.</span></p>
     </div>
   </div>
@@ -807,11 +936,24 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   <!-- FINALE divider -->
 
 <!-- ============ RENDERED PLATE · Shot 4 · the spin ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 4 · the spin" style="height:300vh"
-         data-plate="render/spotify-s4.mp4" data-plate-poster="render/spotify-s4.jpg"
+
+<section class="scene rplate" data-scene="pin" data-slate="Shot 14 · the chorus returns" style="height:300vh"
+         data-plate="spotify/shots/s14-chorus.mp4" data-plate-poster="spotify/shots/s14-chorus.jpg"
+         aria-label="Rendered plate — Shot 14 · the chorus returns">
+  <div class="stage">
+    <p class="rtag"><span class="L en">144 FRAMES · 1280×536 · 58→34 MM · f/4</span><span class="L ar">١٤٤ إطارًا · ١٢٨٠×٥٣٦ · ٥٨→٣٤ مم · f/4</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Rendered · thirty tracks</span><span class="L ar">مُصيَّر · ثلاثون مقطعًا</span></p>
+      <h2><span class="L en">Thirty tracks light in order</span><span class="L ar">ثلاثون مقطعًا تُضاء بالترتيب</span></h2>
+      <p><span class="L en">Each bar takes its own beat, the pink and the violet come back with them, and the camera lifts off the deck into the room it started in.</span><span class="L ar">كلُّ عمودٍ يأخذ نبضته، ويعود معها الورديُّ والبنفسجيّ، وترتفع الكاميرا عن الجهاز إلى الغرفة التي بدأت منها.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene rplate" data-scene="pin" data-slate="Shot 15 · lift off" style="height:300vh"
+         data-plate="spotify/shots/s15-outro.mp4" data-plate-poster="spotify/shots/s15-outro.jpg"
          aria-label="Rendered plate 4">
   <div class="stage">
-    <p class="rtag"><span class="L en">SHOT 4 · f/2.8 · SHUTTER 0.6</span><span class="L ar">اللقطة ٤ · f/2.8 · غالق ٠٫٦</span></p>
+    <p class="rtag"><span class="L en">132 FRAMES · 1280×536 · 92→52 MM · f/4</span><span class="L ar">١٣٢ إطارًا · ١٢٨٠×٥٣٦ · ٩٢→٥٢ مم · f/4</span></p>
     <div class="caption">
       <p class="kick"><span class="L en">Shot 4 · 62→40 mm</span><span class="L ar">اللقطة ٤ · ٦٢→٤٠ مم</span></p>
       <h2><span class="L en">Lift off and let it run</span><span class="L ar">ارتفعْ ودعها تدور</span></h2>
@@ -862,8 +1004,8 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
         <dl class="duo">
           <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
           <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
-          <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live — 4 canvases + CSS, no footage, no audio</span><span class="L ar">حيًّا — ٤ لوحات وCSS، بلا مشهدٍ مصوَّر وبلا صوت</span></dd>
-          <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
+          <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live canvases + CSS, and 15 Cycles plates (1,860 frames, path-traced, no AI footage, no audio)</span><span class="L ar">لوحاتٌ حيّة وCSS، مع ١٥ لقطة Cycles (١٨٦٠ إطارًا، تتبُّع مسار، بلا مشاهد مولَّدة بالذكاء الاصطناعي وبلا صوت)</span></dd>
+          <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v4 · CSS custom properties · Blender Cycles, OptiX, AgX</span><span class="L ar">cinema.js v4 · خصائص CSS · Blender Cycles وOptiX وAgX</span></dd>
           <dt><span class="L en">Tempo</span><span class="L ar">الإيقاع</span></dt><dd><span class="L en">84 BPM — one tempo, every layer</span><span class="L ar">٨٤ نبضة في الدقيقة — إيقاعٌ واحد لكل الطبقات</span></dd>
           <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
         </dl>

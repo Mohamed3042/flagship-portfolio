@@ -148,9 +148,25 @@ def _put(node, name, value, nth=0):
     return False
 
 
-def grade(hi=(1, 1, 1), mid=(1, 1, 1), lo=(1, 1, 1), glare=0.0, vignette=0.0):
-    """Per-world colour grade + optional glare, in the compositor."""
+def grade(hi=(1, 1, 1), mid=(1, 1, 1), lo=(1, 1, 1), glare=0.0, vignette=0.0,
+          dispersion=0.0):
+    """Per-world colour grade + optional glare, in the compositor.
+
+    `dispersion` adds the chromatic fringe real glass has at the frame edge.
+    It has to live here rather than in a second pass because _comp_tree()
+    builds a fresh node group every call — a caller that ran it first would
+    silently have its work discarded by this one."""
     nt, src, dst = _comp_tree()
+
+    if dispersion > 0:
+        try:
+            ld = nt.nodes.new('CompositorNodeLensdist')
+            _put(ld, 'Dispersion', dispersion)
+            _put(ld, 'Fit', True)
+            nt.links.new(src, ld.inputs['Image'])
+            src = ld.outputs['Image']
+        except Exception:
+            pass
 
     if glare > 0:
         g = nt.nodes.new('CompositorNodeGlare')
