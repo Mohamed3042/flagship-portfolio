@@ -26,8 +26,13 @@ DEST="C:/Users/GAMING/Downloads/flagship-portfolio-git/public/worlds/spotify"
 MP="$R/out/_master"
 mkdir -p "$DEST/shots" "$MP"
 
-RES_X=${RES_X:-1280}
-SAMPLES=${SAMPLES:-40}
+# Render high, deliver right-sized. Downscaling 1920 -> 1280 at encode is also
+# free supersampling — cleaner edges than a native 1280 render — while the
+# master keeps the full scope frame for the theater.
+RES_X=${RES_X:-1920}
+SAMPLES=${SAMPLES:-128}
+PLATE_W=${PLATE_W:-1280}
+MASTER_W=${MASTER_W:-1920}
 SHOTS=${SHOTS:-"1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"}
 NAMES=(line pulse room arm needle groove quantize lanes canyon t01 t02 t03 master chorus outro)
 
@@ -39,7 +44,8 @@ for n in $SHOTS; do
   echo "### RENDER $tag  $(date +%T)"
   rm -rf "$R/out/$tag"
   log="$R/out/$tag.log"
-  SHOT=$n RES_X=$RES_X SAMPLES=$SAMPLES BOUNCE=${BOUNCE:-6} HAZE=${HAZE:-0.010} "$BL" \
+  SHOT=$n RES_X=$RES_X SAMPLES=$SAMPLES BOUNCE=${BOUNCE:-12} HAZE=${HAZE:-0.014} \
+    TEX4K=${TEX4K:-1} "$BL" \
     --background --factory-startup --python "$R/film_spotify.py" -- "$R/out/$tag" \
     > "$log" 2>&1
   grep -E "FILM_SHOT|Error:" "$log" | head -3
@@ -58,14 +64,15 @@ for n in $SHOTS; do
   # Grain at encode, not in the compositor: it costs nothing, it lands after the
   # grade where real grain lives, and it hides the last of the denoiser's wax.
   ffmpeg -y -loglevel error -framerate 24 -i "$R/out/$tag/f_%04d.png" \
-    -vf "noise=alls=4:allf=t" \
+    -vf "scale=${PLATE_W}:-2:flags=lanczos,noise=alls=4:allf=t" \
     -c:v libx264 -pix_fmt yuv420p -crf 20 -preset slow \
     -g 4 -keyint_min 4 -sc_threshold 0 -movflags +faststart -an "$out"
   ffmpeg -y -loglevel error -framerate 24 -i "$R/out/$tag/f_%04d.png" \
-    -vf "noise=alls=4:allf=t" \
+    -vf "scale=${MASTER_W}:-2:flags=lanczos,noise=alls=3:allf=t" \
     -c:v libx264 -pix_fmt yuv420p -crf 20 -preset slow \
     -g 48 -movflags +faststart -an "$MP/$tag.mp4"
-  ffmpeg -y -loglevel error -i "$R/out/$tag/f_0001.png" -q:v 3 "$DEST/shots/$tag.jpg"
+  ffmpeg -y -loglevel error -i "$R/out/$tag/f_0001.png" \
+    -vf "scale=${PLATE_W}:-2:flags=lanczos" -q:v 3 "$DEST/shots/$tag.jpg"
   rm -rf "$R/out/$tag"
   echo "### ENCODED $tag  $have frames  plate $(du -h "$out" | cut -f1)  master $(du -h "$MP/$tag.mp4" | cut -f1)"
 done

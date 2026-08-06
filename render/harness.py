@@ -34,8 +34,17 @@ def setup_gpu():
 
 def init(res=(1280, 640), frames=96, samples=128, fps=24,
          look='AgX - Medium High Contrast', exposure=0.0, transparent=False):
-    """Wipe the factory scene and configure the render."""
+    """Wipe the factory scene and configure the render.
+
+    read_factory_settings() resets the PREFERENCES too, which puts
+    cycles.preferences.compute_device_type back to NONE — and with no backend,
+    `scene.cycles.device = 'GPU'` silently renders on the CPU. Every world
+    script calls setup_gpu() before this, so every plate this pipeline shipped
+    was a CPU render wearing an OptiX label. Re-apply the device AFTER the
+    reset, and never trust a setup_gpu() that ran before it.
+    """
     bpy.ops.wm.read_factory_settings(use_empty=True)
+    setup_gpu()
     sc = bpy.context.scene
     sc.render.engine = 'CYCLES'
     sc.cycles.device = 'GPU'

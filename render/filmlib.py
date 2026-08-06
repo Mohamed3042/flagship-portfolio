@@ -98,7 +98,7 @@ def tex_pbr(name, role, tile=2.0, rough_mul=1.0, rough_add=0.0, tint=(1, 1, 1),
     """
     name_dir = TEX.get(role, role)
     folder = os.path.join(_LOCAL, name_dir)
-    if not os.path.isdir(folder):
+    if os.environ.get('TEX4K') == '1' or not os.path.isdir(folder):
         folder = os.path.join(MIX, name_dir)
     m = bpy.data.materials.new(name)
     m.use_nodes = True
