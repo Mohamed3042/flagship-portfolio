@@ -485,6 +485,10 @@ PROPS = [
     # where the music ends up: consumer box on the floor, away from the desk
     dict(names=('boombox', 'jbl'), size=0.48, loc=(-2.32, 2.62, 0.0), rot=28),
     dict(names=('patchbay',), size=0.483, loc=(2.06, 1.22, 0.64), rot=0),
+    # Shure SM7dB. Real body is 190mm on its longest axis. It hangs off the
+    # boom tip once _mic_arm() exists; until then it rests on the bench, which
+    # is at least a place a microphone can actually be.
+    dict(names=('sm7', 'shure', 'mic_'), size=0.19, loc=(0.98, 1.80, 0.90), rot=-24),
     dict(names=('stool',), size=0.62, loc=(-0.55, 0.55, 0.0), rot=0,
          hides=('Stool',)),
 ]
