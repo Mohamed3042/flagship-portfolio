@@ -25,3 +25,7 @@ artifacts/
 render/out/
 render/*.log
 render/assets/
+
+# Python bytecode: churns on every Blender run and pollutes every diff.
+__pycache__/
+*.pyc
