@@ -541,12 +541,32 @@ def assign(ob, mat):
 
 
 def shade_smooth(ob, angle=math.radians(35)):
+    """Smooth shading, with the angle split where the build still supports it.
+
+    Blender 4.1 removed `mesh.use_auto_smooth` and `mesh.auto_smooth_angle` and
+    moved the angle to a "Smooth by Angle" modifier. The guard that used to be
+    here picked the assigned VALUE with hasattr but still assigned
+    unconditionally, so on 4.1+ this raised AttributeError for every caller.
+    Nothing caught it because nothing called it: place_prop's shade_smooth flag
+    defaults to False, so the only path in was never taken.
+    """
     for p in ob.data.polygons:
         p.use_smooth = True
-    mod = ob.modifiers.new('SmoothByAngle', 'WEIGHTED_NORMAL') if False else None
-    ob.data.use_auto_smooth = True if hasattr(ob.data, 'use_auto_smooth') else False
-    if hasattr(ob.data, 'auto_smooth_angle'):
-        ob.data.auto_smooth_angle = angle
+    if hasattr(ob.data, 'use_auto_smooth'):                  # <= 4.0
+        ob.data.use_auto_smooth = True
+        if hasattr(ob.data, 'auto_smooth_angle'):
+            ob.data.auto_smooth_angle = angle
+        return ob
+    prev = bpy.context.view_layer.objects.active             # >= 4.1
+    try:
+        bpy.context.view_layer.objects.active = ob
+        ob.select_set(True)
+        bpy.ops.object.shade_smooth_by_angle(angle=angle)
+    except Exception:
+        pass                    # flags above already give fully smooth shading
+    finally:
+        ob.select_set(False)
+        bpy.context.view_layer.objects.active = prev
     return ob
 
 
