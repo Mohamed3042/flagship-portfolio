@@ -140,14 +140,23 @@ def build_room():
     Returns the handles the shot dressers animate."""
     R = {}
 
-    concrete = F.tex_pbr('Concrete', 'concrete', tile=2.6, rough_mul=0.85,
-                         rough_add=0.10, tint=(0.52, 0.52, 0.55), normal_strength=1.2)
-    concrete_b = F.tex_pbr('ConcreteB', 'concrete_old', tile=3.1, rough_mul=0.9,
-                           rough_add=0.06, tint=(0.44, 0.44, 0.48), normal_strength=1.0)
-    parquet = F.tex_pbr('Parquet', 'parquet', tile=1.15, rough_mul=0.60,
-                        rough_add=0.08, tint=(0.66, 0.55, 0.46), normal_strength=0.9)
-    woodc = F.tex_pbr('WoodCeil', 'wood_ceiling', tile=1.4, rough_mul=0.7,
-                      rough_add=0.14, tint=(0.44, 0.36, 0.30), normal_strength=0.8)
+    # The room is black. A grey concrete shell reflects every practical back as
+    # grey, which is why the first cut read as a workshop with green lights in
+    # it rather than as the room the reference photograph shows: there, the
+    # walls contribute nothing and the ONLY colour in frame is emitted. Keep the
+    # textures for grain and drive the tint down to near-black — an albedo of
+    # 0.03 still shows normal detail under a raking cove, it just refuses to
+    # become a light source of its own.
+    concrete = F.tex_pbr('WallDark', 'concrete', tile=2.6, rough_mul=1.0,
+                         rough_add=0.14, tint=(0.055, 0.055, 0.062), normal_strength=1.1)
+    concrete_b = F.tex_pbr('CeilDark', 'concrete_old', tile=3.1, rough_mul=1.0,
+                           rough_add=0.10, tint=(0.032, 0.032, 0.038), normal_strength=0.9)
+    # dark stained plank, glossier than the walls — the floor is what carries
+    # the cove reflections down the length of the room
+    parquet = F.tex_pbr('PlankDark', 'parquet', tile=1.15, rough_mul=0.34,
+                        rough_add=0.02, tint=(0.115, 0.082, 0.062), normal_strength=1.0)
+    woodc = F.tex_pbr('SlatCeil', 'wood_ceiling', tile=1.4, rough_mul=0.9,
+                      rough_add=0.12, tint=(0.052, 0.046, 0.042), normal_strength=0.8)
 
     # shell ────────────────────────────────────────────────────────────────
     floor = H.plane(loc=(0, 0, 0), size=14.0, name='Floor')
@@ -172,15 +181,10 @@ def build_room():
 
     F.slat_ceiling(RH - 0.02, RW - 0.2, RD - 0.6, woodc)
 
-    # acoustic panels on the back wall — fabric, so they eat the specular and
-    # give the green line something matte to sit against
-    # they flank the line rather than share its wall band: two solids sitting
-    # 8 cm proud of a 1.4 cm light bar would intersect it, and an intersection
-    # is the one artifact a still frame always finds
-    fab = H.pbr('Fabric', base=(0.055, 0.058, 0.065), rough=0.94, sheen=0.35)
-    for i, x in enumerate((-2.02, 2.02)):
-        F.box(loc=(x, RD / 2 - 0.05, 1.62), dims=(1.10, 0.075, 1.86),
-              name='Panel%d' % i, mat=fab, bevel=0.008, segments=2)
+    R.update(_feature_wall())
+    _coves()
+    _wallart()
+    R.update(_lounge())
 
     # bench ────────────────────────────────────────────────────────────────
     benchwood = H.pbr('BenchWood', base=(0.052, 0.043, 0.036), rough=0.34)
