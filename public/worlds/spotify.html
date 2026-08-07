@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>THE ALBUM · الألبوم — Spotify Pulse | Mohamed Mahmoud</title>
-<meta name="description" content="THE ALBUM — a scroll-cinema motion study in the language of music culture: one pulse finds a groove, project tracks cut a visual mixtape, a hand rides the master fader to unity. Drawn entirely in code.">
+<meta name="description" content="THE ALBUM — a scroll-cinema motion study in the language of music culture. Side A: six acts in one photographed room, beside the Cycles plates and live code that build the same claim. Side B: sixty seconds of scroll-scrubbed flight through twelve places, with no cut.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23191414'/><path d='M10 34h11l5-13 8 26 6-19 4 6h10' fill='none' stroke='%231ED760' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <link rel="stylesheet" href="./cinema.css?v=4">
 <style>
@@ -282,7 +282,73 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   box-shadow:0 0 20px 3px color-mix(in srgb,var(--w-accent) 60%,transparent);
   animation:beat var(--beat) ease-in-out infinite}
 
+/* ---------- LIVE PLATES — the six photographed room heroes (Side A) ----------
+   Same engine as the Cycles plates (.rplate + data-plate); only the scrim and
+   the slate change. The footage is far brighter than a path-traced night
+   interior, so the caption needs a deeper wash under it or the white type sits
+   on a green wall. */
+.scene.rplate.live .rtag{color:color-mix(in srgb,var(--w-accent) 80%,transparent)}
+.scene.rplate.live .stage::after{
+  background:radial-gradient(126% 100% at 50% 44%,transparent 60%,rgba(3,3,5,.52) 100%),
+             linear-gradient(180deg,rgba(3,3,5,.44) 0%,transparent 22% 54%,rgba(3,3,5,.72) 100%)}
+
+/* ---------- SIDE B — the flight ----------
+   Twelve clips share ONE scene and one playhead, so there is no scene boundary
+   between legs and the whole movement scrubs as a single take. The still under
+   the videos is always the current leg's poster: a leg that has not finished
+   loading holds the right frame instead of going black. */
+.flip .no{color:var(--w-accent)}
+.scene.flight .stage{background:#04050a}
+.flightstill{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+.flightplate{position:absolute;inset:0;z-index:1;overflow:hidden}
+/* The swap is fast on purpose. A long cross-fade dissolves two legs into each
+   other, and these legs are joined by GRAPHIC MATCHES — a ring becoming a
+   record, a tunnel mouth becoming an earcup — which a dissolve turns to mush.
+   90 ms reads as a cut on motion, and the poster underneath means the swap can
+   never expose black even if the incoming leg is still loading. */
+.flightplate video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  opacity:0;transition:opacity .09s linear;filter:brightness(1.04) saturate(1.03)}
+.flightplate video.on{opacity:1}
+.scene.flight.mode-still .flightplate{display:none}
+.scene.flight .stage::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(130% 104% at 50% 44%,transparent 56%,rgba(2,3,8,.62) 100%),
+             linear-gradient(180deg,rgba(2,3,8,.5) 0%,transparent 20% 52%,rgba(2,3,8,.78) 100%)}
+
+/* caption depth: the plate travels, the type drifts — three rates, three planes */
+.legcaps{position:absolute;inset:0;z-index:5;pointer-events:none}
+/* Asymmetric on purpose: the outgoing card clears in 160 ms, the incoming one
+   only starts after that. Symmetric timing put two headlines on top of each
+   other at the same coordinates for a third of a second at every leg change,
+   and two overlapping headlines are unreadable, not a cross-fade. */
+.legcap{position:absolute;max-width:min(560px,82vw);
+  inset-inline-start:clamp(18px,6vw,84px);bottom:clamp(30px,11vh,104px);
+  opacity:0;transform:translateY(20px);transition:opacity .16s ease,transform .16s ease}
+.legcap.on{opacity:1;transform:translateY(calc((.5 - var(--f,.5)) * -22px));
+  transition:opacity .3s ease .16s,transform .3s ease .16s}
+.legcap .kick{font:700 11px/1 var(--w-ui);letter-spacing:.22em;text-transform:uppercase;
+  color:var(--w-accent);margin-bottom:10px}
+.legcap h2{font:800 clamp(26px,4.6vw,46px)/1.08 var(--w-display);text-transform:uppercase;
+  letter-spacing:.015em;text-wrap:balance;text-shadow:0 2px 24px rgba(0,0,0,.6)}
+.legcap p{margin-top:10px;max-width:46ch;font-size:clamp(14px,1.6vw,17px);line-height:1.55;
+  color:color-mix(in srgb,var(--w-ink) 88%,transparent);text-shadow:0 1px 14px rgba(0,0,0,.55)}
+.legcap p b{color:var(--w-accent);font-weight:800;letter-spacing:.02em}
+.legno{position:absolute;z-index:4;top:clamp(70px,11vh,110px);inset-inline-start:clamp(18px,6vw,84px);
+  font:800 clamp(60px,10vw,128px)/1 var(--w-display);color:transparent;letter-spacing:.02em;
+  -webkit-text-stroke:1.5px color-mix(in srgb,var(--w-accent) 55%,transparent);
+  transform:translateY(calc((.5 - var(--f,.5)) * -54px))}
+.legrail{position:absolute;z-index:5;left:50%;transform:translateX(-50%);bottom:clamp(12px,3vh,26px);
+  display:flex;gap:6px}
+.legrail i{width:15px;height:3px;border-radius:2px;transition:background .3s,width .3s;
+  background:color-mix(in srgb,var(--w-ink) 22%,transparent)}
+.legrail i.on{width:28px;background:var(--w-accent)}
+.scene.flight.needs-tap .legrail{opacity:.4}
+
 /* ---------- responsive ---------- */
+@media (max-width:820px){
+  .legno{font-size:54px}
+  .legrail i{width:9px}
+  .legrail i.on{width:18px}
+}
 @media (max-width:820px){
   .sc-t1 .rig{grid-template-columns:1fr;gap:26px;padding:12vh 8vw 26vh;align-content:center}
   .pbars i{height:12px}
@@ -304,10 +370,14 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   .meters .m i{height:72%}.meters .m u{bottom:72%}
   .unity-line,.unity-tag,.sc-spine .idbeat,.sc-fin .endcard{opacity:1}
   .sc-gate .caption{opacity:1}
+  /* the flight keeps its stills and drops the scrub entirely (mode-still) */
+  .legcap{transition:none}
+  .legcap.on,.legno{transform:none}
+  .flightplate video{transition:none}
 }
 </style>
 </head>
-<body data-film="ALB · REEL 01" data-runtime="560" data-ticks data-letterbox>
+<body data-film="ALB · REEL 01" data-runtime="700" data-ticks data-letterbox>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <filter id="tooth"><feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="2" seed="7" stitchTiles="stitch"/>
@@ -322,7 +392,8 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </nav>
   <div class="grp">
-    <button type="button" data-theater="spotify/spotify-film.mp4" data-theater-poster="spotify/spotify-film.jpg"><span class="L en">▸ The film · 1:53</span><span class="L ar">▸ الفيلم · ١:٥٣</span></button>
+    <button type="button" data-theater="spotify/spotify-film.mp4" data-theater-poster="spotify/spotify-film.jpg"><span class="L en">▸ Side A · 1:53</span><span class="L ar">▸ الوجه أ · ١:٥٣</span></button>
+    <button type="button" data-theater="spotify/live/sideb-flight.mp4" data-theater-poster="spotify/live/sideb-flight.jpg"><span class="L en">▸ Side B · 1:00</span><span class="L ar">▸ الوجه ب · ١:٠٠</span></button>
     <button type="button" data-lang-toggle aria-pressed="false">
       <span class="L en">عربي</span><span class="L ar">English</span>
     </button>
@@ -344,6 +415,24 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
       <div class="iris" aria-hidden="true"></div>
     </div>
   </section>
+
+<!-- ============ SIDE A · the room, photographed ============
+     One clip per act, always the FIRST surface of that act: photograph, then
+     the Cycles plate that solves the same claim, then the code that draws it
+     live. The room never changes; only the camera and the act do. -->
+
+<section class="scene rplate live" data-scene="pin" data-slate="Side A/1 · Silence arrival" style="height:300vh"
+         data-plate="spotify/live/room01-silence.mp4" data-plate-poster="spotify/live/room01-silence.jpg"
+         aria-label="Photographed room — silence arrival">
+  <div class="stage">
+    <p class="rtag"><span class="L en">LIVE PLATE · SIDE A/1 · 150 FRAMES · 1600×670 · SCOPE 2.39:1</span><span class="L ar">لقطة حيّة · الوجه أ/١ · ١٥٠ إطارًا · ١٦٠٠×٦٧٠ · سكوب ٢٫٣٩:١</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Prologue · The room, photographed</span><span class="L ar">البرولوج · الغرفة، مصوَّرة</span></p>
+      <h2><span class="L en">Before anyone puts a record on</span><span class="L ar">قبل أن يضع أحدٌ أسطوانة</span></h2>
+      <p><span class="L en">One room, six moves, and the film never leaves it. This is the first: the dark resolving into shelves, a wall, a deck — and the mark waiting up there like a held breath.</span><span class="L ar">غرفةٌ واحدة، وستُّ حركات، ولا يغادرها الفيلم أبدًا. هذه أولاها: العتمة تتحوّل رفوفًا وجدارًا وجهازًا — والعلامةُ تنتظر في الأعلى كنَفَسٍ محبوس.</span></p>
+    </div>
+  </div>
+</section>
 
 <!-- ============ THE RENDERED PLATE (Cycles) ============ -->
 
@@ -399,8 +488,8 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
           <div class="beat-dot" aria-hidden="true"></div>
           <h1>The Album<span class="ar-t">الألبوم</span></h1>
           <p class="sub">
-            <span class="L en">Spotify Pulse — a visual mixtape in six acts, drawn in code</span>
-            <span class="L ar">سبوتيفاي پَلس — شريط بصري في ستة فصول، مرسوم بالشيفرة</span>
+            <span class="L en">Spotify Pulse — six acts in one room, and a side you fall through</span>
+            <span class="L ar">سبوتيفاي پَلس — ستة فصول في غرفة واحدة، ووجهٌ تسقط فيه</span>
           </p>
         </div>
       </div>
@@ -425,6 +514,18 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
       <p class="kick"><span class="L en">Rendered · 105 mm on the wall</span><span class="L ar">مُصيَّر · ١٠٥ مم على الجدار</span></p>
       <h2><span class="L en">One beat crosses the line</span><span class="L ar">نبضةٌ واحدة تعبر الخطّ</span></h2>
       <p><span class="L en">The heartbeat is a moving emitter, not a texture: it lights the concrete it passes and goes dark again. Everything the wall does is the wall answering a light.</span><span class="L ar">النبضةُ باعثُ ضوءٍ متحرك لا نقشةٌ مرسومة: تُضيء الخرسانةَ التي تمرّ بها ثم تخبو. وكلُّ ما يفعله الجدارُ هو ردُّه على ضوء.</span></p>
+    </div>
+  </div>
+</section>
+<section class="scene rplate live" data-scene="pin" data-slate="Side A/2 · Contact turntable" style="height:300vh"
+         data-plate="spotify/live/room02-contact.mp4" data-plate-poster="spotify/live/room02-contact.jpg"
+         aria-label="Photographed room — the camera descends to the record">
+  <div class="stage">
+    <p class="rtag"><span class="L en">LIVE PLATE · SIDE A/2 · 150 FRAMES · 1600×670 · SCOPE 2.39:1</span><span class="L ar">لقطة حيّة · الوجه أ/٢ · ١٥٠ إطارًا · ١٦٠٠×٦٧٠ · سكوب ٢٫٣٩:١</span></p>
+    <div class="caption">
+      <p class="kick"><span class="L en">Prologue · Contact, for real</span><span class="L ar">البرولوج · التلامس، حقيقةً</span></p>
+      <h2><span class="L en">All the way down to the record</span><span class="L ar">نزولًا حتى الأسطوانة</span></h2>
+      <p><span class="L en">The longest move in the room set. A wide of the whole lounge that never cuts — it just keeps descending until the platter fills the frame and one green streak crosses the vinyl.</span><span class="L ar">أطولُ حركةٍ في لقطات هذه الغرفة. لقطةٌ واسعةٌ للصالة لا تُقطع أبدًا — بل تظلّ تهبط حتى يملأ القرصُ الإطار، ويعبر الفينيلَ خطٌّ أخضر واحد.</span></p>
     </div>
   </div>
 </section>
@@ -496,6 +597,19 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
       <h2><span class="L en">Find the groove</span><span class="L ar">اعثر على الإيقاع</span></h2>
       <p><span class="L en">Noise auditions. The beat decides — every layer quantizes to 84 BPM or leaves the record.</span>
          <span class="L ar">الضجيج يتقدّم للتجربة، والإيقاع يحسم — كل طبقة تنضبط على ٨٤ نبضة في الدقيقة أو تغادر الأسطوانة.</span></p>
+    </div>
+  </section>
+
+  <section class="scene rplate live" data-scene="pin" data-slate="Side A/3 · Groove runway" style="height:300vh"
+           data-plate="spotify/live/room03-runway.mp4" data-plate-poster="spotify/live/room03-runway.jpg"
+           aria-label="Photographed room — a column of green climbs the wall">
+    <div class="stage">
+      <p class="rtag"><span class="L en">LIVE PLATE · SIDE A/3 · 150 FRAMES · 1600×670 · SCOPE 2.39:1</span><span class="L ar">لقطة حيّة · الوجه أ/٣ · ١٥٠ إطارًا · ١٦٠٠×٦٧٠ · سكوب ٢٫٣٩:١</span></p>
+      <div class="caption" style="--k:var(--vi)">
+        <p class="kick"><span class="L en">Act I · The runway</span><span class="L ar">الفصل الأول · المدرج</span></p>
+        <h2><span class="L en">The beat arrives before the camera does</span><span class="L ar">النبضة تصل قبل الكاميرا</span></h2>
+        <p><span class="L en">A column of green climbs from the table to the wall while the camera tracks past the console. The light is what moves here; the room only lets it.</span><span class="L ar">عمودٌ أخضر يصعد من الطاولة إلى الجدار بينما تنساب الكاميرا أمام الخزانة. الضوءُ هو ما يتحرك هنا، والغرفةُ تدعه فحسب.</span></p>
+      </div>
     </div>
   </section>
 
@@ -634,6 +748,19 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
       <h2><span class="L en">The visual mixtape</span><span class="L ar">الشريط البصري</span></h2>
       <p><span class="L en">Each project cuts a track: black, two colors, white — and one truth it refuses to break.</span>
          <span class="L ar">كل مشروع يسجّل مقطوعته: أسود ولونان وأبيض — وحقيقة واحدة يرفض أن يكسرها.</span></p>
+    </div>
+  </section>
+
+  <section class="scene rplate live" data-scene="pin" data-slate="Side A/4 · Build workstation" style="height:300vh"
+           data-plate="spotify/live/room04-build.mp4" data-plate-poster="spotify/live/room04-build.jpg"
+           aria-label="Photographed room — the desk becomes the subject">
+    <div class="stage">
+      <p class="rtag"><span class="L en">LIVE PLATE · SIDE A/4 · 150 FRAMES · 1600×670 · SCOPE 2.39:1</span><span class="L ar">لقطة حيّة · الوجه أ/٤ · ١٥٠ إطارًا · ١٦٠٠×٦٧٠ · سكوب ٢٫٣٩:١</span></p>
+      <div class="caption" style="--k:var(--pk)">
+        <p class="kick"><span class="L en">Act II · The desk</span><span class="L ar">الفصل الثاني · المكتب</span></p>
+        <h2><span class="L en">Where the work actually happens</span><span class="L ar">حيث يجري العمل فعلًا</span></h2>
+        <p><span class="L en">Every other take treats the desk as furniture at the edge of a wide. This one makes it the subject and stays there — screen, keys, and the deck still turning behind them.</span><span class="L ar">كلُّ اللقطات الأخرى تعامل المكتبَ كأثاثٍ على حافة الإطار. هذه تجعله الموضوعَ وتبقى عنده — شاشةٌ ولوحةُ مفاتيح، والجهازُ لا يزال يدور خلفهما.</span></p>
+      </div>
     </div>
   </section>
 
@@ -810,6 +937,19 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     </div>
   </section>
 
+  <section class="scene rplate live" data-scene="pin" data-slate="Side A/5 · Gate lounge" style="height:300vh"
+           data-plate="spotify/live/room05-lounge.mp4" data-plate-poster="spotify/live/room05-lounge.jpg"
+           aria-label="Photographed room — a patient track along the lounge wall">
+    <div class="stage">
+      <p class="rtag"><span class="L en">LIVE PLATE · SIDE A/5 · 150 FRAMES · 1600×670 · SCOPE 2.39:1</span><span class="L ar">لقطة حيّة · الوجه أ/٥ · ١٥٠ إطارًا · ١٦٠٠×٦٧٠ · سكوب ٢٫٣٩:١</span></p>
+      <div class="caption">
+        <p class="kick"><span class="L en">Act III · The long wall</span><span class="L ar">الفصل الثالث · الجدار الطويل</span></p>
+        <h2><span class="L en">A camera that passes things and never stops</span><span class="L ar">كاميرا تمرّ ولا تقف</span></h2>
+        <p><span class="L en">Headphones, posters, the neon script, a guitar. The gate act is suspense by subtraction, so the move is patient and arrives nowhere on purpose.</span><span class="L ar">سمّاعات، وملصقات، وخطٌّ نيونيّ، وقيثارة. فصلُ البوابة تشويقٌ بالحذف، فالحركةُ صبورةٌ ولا تصل إلى شيءٍ عن قصد.</span></p>
+      </div>
+    </div>
+  </section>
+
   <!-- 09 · GATE — ride the master fader (signature) -->
   <section class="scene sc-gate" data-scene="pin" style="--h:360vh" data-slate="The master fader" aria-label="Gate — ride the master fader to unity">
     <div class="stage">
@@ -874,6 +1014,19 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
       <h2><span class="L en">Proof / Chorus</span><span class="L ar">البرهان / الكورس</span></h2>
       <p><span class="L en">The chorus is data-lit: every track returns exactly as big as its evidence.</span>
          <span class="L ar">الكورس مضاء بالبيانات: كل مقطوعة تعود بحجم دليلها تمامًا.</span></p>
+    </div>
+  </section>
+
+  <section class="scene rplate live" data-scene="pin" data-slate="Side A/6 · Chorus finale" style="height:300vh"
+           data-plate="spotify/live/room06-chorus.mp4" data-plate-poster="spotify/live/room06-chorus.jpg"
+           aria-label="Photographed room — the frame opens to the whole room">
+    <div class="stage">
+      <p class="rtag"><span class="L en">LIVE PLATE · SIDE A/6 · 150 FRAMES · 1600×670 · SCOPE 2.39:1</span><span class="L ar">لقطة حيّة · الوجه أ/٦ · ١٥٠ إطارًا · ١٦٠٠×٦٧٠ · سكوب ٢٫٣٩:١</span></p>
+      <div class="caption" style="--k:var(--bl)">
+        <p class="kick"><span class="L en">Act IV · Everything at once</span><span class="L ar">الفصل الرابع · كلُّ شيءٍ دفعةً واحدة</span></p>
+        <h2><span class="L en">The frame opens instead of pushing</span><span class="L ar">الإطار ينفتح بدل أن يندفع</span></h2>
+        <p><span class="L en">The chorus is the return of everything that left, so this act gets the only take that opens out rather than closing in — desk, deck, sofa and mark in one breath.</span><span class="L ar">الكورس عودةُ كلِّ ما غاب، لذلك يأخذ هذا الفصل اللقطةَ الوحيدة التي تنفتح بدل أن تضيق — المكتبُ والجهازُ والأريكةُ والعلامة في نَفَسٍ واحد.</span></p>
+      </div>
     </div>
   </section>
 
@@ -995,6 +1148,108 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     </div>
   </section>
 
+<!-- ============ THE FLIP ============ -->
+  <section class="act flip" aria-label="Intermission — turn the record over">
+    <div>
+      <div class="no"><span class="L en">Intermission</span><span class="L ar">استراحة</span></div>
+      <h2><span class="L en">Turn it over</span><span class="L ar">اقلبِ الأسطوانة</span></h2>
+      <p><span class="L en">Side A was the room where the work gets done. Side B is the sixty seconds inside the headphones — one scroll, twelve places, and not one cut between them.</span>
+         <span class="L ar">الوجه (أ) كان الغرفةَ التي يُصنع فيها العمل. أمّا الوجه (ب) فهو الستون ثانية داخل السمّاعات — تمريرةٌ واحدة، واثنا عشر مكانًا، وبلا قطعٍ واحدٍ بينها.</span></p>
+    </div>
+  </section>
+
+  <!-- ============ SIDE B · THE FLIGHT ============
+       One scene, one playhead, twelve clips. --p across this whole pinned
+       runway is the position in the movement; the controller at the bottom of
+       the page turns it into (leg, time-in-leg) and double-buffers two videos
+       so there is never a scene boundary to fall through. Each .legcap carries
+       its own clip + poster, so the cut is authored here, not in the script. -->
+  <section class="scene flight" id="flight" data-scene="pin" style="--h:1180vh"
+           data-slate="Side B · the flight" aria-label="Side B — a continuous scroll-scrubbed flight through twelve places">
+    <div class="stage">
+      <img class="flightstill" src="spotify/live/j01-portal.jpg" alt="" aria-hidden="true" decoding="async">
+      <div class="flightplate" aria-hidden="true">
+        <video muted playsinline preload="none" disablepictureinpicture></video>
+        <video muted playsinline preload="none" disablepictureinpicture></video>
+      </div>
+      <div class="legno" aria-hidden="true">01</div>
+      <div class="legcaps">
+        <div class="legcap on" data-clip="spotify/live/j01-portal.mp4" data-poster="spotify/live/j01-portal.jpg">
+          <p class="kick"><span class="L en">Side B · 01 · The portal</span><span class="L ar">الوجه ب · ٠١ · البوابة</span></p>
+          <h2><span class="L en">The wall opens</span><span class="L ar">الجدار ينفتح</span></h2>
+          <p><span class="L en">The mark that has been on that wall for six acts turns out to be a door.</span><span class="L ar">العلامةُ التي ظلّت على ذلك الجدار ستةَ فصولٍ تبيَّن أنها باب.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j02-equalizer.mp4" data-poster="spotify/live/j02-equalizer.jpg">
+          <p class="kick"><span class="L en">Side B · 02 · The equaliser tunnel</span><span class="L ar">الوجه ب · ٠٢ · نفق المُعادِل</span></p>
+          <h2><span class="L en">Everything in here is a level</span><span class="L ar">كلُّ شيءٍ هنا مستوى</span></h2>
+          <p><span class="L en">Inside, the walls keep score. Sixty bars a second, and every one of them is you.</span><span class="L ar">في الداخل، الجدرانُ تُحصي. ستون عمودًا في الثانية، وكلُّ واحدٍ منها أنت.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j03-playlist.mp4" data-poster="spotify/live/j03-playlist.jpg">
+          <p class="kick"><span class="L en">Side B · 03 · The infinite playlist</span><span class="L ar">الوجه ب · ٠٣ · القائمة اللانهائية</span></p>
+          <h2><span class="L en">Every playlist ever made</span><span class="L ar">كلُّ قائمةٍ صُنعت يومًا</span></h2>
+          <p><span class="L en">A corridor with no end to it, and a moon at the end of it anyway.</span><span class="L ar">ممرٌّ بلا نهاية، وفي نهايته قمرٌ رغم ذلك.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j04-city.mp4" data-poster="spotify/live/j04-city.jpg">
+          <p class="kick"><span class="L en">Side B · 04 · Soundwaves city</span><span class="L ar">الوجه ب · ٠٤ · مدينة الموجات</span></p>
+          <h2><span class="L en">The city runs on it</span><span class="L ar">المدينةُ تعمل به</span></h2>
+          <p><span class="L en">The mark hangs over the towers and pours one green avenue straight down the middle of them.</span><span class="L ar">العلامةُ تعلو الأبراج وتصبُّ جادّةً خضراء واحدة في منتصفها تمامًا.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j05-parallax.mp4" data-poster="spotify/live/j05-parallax.jpg">
+          <p class="kick"><span class="L en">Side B · 05 · The parallax world</span><span class="L ar">الوجه ب · ٠٥ · عالم الاختلاف</span></p>
+          <h2><span class="L en">The avenue folds</span><span class="L ar">الجادّةُ تنطوي</span></h2>
+          <p><span class="L en">Down is not where you left it. Stairs become ceilings, and you keep falling forward.</span><span class="L ar">لم يعد الأسفلُ حيث تركتَه. تصير السلالمُ سقوفًا، وتظلُّ تسقط إلى الأمام.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j06-vinyl.mp4" data-poster="spotify/live/j06-vinyl.jpg">
+          <p class="kick"><span class="L en">Side B · 06 · The vinyl dimension</span><span class="L ar">الوجه ب · ٠٦ · بُعد الفينيل</span></p>
+          <h2><span class="L en">It was a record the whole time</span><span class="L ar">كانت أسطوانةً طوال الوقت</span></h2>
+          <p><span class="L en">From above, the world has a spindle and a tonearm. Then the camera drops all the way to the surface.</span><span class="L ar">من الأعلى، للعالمِ محورٌ وذراعُ عزف. ثم تهبط الكاميرا إلى السطح تمامًا.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j07-highway.mp4" data-poster="spotify/live/j07-highway.jpg">
+          <p class="kick"><span class="L en">Side B · 07 · The groove highway</span><span class="L ar">الوجه ب · ٠٧ · طريق الأخدود</span></p>
+          <h2><span class="L en">The groove is a road</span><span class="L ar">الأخدودُ طريق</span></h2>
+          <p><span class="L en"><b>The drop.</b> For six shots the world moved because you were flying. Here something else is moving, and it is faster than you are.</span><span class="L ar"><b>السقطة.</b> ستُّ لقطاتٍ تحرّك فيها العالمُ لأنك كنت تطير. وهنا شيءٌ آخر يتحرك، وهو أسرع منك.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j08-listener.mp4" data-poster="spotify/live/j08-listener.jpg">
+          <p class="kick"><span class="L en">Side B · 08 · The listener</span><span class="L ar">الوجه ب · ٠٨ · المستمع</span></p>
+          <h2><span class="L en">Eight centimetres from an ear</span><span class="L ar">على بُعد ثمانية سنتيمترات من أذن</span></h2>
+          <p><span class="L en">The mouth of the tunnel was an earcup. All of this has been happening beside somebody's head.</span><span class="L ar">فمُ النفق كان صيوانَ سمّاعة. كلُّ هذا كان يجري بجوار رأسِ أحدهم.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j09-pupil.mp4" data-poster="spotify/live/j09-pupil.jpg">
+          <p class="kick"><span class="L en">Side B · 09 · Through the pupil</span><span class="L ar">الوجه ب · ٠٩ · عبر البؤبؤ</span></p>
+          <h2><span class="L en">Out through the pupil</span><span class="L ar">خروجًا من البؤبؤ</span></h2>
+          <p><span class="L en">Into deep space, where records orbit as planets — and the one you land on has the same road running across it.</span><span class="L ar">إلى الفضاء السحيق، حيث تدور الأسطواناتُ كالكواكب — وتلك التي تحطُّ عليها يمتدُّ فوقها الطريقُ ذاته.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j10-pullback.mp4" data-poster="spotify/live/j10-pullback.jpg">
+          <p class="kick"><span class="L en">Side B · 10 · The pull-back</span><span class="L ar">الوجه ب · ١٠ · الانسحاب</span></p>
+          <h2><span class="L en">The sky was a turntable</span><span class="L ar">كانت السماءُ جهازَ عزف</span></h2>
+          <p><span class="L en">One figure alone on a black plain. The camera lifts, and the aurora turns out to have a tonearm resting on it.</span><span class="L ar">شخصٌ واحد وحيدٌ على سهلٍ أسود. ترتفع الكاميرا، فإذا بالشفقِ تستقرُّ عليه ذراعُ عزف.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j11-return.mp4" data-poster="spotify/live/j11-return.jpg">
+          <p class="kick"><span class="L en">Side B · 11 · The return</span><span class="L ar">الوجه ب · ١١ · العودة</span></p>
+          <h2><span class="L en">The islands were furniture</span><span class="L ar">كانت الجزرُ أثاثًا</span></h2>
+          <p><span class="L en">The dream folds back into a room, and the moon becomes a lamp on somebody's shelf.</span><span class="L ar">يعود الحلمُ غرفةً، ويصير القمرُ مصباحًا على رفِّ أحدهم.</span></p>
+        </div>
+        <div class="legcap" data-clip="spotify/live/j12-line.mp4" data-poster="spotify/live/j12-line.jpg">
+          <p class="kick"><span class="L en">Side B · 12 · One line</span><span class="L ar">الوجه ب · ١٢ · خطٌّ واحد</span></p>
+          <h2><span class="L en">Back to one line</span><span class="L ar">عودةٌ إلى خطٍّ واحد</span></h2>
+          <p><span class="L en">The glass runs out, and everything you fell through collapses into a single waveform — which is exactly where the film started.</span><span class="L ar">ينفد الزجاج، فينهار كلُّ ما سقطتَ فيه إلى موجةٍ واحدة — وهي بالضبط حيث بدأ الفيلم.</span></p>
+        </div>
+      </div>
+      <div class="legrail" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="vig"></div>
+    </div>
+  </section>
+
+  <!-- ============ RUNOUT ============ -->
+  <section class="act" aria-label="Runout groove">
+    <div>
+      <div class="no"><span class="L en">Runout groove</span><span class="L ar">أخدود الخروج</span></div>
+      <h2><span class="L en">Both sides end on the same line</span><span class="L ar">كِلا الوجهين ينتهي بالخطِّ نفسه</span></h2>
+      <p><span class="L en">Side A ends with a needle lifting off a record. Side B ends with everything you fell through collapsing into one waveform. It is the line the film opened on, and it is still the only thing in the frame.</span>
+         <span class="L ar">الوجه (أ) ينتهي برفع الإبرة عن أسطوانة. والوجه (ب) ينتهي بانهيار كلِّ ما سقطتَ فيه إلى موجةٍ واحدة. إنه الخطُّ الذي افتُتح به الفيلم، وما زال الشيءَ الوحيدَ في الإطار.</span></p>
+    </div>
+  </section>
+
 <!-- END CREDITS -->
   <section class="scene credits" data-scene="pin" data-slate="End credits" style="--h:320vh" aria-label="End credits">
     <div class="stage">
@@ -1004,12 +1259,13 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
         <dl class="duo">
           <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
           <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
-          <dt><span class="L en">Rendered</span><span class="L ar">العرض</span></dt><dd><span class="L en">Live canvases + CSS, and 15 Cycles plates (2,712 frames, path-traced, no AI footage, no audio)</span><span class="L ar">لوحاتٌ حيّة وCSS، مع ١٥ لقطة Cycles (٢٧١٢ إطارًا، تتبُّع مسار، بلا مشاهد مولَّدة بالذكاء الاصطناعي وبلا صوت)</span></dd>
-          <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v4 · CSS custom properties · Blender Cycles, OptiX, AgX</span><span class="L ar">cinema.js v4 · خصائص CSS · Blender Cycles وOptiX وAgX</span></dd>
+          <dt><span class="L en">Side A · the room</span><span class="L ar">الوجه أ · الغرفة</span></dt><dd><span class="L en">6 photoreal room plates, 15 Blender Cycles plates (2,712 frames, path-traced), and live canvas + CSS scenes</span><span class="L ar">٦ لقطات فوتوغرافية للغرفة، و١٥ لقطة Blender Cycles (٢٧١٢ إطارًا بتتبُّع المسار)، ومشاهد حيّة بالـcanvas وCSS</span></dd>
+          <dt><span class="L en">Side B · the flight</span><span class="L ar">الوجه ب · الرحلة</span></dt><dd><span class="L en">12 clips, 1,800 frames, 1:00 — one scene, one scroll playhead, no cut</span><span class="L ar">١٢ لقطة، ١٨٠٠ إطار، ١:٠٠ — مشهدٌ واحد ورأسُ قراءةٍ واحد يقوده التمرير، بلا قطع</span></dd>
+          <dt><span class="L en">Pipeline</span><span class="L ar">خط الإنتاج</span></dt><dd><span class="L en">Keyframes: GPT-Image · Motion: Wan · Plates: Blender Cycles, OptiX, AgX · Engine: cinema.js v4 · No audio anywhere</span><span class="L ar">اللقطات المفتاحية: GPT-Image · الحركة: Wan · اللوحات: Blender Cycles وOptiX وAgX · المحرك: cinema.js v4 · بلا صوت في أي موضع</span></dd>
           <dt><span class="L en">Tempo</span><span class="L ar">الإيقاع</span></dt><dd><span class="L en">84 BPM — one tempo, every layer</span><span class="L ar">٨٤ نبضة في الدقيقة — إيقاعٌ واحد لكل الطبقات</span></dd>
           <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
         </dl>
-        <p class="fine"><span class="L en">A brand-inspired study; no official artwork, interface or audio is reproduced. The send fader stays welded at zero auto-sends — here and in the real systems.</span><span class="L ar">دراسة مستلهَمة؛ لم يُعَد إنتاج أي عملٍ فني أو واجهة أو صوت رسمي. ويبقى مِقبض الإرسال مُثبَّتًا عند صفر إرسالٍ تلقائي — هنا وفي الأنظمة الحقيقية.</span></p>
+        <p class="fine"><span class="L en">An unaffiliated fan tribute and motion-design study. The generated footage depicts the Spotify logomark; Spotify and its marks belong to Spotify AB, which has not endorsed or reviewed any of this. No official artwork, interface or audio was used as a source. The send fader stays welded at zero auto-sends — here and in the real systems.</span><span class="L ar">تحيّةٌ من معجب ودراسةُ تصميمٍ حركي، بلا أي انتساب. تُظهر اللقطاتُ المولَّدة شعارَ سبوتيفاي؛ وسبوتيفاي وعلاماتها ملكٌ لشركة Spotify AB التي لم تُقرّ أيًّا من هذا ولم تراجعه. ولم يُستخدَم أيُّ عملٍ فني أو واجهة أو صوت رسمي مصدرًا. ويبقى مِقبض الإرسال مُثبَّتًا عند صفر إرسالٍ تلقائي — هنا وفي الأنظمة الحقيقية.</span></p>
         <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
         <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
       </div>
@@ -1021,13 +1277,17 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
 
 <footer class="disclosure">
   <p>
-    <span class="L en">THE ALBUM is an original music-culture motion study by Mohamed Mahmoud — an AI-assisted design
-    exercise drawn entirely in code (CSS, SVG, canvas). It is not affiliated with, endorsed by, or connected to any
-    streaming service; no official artwork, interface, or audio is reproduced.
+    <span class="L en">THE ALBUM is an original music-culture motion study by Mohamed Mahmoud, built from live code
+    (CSS, SVG, canvas), Blender Cycles renders, and AI-generated footage — keyframes by GPT-Image, motion by Wan.
+    It is an <strong>unaffiliated fan tribute</strong>: the generated footage depicts the Spotify logomark, and
+    Spotify and its marks belong to Spotify AB, which has neither endorsed nor reviewed this page. No official
+    artwork, interface or audio was used as a source, and the page has no audio at all.
     <a href="../">Back to the portfolio</a>.</span>
-    <span class="L ar">«الألبوم» دراسة حركية أصلية في ثقافة الموسيقى لمحمد محمود — تمرين تصميمي بمساعدة الذكاء
-    الاصطناعي مرسوم كاملًا بالشيفرة (CSS وSVG وCanvas)، ولا يتبع أي خدمة بثٍّ موسيقي ولا يحمل تأييدها، ولم يُعَد
-    إنتاج أي عملٍ فني أو واجهة أو صوت رسمي.
+    <span class="L ar">«الألبوم» دراسة حركية أصلية في ثقافة الموسيقى لمحمد محمود، مبنيّة من شيفرةٍ حيّة
+    (CSS وSVG وCanvas)، ومن لقطات Blender Cycles، ومن مشاهد مولَّدة بالذكاء الاصطناعي — لقطاتٌ مفتاحية بـGPT-Image
+    وحركةٌ بـWan. وهي <strong>تحيّةٌ من معجب بلا أي انتساب</strong>: تُظهر اللقطاتُ المولَّدة شعارَ سبوتيفاي، وسبوتيفاي
+    وعلاماتها ملكٌ لشركة Spotify AB التي لم تُقرّ هذه الصفحة ولم تراجعها. ولم يُستخدَم أيُّ عملٍ فني أو واجهة أو صوت
+    رسمي مصدرًا، والصفحة بلا صوتٍ إطلاقًا.
     <a href="../">العودة إلى الموقع</a>.</span>
   </p>
 </footer>
@@ -1232,6 +1492,158 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
     /* first paint even before any scroll/IO settles */
     setTimeout(kick, 120);
   }
+})();
+
+/* ════════════════════════════════════════════════════════════════════
+   SIDE B — the flight.
+   Twelve clips, one scene, one playhead. The scene's --p is the position
+   in the whole movement, not in one clip: leg = floor(p*12), and the time
+   inside that leg is the fraction. Two <video> elements are double-
+   buffered — the one showing the current leg is seeked, the other is armed
+   with the leg the scroll is heading towards — so the sixty seconds scrub
+   as a single take with no scene boundary to fall through.
+
+   The cut is authored in the HTML: each .legcap carries its own clip and
+   poster. This script never names a file.
+
+   Three modes:
+     scrub  desktop — scroll drives currentTime
+     chain  coarse pointer — clips play through in sequence (disney's
+            precedent: scrubbing twelve 1600-wide clips over touch is janky
+            and expensive, and a phone would download all of them)
+     still  prefers-reduced-motion — posters only, no video, no scrub
+   ════════════════════════════════════════════════════════════════════ */
+(() => {
+  'use strict';
+  const scene = document.getElementById('flight');
+  if (!scene) return;
+  const caps = [...scene.querySelectorAll('.legcap')];
+  const vids = [...scene.querySelectorAll('.flightplate video')];
+  const pips = [...scene.querySelectorAll('.legrail i')];
+  const still = scene.querySelector('.flightstill');
+  const legno = scene.querySelector('.legno');
+  const N = caps.length;
+  if (!N || vids.length < 2) return;
+  const LEGS = caps.map(c => ({ clip: c.dataset.clip, poster: c.dataset.poster }));
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = matchMedia('(hover: none) and (pointer: coarse)').matches || innerWidth < 760;
+  const solo = new URLSearchParams(location.search).has('solo');
+  const MODE = reduced ? 'still' : coarse ? 'chain' : 'scrub';
+  scene.classList.add('mode-' + MODE);
+  /* a play-through does not need a 1180vh runway to scroll past */
+  if (MODE === 'chain') scene.style.setProperty('--h', '520vh');
+
+  const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+  const slots = vids.map(v => ({ v, leg: -1, ready: false, seeking: false, want: -1 }));
+  let shown = -1, lastLeg = -1, dir = 1, lastP = 0;
+
+  const arm = (s, leg) => {
+    if (s.leg === leg) return s;
+    s.leg = leg; s.ready = false; s.seeking = false; s.want = -1;
+    s.v.poster = LEGS[leg].poster;
+    s.v.src = LEGS[leg].clip;
+    s.v.load();
+    return s;
+  };
+  const seek = (s, t) => {
+    if (!s.ready) return;
+    if (s.seeking) { s.want = t; return; }
+    if (Math.abs(s.v.currentTime - t) < 0.012) return;
+    s.seeking = true;
+    try { s.v.currentTime = t; } catch { s.seeking = false; }
+  };
+  slots.forEach(s => {
+    s.v.addEventListener('loadedmetadata', () => { s.ready = true; paint(); });
+    s.v.addEventListener('seeked', () => {
+      s.seeking = false;
+      if (s.want >= 0) { const t = s.want; s.want = -1; seek(s, t); }
+    });
+    /* a leg that will not load leaves its poster standing — never a black hole */
+    s.v.addEventListener('error', () => { s.ready = false; s.v.classList.remove('on'); }, true);
+  });
+  const slotFor = leg => {
+    for (const s of slots) if (s.leg === leg) return s;
+    return arm(slots[shown === 0 ? 1 : 0], leg);
+  };
+  const show = s => {
+    const k = slots.indexOf(s);
+    if (k === shown) return;
+    shown = k;
+    slots.forEach(o => o.v.classList.toggle('on', o === s));
+  };
+  const setLeg = i => {
+    if (i === lastLeg) return;
+    lastLeg = i;
+    caps.forEach((c, k) => c.classList.toggle('on', k === i));
+    pips.forEach((p, k) => p.classList.toggle('on', k === i));
+    if (legno) legno.textContent = String(i + 1).padStart(2, '0');
+    if (still) still.src = LEGS[i].poster;   /* the floor under the videos */
+  };
+
+  function paint() {
+    const p = clamp01(parseFloat(scene.style.getPropertyValue('--p') || '0'));
+    if (p > lastP + 1e-4) dir = 1; else if (p < lastP - 1e-4) dir = -1;
+    lastP = p;
+    const g = Math.min(p, 0.999999) * N;
+    const i = Math.floor(g), f = g - i;
+    setLeg(i);
+    scene.style.setProperty('--f', f.toFixed(4));   /* caption + numeral parallax */
+    if (MODE === 'still') return;
+    const s = slotFor(i);
+    show(s);
+    if (s.ready) {
+      const d = s.v.duration || 5;
+      seek(s, Math.min(d - 0.04, Math.max(0, f * d)));
+    }
+    const nb = i + dir;                              /* prefetch where we are going */
+    if (nb >= 0 && nb < N) {
+      const other = slots[1 - slots.indexOf(s)];
+      if (other.leg !== nb) arm(other, nb);
+    }
+  }
+
+  if (MODE === 'chain') {
+    let idx = 0, live = false, cur = slots[0];
+    const playIdx = () => {
+      arm(cur, idx); show(cur); setLeg(idx);
+      const go = cur.v.play();
+      if (go) go.catch(() => scene.classList.add('needs-tap'));
+      const other = cur === slots[0] ? slots[1] : slots[0];
+      if (idx + 1 < N) arm(other, idx + 1);
+    };
+    slots.forEach(s => s.v.addEventListener('ended', () => {
+      if (!live || s !== cur || idx + 1 >= N) return;   /* hold the last frame */
+      idx += 1; cur = cur === slots[0] ? slots[1] : slots[0]; playIdx();
+    }));
+    scene.addEventListener('scene:live', () => { live = true; playIdx(); });
+    scene.addEventListener('scene:idle', () => { live = false; slots.forEach(s => s.v.pause()); });
+    scene.addEventListener('click', () => { scene.classList.remove('needs-tap'); live = true; playIdx(); });
+    setLeg(0);
+    return;
+  }
+
+  let tick = false, fallback = 0;
+  const onScroll = () => {
+    if (tick) return;
+    tick = true;
+    requestAnimationFrame(() => { tick = false; paint(); });
+    // same safety the engine carries: rAF is frozen in a hidden or embedded
+    // webview, and without this the flight sticks on leg 01 while the page
+    // scrolls past it. Measured: document.hidden === true, rAF never fires,
+    // timers still do.
+    clearTimeout(fallback);
+    fallback = setTimeout(() => { if (tick) { tick = false; paint(); } }, 120);
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll, { passive: true });
+  if (solo) {
+    /* the QA harness sets --p once and never scrolls; keep painting until the
+       leg has metadata, then a couple more so the seek lands */
+    let n = 0;
+    const hold = setInterval(() => { paint(); if (++n > 60) clearInterval(hold); }, 100);
+  }
+  paint();
 })();
 </script>
 </body>
