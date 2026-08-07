@@ -310,24 +310,35 @@ def place_prop(path, size, loc, rot_z=0.0, tris=60000, shade_smooth=False):
             for p in m.data.polygons:
                 p.use_smooth = True
 
-    dg = bpy.context.evaluated_depsgraph_get()
-    bpy.context.view_layer.update()
-
     def world_bb():
+        """Bounds in world space. The depsgraph must be fetched AFTER the
+        view layer update, not before: reparenting and the decimate modifier
+        both change evaluated geometry, and a depsgraph captured earlier
+        hands back the pre-modifier bound_box. Measuring against that scaled
+        the first test prop to 0.525 m when it had been asked for 0.480."""
+        bpy.context.view_layer.update()
+        dg = bpy.context.evaluated_depsgraph_get()
         pts = []
         for m in meshes:
-            for c in m.evaluated_get(dg).bound_box:
+            ev = m.evaluated_get(dg)
+            for c in ev.bound_box:
                 pts.append(m.matrix_world @ Vector(c))
         return pts
 
-    pts = world_bb()
-    dims = [max(p[k] for p in pts) - min(p[k] for p in pts) for k in range(3)]
-    longest = max(dims) or 1.0
-    f = size / longest
-    root.scale = (f, f, f)
     root.rotation_mode = 'XYZ'
     root.rotation_euler = (0, 0, math.radians(rot_z))
-    bpy.context.view_layer.update()
+
+    # Solve the scale rather than compute it once. An importer can put its own
+    # transform between the root and the meshes, so one division is a guess
+    # that happens to be right; measuring the result and correcting is not.
+    for _ in range(4):
+        pts = world_bb()
+        dims = [max(p[k] for p in pts) - min(p[k] for p in pts) for k in range(3)]
+        longest = max(dims) or 1.0
+        if abs(longest - size) <= size * 1e-4:
+            break
+        k = size / longest
+        root.scale = tuple(s * k for s in root.scale)
 
     pts = world_bb()
     cx = (max(p[0] for p in pts) + min(p[0] for p in pts)) / 2
