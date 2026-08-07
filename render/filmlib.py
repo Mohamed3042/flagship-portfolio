@@ -258,6 +258,103 @@ def linear(ob):
     return ob
 
 
+def place_prop(path, size, loc, rot_z=0.0, tris=60000, shade_smooth=False):
+    """Import ONE model file and stand it in the set at real size.
+
+    harness.dressing() places a whole folder by index order, which is fine for
+    a plate world where anything dropped in is decoration. A film cannot work
+    that way: a prop belongs at a specific mark in a specific shot, and the
+    order files happen to sort in is not that. This takes one path.
+
+    `size` is the real-world size in metres on the longest axis. `loc` is where
+    the prop's BASE CENTRE goes, so a crate at z=0 sits on the floor rather
+    than half-sunk in it. Missing file is not an error — the shot renders
+    undressed, which is the state the film is in today.
+    """
+    if not path or not os.path.isfile(path):
+        return None
+    before = set(bpy.data.objects)
+    low = path.lower()
+    try:
+        if low.endswith(('.glb', '.gltf')):
+            bpy.ops.import_scene.gltf(filepath=path)
+        elif low.endswith('.fbx'):
+            bpy.ops.import_scene.fbx(filepath=path)
+        elif low.endswith('.obj'):
+            bpy.ops.wm.obj_import(filepath=path)
+        else:
+            return None
+    except Exception as e:
+        print('PROP_FAILED %s: %s' % (os.path.basename(path), str(e)[:80]))
+        return None
+
+    added = [o for o in bpy.data.objects if o not in before]
+    meshes = [o for o in added if o.type == 'MESH']
+    if not meshes:
+        return None
+
+    # Parent everything to one empty so the group scales and rotates as a unit
+    # — a multi-part import scaled per-object comes apart.
+    root = bpy.data.objects.new('Prop_' + os.path.basename(path)[:16], None)
+    bpy.context.collection.objects.link(root)
+    for o in added:
+        if o.parent is None:
+            o.parent = root
+            o.matrix_parent_inverse = root.matrix_world.inverted()
+
+    if tris:
+        for m in meshes:
+            H.decimate_to(m, tris)
+    if shade_smooth:
+        for m in meshes:
+            for p in m.data.polygons:
+                p.use_smooth = True
+
+    dg = bpy.context.evaluated_depsgraph_get()
+    bpy.context.view_layer.update()
+
+    def world_bb():
+        pts = []
+        for m in meshes:
+            for c in m.evaluated_get(dg).bound_box:
+                pts.append(m.matrix_world @ Vector(c))
+        return pts
+
+    pts = world_bb()
+    dims = [max(p[k] for p in pts) - min(p[k] for p in pts) for k in range(3)]
+    longest = max(dims) or 1.0
+    f = size / longest
+    root.scale = (f, f, f)
+    root.rotation_mode = 'XYZ'
+    root.rotation_euler = (0, 0, math.radians(rot_z))
+    bpy.context.view_layer.update()
+
+    pts = world_bb()
+    cx = (max(p[0] for p in pts) + min(p[0] for p in pts)) / 2
+    cy = (max(p[1] for p in pts) + min(p[1] for p in pts)) / 2
+    zmin = min(p[2] for p in pts)
+    root.location = (loc[0] - cx, loc[1] - cy, loc[2] - zmin)
+    bpy.context.view_layer.update()
+    print('PROP %s -> %.3fm at %s' % (os.path.basename(path)[:28], size, loc))
+    return root
+
+
+def prop_path(world, *names):
+    """First existing file in render/assets/<world>/ matching any of `names`
+    (case-insensitive substring). Lets the set reference a prop by what it IS
+    while the file on disk keeps whatever name the generator gave it."""
+    folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', world)
+    if not os.path.isdir(folder):
+        return None
+    files = [f for f in sorted(os.listdir(folder))
+             if f.lower().endswith(('.glb', '.gltf', '.fbx', '.obj'))]
+    for want in names:
+        for f in files:
+            if want.lower() in f.lower():
+                return os.path.join(folder, f)
+    return None
+
+
 def hold(cam, tgt, spec, frames):
     """stage_shot, with MB=0 to strip motion blur — the second-largest lever on
     frame cost after the world volume, and worth measuring separately."""

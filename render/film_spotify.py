@@ -246,6 +246,7 @@ def build_room():
     R.update(_monitors(steel))
     R.update(_rack(steel))
     R.update(_life(steel))
+    R['props'] = _props()
 
     # cable from the deck's back edge down behind the bench
     cbl = H.pbr('Cable', base=(0.010, 0.010, 0.012), rough=0.62)
@@ -447,6 +448,67 @@ def _monitors(steel):
                           name='MonLed'), m)
         out.setdefault('mon_leds', []).append(m)
     out['cones'] = cones
+    return out
+
+
+# Generated dressing. Every entry is a no-op until a matching file appears in
+# render/assets/spotify/, so the room renders exactly as authored until then.
+#
+#   name        the prop, and the substrings that identify its file on disk
+#   size_m      real size on the longest axis — a generated mesh arrives
+#               normalised to 1.0, so this is the only thing that makes a
+#               crate a crate and not a wardrobe
+#   loc         BASE CENTRE, so z=0 means standing on the floor
+#
+# Marks are chosen against the room's real fixtures: bench face y=1.62 with
+# its top at z=0.90, deck at x=-0.05, rack at (2.36, 1.22), stool at
+# (-0.55, 0.55). Nothing is placed where the four macro shots look.
+#   hides       built-in objects this prop REPLACES. The room already builds a
+#               stool, two monitors and a rack; dropping a generated one on
+#               the same mark puts two solids in the same cubic metre, which
+#               is the one artifact a still frame always finds.
+#
+# The back wall is at y=4.2 with fabric panels standing 5 cm proud at x=+-2.02,
+# and the bench top spans x -1.55..1.55 — marks are inside those, not through
+# them. No wall-hung prop is listed: place_prop rotates in Z only, so a panel
+# cannot be laid flat against a vertical wall yet.
+PROPS = [
+    # the one prop the story is about — floor, left of the stool, angled open
+    dict(names=('crate', 'lp', 'vinyl', 'record'), size=0.34, loc=(-1.62, 0.98, 0.0), rot=14),
+    # outboard unit on the bench, inboard of the edge
+    dict(names=('rack_u', 'preamp', 'vu', '19in'), size=0.483, loc=(1.16, 1.42, 0.90), rot=-6),
+    # near-field replaces the built pair of boxes
+    dict(names=('monitor', 'speaker', 'nearfield'), size=0.34, loc=(-1.15, 1.50, 0.90), rot=22,
+         hides=('Monitor', 'MonLed', 'Woofer', 'Tweeter')),
+    # reel-to-reel on the floor behind the bench, clear of the rack at y 0.92..1.52
+    dict(names=('reel', 'tape'), size=0.55, loc=(1.98, 2.30, 0.0), rot=-18),
+    # where the music ends up: consumer box on the floor, away from the desk
+    dict(names=('boombox', 'jbl'), size=0.48, loc=(-2.32, 2.62, 0.0), rot=28),
+    dict(names=('patchbay',), size=0.483, loc=(2.06, 1.22, 0.64), rot=0),
+    dict(names=('stool',), size=0.62, loc=(-0.55, 0.55, 0.0), rot=0,
+         hides=('Stool',)),
+]
+
+
+def _props():
+    """Place whatever generated dressing exists. Returns the roots placed."""
+    out = []
+    for p in PROPS:
+        path = F.prop_path('spotify', *p['names'])
+        if not path:
+            continue
+        ob = F.place_prop(path, p['size'], p['loc'], p.get('rot', 0.0),
+                          tris=int(os.environ.get('PROP_TRIS', 60000)))
+        if not ob:
+            continue
+        for pre in p.get('hides', ()):
+            for o in list(bpy.data.objects):
+                if o.name.startswith(pre) and not o.name.startswith('Prop_'):
+                    o.hide_render = True
+                    o.hide_viewport = True
+        out.append(ob)
+    if out:
+        print('PROPS_PLACED %d' % len(out))
     return out
 
 

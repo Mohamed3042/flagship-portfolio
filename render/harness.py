@@ -726,7 +726,29 @@ def _roots(objs):
     return [o for o in objs if o.type == 'MESH' and (o.parent is None or o.parent not in s)]
 
 
-def dressing(world, slots, hide_extra=True):
+def decimate_to(ob, tris):
+    """Collapse an object (and its mesh children) down to roughly `tris`.
+
+    Image-to-3D output lands at a fixed budget — every model out of Hunyuan is
+    ~1.5M triangles whether it is a dish antenna or a book. Six of those is 9M
+    triangles of *background dressing*, which costs BVH build time and memory
+    on every frame to resolve detail no lens in the shot can see. Decimating a
+    prop that occupies 200px is free quality.
+    """
+    for o in [ob] + list(ob.children_recursive):
+        if o.type != 'MESH' or not o.data.polygons:
+            continue
+        have = len(o.data.polygons)
+        if have <= tris:
+            continue
+        m = o.modifiers.new('Decimate', 'DECIMATE')
+        m.decimate_type = 'COLLAPSE'
+        m.ratio = max(0.002, tris / float(have))
+        m.use_collapse_triangulate = True
+    return ob
+
+
+def dressing(world, slots, hide_extra=True, tris=None):
     """Import render/assets/<world>/ and dress the set with it.
 
     slots: [(size_m, (x, y, z), rot_z_deg), ...] — each imported root is
@@ -735,6 +757,9 @@ def dressing(world, slots, hide_extra=True):
     measuring the bounds is the only reliable way to make them share a set
     with hand-built geometry. Anything past the last slot is hidden rather
     than left floating at the origin.
+
+    tris: optional per-prop triangle budget, see decimate_to(). Left at None
+    the geometry is untouched, so this stays a no-op for existing worlds.
     """
     objs = import_assets(world)
     if not objs:
