@@ -41,7 +41,16 @@ for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
   src="$R/out/$tag"
   [ -d "$src" ] || { echo "### NO FRAMES $tag — leaving its mp4 alone"; continue; }
   have=$(ls "$src"/f_*.png 2>/dev/null | wc -l)
-  [ "$have" -lt 2 ] && { echo "### NO FRAMES $tag"; continue; }
+  # Same guard as film_batch.sh, and for the same reason. A fixed floor here
+  # (`-lt 2`) is not a completeness test: run while the batch is still working,
+  # it happily encoded 18 of shot 4's 144 frames and shipped them as a finished
+  # plate. Grade against what the shot declared it would render, so a directory
+  # that is still filling up is skipped rather than published.
+  want=$(grep -oE 'frames=[0-9]+' "$R/out/$tag.log" 2>/dev/null | head -1 | cut -d= -f2)
+  if [ -z "$want" ] || [ "$have" -ne "$want" ]; then
+    echo "### INCOMPLETE $tag — ${have} of ${want:-?} frames, leaving its mp4 alone"
+    continue
+  fi
   ffmpeg -y -loglevel error -framerate 24 -i "$src/f_%04d.png" \
     -vf "scale=${PLATE_W}:-2:flags=lanczos,noise=alls=3:allf=t" \
     -c:v libx264 -pix_fmt yuv420p -crf $PLATE_CRF -preset slow \

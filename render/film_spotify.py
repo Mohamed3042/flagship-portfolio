@@ -1020,7 +1020,11 @@ def main():
             glare=0.13, vignette=0.0, dispersion=0.007)
 
     out = H.out_arg('C:/Users/GAMING/Downloads/flagship-portfolio-git/render/out/spot-film-s%d' % n)
-    print('FILM_SHOT %d %s frames=%d' % (n, spec['name'], frames))
+    # flush: this line is the contract the encode guards grade against ("did
+    # this shot render all the frames it said it would"). Block-buffered, it
+    # only reaches the log when Blender exits, so a guard run mid-render cannot
+    # read the count and has to fall back to refusing on a missing declaration.
+    print('FILM_SHOT %d %s frames=%d' % (n, spec['name'], frames), flush=True)
     H.render(out)
 
 
