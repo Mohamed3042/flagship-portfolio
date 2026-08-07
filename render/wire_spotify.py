@@ -177,7 +177,8 @@ def main():
     old_btn = ('  <div class="grp">\n'
                '    <button type="button" data-lang-toggle aria-pressed="false">')
     new_btn = ('  <div class="grp">\n'
-               '    <button type="button" data-theater="spotify/spotify-film.mp4">'
+               '    <button type="button" data-theater="spotify/spotify-film.mp4"'
+               ' data-theater-poster="spotify/spotify-film.jpg">'
                '<span class="L en">▸ The film · %s</span>' % RUNTIME_EN +
                '<span class="L ar">▸ الفيلم · %s</span></button>\n' % RUNTIME_AR +
                '    <button type="button" data-lang-toggle aria-pressed="false">')

@@ -144,10 +144,22 @@
     dlg.innerHTML = '<button class="theater__close" aria-label="Close">✕</button><video controls playsinline></video>';
     document.body.appendChild(dlg);
     const tv = dlg.querySelector('video');
-    dlg.querySelector('.theater__close').addEventListener('click', () => dlg.close());
-    dlg.addEventListener('close', () => { tv.pause(); tv.removeAttribute('src'); tv.load(); });
-    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    // Idempotent, and called from the explicit close paths as well as the
+    // close event: leaving src set keeps the browser buffering a two-minute
+    // file behind a dialog nobody is looking at.
+    const teardown = () => {
+      if (!tv.hasAttribute('src')) return;
+      tv.pause(); tv.removeAttribute('src'); tv.removeAttribute('poster'); tv.load();
+    };
+    const shut = () => { dlg.close(); teardown(); };
+    dlg.querySelector('.theater__close').addEventListener('click', shut);
+    dlg.addEventListener('close', teardown);
+    dlg.addEventListener('cancel', teardown);
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) shut(); });
     theaterBtns.forEach(b => b.addEventListener('click', () => {
+      // Poster first: the master is a two-minute file, so without one the
+      // dialog opens on a black rectangle for as long as the buffer takes.
+      if (b.dataset.theaterPoster) tv.poster = b.dataset.theaterPoster;
       tv.src = b.dataset.theater;
       dlg.showModal();
       tv.play().catch(() => {});
