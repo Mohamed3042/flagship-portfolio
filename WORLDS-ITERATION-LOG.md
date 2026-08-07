@@ -73,3 +73,50 @@ so the next person can measure instead of guess.
 - Recorded in DEPLOY-STATUS notes / final session report: full scroll-through of lobby +
   all 8 films on https://mohamed3042.github.io/flagship-portfolio/worlds/ in a real
   browser, EN + AR, plus video playback checks on disney (chain advance + theater).
+
+## Pass 5 — Spotify ships as a real film (2026-08-07)
+
+**Live:** https://mohamed3042.github.io/flagship-portfolio/worlds/spotify.html
+
+15 shots, 2712 frames, 1920×804 scope, 128 samples, OptiX. Master 113.000 s = 1:53,
+which is 2712/24 exactly; the page derives that runtime from the shot table rather
+than carrying it as a second copy of the number.
+
+**The one that mattered:** every "Cycles OptiX" plate this repo had ever shipped was a
+CPU render. `harness.init()` calls `read_factory_settings()`, which resets the
+*preferences* too, so `cycles.preferences.compute_device_type` went back to NONE — and
+with no backend, `scene.cycles.device = 'GPU'` silently falls back to CPU. Every world
+script called `setup_gpu()` *before* `init()`. Found because the owner sent a Task
+Manager screenshot showing the 5070 Ti at 2%. 21 s/frame → 5.8 s/frame at higher
+settings. Everything I had "optimised" before that was tuning the wrong machine: the
+2K texture mirror was worth 5× on CPU and nothing at all on GPU (43 s vs 45 s).
+
+**Completeness guards.** `film_batch.sh` graded renders with `frames -lt 8`, a fixed
+floor over a variable population; an 11-of-96 partial passed it and shipped as a
+finished shot. Fixed to grade against the count each shot declares. Then sweeping for
+the predicate found the same defect in three more scripts — `batch.sh`, `rerender.sh`,
+`batch_seq.sh`, all `-lt 8`, each already knowing the right number because it sets
+FRAMES itself. Audited the 40 already-published plates: no truncation had ever shipped.
+
+**Corrected an unmeasured claim.** I had asserted scroll-scrubbed video needs `-g 4`
+from first principles. Measured: seek cost across g=4/8/12/24/single-keyframe was
+3.9–9.9 ms max with *no* correlation to keyframe density, while size correlated
+steeply (1930 KB at g=4 vs 1043 KB at g=12). Settled at g=12; plates 25M → 18M.
+
+**Deploy traps.** `npm run build:ghpages` was broken on Windows — POSIX env syntax
+through cmd.exe — so the Pages build could not be produced on the machine it ships
+from. And `.nojekyll` existed only as a hand-placed file on the gh-pages branch, so
+replacing that branch with a fresh `dist/` would have dropped it and Jekyll would have
+skipped all 30 assets under `_astro/`. Both fixed at the source.
+
+**Prop pipeline** (`filmlib.place_prop`, `prop_path`, `harness.decimate_to`): the film
+never imported `render/assets/spotify/` at all. Now it does, one file per mark, with a
+triangle budget — generated models arrive at a flat ~1.5M tris each. First real run put
+a 0.480 m prop in at 0.525 m: the depsgraph was captured before the view-layer update,
+so the bounds were pre-decimate. Scale is solved iteratively now, not divided once.
+
+**Still undressed.** The room has no records in it. Crate, rack unit, near-field
+monitor, reel-to-reel and patchbay are exported but not yet delivered; boombox and
+SM7dB are staged in `assets/spotify/_pending/`, deliberately out of the live folder so
+all 15 shots stay identical. Dressing means re-rendering s03, s13, s14 and s15 together
+— dressing only the later ones would give the room a boombox two thirds through.
