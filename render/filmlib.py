@@ -258,7 +258,8 @@ def linear(ob):
     return ob
 
 
-def place_prop(path, size, loc, rot_z=0.0, tris=60000, shade_smooth=False):
+def place_prop(path, size, loc, rot_z=0.0, tris=60000, shade_smooth=False,
+               rot=None):
     """Import ONE model file and stand it in the set at real size.
 
     harness.dressing() places a whole folder by index order, which is fine for
@@ -326,7 +327,11 @@ def place_prop(path, size, loc, rot_z=0.0, tris=60000, shade_smooth=False):
         return pts
 
     root.rotation_mode = 'XYZ'
-    root.rotation_euler = (0, 0, math.radians(rot_z))
+    # `rot` (radians, XYZ) for props that are not Z-up as generated — image-to
+    # -3D output lands in whatever orientation the reference photo implied.
+    # It has to be set BEFORE the scale solve and the floor drop below, or the
+    # prop is measured and grounded in the wrong orientation and then turned.
+    root.rotation_euler = rot if rot is not None else (0, 0, math.radians(rot_z))
 
     # Solve the scale rather than compute it once. An importer can put its own
     # transform between the root and the meshes, so one division is a guess

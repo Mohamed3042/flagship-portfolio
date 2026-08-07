@@ -394,9 +394,11 @@ def _desk(M):
           name='Keys', mat=M['black'], bevel=0.002)
     F.box(loc=(x - 0.18, cy - 0.30, DESK_Z + 0.021), dims=(0.19, 0.47, 0.006),
           name='KeyGlow', mat=M['greenSoft'])
-    # near-field monitors flanking the desk
-    for yy, sc in ((y0 + 0.28, 1.15), (y1 - 0.55, 0.80)):
-        _speaker(M, (x - 0.02, yy, DESK_Z + 0.038), sc)
+    # Near-field monitors: the real cut-out prop if it is on disk, otherwise
+    # the built box. The room has always had to render undressed.
+    if not F.prop_path('lounge', 'monitor'):
+        for yy, sc in ((y0 + 0.28, 1.15), (y1 - 0.55, 0.80)):
+            _speaker(M, (x - 0.02, yy, DESK_Z + 0.038), sc)
     _boom(M, (x + 0.16, cy + 0.62, DESK_Z))
 
 
@@ -701,6 +703,32 @@ def _chair(M, at=(-1.82, 0.98), turn=-0.62):
           rot=(0, -0.19, turn + math.pi))
 
 
+# Props cut out of the fused image-to-3D plates by tools/split_plate.py.
+# `rot` is in radians XYZ because the pieces are not reliably Z-up — the
+# orientation follows whatever the reference photo implied, not a convention.
+LOUNGE_PROPS = [
+    dict(names=('monitor',), size=0.33, loc=(-2.58, -0.62, DESK_Z + 0.019)),
+    dict(names=('monitor',), size=0.33, loc=(-2.58, 1.62, DESK_Z + 0.019)),
+    dict(names=('lamp',), size=0.44, loc=(-2.62, 2.02, DESK_Z + 0.019)),
+]
+
+
+def _props(M):
+    """Place the cut-out props. A missing file is not an error: the room
+    renders with its built stand-ins, which is the state it shipped in."""
+    placed = []
+    for p in LOUNGE_PROPS:
+        path = F.prop_path('lounge', *p['names'])
+        if not path:
+            continue
+        ob = F.place_prop(path, p['size'], p['loc'], tris=p.get('tris', 40000),
+                          rot=p.get('rot'))
+        if ob:
+            placed.append(ob)
+    print('PROPS placed=%d' % len(placed), flush=True)
+    return placed
+
+
 def _guitar(M):
     """The electric leaning against the right wall. Present in three of the six
     keyframes, and the only warm-toned object in the room — which is exactly
@@ -767,6 +795,7 @@ def build():
     _plant(M, (-2.55, 2.62, 0.0), 1.15)
     _plant(M, (2.52, 2.72, 0.0), 1.05)
     _plant(M, (2.40, -2.15, 0.0), 0.95)
+    _props(M)
     _lights(M)
     return dict(mats=M)
 
