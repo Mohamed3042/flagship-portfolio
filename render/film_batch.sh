@@ -64,16 +64,19 @@ for n in $SHOTS; do
   # Grain at encode, not in the compositor: it costs nothing, it lands after the
   # grade where real grain lives, and it hides the last of the denoiser's wax.
   ffmpeg -y -loglevel error -framerate 24 -i "$R/out/$tag/f_%04d.png" \
-    -vf "scale=${PLATE_W}:-2:flags=lanczos,noise=alls=4:allf=t" \
-    -c:v libx264 -pix_fmt yuv420p -crf 20 -preset slow \
+    -vf "scale=${PLATE_W}:-2:flags=lanczos,noise=alls=3:allf=t" \
+    -c:v libx264 -pix_fmt yuv420p -crf ${PLATE_CRF:-22} -preset slow \
     -g 4 -keyint_min 4 -sc_threshold 0 -movflags +faststart -an "$out"
   ffmpeg -y -loglevel error -framerate 24 -i "$R/out/$tag/f_%04d.png" \
     -vf "scale=${MASTER_W}:-2:flags=lanczos,noise=alls=3:allf=t" \
-    -c:v libx264 -pix_fmt yuv420p -crf 20 -preset slow \
+    -c:v libx264 -pix_fmt yuv420p -crf ${MASTER_CRF:-21} -preset slow \
     -g 48 -movflags +faststart -an "$MP/$tag.mp4"
   ffmpeg -y -loglevel error -i "$R/out/$tag/f_0001.png" \
     -vf "scale=${PLATE_W}:-2:flags=lanczos" -q:v 3 "$DEST/shots/$tag.jpg"
-  rm -rf "$R/out/$tag"
+  # Keep the frames by default. Re-encoding to trade size against quality is
+  # seconds; re-rendering to get them back is hours. KEEP_PNG=0 to reclaim
+  # the ~5 GB once the cut is signed off.
+  [ "${KEEP_PNG:-1}" = "0" ] && rm -rf "$R/out/$tag"
   echo "### ENCODED $tag  $have frames  plate $(du -h "$out" | cut -f1)  master $(du -h "$MP/$tag.mp4" | cut -f1)"
 done
 

@@ -12,21 +12,47 @@ import io, os, re, sys
 HTML = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                     '..', 'public', 'worlds', 'spotify.html')
 
-# name, slate, technical slate EN/AR, kick EN/AR, title EN/AR, body EN/AR
-SHOT_TECH = {
-    'line':     ('120 FRAMES · 1280×536 · 32→38 MM · f/2.8', '١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ٣٢→٣٨ مم · f/2.8'),
-    'room':     ('144 FRAMES · 1280×536 · 24→28 MM · f/5.6', '١٤٤ إطارًا · ١٢٨٠×٥٣٦ · ٢٤→٢٨ مم · f/5.6'),
-    'pulse':    ('96 FRAMES · 1280×536 · 85→105 MM · f/4',   '٩٦ إطارًا · ١٢٨٠×٥٣٦ · ٨٥→١٠٥ مم · f/4'),
-    'needle':   ('120 FRAMES · 1280×536 · 90→125 MM · f/9',  '١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ٩٠→١٢٥ مم · f/9'),
-    'quantize': ('132 FRAMES · 1280×536 · 50→70 MM · f/4',   '١٣٢ إطارًا · ١٢٨٠×٥٣٦ · ٥٠→٧٠ مم · f/4'),
-    'lanes':    ('120 FRAMES · 1280×536 · 40→48 MM · f/4',   '١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ٤٠→٤٨ مم · f/4'),
-    'canyon':   ('168 FRAMES · 1280×536 · 30→38 MM · f/2.8', '١٦٨ إطارًا · ١٢٨٠×٥٣٦ · ٣٠→٣٨ مم · f/2.8'),
-    't01':      ('108 FRAMES · 1280×536 · 85→110 MM · f/6.3', '١٠٨ إطارًا · ١٢٨٠×٥٣٦ · ٨٥→١١٠ مم · f/6.3'),
-    't02':      ('108 FRAMES · 1280×536 · 85→112 MM · f/6.3', '١٠٨ إطارًا · ١٢٨٠×٥٣٦ · ٨٥→١١٢ مم · f/6.3'),
-    't03':      ('96 FRAMES · 1280×536 · 62→85 MM · f/4',    '٩٦ إطارًا · ١٢٨٠×٥٣٦ · ٦٢→٨٥ مم · f/4'),
-    'master':   ('144 FRAMES · 1280×536 · 62→105 MM · f/5.6', '١٤٤ إطارًا · ١٢٨٠×٥٣٦ · ٦٢→١٠٥ مم · f/5.6'),
-    'chorus':   ('144 FRAMES · 1280×536 · 58→34 MM · f/4',   '١٤٤ إطارًا · ١٢٨٠×٥٣٦ · ٥٨→٣٤ مم · f/4'),
+# Technical slates are DERIVED, never transcribed. Hand-maintaining the same
+# numbers twice — once in Latin digits, once in Arabic-Indic — is how a page
+# ends up advertising a frame count the film does not have, and patching those
+# numerals in place afterwards is worse: "٢٤٠" contains "٢٤", so a naive
+# replace silently rewrites the wrong shot.
+_AR = {'0': '٠', '1': '١', '2': '٢', '3': '٣', '4': '٤',
+       '5': '٥', '6': '٦', '7': '٧', '8': '٨', '9': '٩'}
+
+
+def _ar(text):
+    return ''.join(_AR.get(c, c) for c in str(text))
+
+
+# shot: (frames, focal-from, focal-to, f-stop)  — must match film_spotify.SHOTS
+OPTICS = {
+    'line': (168, 32, 38, '2.8'),   'pulse': (120, 85, 105, '4'),
+    'room': (216, 24, 28, '5.6'),   'arm': (144, 65, 85, '4'),
+    'needle': (168, 90, 125, '9'),  'groove': (168, 100, 135, '11'),
+    'quantize': (192, 50, 70, '4'), 'lanes': (192, 40, 48, '4'),
+    'canyon': (240, 30, 38, '2.8'), 't01': (168, 85, 110, '6.3'),
+    't02': (168, 85, 112, '6.3'),   't03': (144, 62, 85, '4'),
+    'master': (216, 62, 105, '5.6'), 'chorus': (216, 58, 34, '4'),
+    'outro': (192, 92, 52, '4'),
 }
+PLATE_W, PLATE_H = 1280, 536
+
+
+def tech(shot):
+    f, a, b, N = OPTICS[shot]
+    en = '%d FRAMES · %d×%d · %d→%d MM · f/%s' % (f, PLATE_W, PLATE_H, a, b, N)
+    ar = '%s إطارًا · %s×%s · %s→%s مم · f/%s' % (
+        _ar(f), _ar(PLATE_W), _ar(PLATE_H), _ar(a), _ar(b), N)
+    return en, ar
+
+
+SHOT_TECH = {k: tech(k) for k in OPTICS}
+
+TOTAL_FRAMES = sum(v[0] for v in OPTICS.values())
+_secs = TOTAL_FRAMES / 24.0
+RUNTIME_EN = '%d:%02d' % (_secs // 60, round(_secs) % 60)
+RUNTIME_AR = _ar(RUNTIME_EN)
 
 COPY = {
 'line': ('s01-line', 'Shot 1 · the room before anything',
@@ -152,24 +178,24 @@ def main():
                '    <button type="button" data-lang-toggle aria-pressed="false">')
     new_btn = ('  <div class="grp">\n'
                '    <button type="button" data-theater="spotify/spotify-film.mp4">'
-               '<span class="L en">▸ The film · 1:17</span>'
-               '<span class="L ar">▸ الفيلم · ١:١٧</span></button>\n'
+               '<span class="L en">▸ The film · %s</span>' % RUNTIME_EN +
+               '<span class="L ar">▸ الفيلم · %s</span></button>\n' % RUNTIME_AR +
                '    <button type="button" data-lang-toggle aria-pressed="false">')
     assert s.count(old_btn) == 1, 'chrome button anchor'
     s = s.replace(old_btn, new_btn, 1)
 
     # ── repoint the four original plates at the film's shots ──────────────
     repoint = [
-        ('render/spotify-s1.mp4', 'render/spotify-s1.jpg', 's04-arm',    'Shot 4 · the needle comes down',
-         ('108 FRAMES · 1280×536 · 65→85 MM · f/4', '١٠٨ إطارًا · ١٢٨٠×٥٣٦ · ٦٥→٨٥ مم · f/4')),
-        ('render/spotify-s2.mp4', 'render/spotify-s2.jpg', 's06-groove', 'Shot 6 · the groove',
-         ('120 FRAMES · 1280×536 · 100→135 MM · f/11', '١٢٠ إطارًا · ١٢٨٠×٥٣٦ · ١٠٠→١٣٥ مم · f/11')),
-        ('render/spotify-s3.mp4', 'render/spotify-s3.jpg', 's13-master', 'Shot 13 · the master fader',
-         ('144 FRAMES · 1280×536 · 62→105 MM · f/5.6', '١٤٤ إطارًا · ١٢٨٠×٥٣٦ · ٦٢→١٠٥ مم · f/5.6')),
-        ('render/spotify-s4.mp4', 'render/spotify-s4.jpg', 's15-outro',  'Shot 15 · lift off',
-         ('132 FRAMES · 1280×536 · 92→52 MM · f/4', '١٣٢ إطارًا · ١٢٨٠×٥٣٦ · ٩٢→٥٢ مم · f/4')),
+        ('render/spotify-s1.mp4', 'render/spotify-s1.jpg', 's04-arm',
+         'Shot 4 · the needle comes down', tech('arm')),
+        ('render/spotify-s2.mp4', 'render/spotify-s2.jpg', 's06-groove',
+         'Shot 6 · the groove', tech('groove')),
+        ('render/spotify-s3.mp4', 'render/spotify-s3.jpg', 's13-master',
+         'Shot 13 · the master fader', tech('master')),
+        ('render/spotify-s4.mp4', 'render/spotify-s4.jpg', 's15-outro',
+         'Shot 15 · lift off', tech('outro')),
     ]
-    for mp4, jpg, tag, slate, tech in repoint:
+    for mp4, jpg, tag, slate, _t in repoint:
         assert mp4 in s, mp4
         s = s.replace(mp4, 'spotify/shots/%s.mp4' % tag)
         s = s.replace(jpg, 'spotify/shots/%s.jpg' % tag)
@@ -181,6 +207,21 @@ def main():
         s = s.replace(tagblock,
                       '<p class="rtag"><span class="L en">%s</span>'
                       '<span class="L ar">%s</span></p>' % (ten, tar), 1)
+
+    # ── the credits stop claiming there is no footage ─────────────────────
+    s = s.replace(
+        '<dd><span class="L en">Live — 4 canvases + CSS, no footage, no audio</span>'
+        '<span class="L ar">حيًّا — ٤ لوحات وCSS، بلا مشهدٍ مصوَّر وبلا صوت</span></dd>',
+        '<dd><span class="L en">Live canvases + CSS, and 15 Cycles plates '
+        '(%s frames, path-traced, no AI footage, no audio)</span>'
+        '<span class="L ar">لوحاتٌ حيّة وCSS، مع ١٥ لقطة Cycles '
+        '(%s إطارًا، تتبُّع مسار، بلا مشاهد مولَّدة بالذكاء الاصطناعي وبلا صوت)</span></dd>'
+        % ('{:,}'.format(TOTAL_FRAMES), _ar(TOTAL_FRAMES)), 1)
+    s = s.replace(
+        '<dd>cinema.js v3 · CSS custom properties</dd>',
+        '<dd><span class="L en">cinema.js v4 · CSS custom properties · '
+        'Blender Cycles, OptiX, AgX</span><span class="L ar">cinema.js v4 · '
+        'خصائص CSS · Blender Cycles وOptiX وAgX</span></dd>', 1)
 
     # Shot 3's caption was written for a stylus plate; it is the master fader now
     s = s.replace(

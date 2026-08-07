@@ -44,17 +44,17 @@ LP_R = 0.152                          # a 12" LP, for real
 # keys are (t, cam_xyz, target_xyz) with t in 0..1; focal in mm; focus in m.
 
 SHOTS = [
-    dict(name='line', ev=0.85, frames=120, set='room', fstop=2.8, shutter=0.4,
+    dict(name='line', ev=0.85, frames=168, set='room', fstop=2.8, shutter=0.4,
          keys=[(0.0, (0.62, -3.45, 1.42), (0.0, 3.9, 1.30)),
                (1.0, (0.44, -2.55, 1.36), (0.0, 3.9, 1.30))],
          focal=[(0, 32), (1, 38)], focus=[(0, 7.4), (1, 6.5)]),
 
-    dict(name='pulse', ev=0.8, frames=96, set='room', fstop=4.0, shutter=0.4,
+    dict(name='pulse', ev=0.8, frames=120, set='room', fstop=4.0, shutter=0.4,
          keys=[(0.0, (0.30, 1.05, 1.40), (-0.55, 4.12, 1.30)),
                (1.0, (0.16, 1.55, 1.36), (-0.15, 4.12, 1.30))],
          focal=[(0, 85), (1, 105)], focus=[(0, 3.2), (1, 2.6)]),
 
-    dict(name='room', ev=0.35, frames=144, set='room', fstop=5.6, shutter=0.35,
+    dict(name='room', ev=0.35, frames=216, set='room', fstop=5.6, shutter=0.35,
          keys=[(0.0, (-2.05, -3.55, 2.34), (0.10, 1.55, 1.05)),
                (0.5, (-1.72, -3.00, 1.92), (0.10, 1.55, 1.02)),
                (1.0, (-1.38, -2.45, 1.52), (0.10, 1.55, 1.00))],
@@ -63,70 +63,70 @@ SHOTS = [
     # From here the framings are solved against the solved rig: the stylus
     # plays the lead-in groove at (-0.127, 1.541, 0.993), so that is what the
     # macro lenses are pointed at — not the arm post they were aimed at before.
-    dict(name='arm', ev=0.45, frames=108, set='room', fstop=4.0, shutter=0.5,
+    dict(name='arm', ev=0.45, frames=144, set='room', fstop=4.0, shutter=0.5,
          keys=[(0.0, (-0.62, 0.52, 1.10), (0.02, 1.50, 1.005)),
                (1.0, (-0.40, 0.72, 1.06), (-0.02, 1.51, 1.000))],
          focal=[(0, 65), (1, 85)], focus=[(0, 1.18), (1, 0.88)],
          roll=[(0, -0.5), (1, 0.4)]),
 
-    dict(name='needle', ev=1.2, frames=120, set='room', fstop=9.0, shutter=0.5,
+    dict(name='needle', ev=1.2, frames=168, set='room', fstop=9.0, shutter=0.5,
          keys=[(0.0, (0.085, 1.140, 1.058), (-0.115, 1.532, 1.000)),
                (1.0, (0.020, 1.245, 1.022), (-0.127, 1.541, 0.9935))],
          focal=[(0, 90), (1, 125)], focus=[(0, 0.444), (1, 0.332)]),
 
     # 4 cm above a glossy disc is the exact angle that mirrors every practical
     # straight into the lens; sit up and look down the groove instead
-    dict(name='groove', ev=-0.7, frames=120, set='room', fstop=11.0, shutter=0.5,
+    dict(name='groove', ev=-0.7, frames=168, set='room', fstop=11.0, shutter=0.5,
          keys=[(0.0, (-0.46, 1.20, 1.118), (-0.175, 1.50, 0.9932)),
                (1.0, (-0.36, 1.27, 1.084), (-0.170, 1.50, 0.9932))],
          focal=[(0, 100), (1, 135)], focus=[(0, 0.492), (1, 0.348)]),
 
-    dict(name='quantize', ev=0.35, frames=132, set='room', fstop=4.0, shutter=0.45,
+    dict(name='quantize', ev=0.35, frames=192, set='room', fstop=4.0, shutter=0.45,
          keys=[(0.0, (-0.72, 0.62, 1.26), (-0.05, 1.43, 1.03)),
                (1.0, (-0.46, 0.82, 1.16), (-0.05, 1.43, 1.01))],
          focal=[(0, 50), (1, 70)], focus=[(0, 1.09), (1, 0.75)]),
 
-    dict(name='lanes', ev=0.55, frames=120, set='room', fstop=4.0, shutter=0.45,
+    dict(name='lanes', ev=0.55, frames=192, set='room', fstop=4.0, shutter=0.45,
          keys=[(0.0, (-1.72, -0.52, 1.26), (0.10, 1.83, 0.96)),
                (1.0, (-0.62, -0.18, 1.18), (0.06, 1.83, 0.94))],
          focal=[(0, 40), (1, 48)], focus=[(0, 2.60), (1, 1.98)],
          roll=[(0, 0.8), (1, -0.6)]),
 
-    dict(name='canyon', ev=0.35, frames=168, set='canyon', fstop=2.8, shutter=0.6,
+    dict(name='canyon', ev=0.35, frames=240, set='canyon', fstop=2.8, shutter=0.6,
          keys=[(0.0, (0.0, -13.0, 0.42), (0.0, -6.0, 0.20)),
                (0.5, (0.06, -4.0, 0.30), (0.0, 3.0, 0.16)),
                (1.0, (-0.05, 5.0, 0.24), (0.0, 12.0, 0.14))],
          focal=[(0, 30), (1, 38)], focus=[(0, 7.0), (1, 6.0)],
          roll=[(0, -1.4), (1, 1.2)]),
 
-    dict(name='t01', ev=0.75, frames=108, set='room', fstop=6.3, shutter=0.45,
+    dict(name='t01', ev=0.75, frames=168, set='room', fstop=6.3, shutter=0.45,
          keys=[(0.0, (-0.92, 0.72, 1.10), (-1.24, 1.44, 0.945)),
                (1.0, (-1.06, 0.98, 1.03), (-1.28, 1.46, 0.940))],
          focal=[(0, 85), (1, 110)], focus=[(0, 0.86), (1, 0.62)]),
 
-    dict(name='t02', ev=0.4, frames=108, set='room', fstop=6.3, shutter=0.45,
+    dict(name='t02', ev=0.4, frames=168, set='room', fstop=6.3, shutter=0.45,
          keys=[(0.0, (0.98, 0.66, 1.12), (1.30, 1.46, 0.950)),
                (1.0, (1.14, 0.94, 1.04), (1.34, 1.48, 0.944))],
          focal=[(0, 85), (1, 112)], focus=[(0, 0.90), (1, 0.64)]),
 
-    dict(name='t03', ev=0.55, frames=96, set='room', fstop=4.0, shutter=0.4,
+    dict(name='t03', ev=0.55, frames=144, set='room', fstop=4.0, shutter=0.4,
          keys=[(0.0, (1.15, 0.10, 1.05), (2.06, 1.24, 0.74)),
                (1.0, (1.42, 0.44, 0.96), (2.06, 1.24, 0.66))],
          focal=[(0, 62), (1, 85)], focus=[(0, 1.50), (1, 1.04)]),
 
-    dict(name='master', ev=0.7, frames=144, set='room', fstop=5.6, shutter=0.45,
+    dict(name='master', ev=0.7, frames=216, set='room', fstop=5.6, shutter=0.45,
          keys=[(0.0, (-0.80, 0.42, 1.24), (-1.20, 1.46, 0.960)),
                (0.5, (-0.90, 0.72, 1.12), (-1.24, 1.46, 0.950)),
                (1.0, (-1.00, 1.00, 1.02), (-1.26, 1.47, 0.944))],
          focal=[(0, 62), (1, 105)], focus=[(0, 1.20), (1, 0.60)]),
 
-    dict(name='chorus', ev=0.4, frames=144, set='room', fstop=4.0, shutter=0.5,
+    dict(name='chorus', ev=0.4, frames=216, set='room', fstop=4.0, shutter=0.5,
          keys=[(0.0, (-0.30, 0.10, 1.16), (-0.05, 1.44, 1.00)),
                (0.5, (0.55, -0.55, 1.44), (-0.05, 1.46, 1.00)),
                (1.0, (1.55, -1.35, 1.86), (-0.05, 1.48, 0.99))],
          focal=[(0, 58), (1, 34)], focus=[(0, 1.6), (1, 3.1)]),
 
-    dict(name='outro', ev=0.9, frames=132, set='room', fstop=4.0, shutter=0.4,
+    dict(name='outro', ev=0.9, frames=192, set='room', fstop=4.0, shutter=0.4,
          keys=[(0.0, (0.34, 0.68, 1.06), (0.10, 1.52, 0.998)),
                (1.0, (0.90, -0.55, 1.32), (0.05, 1.52, 1.00))],
          focal=[(0, 92), (1, 52)], focus=[(0, 0.95), (1, 2.25)]),
