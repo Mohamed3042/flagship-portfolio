@@ -83,8 +83,7 @@ def mats():
     M['ledV'] = H.emissive('ELedV', VIOLET, 16.0)
     # The bay glow is a WASH, not a source: at 1.5 the bays clipped to pastel
     # and ate the gear silhouettes that are the point of the towers.
-    M['bayG'] = H.emissive('EBayG', GREEN, 0.34)
-    M['bayV'] = H.emissive('EBayV', VIOLET, 0.30)
+    M['bayMat'] = H.pbr('BayBack', base=(0.085, 0.085, 0.092), rough=0.78)
     M['greenLo'] = H.emissive('EGreenLo', GREEN, 2.2)
     # A logo printed on a cushion is ink, not a light. Emissive marks on the
     # sofa read as two floating green discs.
@@ -242,11 +241,13 @@ def _shelf_column(M, cx):
         F.box(loc=(cx, BY - 0.352, z - 0.026), dims=(COL_W - 0.08, 0.020, 0.014),
               name='ShelfLed',
               mat=M['ledG'] if i % 2 == 0 else M['ledV'])
-        # ...and the bay back, which is the surface the strip actually washes.
-        # In every keyframe this glow, not the strip, is what you read.
+        # The bay back is an ORDINARY dark surface that the strip above lights.
+        # It was an emissive panel first, which is why the towers read as flat
+        # saturated rectangles: a uniform emitter has no falloff, and the
+        # gradient down the back of each bay is the whole look in the
+        # reference. Let Cycles do it and the gradient comes for free.
         F.box(loc=(cx, BY - 0.045, z + 0.29), dims=(COL_W - 0.05, 0.010, 0.50),
-              name='BayWash',
-              mat=M['bayG'] if i % 2 == 0 else M['bayV'])
+              name='BayBack', mat=M['bayMat'])
         _shelf_gear(M, cx, z + inner / 2, i)
     # Against the wall. This was at BY-0.375 — the NEAREST face, not the
     # furthest — so a black panel sat in front of every glowing bay and the
@@ -571,25 +572,43 @@ def _headphone_neon(M, loc):
 
 def _sofa(M):
     """L-sectional along the right wall with a chaise return toward camera."""
-    seat_z, back_z = 0.40, 0.76
-    # long run
-    F.box(loc=(2.05, 0.55, seat_z / 2 + 0.06), dims=(1.05, 3.30, seat_z - 0.06),
-          name='SofaBase', mat=M['fabric'], bevel=0.03)
-    F.box(loc=(2.44, 0.55, back_z / 2 + 0.34), dims=(0.26, 3.30, back_z),
-          name='SofaBack', mat=M['fabric'], bevel=0.03)
-    for yy in (-0.55, 0.55, 1.65):
-        F.box(loc=(2.02, yy, 0.50), dims=(0.98, 1.02, 0.16), name='Cushion',
-              mat=M['fabric'], bevel=0.04)
+    seat_z = 0.40
+    # A recessed plinth so the sofa sits ON the floor instead of growing out of
+    # it, then the frame above it. One slab reads as a bench.
+    F.box(loc=(2.05, 0.55, 0.055), dims=(0.92, 3.16, 0.11), name='SofaPlinth',
+          mat=M['black'], bevel=0.01)
+    F.box(loc=(2.05, 0.55, 0.265), dims=(1.05, 3.30, 0.31), name='SofaFrame',
+          mat=M['fabric'], bevel=0.03)
+    F.box(loc=(2.46, 0.55, 0.72), dims=(0.22, 3.30, 0.60), name='SofaBackRest',
+          mat=M['fabric'], bevel=0.03)
+    for yy in (2.06, -1.00):                                     # arms
+        F.box(loc=(2.08, yy, 0.56), dims=(1.00, 0.24, 0.28), name='SofaArm',
+              mat=M['fabric'], bevel=0.06, segments=4)
+    # separate seat cushions with a real gap between them, and back cushions
+    # that lean — the gaps are what make it read as upholstery at 24 mm
+    for yy in (-0.42, 0.54, 1.50):
+        F.box(loc=(2.00, yy, 0.475), dims=(0.94, 0.90, 0.14), name='SeatCush',
+              mat=M['fabric'], bevel=0.045, segments=4)
+        F.box(loc=(2.34, yy, 0.755), dims=(0.20, 0.88, 0.42), rot=(0.13, 0, 0),
+              name='BackCush', mat=M['fabric'], bevel=0.05, segments=4)
     # chaise return
-    F.box(loc=(1.20, -1.42, seat_z / 2 + 0.06), dims=(2.60, 1.05, seat_z - 0.06),
-          name='ChaiseBase', mat=M['fabric'], bevel=0.03)
-    F.box(loc=(1.20, -1.42, 0.50), dims=(2.50, 0.98, 0.16), name='ChaiseCush',
-          mat=M['fabric'], bevel=0.04)
+    F.box(loc=(1.20, -1.42, 0.055), dims=(2.44, 0.92, 0.11), name='ChaisePlinth',
+          mat=M['black'], bevel=0.01)
+    F.box(loc=(1.20, -1.42, 0.265), dims=(2.60, 1.05, 0.31), name='ChaiseFrame',
+          mat=M['fabric'], bevel=0.03)
+    for dx in (-0.62, 0.62):
+        F.box(loc=(1.20 + dx, -1.42, 0.475), dims=(1.16, 0.98, 0.14),
+              name='ChaiseCush', mat=M['fabric'], bevel=0.045, segments=4)
+    # the green throw over the chaise — the one soft warm-ish note
+    F.box(loc=(0.55, -1.55, 0.565), dims=(0.62, 0.86, 0.055), rot=(0, 0.05, 0),
+          name='Throw', mat=M['ink'], bevel=0.03, segments=3)
     # logo cushions
     for yy in (1.30, 0.15):
-        c = F.box(loc=(2.28, yy, 0.68), dims=(0.16, 0.46, 0.46), rot=(0.16, 0, 0),
+        # in FRONT of the back cushions (which now occupy x 2.24-2.44), not
+        # buried inside them
+        c = F.box(loc=(2.14, yy, 0.68), dims=(0.16, 0.46, 0.46), rot=(0.16, 0, 0),
                   name='Pillow', mat=M['fabric'], bevel=0.05, segments=4)
-        _mark(M, (2.187, yy, 0.70), 0.115, M['ink'], M['fabric'],
+        _mark(M, (2.048, yy, 0.70), 0.115, M['ink'], M['fabric'],
               name='PillowMark%d' % int(yy * 100), rot=(0, 0, -math.pi / 2))
 
 
@@ -619,8 +638,88 @@ def _table(M):
 
 
 def _rug(M):
-    F.box(loc=(0.45, 0.28, 0.006), dims=(3.55, 2.60, 0.012), name='Rug',
+    """Shag pile as a real array of tufts. A flat slab reads as a painted
+    rectangle on the floor; the pile is what catches the table's green inlay
+    and the only soft silhouette at floor level."""
+    F.box(loc=(0.45, 0.28, 0.008), dims=(3.55, 2.60, 0.016), name='RugBase',
           mat=M['rug'], bevel=0.004)
+    tuft = H.cyl(loc=(0.45 - 1.72, 0.28 - 1.26, 0.030), r=0.011, depth=0.030,
+                 verts=6, name='Tuft')
+    H.assign(tuft, M['rug'])
+    a = tuft.modifiers.new('AX', 'ARRAY')
+    a.count, a.use_relative_offset, a.use_constant_offset = 78, False, True
+    a.constant_offset_displace = (0.0445, 0, 0)
+    b = tuft.modifiers.new('AY', 'ARRAY')
+    b.count, b.use_relative_offset, b.use_constant_offset = 57, False, True
+    b.constant_offset_displace = (0, 0.0445, 0)
+
+
+def _chair(M, at=(-1.82, 0.98), turn=-0.62):
+    """The gaming chair. It is the foreground subject in four of the six
+    keyframes, so it is built rather than left to a prop that does not exist:
+    5-star base, gas lift, bolstered seat, winged back, headrest, arms, and the
+    mark on the backrest."""
+    x, y = at
+    ct, st = math.cos(turn), math.sin(turn)
+
+    def place(dx, dy, dz, dims, rot=(0, 0, 0), mat=None, name='Chair', bev=0.008):
+        """Chair-local (dx forward, dy left) into room space."""
+        return F.box(loc=(x + dx * ct - dy * st, y + dx * st + dy * ct, dz),
+                     dims=dims, rot=(rot[0], rot[1], rot[2] + turn),
+                     name=name, mat=mat or M['black'], bevel=bev)
+
+    for k in range(5):
+        a = TAU * k / 5.0
+        F.box(loc=(x + math.cos(a) * 0.17, y + math.sin(a) * 0.17, 0.045),
+              dims=(0.34, 0.055, 0.030), rot=(0, 0, a), name='Star',
+              mat=M['steel'], bevel=0.004)
+        c = H.cyl(loc=(x + math.cos(a) * 0.32, y + math.sin(a) * 0.32, 0.028),
+                  r=0.028, depth=0.022, rot=(math.pi / 2, 0, a), verts=16,
+                  name='Caster')
+        H.assign(c, M['black'])
+    gas = H.cyl(loc=(x, y, 0.20), r=0.036, depth=0.30, verts=20, name='GasLift')
+    H.assign(gas, M['steel'])
+
+    place(0, 0, 0.435, (0.54, 0.56, 0.085), name='SeatPan')          # seat
+    for dy in (-0.235, 0.235):                                        # bolsters
+        place(0.02, dy, 0.470, (0.46, 0.10, 0.085), name='SeatBolster')
+    # backrest, reclined ~11 degrees
+    place(-0.235, 0, 0.845, (0.13, 0.54, 0.72), rot=(0, -0.19, 0), name='Back')
+    for dy in (-0.225, 0.225):
+        place(-0.185, dy, 0.845, (0.11, 0.10, 0.66), rot=(0, -0.19, 0),
+              name='BackWing')
+    place(-0.345, 0, 1.235, (0.12, 0.30, 0.17), rot=(0, -0.19, 0),
+          name='Headrest')
+    for dy in (-0.30, 0.30):                                          # arms
+        place(0.0, dy, 0.60, (0.06, 0.06, 0.20), name='ArmPost',
+              mat=M['steel'], bev=0.004)
+        place(0.02, dy, 0.715, (0.30, 0.10, 0.045), name='ArmPad')
+    # the mark, proud of the backrest and tilted with it
+    mx, my = -0.305, 0.0
+    _mark(M, (x + mx * ct - my * st, y + mx * st + my * ct, 0.90), 0.115,
+          M['ink'], M['black'], name='ChairMark',
+          rot=(0, -0.19, turn + math.pi))
+
+
+def _guitar(M):
+    """The electric leaning against the right wall. Present in three of the six
+    keyframes, and the only warm-toned object in the room — which is exactly
+    why it is worth the geometry: it stops the right wall going all green."""
+    x, y = RX - 0.20, 3.05
+    lean = 0.13
+    wood = H.pbr('GuitarWood', base=(0.230, 0.105, 0.042), rough=0.24, spec=0.7)
+    body = F.box(loc=(x, y, 0.34), dims=(0.34, 0.11, 0.46), rot=(0, lean, 0),
+                 name='GtrBody', mat=wood, bevel=0.05, segments=5)
+    F.box(loc=(x - 0.115, y, 0.94), dims=(0.07, 0.022, 0.78), rot=(0, lean, 0),
+          name='GtrNeck', mat=wood, bevel=0.006)
+    F.box(loc=(x - 0.208, y, 1.36), dims=(0.09, 0.026, 0.19), rot=(0, lean, 0),
+          name='GtrHead', mat=M['black'], bevel=0.006)
+    for k in range(6):
+        F.box(loc=(x - 0.115, y - 0.021 + k * 0.0084, 0.94),
+              dims=(0.0016, 0.0016, 0.80), rot=(0, lean, 0), name='GtrString',
+              mat=M['steel'], bevel=0.0)
+    F.box(loc=(x - 0.03, y - 0.058, 0.40), dims=(0.16, 0.012, 0.05),
+          rot=(0, lean, 0), name='GtrPickup', mat=M['steel'], bevel=0.003)
 
 
 def _mark_disc(M):
@@ -661,6 +760,13 @@ def build():
     _rug(M)
     _sofa(M)
     _table(M)
+    _chair(M)
+    _guitar(M)
+    # floor plants: both back corners, and one beside the sofa where the
+    # keyframes put a tall leafy thing against the right wall
+    _plant(M, (-2.55, 2.62, 0.0), 1.15)
+    _plant(M, (2.52, 2.72, 0.0), 1.05)
+    _plant(M, (2.40, -2.15, 0.0), 0.95)
     _lights(M)
     return dict(mats=M)
 
