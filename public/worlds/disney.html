@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
-<meta name="description" content="A scroll-cinema film cut from 32 real WAN 2.7 shots — a golden book opens, ink becomes fireflies, a thread proves a loop, and the system takes over the storytelling.">
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%2314213D"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23F3E8C8"/><path d="M15 7h2v18h-2z" fill="%23F2BC3B"/></svg>'>
-<link rel="stylesheet" href="cinema.css?v=4">
+<meta name="description" content="Edition II — a dark cut-paper folktale scrubbed by your hand. Twenty WAN 2.7 shots in one continuous take: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230f0b07"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23e8dcc0"/><path d="M15 7h2v18h-2z" fill="%23e2b13c"/></svg>'>
+<link rel="stylesheet" href="cinema.css?v=5">
 <style>
   :root{
-    --w-bg:#14213D; --w-ink:#F3E8C8; --w-accent:#F2BC3B; --w-dim:#BFD0DE;
-    --grade-a:rgba(10,13,26,.5); --grade-b:rgba(38,30,12,.22);
-    --sepia:#35271F; --parch:#F3E8C8; --moon:#BFD0DE; --rose:#D9829B; --mint:#8FCFB5; --lilac:#A897CF;
+    --w-bg:#0f0b07; --w-ink:#e8dcc0; --w-accent:#e2b13c; --w-dim:#8f9db0;
+    --grade-a:rgba(6,4,2,.5); --grade-b:rgba(40,28,10,.22);
+    --sepia:#35271f; --parch:#e8dcc0; --moon:#8f9db0;
     --w-display:"Iowan Old Style","Palatino Nova",Palatino,"Book Antiqua","Times New Roman",Georgia,serif;
     --w-body:"Iowan Old Style",Palatino,"Book Antiqua",Georgia,serif;
     --w-ui:ui-sans-serif,system-ui,"Segoe UI",sans-serif;
@@ -20,7 +20,7 @@
     --w-display:"Geeza Pro","Al Bayan","Traditional Arabic",serif;
   }
   body{ background:
-    radial-gradient(120% 90% at 50% -10%, #1b2b4e 0%, var(--w-bg) 55%, #0d1730 100%);
+    radial-gradient(120% 90% at 50% -10%, #1d150c 0%, var(--w-bg) 55%, #070503 100%);
   }
 
   /* ————— paper grain unifier ————— */
@@ -28,19 +28,22 @@
     background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer></filter><rect width="240" height="240" filter="url(%23n)"/></svg>');
   }
 
+  .chrome .ver{ font:700 10px/1 var(--w-ui); letter-spacing:.2em; color:var(--w-dim);
+    border:1px solid rgba(143,157,176,.35); padding:5px 8px; border-radius:6px; }
+
   /* ————— cold open ————— */
   .open .stage{ display:grid; place-items:center; text-align:center;
-    background:radial-gradient(80% 60% at 72% 30%, rgba(242,188,59,.16), transparent 60%), #0d1730; }
-  .open .plate{ position:absolute; inset:0; background:url('disney/cold-open.jpg') center/cover no-repeat;
-    opacity:calc(.34 - var(--p,0)*.2); filter:sepia(.3) brightness(.8); }
-  .open .veil{ position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 50%, transparent 30%, rgba(9,14,28,.88) 78%); }
+    background:radial-gradient(80% 60% at 72% 30%, rgba(226,177,60,.14), transparent 60%), #080604; }
+  .open .plate{ position:absolute; inset:0; background:url('disney2/posters/kf-01.jpg') center/cover no-repeat;
+    opacity:calc(.42 - var(--p,0)*.2); }
+  .open .veil{ position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 50%, transparent 30%, rgba(7,5,3,.9) 78%); }
   .open .card{ position:relative; z-index:3; padding:0 6vw; transform:translateY(calc(var(--p,0)*-6vh)); }
   .open .kick{ font:700 12px/1 var(--w-ui); letter-spacing:.28em; text-transform:uppercase; color:var(--w-accent); }
   .open h1{ font:700 clamp(38px,8vw,92px)/1.04 var(--w-display); margin:18px 0 10px; text-wrap:balance;
-    text-shadow:0 3px 40px rgba(0,0,0,.6); }
+    text-shadow:0 3px 40px rgba(0,0,0,.7); }
   .open .sub{ max-width:62ch; margin:0 auto; color:color-mix(in srgb, var(--w-ink) 82%, transparent); line-height:1.65; font-size:clamp(14px,1.7vw,18px); }
   .open .candle{ position:absolute; top:12%; inset-inline-end:14%; width:10px; height:10px; border-radius:50%;
-    background:var(--w-accent); box-shadow:0 0 30px 12px rgba(242,188,59,.55), 0 0 90px 44px rgba(242,188,59,.22);
+    background:var(--w-accent); box-shadow:0 0 30px 12px rgba(226,177,60,.55), 0 0 90px 44px rgba(226,177,60,.22);
     animation:flick 3.2s ease-in-out infinite; }
   @keyframes flick{ 0%,100%{transform:scale(1);opacity:.92} 38%{transform:scale(.86) translateX(-1px);opacity:.75} 62%{transform:scale(1.08);opacity:1} }
   .open .hintwrap{ position:absolute; bottom:26px; left:0; right:0; display:grid; place-items:center; gap:8px; z-index:3; }
@@ -48,49 +51,60 @@
   .open .quill{ width:1px; height:44px; background:linear-gradient(var(--w-accent), transparent); animation:drip 2.2s ease-in-out infinite; }
   @keyframes drip{ 0%{transform:scaleY(.2); transform-origin:top} 55%{transform:scaleY(1)} 100%{transform:scaleY(.2); opacity:.2} }
 
-  /* ————— chapters (real footage) ————— */
-  .chapter{ height:300vh; }
-  .chapter .stage{ background:#0b1226; }
-  .chapter video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .28s ease; }
-  .chapter video.on{ opacity:1; }
-  .chapter .vig{ position:absolute; inset:0; pointer-events:none;
-    background:radial-gradient(115% 95% at 50% 42%, transparent 55%, rgba(9,13,26,.62) 100%); }
-  .chapter .chip{ position:absolute; z-index:6; top:clamp(56px,7vh,74px); inset-inline-start:clamp(18px,6vw,84px);
-    display:flex; gap:10px; align-items:center;
+  /* ————— THE BOOK — one scrubbed take, twenty shots ————— */
+  .film{ height:1500vh; }
+  .film .stage{ background:#070503; }
+  .film .floor, .film video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .film video{ opacity:0; }
+  .film video.on{ opacity:1; }
+  .film .floor{ z-index:0; }
+  .film .vig{ position:absolute; inset:0; z-index:3; pointer-events:none;
+    background:radial-gradient(115% 95% at 50% 42%, transparent 55%, rgba(5,3,2,.66) 100%); }
+  .film .legcap{ display:none; }
+  .film .chip{ position:absolute; z-index:6; top:clamp(56px,7vh,74px); inset-inline-start:clamp(18px,6vw,84px);
+    display:flex; gap:10px; align-items:baseline;
     font:700 11px/1 var(--w-ui); letter-spacing:.18em; text-transform:uppercase; color:var(--w-ink); }
-  .chapter .chip .id{ color:var(--w-accent); }
-  .chapter .chip .t{ opacity:.85; letter-spacing:.1em; }
-  .chapter .dots{ position:absolute; z-index:6; bottom:clamp(18px,4vh,40px); inset-inline-end:clamp(18px,6vw,84px);
-    display:flex; gap:7px; }
-  .chapter .dots i{ width:7px; height:7px; border-radius:50%;
-    background:color-mix(in srgb, var(--w-ink) 30%, transparent); transition:background .3s, transform .3s; }
-  .chapter .dots i.on{ background:var(--w-accent); transform:scale(1.25); }
-  .chapter .playbtn{ position:absolute; z-index:7; inset:0; margin:auto; width:86px; height:86px; border-radius:50%;
-    display:none; place-items:center; cursor:pointer; border:1px solid rgba(243,232,200,.5);
-    background:rgba(13,19,38,.55); color:var(--w-ink); backdrop-filter:blur(6px); }
-  .chapter .playbtn svg{ width:26px; height:26px; fill:currentColor; margin-inline-start:4px; }
-  .chapter.needs-tap .playbtn{ display:grid; }
+  .film .chip .id{ color:var(--w-accent); }
+  .film .chip .t{ opacity:.85; letter-spacing:.1em; }
+  .film .legno{ position:absolute; z-index:6; top:clamp(50px,6.4vh,70px); inset-inline-end:clamp(18px,6vw,84px);
+    font:700 clamp(30px,4.6vw,52px)/1 var(--w-ui); color:rgba(232,220,192,.2); font-variant-numeric:tabular-nums; }
+  .film .caption{ z-index:7; }
+  .film .caption .story{ font-family:var(--w-display); font-size:clamp(15px,1.9vw,21px); line-height:1.6;
+    color:var(--w-ink); text-shadow:0 2px 22px rgba(0,0,0,.85); max-width:56ch; }
+  .film .legrail{ position:absolute; z-index:6; bottom:clamp(18px,4vh,40px); inset-inline-end:clamp(18px,6vw,84px);
+    display:flex; gap:6px; }
+  .film .legrail i{ width:6px; height:6px; border-radius:50%;
+    background:color-mix(in srgb, var(--w-ink) 26%, transparent); transition:background .3s, transform .3s; }
+  .film .legrail i.on{ background:var(--w-accent); transform:scale(1.3); }
+  .film .playbtn{ position:absolute; z-index:8; inset:0; margin:auto; width:86px; height:86px; border-radius:50%;
+    display:none; place-items:center; cursor:pointer; border:1px solid rgba(232,220,192,.5);
+    background:rgba(10,7,4,.55); color:var(--w-ink); backdrop-filter:blur(6px); }
+  .film .playbtn svg{ width:26px; height:26px; fill:currentColor; margin-inline-start:4px; }
+  .film.needs-tap .playbtn{ display:grid; }
+  .film.mode-still video{ display:none; }
+  /* chain mode does not need a 1500vh runway */
+  .film.mode-chain{ height:680vh; }
 
   /* ————— acts styling ————— */
   .act{ position:relative; }
   .act .rule{ width:64px; height:1px; margin:18px auto 0; background:linear-gradient(90deg, transparent, var(--w-accent), transparent); }
 
-  /* ————— handoff ————— */
+  /* ————— handoff (code takes the kingdom) ————— */
   .handoff{ height:260vh; }
-  .handoff .stage{ background:#0d1730; }
-  .handoff .plate{ position:absolute; inset:0; background:url('disney/handoff.jpg') center/cover no-repeat;
-    filter:sepia(calc(var(--p,0)*.55)) contrast(calc(1 - var(--p,0)*.12)) brightness(calc(1 - var(--p,0)*.22)); }
+  .handoff .stage{ background:#0a0705; }
+  .handoff .plate{ position:absolute; inset:0; background:url('disney2/posters/kf-17.jpg') center/cover no-repeat;
+    filter:brightness(calc(1 - var(--p,0)*.25)); }
   .handoff .paperize{ position:absolute; inset:0; background:var(--parch);
     opacity:calc(max(0, var(--p,0) - .72) * 2.6); mix-blend-mode:soft-light; }
   .handoff svg.thread{ position:absolute; inset:0; width:100%; height:100%; z-index:4; }
   .handoff svg.thread path{ fill:none; stroke:var(--w-accent); stroke-width:2.6; stroke-linecap:round;
-    filter:drop-shadow(0 0 6px rgba(242,188,59,.65));
+    filter:drop-shadow(0 0 6px rgba(226,177,60,.65));
     stroke-dasharray:1; stroke-dashoffset:calc(1 - min(1, var(--p,0)*1.25)); }
   .handoff .caption{ bottom:auto; top:clamp(72px,12vh,140px); }
 
   /* ————— BUILD: the paper kingdom (code) ————— */
   .build{ height:320vh; }
-  .build .stage{ background:linear-gradient(#0d1730 0%, #1b2b4e 46%, #3a3122 100%); }
+  .build .stage{ background:linear-gradient(#0a0705 0%, #1d150c 46%, #33261a 100%); }
   .build .layer{ position:absolute; inset:auto 0 0 0; height:62vh; pointer-events:none; }
   .build .layer svg{ position:absolute; inset:0; width:100%; height:100%; }
   .build .l4{ transform:translateY(calc((1 - var(--p,0)) * 12vh)); opacity:.5; }   /* distant painted field .12 */
@@ -99,11 +113,11 @@
   .build .l1{ transform:translateY(calc((1 - var(--p,0)) * 100vh)); }              /* foreground 1.0 */
   .build svg.weave{ position:absolute; inset:0; width:100%; height:100%; z-index:5; }
   .build svg.weave path{ fill:none; stroke:var(--w-accent); stroke-width:2.2; stroke-linecap:round;
-    filter:drop-shadow(0 0 7px rgba(242,188,59,.6));
+    filter:drop-shadow(0 0 7px rgba(226,177,60,.6));
     stroke-dasharray:1; stroke-dashoffset:calc(1 - min(1, max(0, var(--p,0) - .1) * 1.35)); }
   .build .caption{ z-index:8; }
   .district{ position:absolute; z-index:6; font:600 11.5px/1.3 var(--w-ui); letter-spacing:.06em;
-    color:var(--w-ink); background:rgba(20,33,61,.72); border:1px solid rgba(242,188,59,.4);
+    color:var(--w-ink); background:rgba(20,14,8,.74); border:1px solid rgba(226,177,60,.4);
     padding:8px 11px; border-radius:8px; backdrop-filter:blur(4px);
     opacity:calc(max(0, var(--p,0) - var(--at,.4)) * 4); transform:translateY(calc((1 - min(1,(var(--p,0) - var(--at,.4)) * 4)) * 14px)); }
   .district b{ color:var(--w-accent); font-weight:700; }
@@ -127,7 +141,7 @@
   .gate .wax{ position:absolute; z-index:3; left:50%; top:58%; width:96px; height:96px; border-radius:50%;
     transform:translate(-50%,-50%) scale(calc(min(1, max(0, var(--p,0) - .70) * 5.6)));
     background:radial-gradient(circle at 36% 32%, #ffd977 0%, var(--w-accent) 42%, #b88a1f 100%);
-    box-shadow:0 4px 26px rgba(242,188,59,.5), inset 0 2px 8px rgba(255,255,255,.45); }
+    box-shadow:0 4px 26px rgba(226,177,60,.5), inset 0 2px 8px rgba(255,255,255,.45); }
   .gate .wax::after{ content:""; position:absolute; inset:16%; border-radius:50%;
     border:2px solid rgba(53,39,31,.4);
     background:conic-gradient(from 40deg, transparent 0 20%, rgba(53,39,31,.35) 20% 24%, transparent 24% 47%, rgba(53,39,31,.35) 47% 52%, transparent 52% 78%, rgba(53,39,31,.35) 78% 83%, transparent 83%); }
@@ -135,52 +149,54 @@
 
   /* ————— PROVE: thirty lanterns (code) ————— */
   .prove{ height:300vh; }
-  .prove .stage{ background:radial-gradient(100% 80% at 50% 20%, #1b2b4e 0%, var(--w-bg) 52%, #0a1226 100%); }
+  .prove .stage{ background:radial-gradient(100% 80% at 50% 20%, #1d150c 0%, var(--w-bg) 52%, #070503 100%); }
   .prove canvas{ position:absolute; inset:0; width:100%; height:100%; }
   .prove .caption a{ color:var(--w-accent); }
 
   /* ————— finale: the book closes ————— */
   .finale{ height:280vh; }
   .finale .stage{ display:grid; place-items:center; perspective:1400px;
-    background:radial-gradient(80% 60% at 68% 28%, rgba(242,188,59,.14), transparent 60%), #0d1730; }
+    background:radial-gradient(80% 60% at 68% 28%, rgba(226,177,60,.13), transparent 60%), #080604; }
   .finale .book{ position:relative; width:min(540px,78vw); aspect-ratio:16/10; transform-style:preserve-3d; }
   .finale .pageimg{ position:absolute; inset:0; border-radius:6px; overflow:hidden;
-    background:url('disney/posters/dsn-h-001.jpg') center/cover; box-shadow:0 40px 90px rgba(0,0,0,.55);
-    filter:sepia(.25) brightness(.94); }
+    background:url('disney2/posters/kf-20.jpg') center/cover; box-shadow:0 40px 90px rgba(0,0,0,.6); }
   .finale .cover{ position:absolute; inset:0; border-radius:6px; transform-origin:left center;
     transform:rotateY(calc((1 - min(1, var(--p,0) * 1.5)) * -168deg));
-    background:linear-gradient(115deg, #1d2f57 0%, #14213D 55%, #0e1830 100%);
-    box-shadow:inset 0 0 0 2px rgba(242,188,59,.35), inset 0 0 44px rgba(0,0,0,.45);
+    background:linear-gradient(115deg, #2a1d10 0%, #1c130a 55%, #120c06 100%);
+    box-shadow:inset 0 0 0 2px rgba(226,177,60,.35), inset 0 0 44px rgba(0,0,0,.5);
     backface-visibility:hidden; display:grid; place-items:center; }
   .lang-ar .finale .cover{ transform-origin:right center;
     transform:rotateY(calc((1 - min(1, var(--p,0) * 1.5)) * 168deg)); }
   .finale .cover .mark{ width:34%; aspect-ratio:1; border-radius:50%;
-    border:2px solid rgba(242,188,59,.6); display:grid; place-items:center; }
+    border:2px solid rgba(226,177,60,.6); display:grid; place-items:center; }
   .finale .cover .mark i{ width:44%; height:1px; background:var(--w-accent); box-shadow:0 6px 0 var(--w-accent), 0 -6px 0 var(--w-accent); }
   .finale .latch{ position:absolute; inset-inline-end:-8px; top:50%; width:22px; height:56px; translate:0 -50%;
     background:linear-gradient(#d9b04b, #a97e22); border-radius:4px;
-    opacity:calc(max(0, var(--p,0) - .68) * 4); box-shadow:0 0 18px rgba(242,188,59,.55); }
+    opacity:calc(max(0, var(--p,0) - .68) * 4); box-shadow:0 0 18px rgba(226,177,60,.55); }
   .finale .caption{ text-align:center; inset-inline:0; margin-inline:auto; max-width:640px; }
 
   /* ————— VAULT: the unmade shots (code) ————— */
   .vault{ height:300vh; }
-  .vault .stage{ background:radial-gradient(110% 85% at 50% 0%, #1a2647 0%, #0c142c 55%, #080f22 100%); }
+  .vault .stage{ background:radial-gradient(110% 85% at 50% 0%, #1d150c 0%, #100b06 55%, #080503 100%); }
   .vault .drawer{ position:absolute; inset:14% 8% 24%; display:grid; align-content:center;
     grid-template-columns:repeat(auto-fill, minmax(52px, 1fr)); gap:7px;
     transform:perspective(900px) rotateX(calc(18deg - min(1, var(--p,0)*1.4) * 14deg));
     transform-origin:50% 100%; }
   .vault .slate{ aspect-ratio:16/10; border-radius:3px; position:relative;
-    background:linear-gradient(160deg, #1d2b52 0%, #131f3e 70%);
-    border:1px solid rgba(191,208,222,.16);
+    background:linear-gradient(160deg, #221a10 0%, #171008 70%);
+    border:1px solid rgba(232,220,192,.14);
     opacity:calc(min(1, max(0, var(--p,0)*1.15 - var(--i,0)) * 8));
     transform:translateY(calc((1 - min(1, max(0, var(--p,0)*1.15 - var(--i,0)) * 8)) * 12px)); }
   .vault .slate::before{ content:""; position:absolute; inset:0 0 auto; height:22%;
-    background:repeating-linear-gradient(115deg, #F2BC3B 0 6px, #131f3e 6px 12px);
+    background:repeating-linear-gradient(115deg, #e2b13c 0 6px, #171008 6px 12px);
     border-radius:3px 3px 0 0; opacity:.5; }
+  .vault .slate.retired{ border-color:rgba(226,177,60,.35); }
+  .vault .slate.retired::after{ content:""; position:absolute; inset:30% 22%;
+    border:1px solid rgba(226,177,60,.4); border-radius:2px; }
   .vault .slate.lit{ background:linear-gradient(160deg, #4a3c1a 0%, #2c250f 70%);
-    border-color:rgba(242,188,59,.7); box-shadow:0 0 22px rgba(242,188,59,.35); }
+    border-color:rgba(226,177,60,.7); box-shadow:0 0 22px rgba(226,177,60,.35); }
   .vault .slate.lit::after{ content:""; position:absolute; left:50%; top:60%; width:5px; height:5px;
-    border-radius:50%; translate:-50% -50%; background:#FFE49A; box-shadow:0 0 12px 4px rgba(242,188,59,.6); }
+    border-radius:50%; translate:-50% -50%; background:#FFE49A; box-shadow:0 0 12px 4px rgba(226,177,60,.6); }
   .vault .tally{ position:absolute; z-index:6; top:clamp(56px,7vh,80px); inset-inline-end:clamp(18px,6vw,84px);
     text-align:end; font:700 clamp(30px,5vw,54px)/1 var(--w-ui); color:var(--w-accent);
     font-variant-numeric:tabular-nums; text-shadow:0 2px 30px rgba(0,0,0,.5); }
@@ -190,17 +206,17 @@
 
   @media (prefers-reduced-motion: reduce){
     .open .candle, .open .quill{ animation:none; }
-    .chapter video{ transition:none; }
+    .film video{ transition:none; }
     .vault .drawer{ transform:none; }
   }
   @media (max-width:640px){
-    .chapter{ height:260vh; }
     .district{ display:none; }
+    .film .legno{ display:none; }
     .vault .drawer{ inset:16% 5% 30%; grid-template-columns:repeat(auto-fill, minmax(38px, 1fr)); gap:5px; }
   }
 </style>
 </head>
-<body data-film="DSN · REEL 01" data-runtime="520" data-ticks data-letterbox>
+<body data-film="DSN · EDITION II" data-runtime="100" data-ticks data-letterbox>
 <div class="rail" data-rail><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="grade" aria-hidden="true"></div>
@@ -211,7 +227,8 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <button type="button" data-theater="disney/disney-master.mp4"><span class="L en">▸ Master cut · 2:40</span><span class="L ar">▸ الفيلم الكامل · ٢:٤٠</span></button>
+    <span class="ver" title="The Kingdom of Running Things — Edition II">v2.0 · II</span>
+    <button type="button" data-theater="disney2/master.mp4" data-theater-poster="disney2/posters/kf-01.jpg"><span class="L en">▸ Master cut · 1:40</span><span class="L ar">▸ الفيلم الكامل · ١:٤٠</span></button>
     <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
   </div>
 </nav>
@@ -230,27 +247,6 @@
   </div>
 </section>
 
-<!-- ============ THE RENDERED PLATE (Cycles) ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 1 · the plate" style="height:300vh"
-         data-plate="render/disney-s1.mp4" data-plate-poster="render/disney-s1.jpg"
-         aria-label="Rendered plate">
-  <div class="stage">
-    <p class="rtag"><span class="L en">48 FRAMES · CYCLES OPTIX · 960×480
-38→50 MM · f/2.4 · ONE CANDLE</span><span class="L ar">٤٨ إطارًا · CYCLES OPTIX · ٩٦٠×٤٨٠
-٣٨→٥٠ مم · f/2.4 · شمعةٌ واحدة</span></p>
-    <div class="caption">
-      <p class="kick"><span class="L en">Rendered · Cycles path trace</span><span class="L ar">عرضٌ مُصيَّر · تتبُّع مسار Cycles</span></p>
-      <h2><span class="L en">The workshop, rebuilt as geometry</span><span class="L ar">الورشة، مُعادةَ البناء هندسةً</span></h2>
-      <p><span class="L en">The room the 32 real shots came from, this time modelled: gilt with true metallic roughness, parchment with sheen, one candle as the only motivated source, and ink lifting off the page as light.</span><span class="L ar">الغرفة التي جاءت منها اللقطات الحقيقية الاثنتان والثلاثون، منمذجةً هذه المرّة: تذهيبٌ بخشونةٍ معدنية صادقة، ورقٌّ ذو لمعةٍ حريرية، وشمعةٌ واحدة هي المصدر الوحيد المبرَّر، وحبرٌ ينهض عن الصفحة ضوءًا.</span></p>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-
 <!-- ============ COLD OPEN ============ -->
 <section class="scene open" data-scene="pin" id="top" data-slate="Cold open">
   <div class="stage">
@@ -258,143 +254,125 @@
     <div class="veil" aria-hidden="true"></div>
     <div class="candle" aria-hidden="true"></div>
     <div class="card">
-      <p class="kick"><span class="L en">World 03 · Disney Storybook · 32 real WAN 2.7 shots</span><span class="L ar">العالم ٠٣ · حكاية مصوّرة · ٣٢ لقطة حقيقية من WAN 2.7</span></p>
+      <p class="kick"><span class="L en">World 03 · Edition II · 20 scroll-scrubbed WAN 2.7 shots</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ٢٠ لقطة WAN 2.7 تُفرَك بالتمرير</span></p>
       <h1><span class="L en">The Kingdom of&nbsp;Running&nbsp;Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h1>
-      <p class="sub"><span class="L en">A golden book opens in a candlelit workshop. Ink becomes fireflies, fireflies find a looping thread — and when the footage runs out, the system keeps telling the story. Every frame until the handoff was generated shot-by-shot from a 144-clip production bible.</span><span class="L ar">كتاب مذهّب يُفتح في ورشة على ضوء شمعة. يصير الحبر يراعاتٍ، وتجد اليراعات خيطًا يدور في حلقة — وحين ينفد المشهد المصوّر، يواصل النظام سرد الحكاية بنفسه. كل إطار حتى لحظة التسليم وُلِّد لقطةً لقطةً من «كتاب إنتاج» يضم ١٤٤ مقطعًا.</span></p>
+      <p class="sub"><span class="L en">A dark cut-paper folktale that obeys your hand. One continuous take, twenty shots: a golden book is persuaded open, ink becomes fireflies, a thread survives its own knot and proves a loop — and the kingdom it raises pauses at a human seal. Scroll forward, the tale advances. Scroll back, it politely un-tells itself.</span><span class="L ar">حكاية ورقٍ داكنة تُطيع يدك. لقطةٌ واحدة متصلة من عشرين مشهدًا: كتابٌ مذهّب يُقنَع حتى يُفتَح، وحبرٌ يصير يراعات، وخيطٌ ينجو من عقدته ويثبت الحلقة — والمملكة التي يرفعها تقف عند ختمٍ بشري. مرِّر إلى الأمام تتقدّم الحكاية، ومرِّر إلى الخلف تتراجع بأدب.</span></p>
     </div>
     <div class="hintwrap"><div class="quill" aria-hidden="true"></div><p class="hint"><span class="L en">Scroll to open the book</span><span class="L ar">مرِّر لفتح الكتاب</span></p></div>
   </div>
 </section>
 
-<!-- ============ ACT I ============ -->
+<!-- ============ ACT CARD ============ -->
 <section class="act">
-  <p class="no"><span class="L en">Act I · Prologue — shots 001–012</span><span class="L ar">الفصل الأول · الافتتاح — اللقطات ٠٠١–٠١٢</span></p>
+  <p class="no"><span class="L en">One take · shots 01–20 · the film obeys the hand</span><span class="L ar">لقطة واحدة · المشاهد ٠١–٢٠ · الفيلم يُطيع اليد</span></p>
   <h2><span class="L en">The Book Wakes</span><span class="L ar">الكتاب يستيقظ</span></h2>
   <p><span class="L en">Cause precedes magic. The Maker touches, winds, and stamps — only then may ink, thread, and light respond.</span><span class="L ar">السبب يسبق السحر. الصانع يلمس ويلفّ ويختم — وعندها فقط يُسمح للحبر والخيط والضوء أن تستجيب.</span></p>
   <div class="rule"></div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-slate="Ch.1 · The Waking" data-chain="dsn-h-001,dsn-h-002,dsn-h-003,dsn-h-004,dsn-h-005,dsn-h-006">
+<!-- ============ THE BOOK — 20 legs, one scrubbed take ============ -->
+<section class="scene film" id="book" data-scene="pin" data-slate="The book · 20 shots">
   <div class="stage">
+    <img class="floor" alt="" aria-hidden="true">
     <video muted playsinline preload="none"></video>
     <video muted playsinline preload="none"></video>
-    <div class="vig"></div>
-    <p class="chip"><span class="id">DSN-H-001</span><span class="t">…</span></p>
-    <div class="dots" aria-hidden="true"></div>
-    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="vig" aria-hidden="true"></div>
+    <p class="chip"><span class="id">SHOT 01</span><span class="t">…</span></p>
+    <p class="legno" aria-hidden="true">01</p>
+    <div class="legrail" aria-hidden="true"></div>
+    <button class="playbtn" type="button" aria-label="Play the tale"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+
+    <figure class="legcap" data-clip="disney2/clips/DSN2-001.mp4" data-poster="disney2/posters/kf-01.jpg"
+      data-act-en="Act I" data-act-ar="الفصل الأول" data-t-en="The Waiting Book" data-t-ar="الكتاب المنتظِر">
+      <figcaption><span class="L en">One candle. One sealed volume. The room holds its breath.</span><span class="L ar">شمعةٌ واحدة. مجلّدٌ مختوم. الغرفة تحبس أنفاسها.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-002.mp4" data-poster="disney2/posters/kf-02.jpg"
+      data-act-en="Act I" data-act-ar="الفصل الأول" data-t-en="The Maker Arrives" data-t-ar="وصول الصانع">
+      <figcaption><span class="L en">A hand enters — its shadow arrives first.</span><span class="L ar">تدخل يدٌ — وظلُّها يصل قبلها.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-003.mp4" data-poster="disney2/posters/kf-03.jpg"
+      data-act-en="Act I" data-act-ar="الفصل الأول" data-t-en="The Latch Yields" data-t-ar="المزلاج يلين">
+      <figcaption><span class="L en">The latch is convinced — never forced.</span><span class="L ar">المزلاج يُقنَع إقناعًا — ولا يُكسَر أبدًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-004.mp4" data-poster="disney2/posters/kf-04.jpg"
+      data-act-en="Act I" data-act-ar="الفصل الأول" data-t-en="The First Page" data-t-ar="الصفحة الأولى">
+      <figcaption><span class="L en">The page opens into a stage; the world shrinks to a border.</span><span class="L ar">تنفتح الصفحة مسرحًا؛ ويتقلّص العالم إلى إطار.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-005.mp4" data-poster="disney2/posters/kf-05.jpg"
+      data-act-en="Act II" data-act-ar="الفصل الثاني" data-t-en="A Cause Is Drawn" data-t-ar="سببٌ يُرسَم">
+      <figcaption><span class="L en">The quill states one cause. The ink considers it.</span><span class="L ar">تكتب الريشة سببًا واحدًا. والحبر يتأمّله.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-006.mp4" data-poster="disney2/posters/kf-06.jpg"
+      data-act-en="Act II" data-act-ar="الفصل الثاني" data-t-en="The Ink Answers" data-t-ar="الحبر يجيب">
+      <figcaption><span class="L en">The ink answers with three small lights.</span><span class="L ar">يجيب الحبر بثلاثة أضواءٍ صغيرة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-007.mp4" data-poster="disney2/posters/kf-07.jpg"
+      data-act-en="Act II" data-act-ar="الفصل الثاني" data-t-en="The Forest Rises" data-t-ar="الغابة تنهض">
+      <figcaption><span class="L en">The drawing stands up — four planes of paper.</span><span class="L ar">ينهض الرسم واقفًا — أربع طبقاتٍ من الورق.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-008.mp4" data-poster="disney2/posters/kf-08.jpg"
+      data-act-en="Act II" data-act-ar="الفصل الثاني" data-t-en="The Living Map" data-t-ar="الخريطة الحيّة">
+      <figcaption><span class="L en">Four roads from one line. Only one can be true.</span><span class="L ar">أربع طرقٍ من خطٍّ واحد. واحدةٌ فقط صادقة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-009.mp4" data-poster="disney2/posters/kf-09.jpg"
+      data-act-en="Act II" data-act-ar="الفصل الثاني" data-t-en="Three Roads Die" data-t-ar="ثلاث طرقٍ تموت">
+      <figcaption><span class="L en">Three roads fold back to ink. One survives.</span><span class="L ar">ثلاث طرقٍ تعود حبرًا. وواحدةٌ تنجو.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-010.mp4" data-poster="disney2/posters/kf-10.jpg"
+      data-act-en="Act III" data-act-ar="الفصل الثالث" data-t-en="The Chosen Light" data-t-ar="الضوء المختار">
+      <figcaption><span class="L en">The Maker chooses — a sun small enough to hold.</span><span class="L ar">يختار الصانع — شمسًا تصغر حتى تُحمَل.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-011.mp4" data-poster="disney2/posters/kf-11.jpg"
+      data-act-en="Act III" data-act-ar="الفصل الثالث" data-t-en="The Golden Thread" data-t-ar="الخيط الذهبي">
+      <figcaption><span class="L en">Light becomes thread. The page lets it go.</span><span class="L ar">يصير الضوء خيطًا. والصفحة تتركه يذهب.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-012.mp4" data-poster="disney2/posters/kf-12.jpg"
+      data-act-en="Act III" data-act-ar="الفصل الثالث" data-t-en="The False Knot" data-t-ar="العقدة الزائفة">
+      <figcaption><span class="L en">The thread lies: a knot with no beginning.</span><span class="L ar">يكذب الخيط: عقدةٌ بلا بداية.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-013.mp4" data-poster="disney2/posters/kf-13.jpg"
+      data-act-en="Act III" data-act-ar="الفصل الثالث" data-t-en="The True Fibre" data-t-ar="الليفة الصادقة">
+      <figcaption><span class="L en">Under glass, one straight fibre hides in the tangle.</span><span class="L ar">تحت الزجاج، ليفةٌ مستقيمة تختبئ في التشابك.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-014.mp4" data-poster="disney2/posters/kf-14.jpg"
+      data-act-en="Act III" data-act-ar="الفصل الثالث" data-t-en="The Release" data-t-ar="الانفكاك">
+      <figcaption><span class="L en">Pulled right, the trap unfolds into a road.</span><span class="L ar">اسحب الصحيح، فتنفكّ المصيدة طريقًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-015.mp4" data-poster="disney2/posters/kf-15.jpg"
+      data-act-en="Act III" data-act-ar="الفصل الثالث" data-t-en="The Circle Revealed" data-t-ar="الدائرة تتكشّف">
+      <figcaption><span class="L en">The road returns to its first mark. A loop — a system.</span><span class="L ar">يعود الطريق إلى علامته الأولى. حلقةٌ — منظومة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-016.mp4" data-poster="disney2/posters/kf-16.jpg"
+      data-act-en="Act III" data-act-ar="الفصل الثالث" data-t-en="The Hidden Spool" data-t-ar="البكرة الخفيّة">
+      <figcaption><span class="L en">The hand withdraws. The spool keeps feeding.</span><span class="L ar">تنسحب اليد. والبكرة تواصل الإمداد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-017.mp4" data-poster="disney2/posters/kf-17.jpg"
+      data-act-en="Act IV" data-act-ar="الفصل الرابع" data-t-en="The Handoff" data-t-ar="التسليم">
+      <figcaption><span class="L en">The Maker leaves. Nothing stops.</span><span class="L ar">يرحل الصانع. ولا شيء يتوقف.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-018.mp4" data-poster="disney2/posters/kf-18.jpg"
+      data-act-en="Act IV" data-act-ar="الفصل الرابع" data-t-en="The Kingdom Builds Itself" data-t-ar="المملكة تبني نفسها">
+      <figcaption><span class="L en">Districts unfold along the thread — thirty of them real.</span><span class="L ar">تتفتّح الأحياء على الخيط — ثلاثون منها حقيقية.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-019.mp4" data-poster="disney2/posters/kf-19.jpg"
+      data-act-en="Act V" data-act-ar="الفصل الخامس" data-t-en="The Human Gate" data-t-ar="البوّابة البشرية">
+      <figcaption><span class="L en">Everything pauses at the seal. On purpose.</span><span class="L ar">كل شيءٍ يقف عند الختم. عن قصد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-020.mp4" data-poster="disney2/posters/kf-20.jpg"
+      data-act-en="Act VI" data-act-ar="الفصل السادس" data-t-en="Proof, Vault, Return" data-t-ar="برهانٌ وخزانةٌ وعودة">
+      <figcaption><span class="L en">Thirty lanterns close the circle. The book closes with them.</span><span class="L ar">ثلاثون فانوسًا تغلق الدائرة. والكتاب يُغلَق معها.</span></figcaption>
+    </figure>
+
     <div class="caption">
-      <p class="kick"><span class="L en">Chapter one</span><span class="L ar">الفصل الأول</span></p>
-      <h2><span class="L en">The Waking</span><span class="L ar">الاستيقاظ</span></h2>
-      <p><span class="L en">One candle, one closed volume, one anonymous Maker. The latch is convinced — never forced.</span><span class="L ar">شمعة واحدة، ومجلّد مغلق، وصانع بلا ملامح. المزلاج يُقنَع إقناعًا — ولا يُكسَر أبدًا.</span></p>
+      <p class="kick" id="leg-kick"><span class="L en">Act I · The film obeys the hand</span><span class="L ar">الفصل الأول · الفيلم يُطيع اليد</span></p>
+      <h2 id="leg-title"><span class="L en">The Waiting Book</span><span class="L ar">الكتاب المنتظِر</span></h2>
+      <p class="story" id="leg-story"></p>
     </div>
   </div>
 </section>
 
-<section class="scene chapter" data-scene="pin" data-slate="Ch.2 · First Page" data-chain="dsn-h-007,dsn-h-008,dsn-h-009,dsn-h-010,dsn-h-011,dsn-h-012">
-  <div class="stage">
-    <video muted playsinline preload="none"></video>
-    <video muted playsinline preload="none"></video>
-    <div class="vig"></div>
-    <p class="chip"><span class="id">DSN-H-007</span><span class="t">…</span></p>
-    <div class="dots" aria-hidden="true"></div>
-    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-    <div class="caption">
-      <p class="kick"><span class="L en">Chapter two</span><span class="L ar">الفصل الثاني</span></p>
-      <h2><span class="L en">First Page</span><span class="L ar">الصفحة الأولى</span></h2>
-      <p><span class="L en">A quill draws a cause; the ink answers with three paper fireflies — and the page turns into a forest.</span><span class="L ar">ريشةٌ ترسم سببًا؛ فيجيب الحبر بثلاث يراعاتٍ ورقية — وتنقلب الصفحة غابةً.</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ACT II ============ -->
-
-<!-- ============ RENDERED PLATE · Shot 2 · the candle ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 2 · the candle" style="height:300vh"
-         data-plate="render/disney-s2.mp4" data-plate-poster="render/disney-s2.jpg"
-         aria-label="Rendered plate 2">
-  <div class="stage">
-    <p class="rtag"><span class="L en">SHOT 2 · f/1.8 · ONE PRACTICAL</span><span class="L ar">اللقطة ٢ · f/1.8 · مصدرٌ عمليٌّ واحد</span></p>
-    <div class="caption">
-      <p class="kick"><span class="L en">Shot 2 · 66→92 mm</span><span class="L ar">اللقطة ٢ · ٦٦→٩٢ مم</span></p>
-      <h2><span class="L en">One flame, doing all the work</span><span class="L ar">لهبٌ واحد يقوم بالعمل كله</span></h2>
-      <p><span class="L en">The only motivated source in the room, held at f/1.8. Its flicker is keyframed, so the wax, the gilt and the parchment all breathe together — as they would.</span><span class="L ar">المصدر الوحيد المبرَّر في الغرفة، مُمسَكًا عند f/1.8. ورجفتُه مُفتَّحة زمنيًّا، فيتنفّس الشمعُ والتذهيبُ والرقُّ معًا — كما ينبغي لها.</span></p>
-    </div>
-  </div>
-</section>
-
-<section class="act">
-  <p class="no"><span class="L en">Act II · MAP — shots 013–032</span><span class="L ar">الفصل الثاني · الخريطة — اللقطات ٠١٣–٠٣٢</span></p>
-  <h2><span class="L en">Survey the Disorder, Find the Loop</span><span class="L ar">امسحِ الفوضى، جِدِ الحلقة</span></h2>
-  <p><span class="L en">Three routes die in the paper forest. One golden thread survives — because it returns to where it began.</span><span class="L ar">ثلاثُ طرقٍ تموت في غابة الورق. خيطٌ ذهبيٌّ واحد ينجو — لأنه يعود إلى حيث بدأ.</span></p>
-  <div class="rule"></div>
-</section>
-
-<section class="scene chapter" data-scene="pin" data-slate="Ch.3 · The Living Map" data-chain="dsn-h-013,dsn-h-014,dsn-h-015,dsn-h-016,dsn-h-017">
-  <div class="stage">
-    <video muted playsinline preload="none"></video>
-    <video muted playsinline preload="none"></video>
-    <div class="vig"></div>
-    <p class="chip"><span class="id">DSN-H-013</span><span class="t">…</span></p>
-    <div class="dots" aria-hidden="true"></div>
-    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-    <div class="caption">
-      <p class="kick"><span class="L en">Chapter three</span><span class="L ar">الفصل الثالث</span></p>
-      <h2><span class="L en">The Living Map</span><span class="L ar">الخريطة الحيّة</span></h2>
-      <p><span class="L en">The open-book forest stands in finite paper layers. The fireflies divide — and three paths go dark.</span><span class="L ar">غابة الكتاب المفتوح تقوم على طبقاتٍ ورقيةٍ معدودة. تتفرّق اليراعات — فتُظلم ثلاث طرق.</span></p>
-    </div>
-  </div>
-</section>
-
-<section class="scene chapter" data-scene="pin" data-slate="Ch.4 · The Golden Thread" data-chain="dsn-h-018,dsn-h-019,dsn-h-020,dsn-h-021,dsn-h-022">
-  <div class="stage">
-    <video muted playsinline preload="none"></video>
-    <video muted playsinline preload="none"></video>
-    <div class="vig"></div>
-    <p class="chip"><span class="id">DSN-H-018</span><span class="t">…</span></p>
-    <div class="dots" aria-hidden="true"></div>
-    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-    <div class="caption">
-      <p class="kick"><span class="L en">Chapter four</span><span class="L ar">الفصل الرابع</span></p>
-      <h2><span class="L en">The Golden Thread</span><span class="L ar">الخيط الذهبي</span></h2>
-      <p><span class="L en">The Maker points; one firefly is chosen. Under its light, a gold thread pulls free of the page and leads on.</span><span class="L ar">يشير الصانع؛ فتُختار يراعةٌ واحدة. وعلى ضوئها ينسلّ خيطٌ ذهبيٌّ من الصفحة ويمضي دليلًا.</span></p>
-    </div>
-  </div>
-</section>
-
-<section class="scene chapter" data-scene="pin" data-slate="Ch.5 · The False Knot" data-chain="dsn-h-023,dsn-h-024,dsn-h-025,dsn-h-026,dsn-h-027">
-  <div class="stage">
-    <video muted playsinline preload="none"></video>
-    <video muted playsinline preload="none"></video>
-    <div class="vig"></div>
-    <p class="chip"><span class="id">DSN-H-023</span><span class="t">…</span></p>
-    <div class="dots" aria-hidden="true"></div>
-    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-    <div class="caption">
-      <p class="kick"><span class="L en">Chapter five</span><span class="L ar">الفصل الخامس</span></p>
-      <h2><span class="L en">The False Knot</span><span class="L ar">العقدة الزائفة</span></h2>
-      <p><span class="L en">The thread snarls. Under glass, the signet pin finds the one fiber that matters — and the knot releases.</span><span class="L ar">يتشابك الخيط. وتحت العدسة يجد دبّوسُ الخاتم الليفةَ الوحيدة المهمّة — فتنحلّ العقدة.</span></p>
-    </div>
-  </div>
-</section>
-
-<section class="scene chapter" data-scene="pin" data-slate="Ch.6 · The Loop" data-chain="dsn-h-028,dsn-h-029,dsn-h-030,dsn-h-031,dsn-h-032">
-  <div class="stage">
-    <video muted playsinline preload="none"></video>
-    <video muted playsinline preload="none"></video>
-    <div class="vig"></div>
-    <p class="chip"><span class="id">DSN-H-028</span><span class="t">…</span></p>
-    <div class="dots" aria-hidden="true"></div>
-    <button class="playbtn" type="button" aria-label="Play chapter"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-    <div class="caption">
-      <p class="kick"><span class="L en">Chapter six</span><span class="L ar">الفصل السادس</span></p>
-      <h2><span class="L en">The Loop</span><span class="L ar">الحلقة</span></h2>
-      <p><span class="L en">The route is circular. The journey repeats without the Maker's hand — and a hidden spool keeps feeding it. A system.</span><span class="L ar">المسار دائري. الرحلة تتكرّر دون يد الصانع — وبكرةٌ خفيّة تُمِدّها بلا توقّف. إنها منظومة.</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ THE HANDOFF ============ -->
-<section class="scene handoff" data-scene="pin" data-slate="The handoff">
+<!-- ============ THE HANDOFF (film → code) ============ -->
+<section class="scene handoff" data-scene="pin" data-slate="Film hands to code">
   <div class="stage">
     <div class="plate" aria-hidden="true"></div>
     <svg class="thread" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -403,16 +381,16 @@
     </svg>
     <div class="paperize" aria-hidden="true"></div>
     <div class="caption">
-      <p class="kick"><span class="L en">Shot 32 of 144 · the handoff</span><span class="L ar">اللقطة ٣٢ من ١٤٤ · التسليم</span></p>
-      <h2><span class="L en">The footage ends. The kingdom keeps running.</span><span class="L ar">ينتهي المشهد المصوَّر. وتبقى المملكة تجري.</span></h2>
-      <p><span class="L en">Every frame above was generated shot-by-shot, each end-frame feeding the next beginning. From this exact frame onward, the film is rendered live by code — same palette, same laws, no more footage needed. That is the whole thesis: the human proves the loop, then the system runs it.</span><span class="L ar">كل إطارٍ أعلاه وُلِّد لقطةً بعد لقطة، وكل إطارِ نهايةٍ يغذّي البداية التالية. ومن هذا الإطار بالذات فصاعدًا يُعرَض الفيلم حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. وهذه هي الأطروحة كلها: الإنسان يثبت الحلقة، ثم يديرها النظام.</span></p>
+      <p class="kick"><span class="L en">Twenty shots · one take · now the code takes the thread</span><span class="L ar">عشرون لقطة · لقطة واحدة · والآن تأخذ الشيفرة الخيط</span></p>
+      <h2><span class="L en">The film proves it. The code runs it.</span><span class="L ar">الفيلم يثبتها. والشيفرة تُديرها.</span></h2>
+      <p><span class="L en">Everything you just scrubbed was generated shot-by-shot, each frame chained to the next, forward and reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما فركتَه للتوّ وُلِّد لقطةً بعد لقطة، وكل إطارٍ مسلسلٌ إلى تاليه، ذهابًا وإيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
     </div>
   </div>
 </section>
 
-<!-- ============ ACT III · BUILD (code) ============ -->
+<!-- ============ BUILD (code) ============ -->
 <section class="act">
-  <p class="no"><span class="L en">Act III · BUILD — rendered live by code</span><span class="L ar">الفصل الثالث · البناء — يُعرَض حيًّا بالشيفرة</span></p>
+  <p class="no"><span class="L en">Rendered live by code</span><span class="L ar">يُعرَض حيًّا بالشيفرة</span></p>
   <h2><span class="L en">The Paper Kingdom Rises</span><span class="L ar">مملكة الورق تنهض</span></h2>
   <p><span class="L en">Thirty districts — every one a real, shipped system from this portfolio, wearing storybook paper.</span><span class="L ar">ثلاثون حيًّا — كلٌّ منها منظومة حقيقية مُنجزة من هذا الملف، تلبس ورق الحكايات.</span></p>
   <div class="rule"></div>
@@ -421,18 +399,18 @@
 <section class="scene build" data-scene="pin" data-slate="The paper kingdom">
   <div class="stage">
     <div class="layer l4" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 300 L60 290 L90 240 L120 296 L200 280 L240 210 L285 285 L370 270 L420 230 L470 278 L560 262 L610 200 L662 270 L760 258 L820 214 L868 268 L940 250 L1000 262 L1000 400 Z" fill="#22345e"/>
+      <path d="M0 400 L0 300 L60 290 L90 240 L120 296 L200 280 L240 210 L285 285 L370 270 L420 230 L470 278 L560 262 L610 200 L662 270 L760 258 L820 214 L868 268 L940 250 L1000 262 L1000 400 Z" fill="#241a10"/>
     </svg></div>
     <div class="layer l3" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 320 L80 310 L110 250 L150 315 L230 300 L268 235 L310 305 L400 292 L448 240 L500 300 L590 285 L640 225 L695 295 L790 280 L850 235 L905 292 L1000 278 L1000 400 Z" fill="#2c3f6b" stroke="#F2BC3B" stroke-width="1" stroke-opacity=".25"/>
-      <g fill="#F2BC3B" opacity=".8"><circle cx="268" cy="252" r="2.4"/><circle cx="640" cy="243" r="2.4"/><circle cx="850" cy="252" r="2.4"/></g>
+      <path d="M0 400 L0 320 L80 310 L110 250 L150 315 L230 300 L268 235 L310 305 L400 292 L448 240 L500 300 L590 285 L640 225 L695 295 L790 280 L850 235 L905 292 L1000 278 L1000 400 Z" fill="#2e2114" stroke="#e2b13c" stroke-width="1" stroke-opacity=".25"/>
+      <g fill="#e2b13c" opacity=".8"><circle cx="268" cy="252" r="2.4"/><circle cx="640" cy="243" r="2.4"/><circle cx="850" cy="252" r="2.4"/></g>
     </svg></div>
     <div class="layer l2" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 336 L70 330 L105 268 L146 332 L240 320 L286 252 L332 326 L430 312 L484 258 L540 320 L636 305 L692 243 L748 315 L845 300 L900 255 L950 312 L1000 300 L1000 400 Z" fill="#35486f" stroke="#F2BC3B" stroke-width="1.2" stroke-opacity=".35"/>
-      <g fill="#FFE49A"><circle cx="105" cy="280" r="2.8"/><circle cx="332" cy="338" r="0"/><circle cx="286" cy="266" r="2.8"/><circle cx="692" cy="257" r="2.8"/><circle cx="900" cy="268" r="2.8"/></g>
+      <path d="M0 400 L0 336 L70 330 L105 268 L146 332 L240 320 L286 252 L332 326 L430 312 L484 258 L540 320 L636 305 L692 243 L748 315 L845 300 L900 255 L950 312 L1000 300 L1000 400 Z" fill="#382a18" stroke="#e2b13c" stroke-width="1.2" stroke-opacity=".35"/>
+      <g fill="#FFE49A"><circle cx="105" cy="280" r="2.8"/><circle cx="286" cy="266" r="2.8"/><circle cx="692" cy="257" r="2.8"/><circle cx="900" cy="268" r="2.8"/></g>
     </svg></div>
     <div class="layer l1" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 352 L90 346 L130 286 L175 350 L285 338 L340 270 L395 344 L505 330 L565 274 L625 338 L730 322 L790 262 L850 334 L1000 320 L1000 400 Z" fill="#3f527a" stroke="#F2BC3B" stroke-width="1.4" stroke-opacity=".5"/>
+      <path d="M0 400 L0 352 L90 346 L130 286 L175 350 L285 338 L340 270 L395 344 L505 330 L565 274 L625 338 L730 322 L790 262 L850 334 L1000 320 L1000 400 Z" fill="#453322" stroke="#e2b13c" stroke-width="1.4" stroke-opacity=".5"/>
       <g fill="#FFE49A"><circle cx="130" cy="300" r="3.2"/><circle cx="340" cy="284" r="3.2"/><circle cx="790" cy="276" r="3.2"/></g>
     </svg></div>
     <svg class="weave" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -449,9 +427,9 @@
   </div>
 </section>
 
-<!-- ============ ACT IV · GATE (code) ============ -->
+<!-- ============ GATE (code) ============ -->
 <section class="act">
-  <p class="no"><span class="L en">Act IV · GATE</span><span class="L ar">الفصل الرابع · البوّابة</span></p>
+  <p class="no"><span class="L en">The gate</span><span class="L ar">البوّابة</span></p>
   <h2><span class="L en">One Decision No Machine May Make</span><span class="L ar">قرارٌ واحد لا يملكه أي نظام</span></h2>
   <p><span class="L en">Every system in this portfolio keeps a human gate. The kingdom stops at the seal — on purpose.</span><span class="L ar">كل منظومة في هذا الملف تحتفظ ببوّابة بشرية. المملكة تتوقف عند الختم — عن قصد.</span></p>
   <div class="rule"></div>
@@ -479,9 +457,9 @@
   </div>
 </section>
 
-<!-- ============ ACT V · PROVE (code) ============ -->
+<!-- ============ PROVE (code) ============ -->
 <section class="act">
-  <p class="no"><span class="L en">Act V · PROVE</span><span class="L ar">الفصل الخامس · البرهان</span></p>
+  <p class="no"><span class="L en">The proof</span><span class="L ar">البرهان</span></p>
   <h2><span class="L en">Thirty Lanterns Answer</span><span class="L ar">ثلاثون فانوسًا تُجيب</span></h2>
   <p><span class="L en">Each light is one verified story from the live portfolio — no invented numbers, ever.</span><span class="L ar">كل ضوءٍ قصةٌ موثَّقة من الموقع الحيّ — لا أرقامَ مخترعة، أبدًا.</span></p>
   <div class="rule"></div>
@@ -498,26 +476,11 @@
   </div>
 </section>
 
-<!-- ============ ACT VI · THE VAULT (code) ============ -->
-
-<!-- ============ RENDERED PLATE · Shot 3 · the page ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 3 · the page" style="height:300vh"
-         data-plate="render/disney-s3.mp4" data-plate-poster="render/disney-s3.jpg"
-         aria-label="Rendered plate 3">
-  <div class="stage">
-    <p class="rtag"><span class="L en">SHOT 3 · f/2.0 · FOCUS 3.6→1.9 M</span><span class="L ar">اللقطة ٣ · f/2.0 · تركيز ٣٫٦→١٫٩ م</span></p>
-    <div class="caption">
-      <p class="kick"><span class="L en">Shot 3 · 58→84 mm</span><span class="L ar">اللقطة ٣ · ٥٨→٨٤ مم</span></p>
-      <h2><span class="L en">Down onto the open page</span><span class="L ar">هبوطًا إلى الصفحة المفتوحة</span></h2>
-      <p><span class="L en">The camera descends onto the page block as the quill draws its cause. Sixteen sheets of parchment, each with its own sheen — this is where the ink decides to answer.</span><span class="L ar">تهبط الكاميرا على كتلة الصفحات بينما ترسم الريشةُ سببَها. ستَّ عشرةَ ورقةً من الرقّ، لكلٍّ منها لمعتُها — وهنا يقرّر الحبر أن يُجيب.</span></p>
-    </div>
-  </div>
-</section>
-
+<!-- ============ THE VAULT (code) ============ -->
 <section class="act">
-  <p class="no"><span class="L en">Act VI · THE VAULT</span><span class="L ar">الفصل السادس · الخزانة</span></p>
-  <h2><span class="L en">One Hundred Twelve Unmade Shots</span><span class="L ar">مئة واثنتا عشرة لقطةً لم تُصنَع بعد</span></h2>
-  <p><span class="L en">The bible scripts 144 clips; 32 were produced. The rest wait in the vault — written, numbered, honest about being unmade.</span><span class="L ar">كتاب الإنتاج يكتب ١٤٤ مقطعًا؛ صُنع منها ٣٢. والبقية تنتظر في الخزانة — مكتوبةً، مرقَّمةً، صريحةً في أنها لم تُصنَع.</span></p>
+  <p class="no"><span class="L en">The vault</span><span class="L ar">الخزانة</span></p>
+  <h2><span class="L en">The Shots That Wait</span><span class="L ar">اللقطات التي تنتظر</span></h2>
+  <p><span class="L en">The production bible scripts 144 clips. The first edition produced 32 — retired with honor when the grammar changed. Edition II re-tells the whole tale in 20 scrubbed shots. The rest wait, honestly dark.</span><span class="L ar">كتاب الإنتاج يكتب ١٤٤ مقطعًا. الإصدار الأول صنع ٣٢ — أُحيلت إلى الأرشيف بشرفٍ حين تغيّرت القواعد. والإصدار الثاني يعيد الحكاية كاملةً في ٢٠ لقطةً تُفرَك فركًا. والبقية تنتظر، معتمةً بصدق.</span></p>
   <div class="rule"></div>
 </section>
 
@@ -528,31 +491,16 @@
     <div class="caption">
       <p class="kick"><span class="L en">DSN-H-033 → DSN-H-144</span><span class="L ar">DSN-H-033 ← DSN-H-144</span></p>
       <h2><span class="L en">The vault stays honest</span><span class="L ar">الخزانة تبقى صادقة</span></h2>
-      <p><span class="L en">Every slate you see is a real entry in the production bible — storyboarded, captioned, never generated. No pretend footage; the drawer glows only where film truly exists.</span><span class="L ar">كل لوحٍ تراه قيدٌ حقيقي في كتاب الإنتاج — مرسومٌ مشهديًّا، ومُعنوَن، ولم يُولَّد قط. لا مشاهدَ مزعومة؛ فالدُّرج لا يتوهّج إلا حيث يوجد فيلمٌ فعلًا.</span></p>
+      <p><span class="L en">Every slate is a real entry in the production bible — storyboarded, captioned, never generated. Outlined slates are the first edition's 32, retired to the archive; nothing pretends to be film that is not film.</span><span class="L ar">كل لوحٍ قيدٌ حقيقي في كتاب الإنتاج — مرسومٌ مشهديًّا ومُعنوَن ولم يُولَّد قط. والألواح المؤطَّرة هي لقطات الإصدار الأول الاثنتان والثلاثون، المُحالة إلى الأرشيف؛ لا شيء هنا يتظاهر بأنه فيلمٌ وهو ليس كذلك.</span></p>
     </div>
   </div>
 </section>
 
 <!-- ============ FINALE ============ -->
-
-<!-- ============ RENDERED PLATE · Shot 4 · the fireflies ============ -->
-<section class="scene rplate" data-scene="pin" data-slate="Shot 4 · the fireflies" style="height:300vh"
-         data-plate="render/disney-s4.mp4" data-plate-poster="render/disney-s4.jpg"
-         aria-label="Rendered plate 4">
-  <div class="stage">
-    <p class="rtag"><span class="L en">SHOT 4 · f/2.4 · CRANE UP</span><span class="L ar">اللقطة ٤ · f/2.4 · رافعة للأعلى</span></p>
-    <div class="caption">
-      <p class="kick"><span class="L en">Shot 4 · 62→40 mm</span><span class="L ar">اللقطة ٤ · ٦٢→٤٠ مم</span></p>
-      <h2><span class="L en">Ink leaves the page as light</span><span class="L ar">الحبر يغادر الصفحة ضوءًا</span></h2>
-      <p><span class="L en">The camera rises with them and the lens widens. Twenty-two lights lift on their own schedule, each earning its brightness — nothing is a sprite, everything is geometry.</span><span class="L ar">ترتفع الكاميرا معها وتتّسع العدسة. اثنتان وعشرون ضوءًا تنهض كلٌّ في موعدها، ويستحقّ كلٌّ منها سطوعه — لا شيء هنا صورةٌ ملصقة، وكلُّ شيء هندسة.</span></p>
-    </div>
-  </div>
-</section>
-
 <section class="act">
   <p class="no"><span class="L en">Finale</span><span class="L ar">الخاتمة</span></p>
   <h2><span class="L en">Fold Safely Home</span><span class="L ar">عودةٌ آمنة إلى الرفّ</span></h2>
-  <p><span class="L en">The finale restores the opening frame — the loop closes, as the continuity spec demands.</span><span class="L ar">الخاتمة تُعيد إطارَ البداية — فتنغلق الحلقة كما يشترط عقد الاستمرارية.</span></p>
+  <p><span class="L en">Shot 20 lands on shot 01's exact composition — the loop closes, as the continuity spec demands.</span><span class="L ar">اللقطة ٢٠ تحطّ على تكوين اللقطة ٠١ نفسه — فتنغلق الحلقة كما يشترط عقد الاستمرارية.</span></p>
   <div class="rule"></div>
 </section>
 
@@ -578,10 +526,12 @@
       <h3><span class="L en">The Kingdom of Running Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h3>
       <dl class="duo">
         <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
+        <dt><span class="L en">Edition</span><span class="L ar">الإصدار</span></dt><dd><span class="L en">II — dark cut-paper folktale, scroll-scrubbed</span><span class="L ar">الثاني — حكاية ورقٍ داكنة تُفرَك بالتمرير</span></dd>
         <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
-        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">32 WAN 2.7 shots, end-frame → first-frame</span><span class="L ar">٣٢ لقطة WAN 2.7، إطار نهايةٍ إلى إطار بداية</span></dd>
-        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v3 · CSS custom properties</dd>
-        <dt><span class="L en">Acts III–VI rendered</span><span class="L ar">عرض الفصول الثالث–السادس</span></dt><dd><span class="L en">Live, in code — no footage</span><span class="L ar">حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
+        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · reverse-safe</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · آمنة الاتجاهين</span></dd>
+        <dt><span class="L en">First edition</span><span class="L ar">الإصدار الأول</span></dt><dd><span class="L en">32 shots, retired to the archive</span><span class="L ar">٣٢ لقطة، أُحيلت إلى الأرشيف</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v4 · CSS custom properties</dd>
+        <dt><span class="L en">Kingdom, gate, lanterns, vault</span><span class="L ar">المملكة والبوّابة والفوانيس والخزانة</span></dt><dd><span class="L en">Rendered live, in code — no footage</span><span class="L ar">تُعرَض حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
         <dt><span class="L en">Production bible</span><span class="L ar">كتاب الإنتاج</span></dt><dd><span class="L en">144 scripted clips · 112 unproduced</span><span class="L ar">١٤٤ مقطعًا مكتوبًا · ١١٢ لم تُنتَج</span></dd>
         <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
       </dl>
@@ -594,8 +544,8 @@
 </section>
 
 <footer class="disclosure">
-  <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — handcrafted-storybook visual grammar, informed by Walt Disney Animation's published process material. Not affiliated with, endorsed by, or representing The Walt Disney Company. No characters, marks, or logos are depicted. Shots DSN-H-001–032 generated with WAN 2.7 from an original 144-clip production bible; Acts III–V rendered live in code. All project claims live on the <a href="../">portfolio's story pages</a>.</span>
-  <span class="L ar">دراسة حركية أصلية مستلهَمة لأغراض ملف أعمال محمد محمود — بقواعد «الحكاية المصوَّرة» البصرية، مستنيرةً بمواد عملية منشورة لاستوديوهات الرسوم المتحركة. لا انتساب ولا تأييد ولا تمثيل لشركة ديزني، ولا تظهر فيها شخصيات أو علامات أو شعارات. اللقطات ٠٠١–٠٣٢ مولَّدة بـ WAN 2.7 من كتاب إنتاج أصلي من ١٤٤ مقطعًا؛ والفصول الثالث إلى الخامس تُعرَض حيًّا بالشيفرة. جميع الأرقام والادّعاءات في <a href="../">صفحات القصص بالموقع</a>.</span></p>
+  <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — dark storybook visual grammar in the shadow-puppet folktale tradition. Not affiliated with, endorsed by, or representing The Walt Disney Company. No characters, marks, or logos are depicted. Edition II's 20 shots generated with WAN 2.7 from an original 20-keyframe shot bible; the first edition's 32 shots are retired to the archive; kingdom, gate, lanterns and vault render live in code. All project claims live on the <a href="../">portfolio's story pages</a>.</span>
+  <span class="L ar">دراسة حركية أصلية مستلهَمة لأغراض ملف أعمال محمد محمود — بقواعد الحكاية المظلمة في تقليد مسرح خيال الظلّ الورقي. لا انتساب ولا تأييد ولا تمثيل لشركة ديزني، ولا تظهر فيها شخصيات أو علامات أو شعارات. لقطات الإصدار الثاني العشرون مولَّدة بـ WAN 2.7 من كتاب لقطاتٍ أصلي من عشرين إطارًا؛ ولقطات الإصدار الأول الاثنتان والثلاثون محالةٌ إلى الأرشيف؛ والمملكة والبوّابة والفوانيس والخزانة تُعرَض حيًّا بالشيفرة. جميع الأرقام والادّعاءات في <a href="../">صفحات القصص بالموقع</a>.</span></p>
 </footer>
 
 <script src="cinema.js?v=6"></script>
@@ -604,93 +554,180 @@
   'use strict';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- VAULT: 144 slates, the 32 produced ones lit ---------- */
+  /* ---------- VAULT: 144 slates — first edition's 32 retired (outlined) ---------- */
   const drawer = document.getElementById('vault-drawer');
   if (drawer) {
     const frag = document.createDocumentFragment();
     for (let i = 0; i < 144; i++) {
       const s = document.createElement('i');
-      s.className = 'slate' + (i < 32 ? ' lit' : '');
+      s.className = 'slate' + (i < 32 ? ' retired' : '');
       s.style.setProperty('--i', (i / 144 * 0.82).toFixed(3));
       frag.appendChild(s);
     }
     drawer.appendChild(frag);
   }
 
-  /* ---------- shot titles (chip) ---------- */
-  const T = {
-    'dsn-h-001':['The Closed Volume','المجلّد المغلق'], 'dsn-h-002':['Maker at the Table','الصانع إلى الطاولة'],
-    'dsn-h-003':['Square Signet','الخاتم المربّع'], 'dsn-h-004':['Latch Fiber','ليف المزلاج'],
-    'dsn-h-005':['Latch Releases','المزلاج ينفتح'], 'dsn-h-006':['Cover Anticipates','الغلاف يتأهّب'],
-    'dsn-h-007':['Pages Breathe','الصفحات تتنفّس'], 'dsn-h-008':['First Page','الصفحة الأولى'],
-    'dsn-h-009':['Drawn Cause','السبب المرسوم'], 'dsn-h-010':['Ink Answers','الحبر يستجيب'],
-    'dsn-h-011':['First Fireflies','اليراعات الأولى'], 'dsn-h-012':['Page into Forest','صفحةٌ تصير غابة'],
-    'dsn-h-013':['Forest from the Page','الغابة من الصفحة'], 'dsn-h-014':['Layered Geography','جغرافيا من طبقات'],
-    'dsn-h-015':['Fireflies Divide','اليراعات تتفرّق'], 'dsn-h-016':['Three Dead Paths','ثلاث طرقٍ ميّتة'],
-    'dsn-h-017':['Maker Points','الصانع يشير'], 'dsn-h-018':['Chosen Firefly','اليراعة المختارة'],
-    'dsn-h-019':['Thread Glint','لمعة الخيط'], 'dsn-h-020':['Thread Pulled Free','انسلال الخيط'],
-    'dsn-h-021':['Follow the Thread','اتّبع الخيط'], 'dsn-h-022':['Creek Fold','طيّة الجدول'],
-    'dsn-h-023':['False Knot','العقدة الزائفة'], 'dsn-h-024':['Knot under Glass','العقدة تحت العدسة'],
-    'dsn-h-025':['Signet Pin','دبّوس الخاتم'], 'dsn-h-026':['Knot Releases','العقدة تنحلّ'],
-    'dsn-h-027':['Map Clearing','الخريطة تصفو'], 'dsn-h-028':['Circular Route','المسار الدائري'],
-    'dsn-h-029':['Loop Almost Closes','الحلقة تكاد تكتمل'], 'dsn-h-030':['Return Point','نقطة العودة'],
-    'dsn-h-031':['Repeat Journey','الرحلة تتكرّر'], 'dsn-h-032':['Hidden Spool','البكرة الخفيّة'],
-  };
-  const isAr = () => document.documentElement.lang === 'ar';
+  /* ════════════════════════════════════════════════════════════════════
+     THE BOOK — twenty clips, one scene, one playhead.
+     The scene's --p is the position in the whole tale: leg = floor(p*20),
+     the fraction inside the leg is the clip's currentTime. Two <video>
+     elements double-buffer — the shown one is seeked, the other is armed
+     with the leg the scroll is heading towards — so 100 seconds scrub as
+     one take with no boundary to fall through. Every clip was generated
+     first-frame → last-frame onto the NEXT keyframe, so leg joins land on
+     the exact frame the floor poster shows.
 
-  /* ---------- chapter chain player (double-buffered) ---------- */
-  document.querySelectorAll('.chapter[data-chain]').forEach(section => {
-    const ids = section.dataset.chain.split(',');
-    const vids = section.querySelectorAll('video');
-    const chipId = section.querySelector('.chip .id');
-    const chipT = section.querySelector('.chip .t');
-    const dots = section.querySelector('.dots');
-    const playbtn = section.querySelector('.playbtn');
-    ids.forEach(() => dots.appendChild(document.createElement('i')));
-
-    let idx = 0, active = 0, started = false, wanted = false;
-    const src = i => `disney/clips/${ids[i]}.mp4`;
-    const poster = i => `disney/posters/${ids[i]}.jpg`;
-    vids[0].poster = poster(0);
-
-    const show = (v) => { vids.forEach(x => x.classList.toggle('on', x === v)); };
-    const updateChrome = () => {
-      chipId.textContent = ids[idx].toUpperCase();
-      chipT.textContent = ' · ' + (T[ids[idx]] ? T[ids[idx]][isAr() ? 1 : 0] : '');
-      [...dots.children].forEach((d, i) => d.classList.toggle('on', i === idx));
-    };
-    const arm = (v, i) => {
-      if (i >= ids.length) return;
-      if (v.dataset.for !== ids[i]) { v.dataset.for = ids[i]; v.src = src(i); v.load(); }
-    };
-    const playIdx = () => {
-      const v = vids[active];
-      arm(v, idx);
-      show(v); updateChrome();
-      const p = v.play(); if (p) p.catch(() => { section.classList.add('needs-tap'); });
-      arm(vids[1 - active], idx + 1);            // prefetch next into standby
-    };
-    vids.forEach(v => v.addEventListener('ended', () => {
-      if (idx + 1 >= ids.length) return;         // hold last frame of chapter
-      idx += 1; active = 1 - active; playIdx();
+     Modes (spotify precedent, the shipped reference):
+       scrub  desktop — scroll drives currentTime, forward and reverse
+       chain  coarse pointer — clips play through in sequence
+       still  prefers-reduced-motion — posters and captions only
+     ════════════════════════════════════════════════════════════════════ */
+  (() => {
+    const scene = document.getElementById('book');
+    if (!scene) return;
+    const caps = [...scene.querySelectorAll('.legcap')];
+    const vids = [...scene.querySelectorAll('video')];
+    const floor = scene.querySelector('.floor');
+    const chipId = scene.querySelector('.chip .id');
+    const chipT = scene.querySelector('.chip .t');
+    const legno = scene.querySelector('.legno');
+    const rail = scene.querySelector('.legrail');
+    const kick = document.getElementById('leg-kick');
+    const title = document.getElementById('leg-title');
+    const story = document.getElementById('leg-story');
+    const playbtn = scene.querySelector('.playbtn');
+    const N = caps.length;
+    if (!N || vids.length < 2) return;
+    const LEGS = caps.map(c => ({
+      clip: c.dataset.clip, poster: c.dataset.poster,
+      actEn: c.dataset.actEn, actAr: c.dataset.actAr,
+      tEn: c.dataset.tEn, tAr: c.dataset.tAr,
+      html: c.querySelector('figcaption').innerHTML,
     }));
-    playbtn.addEventListener('click', () => {
-      section.classList.remove('needs-tap'); wanted = true; playIdx();
+    caps.forEach(() => rail.appendChild(document.createElement('i')));
+    const pips = [...rail.children];
+    const isAr = () => document.documentElement.lang === 'ar';
+
+    const coarse = matchMedia('(hover: none) and (pointer: coarse)').matches || innerWidth < 760;
+    const solo = new URLSearchParams(location.search).has('solo');
+    const MODE = reduced ? 'still' : coarse ? 'chain' : 'scrub';
+    scene.classList.add('mode-' + MODE);
+
+    const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+    const slots = vids.map(v => ({ v, leg: -1, ready: false, seeking: false, want: -1 }));
+    let shown = -1, lastLeg = -1, dir = 1, lastP = 0;
+
+    const arm = (s, leg) => {
+      if (s.leg === leg) return s;
+      s.leg = leg; s.ready = false; s.seeking = false; s.want = -1;
+      s.v.poster = LEGS[leg].poster;
+      s.v.src = LEGS[leg].clip;
+      s.v.load();
+      return s;
+    };
+    const seek = (s, t) => {
+      if (!s.ready) return;
+      if (s.seeking) { s.want = t; return; }
+      if (Math.abs(s.v.currentTime - t) < 0.012) return;
+      s.seeking = true;
+      try { s.v.currentTime = t; } catch { s.seeking = false; }
+    };
+    slots.forEach(s => {
+      s.v.addEventListener('loadedmetadata', () => { s.ready = true; paint(); });
+      s.v.addEventListener('seeked', () => {
+        s.seeking = false;
+        if (s.want >= 0) { const t = s.want; s.want = -1; seek(s, t); }
+      });
+      /* a clip that will not load leaves the keyframe poster standing —
+         the page is complete art with zero videos on disk */
+      s.v.addEventListener('error', () => { s.ready = false; s.v.classList.remove('on'); }, true);
+    });
+    const slotFor = leg => {
+      for (const s of slots) if (s.leg === leg) return s;
+      return arm(slots[shown === 0 ? 1 : 0], leg);
+    };
+    const show = s => {
+      const k = slots.indexOf(s);
+      if (k === shown) return;
+      shown = k;
+      slots.forEach(o => o.v.classList.toggle('on', o === s));
+    };
+    const setLeg = i => {
+      if (i === lastLeg) return;
+      lastLeg = i;
+      const L = LEGS[i], ar = isAr();
+      chipId.textContent = 'SHOT ' + String(i + 1).padStart(2, '0');
+      chipT.textContent = ' · ' + (ar ? L.actAr : L.actEn);
+      legno.textContent = String(i + 1).padStart(2, '0');
+      kick.innerHTML = '<span class="L en">' + L.actEn + ' · the film obeys the hand</span><span class="L ar">' + L.actAr + ' · الفيلم يُطيع اليد</span>';
+      title.innerHTML = '<span class="L en">' + L.tEn + '</span><span class="L ar">' + L.tAr + '</span>';
+      story.innerHTML = L.html;
+      pips.forEach((p, k) => p.classList.toggle('on', k === i));
+      floor.src = L.poster;                       /* the floor under the videos */
+    };
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-lang-toggle]')) { const i = lastLeg; lastLeg = -1; if (i >= 0) setLeg(i); }
     });
 
-    // liveness comes from the engine (scene:live / scene:idle) — no IO here
-    section.addEventListener('scene:live', () => {
-      wanted = true;
-      if (reduced && !started) { arm(vids[0], 0); show(vids[0]); updateChrome(); section.classList.add('needs-tap'); return; }
-      started = true; playIdx();
-    });
-    section.addEventListener('scene:idle', () => {
-      wanted = false; vids.forEach(v => v.pause());
-    });
-    updateChrome();
-    // re-title chips when language flips
-    document.addEventListener('click', (e) => { if (e.target.closest('[data-lang-toggle]')) updateChrome(); });
-  });
+    function paint() {
+      const p = clamp01(parseFloat(scene.style.getPropertyValue('--p') || '0'));
+      if (p > lastP + 1e-4) dir = 1; else if (p < lastP - 1e-4) dir = -1;
+      lastP = p;
+      const g = Math.min(p, 0.999999) * N;
+      const i = Math.floor(g), f = g - i;
+      setLeg(i);
+      if (MODE === 'still') return;
+      const s = slotFor(i);
+      show(s);
+      if (s.ready) {
+        const d = s.v.duration || 5;
+        seek(s, Math.min(d - 0.04, Math.max(0, f * d)));
+      }
+      const nb = i + dir;                          /* prefetch where we are going */
+      if (nb >= 0 && nb < N) {
+        const other = slots[1 - slots.indexOf(s)];
+        if (other.leg !== nb) arm(other, nb);
+      }
+    }
+
+    if (MODE === 'chain') {
+      let idx = 0, live = false, cur = slots[0];
+      const playIdx = () => {
+        arm(cur, idx); show(cur); setLeg(idx);
+        const go = cur.v.play();
+        if (go) go.catch(() => scene.classList.add('needs-tap'));
+        const other = cur === slots[0] ? slots[1] : slots[0];
+        if (idx + 1 < N) arm(other, idx + 1);
+      };
+      slots.forEach(s => s.v.addEventListener('ended', () => {
+        if (!live || s !== cur || idx + 1 >= N) return;   /* hold the last frame */
+        idx += 1; cur = cur === slots[0] ? slots[1] : slots[0]; playIdx();
+      }));
+      playbtn.addEventListener('click', () => { scene.classList.remove('needs-tap'); live = true; playIdx(); });
+      scene.addEventListener('scene:live', () => { live = true; playIdx(); });
+      scene.addEventListener('scene:idle', () => { live = false; slots.forEach(s => s.v.pause()); });
+      setLeg(0);
+      return;
+    }
+
+    let tick = false, fallback = 0;
+    const onScroll = () => {
+      if (tick) return;
+      tick = true;
+      requestAnimationFrame(() => { tick = false; paint(); });
+      /* rAF freezes in hidden/embedded webviews; timers do not */
+      clearTimeout(fallback);
+      fallback = setTimeout(() => { if (tick) { tick = false; paint(); } }, 120);
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll, { passive: true });
+    if (solo) {
+      let n = 0;
+      const hold = setInterval(() => { paint(); if (++n > 60) clearInterval(hold); }, 100);
+    }
+    setLeg(0);
+    paint();
+  })();
 
   /* ---------- PROVE: thirty lanterns settle into the loop ---------- */
   const cv = document.getElementById('lanterns');
@@ -715,10 +752,9 @@
       const cx = W / 2, cy = H * 0.44;
       const R = Math.min(W, H) * 0.30;
       const settle = Math.min(1, Math.max(0, (p - 0.15) * 1.7));
-      // the loop path, drawn as the lanterns settle
       if (settle > 0.35) {
         ctx.beginPath();
-        ctx.strokeStyle = 'rgba(242,188,59,' + (0.35 * (settle - 0.35) / 0.65) + ')';
+        ctx.strokeStyle = 'rgba(226,177,60,' + (0.35 * (settle - 0.35) / 0.65) + ')';
         ctx.lineWidth = 1.2;
         ctx.ellipse(cx, cy, R, R * 0.72, 0, 0, Math.PI * 2);
         ctx.stroke();
@@ -734,8 +770,8 @@
         const r = 2 + q.seed * 2.2;
         const g = ctx.createRadialGradient(x, y, 0, x, y, r * 6);
         g.addColorStop(0, 'rgba(255,228,154,' + (0.85 * tw) + ')');
-        g.addColorStop(0.35, 'rgba(242,188,59,' + (0.4 * tw) + ')');
-        g.addColorStop(1, 'rgba(242,188,59,0)');
+        g.addColorStop(0.35, 'rgba(226,177,60,' + (0.4 * tw) + ')');
+        g.addColorStop(1, 'rgba(226,177,60,0)');
         ctx.fillStyle = g;
         ctx.beginPath(); ctx.arc(x, y, r * 6, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = 'rgba(255,240,200,' + (0.9 * tw) + ')';
@@ -747,8 +783,7 @@
     const stop = () => { cancelAnimationFrame(raf); raf = 0; };
     if (reduced) {
       size();
-      // one static settled frame
-      const p1 = { style: scene.style }; scene.style.setProperty('--p', '0.8');
+      scene.style.setProperty('--p', '0.8');
       requestAnimationFrame((t) => { draw(t); stop(); });
     } else {
       scene.addEventListener('scene:live', start);
