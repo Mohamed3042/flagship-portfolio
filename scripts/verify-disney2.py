@@ -361,11 +361,25 @@ class Verification:
             "img => ({src:img.currentSrc.split('/').slice(-3).join('/'), width:img.naturalWidth, height:img.naturalHeight})"
         )
         body = page.locator("body").inner_text()
+        badge = card.locator(".badge .en").inner_text().strip()
+        spec = card.locator(".spec").inner_text().strip()
+        description = page.locator("meta[name='description']").get_attribute("content") or ""
+        badge_facts = " ".join(badge.split()).casefold()
+        spec_facts = " ".join(spec.split()).casefold()
         self.check("lobby Edition II poster", state["src"] == "disney2/posters/kf-19.jpg", state)
         self.check(
             "lobby Edition II truth copy",
             "Edition II from 20 real WAN 2.7" in body and "32-shot first edition is retired" in body,
             "20 current / 32 retired",
+        )
+        self.check(
+            "lobby card runtime facts",
+            badge_facts == "20 real wan shots"
+            and "1 scrubbed take" in spec_facts
+            and "20 real shots" in spec_facts
+            and "master cut 1:40" in spec_facts
+            and "Edition II cut from 20 real WAN 2.7" in description,
+            {"badge": badge, "spec": spec, "description": description},
         )
         card.scroll_into_view_if_needed()
         self.screenshot(page, "desktop-worlds-lobby.png")
