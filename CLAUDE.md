@@ -217,6 +217,19 @@ The Cosmic Keynote is **live on both hosts** (`npm run build` green, 22 pages). 
    scaffold is in `tokens.css` to pin more sections per-section if desired.
 4. **Open decision:** the indigo (Web·Live) accent was lightened from the spec'd `#5e5ce6` to
    `#7574ee` so it passes AA as small text — confirmed **keep** this session.
+5. **Netflix World — THE ANTHOLOGY owner-run WAN handoff (2026-08-08):** generated and
+   mechanically normalized **33 stills** (`KF00` style anchor + `KF01–KF32`) to exact
+   **1920×1088** PNGs under `public/worlds/assets/netflix/keyframes/`; contact sheets and the
+   reconstructable prompt/verdict manifest are in `public/worlds/assets/netflix/review/` and
+   `public/worlds/assets/netflix/keyframe-review.md`. The owner approved regenerating the ten
+   first-pass rejects (`KF06`, `KF12`, `KF16`, `KF18`, `KF20`, `KF21`, `KF23`, `KF24`, `KF28`,
+   `KF29`); Revision 2 now scores **33 PASS / 0 REJECT**. The originals and first-pass sheets are
+   archived in `review/rejected-v1/`; selected raw retries are in `review/regenerated-v2/raw/`.
+   The owner explicitly approved Revision 2, then chose to generate WAN 2.7 clips himself from
+   his own account. **0 WAN credits were spent by Codex.** The copy-ready 32-clip prompts, exact
+   reference/FLF mapping, fixed seeds, filenames, QA ladder, and resumable task log live in
+   `public/worlds/assets/netflix/wan/OWNER-RUNBOOK.md`. Generated clips are still pending; do not
+   edit/deploy `netflix.html` until the accepted MP4 chain is added under `wan/accepted/`.
 
 **Full architecture + DOM contract + verification status:** see `continue.md` (self-contained handoff).
 
