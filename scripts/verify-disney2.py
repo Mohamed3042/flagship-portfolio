@@ -19,6 +19,7 @@ import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from statistics import median
 from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
 
 from PIL import Image, ImageChops, ImageFilter
@@ -137,7 +138,7 @@ class Verification:
         return page
 
     @staticmethod
-    def set_progress(page: Page, selector: str, progress: float, delay_ms: int = 260) -> float:
+    def set_progress(page: Page, selector: str, progress: float, delay_ms: int = 550) -> float:
         y = page.locator(selector).evaluate(
             """(el, p) => {
               const top = el.getBoundingClientRect().top + scrollY;
@@ -375,14 +376,286 @@ class Verification:
             "scene => parseFloat(scene.style.getPropertyValue('--pan') || '0.5')"
         ))
 
+    def settle_progress(self, page: Page, progress: float) -> None:
+        """Move only by scroll, then wait for the page's own camera and seek
+        queue to reach the requested film position."""
+        self.set_progress(page, "#book", progress, delay_ms=0)
+        page.wait_for_function(
+            """target => {
+              const scene = document.querySelector('#book');
+              const journey = parseFloat(scene.style.getPropertyValue('--journey') || '-1');
+              const g = Math.min(target, .999999) * 20;
+              const leg = Math.floor(g);
+              const fraction = g - leg;
+              const video = scene.querySelector('video.on');
+              if (Math.abs(journey - target) > 1e-4 || !video || video.readyState < 1 || video.seeking) return false;
+              if (!video.currentSrc.endsWith('DSN2-' + String(leg + 1).padStart(3, '0') + '.mp4')) return false;
+              const wanted = Math.min(video.duration - .04, Math.max(0, fraction * video.duration));
+              return Math.abs(video.currentTime - wanted) <= .12;
+            }""",
+            arg=progress,
+            timeout=30_000,
+        )
+
+    @staticmethod
+    def camera_sample_metrics(
+        samples: list[dict[str, object]], key: str, target: float
+    ) -> dict[str, object]:
+        values = [float(sample[key]) for sample in samples]
+        start = values[0]
+        total = target - start
+        magnitude = abs(total)
+        direction = 1.0 if total >= 0 else -1.0
+        deltas = [values[index] - values[index - 1] for index in range(1, len(values))]
+        movement_floor = max(magnitude * 0.002, 0.0001 if key == "pan" else 0.002)
+        movement_frames = sum(abs(delta) >= movement_floor for delta in deltas)
+        max_share = max((abs(delta) for delta in deltas), default=0.0) / max(magnitude, 1e-9)
+        wrong_way = max((max(0.0, -direction * delta) for delta in deltas), default=0.0)
+        by_500 = next(
+            (float(sample[key]) for sample in reversed(samples) if float(sample["ms"]) <= 500),
+            values[0],
+        )
+        remaining_500 = abs(target - by_500) / max(magnitude, 1e-9)
+        crossing = next(
+            (
+                index
+                for index, value in enumerate(values)
+                if direction * (value - start) >= magnitude * 0.5
+            ),
+            None,
+        )
+        return {
+            "start": start,
+            "target": target,
+            "final": values[-1],
+            "movement_frames": movement_frames,
+            "max_share": max_share,
+            "wrong_way_share": wrong_way / max(magnitude, 1e-9),
+            "remaining_500": remaining_500,
+            "crossing": crossing,
+        }
+
+    def sample_step_response(self, page: Page) -> tuple[list[dict[str, object]], float, float]:
+        """Instantly move half a leg and sample the rendered camera once per rAF."""
+        leg_index = 10  # leg 11, even: pan travels left -> right
+        start_fraction, target_fraction = 0.25, 0.75
+        start_progress = (leg_index + start_fraction) / 20
+        target_progress = (leg_index + target_fraction) / 20
+        self.settle_progress(page, start_progress)
+        duration = float(page.locator("#book video.on").evaluate("video => video.duration"))
+        samples = page.evaluate(
+            """arg => new Promise(resolve => {
+              const scene = document.querySelector('#book');
+              const top = scene.getBoundingClientRect().top + scrollY;
+              const span = Math.max(0, scene.offsetHeight - innerHeight);
+              const samples = [];
+              const started = performance.now();
+              const read = now => {
+                const video = scene.querySelector('video.on');
+                samples.push({
+                  ms: now - started,
+                  pan: parseFloat(scene.style.getPropertyValue('--pan') || '.5'),
+                  journey: parseFloat(scene.style.getPropertyValue('--journey') || '0'),
+                  time: video ? video.currentTime : 0,
+                });
+              };
+              read(started);
+              scrollTo(0, top + span * arg.target);
+              const frame = now => {
+                read(now);
+                if (now - started < 620) requestAnimationFrame(frame);
+                else resolve(samples);
+              };
+              requestAnimationFrame(frame);
+            })""",
+            {"target": target_progress},
+        )
+        u = (target_fraction - 0.12) / 0.76
+        target_pan = u * u * (3 - 2 * u)
+        target_time = target_fraction * duration
+        return samples, target_pan, target_time
+
+    def check_step_response(self, page: Page, label: str) -> None:
+        samples, target_pan, target_time = self.sample_step_response(page)
+        pan = self.camera_sample_metrics(samples, "pan", target_pan)
+        clock = self.camera_sample_metrics(samples, "time", target_time)
+        self.check(
+            f"{label} weighted step spreads motion over frames",
+            pan["movement_frames"] >= 6 and clock["movement_frames"] >= 6,
+            f"pan={pan['movement_frames']} frames, clock={clock['movement_frames']} frames",
+        )
+        self.check(
+            f"{label} weighted step has no teleport",
+            pan["max_share"] <= 0.35 and clock["max_share"] <= 0.35,
+            f"largest pan={pan['max_share']:.1%}, clock={clock['max_share']:.1%} of step",
+        )
+        self.check(
+            f"{label} weighted step reaches 95% by 500ms",
+            pan["remaining_500"] <= 0.05 and clock["remaining_500"] <= 0.05,
+            f"remaining pan={pan['remaining_500']:.1%}, clock={clock['remaining_500']:.1%}",
+        )
+        self.check(
+            f"{label} weighted step approaches monotonically",
+            pan["wrong_way_share"] <= 0.01 and clock["wrong_way_share"] <= 0.01,
+            f"reverse pan={pan['wrong_way_share']:.2%}, clock={clock['wrong_way_share']:.2%}",
+        )
+        pan_cross, time_cross = pan["crossing"], clock["crossing"]
+        lockstep = pan_cross is not None and time_cross is not None and abs(pan_cross - time_cross) <= 3
+        self.check(
+            f"{label} pan and film clock stay in lockstep",
+            lockstep,
+            f"50% crossing frames pan={pan_cross}, clock={time_cross}",
+        )
+
+    def check_glide_to_rest(self, page: Page, label: str) -> None:
+        """A short equal-step wheel burst must leave camera motion after the
+        hand stops, then converge and park its rAF loop."""
+        start = (10 + 0.20) / 20
+        targets = [(10 + fraction) / 20 for fraction in (0.30, 0.40, 0.50)]
+        self.settle_progress(page, start)
+        result = page.evaluate(
+            """arg => new Promise(resolve => {
+              const scene = document.querySelector('#book');
+              const top = scene.getBoundingClientRect().top + scrollY;
+              const span = Math.max(0, scene.offsetHeight - innerHeight);
+              const samples = [];
+              const started = performance.now();
+              const stopMs = 110;
+              const read = now => samples.push({
+                ms: now - started,
+                pan: parseFloat(scene.style.getPropertyValue('--pan') || '.5'),
+                journey: parseFloat(scene.style.getPropertyValue('--journey') || '0'),
+                time: scene.querySelector('video.on')?.currentTime || 0,
+              });
+              read(started);
+              arg.targets.forEach((target, index) => setTimeout(
+                () => scrollTo(0, top + span * target), index * 55
+              ));
+              const frame = now => {
+                read(now);
+                if (now - started < 850) requestAnimationFrame(frame);
+                else resolve({samples, stopMs, finalTarget: arg.targets.at(-1)});
+              };
+              requestAnimationFrame(frame);
+            })""",
+            {"targets": targets},
+        )
+        samples = result["samples"]
+        post_stop_moves = 0
+        for previous, current in zip(samples, samples[1:]):
+            if float(current["ms"]) < float(result["stopMs"]) + 34:
+                continue
+            if abs(float(current["journey"]) - float(previous["journey"])) >= 1e-5:
+                post_stop_moves += 1
+        final_error_legs = abs(float(samples[-1]["journey"]) - float(result["finalTarget"])) * 20
+        self.check(
+            f"{label} camera glides after input stops",
+            post_stop_moves >= 2,
+            f"moving post-stop frames={post_stop_moves}",
+        )
+        self.check(
+            f"{label} glide settles within 0.5% of a leg",
+            final_error_legs <= 0.005,
+            f"final error={final_error_legs:.4f} leg",
+        )
+        page.wait_for_timeout(450)
+        state = page.locator("#book").get_attribute("data-camera-state") or "missing"
+        self.check(f"{label} camera loop parks when idle", state == "idle", state)
+
+    def check_steady_scroll_evenness(self, page: Page, label: str) -> None:
+        """A constant-rate train of wheel-sized inputs must not appear as
+        event-sized pan spikes."""
+        start = (10 + 0.30) / 20
+        targets = [(10 + 0.30 + 0.05 * step) / 20 for step in range(1, 9)]
+        self.settle_progress(page, start)
+        result = page.evaluate(
+            """arg => new Promise(resolve => {
+              const scene = document.querySelector('#book');
+              const top = scene.getBoundingClientRect().top + scrollY;
+              const span = Math.max(0, scene.offsetHeight - innerHeight);
+              const samples = [];
+              const started = performance.now();
+              const inputEnd = (arg.targets.length - 1) * 70;
+              const read = now => samples.push({
+                ms: now - started,
+                pan: parseFloat(scene.style.getPropertyValue('--pan') || '.5'),
+              });
+              read(started);
+              arg.targets.forEach((target, index) => setTimeout(
+                () => scrollTo(0, top + span * target), index * 70
+              ));
+              const frame = now => {
+                read(now);
+                if (now - started < inputEnd + 180) requestAnimationFrame(frame);
+                else resolve({samples, inputEnd});
+              };
+              requestAnimationFrame(frame);
+            })""",
+            {"targets": targets},
+        )
+        samples = result["samples"]
+        deltas = [
+            abs(float(current["pan"]) - float(previous["pan"]))
+            for previous, current in zip(samples, samples[1:])
+            if 70 <= float(current["ms"]) <= float(result["inputEnd"]) + 120
+        ]
+        middle = median(deltas) if deltas else 0.0
+        spike = max(deltas, default=0.0)
+        even = middle > 1e-5 and spike <= 3 * middle
+        self.check(
+            f"{label} steady scroll has even per-frame pan",
+            even,
+            f"max={spike:.5f}, median={middle:.5f}, ratio={spike / max(middle, 1e-9):.2f}x",
+        )
+
+    def check_chapter_grammar(self, page: Page, label: str) -> None:
+        values: dict[str, float] = {}
+        for name, leg_index, fraction in (
+            ("even_arrive", 10, 0.10), ("even_mid", 10, 0.50), ("even_settle", 10, 0.90),
+            ("odd_arrive", 9, 0.10), ("odd_mid", 9, 0.50), ("odd_settle", 9, 0.90),
+        ):
+            self.settle_progress(page, (leg_index + fraction) / 20)
+            values[name] = self.pan_position(page)
+        parked = (
+            values["even_arrive"] <= 0.02 and values["even_settle"] >= 0.98
+            and values["odd_arrive"] >= 0.98 and values["odd_settle"] <= 0.02
+        )
+        self.check(f"{label} chapters arrive and settle on parked edges", parked, values)
+        midpoint = abs(values["even_mid"] - 0.5) <= 0.05 and abs(values["odd_mid"] - 0.5) <= 0.05
+        self.check(f"{label} chapter cross is centered at halfway", midpoint, values)
+
+    def check_jump_snap(self, page: Page, label: str) -> None:
+        start, target = (2 + 0.5) / 20, (6 + 0.5) / 20  # four-leg navigation jump
+        self.settle_progress(page, start)
+        samples = page.evaluate(
+            """target => new Promise(resolve => {
+              const scene = document.querySelector('#book');
+              const top = scene.getBoundingClientRect().top + scrollY;
+              const span = Math.max(0, scene.offsetHeight - innerHeight);
+              const values = [];
+              scrollTo(0, top + span * target);
+              const frame = () => {
+                values.push(parseFloat(scene.style.getPropertyValue('--journey') || '0'));
+                if (values.length < 4) requestAnimationFrame(frame); else resolve(values);
+              };
+              requestAnimationFrame(frame);
+            })""",
+            target,
+        )
+        self.check(
+            f"{label} large navigation jump snaps the camera",
+            abs(float(samples[-1]) - target) <= 1e-4,
+            f"journey frames={samples}, target={target:.4f}",
+        )
+
     def check_rostrum_pan(self, page: Page, label: str) -> None:
         """The scroll must PAN the frame's hidden width inside each chapter,
         serpentine across chapters so the camera never jumps at a join."""
-        self.set_progress(page, "#book", 0.455)   # leg 10 (index 9, odd): pan = 1-f
-        self.wait_leg(page, 10, 0.1, label=label)
+        self.set_progress(page, "#book", 0.4575)  # leg 10 (index 9, odd), f=.15
+        self.wait_leg(page, 10, 0.15, label=label)
         early = self.pan_position(page)
-        self.set_progress(page, "#book", 0.495)
-        self.wait_leg(page, 10, 0.9, label=label)
+        self.set_progress(page, "#book", 0.4925)  # f=.85; plateaus sit outside this window
+        self.wait_leg(page, 10, 0.85, label=label)
         late = self.pan_position(page)
         sweep = abs(late - early)
         self.check(
@@ -404,7 +677,7 @@ class Verification:
         boundary_after = self.pan_position(page)
         self.check(
             f"{label} serpentine continuity at the join",
-            abs(boundary_after - boundary_before) <= 0.12,
+            abs(boundary_after - boundary_before) <= 0.04,
             f"pan {boundary_before:.3f} -> {boundary_after:.3f} across 10→11",
         )
 
@@ -422,6 +695,15 @@ class Verification:
             "credits state never-autoplayed",
             "never autoplayed" in credits,
             "found" if "never autoplayed" in credits else "missing",
+        )
+
+    def check_weighted_version(self, page: Page) -> None:
+        badge = " ".join(page.locator(".ver").inner_text().split())
+        title = (page.locator(".ver").get_attribute("title") or "").casefold()
+        self.check(
+            "weighted camera version badge",
+            badge == "v3.3 · II" and "weighted camera" in title,
+            {"badge": badge, "title": title},
         )
 
     def screenshot(self, page: Page, name: str) -> Path:
@@ -544,12 +826,18 @@ class Verification:
         self.assert_mode(page, "desktop")
         self.assert_no_side_chrome(page, "desktop")
         self.check_truth_copy(page)
+        self.check_weighted_version(page)
 
         self.set_progress(page, "#top", 0.56)
         self.screenshot(page, "desktop-cold-open.png")
 
         self.scrub_journey(page, "desktop")
         self.check_parallax_travel(page, "desktop")
+        self.check_step_response(page, "desktop")
+        self.check_glide_to_rest(page, "desktop")
+        self.check_steady_scroll_evenness(page, "desktop")
+        self.check_chapter_grammar(page, "desktop")
+        self.check_jump_snap(page, "desktop")
         self.check_rostrum_pan(page, "desktop")
         self.check_chrome_fade(page, "desktop")
 
@@ -603,6 +891,8 @@ class Verification:
         page = self.open_page(context, self.url)
         page.wait_for_selector("#book.mode-scrub")
         self.assert_mode(page, "motion-preference")
+        self.check_step_response(page, "motion-preference")
+        self.check_glide_to_rest(page, "motion-preference")
         self.set_progress(page, "#book", 0.475)
         self.wait_leg(page, 10, 0.5, label="motion-preference")
         candle = page.evaluate(
@@ -659,6 +949,11 @@ class Verification:
 
         self.scrub_journey(page, "phone")
         self.check_parallax_travel(page, "phone")
+        self.check_step_response(page, "phone")
+        self.check_glide_to_rest(page, "phone")
+        self.check_steady_scroll_evenness(page, "phone")
+        self.check_chapter_grammar(page, "phone")
+        self.check_jump_snap(page, "phone")
         self.check_rostrum_pan(page, "phone")
 
         self.find_fin(page, "phone")

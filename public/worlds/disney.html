@@ -231,7 +231,7 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="The Kingdom of Running Things — Edition II · The Parallax Cut, rostrum camera">v3.2 · II</span>
+    <span class="ver" title="The Kingdom of Running Things — Edition II · The Weighted Camera">v3.3 · II</span>
     <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
   </div>
 </nav>
@@ -598,8 +598,17 @@
     scene.classList.add('mode-scrub');
 
     const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+    const smoothstep = v => v * v * (3 - 2 * v);
+    const TAU = 140;
+    const SNAP_LEGS = 1.5;
+    const IDLE_EPS = 1e-4;
+    const IDLE_FRAMES = 3;
+    const readRaw = () => clamp01(parseFloat(scene.style.getPropertyValue('--p') || '0'));
     const slots = vids.map(v => ({ v, leg: -1, ready: false, seeking: false, want: -1 }));
-    let shown = -1, lastLeg = -1, dir = 1, lastP = 0;
+    let shown = -1, lastLeg = -1, dir = 1;
+    let smoothP = readRaw();
+    let cameraRaf = 0, lastTs = 0, lastFrameWall = performance.now(), settledFrames = 0;
+    let live = solo || scene.classList.contains('is-live');
 
     const arm = (s, leg) => {
       if (s.leg === leg) return s;
@@ -619,7 +628,7 @@
       try { s.v.currentTime = t; } catch { s.seeking = false; }
     };
     slots.forEach(s => {
-      s.v.addEventListener('loadedmetadata', () => { s.ready = true; paint(); });
+      s.v.addEventListener('loadedmetadata', () => { s.ready = true; render(smoothP, readRaw()); });
       s.v.addEventListener('seeked', () => {
         s.seeking = false;
         if (s.want >= 0) { const t = s.want; s.want = -1; seek(s, t); }
@@ -652,18 +661,17 @@
       if (e.target.closest('[data-lang-toggle]')) { const i = lastLeg; lastLeg = -1; if (i >= 0) setLeg(i); }
     });
 
-    function paint() {
-      const p = clamp01(parseFloat(scene.style.getPropertyValue('--p') || '0'));
-      if (p > lastP + 1e-4) dir = 1; else if (p < lastP - 1e-4) dir = -1;
-      lastP = p;
+    /* One camera clock. Film time, framing and both depth values are painted
+       from the same weighted playhead; raw scroll only chooses its target. */
+    function render(p, raw) {
       const g = Math.min(p, 0.999999) * N;
       const i = Math.floor(g), f = g - i;
       scene.style.setProperty('--depth', (f - .5).toFixed(4));
       scene.style.setProperty('--journey', p.toFixed(5));
-      /* rostrum camera: the frame is wider than the screen, so the same hand
-         that runs the clock pans across the hidden width — serpentine, so
-         chapter joins land at the same edge and the camera never jumps */
-      scene.style.setProperty('--pan', (i % 2 === 0 ? f : 1 - f).toFixed(4));
+      /* ARRIVE 0-.12: hold the entry composition. CROSS .12-.88: pan with
+         zero velocity at both ends. SETTLE .88-1: hold into the join. */
+      const cross = smoothstep(clamp01((f - .12) / .76));
+      scene.style.setProperty('--pan', (i % 2 === 0 ? cross : 1 - cross).toFixed(4));
       setLeg(i);
       const s = slotFor(i);
       show(s);
@@ -671,30 +679,79 @@
         const d = s.v.duration || 5;
         seek(s, Math.min(d - 0.04, Math.max(0, f * d)));
       }
-      const nb = i + dir;                          /* prefetch where we are going */
+      const hand = raw - p;
+      if (hand > IDLE_EPS) dir = 1; else if (hand < -IDLE_EPS) dir = -1;
+      const nb = i + dir;                          /* prefetch where the hand is heading */
       if (nb >= 0 && nb < N) {
         const other = slots[1 - slots.indexOf(s)];
         if (other.leg !== nb) arm(other, nb);
       }
     }
 
-    let tick = false, fallback = 0;
+    let fallback = 0;
+    const park = () => {
+      if (cameraRaf) cancelAnimationFrame(cameraRaf);
+      cameraRaf = 0; lastTs = 0; settledFrames = 0;
+      scene.dataset.cameraState = 'idle';
+    };
+    const frame = ts => {
+      cameraRaf = 0;
+      lastFrameWall = performance.now();
+      const raw = readRaw();
+      const gap = raw - smoothP;
+      if (solo || Math.abs(gap) * N > SNAP_LEGS) {
+        smoothP = raw;
+      } else if (Math.abs(gap) < IDLE_EPS) {
+        smoothP = raw;
+      } else {
+        const dt = lastTs ? Math.min(64, ts - lastTs) : 1000 / 60;
+        smoothP += gap * (1 - Math.exp(-dt / TAU));
+      }
+      lastTs = ts;
+      render(smoothP, raw);
+      if (Math.abs(raw - smoothP) < IDLE_EPS) settledFrames += 1;
+      else settledFrames = 0;
+      if (!live || settledFrames >= IDLE_FRAMES) { park(); return; }
+      cameraRaf = requestAnimationFrame(frame);
+    };
+    const start = () => {
+      scene.dataset.cameraState = 'running';
+      settledFrames = 0;
+      if (cameraRaf) return;
+      lastTs = 0;
+      cameraRaf = requestAnimationFrame(frame);
+    };
     const onScroll = () => {
-      if (tick) return;
-      tick = true;
-      requestAnimationFrame(() => { tick = false; paint(); });
+      if (solo) {
+        smoothP = readRaw();
+        render(smoothP, smoothP);
+        park();
+        return;
+      }
+      live = scene.classList.contains('is-live');
+      if (live) start();
       /* rAF freezes in hidden/embedded webviews; timers do not */
       clearTimeout(fallback);
-      fallback = setTimeout(() => { if (tick) { tick = false; paint(); } }, 120);
+      fallback = setTimeout(() => {
+        if (cameraRaf && performance.now() - lastFrameWall > 120) {
+          smoothP = readRaw(); render(smoothP, smoothP); park();
+        }
+      }, 150);
     };
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll, { passive: true });
+    scene.addEventListener('scene:live', () => { live = true; start(); });
+    scene.addEventListener('scene:idle', () => { live = false; park(); });
     if (solo) {
       let n = 0;
-      const hold = setInterval(() => { paint(); if (++n > 60) clearInterval(hold); }, 100);
+      const hold = setInterval(() => {
+        smoothP = readRaw(); render(smoothP, smoothP); park();
+        if (++n > 60) clearInterval(hold);
+      }, 100);
     }
-    setLeg(0);
-    paint();
+    render(smoothP, smoothP);
+    park();
+    if (live && !solo) start();
   })();
 
   /* ---------- PROVE: thirty lanterns settle into the loop ---------- */
