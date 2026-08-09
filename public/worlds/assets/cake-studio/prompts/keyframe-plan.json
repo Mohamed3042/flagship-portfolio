@@ -1,0 +1,477 @@
+{
+  "schema": "cake-studio-keyframe-plan/v1",
+  "status": "phase-1-stills-only",
+  "canvas": { "width": 1920, "height": 1088, "format": "png" },
+  "styleLock": "Photoreal optical patisserie, deep teal and rose gold, black marble, flour-haze backlight, restrained film grain.",
+  "preserveLock": "Preserve the same palette, same rear light quality, same flour haze, same marble veining, same buttercream texture, same lens character, and same restrained grain.",
+  "identityLock": "Same operator identity: medium-brown hands, deep-teal cuff, one slim rose-gold proof ring, no visible face.",
+  "centerSafeLock": "Keep every story-critical object and action inside the center 50 percent of frame width so a vertical center crop preserves the complete beat.",
+  "negativeLock": "No readable text, letters, numbers, UI, labels, logos, watermarks, captions, faces in printed photographs, extra fingers, deformed hands, melted tools, dirty kitchen, cellar, clinic, gore, body horror, or unintended horror.",
+  "anchor": {
+    "id": "KF00",
+    "slug": "style-anchor",
+    "prompt": "A photorealistic cinematic optical-illusion patisserie inside a refined operating bakery: a monumental ivory buttercream cake rises from polished black marble into impossible Escher-stacked tiers, an anamorphic rose-gold icing ribbon scatters across the room yet resolves as one perfect loop from this camera, a macro stainless piping tip reads like a graceful architectural monument, restrained frozen mirror-glaze droplets hover above the cake, and one blank edible-print sheet peels upward into a tiny luminous bakery scene without people. Deep teal glass shadows and rose-gold highlights, volumetric rear bakery light through fine flour dust, rich protected blacks, realistic buttercream pores, edible-paper fibres, polished marble veining, 40 mm large-format lens, subtle depth of field, restrained cinematic film grain. Premium patisserie, precise and inviting, never dark or sinister. Keep all indispensable forms inside the center half of the frame. No readable text, letters, numbers, UI, labels, logos, watermarks, captions, faces, people, hands, gore, body horror, dirty kitchen, cellar, clinic, melted objects, or unintended horror. 16:9 landscape composition."
+  },
+  "flfAnchors": ["KF01", "KF07", "KF13", "KF19", "KF25", "KF31", "KF37", "KF43", "KF50"],
+  "frames": [
+    {
+      "id": "KF01",
+      "slug": "opening-sheet",
+      "chapter": "overture",
+      "flf": true,
+      "scene": "On the same black-marble slab, one blank ivory edible-print sheet with a hairline rose-gold edge rests in a gentle upward curl; the impossible patisserie is only a soft deep-teal reflection behind it. Stable poster composition, inviting and pristine.",
+      "toNext": "The sheet's front edge lifts twenty centimetres into a clean arch.",
+      "camera": "Slow centered push forward by twenty centimetres."
+    },
+    {
+      "id": "KF02",
+      "slug": "sheet-rises",
+      "chapter": "overture",
+      "flf": false,
+      "scene": "The same blank edible sheet rises from the slab as a single smooth arch, its lower edge still touching the marble; a tiny bakery backlight glows through the edible-paper fibres.",
+      "toNext": "The arch opens into a thin upright portal while remaining one continuous sheet.",
+      "camera": "Continue the same slow push forward."
+    },
+    {
+      "id": "KF03",
+      "slug": "sheet-portal",
+      "chapter": "overture",
+      "flf": false,
+      "scene": "The upright blank edible sheet has become a paper-thin portal showing a tiny photoreal bakery interior made of ivory counters, teal glass, and rose-gold tools; no people and no signage.",
+      "toNext": "The portal bends forward and its lower half folds into a round cake top.",
+      "camera": "Gentle five-degree orbit to camera right."
+    },
+    {
+      "id": "KF04",
+      "slug": "portal-folds-to-cake",
+      "chapter": "overture",
+      "flf": false,
+      "scene": "The same edible portal folds forward along one soft crease, its circular lower plane becoming the blank top of an ivory buttercream cake while the upper plane still reveals the tiny bakery.",
+      "toNext": "The remaining upright sheet settles flat and seals into the cake top.",
+      "camera": "Slow dolly down by fifteen centimetres."
+    },
+    {
+      "id": "KF05",
+      "slug": "blank-cake",
+      "chapter": "overture",
+      "flf": false,
+      "scene": "A pristine cylindrical ivory buttercream cake now stands centered on the slab; a faint edible-paper disc is flush with its top, and the portal glow is gone except for a rose-gold rim reflection.",
+      "toNext": "A stainless piping tip descends above the center and begins one continuous ivory cream line.",
+      "camera": "Hold the centered camera and ease closer."
+    },
+    {
+      "id": "KF06",
+      "slug": "piping-stair-begins",
+      "chapter": "overture",
+      "flf": false,
+      "scene": "A monumental stainless piping tip hangs above the same cake and extrudes one precise ivory cream ribbon that climbs upward as the first impossible staircase step; no hand is visible.",
+      "toNext": "The single cream staircase expands into an impossible tiered atrium and the piping tip exits upward.",
+      "camera": "Slow tilt upward following the cream line."
+    },
+    {
+      "id": "KF07",
+      "slug": "escher-atrium",
+      "chapter": "overture",
+      "flf": true,
+      "scene": "Stable hero view of an impossible Escher-stacked ivory cake atrium growing from the original cake, with stair-like tiers that reconnect cleanly, rose-gold rails, deep-teal voids, and one perfectly resolved anamorphic icing loop. No loose or melting geometry.",
+      "toNext": "The lowest stair rotates like a carousel and reveals the first real storefront cake form.",
+      "camera": "Settle into a symmetrical 40 mm poster frame."
+    },
+    {
+      "id": "KF08",
+      "slug": "product-berry",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-berry-photo.png",
+      "scene": "The atrium's central carousel presents the grounded berry photo-cake form: tall ivory round cake, ribbed buttercream sides, raspberry pearl border, and an asymmetric berry crescent outside a blank pearlescent top print disc. Use the product reference only for cake geometry and decoration; remove the portrait completely.",
+      "toNext": "The carousel turns one ninth of a revolution and the berry cake transforms into the chocolate round form.",
+      "camera": "Slow lateral track left while holding the cake centered."
+    },
+    {
+      "id": "KF09",
+      "slug": "product-chocolate-round",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-choc-photo.png",
+      "scene": "The same carousel slot now presents the grounded chocolate round photo-cake form: cylindrical chocolate-coated cake, controlled dark drip, cream pearl border, tiny chocolate accents, and a blank pearlescent circular print disc. Use the reference only for form and decoration; no portrait.",
+      "toNext": "The carousel turns and the round cake straightens into the rectangular chocolate sheet form.",
+      "camera": "Continue the same lateral track left."
+    },
+    {
+      "id": "KF10",
+      "slug": "product-chocolate-sheet",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-choc-sheet-photo.png",
+      "scene": "The centered carousel slot presents the grounded rectangular chocolate sheet cake: clean tall cuboid, ribbed chocolate sides, tiny chocolate accents at the perimeter, pale pearl base border, and one blank edible-print rectangle on top. No portrait.",
+      "toNext": "The rectangle softens inward at its top cleft and resolves into the heart form.",
+      "camera": "Continue the same measured lateral track."
+    },
+    {
+      "id": "KF11",
+      "slug": "product-heart",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-heart-photo.png",
+      "scene": "The centered slot presents the grounded ivory heart photo cake: exact heart silhouette, delicate raspberry base pearls, restrained red heart and rose accents kept outside a blank heart-shaped edible-print area. Use the reference only for cake geometry and decoration; no portrait and no inscription.",
+      "toNext": "The heart's cleft eases closed while the side walls lengthen into an oval.",
+      "camera": "Small clockwise orbit of six degrees."
+    },
+    {
+      "id": "KF12",
+      "slug": "product-oval",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-oval-photo.png",
+      "scene": "The carousel presents the grounded 8-by-6 oval ivory photo cake, clearly oval rather than round, with a restrained pearl border, tiny pale accents, and a blank oval edible-print top. Use the reference only for proportions and decoration; no portrait or text.",
+      "toNext": "The blank oval print stretches sideways and flows down the smooth cylinder as a wrap.",
+      "camera": "Lower the camera slightly toward a shallow wrap-reading angle."
+    },
+    {
+      "id": "KF13",
+      "slug": "product-photo-wrap",
+      "chapter": "nine-real-cakes",
+      "flf": true,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-photo-wrap.png",
+      "scene": "Stable poster landing of the grounded smooth cylindrical photo-wrap cake, with an uninterrupted blank pearlescent edible strip wrapping the side, neat upper pearl ring, restrained cream peaks, and one rose-gold cherry-like accent. No portrait and no seams hidden by fantasy decoration.",
+      "toNext": "The wrap unfurls into a flat rectangle and the cylinder corners square into an ivory sheet cake.",
+      "camera": "Settle at a shallow fourteen-degree elevation."
+    },
+    {
+      "id": "KF14",
+      "slug": "product-ivory-sheet",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-sheet-photo.png",
+      "scene": "The slot presents the grounded rectangular ivory sheet photo cake: clean ribbed walls, white board, and one blank pearlescent edible-print rectangle covering the top with no portrait. The form stays premium and physically plausible.",
+      "toNext": "A second smaller round tier rises from the rectangle's center.",
+      "camera": "Raise the camera toward a forty-two-degree top-print view."
+    },
+    {
+      "id": "KF15",
+      "slug": "product-tiered",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-tiered-photo.png",
+      "scene": "The carousel presents the grounded two-tier ivory photo cake: two clean ribbed round tiers, berry crescent on the lower rim, a blank circular edible-print disc on the upper tier, and a restrained rose-gold topper silhouette without letters.",
+      "toNext": "The lower tier narrows, ornate piping curls around the upper tier, and the cake resolves into the vintage round form.",
+      "camera": "Slow orbit right by eight degrees."
+    },
+    {
+      "id": "KF16",
+      "slug": "product-vintage-round",
+      "chapter": "nine-real-cakes",
+      "flf": false,
+      "sourceRef": "external://CAKE-STUDIO-EXAMPLES/01-real-cakes/tbk-vintage-round-photo.png",
+      "scene": "The centered slot presents the grounded vintage round ivory cake with restrained ornate piping, small cherry and macaron accents, a graduation-cap-shaped ornament without symbols, and a blank circular edible-print top. No portrait and no inscription.",
+      "toNext": "Eight prior cake forms rise from hidden carousel slots to join this one in a clean nine-form spiral.",
+      "camera": "Pull back slowly to reveal the full carousel."
+    },
+    {
+      "id": "KF17",
+      "slug": "nine-form-spiral",
+      "chapter": "choose-and-place",
+      "flf": false,
+      "scene": "Exactly nine distinct grounded cake forms occupy nine clean Escher stair landings in a centered spiral: berry round, chocolate round, chocolate sheet, heart, oval, smooth photo wrap, ivory sheet, two-tier, and vintage round. All printed areas are blank pearlescent edible sheet.",
+      "toNext": "The operator's right hand enters and points once toward the berry cake; the other eight remain still.",
+      "camera": "Continue the slow pullback, then settle."
+    },
+    {
+      "id": "KF18",
+      "slug": "one-click-choice",
+      "chapter": "choose-and-place",
+      "flf": false,
+      "scene": "The recurring operator's right hand enters from below and touches a small rose-gold selection disc directly before the central berry cake; eight other cakes remain on the surrounding stairs. The gesture is calm, one finger, physically correct.",
+      "toNext": "The selected berry cake glides forward alone while the eight others recede into deep-teal shadow.",
+      "camera": "Push forward with the selected cake by forty centimetres."
+    },
+    {
+      "id": "KF19",
+      "slug": "anamorphic-surface-map",
+      "chapter": "choose-and-place",
+      "flf": true,
+      "scene": "Stable hero landing of the selected berry cake on black marble. From this one camera angle, scattered rose-gold and deep-teal icing marks across its top and side resolve into one precise continuous surface-map contour; from elsewhere they would read as abstraction. The blank print disc and fruit crescent remain intact.",
+      "toNext": "A rose-gold hover marker appears over the cake rim and contracts to one precise point.",
+      "camera": "Settle exactly at the illusion's resolving angle."
+    },
+    {
+      "id": "KF20",
+      "slug": "surface-hover",
+      "chapter": "surface-and-type",
+      "flf": false,
+      "scene": "A thin rose-gold hover ring floats one millimetre above the selected cake's outer top rim, with a delicate projected footprint that follows the analytic curve; the cake remains unchanged and centered.",
+      "toNext": "The hover ring slides smoothly along the rim to the front-right quadrant without leaving the surface.",
+      "camera": "Orbit right by six degrees, matching the marker."
+    },
+    {
+      "id": "KF21",
+      "slug": "part-hover",
+      "chapter": "surface-and-type",
+      "flf": false,
+      "scene": "A single realistic strawberry-and-leaf decoration hovers directly above the rose-gold surface marker at the front-right rim; the footprint, part, and cake surface align vertically with no penetration.",
+      "toNext": "The decoration descends four centimetres and settles exactly on the marked surface.",
+      "camera": "Slow macro push forward by fifteen centimetres."
+    },
+    {
+      "id": "KF22",
+      "slug": "part-placed",
+      "chapter": "surface-and-type",
+      "flf": false,
+      "scene": "The strawberry decoration is now cleanly seated at the exact rose-gold marker on the curved rim; the marker fades to a fine outline and the fruit casts a real soft shadow on buttercream.",
+      "toNext": "The blank top print disc lifts at one edge and unfurls into a smooth side-wrap strip.",
+      "camera": "Ease back and lower toward the side."
+    },
+    {
+      "id": "KF23",
+      "slug": "edible-wrap-unfurls",
+      "chapter": "surface-and-type",
+      "flf": false,
+      "scene": "A blank pearlescent edible-print strip lifts from the cake top and spirals once around the smooth cylindrical wall, hovering a finger-width away before placement; edges are crisp, continuous, and physically plausible.",
+      "toNext": "A single dark-teal vector-like path emerges from the strip and becomes an ivory cream line.",
+      "camera": "Orbit left slowly following the strip."
+    },
+    {
+      "id": "KF24",
+      "slug": "typeset-path-rises",
+      "chapter": "surface-and-type",
+      "flf": false,
+      "scene": "From the blank edible strip, one precise ivory cream path rises in three dimensions, shaped like elegant connected Arabic calligraphic geometry without forming any readable word; beside it, one restrained Latin-serif-inspired curve begins to rise. Real shadows and consistent extrusion thickness.",
+      "toNext": "Both cream paths grow upward into a balanced pair of monumental piped forms.",
+      "camera": "Tilt upward slowly with the rising paths."
+    },
+    {
+      "id": "KF25",
+      "slug": "cream-outline-monument",
+      "chapter": "surface-and-type",
+      "flf": true,
+      "scene": "Stable poster landing: two precise piped cream monuments rise from the centered cake—one Arabic-calligraphy-inspired connected outline and one Latin-serif-inspired outline, both abstract and unreadable, extruded with uniform real cream thickness and casting soft shadows. The piping tip stands beyond them like a monument.",
+      "toNext": "The camera moves directly into the opening of the monumental piping tip.",
+      "camera": "Settle symmetrically, then begin a straight slow push."
+    },
+    {
+      "id": "KF26",
+      "slug": "piping-tip-portal",
+      "chapter": "calibrate",
+      "flf": false,
+      "scene": "Forced-perspective macro view: the stainless piping tip fills the central frame like a refined architectural portal, its fluted opening revealing a deep-teal calibration chamber beyond; the cream monuments remain small and intact behind it.",
+      "toNext": "The camera passes through the piping-tip opening into the calibration chamber.",
+      "camera": "Straight forward move of one metre, slow and stable."
+    },
+    {
+      "id": "KF27",
+      "slug": "twenty-patch-field",
+      "chapter": "calibrate",
+      "flf": false,
+      "scene": "Inside the refined calibration chamber, exactly twenty unlabeled matte edible-colour patches form a precise four-column by five-row grid on one ivory sheet, centered on black marble. No extra swatches, no labels, no text.",
+      "toNext": "A controlled off-colour ink mist passes once across the twenty patches from left to right.",
+      "camera": "Slow overhead rise while keeping the full 5-by-4 grid visible."
+    },
+    {
+      "id": "KF28",
+      "slug": "press-error-cast",
+      "chapter": "calibrate",
+      "flf": false,
+      "scene": "The same exact twenty-patch four-by-five grid sits under a visible but tasteful green-magenta press cast; a thin coloured mist is midway across the sheet and the left patches are shifted while the right remain original. No labels.",
+      "toNext": "A rose-gold measurement beam sweeps across each row and the mist dissipates behind it.",
+      "camera": "Track right at the same speed as the scan beam."
+    },
+    {
+      "id": "KF29",
+      "slug": "patch-scan",
+      "chapter": "calibrate",
+      "flf": false,
+      "scene": "One thin rose-gold optical scan line crosses the exact twenty-patch grid, with subtle deep-teal reflection bars above each already-scanned patch; the cast remains ahead of the beam and disappears behind it.",
+      "toNext": "The beam reaches the final patch and every patch settles into a balanced true colour.",
+      "camera": "Continue the same rightward track."
+    },
+    {
+      "id": "KF30",
+      "slug": "corrected-patches",
+      "chapter": "calibrate",
+      "flf": false,
+      "scene": "The exact twenty unlabeled patches are now balanced, clean, and physically printed on the same ivory edible sheet; the scan line has reached the far edge and become a slim rose-gold border.",
+      "toNext": "The twenty patches lift as twenty restrained mirror-glaze droplets and arc upward into a colour arch.",
+      "camera": "Lower from overhead toward a frontal hero angle."
+    },
+    {
+      "id": "KF31",
+      "slug": "calibrated-glaze-arch",
+      "chapter": "calibrate",
+      "flf": true,
+      "scene": "Stable hero landing: exactly twenty small mirror-glaze droplets, carrying the calibrated patch colours, hang frozen in one graceful arch above the ivory sheet; the sheet's rose-gold edge and deep-teal chamber remain crisp and premium, with no sinister darkness.",
+      "toNext": "The droplets settle into a single controlled colour ribbon while the sheet glides toward the press.",
+      "camera": "Settle at a symmetrical frontal angle."
+    },
+    {
+      "id": "KF32",
+      "slug": "sheet-enters-press",
+      "chapter": "measured-print",
+      "flf": false,
+      "scene": "The calibrated blank edible sheet, edged by one controlled multicolour ribbon, glides centrally into a refined deep-teal and rose-gold edible-sheet press. The press is clean, compact, and recognisably a printer, not an industrial or medical machine.",
+      "toNext": "The sheet advances through the rollers and emerges from the opposite side without changing dimensions.",
+      "camera": "Parallel track alongside the sheet."
+    },
+    {
+      "id": "KF33",
+      "slug": "sheet-exits-press",
+      "chapter": "measured-print",
+      "flf": false,
+      "scene": "The same edible sheet exits the refined press perfectly flat and undamaged, with crisp pearlescent fibres and restrained calibrated colour accents; a blank circular cut shape is visible without any image or text.",
+      "toNext": "A polished steel rule slides beside the sheet and aligns with its long edge.",
+      "camera": "Slow dolly down to the sheet plane."
+    },
+    {
+      "id": "KF34",
+      "slug": "steel-rule-alignment",
+      "chapter": "measured-print",
+      "flf": false,
+      "scene": "A real polished steel rule with fine unlabeled tick marks lies exactly parallel to the edible sheet's edge on black marble; the recurring operator's two hands gently align the sheet and rule, with correct anatomy and the rose-gold proof ring visible.",
+      "toNext": "The steel rule lengthens forward into a narrow rose-gold-edged bridge while the hands withdraw.",
+      "camera": "Track forward along the rule at low height."
+    },
+    {
+      "id": "KF35",
+      "slug": "one-to-one-bridge",
+      "chapter": "measured-print",
+      "flf": false,
+      "scene": "The aligned steel rule has extended into a physically straight bridge between the flat edible sheet and a matching blank cake-top disc, making their one-to-one scale relationship visually exact; no numbers or labels appear.",
+      "toNext": "Six small rose-gold facets rise from the bridge and orbit the sheet revision.",
+      "camera": "Continue the low forward track toward the cake disc."
+    },
+    {
+      "id": "KF36",
+      "slug": "six-proof-facets",
+      "chapter": "approve",
+      "flf": false,
+      "scene": "Exactly six small rose-gold geometric facets orbit one centered stack of translucent edible-sheet layers; each facet is distinct and unmarked, and the original steel-rule bridge remains below.",
+      "toNext": "The six facets converge once and fuse into one six-faceted proof ring around the exact layer stack.",
+      "camera": "Slow clockwise orbit matching the facets."
+    },
+    {
+      "id": "KF37",
+      "slug": "revision-seal",
+      "chapter": "approve",
+      "flf": true,
+      "scene": "Stable poster landing: exactly six rose-gold facets form one elegant proof ring locked around a single perfectly aligned translucent edible-sheet revision stack; a narrow beam passes through all layers to show exact registration. No symbols or readable code.",
+      "toNext": "One altered top layer slides sideways while the proof ring stays bound to the original aligned stack.",
+      "camera": "Settle into a centered close hero view."
+    },
+    {
+      "id": "KF38",
+      "slug": "changed-revision",
+      "chapter": "inspect",
+      "flf": false,
+      "scene": "A single altered translucent sheet layer has shifted several centimetres to the right, visibly misregistered; the six-faceted rose-gold proof ring remains cleanly locked around the untouched original stack at center.",
+      "toNext": "The changed layer drifts into deep-teal shadow while the original approved stack moves toward the cake.",
+      "camera": "Short rack focus from changed layer back to the sealed original."
+    },
+    {
+      "id": "KF39",
+      "slug": "stale-layer-rejected",
+      "chapter": "inspect",
+      "flf": false,
+      "scene": "The changed sheet layer rests separately in soft deep-teal shadow with no seal; the approved exact stack remains illuminated at center inside the six-faceted ring, clearly safe and undamaged.",
+      "toNext": "Twelve thin rose-gold inspection beams unfold around the approved cake as a spacious analytic cage.",
+      "camera": "Pull back slowly to reveal inspection space."
+    },
+    {
+      "id": "KF40",
+      "slug": "twelve-rule-cage",
+      "chapter": "inspect",
+      "flf": false,
+      "scene": "Exactly twelve thin rose-gold inspection beams form a clean open cage around one ivory photo cake, arranged as three groups of four with generous negative space; every beam is distinct, no text or numerals, premium rather than clinical.",
+      "toNext": "The twelve beams sweep outward and reveal nine cake silhouettes on separate stair landings.",
+      "camera": "Slow vertical rise through the open cage."
+    },
+    {
+      "id": "KF41",
+      "slug": "nine-defects-revealed",
+      "chapter": "inspect",
+      "flf": false,
+      "scene": "Exactly nine distinct storefront cake forms sit on nine separate black-marble stair landings; each carries one restrained, clearly readable design fault such as an even berry ring, an orphan accent, poor tone separation, oversize print, wrong oval proportion, ribbed wrap, flat slab drip, misplaced ornament, or mismatched inscription represented only as an abstract plaque line. The scene remains appetising, never grotesque.",
+      "toNext": "Each faulty element lifts cleanly away from its cake along one rose-gold beam.",
+      "camera": "Slow diagonal crane downward toward the center."
+    },
+    {
+      "id": "KF42",
+      "slug": "defects-lift-away",
+      "chapter": "inspect",
+      "flf": false,
+      "scene": "The nine restrained faulty decorations hover just above their nine cakes, each attached to one clean rose-gold correction beam; beneath them, the cakes already read balanced and physically plausible. No melted food, damage, or horror.",
+      "toNext": "The faulty elements dissolve into flour sparkle and the nine corrected cakes rise into one Escher staircase composition.",
+      "camera": "Pull back and level into a frontal poster angle."
+    },
+    {
+      "id": "KF43",
+      "slug": "nine-corrected-cakes",
+      "chapter": "inspect",
+      "flf": true,
+      "scene": "Stable grand landing: exactly nine distinct corrected Cake Studio product forms occupy an impossible but clean Escher staircase, all appetising and physically coherent, their blank edible-print areas intact, with the berry round centered as hero. Rose-gold inspection beams have vanished.",
+      "toNext": "The central berry cake opens like a circular aperture into a living miniature bakery world.",
+      "camera": "Settle symmetrically with all nine forms visible."
+    },
+    {
+      "id": "KF44",
+      "slug": "cake-aperture",
+      "chapter": "finale",
+      "flf": false,
+      "scene": "The central berry cake's blank top disc opens as a clean circular aperture revealing a tiny luminous operating bakery of ivory counters and teal glass; the surrounding eight cakes remain intact on the staircase, and no people or signage appear.",
+      "toNext": "The camera passes through the cake aperture into the tiny bakery.",
+      "camera": "Straight slow push forward by one metre."
+    },
+    {
+      "id": "KF45",
+      "slug": "glaze-settles",
+      "chapter": "finale",
+      "flf": false,
+      "scene": "Inside the miniature bakery, restrained rose-gold mirror-glaze droplets hang frozen above a centered ivory cake, then are poised just before settling into one clean controlled drip; black marble and teal glass repeat the original world.",
+      "toNext": "The droplets settle simultaneously into a single neat glaze edge and stop completely.",
+      "camera": "Slow half-orbit left around the cake."
+    },
+    {
+      "id": "KF46",
+      "slug": "photos-peel-live",
+      "chapter": "finale",
+      "flf": false,
+      "scene": "Nine blank pearlescent edible photographs peel upward from nine small cake forms around the central cake; within each sheet is a different tiny live bakery still life—berries, chocolate, piping, sheet, press, rule, cream path, tier, and glaze—with no people and no text.",
+      "toNext": "The nine peeling sheets curve inward and join into one continuous cream-and-paper arch.",
+      "camera": "Crane upward slowly through the center of the nine sheets."
+    },
+    {
+      "id": "KF47",
+      "slug": "cream-paper-arch",
+      "chapter": "finale",
+      "flf": false,
+      "scene": "The nine edible sheets join as one elegant central arch intertwined with precise abstract Arabic-calligraphy-inspired and Latin-serif-inspired cream paths, all unreadable, evenly extruded, and casting real shadows onto the ivory paper.",
+      "toNext": "The arch straightens into a deep-teal glass print-room aperture framed by rose gold.",
+      "camera": "Tilt down slowly as the arch straightens."
+    },
+    {
+      "id": "KF48",
+      "slug": "print-room-aperture",
+      "chapter": "finale",
+      "flf": false,
+      "scene": "A refined deep-teal glass aperture framed in rose gold stands on the original black-marble slab, containing the entire impossible cake atrium as a luminous miniature; it suggests a premium desktop print room without showing any UI, device logo, text, or numbers.",
+      "toNext": "The glass aperture compresses into a single thin edible sheet while the miniature atrium folds flat inside it.",
+      "camera": "Slow backward dolly by forty centimetres."
+    },
+    {
+      "id": "KF49",
+      "slug": "world-folds-to-sheet",
+      "chapter": "finale",
+      "flf": false,
+      "scene": "The impossible patisserie has nearly folded flat into one blank edible-print sheet on black marble; a final rose-gold light seam runs down its center and the sheet's front edge begins the same gentle curl as the opening.",
+      "toNext": "The last light seam closes and the sheet settles into the opening curl inside a six-faceted rose-gold reflection.",
+      "camera": "Continue the backward dolly to the opening distance."
+    },
+    {
+      "id": "KF50",
+      "slug": "loop-closure",
+      "chapter": "finale",
+      "flf": true,
+      "scene": "Stable loop-closure poster: the same blank ivory edible sheet rests in the same gentle upward curl on the same black-marble slab and at the same camera distance as KF01; a subtle six-faceted rose-gold reflection encircles it, with deep-teal patisserie reflections and warm flour-haze backlight. The sheet remains the central subject.",
+      "toNext": "The six-faceted reflection fades, returning exactly to KF01.",
+      "camera": "Locked-off 40 mm frame identical to the opening."
+    }
+  ]
+}

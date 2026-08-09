@@ -29,3 +29,12 @@ render/assets/
 # Python bytecode: churns on every Blender run and pollutes every diff.
 __pycache__/
 *.pyc
+
+# Cake Studio Phase-1 generation evidence kept locally; Git receives only the
+# accepted keyframes, compact master review sheets, prompts, ledger, and QA.
+public/worlds/assets/cake-studio/raw/
+public/worlds/assets/cake-studio/review/REJECT-*.png
+public/worlds/assets/cake-studio/review/HOLD-BEFORE-*.png
+public/worlds/assets/cake-studio/review/HOLD-AFTER-*.png
+public/worlds/assets/cake-studio/review/CST-contact-sheet-[0-9][0-9].png
+public/worlds/assets/cake-studio/review/CST-contact-sheet-portrait-[0-9][0-9].png
