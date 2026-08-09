@@ -273,11 +273,9 @@ class Verification:
             for name in first["rects"]
         }
         relative = abs(deltas[".depth-far"] - deltas[".film-frame"])
-        moving = (
-            deltas[".depth-far"] >= 4
-            and deltas[".film-frame"] >= 2
-            and relative >= 2
-        )
+        # the picture's own motion is the rostrum PAN (object-position), so its
+        # rect may hold still; the glow plane must travel relative to it
+        moving = deltas[".depth-far"] >= 4 and relative >= 2
         self.check(f"{label} planes travel at distinct rates", moving,
                    {**deltas, "relative": round(relative, 2)})
         scrub_delta = abs(float(second_info["currentTime"]) - float(first_info["currentTime"]))
@@ -329,9 +327,9 @@ class Verification:
         self.check(f"{label} chrome returns for keyboard focus", focused, f"opacity={focus_opacity}")
 
     def check_frame_geometry(self, page: Page, label: str) -> None:
-        """Clean-frame contract, one rule for every screen: the picture is
-        CONTAINED — its whole area visible, centered, nothing on top of it —
-        and the cue sits under the picture whenever the glow band has room."""
+        """Rostrum-camera contract, one rule for every screen: the picture is
+        full-bleed COVER — the frame fills the viewport with no gap — and the
+        cue is a single quiet focus at the foot, clear of the matte."""
         values = page.locator("#book").evaluate(
             """scene => {
               const stage = scene.querySelector('.film-frame');
@@ -339,49 +337,76 @@ class Verification:
               const cue = scene.querySelector('#cue');
               const sr = stage.getBoundingClientRect();
               const cr = cue.getBoundingClientRect();
-              const naturalW = video.videoWidth || 1358, naturalH = video.videoHeight || 624;
-              const scale = Math.min(sr.width / naturalW, sr.height / naturalH);
-              const picW = naturalW * scale, picH = naturalH * scale;
-              const picLeft = sr.left + (sr.width - picW) / 2;
-              const picTop = sr.top + (sr.height - picH) / 2;
               return {
                 fit: getComputedStyle(video).objectFit,
-                pic: [picLeft, picTop, picW, picH],
+                frame: [sr.left, sr.top, sr.width, sr.height],
                 vw: innerWidth, vh: innerHeight,
                 cueTop: cr.top, cueBottom: cr.bottom, cueHeight: cr.height,
               };
             }"""
         )
-        pic_left, pic_top, pic_w, pic_h = values["pic"]
+        left, top, width, height = values["frame"]
         vw, vh = values["vw"], values["vh"]
-        expected_w = min(vw, vh * 1358 / 624)
-        whole = (
-            values["fit"] == "contain"
-            and abs(pic_w - expected_w) <= 4
-            and pic_left >= -2 and pic_top >= -3
-            and pic_left + pic_w <= vw + 2 and pic_top + pic_h <= vh + 3
-            and abs(pic_left - (vw - pic_w) / 2) <= 4
+        full_bleed = (
+            values["fit"] == "cover"
+            and left <= 2 and top <= 2
+            and left + width >= vw - 2 and top + height >= vh - 2
         )
         self.check(
-            f"{label} picture shown whole and centered",
-            whole,
-            f"pic={pic_w:.0f}x{pic_h:.0f}@{pic_left:.0f},{pic_top:.0f} vs viewport {vw}x{vh}",
+            f"{label} full-bleed cover frame",
+            full_bleed,
+            f"frame={left:.0f},{top:.0f} {width:.0f}x{height:.0f} vs viewport {vw}x{vh} fit={values['fit']}",
         )
         matte = min(46.0, max(22.0, vh * 0.042))
-        clear_of_matte = values["cueHeight"] > 4 and values["cueBottom"] <= vh - matte + 2
-        self.check(
-            f"{label} cue clear of the letterbox matte",
-            clear_of_matte,
-            f"cueBottom={values['cueBottom']:.0f} matteTop={vh - matte:.0f}",
+        cue_ok = (
+            values["cueHeight"] > 4
+            and values["cueHeight"] <= 110
+            and values["cueBottom"] <= vh - matte + 2
         )
-        bottom_band = vh - (pic_top + pic_h)
-        if bottom_band >= 200:
-            below = values["cueTop"] >= pic_top + pic_h - 4
-            self.check(
-                f"{label} cue rides the band under the picture",
-                below,
-                f"cueTop={values['cueTop']:.0f} pictureBottom={pic_top + pic_h:.0f} band={bottom_band:.0f}",
-            )
+        self.check(
+            f"{label} single quiet cue at the foot, clear of the matte",
+            cue_ok,
+            f"cueBottom={values['cueBottom']:.0f} h={values['cueHeight']:.0f} matteTop={vh - matte:.0f}",
+        )
+
+    @staticmethod
+    def pan_position(page: Page) -> float:
+        return float(page.locator("#book").evaluate(
+            "scene => parseFloat(scene.style.getPropertyValue('--pan') || '0.5')"
+        ))
+
+    def check_rostrum_pan(self, page: Page, label: str) -> None:
+        """The scroll must PAN the frame's hidden width inside each chapter,
+        serpentine across chapters so the camera never jumps at a join."""
+        self.set_progress(page, "#book", 0.455)   # leg 10 (index 9, odd): pan = 1-f
+        self.wait_leg(page, 10, 0.1, label=label)
+        early = self.pan_position(page)
+        self.set_progress(page, "#book", 0.495)
+        self.wait_leg(page, 10, 0.9, label=label)
+        late = self.pan_position(page)
+        sweep = abs(late - early)
+        self.check(
+            f"{label} scroll pans the hidden width",
+            sweep >= 0.6,
+            f"pan {early:.2f} -> {late:.2f} inside leg 10 (sweep {sweep:.2f})",
+        )
+        rendered = page.locator("#book video.on").evaluate(
+            "v => getComputedStyle(v).objectPosition"
+        )
+        self.check(
+            f"{label} pan reaches the renderer",
+            "%" in str(rendered),
+            f"object-position={rendered} at pan={late:.2f}",
+        )
+        boundary_before = self.pan_position(page)
+        self.set_progress(page, "#book", 0.5005)
+        self.wait_leg(page, 11, 0.01, tolerance=0.45, label=label)
+        boundary_after = self.pan_position(page)
+        self.check(
+            f"{label} serpentine continuity at the join",
+            abs(boundary_after - boundary_before) <= 0.12,
+            f"pan {boundary_before:.3f} -> {boundary_after:.3f} across 10→11",
+        )
 
     def check_truth_copy(self, page: Page) -> None:
         body = page.locator("body").inner_text()
@@ -525,6 +550,7 @@ class Verification:
 
         self.scrub_journey(page, "desktop")
         self.check_parallax_travel(page, "desktop")
+        self.check_rostrum_pan(page, "desktop")
         self.check_chrome_fade(page, "desktop")
 
         # bilingual: the cue must re-render in Arabic with RTL direction
@@ -633,6 +659,7 @@ class Verification:
 
         self.scrub_journey(page, "phone")
         self.check_parallax_travel(page, "phone")
+        self.check_rostrum_pan(page, "phone")
 
         self.find_fin(page, "phone")
         self.assert_zero_autoplay(page, "phone")
