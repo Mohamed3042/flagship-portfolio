@@ -1,0 +1,703 @@
+{
+  "url": "https://mohamed3042.github.io/flagship-portfolio/worlds/disney.html",
+  "verified_at_utc": "2026-08-09T03:43:25.711271+00:00",
+  "viewport_desktop": [
+    1440,
+    900
+  ],
+  "viewport_phone": [
+    390,
+    844
+  ],
+  "checks": [
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "clip HEAD status",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "Accept-Ranges header",
+      "pass": true,
+      "detail": "bytes"
+    },
+    {
+      "name": "clip byte-range response",
+      "pass": true,
+      "detail": "206"
+    },
+    {
+      "name": "clip Content-Range",
+      "pass": true,
+      "detail": "bytes 0-1023/1880702"
+    },
+    {
+      "name": "master duration",
+      "pass": true,
+      "detail": "100.000s"
+    },
+    {
+      "name": "master label matches media",
+      "pass": true,
+      "detail": "label='▸ Master cut · 1:40', media=1:40"
+    },
+    {
+      "name": "rendered film runway",
+      "pass": true,
+      "detail": "19.00vh"
+    },
+    {
+      "name": "screenshot desktop-cold-open.png",
+      "pass": true,
+      "detail": "858335"
+    },
+    {
+      "name": "leg 01 caption",
+      "pass": true,
+      "detail": "The Waiting Book"
+    },
+    {
+      "name": "leg 01 decoded frame",
+      "pass": true,
+      "detail": "DSN2-001.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 01 floor poster",
+      "pass": true,
+      "detail": "kf-01.jpg"
+    },
+    {
+      "name": "desktop no letterbox",
+      "pass": true,
+      "detail": "stage=1371x792 media=[1358, 624] fit=cover"
+    },
+    {
+      "name": "screenshot desktop-leg-01.png",
+      "pass": true,
+      "detail": "1232682"
+    },
+    {
+      "name": "desktop parallax mode",
+      "pass": true,
+      "detail": "scene film mode-parallax is-live"
+    },
+    {
+      "name": "desktop has no alternate motion mode",
+      "pass": true,
+      "detail": "scene film mode-parallax is-live"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop four depth planes",
+      "pass": true,
+      "detail": "{'.depth-far': {'top': -150.1199951171875, 'left': -243, 'transform': 'matrix(1.12, 0, 0, 1.12, 4.68, 4.68)'}, '.film-frame': {'top': 72.13250732421875, 'left': 29.20953369140625, 'transform': 'matrix(1.035, 0, 0, 1.035, -5.2, 13.52)'}, '.depth-near': {'top': -43.91999816894531, 'left': -104.7874984741211, 'transform': 'matrix(1, 0, 0, 1, 10.4, 28.08)'}, '.depth-front': {'top': -66.4000015258789, 'left': -189.69686889648438, 'transform': 'matrix(1, 0, 0, 1, -16.9, 41.6)'}}"
+    },
+    {
+      "name": "screenshot desktop-parallax-before.png",
+      "pass": true,
+      "detail": "1262996"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop ordered parallax travel",
+      "pass": true,
+      "detail": "{'.depth-far': 9.3599853515625, '.film-frame': 27.03997802734375, '.depth-near': 56.160003662109375, '.depth-front': 83.20000457763672}"
+    },
+    {
+      "name": "desktop scroll leaves clip timeline independent",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250->1.250"
+    },
+    {
+      "name": "screenshot desktop-parallax-depth.png",
+      "pass": true,
+      "detail": "1251694"
+    },
+    {
+      "name": "Arabic parallax copy and direction",
+      "pass": true,
+      "detail": "{'mode': 'scene film mode-parallax is-live', 'kick': 'الفصل الثالث · المسرح الورقي يتحرّك في العمق', 'visible': 'inline'}"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "screenshot desktop-leg-10.png",
+      "pass": true,
+      "detail": "1204168"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=4.960/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "screenshot desktop-boundary-10-before.png",
+      "pass": true,
+      "detail": "1555362"
+    },
+    {
+      "name": "media screenshot desktop-boundary-10-before-media.png",
+      "pass": true,
+      "detail": "1657199"
+    },
+    {
+      "name": "leg 11 caption",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "leg 11 decoded frame",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=0.040/5.000"
+    },
+    {
+      "name": "leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "screenshot desktop-boundary-10-after.png",
+      "pass": true,
+      "detail": "1595106"
+    },
+    {
+      "name": "media screenshot desktop-boundary-10-after-media.png",
+      "pass": true,
+      "detail": "1664947"
+    },
+    {
+      "name": "desktop boundary continuity",
+      "pass": true,
+      "detail": "raw=2.8, edge=8.1"
+    },
+    {
+      "name": "leg 19 caption",
+      "pass": true,
+      "detail": "The Human Gate"
+    },
+    {
+      "name": "leg 19 decoded frame",
+      "pass": true,
+      "detail": "DSN2-019.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 19 floor poster",
+      "pass": true,
+      "detail": "kf-19.jpg"
+    },
+    {
+      "name": "screenshot desktop-leg-19-gate.png",
+      "pass": true,
+      "detail": "1227406"
+    },
+    {
+      "name": "leg 20 caption",
+      "pass": true,
+      "detail": "Proof, Vault, Return"
+    },
+    {
+      "name": "leg 20 decoded frame",
+      "pass": true,
+      "detail": "DSN2-020.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 20 floor poster",
+      "pass": true,
+      "detail": "kf-20.jpg"
+    },
+    {
+      "name": "screenshot desktop-leg-20.png",
+      "pass": true,
+      "detail": "1029195"
+    },
+    {
+      "name": "leg 05 caption",
+      "pass": true,
+      "detail": "A Cause Is Drawn"
+    },
+    {
+      "name": "leg 05 decoded frame",
+      "pass": true,
+      "detail": "DSN2-005.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 05 floor poster",
+      "pass": true,
+      "detail": "kf-05.jpg"
+    },
+    {
+      "name": "reverse parallax navigation to leg 05",
+      "pass": true,
+      "detail": "scrollY 18909 -> 6759"
+    },
+    {
+      "name": "desktop FIN intact",
+      "pass": true,
+      "detail": "p=0.45 visible=1.00 top=652.2 bottom=726.2"
+    },
+    {
+      "name": "screenshot desktop-credits.png",
+      "pass": true,
+      "detail": "114420"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "leg 11 caption",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "leg 11 decoded frame",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "solo harness isolates film",
+      "pass": true,
+      "detail": "scenes=1, height=1.00vh"
+    },
+    {
+      "name": "screenshot desktop-solo-p050.png",
+      "pass": true,
+      "detail": "967516"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "motion preference keeps full video experience",
+      "pass": true,
+      "detail": "{'videos': ['block', 'block'], 'floor': 'kf-10.jpg', 'title': 'The Chosen Light', 'candleDuration': '3.2s'}"
+    },
+    {
+      "name": "motion-preference parallax mode",
+      "pass": true,
+      "detail": "scene film mode-parallax is-live"
+    },
+    {
+      "name": "motion-preference has no alternate motion mode",
+      "pass": true,
+      "detail": "scene film mode-parallax is-live"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "motion-preference four depth planes",
+      "pass": true,
+      "detail": "{'.depth-far': {'top': -150.1199951171875, 'left': -243, 'transform': 'matrix(1.12, 0, 0, 1.12, 4.68, 4.68)'}, '.film-frame': {'top': 72.13250732421875, 'left': 29.20953369140625, 'transform': 'matrix(1.035, 0, 0, 1.035, -5.2, 13.52)'}, '.depth-near': {'top': -43.91999816894531, 'left': -104.7874984741211, 'transform': 'matrix(1, 0, 0, 1, 10.4, 28.08)'}, '.depth-front': {'top': -66.4000015258789, 'left': -189.69686889648438, 'transform': 'matrix(1, 0, 0, 1, -16.9, 41.6)'}}"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "motion-preference ordered parallax travel",
+      "pass": true,
+      "detail": "{'.depth-far': 9.3599853515625, '.film-frame': 27.03997802734375, '.depth-near': 56.160003662109375, '.depth-front': 83.20000457763672}"
+    },
+    {
+      "name": "motion-preference scroll leaves clip timeline independent",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250->1.250"
+    },
+    {
+      "name": "screenshot motion-preference-parallax-depth.png",
+      "pass": true,
+      "detail": "1251616"
+    },
+    {
+      "name": "screenshot desktop-motion-preference-parallax.png",
+      "pass": true,
+      "detail": "1251616"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "lobby Edition II poster",
+      "pass": true,
+      "detail": "{'src': 'disney2/posters/kf-19.jpg', 'width': 1600, 'height': 735}"
+    },
+    {
+      "name": "lobby Edition II truth copy",
+      "pass": true,
+      "detail": "20 current / 32 retired"
+    },
+    {
+      "name": "lobby card runtime facts",
+      "pass": true,
+      "detail": "{'badge': '20 REAL WAN SHOTS', 'spec': '1 PARALLAX JOURNEY\\n20 REAL SHOTS\\nMASTER CUT 1:40\\nTHEN LIVE CODE', 'description': 'Eight brand-inspired scroll-cinema films: Disney Edition II cut from 20 real WAN 2.7 shots, with its 32-shot first edition retired; seven more rendered live in code. An original portfolio production.'}"
+    },
+    {
+      "name": "screenshot desktop-worlds-lobby.png",
+      "pass": true,
+      "detail": "943893"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "screenshot phone-cold-open.png",
+      "pass": true,
+      "detail": "294565"
+    },
+    {
+      "name": "phone autoplay-block branch",
+      "pass": true,
+      "detail": "blocked attempts=1"
+    },
+    {
+      "name": "leg 01 caption",
+      "pass": true,
+      "detail": "The Waiting Book"
+    },
+    {
+      "name": "leg 01 decoded frame",
+      "pass": true,
+      "detail": "DSN2-001.mp4 t=0.000/5.000"
+    },
+    {
+      "name": "leg 01 floor poster",
+      "pass": true,
+      "detail": "kf-01.jpg"
+    },
+    {
+      "name": "phone tap starts playback",
+      "pass": true,
+      "detail": "play attempts=2"
+    },
+    {
+      "name": "phone no letterbox",
+      "pass": true,
+      "detail": "stage=379x710 media=[1358, 624] fit=cover"
+    },
+    {
+      "name": "screenshot phone-leg-01.png",
+      "pass": true,
+      "detail": "289072"
+    },
+    {
+      "name": "phone parallax mode",
+      "pass": true,
+      "detail": "scene film mode-parallax is-live"
+    },
+    {
+      "name": "phone has no alternate motion mode",
+      "pass": true,
+      "detail": "scene film mode-parallax is-live"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone four depth planes",
+      "pass": true,
+      "detail": "{'.depth-far': {'top': -140.4775390625, 'left': -62.399993896484375, 'transform': 'matrix(1.12, 0, 0, 1.12, 4.68, 4.68)'}, '.film-frame': {'top': 63.5150146484375, 'left': 0.3950042724609375, 'transform': 'matrix(1.035, 0, 0, 1.035, -5.2, 13.52)'}, '.depth-near': {'top': -39.43562316894531, 'left': -20.787500381469727, 'transform': 'matrix(1, 0, 0, 1, 10.4, 28.08)'}, '.depth-front': {'top': -59.665626525878906, 'left': -63.696876525878906, 'transform': 'matrix(1, 0, 0, 1, -16.9, 41.6)'}}"
+    },
+    {
+      "name": "screenshot phone-parallax-before.png",
+      "pass": true,
+      "detail": "342041"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone ordered parallax travel",
+      "pass": true,
+      "detail": "{'.depth-far': 9.3599853515625, '.film-frame': 27.03997802734375, '.depth-near': 56.160003662109375, '.depth-front': 83.20000457763672}"
+    },
+    {
+      "name": "phone scroll leaves clip timeline independent",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.250->1.250"
+    },
+    {
+      "name": "screenshot phone-parallax-depth.png",
+      "pass": true,
+      "detail": "340988"
+    },
+    {
+      "name": "leg 10 caption",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "leg 10 decoded frame",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=4.960/5.000"
+    },
+    {
+      "name": "leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "screenshot phone-boundary-10-before.png",
+      "pass": true,
+      "detail": "436864"
+    },
+    {
+      "name": "media screenshot phone-boundary-10-before-media.png",
+      "pass": true,
+      "detail": "1657199"
+    },
+    {
+      "name": "leg 11 caption",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "leg 11 decoded frame",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=0.040/5.000"
+    },
+    {
+      "name": "leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "screenshot phone-boundary-10-after.png",
+      "pass": true,
+      "detail": "438582"
+    },
+    {
+      "name": "media screenshot phone-boundary-10-after-media.png",
+      "pass": true,
+      "detail": "1664947"
+    },
+    {
+      "name": "phone boundary continuity",
+      "pass": true,
+      "detail": "raw=2.8, edge=8.1"
+    },
+    {
+      "name": "leg 19 caption",
+      "pass": true,
+      "detail": "The Human Gate"
+    },
+    {
+      "name": "leg 19 decoded frame",
+      "pass": true,
+      "detail": "DSN2-019.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 19 floor poster",
+      "pass": true,
+      "detail": "kf-19.jpg"
+    },
+    {
+      "name": "screenshot phone-leg-19-gate.png",
+      "pass": true,
+      "detail": "326400"
+    },
+    {
+      "name": "leg 20 caption",
+      "pass": true,
+      "detail": "Proof, Vault, Return"
+    },
+    {
+      "name": "leg 20 decoded frame",
+      "pass": true,
+      "detail": "DSN2-020.mp4 t=2.500/5.000"
+    },
+    {
+      "name": "leg 20 floor poster",
+      "pass": true,
+      "detail": "kf-20.jpg"
+    },
+    {
+      "name": "screenshot phone-leg-20.png",
+      "pass": true,
+      "detail": "330144"
+    },
+    {
+      "name": "phone parallax holds final leg",
+      "pass": true,
+      "detail": "SHOT 20"
+    },
+    {
+      "name": "phone FIN intact",
+      "pass": true,
+      "detail": "p=0.45 visible=1.00 top=720.1 bottom=794.1"
+    },
+    {
+      "name": "screenshot phone-credits.png",
+      "pass": true,
+      "detail": "93418"
+    },
+    {
+      "name": "console clean",
+      "pass": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "page exceptions",
+      "pass": true,
+      "detail": "0 exceptions"
+    }
+  ],
+  "failures": [],
+  "console_errors": [],
+  "console_warnings": [],
+  "page_errors": []
+}
