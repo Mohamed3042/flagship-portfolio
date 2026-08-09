@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
-<meta name="description" content="Edition II — a dark cut-paper folktale revealed through four-plane parallax scroll. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
+<meta name="description" content="Edition II — a dark cut-paper folktale scrubbed by scroll through four parallax depths; the film moves only under your hand, never on its own. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230f0b07"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23e8dcc0"/><path d="M15 7h2v18h-2z" fill="%23e2b13c"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=5">
 <style>
@@ -51,65 +51,80 @@
   .open .quill{ width:1px; height:44px; background:linear-gradient(var(--w-accent), transparent); animation:drip 2.2s ease-in-out infinite; }
   @keyframes drip{ 0%{transform:scaleY(.2); transform-origin:top} 55%{transform:scaleY(1)} 100%{transform:scaleY(.2); opacity:.2} }
 
-  /* ————— THE BOOK — twenty chapters through four paper depths ————— */
+  /* ————— THE BOOK — the film, scrubbed by the hand, through four paper depths.
+     --journey = whole-film progress 0..1 (long parallax travel);
+     --depth   = position inside the current chapter, -0.5..+0.5 (breathing). ————— */
   .film{ height:1900vh; --depth:-.5; --journey:0; }
   .film .stage{ background:#070503; isolation:isolate; }
   .film .depth-far, .film .depth-near, .film .depth-front, .film .film-frame{
     will-change:transform; pointer-events:none;
   }
-  .film .depth-far{ position:absolute; inset:-10%; z-index:0; overflow:hidden;
-    transform:translate3d(calc(var(--depth) * -18px),calc(var(--depth) * -18px),0) scale(1.12); }
+  .film .depth-far{ position:absolute; inset:-12%; z-index:0; overflow:hidden;
+    transform:translate3d(calc(var(--depth) * -14px + (var(--journey) - .5) * -46px),
+                          calc(var(--depth) * -14px + (var(--journey) - .5) * -22px),0) scale(1.14); }
   .film .depth-far img{ width:100%; height:100%; object-fit:cover; display:block;
-    filter:blur(20px) brightness(.34) saturate(.8); opacity:.92; }
+    filter:blur(22px) brightness(.4) saturate(.86); opacity:.95; }
   .film .depth-far::after{ content:""; position:absolute; inset:0;
-    background:radial-gradient(90% 74% at 50% 40%,rgba(226,177,60,.12),transparent 64%),rgba(7,5,3,.28); }
-  .film .film-frame{ position:absolute; z-index:2;
-    inset:clamp(62px,8vh,88px) clamp(26px,4vw,68px) clamp(52px,7vh,76px);
-    overflow:hidden; border:1px solid rgba(226,177,60,.28); border-radius:8px;
-    background:#090603; box-shadow:0 32px 90px rgba(0,0,0,.62),0 0 0 1px rgba(232,220,192,.06) inset;
-    transform:translate3d(calc(var(--depth) * 20px),calc(var(--depth) * -52px),0) scale(1.035); }
-  .film .film-frame::after{ content:""; position:absolute; inset:0; z-index:3;
-    box-shadow:inset 0 0 70px rgba(5,3,2,.48); pointer-events:none; }
+    background:radial-gradient(90% 74% at 50% 40%,rgba(226,177,60,.12),transparent 64%),rgba(7,5,3,.24); }
+  /* the movie — full-bleed, borderless, the whole screen is the page */
+  .film .film-frame{ position:absolute; z-index:2; inset:0; overflow:hidden; background:#090603;
+    transform:translate3d(0,calc(var(--depth) * -10px),0) scale(calc(1.02 + var(--depth) * var(--depth) * .05)); }
   .film .floor, .film video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
   .film .floor{ z-index:0; }
-  .film video{ z-index:1; opacity:0; transition:opacity .32s ease; }
+  .film video{ z-index:1; opacity:0; transition:opacity .3s ease; }
   .film video.on{ opacity:1; }
   .film .depth-near{ position:absolute; inset:-8%; z-index:3;
-    transform:translate3d(calc(var(--depth) * -40px),calc(var(--depth) * -108px),0); }
-  .film .depth-near .ridge{ position:absolute; inset:auto -8% -9%; height:38%; display:block;
+    transform:translate3d(calc(var(--depth) * -34px + (var(--journey) - .5) * -120px),
+                          calc(var(--depth) * -64px),0); }
+  .film .depth-near .ridge{ position:absolute; inset:auto -8% -9%; height:34%; display:block;
     background:linear-gradient(180deg,#24170e 0%,#120b07 72%);
     clip-path:polygon(0 58%,8% 45%,15% 62%,24% 38%,34% 59%,45% 31%,55% 57%,67% 39%,77% 63%,88% 42%,100% 58%,100% 100%,0 100%);
-    filter:drop-shadow(0 -14px 20px rgba(0,0,0,.45)); opacity:.92; }
-  .film .depth-near .bough{ position:absolute; display:block; width:34%; height:24%; top:13%;
-    border-top:10px solid #1a1009; border-radius:50%; filter:drop-shadow(0 6px 8px rgba(0,0,0,.5)); }
-  .film .depth-near .bough.left{ left:-7%; transform:rotate(17deg); }
-  .film .depth-near .bough.right{ right:-7%; transform:rotate(-17deg); }
+    filter:drop-shadow(0 -14px 20px rgba(0,0,0,.45)); opacity:.9;
+    transform:translateY(calc(6% + var(--journey) * 5%)); }
+  .film .depth-near .bough{ position:absolute; display:block; width:34%; height:24%; top:9%;
+    border-top:10px solid #1a1009; border-radius:50%; filter:drop-shadow(0 6px 8px rgba(0,0,0,.5)); opacity:.85; }
+  .film .depth-near .bough.left{ left:-9%; transform:rotate(17deg); }
+  .film .depth-near .bough.right{ right:-9%; transform:rotate(-17deg); }
   .film .depth-front{ position:absolute; inset:-12%; z-index:4;
-    transform:translate3d(calc(var(--depth) * 65px),calc(var(--depth) * -160px),0); }
-  .film .depth-front .wing{ position:absolute; top:0; bottom:0; width:22%; display:block;
-    background:linear-gradient(90deg,#060403 0%,#100905 72%,transparent 100%); opacity:.94; }
+    transform:translate3d(calc(var(--depth) * 56px + (var(--journey) - .5) * 210px),
+                          calc(var(--depth) * -120px),0); }
+  .film .depth-front .wing{ position:absolute; top:0; bottom:0; width:20%; display:block;
+    background:linear-gradient(90deg,#060403 0%,#100905 72%,transparent 100%); opacity:.9; }
   .film .depth-front .wing.left{ left:0;
     clip-path:polygon(0 0,77% 0,45% 11%,82% 24%,48% 38%,88% 51%,50% 65%,76% 81%,41% 100%,0 100%); }
   .film .depth-front .wing.right{ right:0; transform:scaleX(-1);
     clip-path:polygon(0 0,77% 0,45% 11%,82% 24%,48% 38%,88% 51%,50% 65%,76% 81%,41% 100%,0 100%); }
   .film .depth-front .glint{ position:absolute; width:5px; height:5px; border-radius:50%; display:block;
-    background:#ffe49a; box-shadow:0 0 10px 4px rgba(226,177,60,.5); opacity:.72; }
+    background:#ffe49a; box-shadow:0 0 10px 4px rgba(226,177,60,.5); opacity:.7;
+    transform:translateY(calc(var(--journey) * -60px)); }
   .film .depth-front .g1{ left:14%; top:26%; }
   .film .depth-front .g2{ right:12%; top:45%; }
   .film .depth-front .g3{ left:21%; bottom:18%; }
   .film .vig{ position:absolute; inset:0; z-index:5; pointer-events:none;
-    background:radial-gradient(112% 92% at 50% 42%, transparent 52%, rgba(5,3,2,.72) 100%); }
+    background:radial-gradient(118% 96% at 50% 42%, transparent 56%, rgba(5,3,2,.66) 100%); }
   .film .legcap{ display:none; }
-  .film .chip{ position:absolute; z-index:8; top:clamp(56px,7vh,74px); inset-inline-start:clamp(18px,6vw,84px);
-    display:flex; gap:10px; align-items:baseline;
-    font:700 11px/1 var(--w-ui); letter-spacing:.18em; text-transform:uppercase; color:var(--w-ink); }
-  .film .chip .id{ color:var(--w-accent); }
-  .film .chip .t{ opacity:.85; letter-spacing:.1em; }
-  .film .legno{ position:absolute; z-index:8; top:clamp(50px,6.4vh,70px); inset-inline-end:clamp(18px,6vw,84px);
-    font:700 clamp(30px,4.6vw,52px)/1 var(--w-ui); color:rgba(232,220,192,.2); font-variant-numeric:tabular-nums; }
-  .film .caption{ z-index:9; }
-  .film .caption .story{ font-family:var(--w-display); font-size:clamp(15px,1.9vw,21px); line-height:1.6;
-    color:var(--w-ink); text-shadow:0 2px 22px rgba(0,0,0,.85); max-width:56ch; }
+  /* subtitle — the only words on the film: a cue line, like burned captions */
+  .film .cue{ position:absolute; z-index:9; left:0; right:0;
+    bottom:max(34px, calc(20px + env(safe-area-inset-bottom))); text-align:center; padding:0 7vw;
+    pointer-events:none; }
+  .film .cue .t{ display:block; font:700 10.5px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase;
+    color:var(--w-accent); opacity:.85; margin-bottom:10px; }
+  .film .cue .s{ display:block; font-family:var(--w-display); font-size:clamp(15px,1.8vw,21px); line-height:1.55;
+    color:var(--w-ink); text-shadow:0 2px 6px rgba(0,0,0,.9), 0 0 28px rgba(0,0,0,.8); margin:0 auto; max-width:64ch; }
+  .film .cue.swap .t, .film .cue.swap .s{ animation:cuein .5s ease both; }
+  @keyframes cuein{ from{ opacity:0; transform:translateY(8px) } to{ opacity:1; transform:none } }
+  /* portrait: the reel keeps its true aspect as a floating cinema strip;
+     the blurred far plane fills the rest — same system, same planes */
+  @media (orientation:portrait){
+    .film .film-frame{ inset:auto 0; top:50%; height:auto; aspect-ratio:1358/624;
+      transform:translate3d(0,calc(-50% + var(--depth) * -10px),0) scale(calc(1.02 + var(--depth) * var(--depth) * .05));
+      border-block:1px solid rgba(226,177,60,.26);
+      box-shadow:0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(226,177,60,.08); }
+    .film .depth-far img{ filter:blur(28px) brightness(.28) saturate(.8); }
+    .film .depth-front .wing{ width:19%; opacity:.8; }
+    .film .vig{ background:radial-gradient(120% 70% at 50% 50%, transparent 40%, rgba(5,3,2,.8) 100%); }
+    .film .cue{ bottom:auto; top:calc(50% + min(50vw * 624 / 1358, 50vh) + 26px); }
+  }
   /* ————— acts styling ————— */
   .act{ position:relative; }
   .act .rule{ width:64px; height:1px; margin:18px auto 0; background:linear-gradient(90deg, transparent, var(--w-accent), transparent); }
@@ -141,12 +156,6 @@
     filter:drop-shadow(0 0 7px rgba(226,177,60,.6));
     stroke-dasharray:1; stroke-dashoffset:calc(1 - min(1, max(0, var(--p,0) - .1) * 1.35)); }
   .build .caption{ z-index:8; }
-  .district{ position:absolute; z-index:6; font:600 11.5px/1.3 var(--w-ui); letter-spacing:.06em;
-    color:var(--w-ink); background:rgba(20,14,8,.74); border:1px solid rgba(226,177,60,.4);
-    padding:8px 11px; border-radius:8px; backdrop-filter:blur(4px);
-    opacity:calc(max(0, var(--p,0) - var(--at,.4)) * 4); transform:translateY(calc((1 - min(1,(var(--p,0) - var(--at,.4)) * 4)) * 14px)); }
-  .district b{ color:var(--w-accent); font-weight:700; }
-
   /* ————— GATE: the signet (code) ————— */
   .gate{ height:300vh; }
   .gate .stage{ background:radial-gradient(90% 70% at 50% 38%, #4a3c2a 0%, #241c14 62%, #17110c 100%); }
@@ -229,27 +238,26 @@
     letter-spacing:.22em; text-transform:uppercase; color:var(--w-dim); }
   .vault .caption{ z-index:8; }
 
-  /* Owner contract: the parallax edition has one motion system for every visitor. */
+  /* Owner contract: one motion system for every visitor — phone, desktop,
+     and reduced-motion all scrub the same film with the same planes. */
   @media (prefers-reduced-motion: reduce){
     .open .candle{ animation:flick 3.2s ease-in-out infinite !important; }
     .open .quill{ animation:drip 2.2s ease-in-out infinite !important; }
     body .caption{ transition:opacity .7s ease .15s,transform .7s ease .15s; }
-    .film video{ transition:opacity .32s ease; }
+    .film .cue.swap .t, .film .cue.swap .s{ animation:cuein .5s ease both !important; }
   }
+  /* while a scene is live (letterbox closed) the chrome disappears —
+     nothing on screen but the picture; it returns over the act dividers */
+  .chrome{ transition:opacity .45s ease; }
+  html.boxed .chrome{ opacity:0; pointer-events:none; }
+  html.boxed .chrome:focus-within{ opacity:1; pointer-events:auto; }
   @media (max-width:640px){
-    .district{ display:none; }
-    .film .legno{ display:none; }
-    .film .film-frame{ inset:62px 12px max(96px,calc(78px + env(safe-area-inset-bottom))) 12px; }
-    .film .depth-front .wing{ width:31%; }
-    .film .depth-near .ridge{ height:34%; }
-    .film .caption{ inset-inline-start:20px; bottom:max(54px,calc(34px + env(safe-area-inset-bottom))); max-width:min(340px,82vw); }
-    .film .caption .story{ font-size:14px; line-height:1.45; }
+    .film .cue .s{ font-size:14.5px; line-height:1.5; }
     .vault .drawer{ inset:16% 5% 30%; grid-template-columns:repeat(auto-fill, minmax(38px, 1fr)); gap:5px; }
   }
 </style>
 </head>
-<body data-film="DSN · EDITION II" data-runtime="100" data-ticks data-letterbox>
-<div class="rail" data-rail><i></i></div>
+<body data-letterbox>
 <div class="grain" aria-hidden="true"></div>
 <div class="grade" aria-hidden="true"></div>
 
@@ -259,8 +267,7 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="The Kingdom of Running Things — Edition II">v2.0 · II</span>
-    <button type="button" data-theater="disney2/master.mp4" data-theater-poster="disney2/posters/kf-01.jpg"><span class="L en">▸ Master cut · 1:40</span><span class="L ar">▸ الفيلم الكامل · ١:٤٠</span></button>
+    <span class="ver" title="The Kingdom of Running Things — Edition II · The Parallax Cut">v3.0 · II</span>
     <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
   </div>
 </nav>
@@ -288,7 +295,7 @@
     <div class="card">
       <p class="kick"><span class="L en">World 03 · Edition II · 20 parallax-scroll WAN 2.7 chapters</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ٢٠ فصلاً من WAN 2.7 بتمريرٍ متعدّد الطبقات</span></p>
       <h1><span class="L en">The Kingdom of&nbsp;Running&nbsp;Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h1>
-      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty chapters cross four physical depths: distant light, living film, rising terrain, and foreground leaves. Scroll and the world separates into space; every clip plays on its own clock.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. تعبر عشرون فصلاً أربعة أعماقٍ مادية: ضوء بعيد، وفيلم حيّ، وأرض صاعدة، وأوراق في المقدّمة. مرِّر فتتباعد طبقات العالم في الفضاء؛ وكل مقطعٍ يعمل بتوقيته الخاص.</span></p>
+      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty chapters cross four physical depths: distant light, living film, rising terrain, and foreground leaves. Scroll and the world separates into space; the film itself moves only under your hand — forward and reverse, never on its own.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. تعبر عشرون فصلاً أربعة أعماقٍ مادية: ضوء بعيد، وفيلم حيّ، وأرض صاعدة، وأوراق في المقدّمة. مرِّر فتتباعد طبقات العالم في الفضاء؛ والفيلم نفسه لا يتحرّك إلا بيدك — ذهابًا وإيابًا، ولا يجري وحده أبدًا.</span></p>
     </div>
     <div class="hintwrap"><div class="quill" aria-hidden="true"></div><p class="hint"><span class="L en">Scroll to open the book</span><span class="L ar">مرِّر لفتح الكتاب</span></p></div>
   </div>
@@ -308,8 +315,8 @@
     <div class="depth-far" aria-hidden="true"><img class="backdrop" src="disney2/posters/kf-01.jpg" alt=""></div>
     <div class="film-frame">
       <img class="floor" src="disney2/posters/kf-01.jpg" alt="" aria-hidden="true">
-      <video muted playsinline preload="none"></video>
-      <video muted playsinline preload="none"></video>
+      <video muted playsinline preload="auto"></video>
+      <video muted playsinline preload="auto"></video>
     </div>
     <div class="depth-near" aria-hidden="true">
       <i class="bough left"></i><i class="bough right"></i><i class="ridge"></i>
@@ -319,8 +326,6 @@
       <i class="glint g1"></i><i class="glint g2"></i><i class="glint g3"></i>
     </div>
     <div class="vig" aria-hidden="true"></div>
-    <p class="chip"><span class="id">SHOT 01</span><span class="t">…</span></p>
-    <p class="legno" aria-hidden="true">01</p>
     <figure class="legcap" data-clip="disney2/clips/DSN2-001.mp4" data-poster="disney2/posters/kf-01.jpg"
       data-act-en="Act I" data-act-ar="الفصل الأول" data-t-en="The Waiting Book" data-t-ar="الكتاب المنتظِر">
       <figcaption><span class="L en">One candle. One sealed volume. The room holds its breath.</span><span class="L ar">شمعةٌ واحدة. مجلّدٌ مختوم. الغرفة تحبس أنفاسها.</span></figcaption>
@@ -402,10 +407,9 @@
       <figcaption><span class="L en">Thirty lanterns close the circle. The book closes with them.</span><span class="L ar">ثلاثون فانوسًا تغلق الدائرة. والكتاب يُغلَق معها.</span></figcaption>
     </figure>
 
-    <div class="caption">
-      <p class="kick" id="leg-kick"><span class="L en">Act I · The paper theatre moves in depth</span><span class="L ar">الفصل الأول · المسرح الورقي يتحرّك في العمق</span></p>
-      <h2 id="leg-title"><span class="L en">The Waiting Book</span><span class="L ar">الكتاب المنتظِر</span></h2>
-      <p class="story" id="leg-story"></p>
+    <div class="cue" id="cue">
+      <span class="t" id="cue-title"></span>
+      <span class="s" id="cue-story"></span>
     </div>
   </div>
 </section>
@@ -422,7 +426,7 @@
     <div class="caption">
       <p class="kick"><span class="L en">Twenty chapters · four depths · now the code takes the thread</span><span class="L ar">عشرون فصلاً · أربعة أعماق · والآن تأخذ الشيفرة الخيط</span></p>
       <h2><span class="L en">The film proves it. The code runs it.</span><span class="L ar">الفيلم يثبتها. والشيفرة تُديرها.</span></h2>
-      <p><span class="L en">Everything you just moved through was generated shot-by-shot, then staged as four paper depths while each clip kept its own time. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما عبرتَه للتوّ وُلِّد لقطةً بعد لقطة، ثم نُظِّم في أربعة أعماقٍ ورقية بينما احتفظ كل مقطعٍ بتوقيته. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
+      <p><span class="L en">Everything you just watched was generated shot-by-shot, then staged as four paper depths with one playhead in your hand — every frame arrived because you scrolled it into being, forward or reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما شاهدتَه للتوّ وُلِّد لقطةً بعد لقطة، ثم نُظِّم في أربعة أعماقٍ ورقية برأس قراءةٍ واحد في يدك — فكل إطارٍ ظهر لأن تمريرك استدعاه، ذهابًا أو إيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
     </div>
   </div>
 </section>
@@ -455,9 +459,6 @@
     <svg class="weave" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path pathLength="1" d="M 0 450 C 120 430, 180 360, 260 350 S 420 380, 500 340 S 660 250, 740 260 S 900 320, 1000 280"/>
     </svg>
-    <p class="district" style="--at:.30; top:34%; inset-inline-start:12%"><b>P01</b> <span class="L en">Career Autopilot — a paper route-map that packages applications, then waits for the signet: 0 auto-sends.</span><span class="L ar">الطيّار المهني — خريطةُ طرقٍ ورقية تجهّز الطلبات ثم تنتظر الخاتم: صفر إرسال تلقائي.</span></p>
-    <p class="district" style="--at:.45; top:26%; inset-inline-end:14%"><b>P02</b> <span class="L en">LifeOS — a sealed cottage; memories stay local behind one key. No cloud road exists.</span><span class="L ar">نظام الحياة — كوخٌ مختوم؛ الذكريات محلية خلف مفتاح واحد. لا طريق سحابيًا هناك.</span></p>
-    <p class="district" style="--at:.60; top:52%; inset-inline-start:46%"><b>P04</b> <span class="L en">Box Studio — the gift-wright table folds packaging while 117 inspection lanterns test the path.</span><span class="L ar">استوديو الصناديق — طاولة صانع الهدايا تطوي العبوات بينما ١١٧ فانوسَ فحصٍ تختبر الطريق.</span></p>
     <div class="caption">
       <p class="kick"><span class="L en">Live-rendered · no footage</span><span class="L ar">عرضٌ حيّ · بلا مشهد مصوَّر</span></p>
       <h2><span class="L en">Built district by district</span><span class="L ar">تُبنى حيًّا بعد حيّ</span></h2>
@@ -567,9 +568,9 @@
         <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
         <dt><span class="L en">Edition</span><span class="L ar">الإصدار</span></dt><dd><span class="L en">II — dark cut-paper folktale, parallax-scrolled</span><span class="L ar">الثاني — حكاية ورقٍ داكنة بتمريرٍ متعدّد الطبقات</span></dd>
         <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
-        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · four parallax planes</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · أربع طبقات اختلاف منظور</span></dd>
+        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · scrubbed by scroll, never autoplayed</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · تُفرَك بالتمرير ولا تعمل تلقائيًا أبدًا</span></dd>
         <dt><span class="L en">First edition</span><span class="L ar">الإصدار الأول</span></dt><dd><span class="L en">32 shots, retired to the archive</span><span class="L ar">٣٢ لقطة، أُحيلت إلى الأرشيف</span></dd>
-        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v6 · four measured CSS depth planes</dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v6 · one scroll playhead · four measured CSS depth planes</span><span class="L ar">cinema.js v6 · رأس قراءةٍ واحد بالتمرير · أربع طبقات عمق CSS مقيسة</span></dd>
         <dt><span class="L en">Kingdom, gate, lanterns, vault</span><span class="L ar">المملكة والبوّابة والفوانيس والخزانة</span></dt><dd><span class="L en">Rendered live, in code — no footage</span><span class="L ar">تُعرَض حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
         <dt><span class="L en">Production bible</span><span class="L ar">كتاب الإنتاج</span></dt><dd><span class="L en">144 scripted clips · 112 unproduced</span><span class="L ar">١٤٤ مقطعًا مكتوبًا · ١١٢ لم تُنتَج</span></dd>
         <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
@@ -607,13 +608,16 @@
   }
 
   /* ════════════════════════════════════════════════════════════════════
-     THE BOOK — twenty chapters, four measured paper depths.
-     Scroll selects the chapter and moves far / world / near / foreground
-     planes at ordered ratios. It never writes video time inside a chapter:
-     the active WAN clip plays on its own clock while the page supplies the
-     physical parallax. Two <video> elements still double-buffer the current
-     and next chapter. Desktop and phone run this same mode; there is no
-     coarse-pointer chain or reduced-motion fork in this edition.
+     THE BOOK — one film, one playhead: the visitor's hand.
+     The scene's --p is the position in the whole tale: leg = floor(p*20),
+     the fraction inside the leg is the clip's currentTime — the film is
+     scrubbed, forward and reverse; play() is never called on it. The same
+     scroll writes --journey (whole-film travel) and --depth (position
+     inside the chapter), so the four paper planes travel while the film
+     runs under the hand. Two <video> elements double-buffer: the shown one
+     is seeked, the other is armed with the leg the scroll is heading
+     towards, so 100 seconds scrub as one take with no boundary to fall
+     through. Desktop, phone and reduced-motion all share this one mode.
      ════════════════════════════════════════════════════════════════════ */
   (() => {
     const scene = document.getElementById('book');
@@ -622,49 +626,46 @@
     const vids = [...scene.querySelectorAll('video')];
     const floor = scene.querySelector('.floor');
     const backdrop = scene.querySelector('.backdrop');
-    const chipId = scene.querySelector('.chip .id');
-    const chipT = scene.querySelector('.chip .t');
-    const legno = scene.querySelector('.legno');
-    const kick = document.getElementById('leg-kick');
-    const title = document.getElementById('leg-title');
-    const story = document.getElementById('leg-story');
+    const cue = document.getElementById('cue');
+    const cueTitle = document.getElementById('cue-title');
+    const cueStory = document.getElementById('cue-story');
     const N = caps.length;
     if (!N || vids.length < 2) return;
     const LEGS = caps.map(c => ({
       clip: c.dataset.clip, poster: c.dataset.poster,
-      actEn: c.dataset.actEn, actAr: c.dataset.actAr,
       tEn: c.dataset.tEn, tAr: c.dataset.tAr,
       html: c.querySelector('figcaption').innerHTML,
     }));
-    const isAr = () => document.documentElement.lang === 'ar';
 
     const solo = new URLSearchParams(location.search).has('solo');
-    const MODE = 'parallax';
-    scene.classList.add('mode-' + MODE);
+    scene.classList.add('mode-scrub');
 
     const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-    const slots = vids.map(v => ({ v, leg: -1, ready: false }));
-    let shown = -1, lastLeg = -1, dir = 1, lastP = 0, live = false;
+    const slots = vids.map(v => ({ v, leg: -1, ready: false, seeking: false, want: -1 }));
+    let shown = -1, lastLeg = -1, dir = 1, lastP = 0;
 
     const arm = (s, leg) => {
       if (s.leg === leg) return s;
-      s.v.pause();
-      s.leg = leg; s.ready = false;
+      s.leg = leg; s.ready = false; s.seeking = false; s.want = -1;
       s.v.poster = LEGS[leg].poster;
       s.v.src = LEGS[leg].clip;
       s.v.load();
       return s;
     };
-    const playSlot = s => {
-      if (!live || !s || !s.ready || s.leg !== lastLeg) return;
-      const go = s.v.play();
-      if (go) go.then(() => scene.classList.remove('needs-tap'))
-        .catch(() => scene.classList.add('needs-tap'));
+    /* seek queue: one in-flight currentTime write per element; the newest
+       wanted time replaces the queue so the frame under the hand wins */
+    const seek = (s, t) => {
+      if (!s.ready) return;
+      if (s.seeking) { s.want = t; return; }
+      if (Math.abs(s.v.currentTime - t) < 0.012) return;
+      s.seeking = true;
+      try { s.v.currentTime = t; } catch { s.seeking = false; }
     };
     slots.forEach(s => {
-      s.v.addEventListener('loadedmetadata', () => {
-        s.ready = true;
-        if (s.leg === lastLeg) playSlot(s);
+      s.v.addEventListener('loadedmetadata', () => { s.ready = true; paint(); });
+      s.v.addEventListener('seeked', () => {
+        s.seeking = false;
+        if (s.want >= 0) { const t = s.want; s.want = -1; seek(s, t); }
       });
       /* a clip that will not load leaves the keyframe poster standing —
          the page is complete art with zero videos on disk */
@@ -678,27 +679,17 @@
       const k = slots.indexOf(s);
       if (k === shown) return;
       shown = k;
-      slots.forEach(o => {
-        o.v.classList.toggle('on', o === s);
-        if (o !== s) o.v.pause();
-      });
+      slots.forEach(o => o.v.classList.toggle('on', o === s));
     };
     const setLeg = i => {
-      if (i === lastLeg) return slotFor(i);
+      if (i === lastLeg) return;
       lastLeg = i;
-      const L = LEGS[i], ar = isAr();
-      chipId.textContent = 'SHOT ' + String(i + 1).padStart(2, '0');
-      chipT.textContent = ' · ' + (ar ? L.actAr : L.actEn);
-      legno.textContent = String(i + 1).padStart(2, '0');
-      kick.innerHTML = '<span class="L en">' + L.actEn + ' · the paper theatre moves in depth</span><span class="L ar">' + L.actAr + ' · المسرح الورقي يتحرّك في العمق</span>';
-      title.innerHTML = '<span class="L en">' + L.tEn + '</span><span class="L ar">' + L.tAr + '</span>';
-      story.innerHTML = L.html;
+      const L = LEGS[i];
+      cueTitle.innerHTML = '<span class="L en">' + L.tEn + '</span><span class="L ar">' + L.tAr + '</span>';
+      cueStory.innerHTML = L.html;
+      cue.classList.remove('swap'); void cue.offsetWidth; cue.classList.add('swap');
       floor.src = L.poster;
       backdrop.src = L.poster;
-      const s = slotFor(i);
-      show(s);
-      playSlot(s);
-      return s;
     };
     document.addEventListener('click', (e) => {
       if (e.target.closest('[data-lang-toggle]')) { const i = lastLeg; lastLeg = -1; if (i >= 0) setLeg(i); }
@@ -712,32 +703,19 @@
       const i = Math.floor(g), f = g - i;
       scene.style.setProperty('--depth', (f - .5).toFixed(4));
       scene.style.setProperty('--journey', p.toFixed(5));
-      const s = setLeg(i);
+      setLeg(i);
+      const s = slotFor(i);
+      show(s);
+      if (s.ready) {
+        const d = s.v.duration || 5;
+        seek(s, Math.min(d - 0.04, Math.max(0, f * d)));
+      }
       const nb = i + dir;                          /* prefetch where we are going */
       if (nb >= 0 && nb < N) {
         const other = slots[1 - slots.indexOf(s)];
         if (other.leg !== nb) arm(other, nb);
       }
     }
-
-    const retryPlayback = () => {
-      if (!live) return;
-      scene.classList.remove('needs-tap');
-      playSlot(slots[shown]);
-    };
-    /* Autoplay policies differ across mobile webviews. A normal story gesture
-       retries the active clip synchronously, without covering the artwork in
-       media chrome. Pointer Events cover modern browsers; touch is the iOS
-       fallback and keydown preserves a keyboard route. */
-    addEventListener('pointerdown', retryPlayback, { capture:true, passive:true });
-    addEventListener('touchstart', retryPlayback, { capture:true, passive:true });
-    addEventListener('keydown', retryPlayback, { capture:true });
-    scene.addEventListener('scene:live', () => {
-      live = true; paint(); playSlot(slots[shown]);
-    });
-    scene.addEventListener('scene:idle', () => {
-      live = false; slots.forEach(s => s.v.pause());
-    });
 
     let tick = false, fallback = 0;
     const onScroll = () => {
