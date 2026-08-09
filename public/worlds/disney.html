@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
-<meta name="description" content="Edition II — a dark cut-paper folktale scrubbed by your hand. Twenty WAN 2.7 shots in one continuous take: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
+<meta name="description" content="Edition II — a dark cut-paper folktale revealed through four-plane parallax scroll. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230f0b07"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23e8dcc0"/><path d="M15 7h2v18h-2z" fill="%23e2b13c"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=5">
 <style>
@@ -51,39 +51,75 @@
   .open .quill{ width:1px; height:44px; background:linear-gradient(var(--w-accent), transparent); animation:drip 2.2s ease-in-out infinite; }
   @keyframes drip{ 0%{transform:scaleY(.2); transform-origin:top} 55%{transform:scaleY(1)} 100%{transform:scaleY(.2); opacity:.2} }
 
-  /* ————— THE BOOK — one scrubbed take, twenty shots ————— */
-  .film{ height:1900vh; }
-  .film .stage{ background:#070503; }
+  /* ————— THE BOOK — twenty chapters through four paper depths ————— */
+  .film{ height:1900vh; --depth:-.5; --journey:0; }
+  .film .stage{ background:#070503; isolation:isolate; }
+  .film .depth-far, .film .depth-near, .film .depth-front, .film .film-frame{
+    will-change:transform; pointer-events:none;
+  }
+  .film .depth-far{ position:absolute; inset:-10%; z-index:0; overflow:hidden;
+    transform:translate3d(calc(var(--depth) * -18px),calc(var(--depth) * -18px),0) scale(1.12); }
+  .film .depth-far img{ width:100%; height:100%; object-fit:cover; display:block;
+    filter:blur(20px) brightness(.34) saturate(.8); opacity:.92; }
+  .film .depth-far::after{ content:""; position:absolute; inset:0;
+    background:radial-gradient(90% 74% at 50% 40%,rgba(226,177,60,.12),transparent 64%),rgba(7,5,3,.28); }
+  .film .film-frame{ position:absolute; z-index:2;
+    inset:clamp(62px,8vh,88px) clamp(26px,4vw,68px) clamp(52px,7vh,76px);
+    overflow:hidden; border:1px solid rgba(226,177,60,.28); border-radius:8px;
+    background:#090603; box-shadow:0 32px 90px rgba(0,0,0,.62),0 0 0 1px rgba(232,220,192,.06) inset;
+    transform:translate3d(calc(var(--depth) * 20px),calc(var(--depth) * -52px),0) scale(1.035); }
+  .film .film-frame::after{ content:""; position:absolute; inset:0; z-index:3;
+    box-shadow:inset 0 0 70px rgba(5,3,2,.48); pointer-events:none; }
   .film .floor, .film video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .film video{ opacity:0; }
-  .film video.on{ opacity:1; }
   .film .floor{ z-index:0; }
-  .film .vig{ position:absolute; inset:0; z-index:3; pointer-events:none;
-    background:radial-gradient(115% 95% at 50% 42%, transparent 55%, rgba(5,3,2,.66) 100%); }
+  .film video{ z-index:1; opacity:0; transition:opacity .32s ease; }
+  .film video.on{ opacity:1; }
+  .film .depth-near{ position:absolute; inset:-8%; z-index:3;
+    transform:translate3d(calc(var(--depth) * -40px),calc(var(--depth) * -108px),0); }
+  .film .depth-near .ridge{ position:absolute; inset:auto -8% -9%; height:38%; display:block;
+    background:linear-gradient(180deg,#24170e 0%,#120b07 72%);
+    clip-path:polygon(0 58%,8% 45%,15% 62%,24% 38%,34% 59%,45% 31%,55% 57%,67% 39%,77% 63%,88% 42%,100% 58%,100% 100%,0 100%);
+    filter:drop-shadow(0 -14px 20px rgba(0,0,0,.45)); opacity:.92; }
+  .film .depth-near .bough{ position:absolute; display:block; width:34%; height:24%; top:13%;
+    border-top:10px solid #1a1009; border-radius:50%; filter:drop-shadow(0 6px 8px rgba(0,0,0,.5)); }
+  .film .depth-near .bough.left{ left:-7%; transform:rotate(17deg); }
+  .film .depth-near .bough.right{ right:-7%; transform:rotate(-17deg); }
+  .film .depth-front{ position:absolute; inset:-12%; z-index:4;
+    transform:translate3d(calc(var(--depth) * 65px),calc(var(--depth) * -160px),0); }
+  .film .depth-front .wing{ position:absolute; top:0; bottom:0; width:22%; display:block;
+    background:linear-gradient(90deg,#060403 0%,#100905 72%,transparent 100%); opacity:.94; }
+  .film .depth-front .wing.left{ left:0;
+    clip-path:polygon(0 0,77% 0,45% 11%,82% 24%,48% 38%,88% 51%,50% 65%,76% 81%,41% 100%,0 100%); }
+  .film .depth-front .wing.right{ right:0; transform:scaleX(-1);
+    clip-path:polygon(0 0,77% 0,45% 11%,82% 24%,48% 38%,88% 51%,50% 65%,76% 81%,41% 100%,0 100%); }
+  .film .depth-front .glint{ position:absolute; width:5px; height:5px; border-radius:50%; display:block;
+    background:#ffe49a; box-shadow:0 0 10px 4px rgba(226,177,60,.5); opacity:.72; }
+  .film .depth-front .g1{ left:14%; top:26%; }
+  .film .depth-front .g2{ right:12%; top:45%; }
+  .film .depth-front .g3{ left:21%; bottom:18%; }
+  .film .vig{ position:absolute; inset:0; z-index:5; pointer-events:none;
+    background:radial-gradient(112% 92% at 50% 42%, transparent 52%, rgba(5,3,2,.72) 100%); }
   .film .legcap{ display:none; }
-  .film .chip{ position:absolute; z-index:6; top:clamp(56px,7vh,74px); inset-inline-start:clamp(18px,6vw,84px);
+  .film .chip{ position:absolute; z-index:8; top:clamp(56px,7vh,74px); inset-inline-start:clamp(18px,6vw,84px);
     display:flex; gap:10px; align-items:baseline;
     font:700 11px/1 var(--w-ui); letter-spacing:.18em; text-transform:uppercase; color:var(--w-ink); }
   .film .chip .id{ color:var(--w-accent); }
   .film .chip .t{ opacity:.85; letter-spacing:.1em; }
-  .film .legno{ position:absolute; z-index:6; top:clamp(50px,6.4vh,70px); inset-inline-end:clamp(18px,6vw,84px);
+  .film .legno{ position:absolute; z-index:8; top:clamp(50px,6.4vh,70px); inset-inline-end:clamp(18px,6vw,84px);
     font:700 clamp(30px,4.6vw,52px)/1 var(--w-ui); color:rgba(232,220,192,.2); font-variant-numeric:tabular-nums; }
-  .film .caption{ z-index:7; }
+  .film .caption{ z-index:9; }
   .film .caption .story{ font-family:var(--w-display); font-size:clamp(15px,1.9vw,21px); line-height:1.6;
     color:var(--w-ink); text-shadow:0 2px 22px rgba(0,0,0,.85); max-width:56ch; }
-  .film .legrail{ position:absolute; z-index:6; bottom:clamp(18px,4vh,40px); inset-inline-end:clamp(18px,6vw,84px);
+  .film .legrail{ position:absolute; z-index:8; bottom:clamp(18px,4vh,40px); inset-inline-end:clamp(18px,6vw,84px);
     display:flex; gap:6px; }
   .film .legrail i{ width:6px; height:6px; border-radius:50%;
     background:color-mix(in srgb, var(--w-ink) 26%, transparent); transition:background .3s, transform .3s; }
   .film .legrail i.on{ background:var(--w-accent); transform:scale(1.3); }
-  .film .playbtn{ position:absolute; z-index:8; inset:0; margin:auto; width:86px; height:86px; border-radius:50%;
+  .film .playbtn{ position:absolute; z-index:10; inset:0; margin:auto; width:86px; height:86px; border-radius:50%;
     display:none; place-items:center; cursor:pointer; border:1px solid rgba(232,220,192,.5);
     background:rgba(10,7,4,.55); color:var(--w-ink); backdrop-filter:blur(6px); }
   .film .playbtn svg{ width:26px; height:26px; fill:currentColor; margin-inline-start:4px; }
   .film.needs-tap .playbtn{ display:grid; }
-  .film.mode-still video{ display:none; }
-  /* chain mode does not need the desktop's 1900vh runway */
-  .film.mode-chain{ height:680vh; }
 
   /* ————— acts styling ————— */
   .act{ position:relative; }
@@ -204,14 +240,21 @@
     letter-spacing:.22em; text-transform:uppercase; color:var(--w-dim); }
   .vault .caption{ z-index:8; }
 
+  /* Owner contract: the parallax edition has one motion system for every visitor. */
   @media (prefers-reduced-motion: reduce){
-    .open .candle, .open .quill{ animation:none; }
-    .film video{ transition:none; }
-    .vault .drawer{ transform:none; }
+    .open .candle{ animation:flick 3.2s ease-in-out infinite !important; }
+    .open .quill{ animation:drip 2.2s ease-in-out infinite !important; }
+    body .caption{ transition:opacity .7s ease .15s,transform .7s ease .15s; }
+    .film video{ transition:opacity .32s ease; }
   }
   @media (max-width:640px){
     .district{ display:none; }
     .film .legno{ display:none; }
+    .film .film-frame{ inset:62px 12px max(96px,calc(78px + env(safe-area-inset-bottom))) 12px; }
+    .film .depth-front .wing{ width:31%; }
+    .film .depth-near .ridge{ height:34%; }
+    .film .caption{ inset-inline-start:20px; bottom:max(54px,calc(34px + env(safe-area-inset-bottom))); max-width:min(340px,82vw); }
+    .film .caption .story{ font-size:14px; line-height:1.45; }
     .vault .drawer{ inset:16% 5% 30%; grid-template-columns:repeat(auto-fill, minmax(38px, 1fr)); gap:5px; }
   }
 </style>
@@ -254,9 +297,9 @@
     <div class="veil" aria-hidden="true"></div>
     <div class="candle" aria-hidden="true"></div>
     <div class="card">
-      <p class="kick"><span class="L en">World 03 · Edition II · 20 scroll-scrubbed WAN 2.7 shots</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ٢٠ لقطة WAN 2.7 تُفرَك بالتمرير</span></p>
+      <p class="kick"><span class="L en">World 03 · Edition II · 20 parallax-scroll WAN 2.7 chapters</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ٢٠ فصلاً من WAN 2.7 بتمريرٍ متعدّد الطبقات</span></p>
       <h1><span class="L en">The Kingdom of&nbsp;Running&nbsp;Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h1>
-      <p class="sub"><span class="L en">A dark cut-paper folktale that obeys your hand. One continuous take, twenty shots: a golden book is persuaded open, ink becomes fireflies, a thread survives its own knot and proves a loop — and the kingdom it raises pauses at a human seal. Scroll forward, the tale advances. Scroll back, it politely un-tells itself.</span><span class="L ar">حكاية ورقٍ داكنة تُطيع يدك. لقطةٌ واحدة متصلة من عشرين مشهدًا: كتابٌ مذهّب يُقنَع حتى يُفتَح، وحبرٌ يصير يراعات، وخيطٌ ينجو من عقدته ويثبت الحلقة — والمملكة التي يرفعها تقف عند ختمٍ بشري. مرِّر إلى الأمام تتقدّم الحكاية، ومرِّر إلى الخلف تتراجع بأدب.</span></p>
+      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty chapters cross four physical depths: distant light, living film, rising terrain, and foreground leaves. Scroll and the world separates into space; every clip plays on its own clock.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. تعبر عشرون فصلاً أربعة أعماقٍ مادية: ضوء بعيد، وفيلم حيّ، وأرض صاعدة، وأوراق في المقدّمة. مرِّر فتتباعد طبقات العالم في الفضاء؛ وكل مقطعٍ يعمل بتوقيته الخاص.</span></p>
     </div>
     <div class="hintwrap"><div class="quill" aria-hidden="true"></div><p class="hint"><span class="L en">Scroll to open the book</span><span class="L ar">مرِّر لفتح الكتاب</span></p></div>
   </div>
@@ -264,18 +307,28 @@
 
 <!-- ============ ACT CARD ============ -->
 <section class="act">
-  <p class="no"><span class="L en">One take · shots 01–20 · the film obeys the hand</span><span class="L ar">لقطة واحدة · المشاهد ٠١–٢٠ · الفيلم يُطيع اليد</span></p>
+  <p class="no"><span class="L en">One journey · chapters 01–20 · four depths move with the hand</span><span class="L ar">رحلة واحدة · الفصول ٠١–٢٠ · أربعة أعماق تتحرّك مع اليد</span></p>
   <h2><span class="L en">The Book Wakes</span><span class="L ar">الكتاب يستيقظ</span></h2>
   <p><span class="L en">Cause precedes magic. The Maker touches, winds, and stamps — only then may ink, thread, and light respond.</span><span class="L ar">السبب يسبق السحر. الصانع يلمس ويلفّ ويختم — وعندها فقط يُسمح للحبر والخيط والضوء أن تستجيب.</span></p>
   <div class="rule"></div>
 </section>
 
-<!-- ============ THE BOOK — 20 legs, one scrubbed take ============ -->
+<!-- ============ THE BOOK — 20 chapters, four parallax planes ============ -->
 <section class="scene film" id="book" data-scene="pin" data-slate="The book · 20 shots">
   <div class="stage">
-    <img class="floor" alt="" aria-hidden="true">
-    <video muted playsinline preload="none"></video>
-    <video muted playsinline preload="none"></video>
+    <div class="depth-far" aria-hidden="true"><img class="backdrop" src="disney2/posters/kf-01.jpg" alt=""></div>
+    <div class="film-frame">
+      <img class="floor" src="disney2/posters/kf-01.jpg" alt="" aria-hidden="true">
+      <video muted playsinline preload="none"></video>
+      <video muted playsinline preload="none"></video>
+    </div>
+    <div class="depth-near" aria-hidden="true">
+      <i class="bough left"></i><i class="bough right"></i><i class="ridge"></i>
+    </div>
+    <div class="depth-front" aria-hidden="true">
+      <i class="wing left"></i><i class="wing right"></i>
+      <i class="glint g1"></i><i class="glint g2"></i><i class="glint g3"></i>
+    </div>
     <div class="vig" aria-hidden="true"></div>
     <p class="chip"><span class="id">SHOT 01</span><span class="t">…</span></p>
     <p class="legno" aria-hidden="true">01</p>
@@ -364,7 +417,7 @@
     </figure>
 
     <div class="caption">
-      <p class="kick" id="leg-kick"><span class="L en">Act I · The film obeys the hand</span><span class="L ar">الفصل الأول · الفيلم يُطيع اليد</span></p>
+      <p class="kick" id="leg-kick"><span class="L en">Act I · The paper theatre moves in depth</span><span class="L ar">الفصل الأول · المسرح الورقي يتحرّك في العمق</span></p>
       <h2 id="leg-title"><span class="L en">The Waiting Book</span><span class="L ar">الكتاب المنتظِر</span></h2>
       <p class="story" id="leg-story"></p>
     </div>
@@ -381,9 +434,9 @@
     </svg>
     <div class="paperize" aria-hidden="true"></div>
     <div class="caption">
-      <p class="kick"><span class="L en">Twenty shots · one take · now the code takes the thread</span><span class="L ar">عشرون لقطة · لقطة واحدة · والآن تأخذ الشيفرة الخيط</span></p>
+      <p class="kick"><span class="L en">Twenty chapters · four depths · now the code takes the thread</span><span class="L ar">عشرون فصلاً · أربعة أعماق · والآن تأخذ الشيفرة الخيط</span></p>
       <h2><span class="L en">The film proves it. The code runs it.</span><span class="L ar">الفيلم يثبتها. والشيفرة تُديرها.</span></h2>
-      <p><span class="L en">Everything you just scrubbed was generated shot-by-shot, each frame chained to the next, forward and reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما فركتَه للتوّ وُلِّد لقطةً بعد لقطة، وكل إطارٍ مسلسلٌ إلى تاليه، ذهابًا وإيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
+      <p><span class="L en">Everything you just moved through was generated shot-by-shot, then staged as four paper depths while each clip kept its own time. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما عبرتَه للتوّ وُلِّد لقطةً بعد لقطة، ثم نُظِّم في أربعة أعماقٍ ورقية بينما احتفظ كل مقطعٍ بتوقيته. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
     </div>
   </div>
 </section>
@@ -480,7 +533,7 @@
 <section class="act">
   <p class="no"><span class="L en">The vault</span><span class="L ar">الخزانة</span></p>
   <h2><span class="L en">The Shots That Wait</span><span class="L ar">اللقطات التي تنتظر</span></h2>
-  <p><span class="L en">The production bible scripts 144 clips. The first edition produced 32 — retired with honor when the grammar changed. Edition II re-tells the whole tale in 20 scrubbed shots. The rest wait, honestly dark.</span><span class="L ar">كتاب الإنتاج يكتب ١٤٤ مقطعًا. الإصدار الأول صنع ٣٢ — أُحيلت إلى الأرشيف بشرفٍ حين تغيّرت القواعد. والإصدار الثاني يعيد الحكاية كاملةً في ٢٠ لقطةً تُفرَك فركًا. والبقية تنتظر، معتمةً بصدق.</span></p>
+  <p><span class="L en">The production bible scripts 144 clips. The first edition produced 32 — retired with honor when the grammar changed. Edition II re-tells the whole tale in 20 parallax chapters. The rest wait, honestly dark.</span><span class="L ar">كتاب الإنتاج يكتب ١٤٤ مقطعًا. الإصدار الأول صنع ٣٢ — أُحيلت إلى الأرشيف بشرفٍ حين تغيّرت القواعد. والإصدار الثاني يعيد الحكاية كاملةً في ٢٠ فصلاً متعدّد العمق. والبقية تنتظر، معتمةً بصدق.</span></p>
   <div class="rule"></div>
 </section>
 
@@ -526,11 +579,11 @@
       <h3><span class="L en">The Kingdom of Running Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h3>
       <dl class="duo">
         <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
-        <dt><span class="L en">Edition</span><span class="L ar">الإصدار</span></dt><dd><span class="L en">II — dark cut-paper folktale, scroll-scrubbed</span><span class="L ar">الثاني — حكاية ورقٍ داكنة تُفرَك بالتمرير</span></dd>
+        <dt><span class="L en">Edition</span><span class="L ar">الإصدار</span></dt><dd><span class="L en">II — dark cut-paper folktale, parallax-scrolled</span><span class="L ar">الثاني — حكاية ورقٍ داكنة بتمريرٍ متعدّد الطبقات</span></dd>
         <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
-        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · reverse-safe</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · آمنة الاتجاهين</span></dd>
+        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · four parallax planes</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · أربع طبقات اختلاف منظور</span></dd>
         <dt><span class="L en">First edition</span><span class="L ar">الإصدار الأول</span></dt><dd><span class="L en">32 shots, retired to the archive</span><span class="L ar">٣٢ لقطة، أُحيلت إلى الأرشيف</span></dd>
-        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v4 · CSS custom properties</dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd>cinema.js v6 · four measured CSS depth planes</dd>
         <dt><span class="L en">Kingdom, gate, lanterns, vault</span><span class="L ar">المملكة والبوّابة والفوانيس والخزانة</span></dt><dd><span class="L en">Rendered live, in code — no footage</span><span class="L ar">تُعرَض حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
         <dt><span class="L en">Production bible</span><span class="L ar">كتاب الإنتاج</span></dt><dd><span class="L en">144 scripted clips · 112 unproduced</span><span class="L ar">١٤٤ مقطعًا مكتوبًا · ١١٢ لم تُنتَج</span></dd>
         <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
@@ -552,7 +605,7 @@
 <script>
 (() => {
   'use strict';
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Owner contract: desktop and phone share one full-motion parallax edition. */
 
   /* ---------- VAULT: 144 slates — first edition's 32 retired (outlined) ---------- */
   const drawer = document.getElementById('vault-drawer');
@@ -568,19 +621,13 @@
   }
 
   /* ════════════════════════════════════════════════════════════════════
-     THE BOOK — twenty clips, one scene, one playhead.
-     The scene's --p is the position in the whole tale: leg = floor(p*20),
-     the fraction inside the leg is the clip's currentTime. Two <video>
-     elements double-buffer — the shown one is seeked, the other is armed
-     with the leg the scroll is heading towards — so 100 seconds scrub as
-     one take with no boundary to fall through. Every clip was generated
-     first-frame → last-frame onto the NEXT keyframe, so leg joins land on
-     the exact frame the floor poster shows.
-
-     Modes (spotify precedent, the shipped reference):
-       scrub  desktop — scroll drives currentTime, forward and reverse
-       chain  coarse pointer — clips play through in sequence
-       still  prefers-reduced-motion — posters and captions only
+     THE BOOK — twenty chapters, four measured paper depths.
+     Scroll selects the chapter and moves far / world / near / foreground
+     planes at ordered ratios. It never writes video time inside a chapter:
+     the active WAN clip plays on its own clock while the page supplies the
+     physical parallax. Two <video> elements still double-buffer the current
+     and next chapter. Desktop and phone run this same mode; there is no
+     coarse-pointer chain or reduced-motion fork in this edition.
      ════════════════════════════════════════════════════════════════════ */
   (() => {
     const scene = document.getElementById('book');
@@ -588,6 +635,7 @@
     const caps = [...scene.querySelectorAll('.legcap')];
     const vids = [...scene.querySelectorAll('video')];
     const floor = scene.querySelector('.floor');
+    const backdrop = scene.querySelector('.backdrop');
     const chipId = scene.querySelector('.chip .id');
     const chipT = scene.querySelector('.chip .t');
     const legno = scene.querySelector('.legno');
@@ -608,40 +656,33 @@
     const pips = [...rail.children];
     const isAr = () => document.documentElement.lang === 'ar';
 
-    const coarse = matchMedia('(hover: none) and (pointer: coarse)').matches || innerWidth < 760;
     const solo = new URLSearchParams(location.search).has('solo');
-    const MODE = reduced ? 'still' : coarse ? 'chain' : 'scrub';
+    const MODE = 'parallax';
     scene.classList.add('mode-' + MODE);
 
     const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-    const slots = vids.map(v => ({ v, leg: -1, ready: false, seeking: false, want: -1 }));
-    let shown = -1, lastLeg = -1, dir = 1, lastP = 0;
+    const slots = vids.map(v => ({ v, leg: -1, ready: false }));
+    let shown = -1, lastLeg = -1, dir = 1, lastP = 0, live = false;
 
     const arm = (s, leg) => {
       if (s.leg === leg) return s;
-      s.leg = leg; s.ready = false; s.seeking = false; s.want = -1;
+      s.v.pause();
+      s.leg = leg; s.ready = false;
       s.v.poster = LEGS[leg].poster;
       s.v.src = LEGS[leg].clip;
       s.v.load();
       return s;
     };
-    const seek = (s, t) => {
-      if (!s.ready) return;
-      if (s.seeking) { s.want = t; return; }
-      if (Math.abs(s.v.currentTime - t) < 0.012) return;
-      s.seeking = true;
-      try { s.v.currentTime = t; } catch { s.seeking = false; }
+    const playSlot = s => {
+      if (!live || !s || !s.ready || s.leg !== lastLeg) return;
+      const go = s.v.play();
+      if (go) go.then(() => scene.classList.remove('needs-tap'))
+        .catch(() => scene.classList.add('needs-tap'));
     };
     slots.forEach(s => {
-      /* A chain prefetch must not repaint from scroll-derived --p: doing so
-         rewinds the touch player to shot 01 as soon as shot 03 metadata lands. */
       s.v.addEventListener('loadedmetadata', () => {
         s.ready = true;
-        if (MODE !== 'chain') paint();
-      });
-      s.v.addEventListener('seeked', () => {
-        s.seeking = false;
-        if (s.want >= 0) { const t = s.want; s.want = -1; seek(s, t); }
+        if (s.leg === lastLeg) playSlot(s);
       });
       /* a clip that will not load leaves the keyframe poster standing —
          the page is complete art with zero videos on disk */
@@ -655,20 +696,28 @@
       const k = slots.indexOf(s);
       if (k === shown) return;
       shown = k;
-      slots.forEach(o => o.v.classList.toggle('on', o === s));
+      slots.forEach(o => {
+        o.v.classList.toggle('on', o === s);
+        if (o !== s) o.v.pause();
+      });
     };
     const setLeg = i => {
-      if (i === lastLeg) return;
+      if (i === lastLeg) return slotFor(i);
       lastLeg = i;
       const L = LEGS[i], ar = isAr();
       chipId.textContent = 'SHOT ' + String(i + 1).padStart(2, '0');
       chipT.textContent = ' · ' + (ar ? L.actAr : L.actEn);
       legno.textContent = String(i + 1).padStart(2, '0');
-      kick.innerHTML = '<span class="L en">' + L.actEn + ' · the film obeys the hand</span><span class="L ar">' + L.actAr + ' · الفيلم يُطيع اليد</span>';
+      kick.innerHTML = '<span class="L en">' + L.actEn + ' · the paper theatre moves in depth</span><span class="L ar">' + L.actAr + ' · المسرح الورقي يتحرّك في العمق</span>';
       title.innerHTML = '<span class="L en">' + L.tEn + '</span><span class="L ar">' + L.tAr + '</span>';
       story.innerHTML = L.html;
       pips.forEach((p, k) => p.classList.toggle('on', k === i));
-      floor.src = L.poster;                       /* the floor under the videos */
+      floor.src = L.poster;
+      backdrop.src = L.poster;
+      const s = slotFor(i);
+      show(s);
+      playSlot(s);
+      return s;
     };
     document.addEventListener('click', (e) => {
       if (e.target.closest('[data-lang-toggle]')) { const i = lastLeg; lastLeg = -1; if (i >= 0) setLeg(i); }
@@ -680,14 +729,9 @@
       lastP = p;
       const g = Math.min(p, 0.999999) * N;
       const i = Math.floor(g), f = g - i;
-      setLeg(i);
-      if (MODE === 'still') return;
-      const s = slotFor(i);
-      show(s);
-      if (s.ready) {
-        const d = s.v.duration || 5;
-        seek(s, Math.min(d - 0.04, Math.max(0, f * d)));
-      }
+      scene.style.setProperty('--depth', (f - .5).toFixed(4));
+      scene.style.setProperty('--journey', p.toFixed(5));
+      const s = setLeg(i);
       const nb = i + dir;                          /* prefetch where we are going */
       if (nb >= 0 && nb < N) {
         const other = slots[1 - slots.indexOf(s)];
@@ -695,25 +739,15 @@
       }
     }
 
-    if (MODE === 'chain') {
-      let idx = 0, live = false, cur = slots[0];
-      const playIdx = () => {
-        arm(cur, idx); show(cur); setLeg(idx);
-        const go = cur.v.play();
-        if (go) go.catch(() => scene.classList.add('needs-tap'));
-        const other = cur === slots[0] ? slots[1] : slots[0];
-        if (idx + 1 < N) arm(other, idx + 1);
-      };
-      slots.forEach(s => s.v.addEventListener('ended', () => {
-        if (!live || s !== cur || idx + 1 >= N) return;   /* hold the last frame */
-        idx += 1; cur = cur === slots[0] ? slots[1] : slots[0]; playIdx();
-      }));
-      playbtn.addEventListener('click', () => { scene.classList.remove('needs-tap'); live = true; playIdx(); });
-      scene.addEventListener('scene:live', () => { live = true; playIdx(); });
-      scene.addEventListener('scene:idle', () => { live = false; slots.forEach(s => s.v.pause()); });
-      setLeg(0);
-      return;
-    }
+    playbtn.addEventListener('click', () => {
+      scene.classList.remove('needs-tap'); live = true; playSlot(slots[shown]);
+    });
+    scene.addEventListener('scene:live', () => {
+      live = true; paint(); playSlot(slots[shown]);
+    });
+    scene.addEventListener('scene:idle', () => {
+      live = false; slots.forEach(s => s.v.pause());
+    });
 
     let tick = false, fallback = 0;
     const onScroll = () => {
@@ -786,16 +820,10 @@
     };
     const start = () => { if (!raf) { size(); raf = requestAnimationFrame(draw); } };
     const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-    if (reduced) {
-      size();
-      scene.style.setProperty('--p', '0.8');
-      requestAnimationFrame((t) => { draw(t); stop(); });
-    } else {
-      scene.addEventListener('scene:live', start);
-      scene.addEventListener('scene:idle', stop);
-      if (scene.classList.contains('is-live')) start();
-      addEventListener('resize', () => { if (raf) size(); }, { passive: true });
-    }
+    scene.addEventListener('scene:live', start);
+    scene.addEventListener('scene:idle', stop);
+    if (scene.classList.contains('is-live')) start();
+    addEventListener('resize', () => { if (raf) size(); }, { passive: true });
   }
 })();
 </script>

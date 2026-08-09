@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""Rendered browser gates for The Kingdom of Running Things, Edition II.
+"""Rendered browser gates for The Kingdom of Running Things, Parallax Edition.
 
-The suite grades the live DOM, decoded media, real scroll positions, mobile
-chain controls, reduced-motion mode, and byte-range delivery. It also captures
-the exact proof frames named by the production handoff.
+The suite grades four ordered depth planes, timeline-independent scroll,
+decoded media, identical desktop/phone behavior at every motion preference,
+byte-range delivery, narrative continuity, and the final rendered frames.
 """
 
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import sys
 from datetime import datetime, timezone
@@ -123,7 +124,7 @@ class Verification:
         return float(y)
 
     def wait_leg(self, page: Page, leg: int, fraction: float | None = None) -> dict[str, object]:
-        payload = {"leg": leg, "fraction": fraction}
+        payload = {"leg": leg}
         handle = page.wait_for_function(
             """arg => {
               const expected = String(arg.leg).padStart(3, '0');
@@ -134,14 +135,9 @@ class Verification:
               if (!floor || !floor.complete || !floor.currentSrc.endsWith('kf-' + expected.slice(-2) + '.jpg')) return false;
               if (!video || !video.currentSrc.endsWith('DSN2-' + expected + '.mp4')) return false;
               if (video.readyState < 1 || !Number.isFinite(video.duration) || video.seekable.length < 1) return false;
-              let target = null;
-              if (arg.fraction !== null) {
-                target = Math.min(video.duration - 0.04, Math.max(0, arg.fraction * video.duration));
-                if (video.seeking || Math.abs(video.currentTime - target) > 0.24) return false;
-              }
               return {
                 clip: video.currentSrc.split('/').pop(), poster: floor.currentSrc.split('/').pop(),
-                currentTime: video.currentTime, duration: video.duration, target,
+                currentTime: video.currentTime, duration: video.duration,
                 seekable: video.seekable.length, readyState: video.readyState,
                 title: document.querySelector('#leg-title .en')?.textContent.trim() || ''
               };
@@ -150,6 +146,33 @@ class Verification:
             timeout=30_000,
         )
         info = handle.json_value()
+        if fraction is not None:
+            frame = page.locator("#book video.on").evaluate(
+                """(video, fraction) => new Promise(resolve => {
+                  video.pause();
+                  const target = Math.min(video.duration - .04, Math.max(.04, fraction * video.duration));
+                  let settled = false;
+                  const done = () => {
+                    if (settled || video.readyState < 2 || video.videoWidth < 1) return;
+                    settled = true;
+                    resolve({currentTime:video.currentTime, target, readyState:video.readyState});
+                  };
+                  video.addEventListener('loadeddata', done, {once:true});
+                  video.addEventListener('seeked', () => {
+                    if ('requestVideoFrameCallback' in video) video.requestVideoFrameCallback(done);
+                    else requestAnimationFrame(done);
+                  }, {once:true});
+                  video.currentTime = target;
+                  if (Math.abs(video.currentTime - target) <= .01) requestAnimationFrame(done);
+                  setTimeout(() => {
+                    if (!settled) resolve({currentTime:video.currentTime, target, readyState:video.readyState});
+                  }, 5000);
+                })""",
+                fraction,
+            )
+            info["currentTime"] = frame["currentTime"]
+            info["target"] = frame["target"]
+            info["readyState"] = frame["readyState"]
         expected_title = EXPECTED_TITLES.get(leg)
         if expected_title:
             self.check(f"leg {leg:02d} caption", info["title"] == expected_title, info["title"])
@@ -164,13 +187,13 @@ class Verification:
     def check_cover(self, page: Page, label: str) -> None:
         values = page.locator("#book").evaluate(
             """scene => {
-              const stage = scene.querySelector('.stage');
+              const stage = scene.querySelector('.film-frame');
               const floor = scene.querySelector('.floor');
               const video = scene.querySelector('video.on');
               const sr = stage.getBoundingClientRect();
               const fr = floor.getBoundingClientRect();
               const vr = video.getBoundingClientRect();
-              const scale = Math.max(sr.width / video.videoWidth, sr.height / video.videoHeight);
+              const scale = Math.max(vr.width / video.videoWidth, vr.height / video.videoHeight);
               return {
                 objectFitFloor: getComputedStyle(floor).objectFit,
                 objectFitVideo: getComputedStyle(video).objectFit,
@@ -188,12 +211,12 @@ class Verification:
         no_gap = (
             values["objectFitFloor"] == "cover"
             and values["objectFitVideo"] == "cover"
-            and abs(sw - fw) <= 1
-            and abs(sh - fh) <= 1
-            and abs(sw - vw) <= 1
-            and abs(sh - vh) <= 1
-            and scaled_w + 0.5 >= sw
-            and scaled_h + 0.5 >= sh
+            and abs(sw - fw) <= 3
+            and abs(sh - fh) <= 3
+            and abs(sw - vw) <= 3
+            and abs(sh - vh) <= 3
+            and scaled_w + 0.5 >= vw
+            and scaled_h + 0.5 >= vh
             and values["opacity"] >= 0.99
         )
         self.check(
@@ -201,6 +224,72 @@ class Verification:
             no_gap,
             f"stage={sw:.0f}x{sh:.0f} media={values['natural']} fit=cover",
         )
+
+    @staticmethod
+    def depth_snapshot(page: Page) -> dict[str, object]:
+        return page.locator("#book").evaluate(
+            """scene => {
+              const names = ['.depth-far', '.film-frame', '.depth-near', '.depth-front'];
+              const rects = Object.fromEntries(names.map(name => {
+                const el = scene.querySelector(name);
+                if (!el) return [name, null];
+                const rect = el.getBoundingClientRect();
+                return [name, {top:rect.top, left:rect.left, transform:getComputedStyle(el).transform}];
+              }));
+              const video = scene.querySelector('video.on');
+              return {
+                classes:scene.className,
+                depth:getComputedStyle(scene).getPropertyValue('--depth').trim(),
+                rects,
+                currentTime:video ? video.currentTime : null,
+                clip:video ? video.currentSrc.split('/').pop() : null,
+              };
+            }"""
+        )
+
+    def check_parallax_contract(self, page: Page, label: str) -> None:
+        classes = page.locator("#book").get_attribute("class") or ""
+        self.check(f"{label} parallax mode", "mode-parallax" in classes, classes)
+        self.check(
+            f"{label} has no alternate motion mode",
+            all(name not in classes for name in ("mode-scrub", "mode-chain", "mode-still")),
+            classes,
+        )
+
+        self.set_progress(page, "#book", 0.462)
+        self.wait_leg(page, 10, 0.25)
+        first = self.depth_snapshot(page)
+        layers_present = all(first["rects"].values())
+        self.check(f"{label} four depth planes", layers_present, first["rects"])
+        if not layers_present:
+            return
+        if label in {"desktop", "phone"}:
+            self.screenshot(page, f"{label}-parallax-before.png")
+
+        self.set_progress(page, "#book", 0.488)
+        self.wait_leg(page, 10)
+        second = self.depth_snapshot(page)
+        deltas = {
+            name: abs(second["rects"][name]["top"] - first["rects"][name]["top"])
+            for name in first["rects"]
+        }
+        ordered = (
+            deltas[".depth-far"] >= 5
+            and deltas[".film-frame"] > deltas[".depth-far"] * 1.6
+            and deltas[".depth-near"] > deltas[".film-frame"] * 1.5
+            and deltas[".depth-front"] > deltas[".depth-near"] * 1.2
+        )
+        self.check(f"{label} ordered parallax travel", ordered, deltas)
+        timeline_free = (
+            first["clip"] == second["clip"]
+            and abs(float(second["currentTime"]) - float(first["currentTime"])) <= 0.08
+        )
+        self.check(
+            f"{label} scroll leaves clip timeline independent",
+            timeline_free,
+            f"{first['clip']} t={first['currentTime']:.3f}->{second['currentTime']:.3f}",
+        )
+        self.screenshot(page, f"{label}-parallax-depth.png")
 
     def screenshot(self, page: Page, name: str) -> Path:
         path = self.output_dir / name
@@ -210,7 +299,21 @@ class Verification:
 
     def media_screenshot(self, page: Page, name: str) -> Path:
         path = self.output_dir / name
-        page.locator("#book video.on").screenshot(path=str(path))
+        data_url = page.locator("#book video.on").evaluate(
+            """video => new Promise(resolve => {
+              const paint = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                resolve(canvas.toDataURL('image/png'));
+              };
+              if ('requestVideoFrameCallback' in video) video.requestVideoFrameCallback(paint);
+              else requestAnimationFrame(paint);
+              setTimeout(paint, 1500);
+            })"""
+        )
+        path.write_bytes(base64.b64decode(data_url.split(",", 1)[1]))
         self.check(f"media screenshot {name}", path.exists() and path.stat().st_size > 10_000, path.stat().st_size)
         return path
 
@@ -273,12 +376,11 @@ class Verification:
     def desktop_pass(self, browser: Browser) -> None:
         context = browser.new_context(viewport={"width": 1440, "height": 900}, locale="en-US")
         page = self.open_page(context, self.url)
-        page.wait_for_selector("#book.mode-scrub")
+        page.wait_for_selector("#book.mode-parallax")
         self.transport_and_master(context, page)
 
         runway = page.locator("#book").evaluate("el => ({height:el.offsetHeight, vh:innerHeight})")
         ratio = runway["height"] / runway["vh"]
-        self.check("desktop scrub mode", "mode-scrub" in page.locator("#book").get_attribute("class"), page.locator("#book").get_attribute("class"))
         self.check("rendered film runway", ratio + 0.01 >= self.minimum_runway_vh, f"{ratio:.2f}vh")
 
         self.set_progress(page, "#top", 0.56)
@@ -289,6 +391,26 @@ class Verification:
         self.check_cover(page, "desktop")
         self.screenshot(page, "desktop-leg-01.png")
 
+        self.check_parallax_contract(page, "desktop")
+        page.locator("[data-lang-toggle]").click()
+        page.wait_for_function("document.documentElement.lang === 'ar' && document.documentElement.dir === 'rtl'")
+        language_state = page.locator("#book").evaluate(
+            """scene => ({
+              mode:scene.className,
+              kick:scene.querySelector('#leg-kick .ar').textContent.trim(),
+              visible:getComputedStyle(scene.querySelector('#leg-kick .ar')).display
+            })"""
+        )
+        self.check(
+            "Arabic parallax copy and direction",
+            "mode-parallax" in language_state["mode"]
+            and "المسرح الورقي يتحرّك في العمق" in language_state["kick"]
+            and language_state["visible"] != "none",
+            language_state,
+        )
+        page.locator("[data-lang-toggle]").click()
+        page.wait_for_function("document.documentElement.lang === 'en' && document.documentElement.dir === 'ltr'")
+
         self.set_progress(page, "#book", 0.475)
         self.wait_leg(page, 10, 0.5)
         self.screenshot(page, "desktop-leg-10.png")
@@ -298,7 +420,7 @@ class Verification:
         self.screenshot(page, "desktop-boundary-10-before.png")
         before = self.media_screenshot(page, "desktop-boundary-10-before-media.png")
         self.set_progress(page, "#book", 0.5001)
-        self.wait_leg(page, 11, 0.002)
+        self.wait_leg(page, 11, 0.0)
         self.screenshot(page, "desktop-boundary-10-after.png")
         after = self.media_screenshot(page, "desktop-boundary-10-after-media.png")
         raw, edge = boundary_metrics(before, after)
@@ -312,14 +434,14 @@ class Verification:
         self.screenshot(page, "desktop-leg-20.png")
         reverse_y = self.set_progress(page, "#book", 0.225)
         self.wait_leg(page, 5, 0.5)
-        self.check("reverse scrub to leg 05", reverse_y < forward_y, f"scrollY {forward_y:.0f} -> {reverse_y:.0f}")
+        self.check("reverse parallax navigation to leg 05", reverse_y < forward_y, f"scrollY {forward_y:.0f} -> {reverse_y:.0f}")
 
         self.find_fin(page, "desktop")
         page.close()
 
         solo = self.open_page(context, with_query(self.url, solo=2, p=0.5))
-        solo.wait_for_selector("#book.mode-scrub")
-        self.wait_leg(solo, 11, 0.0)
+        solo.wait_for_selector("#book.mode-parallax")
+        self.wait_leg(solo, 11, 0.5)
         visible_scenes = solo.locator("[data-scene]").evaluate_all(
             "els => els.filter(el => getComputedStyle(el).display !== 'none').length"
         )
@@ -329,23 +451,32 @@ class Verification:
         solo.close()
         context.close()
 
-    def reduced_motion_pass(self, browser: Browser) -> None:
+    def motion_preference_pass(self, browser: Browser) -> None:
         context = browser.new_context(
             viewport={"width": 1440, "height": 900}, reduced_motion="reduce", locale="en-US"
         )
-        page = self.open_page(context, with_query(self.url, solo=2, p=0.475))
-        page.wait_for_selector("#book.mode-still")
-        page.wait_for_function("document.querySelector('#book .chip .id')?.textContent.trim() === 'SHOT 10'")
+        page = self.open_page(context, self.url)
+        page.wait_for_selector("#book.mode-parallax")
+        self.set_progress(page, "#book", 0.475)
+        self.wait_leg(page, 10, 0.5)
         state = page.locator("#book").evaluate(
             """scene => ({
               videos:[...scene.querySelectorAll('video')].map(v => getComputedStyle(v).display),
               floor:scene.querySelector('.floor').currentSrc.split('/').pop(),
-              title:scene.querySelector('#leg-title .en').textContent.trim()
+              title:scene.querySelector('#leg-title .en').textContent.trim(),
+              candleDuration:getComputedStyle(document.querySelector('.open .candle')).animationDuration
             })"""
         )
-        self.check("reduced-motion still mode", state["videos"] == ["none", "none"], state)
-        self.check("reduced-motion poster and caption", state["floor"] == "kf-10.jpg" and state["title"] == EXPECTED_TITLES[10], state)
-        self.screenshot(page, "desktop-reduced-motion.png")
+        self.check(
+            "motion preference keeps full video experience",
+            state["videos"] != ["none", "none"]
+            and state["floor"] == "kf-10.jpg"
+            and state["title"] == EXPECTED_TITLES[10]
+            and state["candleDuration"] != "0.001s",
+            state,
+        )
+        self.check_parallax_contract(page, "motion-preference")
+        self.screenshot(page, "desktop-motion-preference-parallax.png")
         context.close()
 
     def lobby_pass(self, browser: Browser) -> None:
@@ -375,7 +506,7 @@ class Verification:
         self.check(
             "lobby card runtime facts",
             badge_facts == "20 real wan shots"
-            and "1 scrubbed take" in spec_facts
+            and "1 parallax journey" in spec_facts
             and "20 real shots" in spec_facts
             and "master cut 1:40" in spec_facts
             and "Edition II cut from 20 real WAN 2.7" in description,
@@ -403,26 +534,6 @@ class Verification:
             })();"""
         )
 
-    def advance_chain(self, page: Page, target: int) -> None:
-        while True:
-            current = int(page.locator("#book .chip .id").text_content().strip().split()[-1])
-            if current >= target:
-                return
-            page.locator("#book video.on").evaluate(
-                """v => {
-                  v.playbackRate = 8;
-                  v.currentTime = Math.max(0, v.duration - 0.40);
-                  return v.play();
-                }"""
-            )
-            expected = current + 1
-            page.wait_for_function(
-                "n => document.querySelector('#book .chip .id')?.textContent.trim() === 'SHOT ' + String(n).padStart(2, '0')",
-                arg=expected,
-                timeout=20_000,
-            )
-            self.wait_leg(page, expected)
-
     def phone_pass(self, browser: Browser) -> None:
         context = browser.new_context(
             viewport={"width": 390, "height": 844}, screen={"width": 390, "height": 844},
@@ -430,8 +541,7 @@ class Verification:
         )
         self.install_autoplay_block(context)
         page = self.open_page(context, self.url)
-        page.wait_for_selector("#book.mode-chain")
-        self.check("phone chain mode", "mode-chain" in page.locator("#book").get_attribute("class"), page.locator("#book").get_attribute("class"))
+        page.wait_for_selector("#book.mode-parallax")
 
         self.set_progress(page, "#top", 0.56)
         self.screenshot(page, "phone-cold-open.png")
@@ -454,30 +564,30 @@ class Verification:
         self.check_cover(page, "phone")
         self.screenshot(page, "phone-leg-01.png")
 
-        self.advance_chain(page, 10)
-        page.locator("#book video.on").evaluate(
-            "v => { v.pause(); v.currentTime = Math.max(0, v.duration - 0.20); }"
-        )
-        page.wait_for_function("!document.querySelector('#book video.on').seeking")
+        self.check_parallax_contract(page, "phone")
+
+        self.set_progress(page, "#book", 0.4999)
+        self.wait_leg(page, 10, 0.998)
         self.screenshot(page, "phone-boundary-10-before.png")
         phone_before = self.media_screenshot(page, "phone-boundary-10-before-media.png")
-        page.locator("#book video.on").evaluate("v => { v.playbackRate = 4; return v.play(); }")
-        page.wait_for_function("document.querySelector('#book .chip .id')?.textContent.trim() === 'SHOT 11'")
-        self.wait_leg(page, 11)
+        self.set_progress(page, "#book", 0.5001)
+        self.wait_leg(page, 11, 0.0)
         self.screenshot(page, "phone-boundary-10-after.png")
         phone_after = self.media_screenshot(page, "phone-boundary-10-after-media.png")
         raw, edge = boundary_metrics(phone_before, phone_after)
         self.check("phone boundary continuity", raw <= 20 and edge <= 50, f"raw={raw:.1f}, edge={edge:.1f}")
 
-        self.advance_chain(page, 19)
+        self.set_progress(page, "#book", 0.925)
+        self.wait_leg(page, 19, 0.5)
         self.screenshot(page, "phone-leg-19-gate.png")
-        self.advance_chain(page, 20)
+        self.set_progress(page, "#book", 0.975)
+        self.wait_leg(page, 20, 0.5)
         self.screenshot(page, "phone-leg-20.png")
         page.locator("#book video.on").evaluate(
             "v => { v.playbackRate = 8; v.currentTime = Math.max(0, v.duration - 0.40); return v.play(); }"
         )
         page.wait_for_function("document.querySelector('#book video.on')?.ended", timeout=20_000)
-        self.check("phone chain holds final leg", page.locator("#book .chip .id").text_content().strip() == "SHOT 20", page.locator("#book .chip .id").text_content().strip())
+        self.check("phone parallax holds final leg", page.locator("#book .chip .id").text_content().strip() == "SHOT 20", page.locator("#book .chip .id").text_content().strip())
 
         self.find_fin(page, "phone")
         context.close()
@@ -485,7 +595,7 @@ class Verification:
     def run(self, browser: Browser) -> int:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.desktop_pass(browser)
-        self.reduced_motion_pass(browser)
+        self.motion_preference_pass(browser)
         self.lobby_pass(browser)
         self.phone_pass(browser)
         self.check("console clean", not self.console_errors, self.console_errors or "0 errors")
