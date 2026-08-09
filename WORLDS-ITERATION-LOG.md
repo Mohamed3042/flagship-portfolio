@@ -252,3 +252,29 @@ change in physics at leg 07 rather than as a picture of an explosion.
   are on-story (closed book in 19/20 is the scripted seal). Regen package with a
   book-forbidding prompt, upload rules, CRF16/g6 finalize line and a mid-clip gate:
   `Downloads/kingdom-run/REGEN-006.md` (10 credits).
+
+## 2026-08-09 — Disney v3.3: THE WEIGHTED CAMERA
+
+- **Pass 1 — RED against v3.2:** Added frame-sampled step response, lockstep,
+  steady-scroll, chapter-grammar, idle-park, jump-snap and version gates before the
+  implementation. The old page failed 23 times: one-frame pan/clock jumps, zero glide,
+  no idle state, moving chapter edges and the old badge.
+- **Pass 2 — local GREEN, deployed RED:** One time-based exponentially smoothed playhead
+  (`TAU=140 ms`) now drives film time, pan, depth and journey. The first CDN run exposed
+  a second clock inside asynchronous Range seeks: reduced-motion pan moved across 81
+  frames while the clip clock moved across three. Buffering each of the same two armed
+  five-second slots into an object URL made seeking local and restored measured lockstep.
+- **Pass 3 — shipped:** 236/236 locally and 236/236 on the canonical live URL across
+  desktop, phone and reduced-motion. Desktop pan/clock spread over 81/83 frames, their
+  halfway crossings both landed on frame 22, and only 1.8%/2.6% remained at 500 ms.
+  Sixteen-frame local and deployed contact sheets show arrive / cross / parked join /
+  settle without a lateral teleport or zig-zag.
+- **Gate retunes:** pan-sweep sampling `.10/.90 → .15/.85` to stay outside the new
+  `.12/.88` plateaus (travel requirement unchanged at ≥60%); join continuity tightened
+  `.12 → .04`; observation wait `260 → 550 ms` so the harness sees a full weighted
+  response. No acceptance gate was loosened.
+- **Scope held:** page-local HTML/controller plus QA/capture harness only; no shared
+  cinema CSS/JS, clips or query strings changed. DSN2-006 remains the named, out-of-scope
+  story issue. Cost: 0 credits / 0 generations / 0 paid services.
+- Source: `739350c`, `b6ac62c`; Pages: `91db92d`. Full reports and dailies:
+  `changelogs/2026-08-09-kingdom-weighted-camera.md`.

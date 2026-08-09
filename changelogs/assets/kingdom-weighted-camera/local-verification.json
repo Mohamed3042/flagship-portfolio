@@ -1,0 +1,1201 @@
+{
+  "url": "http://127.0.0.1:4607/worlds/disney.html?blob=4",
+  "verified_at_utc": "2026-08-09T06:06:14.526135+00:00",
+  "viewport_desktop": [
+    1440,
+    900
+  ],
+  "viewport_phone": [
+    390,
+    844
+  ],
+  "checks": [
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "clip HEAD status",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "Accept-Ranges header",
+      "pass": true,
+      "detail": "bytes"
+    },
+    {
+      "name": "clip byte-range response",
+      "pass": true,
+      "detail": "206"
+    },
+    {
+      "name": "clip Content-Range",
+      "pass": true,
+      "detail": "bytes 0-1023/4648178"
+    },
+    {
+      "name": "rendered film runway",
+      "pass": true,
+      "detail": "19.00vh"
+    },
+    {
+      "name": "desktop scrub mode",
+      "pass": true,
+      "detail": "scene film mode-scrub"
+    },
+    {
+      "name": "desktop no alternate motion mode",
+      "pass": true,
+      "detail": "scene film mode-scrub"
+    },
+    {
+      "name": "desktop no side chrome elements",
+      "pass": true,
+      "detail": "forbidden elements=0"
+    },
+    {
+      "name": "desktop cue present",
+      "pass": true,
+      "detail": "cue=1"
+    },
+    {
+      "name": "no own-clock claims survive",
+      "pass": true,
+      "detail": "clean"
+    },
+    {
+      "name": "cold open states the scrub truth",
+      "pass": true,
+      "detail": "phrase found"
+    },
+    {
+      "name": "credits state never-autoplayed",
+      "pass": true,
+      "detail": "found"
+    },
+    {
+      "name": "weighted camera version badge",
+      "pass": true,
+      "detail": "{'badge': 'v3.3 · II', 'title': 'the kingdom of running things — edition ii · the weighted camera'}"
+    },
+    {
+      "name": "screenshot desktop-cold-open.png",
+      "pass": true,
+      "detail": "860525"
+    },
+    {
+      "name": "desktop leg 01 cue",
+      "pass": true,
+      "detail": "The Waiting Book"
+    },
+    {
+      "name": "desktop leg 01 floor poster",
+      "pass": true,
+      "detail": "kf-01.jpg"
+    },
+    {
+      "name": "desktop leg 01 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 01 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-001.mp4 t=2.460 (target 2.500)"
+    },
+    {
+      "name": "desktop full-bleed cover frame",
+      "pass": true,
+      "detail": "frame=0,0 1440x900 vs viewport 1440x900 fit=cover"
+    },
+    {
+      "name": "desktop single quiet cue at the foot, clear of the matte",
+      "pass": true,
+      "detail": "cueBottom=850 h=46 matteTop=862"
+    },
+    {
+      "name": "screenshot desktop-leg-01.png",
+      "pass": true,
+      "detail": "1256010"
+    },
+    {
+      "name": "desktop leg 03 cue",
+      "pass": true,
+      "detail": "The Latch Yields"
+    },
+    {
+      "name": "desktop leg 03 floor poster",
+      "pass": true,
+      "detail": "kf-03.jpg"
+    },
+    {
+      "name": "desktop leg 03 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 03 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-003.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "desktop leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "desktop leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 10 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "desktop film frozen without scroll",
+      "pass": true,
+      "detail": "drift=0.0000s over 2.5s"
+    },
+    {
+      "name": "screenshot desktop-leg-10.png",
+      "pass": true,
+      "detail": "1213166"
+    },
+    {
+      "name": "desktop leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "desktop leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 10 scrubbed to t≈4.95",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=4.900 (target 4.950)"
+    },
+    {
+      "name": "media screenshot desktop-boundary-10-before-media.png",
+      "pass": true,
+      "detail": "1654095"
+    },
+    {
+      "name": "desktop leg 11 cue",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "desktop leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "desktop leg 11 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 11 scrubbed to t≈0.05",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=0.050 (target 0.050)"
+    },
+    {
+      "name": "media screenshot desktop-boundary-10-after-media.png",
+      "pass": true,
+      "detail": "1670245"
+    },
+    {
+      "name": "desktop boundary continuity 10→11",
+      "pass": true,
+      "detail": "raw=2.6, edge=8.4"
+    },
+    {
+      "name": "desktop leg 20 cue",
+      "pass": true,
+      "detail": "Proof, Vault, Return"
+    },
+    {
+      "name": "desktop leg 20 floor poster",
+      "pass": true,
+      "detail": "kf-20.jpg"
+    },
+    {
+      "name": "desktop leg 20 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 20 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-020.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "screenshot desktop-leg-20.png",
+      "pass": true,
+      "detail": "1027641"
+    },
+    {
+      "name": "desktop leg 05 cue",
+      "pass": true,
+      "detail": "A Cause Is Drawn"
+    },
+    {
+      "name": "desktop leg 05 floor poster",
+      "pass": true,
+      "detail": "kf-05.jpg"
+    },
+    {
+      "name": "desktop leg 05 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 05 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-005.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "screenshot desktop-reverse-leg-05.png",
+      "pass": true,
+      "detail": "1494138"
+    },
+    {
+      "name": "desktop leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "desktop leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 10 scrubbed to t≈1.20",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.200 (target 1.200)"
+    },
+    {
+      "name": "desktop glow + picture planes present",
+      "pass": true,
+      "detail": "{'.depth-far': {'top': -259.6800537109375, 'left': -412.748779296875}, '.film-frame': {'top': 0, 'left': 0}}"
+    },
+    {
+      "name": "screenshot desktop-parallax-before.png",
+      "pass": true,
+      "detail": "1263960"
+    },
+    {
+      "name": "desktop leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "desktop leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 10 scrubbed to t≈3.80",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=3.744 (target 3.800)"
+    },
+    {
+      "name": "desktop planes travel at distinct rates",
+      "pass": true,
+      "detail": "{'.depth-far': 6.13677978515625, '.film-frame': 0, 'relative': 6.14}"
+    },
+    {
+      "name": "desktop scroll drives the clip clock",
+      "pass": true,
+      "detail": "t 1.20 -> 3.74 for Δp=0.026"
+    },
+    {
+      "name": "screenshot desktop-parallax-depth.png",
+      "pass": true,
+      "detail": "1258153"
+    },
+    {
+      "name": "leg 19 cue",
+      "pass": true,
+      "detail": "The Human Gate"
+    },
+    {
+      "name": "leg 19 floor poster",
+      "pass": true,
+      "detail": "kf-19.jpg"
+    },
+    {
+      "name": "leg 19 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop whole-film journey travel",
+      "pass": true,
+      "detail": "glow x-drift=25px, Δjourney=0.42"
+    },
+    {
+      "name": "desktop weighted step spreads motion over frames",
+      "pass": true,
+      "detail": "pan=81 frames, clock=83 frames"
+    },
+    {
+      "name": "desktop weighted step has no teleport",
+      "pass": true,
+      "detail": "largest pan=8.6%, clock=11.2% of step"
+    },
+    {
+      "name": "desktop weighted step reaches 95% by 500ms",
+      "pass": true,
+      "detail": "remaining pan=1.8%, clock=2.6%"
+    },
+    {
+      "name": "desktop weighted step approaches monotonically",
+      "pass": true,
+      "detail": "reverse pan=0.00%, clock=0.00%"
+    },
+    {
+      "name": "desktop pan and film clock stay in lockstep",
+      "pass": true,
+      "detail": "50% crossing frames pan=22, clock=22"
+    },
+    {
+      "name": "desktop camera glides after input stops",
+      "pass": true,
+      "detail": "moving post-stop frames=113"
+    },
+    {
+      "name": "desktop glide settles within 0.5% of a leg",
+      "pass": true,
+      "detail": "final error=0.0000 leg"
+    },
+    {
+      "name": "desktop camera loop parks when idle",
+      "pass": true,
+      "detail": "idle"
+    },
+    {
+      "name": "desktop steady scroll has even per-frame pan",
+      "pass": true,
+      "detail": "max=0.00720, median=0.00460, ratio=1.57x"
+    },
+    {
+      "name": "desktop chapters arrive and settle on parked edges",
+      "pass": true,
+      "detail": "{'even_arrive': 0.0, 'even_mid': 0.496, 'even_settle': 1.0, 'odd_arrive': 1.0, 'odd_mid': 0.5039, 'odd_settle': 0.0}"
+    },
+    {
+      "name": "desktop chapter cross is centered at halfway",
+      "pass": true,
+      "detail": "{'even_arrive': 0.0, 'even_mid': 0.496, 'even_settle': 1.0, 'odd_arrive': 1.0, 'odd_mid': 0.5039, 'odd_settle': 0.0}"
+    },
+    {
+      "name": "desktop large navigation jump snaps the camera",
+      "pass": true,
+      "detail": "journey frames=[0.125, 0.325, 0.325, 0.325], target=0.3250"
+    },
+    {
+      "name": "desktop leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "desktop leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 10 scrubbed to t≈0.75",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=0.750 (target 0.750)"
+    },
+    {
+      "name": "desktop leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "desktop leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 10 scrubbed to t≈4.25",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=4.181 (target 4.250)"
+    },
+    {
+      "name": "desktop scroll pans the hidden width",
+      "pass": true,
+      "detail": "pan 1.00 -> 0.01 inside leg 10 (sweep 0.99)"
+    },
+    {
+      "name": "desktop pan reaches the renderer",
+      "pass": true,
+      "detail": "object-position=0.82% 50% at pan=0.01"
+    },
+    {
+      "name": "desktop leg 11 cue",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "desktop leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "desktop leg 11 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "desktop leg 11 scrubbed to t≈0.05",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=0.025 (target 0.050)"
+    },
+    {
+      "name": "desktop serpentine continuity at the join",
+      "pass": true,
+      "detail": "pan 0.008 -> 0.000 across 10→11"
+    },
+    {
+      "name": "desktop chrome invisible during the film",
+      "pass": true,
+      "detail": "{'boxed': True, 'opacity': 0, 'pe': 'none'}"
+    },
+    {
+      "name": "desktop chrome returns for keyboard focus",
+      "pass": true,
+      "detail": "opacity=0.981448"
+    },
+    {
+      "name": "desktop leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "desktop leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "desktop leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "Arabic cue and direction",
+      "pass": true,
+      "detail": "{'en': 'none', 'ar': 'inline', 'text': 'الضوء المختار'}"
+    },
+    {
+      "name": "screenshot desktop-arabic-leg-10.png",
+      "pass": true,
+      "detail": "1206336"
+    },
+    {
+      "name": "desktop FIN intact",
+      "pass": true,
+      "detail": "p=0.45 visible=1.00 top=665.2 bottom=739.2"
+    },
+    {
+      "name": "screenshot desktop-credits.png",
+      "pass": true,
+      "detail": "91537"
+    },
+    {
+      "name": "desktop zero play() attempts",
+      "pass": true,
+      "detail": "attempts=0"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "solo leg 11 cue",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "solo leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "solo leg 11 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "solo leg 11 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "solo harness isolates film",
+      "pass": true,
+      "detail": "scenes=1, height=1.00vh"
+    },
+    {
+      "name": "screenshot desktop-solo-p050.png",
+      "pass": true,
+      "detail": "964677"
+    },
+    {
+      "name": "solo zero play() attempts",
+      "pass": true,
+      "detail": "attempts=0"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "motion-preference scrub mode",
+      "pass": true,
+      "detail": "scene film mode-scrub"
+    },
+    {
+      "name": "motion-preference no alternate motion mode",
+      "pass": true,
+      "detail": "scene film mode-scrub"
+    },
+    {
+      "name": "motion-preference weighted step spreads motion over frames",
+      "pass": true,
+      "detail": "pan=82 frames, clock=82 frames"
+    },
+    {
+      "name": "motion-preference weighted step has no teleport",
+      "pass": true,
+      "detail": "largest pan=8.6%, clock=11.2% of step"
+    },
+    {
+      "name": "motion-preference weighted step reaches 95% by 500ms",
+      "pass": true,
+      "detail": "remaining pan=1.8%, clock=2.8%"
+    },
+    {
+      "name": "motion-preference weighted step approaches monotonically",
+      "pass": true,
+      "detail": "reverse pan=0.00%, clock=0.00%"
+    },
+    {
+      "name": "motion-preference pan and film clock stay in lockstep",
+      "pass": true,
+      "detail": "50% crossing frames pan=22, clock=22"
+    },
+    {
+      "name": "motion-preference camera glides after input stops",
+      "pass": true,
+      "detail": "moving post-stop frames=113"
+    },
+    {
+      "name": "motion-preference glide settles within 0.5% of a leg",
+      "pass": true,
+      "detail": "final error=0.0000 leg"
+    },
+    {
+      "name": "motion-preference camera loop parks when idle",
+      "pass": true,
+      "detail": "idle"
+    },
+    {
+      "name": "motion-preference leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "motion-preference leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "motion-preference leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "motion-preference leg 10 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=2.587 (target 2.500)"
+    },
+    {
+      "name": "motion preference keeps the living candle",
+      "pass": true,
+      "detail": "3.2s"
+    },
+    {
+      "name": "screenshot desktop-motion-preference.png",
+      "pass": true,
+      "detail": "1213500"
+    },
+    {
+      "name": "motion-preference zero play() attempts",
+      "pass": true,
+      "detail": "attempts=0"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "lobby Edition II poster",
+      "pass": true,
+      "detail": "{'src': 'disney2/posters/kf-19.jpg', 'width': 1600}"
+    },
+    {
+      "name": "lobby Edition II truth copy",
+      "pass": true,
+      "detail": "20 current / 32 retired"
+    },
+    {
+      "name": "lobby card names the scrub, not a master button",
+      "pass": true,
+      "detail": "1 parallax journey 20 real shots scroll-scrubbed 1:40 then live code"
+    },
+    {
+      "name": "screenshot desktop-worlds-lobby.png",
+      "pass": true,
+      "detail": "945752"
+    },
+    {
+      "name": "page HTTP",
+      "pass": true,
+      "detail": "200"
+    },
+    {
+      "name": "initial network idle",
+      "pass": true,
+      "detail": "reached"
+    },
+    {
+      "name": "phone scrub mode",
+      "pass": true,
+      "detail": "scene film mode-scrub"
+    },
+    {
+      "name": "phone no alternate motion mode",
+      "pass": true,
+      "detail": "scene film mode-scrub"
+    },
+    {
+      "name": "phone no side chrome elements",
+      "pass": true,
+      "detail": "forbidden elements=0"
+    },
+    {
+      "name": "phone cue present",
+      "pass": true,
+      "detail": "cue=1"
+    },
+    {
+      "name": "screenshot phone-cold-open.png",
+      "pass": true,
+      "detail": "294683"
+    },
+    {
+      "name": "phone leg 01 cue",
+      "pass": true,
+      "detail": "The Waiting Book"
+    },
+    {
+      "name": "phone leg 01 floor poster",
+      "pass": true,
+      "detail": "kf-01.jpg"
+    },
+    {
+      "name": "phone leg 01 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 01 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-001.mp4 t=2.448 (target 2.500)"
+    },
+    {
+      "name": "phone full-bleed cover frame",
+      "pass": true,
+      "detail": "frame=0,0 390x844 vs viewport 390x844 fit=cover"
+    },
+    {
+      "name": "phone single quiet cue at the foot, clear of the matte",
+      "pass": true,
+      "detail": "cueBottom=797 h=60 matteTop=809"
+    },
+    {
+      "name": "screenshot phone-leg-01.png",
+      "pass": true,
+      "detail": "346933"
+    },
+    {
+      "name": "phone leg 03 cue",
+      "pass": true,
+      "detail": "The Latch Yields"
+    },
+    {
+      "name": "phone leg 03 floor poster",
+      "pass": true,
+      "detail": "kf-03.jpg"
+    },
+    {
+      "name": "phone leg 03 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 03 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-003.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "phone leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "phone leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 10 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "phone film frozen without scroll",
+      "pass": true,
+      "detail": "drift=0.0000s over 2.5s"
+    },
+    {
+      "name": "screenshot phone-leg-10.png",
+      "pass": true,
+      "detail": "356523"
+    },
+    {
+      "name": "phone leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "phone leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 10 scrubbed to t≈4.95",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=4.900 (target 4.950)"
+    },
+    {
+      "name": "media screenshot phone-boundary-10-before-media.png",
+      "pass": true,
+      "detail": "1654095"
+    },
+    {
+      "name": "phone leg 11 cue",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "phone leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "phone leg 11 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 11 scrubbed to t≈0.05",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=0.050 (target 0.050)"
+    },
+    {
+      "name": "media screenshot phone-boundary-10-after-media.png",
+      "pass": true,
+      "detail": "1670245"
+    },
+    {
+      "name": "phone boundary continuity 10→11",
+      "pass": true,
+      "detail": "raw=2.6, edge=8.4"
+    },
+    {
+      "name": "phone leg 20 cue",
+      "pass": true,
+      "detail": "Proof, Vault, Return"
+    },
+    {
+      "name": "phone leg 20 floor poster",
+      "pass": true,
+      "detail": "kf-20.jpg"
+    },
+    {
+      "name": "phone leg 20 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 20 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-020.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "screenshot phone-leg-20.png",
+      "pass": true,
+      "detail": "337075"
+    },
+    {
+      "name": "phone leg 05 cue",
+      "pass": true,
+      "detail": "A Cause Is Drawn"
+    },
+    {
+      "name": "phone leg 05 floor poster",
+      "pass": true,
+      "detail": "kf-05.jpg"
+    },
+    {
+      "name": "phone leg 05 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 05 scrubbed to t≈2.50",
+      "pass": true,
+      "detail": "DSN2-005.mp4 t=2.500 (target 2.500)"
+    },
+    {
+      "name": "screenshot phone-reverse-leg-05.png",
+      "pass": true,
+      "detail": "392958"
+    },
+    {
+      "name": "phone leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "phone leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 10 scrubbed to t≈1.20",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=1.200 (target 1.200)"
+    },
+    {
+      "name": "phone glow + picture planes present",
+      "pass": true,
+      "detail": "{'.depth-far': {'top': -243.3175048828125, 'left': -106.14877319335938}, '.film-frame': {'top': 0, 'left': 0}}"
+    },
+    {
+      "name": "screenshot phone-parallax-before.png",
+      "pass": true,
+      "detail": "317163"
+    },
+    {
+      "name": "phone leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "phone leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 10 scrubbed to t≈3.80",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=3.757 (target 3.800)"
+    },
+    {
+      "name": "phone planes travel at distinct rates",
+      "pass": true,
+      "detail": "{'.depth-far': 6.142822265625, '.film-frame': 0, 'relative': 6.14}"
+    },
+    {
+      "name": "phone scroll drives the clip clock",
+      "pass": true,
+      "detail": "t 1.20 -> 3.76 for Δp=0.026"
+    },
+    {
+      "name": "screenshot phone-parallax-depth.png",
+      "pass": true,
+      "detail": "261627"
+    },
+    {
+      "name": "leg 19 cue",
+      "pass": true,
+      "detail": "The Human Gate"
+    },
+    {
+      "name": "leg 19 floor poster",
+      "pass": true,
+      "detail": "kf-19.jpg"
+    },
+    {
+      "name": "leg 19 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone whole-film journey travel",
+      "pass": true,
+      "detail": "glow x-drift=25px, Δjourney=0.42"
+    },
+    {
+      "name": "phone weighted step spreads motion over frames",
+      "pass": true,
+      "detail": "pan=81 frames, clock=82 frames"
+    },
+    {
+      "name": "phone weighted step has no teleport",
+      "pass": true,
+      "detail": "largest pan=8.6%, clock=11.2% of step"
+    },
+    {
+      "name": "phone weighted step reaches 95% by 500ms",
+      "pass": true,
+      "detail": "remaining pan=1.8%, clock=3.1%"
+    },
+    {
+      "name": "phone weighted step approaches monotonically",
+      "pass": true,
+      "detail": "reverse pan=0.00%, clock=0.00%"
+    },
+    {
+      "name": "phone pan and film clock stay in lockstep",
+      "pass": true,
+      "detail": "50% crossing frames pan=22, clock=22"
+    },
+    {
+      "name": "phone camera glides after input stops",
+      "pass": true,
+      "detail": "moving post-stop frames=112"
+    },
+    {
+      "name": "phone glide settles within 0.5% of a leg",
+      "pass": true,
+      "detail": "final error=0.0000 leg"
+    },
+    {
+      "name": "phone camera loop parks when idle",
+      "pass": true,
+      "detail": "idle"
+    },
+    {
+      "name": "phone steady scroll has even per-frame pan",
+      "pass": true,
+      "detail": "max=0.00700, median=0.00460, ratio=1.52x"
+    },
+    {
+      "name": "phone chapters arrive and settle on parked edges",
+      "pass": true,
+      "detail": "{'even_arrive': 0.0, 'even_mid': 0.4961, 'even_settle': 1.0, 'odd_arrive': 1.0, 'odd_mid': 0.504, 'odd_settle': 0.0}"
+    },
+    {
+      "name": "phone chapter cross is centered at halfway",
+      "pass": true,
+      "detail": "{'even_arrive': 0.0, 'even_mid': 0.4961, 'even_settle': 1.0, 'odd_arrive': 1.0, 'odd_mid': 0.504, 'odd_settle': 0.0}"
+    },
+    {
+      "name": "phone large navigation jump snaps the camera",
+      "pass": true,
+      "detail": "journey frames=[0.125, 0.325, 0.325, 0.325], target=0.3250"
+    },
+    {
+      "name": "phone leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "phone leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 10 scrubbed to t≈0.75",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=0.750 (target 0.750)"
+    },
+    {
+      "name": "phone leg 10 cue",
+      "pass": true,
+      "detail": "The Chosen Light"
+    },
+    {
+      "name": "phone leg 10 floor poster",
+      "pass": true,
+      "detail": "kf-10.jpg"
+    },
+    {
+      "name": "phone leg 10 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 10 scrubbed to t≈4.25",
+      "pass": true,
+      "detail": "DSN2-010.mp4 t=4.185 (target 4.250)"
+    },
+    {
+      "name": "phone scroll pans the hidden width",
+      "pass": true,
+      "detail": "pan 1.00 -> 0.01 inside leg 10 (sweep 0.99)"
+    },
+    {
+      "name": "phone pan reaches the renderer",
+      "pass": true,
+      "detail": "object-position=0.82% 50% at pan=0.01"
+    },
+    {
+      "name": "phone leg 11 cue",
+      "pass": true,
+      "detail": "The Golden Thread"
+    },
+    {
+      "name": "phone leg 11 floor poster",
+      "pass": true,
+      "detail": "kf-11.jpg"
+    },
+    {
+      "name": "phone leg 11 film paused (scrub, not playback)",
+      "pass": true,
+      "detail": "paused=True"
+    },
+    {
+      "name": "phone leg 11 scrubbed to t≈0.05",
+      "pass": true,
+      "detail": "DSN2-011.mp4 t=0.025 (target 0.050)"
+    },
+    {
+      "name": "phone serpentine continuity at the join",
+      "pass": true,
+      "detail": "pan 0.008 -> 0.000 across 10→11"
+    },
+    {
+      "name": "phone FIN intact",
+      "pass": true,
+      "detail": "p=0.45 visible=1.00 top=744.9 bottom=818.9"
+    },
+    {
+      "name": "screenshot phone-credits.png",
+      "pass": true,
+      "detail": "67272"
+    },
+    {
+      "name": "phone zero play() attempts",
+      "pass": true,
+      "detail": "attempts=0"
+    },
+    {
+      "name": "console clean",
+      "pass": true,
+      "detail": "0 errors"
+    },
+    {
+      "name": "page exceptions",
+      "pass": true,
+      "detail": "0 exceptions"
+    }
+  ],
+  "failures": [],
+  "console_errors": [],
+  "console_warnings": [
+    "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE [http://127.0.0.1:4607/worlds/disney2/clips/DSN2-004.mp4]",
+    "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE [http://127.0.0.1:4607/worlds/disney2/clips/DSN2-005.mp4]"
+  ],
+  "page_errors": []
+}
