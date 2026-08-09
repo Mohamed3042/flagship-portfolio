@@ -255,6 +255,12 @@ class Verification:
             all(name not in classes for name in ("mode-scrub", "mode-chain", "mode-still")),
             classes,
         )
+        obsolete_controls = page.locator("#book .playbtn, #book .legrail").count()
+        self.check(
+            f"{label} obsolete control chrome removed",
+            obsolete_controls == 0,
+            f"elements={obsolete_controls}",
+        )
 
         self.set_progress(page, "#book", 0.462)
         self.wait_leg(page, 10, 0.25)
@@ -550,7 +556,13 @@ class Verification:
         page.wait_for_selector("#book.needs-tap", timeout=20_000)
         blocked = page.evaluate("window.__blockedPlayAttempts || 0")
         self.check("phone autoplay-block branch", blocked >= 1, f"blocked attempts={blocked}")
-        page.locator("#book .playbtn").click()
+        obsolete_controls = page.locator("#book .playbtn, #book .legrail").count()
+        self.check(
+            "phone blocked autoplay leaves artwork clean",
+            obsolete_controls == 0,
+            f"elements={obsolete_controls}",
+        )
+        page.touchscreen.tap(24, 150)
         page.wait_for_function("!document.querySelector('#book').classList.contains('needs-tap')")
         self.wait_leg(page, 1)
         page.wait_for_function(
@@ -560,7 +572,7 @@ class Verification:
             }""",
             timeout=20_000,
         )
-        self.check("phone tap starts playback", True, f"play attempts={page.evaluate('window.__playAttempts || 0')}")
+        self.check("phone story gesture starts playback", True, f"play attempts={page.evaluate('window.__playAttempts || 0')}")
         self.check_cover(page, "phone")
         self.screenshot(page, "phone-leg-01.png")
 

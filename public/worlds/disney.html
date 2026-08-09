@@ -110,17 +110,6 @@
   .film .caption{ z-index:9; }
   .film .caption .story{ font-family:var(--w-display); font-size:clamp(15px,1.9vw,21px); line-height:1.6;
     color:var(--w-ink); text-shadow:0 2px 22px rgba(0,0,0,.85); max-width:56ch; }
-  .film .legrail{ position:absolute; z-index:8; bottom:clamp(18px,4vh,40px); inset-inline-end:clamp(18px,6vw,84px);
-    display:flex; gap:6px; }
-  .film .legrail i{ width:6px; height:6px; border-radius:50%;
-    background:color-mix(in srgb, var(--w-ink) 26%, transparent); transition:background .3s, transform .3s; }
-  .film .legrail i.on{ background:var(--w-accent); transform:scale(1.3); }
-  .film .playbtn{ position:absolute; z-index:10; inset:0; margin:auto; width:86px; height:86px; border-radius:50%;
-    display:none; place-items:center; cursor:pointer; border:1px solid rgba(232,220,192,.5);
-    background:rgba(10,7,4,.55); color:var(--w-ink); backdrop-filter:blur(6px); }
-  .film .playbtn svg{ width:26px; height:26px; fill:currentColor; margin-inline-start:4px; }
-  .film.needs-tap .playbtn{ display:grid; }
-
   /* ————— acts styling ————— */
   .act{ position:relative; }
   .act .rule{ width:64px; height:1px; margin:18px auto 0; background:linear-gradient(90deg, transparent, var(--w-accent), transparent); }
@@ -332,9 +321,6 @@
     <div class="vig" aria-hidden="true"></div>
     <p class="chip"><span class="id">SHOT 01</span><span class="t">…</span></p>
     <p class="legno" aria-hidden="true">01</p>
-    <div class="legrail" aria-hidden="true"></div>
-    <button class="playbtn" type="button" aria-label="Play the tale"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-
     <figure class="legcap" data-clip="disney2/clips/DSN2-001.mp4" data-poster="disney2/posters/kf-01.jpg"
       data-act-en="Act I" data-act-ar="الفصل الأول" data-t-en="The Waiting Book" data-t-ar="الكتاب المنتظِر">
       <figcaption><span class="L en">One candle. One sealed volume. The room holds its breath.</span><span class="L ar">شمعةٌ واحدة. مجلّدٌ مختوم. الغرفة تحبس أنفاسها.</span></figcaption>
@@ -639,11 +625,9 @@
     const chipId = scene.querySelector('.chip .id');
     const chipT = scene.querySelector('.chip .t');
     const legno = scene.querySelector('.legno');
-    const rail = scene.querySelector('.legrail');
     const kick = document.getElementById('leg-kick');
     const title = document.getElementById('leg-title');
     const story = document.getElementById('leg-story');
-    const playbtn = scene.querySelector('.playbtn');
     const N = caps.length;
     if (!N || vids.length < 2) return;
     const LEGS = caps.map(c => ({
@@ -652,8 +636,6 @@
       tEn: c.dataset.tEn, tAr: c.dataset.tAr,
       html: c.querySelector('figcaption').innerHTML,
     }));
-    caps.forEach(() => rail.appendChild(document.createElement('i')));
-    const pips = [...rail.children];
     const isAr = () => document.documentElement.lang === 'ar';
 
     const solo = new URLSearchParams(location.search).has('solo');
@@ -711,7 +693,6 @@
       kick.innerHTML = '<span class="L en">' + L.actEn + ' · the paper theatre moves in depth</span><span class="L ar">' + L.actAr + ' · المسرح الورقي يتحرّك في العمق</span>';
       title.innerHTML = '<span class="L en">' + L.tEn + '</span><span class="L ar">' + L.tAr + '</span>';
       story.innerHTML = L.html;
-      pips.forEach((p, k) => p.classList.toggle('on', k === i));
       floor.src = L.poster;
       backdrop.src = L.poster;
       const s = slotFor(i);
@@ -739,9 +720,18 @@
       }
     }
 
-    playbtn.addEventListener('click', () => {
-      scene.classList.remove('needs-tap'); live = true; playSlot(slots[shown]);
-    });
+    const retryPlayback = () => {
+      if (!live) return;
+      scene.classList.remove('needs-tap');
+      playSlot(slots[shown]);
+    };
+    /* Autoplay policies differ across mobile webviews. A normal story gesture
+       retries the active clip synchronously, without covering the artwork in
+       media chrome. Pointer Events cover modern browsers; touch is the iOS
+       fallback and keydown preserves a keyboard route. */
+    addEventListener('pointerdown', retryPlayback, { capture:true, passive:true });
+    addEventListener('touchstart', retryPlayback, { capture:true, passive:true });
+    addEventListener('keydown', retryPlayback, { capture:true });
     scene.addEventListener('scene:live', () => {
       live = true; paint(); playSlot(slots[shown]);
     });
