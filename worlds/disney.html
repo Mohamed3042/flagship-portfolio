@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
-<meta name="description" content="Edition II — a dark cut-paper folktale scrubbed by scroll; every frame shown whole, nothing covering the picture, and the film moves only under your hand. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
+<meta name="description" content="Edition II — a dark cut-paper folktale, full-bleed: the scroll runs the film and pans across each frame's hidden width, and the picture moves only under your hand. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230f0b07"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23e8dcc0"/><path d="M15 7h2v18h-2z" fill="%23e2b13c"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=5">
 <style>
@@ -51,14 +51,14 @@
   .open .quill{ width:1px; height:44px; background:linear-gradient(var(--w-accent), transparent); animation:drip 2.2s ease-in-out infinite; }
   @keyframes drip{ 0%{transform:scaleY(.2); transform-origin:top} 55%{transform:scaleY(1)} 100%{transform:scaleY(.2); opacity:.2} }
 
-  /* ————— THE BOOK — the film, scrubbed by the hand.
-     Owner contract: NOTHING may cover a frame. The picture is contained
-     whole — every pixel of every frame visible on every screen — and the
-     parallax lives in the glow surround: the blurred far plane travels on
-     --journey (whole-film) and --depth (in-chapter) while the picture
-     itself only breathes vertically. One rule for phone and desktop.
-     --pic-h = the contained picture's height at the film's true aspect. ————— */
-  .film{ height:1900vh; --depth:-.5; --journey:0; --pic-h:min(100vh, 100vw * 624 / 1358); }
+  /* ————— THE BOOK — the film, scrubbed AND photographed by the hand.
+     Owner contract: full-bleed on every screen, nothing over the picture.
+     The frames are wider than the viewport, so the scroll is projector and
+     rostrum camera at once — inside each chapter the same hand that runs
+     the clock PANS across the frame's hidden width (--pan 0..1, serpentine:
+     odd chapters sweep back, so the camera never jumps at a join). One rule
+     for phone and desktop; the only words on the picture are the cue. ————— */
+  .film{ height:1900vh; --depth:-.5; --journey:0; --pan:.5; }
   .film .stage{ background:#070503; isolation:isolate; }
   .film .depth-far, .film .film-frame{ will-change:transform; pointer-events:none; }
   .film .depth-far{ position:absolute; inset:-16%; z-index:0; overflow:hidden;
@@ -68,27 +68,25 @@
     filter:blur(26px) brightness(.34) saturate(.85); opacity:.95; }
   .film .depth-far::after{ content:""; position:absolute; inset:0;
     background:radial-gradient(90% 74% at 50% 50%,rgba(226,177,60,.1),transparent 64%),rgba(7,5,3,.26); }
-  /* the movie — whole frame, contained, never covered */
-  .film .film-frame{ position:absolute; z-index:2; inset:0; overflow:hidden;
-    transform:translate3d(0,calc(var(--depth) * -8px),0); }
-  .film .floor, .film video{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+  /* the movie — full-bleed; the scroll pans what the screen cannot hold */
+  .film .film-frame{ position:absolute; z-index:2; inset:0; overflow:hidden; }
+  .film .floor, .film video{ position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; object-position:calc(var(--pan) * 100%) 50%; }
   .film .floor{ z-index:0; }
   .film video{ z-index:1; opacity:0; transition:opacity .3s ease; }
   .film video.on{ opacity:1; }
   .film .vig{ position:absolute; inset:0; z-index:5; pointer-events:none;
     background:radial-gradient(130% 110% at 50% 50%, transparent 58%, rgba(5,3,2,.6) 100%); }
   .film .legcap{ display:none; }
-  /* subtitle — the only words on the film; it rides the glow band under the
-     picture when there is room, and sits at the foot when there is not */
+  /* subtitle — one quiet focus at the foot of the picture, clear of the matte */
   .film .cue{ position:absolute; z-index:9; left:0; right:0;
-    /* under the picture when the glow band has room; on tight bands it rides
-       the picture's foot like a burned subtitle — always clear of the matte */
-    bottom:calc(max(clamp(22px, 4.2vh, 46px) + 14px, (100vh - var(--pic-h)) / 2 - 108px) + env(safe-area-inset-bottom, 0px));
+    bottom:calc(clamp(22px, 4.2vh, 46px) + 12px + env(safe-area-inset-bottom, 0px));
     text-align:center; padding:0 7vw; pointer-events:none; }
-  .film .cue .t{ display:block; font:700 10.5px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase;
-    color:var(--w-accent); opacity:.85; margin-bottom:10px; }
-  .film .cue .s{ display:block; font-family:var(--w-display); font-size:clamp(15px,1.8vw,21px); line-height:1.55;
-    color:var(--w-ink); text-shadow:0 2px 6px rgba(0,0,0,.9), 0 0 28px rgba(0,0,0,.8); margin:0 auto; max-width:64ch; }
+  .film .cue .t{ display:block; font:700 10px/1 var(--w-ui); letter-spacing:.28em; text-transform:uppercase;
+    color:var(--w-accent); opacity:.8; margin-bottom:7px; }
+  .film .cue .s{ display:block; font-family:var(--w-display); font-size:clamp(14px,1.7vw,19px); line-height:1.5;
+    color:color-mix(in srgb, var(--w-ink) 94%, transparent);
+    text-shadow:0 2px 6px rgba(0,0,0,.9), 0 0 28px rgba(0,0,0,.85); margin:0 auto; max-width:60ch; }
   .film .cue.swap .t, .film .cue.swap .s{ animation:cuein .5s ease both; }
   @keyframes cuein{ from{ opacity:0; transform:translateY(8px) } to{ opacity:1; transform:none } }
   /* ————— acts styling ————— */
@@ -233,7 +231,7 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="The Kingdom of Running Things — Edition II · The Parallax Cut, clean frame">v3.1 · II</span>
+    <span class="ver" title="The Kingdom of Running Things — Edition II · The Parallax Cut, rostrum camera">v3.2 · II</span>
     <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
   </div>
 </nav>
@@ -261,7 +259,7 @@
     <div class="card">
       <p class="kick"><span class="L en">World 03 · Edition II · 20 parallax-scroll WAN 2.7 chapters</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ٢٠ فصلاً من WAN 2.7 بتمريرٍ متعدّد الطبقات</span></p>
       <h1><span class="L en">The Kingdom of&nbsp;Running&nbsp;Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h1>
-      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty chapters, every frame shown whole — nothing ever covers the picture — floating in a candle-glow that drifts in depth as you travel. The film itself moves only under your hand: forward and reverse, never on its own.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. عشرون فصلاً تُعرَض صورتها كاملةً — لا شيء يغطّي الكادر أبدًا — وهي تطفو في توهّج شمعةٍ يسري في العمق مع مسيرك. والفيلم نفسه لا يتحرّك إلا بيدك: ذهابًا وإيابًا، ولا يجري وحده أبدًا.</span></p>
+      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty full-bleed chapters, each frame wider than your screen — so the scroll is projector and camera at once: it runs the film and pans across each frame's hidden width, and nothing ever covers the picture. The film itself moves only under your hand: forward and reverse, never on its own.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. عشرون فصلاً بملء الشاشة، وكل كادرٍ أعرض من شاشتك — فالتمرير آلة عرضٍ وكاميرا معًا: يُدير الفيلم ويجول عبر العرض الخفيّ لكل كادر، ولا شيء يغطّي الصورة أبدًا. والفيلم نفسه لا يتحرّك إلا بيدك: ذهابًا وإيابًا، ولا يجري وحده أبدًا.</span></p>
     </div>
     <div class="hintwrap"><div class="quill" aria-hidden="true"></div><p class="hint"><span class="L en">Scroll to open the book</span><span class="L ar">مرِّر لفتح الكتاب</span></p></div>
   </div>
@@ -269,7 +267,7 @@
 
 <!-- ============ ACT CARD ============ -->
 <section class="act">
-  <p class="no"><span class="L en">One journey · chapters 01–20 · the film obeys the hand, whole and uncovered</span><span class="L ar">رحلة واحدة · الفصول ٠١–٢٠ · الفيلم يُطيع اليد، كاملاً بلا حجاب</span></p>
+  <p class="no"><span class="L en">One journey · chapters 01–20 · full-bleed; the hand runs the clock and pans the frame</span><span class="L ar">رحلة واحدة · الفصول ٠١–٢٠ · بملء الشاشة؛ اليد تُدير الزمن وتجول في الكادر</span></p>
   <h2><span class="L en">The Book Wakes</span><span class="L ar">الكتاب يستيقظ</span></h2>
   <p><span class="L en">Cause precedes magic. The Maker touches, winds, and stamps — only then may ink, thread, and light respond.</span><span class="L ar">السبب يسبق السحر. الصانع يلمس ويلفّ ويختم — وعندها فقط يُسمح للحبر والخيط والضوء أن تستجيب.</span></p>
   <div class="rule"></div>
@@ -385,7 +383,7 @@
     <div class="caption">
       <p class="kick"><span class="L en">Twenty chapters · one playhead · now the code takes the thread</span><span class="L ar">عشرون فصلاً · رأس قراءةٍ واحد · والآن تأخذ الشيفرة الخيط</span></p>
       <h2><span class="L en">The film proves it. The code runs it.</span><span class="L ar">الفيلم يثبتها. والشيفرة تُديرها.</span></h2>
-      <p><span class="L en">Everything you just watched was generated shot-by-shot and shown whole — no overlay ever covered the picture — with one playhead in your hand: every frame arrived because you scrolled it into being, forward or reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما شاهدتَه للتوّ وُلِّد لقطةً بعد لقطة وعُرِض كاملاً — لم يغطِّ الكادرَ شيءٌ قط — برأس قراءةٍ واحد في يدك: فكل إطارٍ ظهر لأن تمريرك استدعاه، ذهابًا أو إيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
+      <p><span class="L en">Everything you just watched was generated shot-by-shot and shown full-bleed — no overlay ever covered the picture — while one playhead in your hand ran the clock and panned the hidden width of every frame, forward or reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما شاهدتَه للتوّ وُلِّد لقطةً بعد لقطة وعُرِض بملء الشاشة — لم يغطِّ الكادرَ شيءٌ قط — بينما رأسُ قراءةٍ واحد في يدك يُدير الزمن ويجول عبر العرض الخفيّ لكل كادر، ذهابًا أو إيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
     </div>
   </div>
 </section>
@@ -529,7 +527,7 @@
         <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
         <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · scrubbed by scroll, never autoplayed</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · تُفرَك بالتمرير ولا تعمل تلقائيًا أبدًا</span></dd>
         <dt><span class="L en">First edition</span><span class="L ar">الإصدار الأول</span></dt><dd><span class="L en">32 shots, retired to the archive</span><span class="L ar">٣٢ لقطة، أُحيلت إلى الأرشيف</span></dd>
-        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v6 · one scroll playhead · the frame shown whole, zero overlays</span><span class="L ar">cinema.js v6 · رأس قراءةٍ واحد بالتمرير · الكادر كاملاً بلا أي غطاء</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v6 · one scroll playhead · full-bleed serpentine pan, zero overlays</span><span class="L ar">cinema.js v6 · رأس قراءةٍ واحد بالتمرير · جولان متعرّج بملء الشاشة، بلا أي غطاء</span></dd>
         <dt><span class="L en">Kingdom, gate, lanterns, vault</span><span class="L ar">المملكة والبوّابة والفوانيس والخزانة</span></dt><dd><span class="L en">Rendered live, in code — no footage</span><span class="L ar">تُعرَض حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
         <dt><span class="L en">Production bible</span><span class="L ar">كتاب الإنتاج</span></dt><dd><span class="L en">144 scripted clips · 112 unproduced</span><span class="L ar">١٤٤ مقطعًا مكتوبًا · ١١٢ لم تُنتَج</span></dd>
         <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
@@ -662,6 +660,10 @@
       const i = Math.floor(g), f = g - i;
       scene.style.setProperty('--depth', (f - .5).toFixed(4));
       scene.style.setProperty('--journey', p.toFixed(5));
+      /* rostrum camera: the frame is wider than the screen, so the same hand
+         that runs the clock pans across the hidden width — serpentine, so
+         chapter joins land at the same edge and the camera never jumps */
+      scene.style.setProperty('--pan', (i % 2 === 0 ? f : 1 - f).toFixed(4));
       setLeg(i);
       const s = slotFor(i);
       show(s);
