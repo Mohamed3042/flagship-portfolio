@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
-<meta name="description" content="Edition II — a dark cut-paper folktale scrubbed by scroll through four parallax depths; the film moves only under your hand, never on its own. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
+<meta name="description" content="Edition II — a dark cut-paper folktale scrubbed by scroll; every frame shown whole, nothing covering the picture, and the film moves only under your hand. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230f0b07"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23e8dcc0"/><path d="M15 7h2v18h-2z" fill="%23e2b13c"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=5">
 <style>
@@ -51,80 +51,46 @@
   .open .quill{ width:1px; height:44px; background:linear-gradient(var(--w-accent), transparent); animation:drip 2.2s ease-in-out infinite; }
   @keyframes drip{ 0%{transform:scaleY(.2); transform-origin:top} 55%{transform:scaleY(1)} 100%{transform:scaleY(.2); opacity:.2} }
 
-  /* ————— THE BOOK — the film, scrubbed by the hand, through four paper depths.
-     --journey = whole-film progress 0..1 (long parallax travel);
-     --depth   = position inside the current chapter, -0.5..+0.5 (breathing). ————— */
-  .film{ height:1900vh; --depth:-.5; --journey:0; }
+  /* ————— THE BOOK — the film, scrubbed by the hand.
+     Owner contract: NOTHING may cover a frame. The picture is contained
+     whole — every pixel of every frame visible on every screen — and the
+     parallax lives in the glow surround: the blurred far plane travels on
+     --journey (whole-film) and --depth (in-chapter) while the picture
+     itself only breathes vertically. One rule for phone and desktop.
+     --pic-h = the contained picture's height at the film's true aspect. ————— */
+  .film{ height:1900vh; --depth:-.5; --journey:0; --pic-h:min(100vh, 100vw * 624 / 1358); }
   .film .stage{ background:#070503; isolation:isolate; }
-  .film .depth-far, .film .depth-near, .film .depth-front, .film .film-frame{
-    will-change:transform; pointer-events:none;
-  }
-  .film .depth-far{ position:absolute; inset:-12%; z-index:0; overflow:hidden;
-    transform:translate3d(calc(var(--depth) * -14px + (var(--journey) - .5) * -46px),
-                          calc(var(--depth) * -14px + (var(--journey) - .5) * -22px),0) scale(1.14); }
+  .film .depth-far, .film .film-frame{ will-change:transform; pointer-events:none; }
+  .film .depth-far{ position:absolute; inset:-16%; z-index:0; overflow:hidden;
+    transform:translate3d(calc(var(--depth) * -18px + (var(--journey) - .5) * -80px),
+                          calc(var(--depth) * -12px),0) scale(1.2); }
   .film .depth-far img{ width:100%; height:100%; object-fit:cover; display:block;
-    filter:blur(22px) brightness(.4) saturate(.86); opacity:.95; }
+    filter:blur(26px) brightness(.34) saturate(.85); opacity:.95; }
   .film .depth-far::after{ content:""; position:absolute; inset:0;
-    background:radial-gradient(90% 74% at 50% 40%,rgba(226,177,60,.12),transparent 64%),rgba(7,5,3,.24); }
-  /* the movie — full-bleed, borderless, the whole screen is the page */
-  .film .film-frame{ position:absolute; z-index:2; inset:0; overflow:hidden; background:#090603;
-    transform:translate3d(0,calc(var(--depth) * -10px),0) scale(calc(1.02 + var(--depth) * var(--depth) * .05)); }
-  .film .floor, .film video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    background:radial-gradient(90% 74% at 50% 50%,rgba(226,177,60,.1),transparent 64%),rgba(7,5,3,.26); }
+  /* the movie — whole frame, contained, never covered */
+  .film .film-frame{ position:absolute; z-index:2; inset:0; overflow:hidden;
+    transform:translate3d(0,calc(var(--depth) * -8px),0); }
+  .film .floor, .film video{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
   .film .floor{ z-index:0; }
   .film video{ z-index:1; opacity:0; transition:opacity .3s ease; }
   .film video.on{ opacity:1; }
-  .film .depth-near{ position:absolute; inset:-8%; z-index:3;
-    transform:translate3d(calc(var(--depth) * -34px + (var(--journey) - .5) * -120px),
-                          calc(var(--depth) * -64px),0); }
-  .film .depth-near .ridge{ position:absolute; inset:auto -8% -9%; height:34%; display:block;
-    background:linear-gradient(180deg,#24170e 0%,#120b07 72%);
-    clip-path:polygon(0 58%,8% 45%,15% 62%,24% 38%,34% 59%,45% 31%,55% 57%,67% 39%,77% 63%,88% 42%,100% 58%,100% 100%,0 100%);
-    filter:drop-shadow(0 -14px 20px rgba(0,0,0,.45)); opacity:.9;
-    transform:translateY(calc(6% + var(--journey) * 5%)); }
-  .film .depth-near .bough{ position:absolute; display:block; width:34%; height:24%; top:9%;
-    border-top:10px solid #1a1009; border-radius:50%; filter:drop-shadow(0 6px 8px rgba(0,0,0,.5)); opacity:.85; }
-  .film .depth-near .bough.left{ left:-9%; transform:rotate(17deg); }
-  .film .depth-near .bough.right{ right:-9%; transform:rotate(-17deg); }
-  .film .depth-front{ position:absolute; inset:-12%; z-index:4;
-    transform:translate3d(calc(var(--depth) * 56px + (var(--journey) - .5) * 210px),
-                          calc(var(--depth) * -120px),0); }
-  .film .depth-front .wing{ position:absolute; top:0; bottom:0; width:20%; display:block;
-    background:linear-gradient(90deg,#060403 0%,#100905 72%,transparent 100%); opacity:.9; }
-  .film .depth-front .wing.left{ left:0;
-    clip-path:polygon(0 0,77% 0,45% 11%,82% 24%,48% 38%,88% 51%,50% 65%,76% 81%,41% 100%,0 100%); }
-  .film .depth-front .wing.right{ right:0; transform:scaleX(-1);
-    clip-path:polygon(0 0,77% 0,45% 11%,82% 24%,48% 38%,88% 51%,50% 65%,76% 81%,41% 100%,0 100%); }
-  .film .depth-front .glint{ position:absolute; width:5px; height:5px; border-radius:50%; display:block;
-    background:#ffe49a; box-shadow:0 0 10px 4px rgba(226,177,60,.5); opacity:.7;
-    transform:translateY(calc(var(--journey) * -60px)); }
-  .film .depth-front .g1{ left:14%; top:26%; }
-  .film .depth-front .g2{ right:12%; top:45%; }
-  .film .depth-front .g3{ left:21%; bottom:18%; }
   .film .vig{ position:absolute; inset:0; z-index:5; pointer-events:none;
-    background:radial-gradient(118% 96% at 50% 42%, transparent 56%, rgba(5,3,2,.66) 100%); }
+    background:radial-gradient(130% 110% at 50% 50%, transparent 58%, rgba(5,3,2,.6) 100%); }
   .film .legcap{ display:none; }
-  /* subtitle — the only words on the film: a cue line, like burned captions */
+  /* subtitle — the only words on the film; it rides the glow band under the
+     picture when there is room, and sits at the foot when there is not */
   .film .cue{ position:absolute; z-index:9; left:0; right:0;
-    bottom:max(34px, calc(20px + env(safe-area-inset-bottom))); text-align:center; padding:0 7vw;
-    pointer-events:none; }
+    /* under the picture when the glow band has room; on tight bands it rides
+       the picture's foot like a burned subtitle — always clear of the matte */
+    bottom:calc(max(clamp(22px, 4.2vh, 46px) + 14px, (100vh - var(--pic-h)) / 2 - 108px) + env(safe-area-inset-bottom, 0px));
+    text-align:center; padding:0 7vw; pointer-events:none; }
   .film .cue .t{ display:block; font:700 10.5px/1 var(--w-ui); letter-spacing:.3em; text-transform:uppercase;
     color:var(--w-accent); opacity:.85; margin-bottom:10px; }
   .film .cue .s{ display:block; font-family:var(--w-display); font-size:clamp(15px,1.8vw,21px); line-height:1.55;
     color:var(--w-ink); text-shadow:0 2px 6px rgba(0,0,0,.9), 0 0 28px rgba(0,0,0,.8); margin:0 auto; max-width:64ch; }
   .film .cue.swap .t, .film .cue.swap .s{ animation:cuein .5s ease both; }
   @keyframes cuein{ from{ opacity:0; transform:translateY(8px) } to{ opacity:1; transform:none } }
-  /* portrait: the reel keeps its true aspect as a floating cinema strip;
-     the blurred far plane fills the rest — same system, same planes */
-  @media (orientation:portrait){
-    .film .film-frame{ inset:auto 0; top:50%; height:auto; aspect-ratio:1358/624;
-      transform:translate3d(0,calc(-50% + var(--depth) * -10px),0) scale(calc(1.02 + var(--depth) * var(--depth) * .05));
-      border-block:1px solid rgba(226,177,60,.26);
-      box-shadow:0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(226,177,60,.08); }
-    .film .depth-far img{ filter:blur(28px) brightness(.28) saturate(.8); }
-    .film .depth-front .wing{ width:19%; opacity:.8; }
-    .film .vig{ background:radial-gradient(120% 70% at 50% 50%, transparent 40%, rgba(5,3,2,.8) 100%); }
-    .film .cue{ bottom:auto; top:calc(50% + min(50vw * 624 / 1358, 50vh) + 26px); }
-  }
   /* ————— acts styling ————— */
   .act{ position:relative; }
   .act .rule{ width:64px; height:1px; margin:18px auto 0; background:linear-gradient(90deg, transparent, var(--w-accent), transparent); }
@@ -267,7 +233,7 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="The Kingdom of Running Things — Edition II · The Parallax Cut">v3.0 · II</span>
+    <span class="ver" title="The Kingdom of Running Things — Edition II · The Parallax Cut, clean frame">v3.1 · II</span>
     <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
   </div>
 </nav>
@@ -295,7 +261,7 @@
     <div class="card">
       <p class="kick"><span class="L en">World 03 · Edition II · 20 parallax-scroll WAN 2.7 chapters</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ٢٠ فصلاً من WAN 2.7 بتمريرٍ متعدّد الطبقات</span></p>
       <h1><span class="L en">The Kingdom of&nbsp;Running&nbsp;Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h1>
-      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty chapters cross four physical depths: distant light, living film, rising terrain, and foreground leaves. Scroll and the world separates into space; the film itself moves only under your hand — forward and reverse, never on its own.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. تعبر عشرون فصلاً أربعة أعماقٍ مادية: ضوء بعيد، وفيلم حيّ، وأرض صاعدة، وأوراق في المقدّمة. مرِّر فتتباعد طبقات العالم في الفضاء؛ والفيلم نفسه لا يتحرّك إلا بيدك — ذهابًا وإيابًا، ولا يجري وحده أبدًا.</span></p>
+      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty chapters, every frame shown whole — nothing ever covers the picture — floating in a candle-glow that drifts in depth as you travel. The film itself moves only under your hand: forward and reverse, never on its own.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. عشرون فصلاً تُعرَض صورتها كاملةً — لا شيء يغطّي الكادر أبدًا — وهي تطفو في توهّج شمعةٍ يسري في العمق مع مسيرك. والفيلم نفسه لا يتحرّك إلا بيدك: ذهابًا وإيابًا، ولا يجري وحده أبدًا.</span></p>
     </div>
     <div class="hintwrap"><div class="quill" aria-hidden="true"></div><p class="hint"><span class="L en">Scroll to open the book</span><span class="L ar">مرِّر لفتح الكتاب</span></p></div>
   </div>
@@ -303,7 +269,7 @@
 
 <!-- ============ ACT CARD ============ -->
 <section class="act">
-  <p class="no"><span class="L en">One journey · chapters 01–20 · four depths move with the hand</span><span class="L ar">رحلة واحدة · الفصول ٠١–٢٠ · أربعة أعماق تتحرّك مع اليد</span></p>
+  <p class="no"><span class="L en">One journey · chapters 01–20 · the film obeys the hand, whole and uncovered</span><span class="L ar">رحلة واحدة · الفصول ٠١–٢٠ · الفيلم يُطيع اليد، كاملاً بلا حجاب</span></p>
   <h2><span class="L en">The Book Wakes</span><span class="L ar">الكتاب يستيقظ</span></h2>
   <p><span class="L en">Cause precedes magic. The Maker touches, winds, and stamps — only then may ink, thread, and light respond.</span><span class="L ar">السبب يسبق السحر. الصانع يلمس ويلفّ ويختم — وعندها فقط يُسمح للحبر والخيط والضوء أن تستجيب.</span></p>
   <div class="rule"></div>
@@ -317,13 +283,6 @@
       <img class="floor" src="disney2/posters/kf-01.jpg" alt="" aria-hidden="true">
       <video muted playsinline preload="auto"></video>
       <video muted playsinline preload="auto"></video>
-    </div>
-    <div class="depth-near" aria-hidden="true">
-      <i class="bough left"></i><i class="bough right"></i><i class="ridge"></i>
-    </div>
-    <div class="depth-front" aria-hidden="true">
-      <i class="wing left"></i><i class="wing right"></i>
-      <i class="glint g1"></i><i class="glint g2"></i><i class="glint g3"></i>
     </div>
     <div class="vig" aria-hidden="true"></div>
     <figure class="legcap" data-clip="disney2/clips/DSN2-001.mp4" data-poster="disney2/posters/kf-01.jpg"
@@ -424,9 +383,9 @@
     </svg>
     <div class="paperize" aria-hidden="true"></div>
     <div class="caption">
-      <p class="kick"><span class="L en">Twenty chapters · four depths · now the code takes the thread</span><span class="L ar">عشرون فصلاً · أربعة أعماق · والآن تأخذ الشيفرة الخيط</span></p>
+      <p class="kick"><span class="L en">Twenty chapters · one playhead · now the code takes the thread</span><span class="L ar">عشرون فصلاً · رأس قراءةٍ واحد · والآن تأخذ الشيفرة الخيط</span></p>
       <h2><span class="L en">The film proves it. The code runs it.</span><span class="L ar">الفيلم يثبتها. والشيفرة تُديرها.</span></h2>
-      <p><span class="L en">Everything you just watched was generated shot-by-shot, then staged as four paper depths with one playhead in your hand — every frame arrived because you scrolled it into being, forward or reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما شاهدتَه للتوّ وُلِّد لقطةً بعد لقطة، ثم نُظِّم في أربعة أعماقٍ ورقية برأس قراءةٍ واحد في يدك — فكل إطارٍ ظهر لأن تمريرك استدعاه، ذهابًا أو إيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
+      <p><span class="L en">Everything you just watched was generated shot-by-shot and shown whole — no overlay ever covered the picture — with one playhead in your hand: every frame arrived because you scrolled it into being, forward or reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما شاهدتَه للتوّ وُلِّد لقطةً بعد لقطة وعُرِض كاملاً — لم يغطِّ الكادرَ شيءٌ قط — برأس قراءةٍ واحد في يدك: فكل إطارٍ ظهر لأن تمريرك استدعاه، ذهابًا أو إيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
     </div>
   </div>
 </section>
@@ -570,7 +529,7 @@
         <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
         <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · scrubbed by scroll, never autoplayed</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · تُفرَك بالتمرير ولا تعمل تلقائيًا أبدًا</span></dd>
         <dt><span class="L en">First edition</span><span class="L ar">الإصدار الأول</span></dt><dd><span class="L en">32 shots, retired to the archive</span><span class="L ar">٣٢ لقطة، أُحيلت إلى الأرشيف</span></dd>
-        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v6 · one scroll playhead · four measured CSS depth planes</span><span class="L ar">cinema.js v6 · رأس قراءةٍ واحد بالتمرير · أربع طبقات عمق CSS مقيسة</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v6 · one scroll playhead · the frame shown whole, zero overlays</span><span class="L ar">cinema.js v6 · رأس قراءةٍ واحد بالتمرير · الكادر كاملاً بلا أي غطاء</span></dd>
         <dt><span class="L en">Kingdom, gate, lanterns, vault</span><span class="L ar">المملكة والبوّابة والفوانيس والخزانة</span></dt><dd><span class="L en">Rendered live, in code — no footage</span><span class="L ar">تُعرَض حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
         <dt><span class="L en">Production bible</span><span class="L ar">كتاب الإنتاج</span></dt><dd><span class="L en">144 scripted clips · 112 unproduced</span><span class="L ar">١٤٤ مقطعًا مكتوبًا · ١١٢ لم تُنتَج</span></dd>
         <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
