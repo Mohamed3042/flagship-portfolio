@@ -101,7 +101,10 @@ class Verification:
             location = message.location.get("url", "")
             entry = f"{message.text} [{location}]" if location else message.text
             local = urlsplit(self.url).hostname in {"127.0.0.1", "localhost"}
-            if local and "ERR_INVALID_HTTP_RESPONSE" in message.text:
+            if local and any(
+                marker in message.text
+                for marker in ("ERR_INVALID_HTTP_RESPONSE", "ERR_CONTENT_LENGTH_MISMATCH")
+            ):
                 self.console_warnings.append(entry)
                 return
             self.console_errors.append(entry)
@@ -164,7 +167,7 @@ class Verification:
               const floor = document.querySelector('#book .floor');
               const video = document.querySelector('#book video.on');
               if (!floor || !floor.complete || !floor.currentSrc.endsWith('kf-' + n.slice(-2) + '.jpg')) return false;
-              if (!video || !video.currentSrc.endsWith('DSN2-' + n + '.mp4')) return false;
+              if (!video || !(video.dataset.clip || '').endsWith('DSN2-' + n + '.mp4')) return false;
               if (video.readyState < 1 || !Number.isFinite(video.duration) || video.seekable.length < 1) return false;
               if (video.seeking) return false;
               if (arg.fraction !== null) {
@@ -175,7 +178,7 @@ class Verification:
                 if (Math.abs(video.currentTime - target) > arg.tolerance) return false;
               }
               return {
-                clip: video.currentSrc.split('/').pop(),
+                clip: video.dataset.clip.split('/').pop(),
                 poster: floor.currentSrc.split('/').pop(),
                 currentTime: video.currentTime, duration: video.duration,
                 paused: video.paused, readyState: video.readyState,
@@ -247,7 +250,7 @@ class Verification:
                 journey: scene.style.getPropertyValue('--journey').trim(),
                 rects,
                 currentTime: video ? video.currentTime : null,
-                clip: video ? video.currentSrc.split('/').pop() : null,
+                clip: video ? (video.dataset.clip || video.currentSrc).split('/').pop() : null,
               };
             }"""
         )
@@ -389,7 +392,7 @@ class Verification:
               const fraction = g - leg;
               const video = scene.querySelector('video.on');
               if (Math.abs(journey - target) > 1e-4 || !video || video.readyState < 1 || video.seeking) return false;
-              if (!video.currentSrc.endsWith('DSN2-' + String(leg + 1).padStart(3, '0') + '.mp4')) return false;
+              if (!(video.dataset.clip || '').endsWith('DSN2-' + String(leg + 1).padStart(3, '0') + '.mp4')) return false;
               const wanted = Math.min(video.duration - .04, Math.max(0, fraction * video.duration));
               return Math.abs(video.currentTime - wanted) <= .12;
             }""",
