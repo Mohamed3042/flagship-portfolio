@@ -236,3 +236,19 @@ change in physics at leg 07 rather than as a picture of an explosion.
   on the LIVE URL; the suite goes red against the retired edition (fail-first).
 - Live: main `b1942ab`, gh-pages `697a4da`. Proof frames:
   `Downloads/uberstrike handoff/disney-parallax-cut-proof/`.
+
+## 2026-08-09 — Disney v3.2: ROSTRUM CAMERA (owner direction) + clip-06 story break found
+- Full-bleed everywhere (object-fit:cover). The frames are wider than the screen, so
+  the scroll pans each chapter's hidden width via `--pan` → `object-position`,
+  serpentine (odd chapters sweep back) so joins land on the same edge — projector and
+  camera in one hand. Cue tightened to one quiet focus at the foot, clear of the matte.
+  Suite adds pan-sweep, renderer object-position, serpentine join-continuity, cover
+  and cue-focus gates: 203 checks green on the LIVE URL.
+- Full-chain audit (all 20 clips, first frame vs own keyframe + last frame vs next):
+  every endpoint clean (max join diff 14.8, threshold 16), zero cross-slot matches.
+  Mid-clip sweep (t=1.2/2.5/3.8 contact sheets) found ONE story break the endpoint
+  gates cannot see: **DSN2-006 detours to the closed clasped book (~1.8–4.3 s)** —
+  Act I imagery inside the ink chapter; caught live by the owner. All other 19 clips
+  are on-story (closed book in 19/20 is the scripted seal). Regen package with a
+  book-forbidding prompt, upload rules, CRF16/g6 finalize line and a mid-clip gate:
+  `Downloads/kingdom-run/REGEN-006.md` (10 credits).
