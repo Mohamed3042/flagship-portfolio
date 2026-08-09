@@ -43,7 +43,9 @@ EXPECTED_TITLES = {
 
 FORBIDDEN_CHROME = (
     "#book .chip, #book .legno, #book .playbtn, #book .legrail, "
-    ".ticks, .hud, [data-rail], [data-theater], .district"
+    ".ticks, .hud, [data-rail], [data-theater], .district, "
+    "#book .depth-near, #book .depth-front, #book .wing, #book .ridge, "
+    "#book .bough, #book .glint"
 )
 
 
@@ -232,7 +234,7 @@ class Verification:
     def depth_snapshot(self, page: Page) -> dict[str, object]:
         return page.locator("#book").evaluate(
             """scene => {
-              const names = ['.depth-far', '.film-frame', '.depth-near', '.depth-front'];
+              const names = ['.depth-far', '.film-frame'];
               const rects = Object.fromEntries(names.map(name => {
                 const el = scene.querySelector(name);
                 if (!el) return [name, null];
@@ -250,14 +252,15 @@ class Verification:
         )
 
     def check_parallax_travel(self, page: Page, label: str) -> None:
-        """Planes must move with scroll, most at the front, while the film
-        frame stays the steady anchor — and the film time must move WITH the
-        same scroll (scrub), unlike the retired autoplay edition."""
+        """The glow plane and the picture must move at DIFFERENT rates on the
+        same scroll (that difference is the parallax), the glow must drift
+        across the whole film, and the film time must move WITH the same
+        scroll — unlike the retired autoplay edition."""
         self.set_progress(page, "#book", 0.462)
         first_info = self.wait_leg(page, 10, 0.24, label=label)
         first = self.depth_snapshot(page)
         planes = all(first["rects"].values())
-        self.check(f"{label} four depth planes", planes, first["rects"])
+        self.check(f"{label} glow + picture planes present", planes, first["rects"])
         if not planes:
             return
         self.screenshot(page, f"{label}-parallax-before.png")
@@ -269,13 +272,14 @@ class Verification:
             name: abs(second["rects"][name]["top"] - first["rects"][name]["top"])
             for name in first["rects"]
         }
-        ordered = (
-            deltas[".depth-far"] >= 3
-            and deltas[".film-frame"] <= deltas[".depth-far"] + 1
-            and deltas[".depth-near"] >= deltas[".depth-far"] * 2
-            and deltas[".depth-front"] >= deltas[".depth-near"] * 1.4
+        relative = abs(deltas[".depth-far"] - deltas[".film-frame"])
+        moving = (
+            deltas[".depth-far"] >= 4
+            and deltas[".film-frame"] >= 2
+            and relative >= 2
         )
-        self.check(f"{label} ordered parallax travel", ordered, deltas)
+        self.check(f"{label} planes travel at distinct rates", moving,
+                   {**deltas, "relative": round(relative, 2)})
         scrub_delta = abs(float(second_info["currentTime"]) - float(first_info["currentTime"]))
         self.check(
             f"{label} scroll drives the clip clock",
@@ -284,19 +288,16 @@ class Verification:
         )
         self.screenshot(page, f"{label}-parallax-depth.png")
 
-        far_left_a = first["rects"][".depth-far"]["left"]
         self.set_progress(page, "#book", 0.912)
         self.wait_leg(page, 19)
         long_run = self.depth_snapshot(page)
-        long_drift = abs(long_run["rects"][".depth-front"]["left"] - second["rects"][".depth-front"]["left"])
+        far_drift = abs(long_run["rects"][".depth-far"]["left"] - second["rects"][".depth-far"]["left"])
         journey_moved = abs(float(long_run["journey"] or 0) - float(second["journey"] or 0))
         self.check(
             f"{label} whole-film journey travel",
-            long_drift >= 40 and journey_moved >= 0.3,
-            f"front plane x-drift={long_drift:.0f}px, Δjourney={journey_moved:.2f}",
+            far_drift >= 20 and journey_moved >= 0.3,
+            f"glow x-drift={far_drift:.0f}px, Δjourney={journey_moved:.2f}",
         )
-        far_drift = abs(long_run["rects"][".depth-far"]["left"] - far_left_a)
-        self.check(f"{label} far plane journey drift", far_drift >= 8, f"{far_drift:.1f}px")
 
     def check_chrome_fade(self, page: Page, label: str) -> None:
         self.set_progress(page, "#book", 0.3)
@@ -327,7 +328,10 @@ class Verification:
         page.evaluate("document.querySelector('.chrome a').blur()")
         self.check(f"{label} chrome returns for keyboard focus", focused, f"opacity={focus_opacity}")
 
-    def check_frame_geometry(self, page: Page, label: str, portrait: bool) -> None:
+    def check_frame_geometry(self, page: Page, label: str) -> None:
+        """Clean-frame contract, one rule for every screen: the picture is
+        CONTAINED — its whole area visible, centered, nothing on top of it —
+        and the cue sits under the picture whenever the glow band has room."""
         values = page.locator("#book").evaluate(
             """scene => {
               const stage = scene.querySelector('.film-frame');
@@ -335,43 +339,48 @@ class Verification:
               const cue = scene.querySelector('#cue');
               const sr = stage.getBoundingClientRect();
               const cr = cue.getBoundingClientRect();
+              const naturalW = video.videoWidth || 1358, naturalH = video.videoHeight || 624;
+              const scale = Math.min(sr.width / naturalW, sr.height / naturalH);
+              const picW = naturalW * scale, picH = naturalH * scale;
+              const picLeft = sr.left + (sr.width - picW) / 2;
+              const picTop = sr.top + (sr.height - picH) / 2;
               return {
-                frame: [sr.left, sr.top, sr.width, sr.height],
-                vw: innerWidth, vh: innerHeight,
                 fit: getComputedStyle(video).objectFit,
-                cueTop: cr.top, cueVisible: cr.height > 4 && cr.bottom <= innerHeight + 1,
+                pic: [picLeft, picTop, picW, picH],
+                vw: innerWidth, vh: innerHeight,
+                cueTop: cr.top, cueBottom: cr.bottom, cueHeight: cr.height,
               };
             }"""
         )
-        left, top, width, height = values["frame"]
-        if portrait:
-            aspect = width / height if height else 0
-            in_band = top > 0 and top + height < values["vh"]
-            geometry = (
-                values["vw"] - 2 <= width <= values["vw"] * 1.06 + 2   # breathing scale
-                and abs(aspect - 1358 / 624) <= 0.05
-                and in_band
-                and values["cueVisible"]
-                and values["cueTop"] >= top + height - 4
-            )
+        pic_left, pic_top, pic_w, pic_h = values["pic"]
+        vw, vh = values["vw"], values["vh"]
+        expected_w = min(vw, vh * 1358 / 624)
+        whole = (
+            values["fit"] == "contain"
+            and abs(pic_w - expected_w) <= 4
+            and pic_left >= -2 and pic_top >= -3
+            and pic_left + pic_w <= vw + 2 and pic_top + pic_h <= vh + 3
+            and abs(pic_left - (vw - pic_w) / 2) <= 4
+        )
+        self.check(
+            f"{label} picture shown whole and centered",
+            whole,
+            f"pic={pic_w:.0f}x{pic_h:.0f}@{pic_left:.0f},{pic_top:.0f} vs viewport {vw}x{vh}",
+        )
+        matte = min(46.0, max(22.0, vh * 0.042))
+        clear_of_matte = values["cueHeight"] > 4 and values["cueBottom"] <= vh - matte + 2
+        self.check(
+            f"{label} cue clear of the letterbox matte",
+            clear_of_matte,
+            f"cueBottom={values['cueBottom']:.0f} matteTop={vh - matte:.0f}",
+        )
+        bottom_band = vh - (pic_top + pic_h)
+        if bottom_band >= 200:
+            below = values["cueTop"] >= pic_top + pic_h - 4
             self.check(
-                f"{label} portrait reel strip (true aspect, cue below)",
-                geometry,
-                f"frame={width:.0f}x{height:.0f}@y{top:.0f} aspect={aspect:.3f} cueTop={values['cueTop']:.0f}",
-            )
-        else:
-            # the frame breathes (scale 1.02..1.03), so grade COVERAGE: its
-            # rect must fully cover the viewport with no gap on any side
-            geometry = (
-                left <= 2 and top <= 2
-                and left + width >= values["vw"] - 2 and top + height >= values["vh"] - 2
-                and width <= values["vw"] * 1.06 + 4
-                and values["fit"] == "cover"
-            )
-            self.check(
-                f"{label} full-bleed frame covers viewport",
-                geometry,
-                f"frame={left:.0f},{top:.0f} {width:.0f}x{height:.0f} vs {values['vw']}x{values['vh']} fit={values['fit']}",
+                f"{label} cue rides the band under the picture",
+                below,
+                f"cueTop={values['cueTop']:.0f} pictureBottom={pic_top + pic_h:.0f} band={bottom_band:.0f}",
             )
 
     def check_truth_copy(self, page: Page) -> None:
@@ -466,7 +475,7 @@ class Verification:
         film times, forward AND reverse, with the film always paused."""
         self.set_progress(page, "#book", 0.025)
         self.wait_leg(page, 1, 0.5, label=label)
-        self.check_frame_geometry(page, label, portrait=label.startswith("phone"))
+        self.check_frame_geometry(page, label)
         self.screenshot(page, f"{label}-leg-01.png")
 
         self.set_progress(page, "#book", 0.125)
