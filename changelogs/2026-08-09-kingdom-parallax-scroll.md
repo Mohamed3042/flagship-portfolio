@@ -4,6 +4,21 @@ Released 2026-08-09: [open the live parallax story](https://mohamed3042.github.i
 
 This release supersedes Edition II's scrub, coarse-pointer chain, and reduced-motion still modes. The story now has one full-motion parallax experience on desktop, phone, and every motion-preference setting.
 
+## Phone control-chrome correction
+
+Released later on 2026-08-09 from a marked real-phone screenshot.
+
+- **VERIFIED** — The central autoplay play button and 20-dot chapter rail were removed from the DOM and CSS on both phone and desktop. `SHOT 01–20` remains the single chapter indicator.
+- **VERIFIED** — If a mobile webview blocks autoplay, the artwork stays clean. A normal pointer, touch, or keyboard gesture retries the active clip synchronously instead of requiring dedicated media chrome.
+- **VERIFIED** — The fail-first phone gate reproduced `playDisplay=grid`, `railDisplay=flex`, and a persistent `needs-tap` state at shot 20. The same gate now reports both controls `absent` before and after a normal story tap, with `needs-tap` cleared.
+- Source correction: [`876eb78`](https://github.com/Mohamed3042/flagship-portfolio/commit/876eb78).
+- GitHub Pages correction: [`a94f04c`](https://github.com/Mohamed3042/flagship-portfolio/commit/a94f04c2a76e7331c5561fba6923f4bb16e671c1), reported `built` for that exact commit.
+- **VERIFIED** — The corrected canonical URL passed [141 browser checks](assets/kingdom-parallax-scroll/verification-clean-controls.json), including forced phone autoplay blocking, zero obsolete control elements on desktop/phone/motion-preference contexts, normal-gesture playback recovery, and zero console or page errors.
+
+![Corrected phone shot 20 with clean story artwork](assets/kingdom-parallax-scroll/phone-leg-20-clean-controls.png)
+
+![Corrected desktop shot 20 with the same clean story artwork](assets/kingdom-parallax-scroll/desktop-leg-20-clean-controls.png)
+
 ## What changed
 
 - **VERIFIED** — Scroll no longer writes `video.currentTime` inside a chapter. Each WAN clip plays on its own clock while scroll chooses the chapter and moves the paper theatre through depth.
