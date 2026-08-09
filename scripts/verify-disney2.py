@@ -164,6 +164,13 @@ class Verification:
               if (!video || !video.currentSrc.endsWith('DSN2-' + n + '.mp4')) return false;
               if (video.readyState < 1 || !Number.isFinite(video.duration) || video.seekable.length < 1) return false;
               if (video.seeking) return false;
+              if (arg.fraction !== null) {
+                /* the page's own seek must have SETTLED at the scrubbed time —
+                   a t=0 sampled between metadata-load and the queued seek is
+                   "not yet", not a verdict */
+                const target = Math.min(video.duration - 0.04, Math.max(0, arg.fraction * video.duration));
+                if (Math.abs(video.currentTime - target) > arg.tolerance) return false;
+              }
               return {
                 clip: video.currentSrc.split('/').pop(),
                 poster: floor.currentSrc.split('/').pop(),
@@ -172,7 +179,7 @@ class Verification:
                 title: document.querySelector('#cue-title .en')?.textContent.trim() || ''
               };
             }""",
-            arg={"leg": leg},
+            arg={"leg": leg, "fraction": fraction, "tolerance": tolerance},
             timeout=30_000,
         )
         info = handle.json_value()

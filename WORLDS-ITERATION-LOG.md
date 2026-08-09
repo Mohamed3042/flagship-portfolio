@@ -213,3 +213,26 @@ second take of the chorus room. Two of the ten designed journey stations have no
 clip at all: the mood matrix is the same corridor as the infinite playlist in the
 footage, and "the drop" was never generated as a shot — so the drop is delivered as a
 change in physics at leg 07 rather than as a picture of an explosion.
+
+## 2026-08-09 — Disney: THE PARALLAX CUT (owner correction: "fully parallax playing, no autoplay at all, no side stuff")
+- The autoplay parallax edition is retired: the 20-chapter film is now SCRUBBED —
+  scroll writes `currentTime` (leg = floor(p·20), fraction = clip time), forward and
+  reverse, and `play()` is never called on the film. The same scroll writes
+  `--journey` (whole-film) + `--depth` (in-chapter) so all four paper planes travel
+  with the picture. One mode for desktop, phone, and reduced-motion — no forks.
+- Side chrome deleted: SHOT chip, big leg number, page rail, scene ticks, HUD,
+  theater/master button, build districts. The only words on the picture are the cue
+  (chapter title + one story line, subtitle-style, bottom center). Nav chrome fades
+  to nothing while any scene is live; keyboard focus brings it back.
+- Frame: full-bleed on landscape; on portrait the reel keeps its true 1358×624 aspect
+  as a floating strip with gold hairlines, blurred far plane filling the surround.
+- Clips re-encoded from the RAW WAN takes (`crop=1358:624:0:0`, CRF16, `-g 6` — 25
+  keyframes per 5 s clip) so reverse scrub decodes ≤6 frames per seek; 20/20 first
+  frames match their posters (max raw diff 2.2, wrong-scene threshold 33).
+- `verify-disney2.py` rewritten for this contract: play() instrumented at zero across
+  every context, scrub-obedience gates (position → exact film time, settled), clock
+  freeze without scroll, ordered plane travel + whole-film drift, chrome absence,
+  full-bleed/strip geometry, truth-copy phrases, byte ranges, FIN. 173 checks green
+  on the LIVE URL; the suite goes red against the retired edition (fail-first).
+- Live: main `b1942ab`, gh-pages `697a4da`. Proof frames:
+  `Downloads/uberstrike handoff/disney-parallax-cut-proof/`.
