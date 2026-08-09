@@ -604,7 +604,10 @@
     const IDLE_EPS = 1e-4;
     const IDLE_FRAMES = 3;
     const readRaw = () => clamp01(parseFloat(scene.style.getPropertyValue('--p') || '0'));
-    const slots = vids.map(v => ({ v, leg: -1, ready: false, seeking: false, want: -1 }));
+    const slots = vids.map(v => ({
+      v, leg: -1, ready: false, seeking: false, want: -1,
+      fetchId: 0, abort: null, objectUrl: '',
+    }));
     let shown = -1, lastLeg = -1, dir = 1;
     let smoothP = readRaw();
     let cameraRaf = 0, lastTs = 0, lastFrameWall = performance.now(), settledFrames = 0;
@@ -612,10 +615,44 @@
 
     const arm = (s, leg) => {
       if (s.leg === leg) return s;
+      if (s.abort) s.abort.abort();
+      if (s.objectUrl) URL.revokeObjectURL(s.objectUrl);
       s.leg = leg; s.ready = false; s.seeking = false; s.want = -1;
+      s.objectUrl = ''; s.fetchId += 1;
       s.v.poster = LEGS[leg].poster;
-      s.v.src = LEGS[leg].clip;
+      s.v.dataset.clip = LEGS[leg].clip;
+      s.v.removeAttribute('src');
       s.v.load();
+      /* Range seeks can stall independently from the rAF camera on a cold CDN
+         context. Keep only the two armed 5 s clips in memory, where every seek
+         is local and the picture clock can follow the weighted playhead. */
+      const fetchId = s.fetchId;
+      const loadClip = attempt => {
+        const controller = new AbortController();
+        s.abort = controller;
+        const timeout = setTimeout(() => controller.abort(), 8000);
+        fetch(LEGS[leg].clip, { signal: controller.signal, cache: 'force-cache' })
+          .then(response => {
+            if (!response.ok) throw new Error('clip HTTP ' + response.status);
+            return response.blob();
+          })
+          .then(blob => {
+            clearTimeout(timeout);
+            if (s.fetchId !== fetchId) return;
+            s.abort = null;
+            s.objectUrl = URL.createObjectURL(blob);
+            s.v.src = s.objectUrl;
+            s.v.load();
+          })
+          .catch(() => {
+            clearTimeout(timeout);
+            if (s.fetchId !== fetchId) return;
+            if (attempt < 1) { loadClip(attempt + 1); return; }
+            s.abort = null; s.ready = false;
+            s.v.classList.remove('on');
+          });
+      };
+      loadClip(0);
       return s;
     };
     /* seek queue: one in-flight currentTime write per element; the newest
@@ -628,14 +665,20 @@
       try { s.v.currentTime = t; } catch { s.seeking = false; }
     };
     slots.forEach(s => {
-      s.v.addEventListener('loadedmetadata', () => { s.ready = true; render(smoothP, readRaw()); });
+      s.v.addEventListener('loadedmetadata', () => {
+        if (!s.objectUrl || s.v.currentSrc !== s.objectUrl) return;
+        s.ready = true; render(smoothP, readRaw());
+      });
       s.v.addEventListener('seeked', () => {
         s.seeking = false;
         if (s.want >= 0) { const t = s.want; s.want = -1; seek(s, t); }
       });
       /* a clip that will not load leaves the keyframe poster standing —
          the page is complete art with zero videos on disk */
-      s.v.addEventListener('error', () => { s.ready = false; s.v.classList.remove('on'); }, true);
+      s.v.addEventListener('error', () => {
+        if (!s.objectUrl || s.v.currentSrc !== s.objectUrl) return;
+        s.ready = false; s.v.classList.remove('on');
+      }, true);
     });
     const slotFor = leg => {
       for (const s of slots) if (s.leg === leg) return s;
