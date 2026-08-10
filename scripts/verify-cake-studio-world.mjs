@@ -11,6 +11,7 @@ const pagePath = join(worldRoot, 'cake-studio.html');
 const cssPath = join(worldRoot, 'cake-studio.css');
 const scriptPath = join(worldRoot, 'cake-studio.js');
 const codaScriptPath = join(worldRoot, 'cake-studio-coda.js');
+const codaLoaderPath = join(worldRoot, 'cake-studio-coda-loader.js');
 const threePath = join(worldRoot, 'cake-studio', 'three.module.js');
 const threeCorePath = join(worldRoot, 'cake-studio', 'three.core.min.js');
 const threeLicensePath = join(worldRoot, 'cake-studio', 'THREE-LICENSE.txt');
@@ -67,6 +68,7 @@ const [css, originalScript, codaScript, threeFile, threeCoreFile, threeLicense, 
   readFile(join(ownerPackRoot, 'run-log.csv'), 'utf8'),
   readFile(lobbyPath, 'utf8'),
 ]);
+const codaLoader = await readOptional(codaLoaderPath);
 let script = originalScript;
 if (sabotage) {
   script = script.replace('1.65, 1.85, 1.10', '1.65, 0.55, 1.10');
@@ -78,10 +80,10 @@ if (sabotage) {
 const manifest = JSON.parse(manifestRaw);
 const ownerPack = JSON.parse(clipsRaw);
 
-check('visible release badge', page.includes('v1.3 · WORLD 09') && page.includes('data-version="1.3.0"'), 'v1.3 / World 09');
+check('visible release badge', page.includes('v1.4 · WORLD 09') && page.includes('data-version="1.4.0"'), 'v1.4 / World 09');
 check('shared cinema engine', page.includes('cinema.css?v=6') && page.includes('cinema.js?v=6'), 'cinema v6 linked');
-check('page-local assets', page.includes('cake-studio.css?v=5') && page.includes('cake-studio.js?v=5'), 'directed CSS and JS linked');
-check('dimensional coda module', page.includes('type="module" src="cake-studio-coda.js?v=5"') && codaScript.includes("import * as THREE from './cake-studio/three.module.js';"), 'local Three.js module linked');
+check('page-local assets', page.includes('cake-studio.css?v=6') && page.includes('cake-studio.js?v=6'), 'directed CSS and JS linked');
+check('dimensional coda module', page.includes('src="cake-studio-coda-loader.js?v=6"') && codaLoader.includes("import('./cake-studio-coda.js?v=6')") && codaScript.includes("import * as THREE from './cake-studio/three.module.js';"), 'motion-aware local Three.js module linked');
 check('one film scene', (page.match(/id="cake-reel"/g) ?? []).length === 1, 'single shared playhead');
 check('two video buffers', (page.match(/<video\b/g) ?? []).length === 2, 'exactly two video elements');
 const videoTags = [...page.matchAll(/<video\b[^>]*>/g)].map((match) => match[0]);
@@ -135,8 +137,23 @@ check(
   ['reusable pastry knowledge', 'customer mockup', 'baker sheet', 'true-size plaque'].every((phrase) => page.includes(phrase)),
   'ready form → flexible design → production documents',
 );
+check(
+  'first-screen recruiter value',
+  page.includes('class="ident-brief"')
+    && page.includes('9 reusable forms → 3 production proofs')
+    && page.includes('href="#cake-reel"'),
+  'role, result and direct build affordance appear before the long-form film',
+);
+check(
+  'minimum interactive targets',
+  css.includes('min-height: 44px')
+    && css.includes('width: 44px')
+    && css.includes('height: 44px'),
+  'chrome and chapter navigation expose 44px hit areas',
+);
 
 const objectActs = [...page.matchAll(/<article class="object-act"\s+data-object-act="([^"]+)"/g)].map((match) => match[1]);
+const modelAssetBlock = codaScript.match(/const MODEL_ASSETS = \[([\s\S]*?)\n\];/)?.[1] ?? '';
 check(
   'film-to-object match cut',
   page.includes('class="film-bridge"')
@@ -165,9 +182,9 @@ check(
   'real model production layer',
   codaScript.includes("import { GLTFLoader }")
     && codaScript.includes("import { DRACOLoader }")
-    && (codaScript.match(/\.glb'/g) ?? []).length === 24
-    && codaScript.includes("modelSource = 'glb'"),
-  '24 optimized GLBs with procedural loading/failure fallback',
+    && (modelAssetBlock.match(/\.glb'/g) ?? []).length === 24
+    && codaScript.includes("modelSource = 'staged-glb'"),
+  '24 optimized GLBs with staged loading, disposal and procedural fallback',
 );
 check(
   'cinematic GLB choreography',
@@ -177,6 +194,29 @@ check(
     && codaScript.includes("handoffArtifactSource: 'procedural'")
     && codaScript.includes('wordmarkModels: 0'),
   '17 textured GLB wafers · 3 physical chapter words · 3 GLB handoff artifacts',
+);
+check(
+  'authored connected proof room',
+  codaScript.includes('cake-studio-proof-room.glb')
+    && codaScript.includes("cameraSource = 'authored-clip'")
+    && codaScript.includes('renderAuthoredCamera')
+    && codaScript.includes('disposeModelGroup'),
+  'three connected zones · authored desktop/phone cameras · bounded residency',
+);
+check(
+  'semantic production portal',
+  page.includes('data-proof-portal')
+    && page.includes('READY FORM 06')
+    && page.includes('MOCKUP · SHEET · 1:1 PLAQUE')
+    && codaScript.includes('renderProofPortal'),
+  'approved source becomes three production objects at the doorway',
+);
+check(
+  'true reduced-motion path',
+  page.includes('data-coda-reduced-poster')
+    && codaLoader.includes("modelSource: 'reduced-static'")
+    && script.includes("scene.dataset.mediaState = 'poster'"),
+  'poster-only film and coda path skips media seeking and WebGL',
 );
 check(
   'weighted coda camera',
@@ -199,7 +239,7 @@ check(
 check(
   'scroll is the coda playhead',
   codaScript.includes('renderCoda(progress)')
-    && !/\.play\s*\(/.test(codaScript)
+    && !/(?:video|slot\.video)\.play\s*\(/.test(codaScript)
     && !/setInterval\s*\(/.test(codaScript)
     && !/function\s+animate\s*\(/.test(codaScript),
   'deterministic forward/reverse render; no autoplay loop',

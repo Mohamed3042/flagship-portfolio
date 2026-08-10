@@ -1,373 +1,475 @@
 {
-  "schemaVersion": 1,
-  "release": "1.3.0",
+  "schemaVersion": 2,
+  "release": "1.4.0",
   "generator": "Blender 5.1 Cake Studio web pipeline",
   "compression": "KHR_draco_mesh_compression",
-  "texturePolicy": "JPEG quality 78, max edge 1024, generated normal map removed",
+  "texturePolicy": "JPEG quality 78, max edge 512, generated normal map removed",
   "normalization": "longest axis 2 units, horizontal center, base at zero",
   "totalSourceBytes": 1541769952,
-  "totalBytes": 17519216,
+  "totalBytes": 14184216,
   "totalTriangles": 1794994,
+  "textureStats": {
+    "textureCount": 48,
+    "maxEdge": 512,
+    "decodedBaseBytes": 50331648,
+    "estimatedMipBytes": 67108800
+  },
   "assets": [
     {
       "id": "cake-01",
       "file": "cake-01-ivory-spiral.glb",
       "role": "ready-form",
       "sourceBytes": 47324604,
-      "bytes": 892072,
+      "bytes": 776272,
       "sourceTriangles": 500004,
       "triangles": 99999,
       "normalizedDimensions": [
         1.996644,
-        2.0,
+        2,
         1.792975
       ],
-      "sha256": "b6410c9680b3a7250ceee3786bf5e6f065ef9f565e41dbaeb0feb01c02b5d39e"
+      "sha256": "0286d45eb148b98213460eaaa5a29433a17132e7acf2f6bd54fe4d42ef2b18e8",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-02",
       "file": "cake-02-square-cocoa.glb",
       "role": "ready-form",
       "sourceBytes": 48452596,
-      "bytes": 878168,
+      "bytes": 706460,
       "sourceTriangles": 508606,
       "triangles": 85000,
       "normalizedDimensions": [
         1.996107,
-        2.0,
+        2,
         0.951927
       ],
-      "sha256": "c19b0c309b1cb1e936ac00443679a36f0cceeae208132a39a9a4c61dcdcd196f"
+      "sha256": "733c182c9af93fba76323a0cf0448ee72038695918fd0186747b321a68e1ed2f",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-03",
       "file": "cake-03-oval-blush.glb",
       "role": "ready-form",
       "sourceBytes": 48592236,
-      "bytes": 672764,
+      "bytes": 556264,
       "sourceTriangles": 500000,
       "triangles": 80000,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.383941,
         0.689518
       ],
-      "sha256": "b7c281791fbd33cd13579b43dd8bb357da8df1365f352fcb7033d0b1e8c73882"
+      "sha256": "4da54e90428e127fb7cdc3aae6ae71532ad9a5f368d8307ab3e7860f6a82cb86",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-04",
       "file": "cake-04-heart-art-deco.glb",
       "role": "ready-form",
       "sourceBytes": 46756068,
-      "bytes": 732292,
+      "bytes": 631532,
       "sourceTriangles": 499852,
       "triangles": 80000,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.996643,
         1.063924
       ],
-      "sha256": "bbe932545dfa366a22dff767703ff9d925bacc17480fdd2fd975c5697404a4a9"
+      "sha256": "e67fa5a95512e583e9ab01a5d0d53d87b92858a56329fbf2441b2f507799022d",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-05",
       "file": "cake-05-hex-caramel.glb",
       "role": "ready-form",
       "sourceBytes": 52131612,
-      "bytes": 745532,
+      "bytes": 597172,
       "sourceTriangles": 499802,
       "triangles": 80000,
       "normalizedDimensions": [
         1.763926,
-        2.0,
+        2,
         1.026153
       ],
-      "sha256": "35ce5dc2cd2d0472fbd6e2537736ea3ad95f0d6c424bd6ba637f5770de04ab43"
+      "sha256": "46b18bf4498648ce527f081b082799078fac1c18e47edf44e3ea46943e851e77",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-06",
       "file": "cake-06-two-tier-cocoa.glb",
       "role": "ready-form-selected",
       "sourceBytes": 47335608,
-      "bytes": 776768,
+      "bytes": 672180,
       "sourceTriangles": 500000,
       "triangles": 119999,
       "normalizedDimensions": [
         1.999496,
-        2.0,
+        2,
         1.895621
       ],
-      "sha256": "af3b2d41741b4de1c3243e37c2ee93bdbe3074d795704811951b0563e661ea94"
+      "sha256": "87f903d6f5cb835105e912e7642a89e78e8da393ffbf589c195c269b0cef8b4b",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-07",
       "file": "cake-07-rect-sheet-cocoa.glb",
       "role": "ready-form",
       "sourceBytes": 51150068,
-      "bytes": 878320,
+      "bytes": 703136,
       "sourceTriangles": 505212,
       "triangles": 85000,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.992585,
         0.973306
       ],
-      "sha256": "837817b06f406e626747b6da8656e79f8a439d60abae573ec70d0b325eb3d0d8"
+      "sha256": "2baa37e0e49fa42822b5d66142ffa4dd46a514c25339ab55a019ce66c3ddc6a9",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-08",
       "file": "cake-08-scalloped-ivory.glb",
       "role": "ready-form",
       "sourceBytes": 54882608,
-      "bytes": 895492,
+      "bytes": 747692,
       "sourceTriangles": 500020,
       "triangles": 100000,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.998637,
         1.370992
       ],
-      "sha256": "2d1c163f007393905461ebe1874f053e72cf6ca68fc40e09b4e745c1ac5e3579"
+      "sha256": "b443a0195dc9f2d8e765644478a4608c8b922cf5872af4a9551d45451eade2fb",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "cake-09",
       "file": "cake-09-tall-oval-teal.glb",
       "role": "ready-form",
       "sourceBytes": 88214240,
-      "bytes": 1252016,
+      "bytes": 1076192,
       "sourceTriangles": 1500000,
       "triangles": 140000,
       "normalizedDimensions": [
         1.461779,
         1.135027,
-        2.0
+        2
       ],
-      "sha256": "b2e0a2767c2495ea5a95e178ee2f2a85b79e3c23683c38517c33469f1e908805"
+      "sha256": "f2362a7409b1e368a96a401af676fd24e0cfd2b65f41f14453df72490e8e7fa0",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "assembly-10",
       "file": "assembly-10-blank-two-tier-core.glb",
       "role": "assembly-body",
       "sourceBytes": 74016520,
-      "bytes": 1013280,
+      "bytes": 859432,
       "sourceTriangles": 1499854,
       "triangles": 99999,
       "normalizedDimensions": [
         1.99943,
-        2.0,
+        2,
         1.815909
       ],
-      "sha256": "a1744f0096bca8876ca73449b17c29a73959d293fb9ebc6fa801b61de1e8a395"
+      "sha256": "7343bcb4a52632bb855df6d65fe38fda9c1591bc290dc746fc1aa28f1d37055a",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "assembly-11",
       "file": "assembly-11-teal-fondant-collar.glb",
       "role": "assembly-surface",
       "sourceBytes": 42346936,
-      "bytes": 443472,
+      "bytes": 375980,
       "sourceTriangles": 500004,
       "triangles": 59999,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.996453,
         1.00445
       ],
-      "sha256": "4b1792c68abd121ea7f0c7601d1d8f1a8766edc8476b1755d32d22c317481f31"
+      "sha256": "b891bd75194746082bcac8a2b722650e5ef83f004b8cb2cfc597daf771e17496",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "assembly-12",
       "file": "assembly-12-edible-image-panel.glb",
       "role": "assembly-edible-image",
       "sourceBytes": 34266920,
-      "bytes": 541888,
+      "bytes": 467604,
       "sourceTriangles": 500000,
       "triangles": 60000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.439623,
         1.385556
       ],
-      "sha256": "6836a49ceb0454ed30d4c2417a1054f02ca89e09dd72ca35c0670b459e7cd6fd"
+      "sha256": "6ca55b484e1beee9106b70707f2aa2b9eccc6b0cf853cf9994964e2555c30d17",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "assembly-13",
       "file": "assembly-13-blank-bilingual-plaque.glb",
       "role": "assembly-plaque",
       "sourceBytes": 48002180,
-      "bytes": 588760,
+      "bytes": 489184,
       "sourceTriangles": 500000,
       "triangles": 60000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.821231,
         1.29381
       ],
-      "sha256": "78d331c0872b47d281feb1a69d8fae9178b7a3c9f593dbe5197a60e751614e76"
+      "sha256": "b33cfb358d093d5106f5e3950574fa15b322f7a48d715293cb47849d013371d9",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "assembly-14",
       "file": "assembly-14-connected-topper.glb",
       "role": "assembly-decoration",
       "sourceBytes": 54019348,
-      "bytes": 844316,
+      "bytes": 654768,
       "sourceTriangles": 500000,
       "triangles": 79999,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.967634,
         0.320745
       ],
-      "sha256": "34c37d92263995d9b31d237d46488cd237e8d7c6e1988a4abe4f93705fa8bb9a"
+      "sha256": "d928cddacbb549e5f051628a22f7729bcc5cfba7f4a1a44bbd17157192d99062",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "wafer-a",
       "file": "data-wafer-a-teal-order.glb",
       "role": "assembly-data-wafer",
       "sourceBytes": 78181132,
-      "bytes": 541152,
+      "bytes": 407552,
       "sourceTriangles": 1500000,
       "triangles": 45000,
       "normalizedDimensions": [
         1.998239,
-        2.0,
+        2,
         0.32936
       ],
-      "sha256": "ea7ea3f31b32cee15a8f1005b126802920195efbfd2ee0a424045d0e5d0b6d7d"
+      "sha256": "0a5ae853925421dc8e9c655221a6a95f57bc1c7e427a0a3caf17ba96f5758190",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "wafer-b",
       "file": "data-wafer-b-rose-layout.glb",
       "role": "assembly-data-wafer",
       "sourceBytes": 70207552,
-      "bytes": 419268,
+      "bytes": 347056,
       "sourceTriangles": 1499984,
       "triangles": 45000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.911174,
         0.200434
       ],
-      "sha256": "f6a3b4ad37e40754d1d808a0e69537fab1fbc7898943a0da7f11f97e69a6edc4"
+      "sha256": "7fdf2aa003f72407ecde0803455a11fcbc77b9bc4d0ad14a4a07607f25e19a94",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "wafer-c",
       "file": "data-wafer-c-ivory-measure.glb",
       "role": "assembly-data-wafer",
       "sourceBytes": 79764936,
-      "bytes": 614068,
+      "bytes": 444968,
       "sourceTriangles": 1500008,
       "triangles": 45000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.754934,
         0.752189
       ],
-      "sha256": "43a2c665d5a04afd17568f021db34c358d96eae828693e7cc73a5abd8e02add4"
+      "sha256": "59a9245e31343bf558b21009c985227d3f329e80b0959d2b847d8b898bacfb80",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "wafer-d",
       "file": "data-wafer-d-smoked-approval.glb",
       "role": "assembly-data-wafer",
       "sourceBytes": 78895864,
-      "bytes": 497428,
+      "bytes": 390336,
       "sourceTriangles": 1500000,
       "triangles": 45000,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.733628,
         0.348952
       ],
-      "sha256": "1af24941a8357e1032978da7a28469626648410a6a3f8d9e997ccd4c14e285d2"
+      "sha256": "20543facb58803f6b0ec30eed8f21d91564c2e45d96f2a8b170d411c2753fd45",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "wordmark-choose",
       "file": "wordmark-01-choose.glb",
       "role": "chapter-wordmark",
       "sourceBytes": 79736068,
-      "bytes": 762568,
+      "bytes": 591936,
       "sourceTriangles": 1499964,
       "triangles": 75000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.1601,
         0.461683
       ],
-      "sha256": "70ead04c40e6fc1da67c9e099fdbc6592be2c3e61b88c001dca24d11b554f614"
+      "sha256": "987236c251c9483ae0f505754101f0a3aed897fdb3c47a481bea604aae365b70",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "wordmark-assemble",
       "file": "wordmark-02-assemble.glb",
       "role": "chapter-wordmark",
       "sourceBytes": 88930888,
-      "bytes": 842692,
+      "bytes": 620960,
       "sourceTriangles": 1499972,
       "triangles": 75000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.129455,
         0.421457
       ],
-      "sha256": "bed5463b2e7d07657df863db32e102bb4ee98528e8c055cbc5c32bc5a51d4960"
+      "sha256": "ebba32d8c8d2f3c85c8f7c29615484b81f2bf3a96b98f2a6e3573a80333d3bfe",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "wordmark-handoff",
       "file": "wordmark-03-handoff.glb",
       "role": "chapter-wordmark",
       "sourceBytes": 75216308,
-      "bytes": 741224,
+      "bytes": 601500,
       "sourceTriangles": 1499988,
       "triangles": 75000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.157149,
         0.351284
       ],
-      "sha256": "5b368eb40a2128ec5aee4b998e8ccbaa1a64c1645f7940d142db5b2c5cf3048c"
+      "sha256": "b58a13d1a9e4f464486823690f149cae61b16ae28abaaf227a8ddf7964798adf",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "handoff-frame",
       "file": "handoff-01-customer-mockup-frame.glb",
       "role": "handoff-customer-mockup",
       "sourceBytes": 84018264,
-      "bytes": 747300,
+      "bytes": 577100,
       "sourceTriangles": 1500004,
       "triangles": 70000,
       "normalizedDimensions": [
-        2.0,
+        2,
         0.703007,
         1.449521
       ],
-      "sha256": "dcac538bda753718db6eeec2eb9f0a9c853b25ed6962439f272478f76882468a"
+      "sha256": "f6925ecba89c53327d1e5fecbe2ada7e17a0355fb113f03f763d197cc357a2df",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "handoff-sheet",
       "file": "handoff-02-baker-sheet.glb",
       "role": "handoff-baker-sheet",
       "sourceBytes": 82470260,
-      "bytes": 559448,
+      "bytes": 432236,
       "sourceTriangles": 1513465,
       "triangles": 44999,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.575569,
         0.1349
       ],
-      "sha256": "cfbdc0f5e5230f6066bb1b884a8e1cbdbc102583a92e4060cd5186710b181a02"
+      "sha256": "4d824fe979b24fc66913fc326ed4cb3069a92703bdce3f72aab46ea8be7fd50d",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     },
     {
       "id": "handoff-plaque",
       "file": "handoff-03-true-size-plaque.glb",
       "role": "handoff-true-size-plaque",
       "sourceBytes": 86857136,
-      "bytes": 638928,
+      "bytes": 456704,
       "sourceTriangles": 1500000,
       "triangles": 45000,
       "normalizedDimensions": [
-        2.0,
+        2,
         1.191117,
         1.335545
       ],
-      "sha256": "dd4d1989a754a97bfc5f7e383905612da4f5390e5d877ffc005c719bc3b644fb"
+      "sha256": "0ef84d4f8d7e8ffaa98994cbd73e1a6f951408def9653f267a66145b311755db",
+      "textureCount": 2,
+      "textureMaxEdge": 512,
+      "decodedBaseBytes": 2097152,
+      "estimatedMipBytes": 2796200
     }
   ]
 }

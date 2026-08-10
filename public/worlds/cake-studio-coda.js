@@ -31,21 +31,40 @@ const MODEL_ASSETS = [
   ['handoff-sheet', 'handoff-02-baker-sheet.glb'],
   ['handoff-plaque', 'handoff-03-true-size-plaque.glb'],
 ];
+const MODEL_FILES = new Map(MODEL_ASSETS);
+const MODEL_GROUPS = Object.freeze({
+  forms: [
+    'cake-01', 'cake-02', 'cake-03', 'cake-04', 'cake-05',
+    'cake-06', 'cake-07', 'cake-08', 'cake-09', 'wordmark-choose',
+  ],
+  assembly: [
+    'assembly-10', 'assembly-11', 'assembly-12', 'assembly-13', 'assembly-14',
+    'wafer-a', 'wafer-b', 'wafer-c', 'wafer-d', 'wordmark-assemble',
+  ],
+  handoff: ['cake-06', 'handoff-frame', 'handoff-sheet', 'handoff-plaque', 'wordmark-handoff'],
+});
+const ZONE_X = Object.freeze({ forms: -9.2, assembly: 0, handoff: 9.2 });
+const SET_ASSET = './cake-studio/set/cake-studio-proof-room.glb';
 const CAMERA_TAU_MS = 80;
 const CAMERA_IDLE_EPSILON = 0.00008;
 const CAMERA_SNAP_DISTANCE = 0.36;
 const ZERO_VECTOR = new THREE.Vector3();
 const ZERO_EULER = new THREE.Euler();
+const CAMERA_WORLD_SCALE = new THREE.Vector3();
+const CAMERA_WORLD_DIRECTION = new THREE.Vector3();
+const authoredFovCurves = new WeakMap();
 const textureCache = new Map();
 
 const sceneElement = document.querySelector('[data-object-coda]');
 const canvas = sceneElement?.querySelector('[data-cake-canvas]');
 const fallback = sceneElement?.querySelector('[data-coda-fallback]');
+const reducedPoster = sceneElement?.querySelector('[data-coda-reduced-poster]');
+const proofPortal = sceneElement?.querySelector('[data-proof-portal]');
 const actElements = sceneElement ? [...sceneElement.querySelectorAll('[data-object-act]')] : [];
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const runtime = {
-  version: '1.3.0',
+  version: '1.4.0',
   engine: `three-r${THREE.REVISION}`,
   webglAvailable: false,
   ready: false,
@@ -54,12 +73,16 @@ const runtime = {
   cameraState: 'idle',
   cameraPosition: { x: 0, y: 0, z: 0 },
   cameraTarget: { x: 0, y: 0, z: 0 },
+  cameraFov: 35,
   act: 'forms',
   readyForms: READY_FORM_COUNT,
   controlledParts: CONTROLLED_PART_COUNT,
   outputs: OUTPUT_COUNT,
   modelStatus: 'idle',
   modelSource: 'procedural',
+  activeModelGroup: 'none',
+  residentModelGroups: [],
+  modelsResident: 0,
   waferSource: 'procedural',
   waferModels: 0,
   wordmarkModels: 0,
@@ -68,9 +91,15 @@ const runtime = {
   handoffArtifactModels: 0,
   modelsExpected: MODEL_ASSETS.length,
   modelsLoaded: 0,
+  setStatus: 'idle',
+  setSource: 'procedural',
+  cameraSource: 'waypoint-fallback',
+  portalState: 'hidden',
   renders: 0,
   drawCalls: 0,
   triangles: 0,
+  gpuTextures: 0,
+  gpuGeometries: 0,
   pixelRatio: 0,
   reducedMotion,
 };
@@ -78,6 +107,8 @@ window.__cakeStudioCoda = runtime;
 
 if (!sceneElement || !canvas) {
   runtime.reason = 'markup-missing';
+} else if (reducedMotion) {
+  initialiseReducedMotion();
 } else {
   try {
     initialise();
@@ -96,7 +127,7 @@ function initialise() {
       antialias: true,
       depth: true,
       stencil: false,
-      preserveDrawingBuffer: true,
+      preserveDrawingBuffer: false,
       powerPreference: 'high-performance',
     });
   } catch (error) {
@@ -116,6 +147,7 @@ function initialise() {
   scene.fog = new THREE.FogExp2(0x020705, 0.046);
   const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 80);
   const cameraTarget = new THREE.Vector3(0, 0.8, 0);
+  const productionLoader = createProductionLoader();
 
   const set = createPhysicalSet(scene);
   const sheet = createOpticalSheet(scene);
@@ -123,6 +155,15 @@ function initialise() {
   const assembly = createControlledAssembly(scene);
   const handoff = createProductionOutputs(scene);
   const chapterWords = createChapterWords(scene);
+  const states = { readyForms, assembly, handoff, chapterWords };
+  runtime.probeFrame = () => probeRenderedFrame(renderer, scene, camera);
+  const groupStates = new Map(Object.keys(MODEL_GROUPS).map((name) => [name, {
+    name,
+    status: 'idle',
+    models: null,
+    promise: null,
+  }]));
+  const loadedModelIds = new Set();
 
   let frame = 0;
   let lastFrameTime = 0;
@@ -166,14 +207,25 @@ function initialise() {
     renderHandoff(handoff, p3, progress, compact);
     renderChapterWords(chapterWords, progress, compact);
     renderSet(set, progress, compact);
-    renderCamera(camera, cameraTarget, progress, compact);
+    if (set.authored) renderAuthoredCamera(set, camera, progress, compact);
+    else renderCamera(camera, cameraTarget, progress, compact);
+    const activeRoot = actForProgress(progress) === 'forms'
+      ? readyForms.root
+      : actForProgress(progress) === 'assembly'
+        ? assembly.root
+        : handoff.root;
+    runtime.subjectBounds = measureProjectedBounds(activeRoot, camera, width, height);
+    renderProofPortal(progress);
     renderCaptions(progress);
+    if (modelLoadStarted) manageModelResidency(progress);
 
     renderer.render(scene, camera);
     runtime.progress = Number(progress.toFixed(5));
     runtime.renders += 1;
     runtime.drawCalls = renderer.info.render.calls;
     runtime.triangles = renderer.info.render.triangles;
+    runtime.gpuTextures = renderer.info.memory.textures;
+    runtime.gpuGeometries = renderer.info.memory.geometries;
     sceneElement.dataset.renderCount = String(runtime.renders);
   }
 
@@ -212,28 +264,50 @@ function initialise() {
     sceneElement.dataset.cameraState = runtime.cameraState;
     if (!frame) frame = requestAnimationFrame(draw);
   };
+  let progressRefreshFrame = 0;
+  const scheduleProgressRender = () => {
+    scheduleRender();
+    // cinema.js writes --p in its own animation frame. A second queued pass
+    // guarantees WebGL samples that new knot even after a one-shot scroll.
+    if (!progressRefreshFrame) {
+      progressRefreshFrame = requestAnimationFrame(() => {
+        progressRefreshFrame = 0;
+        scheduleRender();
+      });
+    }
+  };
 
   const startModelLoad = () => {
     if (modelLoadStarted) return;
     modelLoadStarted = true;
     runtime.modelStatus = 'loading';
+    runtime.setStatus = 'loading';
     sceneElement.dataset.models = 'loading';
-    loadProductionModels({ readyForms, assembly, handoff, chapterWords })
-      .then(() => {
-        runtime.modelStatus = 'ready';
-        runtime.modelSource = 'glb';
-        sceneElement.dataset.models = 'ready';
-        scheduleRender();
-      })
+    loadProofRoom(set, scene, productionLoader.loader)
+      .then(() => scheduleRender())
       .catch((error) => {
-        runtime.modelStatus = 'fallback';
-        runtime.modelSource = 'procedural';
-        runtime.modelError = error?.message || 'model-load-failed';
-        sceneElement.dataset.models = 'fallback';
-        console.warn('Cake Studio real models unavailable; procedural stage retained.', error);
+        runtime.setStatus = 'fallback';
+        runtime.setSource = 'procedural';
+        runtime.setError = error?.message || 'set-load-failed';
+        console.warn('Cake Studio authored proof room unavailable; procedural set retained.', error);
         scheduleRender();
       });
+    manageModelResidency(readProgress());
   };
+
+  function manageModelResidency(progress) {
+    const active = actForProgress(progress);
+    runtime.activeModelGroup = active;
+    ensureModelGroup(active, groupStates, states, productionLoader.loader, loadedModelIds, scheduleRender);
+    if (progress > 0.24 && progress < 0.69) ensureModelGroup('assembly', groupStates, states, productionLoader.loader, loadedModelIds, scheduleRender);
+    if (progress > 0.57) ensureModelGroup('handoff', groupStates, states, productionLoader.loader, loadedModelIds, scheduleRender);
+    if (progress < 0.42) ensureModelGroup('forms', groupStates, states, productionLoader.loader, loadedModelIds, scheduleRender);
+
+    if (progress > 0.47) disposeModelGroup('forms', groupStates, states);
+    if (progress < 0.24 || progress > 0.80) disposeModelGroup('assembly', groupStates, states);
+    if (progress < 0.55) disposeModelGroup('handoff', groupStates, states);
+    updateResidencyRuntime(groupStates);
+  }
 
   if ('IntersectionObserver' in window) {
     modelObserver = new IntersectionObserver((entries) => {
@@ -246,7 +320,7 @@ function initialise() {
     startModelLoad();
   }
 
-  addEventListener('scroll', scheduleRender, { passive: true });
+  addEventListener('scroll', scheduleProgressRender, { passive: true });
   addEventListener('resize', scheduleRender, { passive: true });
   addEventListener('pageshow', scheduleRender, { passive: true });
   sceneElement.addEventListener('scene:live', scheduleRender);
@@ -258,13 +332,51 @@ function initialise() {
   });
   addEventListener('pagehide', () => {
     if (frame) cancelAnimationFrame(frame);
+    if (progressRefreshFrame) cancelAnimationFrame(progressRefreshFrame);
     modelObserver?.disconnect();
+    for (const group of groupStates.keys()) disposeModelGroup(group, groupStates, states);
+    productionLoader.draco.dispose();
     renderer.dispose();
   }, { once: true });
 
   resize();
   runtime.rawProgress = Number(smoothProgress.toFixed(6));
   renderCoda(smoothProgress);
+}
+
+function initialiseReducedMotion() {
+  runtime.webglAvailable = false;
+  runtime.ready = true;
+  runtime.modelStatus = 'skipped';
+  runtime.modelSource = 'reduced-static';
+  runtime.setStatus = 'poster';
+  runtime.setSource = 'reduced-static';
+  runtime.cameraSource = 'reduced-static';
+  sceneElement.dataset.mode = 'reduced-static';
+  sceneElement.dataset.models = 'skipped';
+  canvas.hidden = true;
+  if (reducedPoster) reducedPoster.hidden = false;
+
+  const posterFor = (act) => `./cake-studio/posters/coda-${act}-${innerWidth <= 700 ? 'phone' : 'desktop'}.jpg`;
+  const renderStatic = () => {
+    const progress = clamp(Number.parseFloat(sceneElement.style.getPropertyValue('--p') || '0'));
+    const act = actForProgress(progress);
+    runtime.progress = progress;
+    runtime.rawProgress = progress;
+    runtime.act = act;
+    runtime.portalState = progress > 0.82 ? 'locked' : progress > 0.7 ? 'open' : 'hidden';
+    sceneElement.dataset.act = act;
+    sceneElement.dataset.portalState = runtime.portalState;
+    sceneElement.style.setProperty('--object-p', progress.toFixed(6));
+    sceneElement.style.setProperty('--portal-p', (act === 'handoff' ? 1 : 0).toFixed(3));
+    const posterSource = posterFor(act);
+    if (reducedPoster && reducedPoster.getAttribute('src') !== posterSource) reducedPoster.setAttribute('src', posterSource);
+    renderCaptions(progress);
+  };
+  addEventListener('scroll', renderStatic, { passive: true });
+  addEventListener('resize', renderStatic, { passive: true });
+  sceneElement.addEventListener('scene:live', renderStatic);
+  renderStatic();
 }
 
 function createPhysicalSet(scene) {
@@ -313,6 +425,10 @@ function createPhysicalSet(scene) {
   const rose = new THREE.PointLight(0xe39b7f, 18, 18, 1.65);
   rose.position.set(0, 2.4, 4.5);
   scene.add(rose);
+  const archiveFill = new THREE.SpotLight(0xffddb8, 34, 30, Math.PI * 0.24, 0.72, 1.3);
+  archiveFill.position.set(-11.8, 8.4, 7.2);
+  archiveFill.target.position.set(-9.2, 1.5, -0.8);
+  scene.add(archiveFill, archiveFill.target);
 
   return { root, floor, monoliths: root.children.filter((child) => child !== floor) };
 }
@@ -474,6 +590,7 @@ function createControlledAssembly(scene) {
     waferRoot,
     fallbackBody: body,
     fallbackParts: parts,
+    fallbackWafers: wafers,
     usingModels: false,
   };
 }
@@ -554,40 +671,196 @@ function createProductionOutputs(scene) {
   });
   root.visible = false;
   scene.add(root);
-  return { root, source, artifacts, mockup, miniature, bakerSheet, plaque, usingModels: false };
+  return {
+    root,
+    source,
+    artifacts,
+    mockup,
+    miniature,
+    bakerSheet,
+    plaque,
+    fallbackSource: source,
+    fallbackMiniature: miniature,
+    fallbackMockupChildren: [...mockup.children],
+    fallbackBakerChildren: [...bakerSheet.children],
+    fallbackPlaqueChildren: [...plaque.children],
+    usingModels: false,
+  };
 }
 
 function createChapterWords(scene) {
   const root = new THREE.Group();
   root.name = 'physical-chapter-wordmarks';
   scene.add(root);
-  return { root, words: [], usingModels: false };
+  return { root, wordsByAct: new Map(), usingModels: false };
 }
 
-async function loadProductionModels(states) {
-  THREE.Cache.enabled = true;
+function createProductionLoader() {
+  THREE.Cache.enabled = false;
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath('./cake-studio/draco/gltf/');
   dracoLoader.setDecoderConfig({ type: 'wasm' });
   const loader = new GLTFLoader();
   loader.setDRACOLoader(dracoLoader);
-  const models = new Map();
+  return { loader, draco: dracoLoader };
+}
 
-  try {
-    await Promise.all(MODEL_ASSETS.map(async ([id, file]) => {
-      const gltf = await loader.loadAsync(`./cake-studio/models/${file}`);
-      const model = prepareProductionModel(gltf.scene, id);
-      models.set(id, model);
-      runtime.modelsLoaded = models.size;
-    }));
-  } finally {
-    dracoLoader.dispose();
+async function loadProofRoom(set, scene, loader) {
+  const gltf = await loader.loadAsync(SET_ASSET);
+  const clip = gltf.animations.find((animation) => animation.name === 'ProofRoom_Cameras');
+  const desktop = gltf.scene.getObjectByName('Camera_Desktop');
+  const phone = gltf.scene.getObjectByName('Camera_Phone');
+  if (!clip || !desktop?.isCamera || !phone?.isCamera) {
+    throw new Error('proof-room camera contract missing');
   }
+  gltf.scene.name = 'cake-studio-authored-proof-room';
+  gltf.scene.traverse((child) => {
+    if (!child.isMesh) return;
+    child.frustumCulled = true;
+    const materials = Array.isArray(child.material) ? child.material : [child.material];
+    materials.filter(Boolean).forEach((material) => {
+      if (material.map) material.map.anisotropy = 4;
+      if (material.emissiveIntensity > 3.6) material.emissiveIntensity = 3.6;
+    });
+  });
+  scene.add(gltf.scene);
+  set.root.visible = false;
+  const mixer = new THREE.AnimationMixer(gltf.scene);
+  const action = mixer.clipAction(clip);
+  action.enabled = true;
+  action.paused = false;
+  action.setLoop(THREE.LoopOnce, 1);
+  action.clampWhenFinished = true;
+  action.play();
+  mixer.setTime(0);
+  set.authored = { root: gltf.scene, clip, mixer, action, desktop, phone };
+  runtime.setStatus = 'ready';
+  runtime.setSource = 'cake-studio-proof-room.glb';
+  runtime.cameraSource = 'authored-clip';
+  sceneElement.dataset.set = 'authored';
+  sceneElement.dataset.camera = 'authored-clip';
+}
 
-  if (models.size !== MODEL_ASSETS.length) {
-    throw new Error(`loaded ${models.size}/${MODEL_ASSETS.length} models`);
+function ensureModelGroup(name, groupStates, states, loader, loadedModelIds, scheduleRender) {
+  const group = groupStates.get(name);
+  if (!group) return Promise.resolve(null);
+  group.wanted = true;
+  if (group.status === 'ready' || group.status === 'loading') return group.promise;
+  // A broken delivery is terminal for this page view. Re-entering this function
+  // from the render loop must not turn one failed GLB into a request/render storm.
+  if (group.status === 'fallback') return Promise.resolve(null);
+  group.status = 'loading';
+  const generation = (group.generation || 0) + 1;
+  group.generation = generation;
+  updateResidencyRuntime(groupStates);
+
+  group.promise = loadModelEntries(name, MODEL_GROUPS[name], loader, loadedModelIds).then((entries) => {
+    const models = new Map(entries);
+    if (!group.wanted || group.generation !== generation) {
+      disposeModelResources(models);
+      group.status = 'idle';
+      group.promise = null;
+      updateResidencyRuntime(groupStates);
+      return null;
+    }
+    group.models = models;
+    adoptModelGroup(name, states, models);
+    group.status = 'ready';
+    runtime.modelStatus = 'ready';
+    runtime.modelSource = 'staged-glb';
+    sceneElement.dataset.models = 'ready';
+    updateResidencyRuntime(groupStates);
+    scheduleRender();
+    return models;
+  }).catch((error) => {
+    group.status = 'fallback';
+    group.promise = null;
+    runtime.modelStatus = 'fallback';
+    runtime.modelError = `${name}: ${error?.message || 'model-load-failed'}`;
+    sceneElement.dataset.models = 'fallback';
+    console.warn(`Cake Studio ${name} models unavailable; procedural group retained.`, error);
+    updateResidencyRuntime(groupStates);
+    scheduleRender();
+    return null;
+  });
+  return group.promise;
+}
+
+async function loadModelEntries(groupName, ids, loader, loadedModelIds) {
+  const entries = new Array(ids.length);
+  const limit = matchMedia('(max-width: 700px)').matches ? 2 : 4;
+  let cursor = 0;
+  let loadError = null;
+  const worker = async () => {
+    while (cursor < ids.length && !loadError) {
+      const index = cursor;
+      cursor += 1;
+      const id = ids[index];
+      const file = MODEL_FILES.get(id);
+      if (!file) {
+        loadError = new Error(`${groupName}: unknown model ${id}`);
+        return;
+      }
+      try {
+        const gltf = await loader.loadAsync(`./cake-studio/models/${file}`);
+        loadedModelIds.add(id);
+        runtime.modelsLoaded = loadedModelIds.size;
+        entries[index] = [id, prepareProductionModel(gltf.scene, id)];
+      } catch (error) {
+        loadError ||= error;
+      }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, ids.length) }, () => worker()));
+  if (loadError) {
+    disposeModelResources(new Map(entries.filter(Boolean)));
+    throw loadError;
   }
-  adoptProductionModels(states, models);
+  return entries;
+}
+
+function updateResidencyRuntime(groupStates) {
+  const resident = [...groupStates.values()].filter((group) => group.status === 'ready');
+  runtime.residentModelGroups = resident.map((group) => group.name);
+  runtime.modelsResident = resident.reduce((count, group) => count + (group.models?.size || 0), 0);
+  sceneElement.dataset.residentGroups = runtime.residentModelGroups.join(',') || 'none';
+}
+
+function disposeModelGroup(name, groupStates, states) {
+  const group = groupStates.get(name);
+  if (!group) return;
+  group.wanted = false;
+  if (group.status === 'loading') return;
+  if (group.status !== 'ready' || !group.models) return;
+  restoreModelGroup(name, states);
+  disposeModelResources(group.models);
+  group.models = null;
+  group.promise = null;
+  group.status = 'idle';
+  updateResidencyRuntime(groupStates);
+}
+
+function disposeModelResources(models) {
+  const geometries = new Set();
+  const materials = new Set();
+  const textures = new Set();
+  for (const model of models.values()) {
+    model.removeFromParent();
+    model.traverse((child) => {
+      if (!child.isMesh) return;
+      if (child.geometry) geometries.add(child.geometry);
+      const list = Array.isArray(child.material) ? child.material : [child.material];
+      list.filter(Boolean).forEach((material) => {
+        materials.add(material);
+        Object.values(material).forEach((value) => {
+          if (value?.isTexture) textures.add(value);
+        });
+      });
+    });
+  }
+  textures.forEach((texture) => texture.dispose());
+  materials.forEach((material) => material.dispose());
+  geometries.forEach((geometry) => geometry.dispose());
 }
 
 function prepareProductionModel(model, id) {
@@ -621,66 +894,72 @@ function prepareProductionModel(model, id) {
   return wrapper;
 }
 
-function adoptProductionModels({ readyForms, assembly, handoff, chapterWords }, models) {
-  readyForms.fallbackForms.forEach((form) => readyForms.root.remove(form));
-  readyForms.forms = Array.from({ length: READY_FORM_COUNT }, (_, index) => {
-    const form = models.get(`cake-${String(index + 1).padStart(2, '0')}`);
-    form.name = `ready-form-${String(index + 1).padStart(2, '0')}-glb`;
-    form.userData.formIndex = index;
-    readyForms.root.add(form);
-    return form;
-  });
-  readyForms.usingModels = true;
+function adoptModelGroup(name, { readyForms, assembly, handoff, chapterWords }, models) {
+  if (name === 'forms') {
+    readyForms.root.remove(...readyForms.forms);
+    readyForms.forms = Array.from({ length: READY_FORM_COUNT }, (_, index) => {
+      const form = models.get(`cake-${String(index + 1).padStart(2, '0')}`);
+      form.name = `ready-form-${String(index + 1).padStart(2, '0')}-glb`;
+      form.userData.formIndex = index;
+      readyForms.root.add(form);
+      return form;
+    });
+    readyForms.usingModels = true;
+    adoptChapterWord(chapterWords, 'forms', models.get('wordmark-choose'));
+    return;
+  }
 
-  assembly.root.remove(assembly.fallbackBody, ...assembly.fallbackParts);
-  const body = models.get('assembly-10');
-  body.name = 'measured-body-glb';
-  body.scale.setScalar(1.55);
-  body.position.y = 0.18;
-  assembly.root.add(body);
-
-  const partSpecs = [
-    ['assembly-11', new THREE.Vector3(0, -0.08, 0), new THREE.Euler(0, 0, 0), 1.48],
-    ['assembly-12', new THREE.Vector3(0, 0.2, 1.28), new THREE.Euler(0, 0, 0), 0.92],
-    ['assembly-13', new THREE.Vector3(0, 0.14, 1.52), new THREE.Euler(0, 0, 0), 0.54],
-    ['assembly-14', new THREE.Vector3(0, 1.52, 0.05), new THREE.Euler(0, 0, 0), 0.58],
-  ];
-  const parts = partSpecs.map(([id, position, rotation, scale], index) => {
-    const part = models.get(id);
-    part.name = ['measured-surface-glb', 'edible-image-glb', 'bilingual-plaque-glb', 'decoration-glb'][index];
-    part.userData.attachPosition = position;
-    part.userData.attachRotation = rotation;
-    part.userData.attachScale = scale;
-    assembly.root.add(part);
-    return part;
-  });
-  assembly.body = body;
-  assembly.parts = parts;
-  assembly.waferRoot.remove(...assembly.wafers);
-  const waferIds = ['wafer-a', 'wafer-b', 'wafer-c', 'wafer-d'];
-  const waferScales = [0.43, 0.47, 0.45, 0.41];
-  const wafers = Array.from({ length: 17 }, (_, index) => {
-    const modelId = waferIds[index % waferIds.length];
-    const wafer = models.get(modelId).clone(true);
-    wafer.name = `data-wafer-${String(index + 1).padStart(2, '0')}-${modelId}`;
-    wafer.userData.phase = index / 17;
-    wafer.userData.baseScale = waferScales[index % waferScales.length];
-    wafer.userData.modelId = modelId;
-    assembly.waferRoot.add(wafer);
-    return wafer;
-  });
-  assembly.wafers = wafers;
-  assembly.usingModels = true;
-  runtime.waferSource = 'glb';
-  runtime.waferModels = wafers.length;
-  sceneElement.dataset.waferSource = 'glb';
+  if (name === 'assembly') {
+    assembly.root.remove(assembly.body, ...assembly.parts);
+    assembly.waferRoot.remove(...assembly.wafers);
+    const body = models.get('assembly-10');
+    body.name = 'measured-body-glb';
+    body.scale.setScalar(1.55);
+    body.position.y = 0.18;
+    assembly.root.add(body);
+    const partSpecs = [
+      ['assembly-11', new THREE.Vector3(0, -0.08, 0), new THREE.Euler(0, 0, 0), 1.48],
+      ['assembly-12', new THREE.Vector3(0, 0.2, 1.28), new THREE.Euler(0, 0, 0), 0.92],
+      ['assembly-13', new THREE.Vector3(0, 0.14, 1.52), new THREE.Euler(0, 0, 0), 0.54],
+      ['assembly-14', new THREE.Vector3(0, 1.52, 0.05), new THREE.Euler(0, 0, 0), 0.58],
+    ];
+    const parts = partSpecs.map(([id, position, rotation, scale], index) => {
+      const part = models.get(id);
+      part.name = ['measured-surface-glb', 'edible-image-glb', 'bilingual-plaque-glb', 'decoration-glb'][index];
+      part.userData.attachPosition = position;
+      part.userData.attachRotation = rotation;
+      part.userData.attachScale = scale;
+      assembly.root.add(part);
+      return part;
+    });
+    const waferIds = ['wafer-a', 'wafer-b', 'wafer-c', 'wafer-d'];
+    const waferScales = [0.43, 0.47, 0.45, 0.41];
+    const wafers = Array.from({ length: 17 }, (_, index) => {
+      const modelId = waferIds[index % waferIds.length];
+      const wafer = models.get(modelId).clone(true);
+      wafer.name = `data-wafer-${String(index + 1).padStart(2, '0')}-${modelId}`;
+      wafer.userData.phase = index / 17;
+      wafer.userData.baseScale = waferScales[index % waferScales.length];
+      wafer.userData.modelId = modelId;
+      assembly.waferRoot.add(wafer);
+      return wafer;
+    });
+    assembly.body = body;
+    assembly.parts = parts;
+    assembly.wafers = wafers;
+    assembly.usingModels = true;
+    runtime.waferSource = 'glb';
+    runtime.waferModels = wafers.length;
+    sceneElement.dataset.waferSource = 'glb';
+    adoptChapterWord(chapterWords, 'assembly', models.get('wordmark-assemble'));
+    return;
+  }
 
   handoff.root.remove(handoff.source);
   const source = models.get('cake-06').clone(true);
   source.name = 'approved-source-cake-glb';
   handoff.root.add(source);
   handoff.source = source;
-
   handoff.mockup.clear();
   const frame = models.get('handoff-frame');
   frame.name = 'customer-mockup-frame-glb';
@@ -693,7 +972,6 @@ function adoptProductionModels({ readyForms, assembly, handoff, chapterWords }, 
   miniature.position.set(0, -0.08, 0.16);
   handoff.mockup.add(miniature);
   handoff.miniature = miniature;
-
   handoff.bakerSheet.clear();
   const bakerSheet = models.get('handoff-sheet');
   bakerSheet.name = 'baker-sheet-glb';
@@ -701,7 +979,6 @@ function adoptProductionModels({ readyForms, assembly, handoff, chapterWords }, 
   bakerSheet.position.y = 0.22;
   bakerSheet.rotation.x = -0.86;
   handoff.bakerSheet.add(bakerSheet);
-
   handoff.plaque.clear();
   const trueSizePlaque = models.get('handoff-plaque');
   trueSizePlaque.name = 'true-size-plaque-glb';
@@ -712,23 +989,62 @@ function adoptProductionModels({ readyForms, assembly, handoff, chapterWords }, 
   runtime.handoffArtifactSource = 'glb';
   runtime.handoffArtifactModels = 3;
   sceneElement.dataset.handoffArtifacts = 'glb';
+  adoptChapterWord(chapterWords, 'handoff', models.get('wordmark-handoff'));
+}
 
-  const wordSpecs = [
-    ['wordmark-choose', 'forms'],
-    ['wordmark-assemble', 'assembly'],
-    ['wordmark-handoff', 'handoff'],
-  ];
-  chapterWords.words = wordSpecs.map(([id, act]) => {
-    const word = models.get(id);
-    word.name = `${act}-chapter-wordmark-glb`;
-    word.userData.act = act;
-    word.visible = false;
-    chapterWords.root.add(word);
-    return word;
-  });
-  chapterWords.usingModels = true;
-  runtime.wordmarkModels = chapterWords.words.length;
+function adoptChapterWord(state, act, word) {
+  const existing = state.wordsByAct.get(act);
+  existing?.removeFromParent();
+  word.name = `${act}-chapter-wordmark-glb`;
+  word.userData.act = act;
+  word.visible = false;
+  state.root.add(word);
+  state.wordsByAct.set(act, word);
+  state.usingModels = state.wordsByAct.size > 0;
+  runtime.wordmarkModels = state.wordsByAct.size;
   sceneElement.dataset.wordmarks = 'ready';
+}
+
+function restoreModelGroup(name, { readyForms, assembly, handoff, chapterWords }) {
+  if (name === 'forms') {
+    readyForms.root.remove(...readyForms.forms);
+    readyForms.fallbackForms.forEach((form) => readyForms.root.add(form));
+    readyForms.forms = readyForms.fallbackForms;
+    readyForms.usingModels = false;
+  } else if (name === 'assembly') {
+    assembly.root.remove(assembly.body, ...assembly.parts);
+    assembly.waferRoot.remove(...assembly.wafers);
+    assembly.root.add(assembly.fallbackBody, ...assembly.fallbackParts);
+    assembly.fallbackWafers.forEach((wafer) => assembly.waferRoot.add(wafer));
+    assembly.body = assembly.fallbackBody;
+    assembly.parts = assembly.fallbackParts;
+    assembly.wafers = assembly.fallbackWafers;
+    assembly.usingModels = false;
+    runtime.waferSource = 'procedural';
+    runtime.waferModels = 0;
+    sceneElement.dataset.waferSource = 'procedural';
+  } else {
+    handoff.root.remove(handoff.source);
+    handoff.root.add(handoff.fallbackSource);
+    handoff.source = handoff.fallbackSource;
+    handoff.mockup.clear();
+    handoff.mockup.add(...handoff.fallbackMockupChildren);
+    handoff.bakerSheet.clear();
+    handoff.bakerSheet.add(...handoff.fallbackBakerChildren);
+    handoff.plaque.clear();
+    handoff.plaque.add(...handoff.fallbackPlaqueChildren);
+    handoff.miniature = handoff.fallbackMiniature;
+    handoff.usingModels = false;
+    runtime.handoffArtifactSource = 'procedural';
+    runtime.handoffArtifactModels = 0;
+    sceneElement.dataset.handoffArtifacts = 'procedural';
+  }
+  const word = chapterWords.wordsByAct.get(name);
+  word?.removeFromParent();
+  chapterWords.wordsByAct.delete(name);
+  chapterWords.usingModels = chapterWords.wordsByAct.size > 0;
+  runtime.wordmarkModels = chapterWords.wordsByAct.size;
+  if (!chapterWords.usingModels) sceneElement.dataset.wordmarks = 'idle';
 }
 
 function createCakeForm(index, simplified = false) {
@@ -787,18 +1103,34 @@ function createCakeForm(index, simplified = false) {
 }
 
 function renderSheet(sheet, progress, p1, compact) {
-  const vanish = smooth(0.23, 0.56, p1);
-  sheet.group.visible = progress < 0.25;
-  sheet.paper.opacity = 1 - vanish;
+  const release = smooth(0.025, 0.155, progress);
+  const toAssembly = smooth(0.25, 0.37, progress);
+  const toHandoff = smooth(0.58, 0.71, progress);
+  const finish = smooth(0.84, 0.95, progress);
+  const crossing = Math.max(
+    Math.sin(toAssembly * Math.PI) * (toAssembly > 0 && toAssembly < 1 ? 1 : 0),
+    Math.sin(toHandoff * Math.PI) * (toHandoff > 0 && toHandoff < 1 ? 1 : 0),
+  );
+  sheet.group.visible = progress < 0.96;
+  sheet.paper.opacity = 1 - finish;
   sheet.edges.forEach((edge) => {
-    edge.material.opacity = 1 - vanish;
+    edge.material.opacity = 1 - finish;
     edge.material.transparent = true;
   });
-  const scale = (compact ? 0.67 : 0.86) * lerp(1, 0.72, vanish);
+  const scale = (compact ? 0.74 : 0.9)
+    * lerp(1, 0.34, release)
+    * lerp(1, 1.72, crossing)
+    * lerp(1, 0.72, finish);
+  const x = lerp(lerp(ZONE_X.forms, ZONE_X.assembly, toAssembly), ZONE_X.handoff, toHandoff);
   sheet.group.scale.setScalar(scale);
-  sheet.group.position.set(0, compact ? 2.15 : 1.28, lerp(0.45, -0.6, p1));
-  sheet.group.rotation.x = lerp(-0.18, -1.2, smooth(0.08, 0.58, p1));
-  sheet.group.rotation.y = lerp(0, 0.34, smooth(0.2, 0.65, p1));
+  sheet.group.position.set(
+    x,
+    lerp(compact ? 2.2 : 1.32, compact ? 0.55 : -0.28, release) + crossing * 1.15,
+    lerp(0.45, toHandoff > 0.99 ? 0.6 : 1.25, release) + crossing * 3.1 - finish * 1.2,
+  );
+  sheet.group.rotation.x = lerp(lerp(-0.18, -1.28, release), -0.38, crossing);
+  sheet.group.rotation.y = crossing * (toHandoff > 0 ? -0.5 : 0.5) + finish * 0.18;
+  sheet.group.rotation.z = Math.sin(progress * Math.PI * 2) * 0.025 * (1 - finish);
 }
 
 function renderReadyForms(state, p1, progress, compact) {
@@ -806,11 +1138,11 @@ function renderReadyForms(state, p1, progress, compact) {
   if (!state.root.visible) return;
   const responsive = compact ? 0.59 : 0.82;
   state.root.scale.setScalar(responsive);
-  state.root.position.y = compact ? 2.05 : 1.22;
+  state.root.position.set(ZONE_X.forms, compact ? 2.05 : 1.22, 0);
   const libraryPositions = [
-    [-3.8, 1.7, -1.7], [0, 2.0, -2.4], [3.8, 1.7, -1.7],
-    [-4.2, 0.18, -0.6], [0, 0.35, -0.1], [4.2, 0.18, -0.6],
-    [-3.5, -1.1, -1.4], [0, -1.05, -1.9], [3.5, -1.1, -1.4],
+    [-2.55, 1.75, -2.15], [0, 1.75, -2.15], [2.55, 1.75, -2.15],
+    [-2.55, -0.15, -2.15], [0, -0.15, -2.15], [2.55, -0.15, -2.15],
+    [-2.55, -2.05, -2.15], [0, -2.05, -2.15], [2.55, -2.05, -2.15],
   ];
   const focus = smooth(0.64, 0.96, p1);
   state.forms.forEach((form, index) => {
@@ -842,7 +1174,7 @@ function renderAssembly(state, p2, progress, compact) {
   const entry = smooth(0, 0.18, p2);
   const exit = 1 - smooth(0.88, 1, p2);
   state.root.scale.setScalar((compact ? 0.74 : 1.08) * entry * Math.max(0.001, exit));
-  state.root.position.set(0, compact ? 1.42 : 0.72, 0.2);
+  state.root.position.set(ZONE_X.assembly, compact ? 1.42 : 0.72, 0.2);
   state.root.rotation.y = lerp(-0.35, 0.45, p2);
   state.body.rotation.y = p2 * 0.36;
 
@@ -887,7 +1219,7 @@ function renderAssembly(state, p2, progress, compact) {
 function renderHandoff(state, p3, progress, compact) {
   state.root.visible = progress > 0.625;
   if (!state.root.visible) return;
-  state.root.position.y = compact ? 1.72 : 0.92;
+  state.root.position.set(ZONE_X.handoff, compact ? 1.72 : 0.92, 0);
   state.root.scale.setScalar(compact ? 0.58 : 0.88);
   const sourceExit = smooth(0.18, 0.48, p3);
   state.source.visible = sourceExit < 0.995;
@@ -896,9 +1228,9 @@ function renderHandoff(state, p3, progress, compact) {
   state.source.scale.setScalar(Math.max(0.001, lerp(1.58, 0.04, sourceExit)));
 
   const targets = [
-    new THREE.Vector3(-4.2, 0, 0.15),
+    new THREE.Vector3(-2.67, 0, 0.15),
     new THREE.Vector3(0, 0, 0.9),
-    new THREE.Vector3(4.2, 0, 0.15),
+    new THREE.Vector3(2.67, 0, 0.15),
   ];
   state.artifacts.forEach((artifact, index) => {
     const reveal = smooth(0.12 + index * 0.09, 0.36 + index * 0.09, p3);
@@ -911,10 +1243,6 @@ function renderHandoff(state, p3, progress, compact) {
 }
 
 function renderChapterWords(state, progress, compact) {
-  if (!state.usingModels) {
-    runtime.wordmarkAct = 'none';
-    return;
-  }
   const spans = [
     { act: 'forms', start: 0.04, end: 0.405 },
     { act: 'assembly', start: 0.3, end: 0.75 },
@@ -923,8 +1251,9 @@ function renderChapterWords(state, progress, compact) {
   let active = 'none';
   let strongestPresence = 0;
 
-  state.words.forEach((word, index) => {
-    const span = spans[index];
+  spans.forEach((span, index) => {
+    const word = state.wordsByAct.get(span.act);
+    if (!word) return;
     const local = range(progress, span.start, span.end);
     const presence = smooth(span.start, span.start + 0.075, progress)
       * (1 - smooth(span.end - 0.07, span.end, progress));
@@ -940,7 +1269,7 @@ function renderChapterWords(state, progress, compact) {
       const depart = smooth(0.64, 1, local);
       const scale = (compact ? 2.55 : 4.15) * lerp(0.76, 1, enter) * Math.max(0.001, presence);
       word.position.set(
-        lerp(-2.8, 0, enter) + depart * 2.6,
+        ZONE_X.forms + lerp(-2.8, 0, enter) + depart * 2.6,
         compact ? 4.45 : 2.92,
         lerp(-7.2, -4.15, enter) + depart * 5.4,
       );
@@ -953,7 +1282,7 @@ function renderChapterWords(state, progress, compact) {
       const depart = smooth(0.68, 1, local);
       const scale = (compact ? 2.05 : 3.5) * lerp(0.72, 1, enter) * Math.max(0.001, presence);
       word.position.set(
-        lerp(4.8, 0, enter) - depart * 4.2,
+        ZONE_X.assembly + lerp(4.8, 0, enter) - depart * 4.2,
         compact ? 4.05 : 2.82,
         -4.35 + depart * 4.1,
       );
@@ -967,7 +1296,7 @@ function renderChapterWords(state, progress, compact) {
       * lerp(0.78, 1.12, passage)
       * Math.max(0.001, presence);
     word.position.set(
-      lerp(-1.4, 0, enter),
+      ZONE_X.handoff + lerp(-1.4, 0, enter),
       lerp(compact ? 1.25 : 0.42, compact ? 3.45 : 2.5, passage),
       lerp(-5.2, compact ? 17.6 : 15.5, passage),
     );
@@ -980,6 +1309,7 @@ function renderChapterWords(state, progress, compact) {
 }
 
 function renderSet(set, progress, compact) {
+  if (set.authored) return;
   set.floor.material.map.offset.x = progress * 0.018;
   set.floor.material.map.offset.y = progress * -0.011;
   set.monoliths.forEach((monolith, index) => {
@@ -1032,6 +1362,68 @@ function renderCamera(camera, target, progress, compact) {
   };
 }
 
+function renderAuthoredCamera(set, camera, progress, compact) {
+  const { action, mixer, clip, desktop, phone } = set.authored;
+  action.enabled = true;
+  action.paused = false;
+  mixer.setTime(progress * clip.duration);
+  const source = compact ? phone : desktop;
+  source.updateWorldMatrix(true, false);
+  source.matrixWorld.decompose(camera.position, camera.quaternion, CAMERA_WORLD_SCALE);
+  camera.fov = sampleAuthoredFov(source, progress * clip.duration, compact ? 43 : 35);
+  camera.updateProjectionMatrix();
+  source.getWorldDirection(CAMERA_WORLD_DIRECTION);
+  const target = camera.position.clone().addScaledVector(CAMERA_WORLD_DIRECTION, 10);
+  runtime.cameraPosition = {
+    x: Number(camera.position.x.toFixed(5)),
+    y: Number(camera.position.y.toFixed(5)),
+    z: Number(camera.position.z.toFixed(5)),
+  };
+  runtime.cameraTarget = {
+    x: Number(target.x.toFixed(5)),
+    y: Number(target.y.toFixed(5)),
+    z: Number(target.z.toFixed(5)),
+  };
+  runtime.cameraFov = Number(camera.fov.toFixed(3));
+}
+
+function sampleAuthoredFov(source, time, fallbackFov) {
+  let curve = authoredFovCurves.get(source);
+  if (!curve) {
+    try {
+      const raw = source.userData?.fovCurve;
+      curve = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    } catch {
+      curve = null;
+    }
+    if (!Array.isArray(curve) || curve.length < 2) curve = [[0, fallbackFov], [1, fallbackFov]];
+    authoredFovCurves.set(source, curve);
+  }
+  if (time <= curve[0][0]) return curve[0][1];
+  for (let index = 1; index < curve.length; index += 1) {
+    const right = curve[index];
+    if (time > right[0]) continue;
+    const left = curve[index - 1];
+    return lerp(left[1], right[1], range(time, left[0], right[0]));
+  }
+  return curve.at(-1)[1];
+}
+
+function actForProgress(progress) {
+  if (progress < 0.36) return 'forms';
+  if (progress < 0.69) return 'assembly';
+  return 'handoff';
+}
+
+function renderProofPortal(progress) {
+  const portalProgress = smooth(0.72, 0.94, progress);
+  const state = progress >= 0.9 ? 'locked' : progress >= 0.72 ? 'open' : 'hidden';
+  sceneElement.style.setProperty('--portal-p', portalProgress.toFixed(4));
+  sceneElement.dataset.portalState = state;
+  runtime.portalState = state;
+  if (proofPortal) proofPortal.setAttribute('aria-hidden', state === 'hidden' ? 'true' : 'false');
+}
+
 function renderCaptions(progress) {
   const spans = [
     { element: actElements[0], start: 0.045, end: 0.37 },
@@ -1050,8 +1442,75 @@ function renderCaptions(progress) {
       active = element.dataset.objectAct;
     }
   });
+  active = actForProgress(progress);
   runtime.act = active;
   sceneElement.dataset.act = active;
+}
+
+function measureProjectedBounds(object, camera, width, height) {
+  if (!object?.visible || width < 1 || height < 1) return { visible: false, coverage: 0 };
+  const box = new THREE.Box3().setFromObject(object);
+  if (box.isEmpty()) return { visible: false, coverage: 0 };
+  const projected = [];
+  let visibleCorners = 0;
+  for (const x of [box.min.x, box.max.x]) {
+    for (const y of [box.min.y, box.max.y]) {
+      for (const z of [box.min.z, box.max.z]) {
+        const point = new THREE.Vector3(x, y, z).project(camera);
+        projected.push({ x: (point.x * 0.5 + 0.5) * width, y: (-point.y * 0.5 + 0.5) * height });
+        if (point.z >= -1 && point.z <= 1 && Math.abs(point.x) <= 1.2 && Math.abs(point.y) <= 1.2) visibleCorners += 1;
+      }
+    }
+  }
+  const left = Math.min(...projected.map((point) => point.x));
+  const right = Math.max(...projected.map((point) => point.x));
+  const top = Math.min(...projected.map((point) => point.y));
+  const bottom = Math.max(...projected.map((point) => point.y));
+  const clippedWidth = Math.max(0, Math.min(width, right) - Math.max(0, left));
+  const clippedHeight = Math.max(0, Math.min(height, bottom) - Math.max(0, top));
+  return {
+    visible: visibleCorners > 0 && clippedWidth > 1 && clippedHeight > 1,
+    visibleCorners,
+    left: Number(left.toFixed(2)),
+    right: Number(right.toFixed(2)),
+    top: Number(top.toFixed(2)),
+    bottom: Number(bottom.toFixed(2)),
+    coverage: Number(((clippedWidth * clippedHeight) / (width * height)).toFixed(5)),
+  };
+}
+
+function probeRenderedFrame(renderer, scene, camera) {
+  const size = 96;
+  const target = new THREE.WebGLRenderTarget(size, size, { depthBuffer: true, stencilBuffer: false });
+  const previousTarget = renderer.getRenderTarget();
+  const pixels = new Uint8Array(size * size * 4);
+  try {
+    renderer.setRenderTarget(target);
+    renderer.clear();
+    renderer.render(scene, camera);
+    renderer.readRenderTargetPixels(target, 0, 0, size, size, pixels);
+  } finally {
+    renderer.setRenderTarget(previousTarget);
+    target.dispose();
+    if (!previousTarget) renderer.render(scene, camera);
+  }
+  let nonDark = 0;
+  let minimum = 255;
+  let maximum = 0;
+  let total = 0;
+  for (let index = 0; index < pixels.length; index += 4) {
+    const light = (pixels[index] + pixels[index + 1] + pixels[index + 2]) / 3;
+    if (pixels[index + 3] > 4 && light > 12) nonDark += 1;
+    minimum = Math.min(minimum, light);
+    maximum = Math.max(maximum, light);
+    total += light;
+  }
+  return {
+    samples: size * size,
+    nonDark,
+    luminanceRange: Number((maximum - minimum).toFixed(2)),
+    meanLuminance: Number((total / (size * size)).toFixed(2)),
+  };
 }
 
 function showFallback(error) {

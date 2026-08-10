@@ -158,7 +158,11 @@ try {
         requestUrls.set(event.params.requestId, event.params.request.url);
       }
       if (event.method === 'Network.loadingFailed' && !event.params.canceled && event.params.errorText !== 'net::ERR_ABORTED') {
-        failedRequests.push(`${event.params.errorText} ${requestUrls.get(event.params.requestId) || 'unknown-url'}`);
+        failedRequests.push({
+          errorText: event.params.errorText,
+          type: event.params.type || '',
+          url: requestUrls.get(event.params.requestId) || 'unknown-url',
+        });
       }
       if (event.method === 'Network.loadingFinished' || event.method === 'Network.loadingFailed') {
         requestUrls.delete(event.params.requestId);
@@ -241,11 +245,11 @@ try {
       lang: document.documentElement.lang,
       dir: document.documentElement.dir
     }))()`);
-    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.3.0', `${basics.title} · ${basics.version}`);
+    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.4.0', `${basics.title} · ${basics.version}`);
     check(`${viewport.name} 50-shot DOM`, basics.figures === 50 && basics.videos === 2, `${basics.figures} figures / ${basics.videos} buffers`);
     check(
       `${viewport.name} directed score`,
-      basics.directorVersion === '1.3.0'
+      basics.directorVersion === '1.4.0'
         && basics.directorWeights === 50
         && basics.fastWeight < basics.choiceWeight
         && [basics.choiceWeight, basics.errorWeight, basics.rejectWeight, basics.loopWeight].every((weight) => weight >= 1.3),
@@ -253,7 +257,7 @@ try {
     );
     check(
       `${viewport.name} dimensional engine`,
-      basics.codaVersion === '1.3.0' && basics.codaReady && basics.webgl && basics.engine.startsWith('three-r') && basics.canvases === 1,
+      basics.codaVersion === '1.4.0' && basics.codaReady && basics.webgl && basics.engine.startsWith('three-r') && basics.canvases === 1,
       `v${basics.codaVersion} · ${basics.engine} · ready=${basics.codaReady} · canvas=${basics.canvases}`,
     );
     check(`${viewport.name} horizontal fit`, basics.overflow <= 1, `${basics.overflow}px overflow`);
@@ -285,21 +289,36 @@ try {
     }
 
     const scrollScene = async (selector, progress) => {
-      const target = await evaluate(`(async () => {
+      let target = await evaluate(`(() => {
         const scene=document.querySelector(${JSON.stringify(selector)});
         const top=scene.getBoundingClientRect().top+scrollY;
         const travel=Math.max(0,scene.offsetHeight-innerHeight);
         const root=document.documentElement;
         const destination=Math.round(top+travel*${progress});
         root.style.setProperty('scroll-behavior','auto','important');
-        for(let frame=0;frame<12;frame+=1){
-          document.scrollingElement.scrollTop=destination;
-          scrollTo({top:destination,left:0,behavior:'instant'});
-          await new Promise(resolve=>requestAnimationFrame(resolve));
-        }
         return destination;
       })()`);
-      await waitFor(`Math.abs(scrollY-${target})<2`, 3_000);
+      // Use the same CSS progress cinema.js exposes as feedback. This remains
+      // deterministic when a GLB decode delays a scroll paint or scroll anchoring
+      // nudges the document while the middle act is entering.
+      for (let frame = 0; frame < 6; frame += 1) {
+        await evaluate(`document.scrollingElement.scrollTop=${target}; scrollTo(0,${target}); true`);
+        // A host delay is not a rendering barrier: CDP can otherwise read the
+        // previous knot before cinema.js receives its next animation frame.
+        await evaluate(`new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))`);
+        const feedback = await evaluate(`(() => {
+          const scene=document.querySelector(${JSON.stringify(selector)});
+          return {
+            progress:Number.parseFloat(scene.style.getPropertyValue('--p') || '0'),
+            travel:Math.max(0,scene.offsetHeight-innerHeight),
+            scrollY
+          };
+        })()`);
+        if (Math.abs(feedback.progress - progress) < .0025) break;
+        target = Math.round(feedback.scrollY + (progress - feedback.progress) * feedback.travel);
+      }
+      const settled = await waitFor(`Math.abs(Number.parseFloat(document.querySelector(${JSON.stringify(selector)}).style.getPropertyValue('--p') || '0')-${progress})<.003`, 3_000);
+      if (!settled) throw new Error(`${selector} failed to settle at ${progress}`);
       await delay(800);
     };
 
@@ -385,12 +404,17 @@ try {
       { name: 'coda-handoff', progress: .84, act: 'handoff', copyRequired: true },
     ];
     await scrollScene('.dimensional-coda', .01);
-    const realModelsReady = await waitFor(`window.__cakeStudioCoda?.modelStatus==='ready'`, 30_000);
+    const realModelsReady = await waitFor(`window.__cakeStudioCoda?.residentModelGroups?.includes('forms') && window.__cakeStudioCoda?.setStatus==='ready'`, 30_000);
     const modelProof = await evaluate(`({
       status:window.__cakeStudioCoda?.modelStatus,
       source:window.__cakeStudioCoda?.modelSource,
       loaded:window.__cakeStudioCoda?.modelsLoaded,
+      resident:window.__cakeStudioCoda?.modelsResident,
+      groups:window.__cakeStudioCoda?.residentModelGroups,
       expected:window.__cakeStudioCoda?.modelsExpected,
+      setStatus:window.__cakeStudioCoda?.setStatus,
+      setSource:window.__cakeStudioCoda?.setSource,
+      cameraSource:window.__cakeStudioCoda?.cameraSource,
       waferSource:window.__cakeStudioCoda?.waferSource,
       waferModels:window.__cakeStudioCoda?.waferModels,
       wordmarkModels:window.__cakeStudioCoda?.wordmarkModels,
@@ -398,13 +422,17 @@ try {
       handoffArtifactModels:window.__cakeStudioCoda?.handoffArtifactModels,
       dataset:document.querySelector('.dimensional-coda')?.dataset.models
     })`);
-    check(`${viewport.name} real model batch`, realModelsReady && modelProof.source === 'glb' && modelProof.loaded === 24 && modelProof.expected === 24 && modelProof.dataset === 'ready', JSON.stringify(modelProof));
-    check(`${viewport.name} cinematic model roles`, modelProof.waferSource === 'glb' && modelProof.waferModels === 17 && modelProof.wordmarkModels === 3 && modelProof.handoffArtifactSource === 'glb' && modelProof.handoffArtifactModels === 3, JSON.stringify(modelProof));
+    check(`${viewport.name} staged forms residency`, realModelsReady && modelProof.source === 'staged-glb' && modelProof.resident === 10 && modelProof.groups.length === 1 && modelProof.groups[0] === 'forms' && modelProof.expected === 24 && modelProof.dataset === 'ready', JSON.stringify(modelProof));
+    check(`${viewport.name} authored proof room`, modelProof.setStatus === 'ready' && modelProof.setSource === 'cake-studio-proof-room.glb' && modelProof.cameraSource === 'authored-clip', JSON.stringify(modelProof));
     const codaResults = [];
     let priorRenders = -1;
     for (const state of codaStates) {
       await scrollScene('.dimensional-coda', state.progress);
-      const rendered = await waitFor(`Math.abs((window.__cakeStudioCoda?.progress ?? -1)-${state.progress})<.025 && window.__cakeStudioCoda?.act==='${state.act}'`, 12_000);
+      const rendered = await waitFor(`Math.abs((window.__cakeStudioCoda?.progress ?? -1)-${state.progress})<.025 && window.__cakeStudioCoda?.act==='${state.act}' && window.__cakeStudioCoda?.residentModelGroups?.includes('${state.act}')`, 30_000);
+      if (state.copyRequired) {
+        await waitFor(`window.__cakeStudioCoda?.wordmarkAct==='${state.act}' && window.__cakeStudioCoda?.subjectBounds?.visible===true`, 10_000);
+      }
+      await delay(180);
       const result = await evaluate(`(() => {
         const runtime=window.__cakeStudioCoda;
         const scene=document.querySelector('.dimensional-coda');
@@ -415,35 +443,11 @@ try {
         const actRect=act.getBoundingClientRect();
         const actStyle=getComputedStyle(act);
         let glVersion='';
-        let pixelNonZero=0;
-        let pixelRange=0;
-        let pixelSamples=0;
         try {
           const gl=canvas.getContext('webgl2') || canvas.getContext('webgl');
           glVersion=gl?.getParameter(gl.VERSION) ?? '';
-          if (gl) {
-            const size=40;
-            const pixels=new Uint8Array(size*size*4);
-            let low=255;
-            let high=0;
-            for (const xRatio of [.2,.5,.8]) {
-              for (const yRatio of [.2,.5,.8]) {
-                const x=Math.max(0,Math.min(canvas.width-size,Math.floor(canvas.width*xRatio-size/2)));
-                const y=Math.max(0,Math.min(canvas.height-size,Math.floor(canvas.height*yRatio-size/2)));
-                gl.readPixels(x,y,size,size,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
-                for (let index=0;index<pixels.length;index+=4) {
-                  const alpha=pixels[index+3];
-                  if (alpha>4) pixelNonZero+=1;
-                  const light=(pixels[index]+pixels[index+1]+pixels[index+2])/3;
-                  low=Math.min(low,light);
-                  high=Math.max(high,light);
-                  pixelSamples+=1;
-                }
-              }
-            }
-            pixelRange=high-low;
-          }
         } catch {}
+        const probe=runtime?.probeFrame?.() ?? {samples:0,nonDark:0,luminanceRange:0,meanLuminance:0};
         return {
           ready:runtime?.ready ?? false,
           webgl:runtime?.webglAvailable ?? false,
@@ -456,6 +460,10 @@ try {
           modelStatus:runtime?.modelStatus ?? '',
           modelSource:runtime?.modelSource ?? '',
           modelsLoaded:runtime?.modelsLoaded ?? 0,
+          modelsResident:runtime?.modelsResident ?? 0,
+          residentGroups:runtime?.residentModelGroups ?? [],
+          setSource:runtime?.setSource ?? '',
+          cameraSource:runtime?.cameraSource ?? '',
           waferSource:runtime?.waferSource ?? '',
           waferModels:runtime?.waferModels ?? 0,
           wordmarkModels:runtime?.wordmarkModels ?? 0,
@@ -465,6 +473,10 @@ try {
           renders:runtime?.renders ?? 0,
           drawCalls:runtime?.drawCalls ?? 0,
           triangles:runtime?.triangles ?? 0,
+          gpuTextures:runtime?.gpuTextures ?? 0,
+          gpuGeometries:runtime?.gpuGeometries ?? 0,
+          subjectBounds:runtime?.subjectBounds ?? {visible:false,coverage:0},
+          portalState:runtime?.portalState ?? 'hidden',
           pixelRatio:runtime?.pixelRatio ?? 0,
           canvasWidth:canvas.width,
           canvasHeight:canvas.height,
@@ -476,22 +488,26 @@ try {
           bridgeSource:bridge.getAttribute('src'),
           bridgeWidth:bridge.getBoundingClientRect().width,
           labels:[...document.querySelectorAll('.artifact-names [data-output]')].map(node=>node.dataset.output),
-          pixelNonZero,
-          pixelSamples,
-          pixelRange,
+          probe,
           glVersion,
           playAttempts:window.__cakePlayAttempts
         };
       })()`);
       codaResults.push(result);
+      const expectedResident = state.act === 'handoff' ? 5 : 10;
+      const roleReady = state.act === 'forms'
+        ? result.wordmarkModels === 1
+        : state.act === 'assembly'
+          ? result.wordmarkModels === 1 && result.waferSource === 'glb' && result.waferModels === 17
+          : result.wordmarkModels === 1 && result.handoffArtifactSource === 'glb' && result.handoffArtifactModels === 3;
       check(`${viewport.name} ${state.name} state`, rendered && result.ready && result.webgl && result.act === state.act && Math.abs(result.progress - state.progress) < .025, `${result.act} @ ${result.progress} · ${result.engine}`);
-      check(`${viewport.name} ${state.name} object contract`, result.forms === 9 && result.parts === 4 && result.outputs === 3 && result.modelStatus === 'ready' && result.modelSource === 'glb' && result.modelsLoaded === 24 && result.waferSource === 'glb' && result.waferModels === 17 && result.wordmarkModels === 3 && result.handoffArtifactSource === 'glb' && result.handoffArtifactModels === 3, `${result.forms} forms · ${result.parts} parts · ${result.outputs} outputs · ${result.modelsLoaded} GLBs`);
+      check(`${viewport.name} ${state.name} object contract`, result.forms === 9 && result.parts === 4 && result.outputs === 3 && result.modelStatus === 'ready' && result.modelSource === 'staged-glb' && result.modelsResident === expectedResident && result.residentGroups.length === 1 && result.residentGroups[0] === state.act && roleReady && result.setSource === 'cake-studio-proof-room.glb' && result.cameraSource === 'authored-clip', `${result.forms} forms · ${result.parts} parts · ${result.outputs} outputs · ${result.modelsResident} resident / ${result.modelsLoaded} loaded`);
       if (state.copyRequired) {
         check(`${viewport.name} ${state.name} physical wordmark`, result.wordmarkAct === state.act, `${result.wordmarkAct} / expected ${state.act}`);
       }
-      check(`${viewport.name} ${state.name} real render`, result.canvasDisplay !== 'none' && result.drawCalls >= 4 && result.triangles >= 500 && result.pixelNonZero > 120 && result.pixelRange > 8 && result.glVersion.includes('WebGL'), `${result.glVersion} · ${result.drawCalls} calls · ${result.triangles} triangles · pixels ${result.pixelNonZero}/${result.pixelSamples} range ${result.pixelRange.toFixed(1)}`);
+      check(`${viewport.name} ${state.name} real render`, result.canvasDisplay !== 'none' && result.drawCalls >= 4 && result.triangles >= 500 && result.probe.nonDark > (state.copyRequired ? 320 : 60) && result.probe.luminanceRange > 8 && (!state.copyRequired || (result.subjectBounds.visible && result.subjectBounds.coverage > .01)) && result.glVersion.includes('WebGL'), `${result.glVersion} · ${result.drawCalls} calls · ${result.triangles} triangles · lit ${result.probe.nonDark}/${result.probe.samples} range ${result.probe.luminanceRange} · subject ${((result.subjectBounds.coverage || 0) * 100).toFixed(1)}%`);
       check(`${viewport.name} ${state.name} composition`, result.canvasContained && (!state.copyRequired || (result.actPresence > .3 && result.actContained)), `canvas=${result.canvasContained} · copy presence=${result.actPresence.toFixed(3)} · copy contained=${result.actContained}`);
-      check(`${viewport.name} ${state.name} bounded rendering`, result.pixelRatio > 0 && result.pixelRatio <= 1.5 && result.renders > priorRenders, `${result.canvasWidth}×${result.canvasHeight} @ ${result.pixelRatio}x · render ${result.renders}`);
+      check(`${viewport.name} ${state.name} bounded rendering`, result.pixelRatio > 0 && result.pixelRatio <= 1.5 && result.renders > priorRenders && result.drawCalls <= 150 && result.triangles <= 2_700_000 && result.gpuTextures <= 26, `${result.canvasWidth}×${result.canvasHeight} @ ${result.pixelRatio}x · render ${result.renders} · ${result.gpuTextures} textures / ${result.gpuGeometries} geometries`);
       check(`${viewport.name} ${state.name} never autoplayed`, result.playAttempts === 0, `${result.playAttempts} play attempts`);
       if (state.name === 'coda-bridge') {
         check(`${viewport.name} endpoint match bridge`, result.bridgeOpacity > .72 && result.bridgeSource.endsWith('CST-KF01-opening-sheet.png') && result.bridgeWidth >= viewport.width * .88, `opacity ${result.bridgeOpacity} · ${result.bridgeSource} · ${result.bridgeWidth}px`);
@@ -503,10 +519,31 @@ try {
       await screenshot(state.name);
     }
 
+    const transitionPeaks = [];
+    for (const transition of [
+      { progress: .34, groups: ['forms', 'assembly'], resident: 20, textureMax: 56 },
+      { progress: .72, groups: ['assembly', 'handoff'], resident: 15, textureMax: 42 },
+    ]) {
+      await scrollScene('.dimensional-coda', transition.progress);
+      const resident = await waitFor(`window.__cakeStudioCoda?.residentModelGroups?.length===2 && ${JSON.stringify(transition.groups)}.every(group=>window.__cakeStudioCoda.residentModelGroups.includes(group))`, 30_000);
+      await delay(180);
+      const peak = await evaluate(`({
+        progress:window.__cakeStudioCoda?.progress,
+        groups:window.__cakeStudioCoda?.residentModelGroups,
+        resident:window.__cakeStudioCoda?.modelsResident,
+        gpuTextures:window.__cakeStudioCoda?.gpuTextures,
+        drawCalls:window.__cakeStudioCoda?.drawCalls,
+        triangles:window.__cakeStudioCoda?.triangles
+      })`);
+      transitionPeaks.push(peak);
+      check(`${viewport.name} transition ${transition.progress} residency`, resident && peak.resident === transition.resident && transition.groups.every((group) => peak.groups.includes(group)), JSON.stringify(peak));
+      check(`${viewport.name} transition ${transition.progress} peak bounded`, peak.gpuTextures <= transition.textureMax && peak.drawCalls <= 240 && peak.triangles <= 4_500_000, `${peak.gpuTextures}/${transition.textureMax} textures Â· ${peak.drawCalls} calls Â· ${peak.triangles} triangles`);
+    }
+
     await scrollScene('.dimensional-coda', .22);
-    const codaReversed = await waitFor(`window.__cakeStudioCoda?.act==='forms' && Math.abs(window.__cakeStudioCoda.progress-.22)<.025`, 10_000);
-    const codaReverseState = await evaluate(`({act:window.__cakeStudioCoda?.act,progress:window.__cakeStudioCoda?.progress,renders:window.__cakeStudioCoda?.renders,playAttempts:window.__cakePlayAttempts})`);
-    check(`${viewport.name} dimensional reverse scrub`, codaReversed && codaReverseState.act === 'forms' && codaReverseState.renders > priorRenders, `${codaReverseState.act} @ ${codaReverseState.progress} · render ${codaReverseState.renders}`);
+    const codaReversed = await waitFor(`window.__cakeStudioCoda?.act==='forms' && Math.abs(window.__cakeStudioCoda.progress-.22)<.025 && window.__cakeStudioCoda?.residentModelGroups?.length===1 && window.__cakeStudioCoda.residentModelGroups[0]==='forms'`, 30_000);
+    const codaReverseState = await evaluate(`({act:window.__cakeStudioCoda?.act,progress:window.__cakeStudioCoda?.progress,renders:window.__cakeStudioCoda?.renders,groups:window.__cakeStudioCoda?.residentModelGroups,resident:window.__cakeStudioCoda?.modelsResident,loaded:window.__cakeStudioCoda?.modelsLoaded,playAttempts:window.__cakePlayAttempts})`);
+    check(`${viewport.name} dimensional reverse scrub`, codaReversed && codaReverseState.act === 'forms' && codaReverseState.renders > priorRenders && codaReverseState.resident === 10 && codaReverseState.loaded === 24, `${codaReverseState.act} @ ${codaReverseState.progress} · ${codaReverseState.resident} resident / ${codaReverseState.loaded} loaded · render ${codaReverseState.renders}`);
     check(`${viewport.name} dimensional reverse remains silent`, codaReverseState.playAttempts === 0, `${codaReverseState.playAttempts} play attempts`);
 
     await evaluate(`document.documentElement.lang==='en' && document.querySelector('[data-lang-toggle]').click()`);
@@ -533,9 +570,27 @@ try {
     check(`${viewport.name} Arabic fit`, arabic.overflow <= 1, `${arabic.overflow}px overflow`);
     await screenshot('coda-forms-ar');
 
-    observations[viewport.name] = { basics, filmStates: stateResults, reverseState, codaStates: codaResults, codaReverseState, arabic };
+    const recoveredMediaAborts = [];
+    const genuineFailures = [];
+    for (const failure of failedRequests) {
+      const abandonedMediaRange = ['net::ERR_INVALID_HTTP_RESPONSE', 'net::ERR_CONTENT_LENGTH_MISMATCH'].includes(failure.errorText)
+        && /\.mp4(?:$|\?)/i.test(failure.url);
+      if (abandonedMediaRange) {
+        try {
+          const probe = await fetch(failure.url, { headers: { Range: 'bytes=0-63' } });
+          const bytes = await probe.arrayBuffer();
+          if (probe.status === 206 && probe.headers.get('accept-ranges') === 'bytes' && bytes.byteLength === 64) {
+            recoveredMediaAborts.push(failure);
+            continue;
+          }
+        } catch {}
+      }
+      genuineFailures.push(failure);
+    }
+    const mediaErrors = await evaluate(`[...document.querySelectorAll('video')].filter(video => video.error).map(video => ({code:video.error.code,message:video.error.message,src:video.currentSrc}))`);
+    observations[viewport.name] = { basics, filmStates: stateResults, reverseState, codaStates: codaResults, transitionPeaks, codaReverseState, arabic, network: { badResponses, genuineFailures, recoveredMediaAborts, mediaErrors } };
     check(`${viewport.name} console clean`, consoleErrors.length === 0 && pageErrors.length === 0, `${consoleErrors.length} console / ${pageErrors.length} page errors`);
-    check(`${viewport.name} network clean`, badResponses.length === 0 && failedRequests.length === 0, `${badResponses.length} bad responses / ${failedRequests.length} failed requests${failedRequests.length ? ` · ${failedRequests.slice(0, 2).join(' | ')}` : ''}`);
+    check(`${viewport.name} network clean`, badResponses.length === 0 && genuineFailures.length === 0 && mediaErrors.length === 0, `${badResponses.length} bad responses / ${genuineFailures.length} genuine failures / ${mediaErrors.length} media errors · ${recoveredMediaAborts.length} abandoned ranges re-probed 206`);
     await cdp.send('Target.closeTarget', { targetId });
   }
 } finally {

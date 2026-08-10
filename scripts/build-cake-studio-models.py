@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import struct
 from pathlib import Path
 
 import bpy
@@ -15,7 +16,7 @@ SOURCE_MANIFEST = ROOT / "production" / "cake-studio" / "hunyuan3d" / "asset-man
 SOURCE_DIR = ROOT / "production" / "cake-studio" / "hunyuan3d" / "generated-glb"
 OUTPUT_DIR = ROOT / "public" / "worlds" / "cake-studio" / "models"
 OUTPUT_MANIFEST = OUTPUT_DIR / "manifest.json"
-TEXTURE_MAX_EDGE = 1024
+TEXTURE_MAX_EDGE = 512
 
 TARGET_TRIANGLES = {
     "cake-01": 100_000,
@@ -86,6 +87,68 @@ def resize_textures() -> None:
             scale = TEXTURE_MAX_EDGE / maximum
             image.scale(max(1, round(image.size[0] * scale)), max(1, round(image.size[1] * scale)))
         image.pack()
+
+
+def jpeg_dimensions(data: bytes) -> tuple[int, int]:
+    if data[:2] != b"\xff\xd8":
+        raise RuntimeError("embedded texture is not JPEG")
+    sof_markers = {0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF}
+    offset = 2
+    while offset + 8 <= len(data):
+        while offset < len(data) and data[offset] == 0xFF:
+            offset += 1
+        if offset >= len(data):
+            break
+        marker = data[offset]
+        offset += 1
+        if marker in sof_markers:
+            height = int.from_bytes(data[offset + 3:offset + 5], "big")
+            width = int.from_bytes(data[offset + 5:offset + 7], "big")
+            return width, height
+        if marker in {0x01, *range(0xD0, 0xDA)}:
+            continue
+        if offset + 2 > len(data):
+            break
+        segment_length = int.from_bytes(data[offset:offset + 2], "big")
+        if segment_length < 2:
+            break
+        offset += segment_length
+    raise RuntimeError("JPEG dimensions unavailable")
+
+
+def full_mip_bytes(width: int, height: int) -> int:
+    total = 0
+    while True:
+        total += width * height * 4
+        if width == 1 and height == 1:
+            return total
+        width = max(1, width // 2)
+        height = max(1, height // 2)
+
+
+def exported_texture_stats(output_path: Path) -> dict[str, int]:
+    data = output_path.read_bytes()
+    json_length = struct.unpack_from("<I", data, 12)[0]
+    document = json.loads(data[20:20 + json_length].decode("utf-8").rstrip(" \t\r\n\0"))
+    binary_header = 20 + json_length
+    if data[binary_header + 4:binary_header + 8] != b"BIN\0":
+        raise RuntimeError(f"{output_path.name}: embedded BIN chunk missing")
+    binary_start = binary_header + 8
+    dimensions = []
+    for image in document.get("images", []):
+        if image.get("mimeType") != "image/jpeg" or "bufferView" not in image:
+            raise RuntimeError(f"{output_path.name}: non-embedded JPEG texture")
+        view = document["bufferViews"][image["bufferView"]]
+        start = binary_start + int(view.get("byteOffset", 0))
+        end = start + int(view["byteLength"])
+        dimensions.append(jpeg_dimensions(data[start:end]))
+    decoded_base_bytes = sum(width * height * 4 for width, height in dimensions)
+    return {
+        "textureCount": len(dimensions),
+        "textureMaxEdge": max((max(width, height) for width, height in dimensions), default=0),
+        "decodedBaseBytes": decoded_base_bytes,
+        "estimatedMipBytes": sum(full_mip_bytes(width, height) for width, height in dimensions),
+    }
 
 
 def decimate(objects: list[bpy.types.Object], target: int) -> None:
@@ -159,6 +222,7 @@ def build_asset(asset: dict) -> dict:
     normalized_dimensions = normalize(asset["id"], meshes)
     triangles = triangle_count(meshes)
     export_glb(output_path)
+    textures = exported_texture_stats(output_path)
 
     record = {
         "id": asset["id"],
@@ -170,6 +234,7 @@ def build_asset(asset: dict) -> dict:
         "triangles": triangles,
         "normalizedDimensions": normalized_dimensions,
         "sha256": hashlib.sha256(output_path.read_bytes()).hexdigest(),
+        **textures,
     }
     print(
         f"MODEL_OK {asset['id']} triangles={source_triangles}->{triangles} "
@@ -183,22 +248,31 @@ def main() -> None:
     source_manifest = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     records = [build_asset(asset) for asset in source_manifest["assets"]]
+    decoded_base_bytes = sum(record["decodedBaseBytes"] for record in records)
+    estimated_mip_bytes = sum(record["estimatedMipBytes"] for record in records)
     manifest = {
-        "schemaVersion": 1,
-        "release": "1.3.0",
+        "schemaVersion": 2,
+        "release": "1.4.0",
         "generator": "Blender 5.1 Cake Studio web pipeline",
         "compression": "KHR_draco_mesh_compression",
-        "texturePolicy": "JPEG quality 78, max edge 1024, generated normal map removed",
+        "texturePolicy": "JPEG quality 78, max edge 512, generated normal map removed",
         "normalization": "longest axis 2 units, horizontal center, base at zero",
         "totalSourceBytes": sum(record["sourceBytes"] for record in records),
         "totalBytes": sum(record["bytes"] for record in records),
         "totalTriangles": sum(record["triangles"] for record in records),
+        "textureStats": {
+            "textureCount": sum(record["textureCount"] for record in records),
+            "maxEdge": max(record["textureMaxEdge"] for record in records),
+            "decodedBaseBytes": decoded_base_bytes,
+            "estimatedMipBytes": estimated_mip_bytes,
+        },
         "assets": records,
     }
     OUTPUT_MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(
         f"CAKE_STUDIO_MODELS_OK assets={len(records)} bytes={manifest['totalBytes']} "
-        f"triangles={manifest['totalTriangles']} manifest={OUTPUT_MANIFEST}",
+        f"triangles={manifest['totalTriangles']} textureBase={decoded_base_bytes} "
+        f"textureMip={estimated_mip_bytes} manifest={OUTPUT_MANIFEST}",
         flush=True,
     )
 

@@ -1,6 +1,6 @@
 # CAKE STUDIO — director's cut
 
-Status: **v1.2 direction locked / implementation source of truth**.
+Status: **v1.4 authored proof-room release / implementation source of truth**.
 
 This is not a shot list. It records the argument of the film, the role of the visitor's hand,
 why the rhythm changes, and how the generated motion and live browser scenes serve Cake Studio's
@@ -88,18 +88,20 @@ therefore testable rather than an undocumented easing curve.
 ## The dimensional live-browser coda
 
 The film provides the feeling; one scroll-driven physical stage continues its material language.
-The coda is not a dashboard and not a set of diagrams. It is a procedural Three.js patisserie on
-black marble, directed as three object acts:
+The coda is not a dashboard and not a set of diagrams. It is one connected Blender-authored proof
+room on black marble, rendered by Three.js as three object acts. A single ten-second camera clip
+contains independent desktop and phone transform tracks plus exported lens curves, so the visitor
+travels through one place rather than cutting between unrelated podiums:
 
-1. **Ready form, not blank canvas** — the final edible sheet unfolds into nine materially distinct
-   cake forms. The visitor sees reusable pastry knowledge as a whole library, then one production-
-   shaped starting point remains.
+1. **Ready form, not blank canvas** — nine optimized cake GLBs occupy an authored archive wall. The
+   visitor sees reusable pastry knowledge as a whole library while the accepted sheet remains the
+   material thread into the next room.
 2. **Flexible change, controlled geometry** — one retained two-tier cake is surrounded by seventeen
-   glass data wafers while surface, edible image, bilingual plaque and decoration separate, travel
-   and lock back onto the same measured body.
-3. **One decision, three useful objects** — the approved source resolves into a cake under a glass
-   customer vitrine, a curled baker sheet with roller, and a true-size plaque on a physical stand.
-   Software stops at the handoff; baking, printing and material approval remain human work.
+   optimized glass data wafers while surface, edible image, bilingual plaque and decoration travel
+   around the same measured body.
+3. **One decision, three useful objects** — the camera crosses a physical portal into the handoff
+   bay, where the approved source becomes a customer mockup frame, baker sheet and true-size plaque.
+   Software stops at the doorway; baking, printing and material approval remain human work.
 
 Each act has one dominant object proposition and one camera proposition. Copy occupies its own
 editorial field below the object. There are no connector lines, circles, generic boxes, autoplay
@@ -123,8 +125,20 @@ untouched until this candidate passes endpoint review.
 - Scroll is the only coda playhead. Forward and reverse positions are deterministic.
 - WebGL renders only while the pinned coda is near the viewport; there is no continuous animation
   loop and device pixel ratio is capped.
+- Model residency is act-bounded: forms, assembly and handoff retain only `10`, `10` and `5` runtime
+  GLBs respectively, with bounded decode concurrency and explicit geometry/material/texture disposal.
+  The two overlap knots are separately tested at `20` and `15` resident models, capped at `56` and
+  `42` desktop GPU textures.
+- All 48 embedded PBR images are capped at 512px: `48 MiB` decoded base residency and `64 MiB` with
+  mip chains, down from `192/256 MiB` in v1.3.
 - Desktop and phone use the same scene and object counts: nine forms, four controlled parts, three
   physical outputs.
+- Full authored motion is the default. When the operating system explicitly requests less motion,
+  the page substitutes six fully lit proof-room tableaux without importing Three.js, GLB or Draco
+  code or requesting MP4, while retaining bilingual copy, portal facts and normal navigation.
+- A failed production GLB group becomes terminal for the page view and leaves the authored
+  procedural stand-in in place. A request-abort gate proves one failed request and no retry/render
+  storm; rapid film chapter jumps use a separate bounded three-attempt transport recovery.
 - The runtime exposes engine, progress, act, render count, draw calls and triangles so the browser
   proof can distinguish a real dimensional frame from an empty canvas.
 - The proof samples pixels across a nine-zone lattice, verifies English/Arabic parity, then runs a

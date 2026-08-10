@@ -2,8 +2,40 @@
 
 Date: 2026-08-10
 Source branch: `feature/cake-studio-world`
-Release: `v1.1.0` / visible badge `v1.1 · WORLD 09`
+Release: `v1.4.0` / visible badge `v1.4 · WORLD 09`
 Deployment: not performed
+
+## v1.4 authored proof-room release
+
+The film now hands its accepted edible sheet into one connected Blender-authored proof room instead
+of a procedural coda. Three physical bays — form archive, measured assembly and production handoff
+— share a continuous floor, walls, runway and portal. One ten-second GLB animation clip drives
+separate desktop and phone cameras through all three bays, including authored FOV curves and
+deterministic reverse scroll.
+
+- All 24 production models remain Draco-compressed GLBs; 48 embedded PBR images were rebuilt from
+  1024px to 512px. Runtime transfer is `14.18 MB`; decoded residency is `48 MiB` base / `64 MiB`
+  with mipmaps, down from `192/256 MiB`.
+- Models load by act with bounded concurrency and explicit disposal. Stable residency is `10` forms,
+  `10` assembly models, or `5` handoff models rather than all 24 at once. Transition high-water is
+  explicitly bounded at `20` models / `48` desktop GPU textures.
+- The three chapter wordmarks and all handoff objects are physical meshes. The final camera crosses
+  a real portal into the customer mockup, baker sheet and true-size plaque tableau.
+- Full authored motion remains the default. An OS-requested accessibility substitution loads no MP4,
+  Three.js, GLB, Draco WASM or WebGL context; six fully lit proof-room tableaux retain the same
+  desktop/phone story, bilingual copy and navigation.
+- Mobile uses an authored portrait camera. Measured subject coverage is `42.9%` at assembly and
+  `12.0%` at handoff; the previous empty/extreme-close handoff false-green is gone.
+
+A failed GLB group is terminal for the current page view: a live request-abort probe records one
+request and zero continuing renders instead of the pre-fix 148-request retry storm. Film transport
+also receives one additional bounded recovery attempt for abandoned range requests during rapid
+chapter jumps.
+
+Verification: Astro 5.18.2 builds `56` pages; the GitHub Pages-base `dist` traversal is GREEN `177/177` at
+1440×1000 and 390×844. Structural world checks are `48/48`; source GLBs and runtime GLBs are both
+`24/24`; the vNext payload gate proves the exact `48/64 MiB` residency. Deliberate sabotage is RED
+`4/48` structurally and `16/90` in the rendered browser. No deployment was performed.
 
 ## Why this pass exists
 

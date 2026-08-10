@@ -46,6 +46,15 @@ def settle(page, progress: float) -> None:
     )
 
 
+def settle_group(page, progress: float, group: str) -> None:
+    settle(page, progress)
+    page.wait_for_function(
+        """group => window.__cakeStudioCoda?.residentModelGroups?.includes(group)""",
+        arg=group,
+        timeout=30_000,
+    )
+
+
 def distance(a: dict[str, float], b: dict[str, float]) -> float:
     return math.sqrt(sum((float(a[key]) - float(b[key])) ** 2 for key in ("x", "y", "z")))
 
@@ -67,15 +76,20 @@ with sync_playwright() as playwright:
 
     set_progress(page, 0.18)
     page.wait_for_function(
-        "['ready', 'fallback'].includes(window.__cakeStudioCoda?.modelStatus)",
+        "window.__cakeStudioCoda?.residentModelGroups?.includes('forms') && window.__cakeStudioCoda?.setStatus === 'ready'",
         timeout=30_000,
     )
     model_state = page.evaluate(
         """() => ({
           status: window.__cakeStudioCoda.modelStatus,
           loaded: window.__cakeStudioCoda.modelsLoaded,
+          resident: window.__cakeStudioCoda.modelsResident,
+          groups: window.__cakeStudioCoda.residentModelGroups,
           expected: window.__cakeStudioCoda.modelsExpected,
           source: window.__cakeStudioCoda.modelSource,
+          setStatus: window.__cakeStudioCoda.setStatus,
+          setSource: window.__cakeStudioCoda.setSource,
+          cameraSource: window.__cakeStudioCoda.cameraSource,
           waferSource: window.__cakeStudioCoda.waferSource,
           waferModels: window.__cakeStudioCoda.waferModels,
           wordmarkModels: window.__cakeStudioCoda.wordmarkModels,
@@ -85,19 +99,18 @@ with sync_playwright() as playwright:
           triangles: window.__cakeStudioCoda.triangles,
         })"""
     )
-    check("24 real models loaded", model_state["status"] == "ready" and model_state["loaded"] == 24 and model_state["expected"] == 24, model_state)
-    check("GLB stage active", model_state["source"] == "glb" and model_state["dataset"] == "ready", model_state)
+    check("forms group staged", model_state["status"] == "ready" and model_state["resident"] == 10 and model_state["groups"] == ["forms"] and model_state["expected"] == 24, model_state)
+    check("GLB stage active", model_state["source"] == "staged-glb" and model_state["dataset"] == "ready", model_state)
     check(
-        "cinematic GLB roles active",
-        model_state["waferSource"] == "glb"
-        and model_state["waferModels"] == 17
-        and model_state["wordmarkModels"] == 3
-        and model_state["handoffArtifactSource"] == "glb"
-        and model_state["handoffArtifactModels"] == 3,
+        "authored set and camera active",
+        model_state["setStatus"] == "ready"
+        and model_state["setSource"] == "cake-studio-proof-room.glb"
+        and model_state["cameraSource"] == "authored-clip",
         model_state,
     )
 
     settle(page, 0.18)
+    opening_camera = page.evaluate("window.__cakeStudioCoda.cameraPosition")
     samples = page.evaluate(
         """target => new Promise(resolve => {
           const scene = document.querySelector('[data-object-coda]');
@@ -138,6 +151,55 @@ with sync_playwright() as playwright:
     check("camera settles accurately", final_error <= 0.002, {"error": round(final_error, 6), "state": samples[-1]["state"]})
     check("one playhead drives objects", lockstep_error <= 0.0001, {"maxError": round(lockstep_error, 7)})
 
+    residency = []
+    settle_group(page, 0.52, "assembly")
+    residency.append(page.evaluate("""() => ({
+      progress:.52,
+      groups:window.__cakeStudioCoda.residentModelGroups,
+      resident:window.__cakeStudioCoda.modelsResident,
+      loaded:window.__cakeStudioCoda.modelsLoaded,
+      wafers:window.__cakeStudioCoda.waferModels,
+      wordmarks:window.__cakeStudioCoda.wordmarkModels,
+      fov:window.__cakeStudioCoda.cameraFov,
+    })"""))
+    settle_group(page, 0.84, "handoff")
+    residency.append(page.evaluate("""() => ({
+      progress:.84,
+      groups:window.__cakeStudioCoda.residentModelGroups,
+      resident:window.__cakeStudioCoda.modelsResident,
+      loaded:window.__cakeStudioCoda.modelsLoaded,
+      artifacts:window.__cakeStudioCoda.handoffArtifactModels,
+      wordmarks:window.__cakeStudioCoda.wordmarkModels,
+      fov:window.__cakeStudioCoda.cameraFov,
+    })"""))
+    settle_group(page, 0.18, "forms")
+    residency.append(page.evaluate("""() => ({
+      progress:.18,
+      groups:window.__cakeStudioCoda.residentModelGroups,
+      resident:window.__cakeStudioCoda.modelsResident,
+      loaded:window.__cakeStudioCoda.modelsLoaded,
+      wordmarks:window.__cakeStudioCoda.wordmarkModels,
+      fov:window.__cakeStudioCoda.cameraFov,
+    })"""))
+    reverse_camera = page.evaluate("window.__cakeStudioCoda.cameraPosition")
+    check(
+        "act-bounded model residency",
+        residency[0]["groups"] == ["assembly"] and residency[0]["resident"] == 10 and residency[0]["wafers"] == 17
+        and residency[1]["groups"] == ["handoff"] and residency[1]["resident"] == 5 and residency[1]["artifacts"] == 3
+        and residency[2]["groups"] == ["forms"] and residency[2]["resident"] == 10
+        and all(row["wordmarks"] == 1 for row in residency)
+        and residency[1]["loaded"] == 24,
+        residency,
+    )
+    check(
+        "authored FOV curve is sampled",
+        abs(residency[0]["fov"] - 33.165) <= 0.1
+        and abs(residency[1]["fov"] - 34.127) <= 0.1
+        and abs(residency[2]["fov"] - 32.611) <= 0.1,
+        [row["fov"] for row in residency],
+    )
+    check("authored camera reverses deterministically", distance(opening_camera, reverse_camera) <= 0.002, {"distance": distance(opening_camera, reverse_camera)})
+
     joins = []
     for boundary in (0.36, 0.69):
         settle(page, boundary - 0.001)
@@ -148,11 +210,95 @@ with sync_playwright() as playwright:
     check("act joins are continuous", all(join["distance"] <= 0.16 for join in joins), joins)
     wordmark_states = []
     for progress, expected_act in ((0.18, "forms"), (0.52, "assembly"), (0.84, "handoff")):
-        settle(page, progress)
+        settle_group(page, progress, expected_act)
         actual_act = page.evaluate("window.__cakeStudioCoda.wordmarkAct")
         wordmark_states.append({"progress": progress, "expected": expected_act, "actual": actual_act})
     check("physical wordmarks follow acts", all(row["actual"] == row["expected"] for row in wordmark_states), wordmark_states)
     check("render has no JavaScript errors", not page_errors, page_errors[:3])
+
+    failure_context = browser.new_context(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
+    failure_page = failure_context.new_page()
+    failed_requests: list[str] = []
+
+    def abort_one_model(route) -> None:
+        failed_requests.append(route.request.url)
+        route.abort()
+
+    failure_page.route("**/cake-01-ivory-spiral.glb", abort_one_model)
+    failure_page.goto(URL, wait_until="domcontentloaded", timeout=30_000)
+    set_progress(failure_page, 0.18)
+    failure_page.wait_for_function("window.__cakeStudioCoda?.modelStatus === 'fallback'", timeout=30_000)
+    failure_page.wait_for_function("window.__cakeStudioCoda?.cameraState === 'idle'", timeout=8_000)
+    failure_before = failure_page.evaluate("window.__cakeStudioCoda.renders")
+    failure_page.wait_for_timeout(1_000)
+    failure_state = failure_page.evaluate(
+        """() => ({
+          status: window.__cakeStudioCoda.modelStatus,
+          groups: window.__cakeStudioCoda.residentModelGroups,
+          resident: window.__cakeStudioCoda.modelsResident,
+          renders: window.__cakeStudioCoda.renders,
+          error: window.__cakeStudioCoda.modelError,
+        })"""
+    )
+    check(
+        "failed GLB is terminal without retry storm",
+        len(failed_requests) == 1
+        and failure_state["status"] == "fallback"
+        and "forms" not in failure_state["groups"]
+        and failure_state["resident"] == 0
+        and failure_state["renders"] - failure_before <= 2,
+        {"requests": len(failed_requests), "renderDelta": failure_state["renders"] - failure_before, **failure_state},
+    )
+    failure_context.close()
+
+    reduced_context = browser.new_context(
+        viewport={"width": 390, "height": 844},
+        device_scale_factor=1,
+        reduced_motion="reduce",
+    )
+    reduced_page = reduced_context.new_page()
+    reduced_requests: list[str] = []
+    reduced_errors: list[str] = []
+    reduced_page.on("request", lambda request: reduced_requests.append(request.url))
+    reduced_page.on("pageerror", lambda error: reduced_errors.append(str(error)))
+    reduced_page.goto(URL, wait_until="networkidle", timeout=30_000)
+    reduced_page.wait_for_function("window.__cakeStudioCoda?.ready === true", timeout=10_000)
+    set_progress(reduced_page, 0.84)
+    reduced_page.evaluate("""() => {
+      const scene = document.querySelector('[data-object-coda]');
+      scene.style.setProperty('--p', '.84');
+      scene.dispatchEvent(new Event('scene:live'));
+    }""")
+    reduced_page.wait_for_function("window.__cakeStudioCoda?.act === 'handoff'", timeout=5_000)
+    reduced_state = reduced_page.evaluate(
+        """() => ({
+          runtime: window.__cakeStudioCoda,
+          videos: [...document.querySelectorAll('#cake-reel video')].map(video => video.currentSrc),
+          canvasHidden: document.querySelector('[data-cake-canvas]').hidden,
+          posterVisible: !document.querySelector('[data-coda-reduced-poster]').hidden,
+          portalHidden: document.querySelector('[data-proof-portal]').getAttribute('aria-hidden'),
+        })"""
+    )
+    forbidden = [
+        url for url in reduced_requests
+        if url.lower().endswith((".mp4", ".glb", ".wasm"))
+        or any(token in url for token in ("three.module", "three.core", "GLTFLoader", "DRACOLoader"))
+    ]
+    check("reduced motion requests no moving media or 3D runtime", not forbidden, forbidden[:6])
+    check(
+        "reduced motion is a usable static proof",
+        reduced_state["runtime"]["modelSource"] == "reduced-static"
+        and reduced_state["runtime"]["cameraSource"] == "reduced-static"
+        and reduced_state["runtime"]["renders"] == 0
+        and reduced_state["runtime"]["modelsLoaded"] == 0
+        and all(not source for source in reduced_state["videos"])
+        and reduced_state["canvasHidden"]
+        and reduced_state["posterVisible"]
+        and reduced_state["portalHidden"] == "false"
+        and not reduced_errors,
+        reduced_state,
+    )
+    reduced_context.close()
     browser.close()
 
 if failures:
