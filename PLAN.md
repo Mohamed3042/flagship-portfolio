@@ -10,8 +10,12 @@ The owner subsequently generated a complete, corrected **50-shot WAN 2.7 First &
 chain** for Cake Studio. That owner-authorized work supersedes the original eight-world count but
 does not rewrite the historical plan below:
 
-- `public/worlds/cake-studio.html` is World 09, **The Edible Compiler**: eight chapters, 50 linked
-  five-second shots, 250 seconds total, followed by three live-code proof scenes.
+- `public/worlds/cake-studio.html` is World 09, **The Cake Is Made Twice** (`v1.1`): eight
+  decisions, 50 linked five-second shots, 250 seconds total, followed by three live-code handoff
+  scenes. `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md` is the direction source of truth.
+- The scroll hand is the operator. A 50-value director score makes reusable-form exploration quick
+  and production decisions deliberate; chapter reasons state why every movement matters to the
+  Cake Studio operator.
 - Scroll is the only playhead, forward and reverse. Two video elements buffer the current and next
   five-second clip; `play()` is never called. Desktop and phone run the same cut.
 - The generated 16:9 picture is always contained in full, while bilingual captions and chapter

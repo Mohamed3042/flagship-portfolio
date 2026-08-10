@@ -36,7 +36,7 @@ if (sabotage) {
   console.log('SABOTAGE APPLIED: CST-050 was replaced in the in-memory page fixture.');
 }
 
-const [css, script, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
+const [css, originalScript, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
   readFile(cssPath, 'utf8'),
   readFile(scriptPath, 'utf8'),
   readFile(manifestPath, 'utf8'),
@@ -44,12 +44,20 @@ const [css, script, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
   readFile(join(ownerPackRoot, 'run-log.csv'), 'utf8'),
   readFile(lobbyPath, 'utf8'),
 ]);
+let script = originalScript;
+if (sabotage) {
+  script = script.replace('1.65, 1.85, 1.10', '1.65, 0.55, 1.10');
+  if (script === originalScript || !script.includes('1.65, 0.55, 1.10')) {
+    throw new Error('director-score sabotage was requested but not applied');
+  }
+  console.log('SABOTAGE APPLIED: the decisive shot-17 hold was flattened in memory.');
+}
 const manifest = JSON.parse(manifestRaw);
 const ownerPack = JSON.parse(clipsRaw);
 
-check('visible release badge', page.includes('v1.0 · WORLD 09') && page.includes('data-version="1.0.0"'), 'v1.0 / World 09');
+check('visible release badge', page.includes('v1.1 · WORLD 09') && page.includes('data-version="1.1.0"'), 'v1.1 / World 09');
 check('shared cinema engine', page.includes('cinema.css?v=6') && page.includes('cinema.js?v=6'), 'cinema v6 linked');
-check('page-local assets', page.includes('cake-studio.css?v=1') && page.includes('cake-studio.js?v=1'), 'CSS and JS linked');
+check('page-local assets', page.includes('cake-studio.css?v=2') && page.includes('cake-studio.js?v=2'), 'directed CSS and JS linked');
 check('one film scene', (page.match(/id="cake-reel"/g) ?? []).length === 1, 'single shared playhead');
 check('two video buffers', (page.match(/<video\b/g) ?? []).length === 2, 'exactly two video elements');
 const videoTags = [...page.matchAll(/<video\b[^>]*>/g)].map((match) => match[0]);
@@ -69,6 +77,40 @@ check('ordered clip chain', JSON.stringify(figureClips) === JSON.stringify(expec
 check('ordered poster chain', JSON.stringify(figurePosters) === JSON.stringify(expectedPosters), figurePosters.at(-1) ?? 'none');
 check('bilingual shot captions', figureMatches.every((match) => match[0].includes('class="L en"') && match[0].includes('class="L ar"')), 'English + Arabic in every figure');
 check('eight chapter jumps', (page.match(/<button type="button"[^>]+data-shot="/g) ?? []).length === 8, '8/8');
+
+const weightMatch = script.match(/const DIRECTOR_WEIGHTS = Object\.freeze\((\[[\s\S]*?\])\);/);
+let directorWeights = [];
+try {
+  directorWeights = weightMatch ? JSON.parse(weightMatch[1]) : [];
+} catch {
+  directorWeights = [];
+}
+check(
+  'director thesis',
+  page.includes('The Cake Is Made Twice') && page.includes('تُصنع الكعكة مرتين'),
+  'software first, kitchen second',
+);
+check(
+  'director pacing map',
+  directorWeights.length === 50
+    && new Set(directorWeights).size >= 5
+    && directorWeights.slice(7, 15).every((weight) => weight <= .7)
+    && [15, 16, 26, 37, 49].every((index) => directorWeights[index] >= 1.3),
+  `${directorWeights.length}/50 weights · ${new Set(directorWeights).size} distinct rhythms`,
+);
+check(
+  'chapter argument layer',
+  page.includes('id="director-note-en"')
+    && page.includes('id="director-note-ar"')
+    && (script.match(/purposeEn:/g) ?? []).length === 8
+    && (script.match(/purposeAr:/g) ?? []).length === 8,
+  'eight bilingual reasons, not only eight labels',
+);
+check(
+  'operator handoff promise',
+  ['reusable pastry knowledge', 'customer mockup', 'baker sheet', 'true-size plaque'].every((phrase) => page.includes(phrase)),
+  'ready form → flexible design → production documents',
+);
 
 check('owner pack complete', ownerPack.clips?.length === 50, `${ownerPack.clips?.length ?? 0}/50 source prompts`);
 const acceptedRows = runLog.split(/\r?\n/).filter((line) => line.includes('"accepted","10"'));
@@ -97,10 +139,20 @@ check('media hashes and posters', verifiedMedia === 50, `${verifiedMedia}/50 ver
 
 check('lobby entry', lobby.includes('href="cake-studio.html"') && lobby.includes('09 · CAKE STUDIO'), 'World 09 linked');
 check('lobby count copy', lobby.includes('Nine Scroll-Cinema Films') && lobby.includes('70 WAN shots'), 'nine worlds / seventy WAN shots');
-check('truth-locked workflow', ['One of nine cake forms', 'Twenty-patch colour field', 'True-size edible sheet', 'Six-facet revision proof', 'Twelve rules across nine forms'].every((phrase) => page.includes(phrase)), 'catalogue, calibration, scale, proof, inspection');
+check(
+  'truth-locked workflow',
+  [
+    'Nine ready forms hold reusable pastry knowledge',
+    'Twenty Patches',
+    'true-size plaque',
+    'Reject the expensive mistake',
+    'Physical baking, printing and final material approval remain human production work',
+  ].every((phrase) => `${page}\n${script}`.includes(phrase)),
+  'ready structure, calibration, measured handoff, early rejection, human craft boundary',
+);
 
 const report = {
-  schema: 'cake-studio-world-verification/v1',
+  schema: 'cake-studio-world-verification/v2',
   generatedAt: new Date().toISOString(),
   sabotage,
   checks,

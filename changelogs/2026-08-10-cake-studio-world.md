@@ -1,5 +1,9 @@
 # Cake Studio World 09 — The Edible Compiler
 
+> Historical v1.0 completion record. The director-led v1.1 cut supersedes the page framing and
+> pacing; see [The Cake Is Made Twice](2026-08-10-cake-studio-director-pass.md). The accepted media
+> chain documented below is unchanged.
+
 Date: 2026-08-10
 Source branch: `feature/cake-studio-world`
 Release: `v1.0.0` / visible badge `v1.0 · WORLD 09`

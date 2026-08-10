@@ -1,7 +1,9 @@
 # Start here
 
 > Production complete: **50/50 clips accepted on 2026-08-10**. This offline board remains the
-> reproducible prompt-and-endpoint source for the finished world at `../../cake-studio.html`.
+> reproducible prompt-and-endpoint source for the finished v1.1 directed world, **The Cake Is Made
+> Twice**, at `../../cake-studio.html`. The media chain is unchanged; the page's weighted director
+> score and product-specific handoff live in `../../cake-studio.js` and the director's cut notes.
 
 1. Double-click **index.html**.
 2. Keep WAN 2.7 at 720P, 5 seconds, audio off, prompt extension off, one output.

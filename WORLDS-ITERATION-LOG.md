@@ -312,3 +312,30 @@ change in physics at leg 07 rather than as a picture of an explosion.
   second 53/53 pass. Lobby, desktop, phone, English and Arabic contact sheets were reviewed.
 - **Release:** source version `v1.0.0`, visible as `v1.0 · WORLD 09`. Lobby count is now nine films
   and 70 real WAN shots. No deployment was performed.
+
+## 2026-08-10 — Cake Studio v1.1: THE CAKE IS MADE TWICE
+
+- **Direction before implementation:** the revised treatment starts from the product problem—cake
+  decisions trapped in one expert's head—and gives the film one sentence: the cake is made twice,
+  first as a software decision and then as a kitchen object. The scroll hand is the operator.
+- **Unequal attention:** a 50-value score replaces equal clip allocation. Ready-form shots move at
+  `0.55–0.60`; the nine-form reveal, one-click choice, colour error, stale-layer rejection and loop
+  close hold at `1.65–1.85`. Eight bilingual chapter reasons expose why each passage matters.
+- **Use-case coda:** the old abstract proof counters became a ready-form library, one retained cake
+  body with four controlled design layers, and one 17-slot CakeDocument splitting into customer
+  mockup, baker sheet and true-size plaque. The diagrams are live DOM, not fake product UI.
+- **Truth boundary:** software preserves and transports the approved decision; it does not claim to
+  bake, print or approve physical material. No invented time-saving metric was introduced.
+- **Fail-first proof:** the new structural contract first failed six checks against v1.0. The real
+  source passed 30/30. Static sabotage flattened the decisive shot-17 hold and broke CST-050;
+  browser sabotage displaced the frame, emptied a chapter reason and removed one production
+  output. Both gates went RED for the intended reasons.
+- **Production proof:** source and independent `dist/` each passed 111/111 live checks on desktop
+  and phone, including six directed shot/time checkpoints, reverse scroll, weighted rhythm state,
+  the three coda compositions, Arabic RTL and diagram-label parity, no overflow, no autoplay and
+  clean console/network.
+  The Astro build and 26-story × two-language static audit passed.
+- **Release:** source version `v1.1.0`, visible as `v1.1 · WORLD 09`. The 50 media files and their
+  hashes are unchanged. No deployment was performed. Full reasoning, evidence and reproduction:
+  `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md` and
+  `changelogs/2026-08-10-cake-studio-director-pass.md`.

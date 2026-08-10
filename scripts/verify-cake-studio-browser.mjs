@@ -214,12 +214,27 @@ try {
       figures: document.querySelectorAll('#cake-reel .shot-data figure').length,
       videos: document.querySelectorAll('#cake-reel video').length,
       version: document.body.dataset.version,
+      directorVersion: window.__cakeStudioDirector?.version ?? '',
+      directorWeights: window.__cakeStudioDirector?.weights?.length ?? 0,
+      fastWeight: window.__cakeStudioDirector?.weights?.[8] ?? -1,
+      choiceWeight: window.__cakeStudioDirector?.weights?.[16] ?? -1,
+      errorWeight: window.__cakeStudioDirector?.weights?.[26] ?? -1,
+      rejectWeight: window.__cakeStudioDirector?.weights?.[37] ?? -1,
+      loopWeight: window.__cakeStudioDirector?.weights?.[49] ?? -1,
       overflow: document.documentElement.scrollWidth - innerWidth,
       lang: document.documentElement.lang,
       dir: document.documentElement.dir
     }))()`);
-    check(`${viewport.name} page identity`, basics.title.includes('The Edible Compiler') && basics.version === '1.0.0', `${basics.title} · ${basics.version}`);
+    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.1.0', `${basics.title} · ${basics.version}`);
     check(`${viewport.name} 50-shot DOM`, basics.figures === 50 && basics.videos === 2, `${basics.figures} figures / ${basics.videos} buffers`);
+    check(
+      `${viewport.name} directed score`,
+      basics.directorVersion === '1.1.0'
+        && basics.directorWeights === 50
+        && basics.fastWeight < basics.choiceWeight
+        && [basics.choiceWeight, basics.errorWeight, basics.rejectWeight, basics.loopWeight].every((weight) => weight >= 1.3),
+      `v${basics.directorVersion} · fast ${basics.fastWeight} · choice/error/reject/loop ${basics.choiceWeight}/${basics.errorWeight}/${basics.rejectWeight}/${basics.loopWeight}`,
+    );
     check(`${viewport.name} horizontal fit`, basics.overflow <= 1, `${basics.overflow}px overflow`);
 
     if (sabotage) {
@@ -227,9 +242,18 @@ try {
         const frame=document.querySelector('.film-frame');
         frame.dataset.browserSabotage='offset';
         frame.style.transform='translateX(180px)';
-        return frame.dataset.browserSabotage==='offset' && getComputedStyle(frame).transform!=='none';
+        const note=document.getElementById('director-note-en');
+        note.dataset.browserSabotage='empty';
+        note.textContent='';
+        const handoff=document.querySelector('.handoff-outputs div:last-child');
+        handoff.remove();
+        return frame.dataset.browserSabotage==='offset'
+          && getComputedStyle(frame).transform!=='none'
+          && note.dataset.browserSabotage==='empty'
+          && note.textContent===''
+          && document.querySelectorAll('.handoff-outputs > div').length===2;
       })()`);
-      check('browser sabotage applied', applied, 'film frame translated 180px in runtime only');
+      check('browser sabotage applied', applied, 'film frame displaced, chapter reason emptied, and one handoff output removed in runtime only');
     }
 
     const scrollScene = async (selector, progress) => {
@@ -258,13 +282,17 @@ try {
     await screenshot('opening');
 
     const filmStates = [
-      { name: 'film-01', progress: .01, shot: 1, time: 2.5 },
-      { name: 'film-35', progress: .69, shot: 35, time: 2.5 },
-      { name: 'film-50', progress: .99, shot: 50, time: 2.5 },
+      { name: 'film-01', shot: 1, time: 2.5, rhythm: 'question' },
+      { name: 'film-09-fast', shot: 9, time: 2.5, rhythm: 'rush' },
+      { name: 'film-17-choice', shot: 17, time: 2.5, rhythm: 'decision' },
+      { name: 'film-27-error', shot: 27, time: 2.5, rhythm: 'protect' },
+      { name: 'film-38-reject', shot: 38, time: 2.5, rhythm: 'gate' },
+      { name: 'film-50', shot: 50, time: 2.5, rhythm: 'release' },
     ];
     const stateResults = [];
     for (const state of filmStates) {
-      await scrollScene('#cake-reel', state.progress);
+      const progress = await evaluate(`window.__cakeStudioDirector.progressForShot(${state.shot}, .5)`);
+      await scrollScene('#cake-reel', progress);
       const ready = await waitFor(`(() => {
         const scene=document.getElementById('cake-reel');
         const active=scene.querySelector('video.on');
@@ -279,6 +307,10 @@ try {
         return {
           shot:Number(scene.dataset.currentShot),
           clip:scene.dataset.currentClip,
+          chapterKey:scene.dataset.chapterKey,
+          rhythm:scene.dataset.rhythm,
+          weight:Number(scene.dataset.shotWeight),
+          directorNote:document.getElementById('director-note-en')?.textContent.trim() ?? '',
           mediaState:scene.dataset.mediaState,
           time:active ? active.currentTime : -1,
           duration:active ? active.duration : 0,
@@ -297,33 +329,86 @@ try {
       stateResults.push(result);
       check(`${viewport.name} ${state.name} ready`, ready && result.readyState >= 2 && result.seekable === 1, `${result.clip} · ready ${result.readyState} · seekable ${result.seekable}`);
       check(`${viewport.name} ${state.name} identity`, result.shot === state.shot && result.activeVideos === 1, `shot ${result.shot} · ${result.activeVideos} active buffer`);
+      check(`${viewport.name} ${state.name} direction`, result.rhythm === state.rhythm && result.weight > 0 && result.directorNote.length > 24, `${result.chapterKey}/${result.rhythm} · weight ${result.weight} · ${result.directorNote}`);
       check(`${viewport.name} ${state.name} scrub time`, Math.abs(result.time - state.time) < .7, `${result.time.toFixed(3)}s / expected ~${state.time.toFixed(1)}s`);
       check(`${viewport.name} ${state.name} picture contained`, result.contained && result.captionClear && result.objectFit === 'contain', `${JSON.stringify(result.frame)} · cue top ${result.cue.top}`);
       check(`${viewport.name} ${state.name} never autoplayed`, result.paused && result.playAttempts === 0, `paused=${result.paused} · play attempts=${result.playAttempts}`);
       await screenshot(state.name);
     }
 
-    await scrollScene('#cake-reel', .69);
-    const reversed = await waitFor(`document.getElementById('cake-reel').dataset.currentShot==='35'`, 10_000);
+    const reverseProgress = await evaluate(`window.__cakeStudioDirector.progressForShot(17, .5)`);
+    await scrollScene('#cake-reel', reverseProgress);
+    const reversed = await waitFor(`document.getElementById('cake-reel').dataset.currentShot==='17'`, 10_000);
     const reverseState = await evaluate(`(() => { const v=document.querySelector('#cake-reel video.on'); return {shot:Number(document.getElementById('cake-reel').dataset.currentShot),time:v?.currentTime ?? -1,playAttempts:window.__cakePlayAttempts}; })()`);
-    check(`${viewport.name} reverse scrub`, reversed && reverseState.shot === 35 && Math.abs(reverseState.time - 2.5) < .8, `shot ${reverseState.shot} @ ${reverseState.time.toFixed(3)}s`);
+    check(`${viewport.name} reverse scrub`, reversed && reverseState.shot === 17 && Math.abs(reverseState.time - 2.5) < .8, `shot ${reverseState.shot} @ ${reverseState.time.toFixed(3)}s`);
     check(`${viewport.name} reverse remains silent`, reverseState.playAttempts === 0, `${reverseState.playAttempts} play attempts`);
 
     await scrollScene('.measure', .64);
     await screenshot('measure');
+    const starterState = await evaluate(`(() => {
+      const panel=document.querySelector('.starter-bench').getBoundingClientRect();
+      const caption=document.querySelector('.starter .code-caption').getBoundingClientRect();
+      return {
+        forms:document.querySelectorAll('.form-library > i').length,
+        selected:document.querySelectorAll('.form-library > i.selected').length,
+        contained:panel.left>=-1 && panel.right<=innerWidth+1 && panel.top>=-1 && panel.bottom<=innerHeight+1,
+        clear:panel.bottom<=caption.top+1
+      };
+    })()`);
+    check(`${viewport.name} ready-form coda`, starterState.forms === 9 && starterState.selected === 1, `${starterState.forms} forms · ${starterState.selected} selected`);
+    check(`${viewport.name} ready-form composition`, starterState.contained && starterState.clear, `contained=${starterState.contained} · panel/caption clear=${starterState.clear}`);
     await scrollScene('.ledger', .66);
     await screenshot('ledger');
+    const adaptState = await evaluate(`(() => {
+      const panel=document.querySelector('.adapt-bench').getBoundingClientRect();
+      const caption=document.querySelector('.adapt .code-caption').getBoundingClientRect();
+      return {
+        controls:document.querySelectorAll('.control-stack > li').length,
+        guide:Boolean(document.querySelector('.surface-guide')),
+        contained:panel.left>=-1 && panel.right<=innerWidth+1 && panel.top>=-1 && panel.bottom<=innerHeight+1,
+        clear:panel.bottom<=caption.top+1
+      };
+    })()`);
+    check(`${viewport.name} flexible-design coda`, adaptState.controls === 4 && adaptState.guide, `${adaptState.controls} controlled layers · guide=${adaptState.guide}`);
+    check(`${viewport.name} flexible-design composition`, adaptState.contained && adaptState.clear, `contained=${adaptState.contained} · panel/caption clear=${adaptState.clear}`);
     await scrollScene('.compile', .72);
     await screenshot('compile');
+    const handoffState = await evaluate(`(() => {
+      const panel=document.querySelector('.handoff-bench').getBoundingClientRect();
+      const caption=document.querySelector('.handoff .code-caption').getBoundingClientRect();
+      const labels=[...document.querySelectorAll('.handoff-outputs > div')].map(node=>node.dataset.output);
+      return {
+        outputs:labels.length,
+        labels,
+        slots:document.querySelector('.source-document strong')?.textContent.trim() ?? '',
+        contained:panel.left>=-1 && panel.right<=innerWidth+1 && panel.top>=-1 && panel.bottom<=innerHeight+1,
+        clear:panel.bottom<=caption.top+1
+      };
+    })()`);
+    check(`${viewport.name} production-handoff coda`, handoffState.outputs === 3 && handoffState.slots === '17' && ['customer mockup','baker sheet','true-size plaque'].every(label=>handoffState.labels.includes(label)), `${handoffState.slots} slots → ${handoffState.labels.join(' / ')}`);
+    check(`${viewport.name} production-handoff composition`, handoffState.contained && handoffState.clear, `contained=${handoffState.contained} · panel/caption clear=${handoffState.clear}`);
 
     await evaluate(`document.documentElement.lang==='en' && document.querySelector('[data-lang-toggle]').click()`);
     await delay(250);
     const arabic = await evaluate(`(() => {
       const ar=document.querySelector('.compile .code-caption .L.ar');
       const en=document.querySelector('.compile .code-caption .L.en');
-      return {lang:document.documentElement.lang,dir:document.documentElement.dir,ar:getComputedStyle(ar).display,en:getComputedStyle(en).display,overflow:document.documentElement.scrollWidth-innerWidth};
+      const codaAr=[...document.querySelectorAll('.starter-bench .L.ar, .adapt-bench .L.ar, .handoff-bench .L.ar')];
+      const codaEn=[...document.querySelectorAll('.starter-bench .L.en, .adapt-bench .L.en, .handoff-bench .L.en')];
+      return {
+        lang:document.documentElement.lang,
+        dir:document.documentElement.dir,
+        ar:getComputedStyle(ar).display,
+        en:getComputedStyle(en).display,
+        overflow:document.documentElement.scrollWidth-innerWidth,
+        codaAr:codaAr.length,
+        codaEn:codaEn.length,
+        codaArVisible:codaAr.every(node=>getComputedStyle(node).display!=='none'),
+        codaEnHidden:codaEn.every(node=>getComputedStyle(node).display==='none')
+      };
     })()`);
     check(`${viewport.name} Arabic direction`, arabic.lang === 'ar' && arabic.dir === 'rtl' && arabic.ar !== 'none' && arabic.en === 'none', `${arabic.lang}/${arabic.dir} · ar=${arabic.ar} en=${arabic.en}`);
+    check(`${viewport.name} Arabic coda parity`, arabic.codaAr === 19 && arabic.codaEn === 19 && arabic.codaArVisible && arabic.codaEnHidden, `${arabic.codaAr} Arabic / ${arabic.codaEn} English labels · Arabic visible=${arabic.codaArVisible} · English hidden=${arabic.codaEnHidden}`);
     check(`${viewport.name} Arabic fit`, arabic.overflow <= 1, `${arabic.overflow}px overflow`);
     await screenshot('compile-ar');
 
@@ -346,7 +431,7 @@ try {
 }
 
 const report = {
-  schema: 'cake-studio-browser-verification/v1',
+  schema: 'cake-studio-browser-verification/v2',
   generatedAt: new Date().toISOString(),
   url: baseUrl,
   sabotage,

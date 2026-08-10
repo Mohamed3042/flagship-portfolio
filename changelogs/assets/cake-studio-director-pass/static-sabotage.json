@@ -1,0 +1,161 @@
+{
+  "schema": "cake-studio-world-verification/v2",
+  "generatedAt": "2026-08-10T09:16:38.580Z",
+  "sabotage": true,
+  "checks": [
+    {
+      "name": "visible release badge",
+      "pass": true,
+      "detail": "v1.1 / World 09"
+    },
+    {
+      "name": "shared cinema engine",
+      "pass": true,
+      "detail": "cinema v6 linked"
+    },
+    {
+      "name": "page-local assets",
+      "pass": true,
+      "detail": "directed CSS and JS linked"
+    },
+    {
+      "name": "one film scene",
+      "pass": true,
+      "detail": "single shared playhead"
+    },
+    {
+      "name": "two video buffers",
+      "pass": true,
+      "detail": "exactly two video elements"
+    },
+    {
+      "name": "no autoplay markup",
+      "pass": true,
+      "detail": "no autoplay attribute"
+    },
+    {
+      "name": "no play call",
+      "pass": true,
+      "detail": "scroll seeks currentTime; play() absent"
+    },
+    {
+      "name": "same phone and desktop mode",
+      "pass": true,
+      "detail": "no mobile-lite branch"
+    },
+    {
+      "name": "contained film frame",
+      "pass": true,
+      "detail": "whole 16:9 image remains visible"
+    },
+    {
+      "name": "captions outside picture",
+      "pass": true,
+      "detail": "cue is a sibling after the frame"
+    },
+    {
+      "name": "50 shot definitions",
+      "pass": true,
+      "detail": "50/50"
+    },
+    {
+      "name": "ordered clip chain",
+      "pass": false,
+      "detail": "cake-studio/clips/CST-XXX.mp4"
+    },
+    {
+      "name": "ordered poster chain",
+      "pass": true,
+      "detail": "cake-studio/posters/CST-050.jpg"
+    },
+    {
+      "name": "bilingual shot captions",
+      "pass": true,
+      "detail": "English + Arabic in every figure"
+    },
+    {
+      "name": "eight chapter jumps",
+      "pass": true,
+      "detail": "8/8"
+    },
+    {
+      "name": "director thesis",
+      "pass": true,
+      "detail": "software first, kitchen second"
+    },
+    {
+      "name": "director pacing map",
+      "pass": false,
+      "detail": "50/50 weights · 16 distinct rhythms"
+    },
+    {
+      "name": "chapter argument layer",
+      "pass": true,
+      "detail": "eight bilingual reasons, not only eight labels"
+    },
+    {
+      "name": "operator handoff promise",
+      "pass": true,
+      "detail": "ready form → flexible design → production documents"
+    },
+    {
+      "name": "owner pack complete",
+      "pass": true,
+      "detail": "50/50 source prompts"
+    },
+    {
+      "name": "accepted ledger complete",
+      "pass": true,
+      "detail": "50 accepted / 0 pending"
+    },
+    {
+      "name": "media manifest version",
+      "pass": true,
+      "detail": "cake-studio-world-media/v1 · 1.0.0"
+    },
+    {
+      "name": "media manifest complete",
+      "pass": true,
+      "detail": "50/50"
+    },
+    {
+      "name": "running time exact",
+      "pass": true,
+      "detail": "250 seconds"
+    },
+    {
+      "name": "dense silent encodes",
+      "pass": true,
+      "detail": ">=10 keyframes and no audio per clip"
+    },
+    {
+      "name": "uniform web frame",
+      "pass": true,
+      "detail": "1280x720 @ 30 fps"
+    },
+    {
+      "name": "media hashes and posters",
+      "pass": true,
+      "detail": "50/50 verified"
+    },
+    {
+      "name": "lobby entry",
+      "pass": true,
+      "detail": "World 09 linked"
+    },
+    {
+      "name": "lobby count copy",
+      "pass": true,
+      "detail": "nine worlds / seventy WAN shots"
+    },
+    {
+      "name": "truth-locked workflow",
+      "pass": true,
+      "detail": "ready structure, calibration, measured handoff, early rejection, human craft boundary"
+    }
+  ],
+  "failures": [
+    "ordered clip chain: cake-studio/clips/CST-XXX.mp4",
+    "director pacing map: 50/50 weights · 16 distinct rhythms"
+  ]
+}
