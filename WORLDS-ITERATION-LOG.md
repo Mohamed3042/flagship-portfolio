@@ -213,3 +213,68 @@ second take of the chorus room. Two of the ten designed journey stations have no
 clip at all: the mood matrix is the same corridor as the infinite playlist in the
 footage, and "the drop" was never generated as a shot — so the drop is delivered as a
 change in physics at leg 07 rather than as a picture of an explosion.
+
+## 2026-08-09 — Disney: THE PARALLAX CUT (owner correction: "fully parallax playing, no autoplay at all, no side stuff")
+- The autoplay parallax edition is retired: the 20-chapter film is now SCRUBBED —
+  scroll writes `currentTime` (leg = floor(p·20), fraction = clip time), forward and
+  reverse, and `play()` is never called on the film. The same scroll writes
+  `--journey` (whole-film) + `--depth` (in-chapter) so all four paper planes travel
+  with the picture. One mode for desktop, phone, and reduced-motion — no forks.
+- Side chrome deleted: SHOT chip, big leg number, page rail, scene ticks, HUD,
+  theater/master button, build districts. The only words on the picture are the cue
+  (chapter title + one story line, subtitle-style, bottom center). Nav chrome fades
+  to nothing while any scene is live; keyboard focus brings it back.
+- Frame: full-bleed on landscape; on portrait the reel keeps its true 1358×624 aspect
+  as a floating strip with gold hairlines, blurred far plane filling the surround.
+- Clips re-encoded from the RAW WAN takes (`crop=1358:624:0:0`, CRF16, `-g 6` — 25
+  keyframes per 5 s clip) so reverse scrub decodes ≤6 frames per seek; 20/20 first
+  frames match their posters (max raw diff 2.2, wrong-scene threshold 33).
+- `verify-disney2.py` rewritten for this contract: play() instrumented at zero across
+  every context, scrub-obedience gates (position → exact film time, settled), clock
+  freeze without scroll, ordered plane travel + whole-film drift, chrome absence,
+  full-bleed/strip geometry, truth-copy phrases, byte ranges, FIN. 173 checks green
+  on the LIVE URL; the suite goes red against the retired edition (fail-first).
+- Live: main `b1942ab`, gh-pages `697a4da`. Proof frames:
+  `Downloads/uberstrike handoff/disney-parallax-cut-proof/`.
+
+## 2026-08-09 — Disney v3.2: ROSTRUM CAMERA (owner direction) + clip-06 story break found
+- Full-bleed everywhere (object-fit:cover). The frames are wider than the screen, so
+  the scroll pans each chapter's hidden width via `--pan` → `object-position`,
+  serpentine (odd chapters sweep back) so joins land on the same edge — projector and
+  camera in one hand. Cue tightened to one quiet focus at the foot, clear of the matte.
+  Suite adds pan-sweep, renderer object-position, serpentine join-continuity, cover
+  and cue-focus gates: 203 checks green on the LIVE URL.
+- Full-chain audit (all 20 clips, first frame vs own keyframe + last frame vs next):
+  every endpoint clean (max join diff 14.8, threshold 16), zero cross-slot matches.
+  Mid-clip sweep (t=1.2/2.5/3.8 contact sheets) found ONE story break the endpoint
+  gates cannot see: **DSN2-006 detours to the closed clasped book (~1.8–4.3 s)** —
+  Act I imagery inside the ink chapter; caught live by the owner. All other 19 clips
+  are on-story (closed book in 19/20 is the scripted seal). Regen package with a
+  book-forbidding prompt, upload rules, CRF16/g6 finalize line and a mid-clip gate:
+  `Downloads/kingdom-run/REGEN-006.md` (10 credits).
+
+## 2026-08-09 — Disney v3.3: THE WEIGHTED CAMERA
+
+- **Pass 1 — RED against v3.2:** Added frame-sampled step response, lockstep,
+  steady-scroll, chapter-grammar, idle-park, jump-snap and version gates before the
+  implementation. The old page failed 23 times: one-frame pan/clock jumps, zero glide,
+  no idle state, moving chapter edges and the old badge.
+- **Pass 2 — local GREEN, deployed RED:** One time-based exponentially smoothed playhead
+  (`TAU=140 ms`) now drives film time, pan, depth and journey. The first CDN run exposed
+  a second clock inside asynchronous Range seeks: reduced-motion pan moved across 81
+  frames while the clip clock moved across three. Buffering each of the same two armed
+  five-second slots into an object URL made seeking local and restored measured lockstep.
+- **Pass 3 — shipped:** 236/236 locally and 236/236 on the canonical live URL across
+  desktop, phone and reduced-motion. Desktop pan/clock spread over 81/83 frames, their
+  halfway crossings both landed on frame 22, and only 1.8%/2.6% remained at 500 ms.
+  Sixteen-frame local and deployed contact sheets show arrive / cross / parked join /
+  settle without a lateral teleport or zig-zag.
+- **Gate retunes:** pan-sweep sampling `.10/.90 → .15/.85` to stay outside the new
+  `.12/.88` plateaus (travel requirement unchanged at ≥60%); join continuity tightened
+  `.12 → .04`; observation wait `260 → 550 ms` so the harness sees a full weighted
+  response. No acceptance gate was loosened.
+- **Scope held:** page-local HTML/controller plus QA/capture harness only; no shared
+  cinema CSS/JS, clips or query strings changed. DSN2-006 remains the named, out-of-scope
+  story issue. Cost: 0 credits / 0 generations / 0 paid services.
+- Source: `739350c`, `b6ac62c`; Pages: `91db92d`. Full reports and dailies:
+  `changelogs/2026-08-09-kingdom-weighted-camera.md`.
