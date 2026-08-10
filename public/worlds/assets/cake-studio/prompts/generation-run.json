@@ -1,0 +1,70 @@
+{
+  "schema": "cake-studio-still-generation/v1",
+  "generator": "OpenAI built-in image generation (GPT Image)",
+  "generatedVideoCredits": 0,
+  "generatedVideoFiles": 0,
+  "generationAttemptsRecorded": 93,
+  "finalFrameCount": 51,
+  "finalFramesPattern": "../keyframes/CST-KF00..CST-KF50.png",
+  "outputContract": {
+    "width": 1920,
+    "height": 1088,
+    "format": "png"
+  },
+  "outputQA": {
+    "status": "pass",
+    "sequence": "51/51",
+    "dimensionErrors": 0,
+    "qualityErrors": 0,
+    "meanLumaRange": [13.24, 87.8],
+    "centerLumaP95Range": [92, 215],
+    "edgeStdDevRange": [17.35, 45.74],
+    "report": "../review/keyframe-qa.json"
+  },
+  "editorialGate": {
+    "status": "awaiting-user-approval",
+    "desktopPassCount": 51,
+    "desktopHold": [],
+    "strictPortraitCoverPassCount": 51,
+    "strictPortraitCoverHold": [],
+    "uniqueHoldCount": 0,
+    "uniqueHold": [],
+    "regenerated": ["KF13", "KF31", "KF40", "KF41", "KF42", "KF43", "KF46", "KF49"],
+    "review": "../review/Cake-Studio-Keyframe-Review.md"
+  },
+  "revisionRejects": [
+    "REJECT-KF13-photo-wrap-cropped.png",
+    "REJECT-KF17-eight-cakes.png",
+    "REJECT-KF31-sixteen-droplets.png",
+    "REJECT-KF36-eight-facets.png",
+    "REJECT-KF37-eight-segment-seal.png",
+    "REJECT-KF38-cropped-seal.png",
+    "REJECT-KF39-cropped-stack.png",
+    "REJECT-KF40-eight-beams.png",
+    "REJECT-KF40-thirteen-beams.png",
+    "REJECT-KF40-three-groups-eleven.png",
+    "REJECT-KF40-tight-edit-zoomed-in.png",
+    "REJECT-KF41-ten-cakes.png",
+    "REJECT-KF41-removal-zoomed-cropped.png",
+    "REJECT-KF42-ambiguous-extra-lifts.png",
+    "REJECT-KF45-cropped-droplet.png",
+    "REJECT-KF47-cropped-arch.png",
+    "REJECT-KF48-cropped-aperture.png",
+    "REJECT-KF49-corners-22px-clipped.png",
+    "REJECT-KF50-ambiguous-reflection.png"
+  ],
+  "records": [
+    {
+      "id": "KF00",
+      "slug": "style-anchor",
+      "status": "accepted",
+      "promptSource": "keyframe-plan.json#anchor.prompt",
+      "inputReferences": [],
+      "rawDimensions": [1672, 941],
+      "rawDimensionGate": "RED as expected",
+      "normalizedOutput": "../keyframes/CST-KF00-style-anchor.png",
+      "normalizedDimensions": [1920, 1088],
+      "qa": "accepted: palette, light, materials, center safety, Escher tiers, piping monument, blank paper portal; no rendered claims"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+CST-A-050 V2 — OPTICAL BRIDGE CANDIDATE
+
+Purpose: Replace CST-A-050 only after midpoint and endpoint QA. The accepted
+v1 clip remains the shipping fallback until this candidate passes.
+
+Model: WAN 2.7 · First & Last Frame
+Duration: 5 seconds
+First Frame: KF50 — keyframes/CST-KF50-loop-closure.png
+Last Frame: KF01 — keyframes/CST-KF01-opening-sheet.png
+Audio: off
+Prompt extension: off
+
+PROMPT
+
+Generate one continuous five-second First-and-Last-Frame shot. The baker's two
+brown hands lower the curled ivory edible sheet toward the black marble. As its
+rose-gold edge crosses the reflection, forced perspective opens depth inside the
+sheet: nine dimensional cake forms unfold from the pearlescent paper fibres,
+circle once in a tight clockwise helix, and resolve into one selected ivory
+two-tier cake. That cake then compresses edge-on through the same rose-gold seam
+and becomes the original blank curled sheet again. The transformation must read
+as an anamorphic optical illusion caused by angle and reflection—software
+knowledge briefly visible inside physical material—not liquid morphing or magic.
+Keep the camera on the supplied locked 40 mm composition; allow only one nearly
+imperceptible 4 cm push, returning exactly. Keep both hands, teal cuffs, anatomy,
+marble and background stable. Complete the return by 4.5 seconds and hold the
+supplied last frame perfectly still for the final 0.5 seconds. One shot, no cuts,
+no extra hands, no loose objects outside the sheet, no readable text or logos,
+no smoke, no camera shake. Photoreal optical patisserie: ivory paper fibres,
+deep-teal glass, rose-gold highlights, black marble, warm flour-haze backlight,
+restrained film grain. No dialogue. No background music.
+
+QA TARGET
+
+At 1.2 s the illusion is still inside the sheet; at 2.5 s all nine forms read;
+at 3.8 s the selected cake is already collapsing; at 4.5 s KF01 is exact; the
+last 0.5 s is motionless. Reject any anatomy drift, world change, loose flying
+cake, missing nine-form beat, liquid morph, endpoint mismatch, or late motion.

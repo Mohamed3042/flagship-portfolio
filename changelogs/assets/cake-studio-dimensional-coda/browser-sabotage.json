@@ -1,0 +1,797 @@
+{
+  "schema": "cake-studio-browser-verification/v3",
+  "generatedAt": "2026-08-10T11:29:52.594Z",
+  "url": "http://127.0.0.1:4617/worlds/cake-studio.html",
+  "sabotage": true,
+  "checks": [
+    {
+      "name": "byte-range delivery",
+      "pass": true,
+      "detail": "206 · bytes 0-63/1973984"
+    },
+    {
+      "name": "desktop navigation",
+      "pass": true,
+      "detail": "HTTP document loaded"
+    },
+    {
+      "name": "desktop document ready",
+      "pass": true,
+      "detail": "complete"
+    },
+    {
+      "name": "desktop dimensional runtime boot",
+      "pass": true,
+      "detail": "Three.js runtime exposed"
+    },
+    {
+      "name": "desktop page identity",
+      "pass": true,
+      "detail": "The Cake Is Made Twice — Cake Studio World · Mohamed Mahmoud · 1.2.0"
+    },
+    {
+      "name": "desktop 50-shot DOM",
+      "pass": true,
+      "detail": "50 figures / 2 buffers"
+    },
+    {
+      "name": "desktop directed score",
+      "pass": true,
+      "detail": "v1.2.0 · fast 0.55 · choice/error/reject/loop 1.85/1.65/1.65/1.65"
+    },
+    {
+      "name": "desktop dimensional engine",
+      "pass": true,
+      "detail": "v1.2.0 · three-r169 · ready=true · canvas=1"
+    },
+    {
+      "name": "desktop horizontal fit",
+      "pass": true,
+      "detail": "0px overflow"
+    },
+    {
+      "name": "browser sabotage applied",
+      "pass": true,
+      "detail": "film displaced, reason emptied, WebGL stage hidden, and one physical output removed in runtime only"
+    },
+    {
+      "name": "desktop film-01 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-001.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-01 identity",
+      "pass": true,
+      "detail": "shot 1 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-01 direction",
+      "pass": false,
+      "detail": "brief/question · weight 1.45 · "
+    },
+    {
+      "name": "desktop film-01 scrub time",
+      "pass": true,
+      "detail": "2.491s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-01 picture contained",
+      "pass": false,
+      "detail": "{\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804"
+    },
+    {
+      "name": "desktop film-01 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop film-09-fast ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-009.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-09-fast identity",
+      "pass": true,
+      "detail": "shot 9 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-09-fast direction",
+      "pass": true,
+      "detail": "ready-forms/rush · weight 0.55 · Reusable forms make the first choice quick, visible and reversible."
+    },
+    {
+      "name": "desktop film-09-fast scrub time",
+      "pass": true,
+      "detail": "2.501s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-09-fast picture contained",
+      "pass": false,
+      "detail": "{\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804"
+    },
+    {
+      "name": "desktop film-09-fast never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop film-17-choice ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-017.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-17-choice identity",
+      "pass": true,
+      "detail": "shot 17 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-17-choice direction",
+      "pass": true,
+      "detail": "flexible-design/decision · weight 1.85 · Change the design without rebuilding the cake geometry."
+    },
+    {
+      "name": "desktop film-17-choice scrub time",
+      "pass": true,
+      "detail": "2.496s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-17-choice picture contained",
+      "pass": false,
+      "detail": "{\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804"
+    },
+    {
+      "name": "desktop film-17-choice never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop film-27-error ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-027.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-27-error identity",
+      "pass": true,
+      "detail": "shot 27 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-27-error direction",
+      "pass": true,
+      "detail": "protect-colour/protect · weight 1.65 · Correct the screen before edible ink and material are spent."
+    },
+    {
+      "name": "desktop film-27-error scrub time",
+      "pass": true,
+      "detail": "2.504s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-27-error picture contained",
+      "pass": false,
+      "detail": "{\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804"
+    },
+    {
+      "name": "desktop film-27-error never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop film-38-reject ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-038.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-38-reject identity",
+      "pass": true,
+      "detail": "shot 38 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-38-reject direction",
+      "pass": true,
+      "detail": "catch-mistakes/gate · weight 1.65 · Reject the expensive mistake before it reaches the baker."
+    },
+    {
+      "name": "desktop film-38-reject scrub time",
+      "pass": true,
+      "detail": "2.503s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-38-reject picture contained",
+      "pass": false,
+      "detail": "{\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804"
+    },
+    {
+      "name": "desktop film-38-reject never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop film-50 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-050.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-50 identity",
+      "pass": true,
+      "detail": "shot 50 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-50 direction",
+      "pass": true,
+      "detail": "make-real/release · weight 1.65 · Software ends where physical craft begins, then saves the result for reuse."
+    },
+    {
+      "name": "desktop film-50 scrub time",
+      "pass": true,
+      "detail": "2.495s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-50 picture contained",
+      "pass": false,
+      "detail": "{\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804"
+    },
+    {
+      "name": "desktop film-50 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop reverse scrub",
+      "pass": true,
+      "detail": "shot 17 @ 2.496s"
+    },
+    {
+      "name": "desktop reverse remains silent",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "desktop coda-bridge state",
+      "pass": true,
+      "detail": "forms @ 0.0101 · three-r169"
+    },
+    {
+      "name": "desktop coda-bridge object contract",
+      "pass": false,
+      "detail": "9 forms · 4 parts · 2 outputs"
+    },
+    {
+      "name": "desktop coda-bridge real render",
+      "pass": false,
+      "detail": "WebGL 2.0 (OpenGL ES 3.0 Chromium) · 7 calls · 2210 triangles · pixels 9/14400 range 1.3"
+    },
+    {
+      "name": "desktop coda-bridge composition",
+      "pass": true,
+      "detail": "canvas=true · copy presence=0.000 · copy contained=true"
+    },
+    {
+      "name": "desktop coda-bridge bounded rendering",
+      "pass": true,
+      "detail": "1×1 @ 1x · render 3"
+    },
+    {
+      "name": "desktop coda-bridge never autoplayed",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "desktop endpoint match bridge",
+      "pass": true,
+      "detail": "opacity 0.8687 · assets/cake-studio/keyframes/CST-KF01-opening-sheet.png · 1404.4375px"
+    },
+    {
+      "name": "desktop coda-forms state",
+      "pass": true,
+      "detail": "forms @ 0.2201 · three-r169"
+    },
+    {
+      "name": "desktop coda-forms object contract",
+      "pass": false,
+      "detail": "9 forms · 4 parts · 2 outputs"
+    },
+    {
+      "name": "desktop coda-forms real render",
+      "pass": false,
+      "detail": "WebGL 2.0 (OpenGL ES 3.0 Chromium) · 84 calls · 33820 triangles · pixels 9/14400 range 1.3"
+    },
+    {
+      "name": "desktop coda-forms composition",
+      "pass": true,
+      "detail": "canvas=true · copy presence=1.000 · copy contained=true"
+    },
+    {
+      "name": "desktop coda-forms bounded rendering",
+      "pass": true,
+      "detail": "1×1 @ 1x · render 4"
+    },
+    {
+      "name": "desktop coda-forms never autoplayed",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "desktop coda-assembly state",
+      "pass": true,
+      "detail": "assembly @ 0.5201 · three-r169"
+    },
+    {
+      "name": "desktop coda-assembly object contract",
+      "pass": false,
+      "detail": "9 forms · 4 parts · 2 outputs"
+    },
+    {
+      "name": "desktop coda-assembly real render",
+      "pass": false,
+      "detail": "WebGL 2.0 (OpenGL ES 3.0 Chromium) · 32 calls · 7280 triangles · pixels 9/14400 range 1.3"
+    },
+    {
+      "name": "desktop coda-assembly composition",
+      "pass": true,
+      "detail": "canvas=true · copy presence=1.000 · copy contained=true"
+    },
+    {
+      "name": "desktop coda-assembly bounded rendering",
+      "pass": true,
+      "detail": "1×1 @ 1x · render 5"
+    },
+    {
+      "name": "desktop coda-assembly never autoplayed",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "desktop coda-handoff state",
+      "pass": true,
+      "detail": "handoff @ 0.8401 · three-r169"
+    },
+    {
+      "name": "desktop coda-handoff object contract",
+      "pass": false,
+      "detail": "9 forms · 4 parts · 2 outputs"
+    },
+    {
+      "name": "desktop coda-handoff real render",
+      "pass": false,
+      "detail": "WebGL 2.0 (OpenGL ES 3.0 Chromium) · 29 calls · 8400 triangles · pixels 9/14400 range 9.3"
+    },
+    {
+      "name": "desktop coda-handoff composition",
+      "pass": true,
+      "detail": "canvas=true · copy presence=1.000 · copy contained=true"
+    },
+    {
+      "name": "desktop coda-handoff bounded rendering",
+      "pass": true,
+      "detail": "1×1 @ 1x · render 6"
+    },
+    {
+      "name": "desktop coda-handoff never autoplayed",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "desktop tangible handoff labels",
+      "pass": false,
+      "detail": "customer mockup / baker sheet"
+    },
+    {
+      "name": "desktop dimensional reverse scrub",
+      "pass": true,
+      "detail": "forms @ 0.2201 · render 7"
+    },
+    {
+      "name": "desktop dimensional reverse remains silent",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "desktop Arabic direction",
+      "pass": true,
+      "detail": "ar/rtl · ar=inline en=none"
+    },
+    {
+      "name": "desktop Arabic coda parity",
+      "pass": false,
+      "detail": "17 Arabic / 17 English labels · Arabic visible=true · English hidden=true"
+    },
+    {
+      "name": "desktop Arabic fit",
+      "pass": true,
+      "detail": "0px overflow"
+    },
+    {
+      "name": "desktop console clean",
+      "pass": true,
+      "detail": "0 console / 0 page errors"
+    },
+    {
+      "name": "desktop network clean",
+      "pass": true,
+      "detail": "0 bad responses / 0 failed requests"
+    }
+  ],
+  "failures": [
+    "desktop film-01 direction: brief/question · weight 1.45 · ",
+    "desktop film-01 picture contained: {\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804",
+    "desktop film-09-fast picture contained: {\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804",
+    "desktop film-17-choice picture contained: {\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804",
+    "desktop film-27-error picture contained: {\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804",
+    "desktop film-38-reject picture contained: {\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804",
+    "desktop film-50 picture contained: {\"left\":197.78125,\"right\":1602.21875,\"top\":6.015625,\"bottom\":796,\"width\":1404.4375,\"height\":789.984375} · cue top 804",
+    "desktop coda-bridge object contract: 9 forms · 4 parts · 2 outputs",
+    "desktop coda-bridge real render: WebGL 2.0 (OpenGL ES 3.0 Chromium) · 7 calls · 2210 triangles · pixels 9/14400 range 1.3",
+    "desktop coda-forms object contract: 9 forms · 4 parts · 2 outputs",
+    "desktop coda-forms real render: WebGL 2.0 (OpenGL ES 3.0 Chromium) · 84 calls · 33820 triangles · pixels 9/14400 range 1.3",
+    "desktop coda-assembly object contract: 9 forms · 4 parts · 2 outputs",
+    "desktop coda-assembly real render: WebGL 2.0 (OpenGL ES 3.0 Chromium) · 32 calls · 7280 triangles · pixels 9/14400 range 1.3",
+    "desktop coda-handoff object contract: 9 forms · 4 parts · 2 outputs",
+    "desktop coda-handoff real render: WebGL 2.0 (OpenGL ES 3.0 Chromium) · 29 calls · 8400 triangles · pixels 9/14400 range 9.3",
+    "desktop tangible handoff labels: customer mockup / baker sheet",
+    "desktop Arabic coda parity: 17 Arabic / 17 English labels · Arabic visible=true · English hidden=true"
+  ],
+  "observations": {
+    "desktop": {
+      "basics": {
+        "title": "The Cake Is Made Twice — Cake Studio World · Mohamed Mahmoud",
+        "figures": 50,
+        "videos": 2,
+        "version": "1.2.0",
+        "directorVersion": "1.2.0",
+        "directorWeights": 50,
+        "fastWeight": 0.55,
+        "choiceWeight": 1.85,
+        "errorWeight": 1.65,
+        "rejectWeight": 1.65,
+        "loopWeight": 1.65,
+        "codaVersion": "1.2.0",
+        "codaReady": true,
+        "webgl": true,
+        "engine": "three-r169",
+        "canvases": 1,
+        "overflow": 0,
+        "lang": "en",
+        "dir": "ltr"
+      },
+      "filmStates": [
+        {
+          "shot": 1,
+          "clip": "cake-studio/clips/CST-001.mp4",
+          "chapterKey": "brief",
+          "rhythm": "question",
+          "weight": 1.45,
+          "directorNote": "",
+          "mediaState": "ready",
+          "time": 2.491379,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": false,
+          "captionClear": true,
+          "frame": {
+            "left": 197.78125,
+            "right": 1602.21875,
+            "top": 6.015625,
+            "bottom": 796,
+            "width": 1404.4375,
+            "height": 789.984375
+          },
+          "cue": {
+            "top": 804,
+            "bottom": 1000
+          }
+        },
+        {
+          "shot": 9,
+          "clip": "cake-studio/clips/CST-009.mp4",
+          "chapterKey": "ready-forms",
+          "rhythm": "rush",
+          "weight": 0.55,
+          "directorNote": "Reusable forms make the first choice quick, visible and reversible.",
+          "mediaState": "ready",
+          "time": 2.501454,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": false,
+          "captionClear": true,
+          "frame": {
+            "left": 197.78125,
+            "right": 1602.21875,
+            "top": 6.015625,
+            "bottom": 796,
+            "width": 1404.4375,
+            "height": 789.984375
+          },
+          "cue": {
+            "top": 804,
+            "bottom": 1000
+          }
+        },
+        {
+          "shot": 17,
+          "clip": "cake-studio/clips/CST-017.mp4",
+          "chapterKey": "flexible-design",
+          "rhythm": "decision",
+          "weight": 1.85,
+          "directorNote": "Change the design without rebuilding the cake geometry.",
+          "mediaState": "ready",
+          "time": 2.495513,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": false,
+          "captionClear": true,
+          "frame": {
+            "left": 197.78125,
+            "right": 1602.21875,
+            "top": 6.015625,
+            "bottom": 796,
+            "width": 1404.4375,
+            "height": 789.984375
+          },
+          "cue": {
+            "top": 804,
+            "bottom": 1000
+          }
+        },
+        {
+          "shot": 27,
+          "clip": "cake-studio/clips/CST-027.mp4",
+          "chapterKey": "protect-colour",
+          "rhythm": "protect",
+          "weight": 1.65,
+          "directorNote": "Correct the screen before edible ink and material are spent.",
+          "mediaState": "ready",
+          "time": 2.504181,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": false,
+          "captionClear": true,
+          "frame": {
+            "left": 197.78125,
+            "right": 1602.21875,
+            "top": 6.015625,
+            "bottom": 796,
+            "width": 1404.4375,
+            "height": 789.984375
+          },
+          "cue": {
+            "top": 804,
+            "bottom": 1000
+          }
+        },
+        {
+          "shot": 38,
+          "clip": "cake-studio/clips/CST-038.mp4",
+          "chapterKey": "catch-mistakes",
+          "rhythm": "gate",
+          "weight": 1.65,
+          "directorNote": "Reject the expensive mistake before it reaches the baker.",
+          "mediaState": "ready",
+          "time": 2.503333,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": false,
+          "captionClear": true,
+          "frame": {
+            "left": 197.78125,
+            "right": 1602.21875,
+            "top": 6.015625,
+            "bottom": 796,
+            "width": 1404.4375,
+            "height": 789.984375
+          },
+          "cue": {
+            "top": 804,
+            "bottom": 1000
+          }
+        },
+        {
+          "shot": 50,
+          "clip": "cake-studio/clips/CST-050.mp4",
+          "chapterKey": "make-real",
+          "rhythm": "release",
+          "weight": 1.65,
+          "directorNote": "Software ends where physical craft begins, then saves the result for reuse.",
+          "mediaState": "ready",
+          "time": 2.495333,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": false,
+          "captionClear": true,
+          "frame": {
+            "left": 197.78125,
+            "right": 1602.21875,
+            "top": 6.015625,
+            "bottom": 796,
+            "width": 1404.4375,
+            "height": 789.984375
+          },
+          "cue": {
+            "top": 804,
+            "bottom": 1000
+          }
+        }
+      ],
+      "reverseState": {
+        "shot": 17,
+        "time": 2.495513,
+        "playAttempts": 0
+      },
+      "codaStates": [
+        {
+          "ready": true,
+          "webgl": true,
+          "engine": "three-r169",
+          "progress": 0.0101,
+          "act": "forms",
+          "forms": 9,
+          "parts": 4,
+          "outputs": 2,
+          "renders": 3,
+          "drawCalls": 7,
+          "triangles": 2210,
+          "pixelRatio": 1,
+          "canvasWidth": 1,
+          "canvasHeight": 1,
+          "canvasDisplay": "none",
+          "canvasContained": true,
+          "actPresence": 0,
+          "actContained": true,
+          "bridgeOpacity": 0.8687,
+          "bridgeSource": "assets/cake-studio/keyframes/CST-KF01-opening-sheet.png",
+          "bridgeWidth": 1404.4375,
+          "labels": [
+            "customer mockup",
+            "baker sheet"
+          ],
+          "pixelNonZero": 9,
+          "pixelSamples": 14400,
+          "pixelRange": 1.3333333333333333,
+          "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "playAttempts": 0
+        },
+        {
+          "ready": true,
+          "webgl": true,
+          "engine": "three-r169",
+          "progress": 0.2201,
+          "act": "forms",
+          "forms": 9,
+          "parts": 4,
+          "outputs": 2,
+          "renders": 4,
+          "drawCalls": 84,
+          "triangles": 33820,
+          "pixelRatio": 1,
+          "canvasWidth": 1,
+          "canvasHeight": 1,
+          "canvasDisplay": "none",
+          "canvasContained": true,
+          "actPresence": 1,
+          "actContained": true,
+          "bridgeOpacity": 0,
+          "bridgeSource": "assets/cake-studio/keyframes/CST-KF01-opening-sheet.png",
+          "bridgeWidth": 1404.4375,
+          "labels": [
+            "customer mockup",
+            "baker sheet"
+          ],
+          "pixelNonZero": 9,
+          "pixelSamples": 14400,
+          "pixelRange": 1.3333333333333333,
+          "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "playAttempts": 0
+        },
+        {
+          "ready": true,
+          "webgl": true,
+          "engine": "three-r169",
+          "progress": 0.5201,
+          "act": "assembly",
+          "forms": 9,
+          "parts": 4,
+          "outputs": 2,
+          "renders": 5,
+          "drawCalls": 32,
+          "triangles": 7280,
+          "pixelRatio": 1,
+          "canvasWidth": 1,
+          "canvasHeight": 1,
+          "canvasDisplay": "none",
+          "canvasContained": true,
+          "actPresence": 1,
+          "actContained": true,
+          "bridgeOpacity": 0,
+          "bridgeSource": "assets/cake-studio/keyframes/CST-KF01-opening-sheet.png",
+          "bridgeWidth": 1404.4375,
+          "labels": [
+            "customer mockup",
+            "baker sheet"
+          ],
+          "pixelNonZero": 9,
+          "pixelSamples": 14400,
+          "pixelRange": 1.3333333333333333,
+          "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "playAttempts": 0
+        },
+        {
+          "ready": true,
+          "webgl": true,
+          "engine": "three-r169",
+          "progress": 0.8401,
+          "act": "handoff",
+          "forms": 9,
+          "parts": 4,
+          "outputs": 2,
+          "renders": 6,
+          "drawCalls": 29,
+          "triangles": 8400,
+          "pixelRatio": 1,
+          "canvasWidth": 1,
+          "canvasHeight": 1,
+          "canvasDisplay": "none",
+          "canvasContained": true,
+          "actPresence": 1,
+          "actContained": true,
+          "bridgeOpacity": 0,
+          "bridgeSource": "assets/cake-studio/keyframes/CST-KF01-opening-sheet.png",
+          "bridgeWidth": 1404.4375,
+          "labels": [
+            "customer mockup",
+            "baker sheet"
+          ],
+          "pixelNonZero": 9,
+          "pixelSamples": 14400,
+          "pixelRange": 9.333333333333334,
+          "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+          "playAttempts": 0
+        }
+      ],
+      "codaReverseState": {
+        "act": "forms",
+        "progress": 0.2201,
+        "renders": 7,
+        "playAttempts": 0
+      },
+      "arabic": {
+        "lang": "ar",
+        "dir": "rtl",
+        "ar": "inline",
+        "en": "none",
+        "overflow": 0,
+        "codaAr": 17,
+        "codaEn": 17,
+        "codaArVisible": true,
+        "codaEnHidden": true
+      }
+    }
+  }
+}

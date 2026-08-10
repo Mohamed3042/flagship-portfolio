@@ -1,0 +1,24 @@
+{
+  "schema": "cake-studio-keyframe-qa/v1",
+  "target": {
+    "width": 1920,
+    "height": 1088
+  },
+  "expectedCount": 1,
+  "actualCount": 1,
+  "errors": [],
+  "frames": [
+    {
+      "file": "CST-KF00-style-anchor.png",
+      "sha256": "c9de087a3f94432f561a40cdd1bf0a74c51f915b771ecab61aaf30460b4f0a43",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 87.8,
+      "lumaStdDev": 60.5,
+      "edgeStdDev": 27.93,
+      "centerMeanLuma": 95.22,
+      "outerMeanLuma": 80.37
+    }
+  ]
+}

@@ -282,6 +282,19 @@ The Cosmic Keynote is **live on both hosts** (`npm run build` green, 22 pages). 
     Budget: 48 frames, 960×480, 40 samples + OptiX denoise ≈ 10 min/world on an RTX 5070
     Ti; all eight plates together weigh well under 2 MB.
 
+12. **Cake Studio World v1.2 — dimensional coda (2026-08-10).** The 50-shot directed film keeps
+    its weighted, reversible scroll score, but its former circles/lines/boxes ending is gone. The
+    exact `CST-KF01-opening-sheet.png` endpoint now holds through a rose-gold optical match cut into
+    one locally rendered Three.js r169 patisserie: nine cake forms → one measured cake with four
+    controlled parts and seventeen data wafers → customer vitrine, baker sheet and true-size
+    plaque. Scroll is the only playhead; the WebGL renderer sleeps away from the coda, caps DPR,
+    supports reverse travel and falls back to bilingual text. Source proof is **40/40 structural**
+    and **159/159 live-browser** across desktop/phone with zero console/network errors; deliberate
+    static and browser sabotage both turn the gates red. Direction source:
+    `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md`. Copy-ready optional WAN bridge:
+    `public/worlds/assets/cake-studio/wan-prompts/CST-A-050-V2-OPTICAL-BRIDGE.txt`. Published to
+    GitHub Pages at `gh-pages` commit `7fd9d97`; the live CDN also passes **159/159**.
+
 ## 9. Companion docs
 - `NOTES.md` — the engineering rationale & "what I improved over the original".
 - `README.md` — quickstart (preview/build/deploy).

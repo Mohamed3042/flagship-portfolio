@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "release": "1.4.0",
+  "asset": "cake-studio-proof-room.glb",
+  "generator": "Blender 5.1 original procedural proof-room authoring",
+  "license": "Original work for Mohamed Mahmoud",
+  "bytes": 669916,
+  "sha256": "f0eed57c01b5509f80e4a9abff30931b2eb2a3f13ca057423d7819a27858ae98",
+  "zones": [
+    "Zone_Archive",
+    "Zone_Assembly",
+    "Zone_Handoff"
+  ],
+  "depthLayers": [
+    "Layer_Foreground",
+    "Layer_Midground",
+    "Layer_Background"
+  ],
+  "cameras": [
+    "Camera_Desktop",
+    "Camera_Phone"
+  ],
+  "animation": "ProofRoom_Cameras",
+  "fovCurves": {
+    "Camera_Desktop": [
+      [
+        1,
+        35.0
+      ],
+      [
+        54,
+        32.0
+      ],
+      [
+        82,
+        36.0
+      ],
+      [
+        112,
+        34.0
+      ],
+      [
+        158,
+        31.0
+      ],
+      [
+        181,
+        36.0
+      ],
+      [
+        214,
+        33.0
+      ],
+      [
+        240,
+        30.0
+      ]
+    ],
+    "Camera_Phone": [
+      [
+        1,
+        43.0
+      ],
+      [
+        18,
+        43.0
+      ],
+      [
+        54,
+        41.0
+      ],
+      [
+        82,
+        44.0
+      ],
+      [
+        112,
+        42.0
+      ],
+      [
+        158,
+        40.0
+      ],
+      [
+        181,
+        44.0
+      ],
+      [
+        214,
+        42.0
+      ],
+      [
+        240,
+        40.0
+      ]
+    ]
+  },
+  "frames": [
+    1,
+    240
+  ],
+  "fps": 24,
+  "zoneCenters": {
+    "forms": -9.2,
+    "assembly": 0.0,
+    "handoff": 9.2
+  }
+}

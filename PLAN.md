@@ -1,8 +1,38 @@
-# PLAN — Eight Worlds, One Cinema
+# PLAN — Nine Worlds, One Cinema
 
 **Author:** Claude (Fable 5), directing autonomously on behalf of Mohamed Mahmoud.
 **Date:** 2026-08-03
 **Mission:** Finish the portfolio's cinematic layer designed in `wan-production-bible/` — without asking the owner to generate another frame.
+
+## 2026-08-10 addendum — Cake Studio becomes World 09
+
+The owner subsequently generated a complete, corrected **50-shot WAN 2.7 First & Last Frame
+chain** for Cake Studio. That owner-authorized work supersedes the original eight-world count but
+does not rewrite the historical plan below:
+
+- `public/worlds/cake-studio.html` is World 09, **The Cake Is Made Twice** (`v1.2`): eight
+  decisions, 50 linked five-second shots, 250 seconds total, followed by one scroll-driven Three.js
+  stage with three physical object acts. `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md` is the
+  direction source of truth.
+- The scroll hand is the operator. A 50-value director score makes reusable-form exploration quick
+  and production decisions deliberate; chapter reasons state why every movement matters to the
+  Cake Studio operator.
+- Scroll is the only playhead, forward and reverse. Two video elements buffer the current and next
+  five-second clip; `play()` is never called. Desktop and phone run the same cut.
+- The generated 16:9 picture is always contained in full, while bilingual captions and chapter
+  controls occupy a separate row and never cover the frame.
+- The final `CST-KF01` sheet remains painted through the film-to-object match cut; nine cake forms,
+  four controlled parts and three tangible production outputs replace the former circles, lines
+  and box diagrams.
+- `public/worlds/cake-studio/manifest.json` records the deploy encodes and hashes; the accepted
+  generation masters and all 50 embedded prompts remain under
+  `public/worlds/assets/cake-studio/`.
+- The lobby is now nine worlds. Deployment remains a separate owner-authorized action; this v1.2
+  pass was explicitly authorized for publication on 2026-08-10.
+- The queued `v1.3` material pass is now portable: fourteen Hunyuan3D source images, a strict GLB
+  manifest, validator and RTX-PC handoff live under `production/cake-studio/hunyuan3d/`. The raw
+  models will replace the cake and assembly proxies only after the returned batch passes validation;
+  the v1.2 procedural coda remains the loading and failure fallback.
 
 ---
 
