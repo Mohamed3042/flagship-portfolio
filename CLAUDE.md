@@ -292,7 +292,8 @@ The Cosmic Keynote is **live on both hosts** (`npm run build` green, 22 pages). 
     and **159/159 live-browser** across desktop/phone with zero console/network errors; deliberate
     static and browser sabotage both turn the gates red. Direction source:
     `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md`. Copy-ready optional WAN bridge:
-    `public/worlds/assets/cake-studio/wan-prompts/CST-A-050-V2-OPTICAL-BRIDGE.txt`.
+    `public/worlds/assets/cake-studio/wan-prompts/CST-A-050-V2-OPTICAL-BRIDGE.txt`. Published to
+    GitHub Pages at `gh-pages` commit `7fd9d97`; the live CDN also passes **159/159**.
 
 ## 9. Companion docs
 - `NOTES.md` — the engineering rationale & "what I improved over the original".

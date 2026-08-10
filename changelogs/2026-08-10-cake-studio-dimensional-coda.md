@@ -48,6 +48,7 @@ deterministic playhead. It does not copy their implementations or depend on thei
 
 - Structural/media source gate: **40/40 GREEN**.
 - Live browser source gate: **159/159 GREEN** at 1440×1000 and 390×844.
+- Public GitHub Pages gate: **159/159 GREEN** against the deployed URL at the same two viewports.
 - Verified: 50 film shots, exact 2.5-second seeks, reverse scrub, zero `play()` attempts, one active
   video buffer, WebGL 2 render, real pixel variance across nine sample zones, 9/4/3 object contract,
   endpoint bridge, Arabic parity, zero overflow, zero console errors and zero network failures.
@@ -61,7 +62,17 @@ deterministic playhead. It does not copy their implementations or depend on thei
 - [Desktop film-to-object contact sheet](assets/cake-studio-dimensional-coda/desktop-coda-contact-sheet.png)
 - [Phone film-to-object contact sheet](assets/cake-studio-dimensional-coda/phone-coda-contact-sheet.png)
 - [Built-output browser verification](assets/cake-studio-dimensional-coda/dist-browser-verification.json)
+- [Live GitHub Pages browser verification](assets/cake-studio-dimensional-coda/live-browser-verification.json)
 - [Browser sabotage report](assets/cake-studio-dimensional-coda/browser-sabotage.json)
+
+## Publication
+
+- Feature source: `058ed52` on `feature/cake-studio-world`.
+- Pages tree: `7fd9d97` on `gh-pages`; Pages build `31385136693` completed successfully.
+- Live world: <https://mohamed3042.github.io/flagship-portfolio/worlds/cake-studio.html>
+- The complete authoring archive remains on the feature branch. The 576 MB Pages tree carries all
+  50 optimized world clips, all 51 WAN prompt files, the linked KF01 bridge and the runtime; only
+  duplicated accepted masters, review sheets and unused keyframes are source-only.
 
 Reproduce locally:
 
