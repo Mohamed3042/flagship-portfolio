@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "project": "cake-studio-world-09",
+  "sourceBranch": "feature/cake-studio-world",
+  "currentRelease": "v1.2.0",
+  "targetRelease": "v1.3.0",
+  "generation": {
+    "model": "3D Generation V3.1",
+    "sourceFaces": 500000,
+    "texture": "PBR 2K",
+    "export": "GLB",
+    "oneObjectPerJob": true
+  },
+  "paths": {
+    "source": "production/cake-studio/hunyuan3d/source-images",
+    "generated": "production/cake-studio/hunyuan3d/generated-glb",
+    "runtimeTarget": "public/worlds/cake-studio/models"
+  },
+  "assets": [
+    { "id": "cake-01", "source": "cake-01-ivory-spiral.png", "output": "cake-01-ivory-spiral.glb", "role": "ready-form" },
+    { "id": "cake-02", "source": "cake-02-square-cocoa.png", "output": "cake-02-square-cocoa.glb", "role": "ready-form" },
+    { "id": "cake-03", "source": "cake-03-oval-blush.png", "output": "cake-03-oval-blush.glb", "role": "ready-form" },
+    { "id": "cake-04", "source": "cake-04-heart-art-deco.png", "output": "cake-04-heart-art-deco.glb", "role": "ready-form" },
+    { "id": "cake-05", "source": "cake-05-hex-caramel.png", "output": "cake-05-hex-caramel.glb", "role": "ready-form" },
+    { "id": "cake-06", "source": "cake-06-two-tier-cocoa.png", "output": "cake-06-two-tier-cocoa.glb", "role": "ready-form-selected" },
+    { "id": "cake-07", "source": "cake-07-rect-sheet-cocoa.png", "output": "cake-07-rect-sheet-cocoa.glb", "role": "ready-form" },
+    { "id": "cake-08", "source": "cake-08-scalloped-ivory.png", "output": "cake-08-scalloped-ivory.glb", "role": "ready-form" },
+    { "id": "cake-09", "source": "cake-09-tall-oval-teal.png", "output": "cake-09-tall-oval-teal.glb", "role": "ready-form" },
+    { "id": "assembly-10", "source": "assembly-10-blank-two-tier-core.png", "output": "assembly-10-blank-two-tier-core.glb", "role": "assembly-body" },
+    { "id": "assembly-11", "source": "assembly-11-teal-fondant-collar.png", "output": "assembly-11-teal-fondant-collar.glb", "role": "assembly-surface" },
+    { "id": "assembly-12", "source": "assembly-12-edible-image-panel.png", "output": "assembly-12-edible-image-panel.glb", "role": "assembly-edible-image" },
+    { "id": "assembly-13", "source": "assembly-13-blank-bilingual-plaque.png", "output": "assembly-13-blank-bilingual-plaque.glb", "role": "assembly-plaque" },
+    { "id": "assembly-14", "source": "assembly-14-connected-topper.png", "output": "assembly-14-connected-topper.glb", "role": "assembly-decoration" }
+  ]
+}

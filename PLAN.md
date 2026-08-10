@@ -29,6 +29,10 @@ does not rewrite the historical plan below:
   `public/worlds/assets/cake-studio/`.
 - The lobby is now nine worlds. Deployment remains a separate owner-authorized action; this v1.2
   pass was explicitly authorized for publication on 2026-08-10.
+- The queued `v1.3` material pass is now portable: fourteen Hunyuan3D source images, a strict GLB
+  manifest, validator and RTX-PC handoff live under `production/cake-studio/hunyuan3d/`. The raw
+  models will replace the cake and assembly proxies only after the returned batch passes validation;
+  the v1.2 procedural coda remains the loading and failure fallback.
 
 ---
 
