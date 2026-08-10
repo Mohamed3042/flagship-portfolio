@@ -1,8 +1,26 @@
-# PLAN — Eight Worlds, One Cinema
+# PLAN — Nine Worlds, One Cinema
 
 **Author:** Claude (Fable 5), directing autonomously on behalf of Mohamed Mahmoud.
 **Date:** 2026-08-03
 **Mission:** Finish the portfolio's cinematic layer designed in `wan-production-bible/` — without asking the owner to generate another frame.
+
+## 2026-08-10 addendum — Cake Studio becomes World 09
+
+The owner subsequently generated a complete, corrected **50-shot WAN 2.7 First & Last Frame
+chain** for Cake Studio. That owner-authorized work supersedes the original eight-world count but
+does not rewrite the historical plan below:
+
+- `public/worlds/cake-studio.html` is World 09, **The Edible Compiler**: eight chapters, 50 linked
+  five-second shots, 250 seconds total, followed by three live-code proof scenes.
+- Scroll is the only playhead, forward and reverse. Two video elements buffer the current and next
+  five-second clip; `play()` is never called. Desktop and phone run the same cut.
+- The generated 16:9 picture is always contained in full, while bilingual captions and chapter
+  controls occupy a separate row and never cover the frame.
+- `public/worlds/cake-studio/manifest.json` records the deploy encodes and hashes; the accepted
+  generation masters and all 50 embedded prompts remain under
+  `public/worlds/assets/cake-studio/`.
+- The lobby is now nine worlds. Deployment remains a separate owner-authorized action; completing
+  and pushing this source branch does not authorize publishing it.
 
 ---
 

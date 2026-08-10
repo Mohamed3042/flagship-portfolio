@@ -1,0 +1,488 @@
+{
+  "schema": "cake-studio-browser-verification/v1",
+  "generatedAt": "2026-08-10T08:13:40.043Z",
+  "url": "http://127.0.0.1:4618/worlds/cake-studio.html",
+  "sabotage": false,
+  "checks": [
+    {
+      "name": "byte-range delivery",
+      "pass": true,
+      "detail": "206 · bytes 0-63/1973984"
+    },
+    {
+      "name": "desktop navigation",
+      "pass": true,
+      "detail": "HTTP document loaded"
+    },
+    {
+      "name": "desktop document ready",
+      "pass": true,
+      "detail": "complete"
+    },
+    {
+      "name": "desktop page identity",
+      "pass": true,
+      "detail": "The Edible Compiler — Cake Studio World · Mohamed Mahmoud · 1.0.0"
+    },
+    {
+      "name": "desktop 50-shot DOM",
+      "pass": true,
+      "detail": "50 figures / 2 buffers"
+    },
+    {
+      "name": "desktop horizontal fit",
+      "pass": true,
+      "detail": "0px overflow"
+    },
+    {
+      "name": "desktop film-01 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-001.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-01 identity",
+      "pass": true,
+      "detail": "shot 1 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-01 scrub time",
+      "pass": true,
+      "detail": "2.500s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-01 picture contained",
+      "pass": true,
+      "detail": "{\"left\":0,\"right\":1440,\"top\":18,\"bottom\":828,\"width\":1440,\"height\":810} · cue top 836"
+    },
+    {
+      "name": "desktop film-01 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop film-35 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-035.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-35 identity",
+      "pass": true,
+      "detail": "shot 35 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-35 scrub time",
+      "pass": true,
+      "detail": "2.500s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-35 picture contained",
+      "pass": true,
+      "detail": "{\"left\":0,\"right\":1440,\"top\":18,\"bottom\":828,\"width\":1440,\"height\":810} · cue top 836"
+    },
+    {
+      "name": "desktop film-35 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop film-50 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-050.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "desktop film-50 identity",
+      "pass": true,
+      "detail": "shot 50 · 1 active buffer"
+    },
+    {
+      "name": "desktop film-50 scrub time",
+      "pass": true,
+      "detail": "2.500s / expected ~2.5s"
+    },
+    {
+      "name": "desktop film-50 picture contained",
+      "pass": true,
+      "detail": "{\"left\":0,\"right\":1440,\"top\":18,\"bottom\":828,\"width\":1440,\"height\":810} · cue top 836"
+    },
+    {
+      "name": "desktop film-50 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "desktop reverse scrub",
+      "pass": true,
+      "detail": "shot 35 @ 2.500s"
+    },
+    {
+      "name": "desktop reverse remains silent",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "desktop Arabic direction",
+      "pass": true,
+      "detail": "ar/rtl · ar=inline en=none"
+    },
+    {
+      "name": "desktop Arabic fit",
+      "pass": true,
+      "detail": "0px overflow"
+    },
+    {
+      "name": "desktop console clean",
+      "pass": true,
+      "detail": "0 console / 0 page errors"
+    },
+    {
+      "name": "desktop network clean",
+      "pass": true,
+      "detail": "0 bad responses / 0 failed requests"
+    },
+    {
+      "name": "phone navigation",
+      "pass": true,
+      "detail": "HTTP document loaded"
+    },
+    {
+      "name": "phone document ready",
+      "pass": true,
+      "detail": "complete"
+    },
+    {
+      "name": "phone page identity",
+      "pass": true,
+      "detail": "The Edible Compiler — Cake Studio World · Mohamed Mahmoud · 1.0.0"
+    },
+    {
+      "name": "phone 50-shot DOM",
+      "pass": true,
+      "detail": "50 figures / 2 buffers"
+    },
+    {
+      "name": "phone horizontal fit",
+      "pass": true,
+      "detail": "0px overflow"
+    },
+    {
+      "name": "phone film-01 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-001.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "phone film-01 identity",
+      "pass": true,
+      "detail": "shot 1 · 1 active buffer"
+    },
+    {
+      "name": "phone film-01 scrub time",
+      "pass": true,
+      "detail": "2.500s / expected ~2.5s"
+    },
+    {
+      "name": "phone film-01 picture contained",
+      "pass": true,
+      "detail": "{\"left\":0,\"right\":390,\"top\":428.625,\"bottom\":648,\"width\":390,\"height\":219.375} · cue top 656"
+    },
+    {
+      "name": "phone film-01 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "phone film-35 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-035.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "phone film-35 identity",
+      "pass": true,
+      "detail": "shot 35 · 1 active buffer"
+    },
+    {
+      "name": "phone film-35 scrub time",
+      "pass": true,
+      "detail": "2.500s / expected ~2.5s"
+    },
+    {
+      "name": "phone film-35 picture contained",
+      "pass": true,
+      "detail": "{\"left\":0,\"right\":390,\"top\":428.625,\"bottom\":648,\"width\":390,\"height\":219.375} · cue top 656"
+    },
+    {
+      "name": "phone film-35 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "phone film-50 ready",
+      "pass": true,
+      "detail": "cake-studio/clips/CST-050.mp4 · ready 4 · seekable 1"
+    },
+    {
+      "name": "phone film-50 identity",
+      "pass": true,
+      "detail": "shot 50 · 1 active buffer"
+    },
+    {
+      "name": "phone film-50 scrub time",
+      "pass": true,
+      "detail": "2.500s / expected ~2.5s"
+    },
+    {
+      "name": "phone film-50 picture contained",
+      "pass": true,
+      "detail": "{\"left\":0,\"right\":390,\"top\":428.625,\"bottom\":648,\"width\":390,\"height\":219.375} · cue top 656"
+    },
+    {
+      "name": "phone film-50 never autoplayed",
+      "pass": true,
+      "detail": "paused=true · play attempts=0"
+    },
+    {
+      "name": "phone reverse scrub",
+      "pass": true,
+      "detail": "shot 35 @ 2.500s"
+    },
+    {
+      "name": "phone reverse remains silent",
+      "pass": true,
+      "detail": "0 play attempts"
+    },
+    {
+      "name": "phone Arabic direction",
+      "pass": true,
+      "detail": "ar/rtl · ar=inline en=none"
+    },
+    {
+      "name": "phone Arabic fit",
+      "pass": true,
+      "detail": "0px overflow"
+    },
+    {
+      "name": "phone console clean",
+      "pass": true,
+      "detail": "0 console / 0 page errors"
+    },
+    {
+      "name": "phone network clean",
+      "pass": true,
+      "detail": "0 bad responses / 0 failed requests"
+    }
+  ],
+  "failures": [],
+  "observations": {
+    "desktop": {
+      "basics": {
+        "title": "The Edible Compiler — Cake Studio World · Mohamed Mahmoud",
+        "figures": 50,
+        "videos": 2,
+        "version": "1.0.0",
+        "overflow": 0,
+        "lang": "en",
+        "dir": "ltr"
+      },
+      "filmStates": [
+        {
+          "shot": 1,
+          "clip": "cake-studio/clips/CST-001.mp4",
+          "mediaState": "ready",
+          "time": 2.5,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": true,
+          "captionClear": true,
+          "frame": {
+            "left": 0,
+            "right": 1440,
+            "top": 18,
+            "bottom": 828,
+            "width": 1440,
+            "height": 810
+          },
+          "cue": {
+            "top": 836,
+            "bottom": 1000
+          }
+        },
+        {
+          "shot": 35,
+          "clip": "cake-studio/clips/CST-035.mp4",
+          "mediaState": "ready",
+          "time": 2.5,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": true,
+          "captionClear": true,
+          "frame": {
+            "left": 0,
+            "right": 1440,
+            "top": 18,
+            "bottom": 828,
+            "width": 1440,
+            "height": 810
+          },
+          "cue": {
+            "top": 836,
+            "bottom": 1000
+          }
+        },
+        {
+          "shot": 50,
+          "clip": "cake-studio/clips/CST-050.mp4",
+          "mediaState": "ready",
+          "time": 2.5,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": true,
+          "captionClear": true,
+          "frame": {
+            "left": 0,
+            "right": 1440,
+            "top": 18,
+            "bottom": 828,
+            "width": 1440,
+            "height": 810
+          },
+          "cue": {
+            "top": 836,
+            "bottom": 1000
+          }
+        }
+      ],
+      "reverseState": {
+        "shot": 35,
+        "time": 2.5,
+        "playAttempts": 0
+      },
+      "arabic": {
+        "lang": "ar",
+        "dir": "rtl",
+        "ar": "inline",
+        "en": "none",
+        "overflow": 0
+      }
+    },
+    "phone": {
+      "basics": {
+        "title": "The Edible Compiler — Cake Studio World · Mohamed Mahmoud",
+        "figures": 50,
+        "videos": 2,
+        "version": "1.0.0",
+        "overflow": 0,
+        "lang": "en",
+        "dir": "ltr"
+      },
+      "filmStates": [
+        {
+          "shot": 1,
+          "clip": "cake-studio/clips/CST-001.mp4",
+          "mediaState": "ready",
+          "time": 2.5,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": true,
+          "captionClear": true,
+          "frame": {
+            "left": 0,
+            "right": 390,
+            "top": 428.625,
+            "bottom": 648,
+            "width": 390,
+            "height": 219.375
+          },
+          "cue": {
+            "top": 656,
+            "bottom": 844
+          }
+        },
+        {
+          "shot": 35,
+          "clip": "cake-studio/clips/CST-035.mp4",
+          "mediaState": "ready",
+          "time": 2.5,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": true,
+          "captionClear": true,
+          "frame": {
+            "left": 0,
+            "right": 390,
+            "top": 428.625,
+            "bottom": 648,
+            "width": 390,
+            "height": 219.375
+          },
+          "cue": {
+            "top": 656,
+            "bottom": 844
+          }
+        },
+        {
+          "shot": 50,
+          "clip": "cake-studio/clips/CST-050.mp4",
+          "mediaState": "ready",
+          "time": 2.5,
+          "duration": 5,
+          "readyState": 4,
+          "seekable": 1,
+          "paused": true,
+          "activeVideos": 1,
+          "playAttempts": 0,
+          "objectFit": "contain",
+          "contained": true,
+          "captionClear": true,
+          "frame": {
+            "left": 0,
+            "right": 390,
+            "top": 428.625,
+            "bottom": 648,
+            "width": 390,
+            "height": 219.375
+          },
+          "cue": {
+            "top": 656,
+            "bottom": 844
+          }
+        }
+      ],
+      "reverseState": {
+        "shot": 35,
+        "time": 2.5,
+        "playAttempts": 0
+      },
+      "arabic": {
+        "lang": "ar",
+        "dir": "rtl",
+        "ar": "inline",
+        "en": "none",
+        "overflow": 0
+      }
+    }
+  }
+}

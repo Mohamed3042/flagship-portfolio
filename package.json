@@ -12,6 +12,9 @@
     "og": "node scripts/generate-og.mjs",
     "verify:static": "node scripts/verify-portfolio.mjs",
     "verify:browser": "python scripts/test-portfolio.py",
+    "verify:cake-studio": "node scripts/verify-cake-studio-world.mjs",
+    "verify:cake-studio:browser": "node scripts/verify-cake-studio-browser.mjs",
+    "build:cake-studio:media": "node scripts/build-cake-studio-media.mjs",
     "astro": "astro"
   },
   "dependencies": {

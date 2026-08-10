@@ -1,0 +1,29 @@
+{
+  "schema": "cake-studio-media-proof/v1",
+  "verifiedOn": "2026-08-10",
+  "intake": {
+    "downloadedFiles": 66,
+    "mappedPrompts": 50,
+    "duplicateDownloads": 16,
+    "acceptedFiles": 50,
+    "pendingFiles": 0,
+    "failures": 0
+  },
+  "endpointAudit": {
+    "thresholdMad": 18,
+    "maximumAcceptedFirstMad": 8.725,
+    "maximumAcceptedLastMad": 14.485,
+    "midclipReviewFramesPerCandidate": 5
+  },
+  "webMedia": {
+    "clips": 50,
+    "durationSeconds": 250,
+    "totalBytes": 96665935,
+    "codec": "H.264",
+    "resolution": "1280x720",
+    "frameRate": 30,
+    "audioStreams": 0,
+    "minimumKeyframesPerClip": 10,
+    "maximumKeyframesPerClip": 10
+  }
+}

@@ -15,3 +15,8 @@ Prompt language rebuilt 2026-08-09 after the owner's first three real WAN trials
 original boilerplate-heavy prompts: motion is now first and causal, every clip is a first+last
 pair of approved stills, and each card is a single self-contained paste. The 51 approved stills
 are unchanged.
+
+Production completed 2026-08-10 from the owner's `cakez` handoff: 66
+downloads mapped deterministically to all 50 prompts; repeated `(1)` downloads were byte-identical
+copies. All 50 accepted clips passed endpoint MAD <= 18 and mid-clip story-strip review. The web
+world uses separate silent, dense-keyframe H.264 encodes; source masters remain in `accepted/`.

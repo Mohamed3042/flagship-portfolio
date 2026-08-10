@@ -1,9 +1,15 @@
 # Cake Studio — owner-run WAN 2.7 production pack
 
-Status: **READY FOR OWNER GENERATION**  
+Status: **COMPLETE — 50/50 OWNER-GENERATED CLIPS ACCEPTED**
 Owner direction: proceed with WAN 2.7 on **2026-08-09**  
 Generation owner: **Mohamed, using his own WAN account**  
 WAN credits spent by Codex: **0**
+
+Completed on **2026-08-10**. The accepted chain is in [`accepted/`](accepted/); the scroll-cinema
+world is [`../../cake-studio.html`](../../cake-studio.html); deploy-ready encodes and their hashes
+are recorded in [`../../cake-studio/manifest.json`](../../cake-studio/manifest.json). The source
+pack remains intact so every accepted motion can be traced to its first frame, last frame, prompt,
+seed record, and ledger row.
 
 This folder is the complete offline source of truth for the 50 five-second clips. The approved
 51-still sequence is in [`keyframes/`](keyframes/), and the embedded visual board is

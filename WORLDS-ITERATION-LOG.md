@@ -278,3 +278,37 @@ change in physics at leg 07 rather than as a picture of an explosion.
   story issue. Cost: 0 credits / 0 generations / 0 paid services.
 - Source: `739350c`, `b6ac62c`; Pages: `91db92d`. Full reports and dailies:
   `changelogs/2026-08-09-kingdom-weighted-camera.md`.
+
+## 2026-08-10 — Cake Studio World 09: THE EDIBLE COMPILER
+
+- **Owner handoff reconciled:** 66 MP4 downloads from the owner's `cakez` folder mapped
+  deterministically to all 50 corrected motion-first prompts. The 16 filenames carrying `(1)`
+  were byte-identical duplicate downloads, not alternate generations. A001–A031 retained Fable's
+  accepted hashes; A032–A050 were reviewed as five-frame motion strips and accepted.
+- **Media gate proved RED → GREEN:** the new audit first failed on exactly 19 missing accepted
+  slots, then passed at 50/50 after intake. Every accepted source matched its supplied first and
+  last frame at endpoint MAD <= 18; the run ledger is 50 accepted / 0 pending.
+- **Web reel:** 50 silent H.264 encodes at 1280×720/30 fps, CRF 24, faststart, and a fixed
+  15-frame GOP (10 keyframes per five-second shot). Total: 96.7 MB / 250.0 seconds. A fixed
+  provider corner mark was removed before scaling; a 50-tile set test confirmed clean corners.
+  Source masters stay untouched in `assets/cake-studio/accepted/`.
+- **One cut on every screen:** `cake-studio.html` uses one 3300vh pinned reel and two blob-backed
+  video buffers. Scroll writes the linked shot and `currentTime`, forward and reverse; `play()` is
+  absent. The 16:9 image is wholly contained and every caption/control sits outside it. Desktop
+  and phone use the same controller—no coarse-pointer autoplay branch and no reduced edition.
+- **Story and truth:** eight chapters carry the 50-shot design-to-production loop. Three live-code
+  scenes resolve the spectacle into grounded product facts: 1:1 print layout; six proof facets,
+  twelve inspection rules and nine corrected forms; then the choose/place/calibrate/print/
+  approve/inspect/loop receipt. English and Arabic share the same DOM.
+- **Fail-first browser proof:** an injected 180px frame offset turned the live containment gate RED
+  while all motion checks remained valid. The real page passed 53/53 checks at 1440×1000 and
+  390×844: exact shot/time identity at 01, 35 and 50; reverse return to 35; one active buffer;
+  zero `play()` calls; byte ranges; no overlap; 0px overflow; Arabic RTL; clean console/network.
+- **Production artifact:** both `npm run build` and `npm run build:ghpages` completed; the root
+  build passed the portfolio verifier, and the final `dist/` world passed the same 53/53 live
+  desktop/phone browser suite independently.
+- **Visual iteration:** the first desktop capture exposed the opening sheet overlapping its
+  paragraph. Lowering the desktop sheet rig preserved the phone composition and produced a clean
+  second 53/53 pass. Lobby, desktop, phone, English and Arabic contact sheets were reviewed.
+- **Release:** source version `v1.0.0`, visible as `v1.0 · WORLD 09`. Lobby count is now nine films
+  and 70 real WAN shots. No deployment was performed.
