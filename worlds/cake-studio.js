@@ -99,7 +99,7 @@
   };
 
   window.__cakeStudioDirector = Object.freeze({
-    version: '1.2.0',
+    version: '1.4.0',
     weights: DIRECTOR_WEIGHTS,
     chapters: DIRECTOR_CHAPTERS,
     progressForShot: (shotNumber, fraction = .5) => progressForIndex(
@@ -107,7 +107,7 @@
       fraction,
     ),
   });
-  scene.dataset.directorVersion = '1.2.0';
+  scene.dataset.directorVersion = '1.4.0';
 
   const shots = definitions.map((figure) => ({
     clip: figure.dataset.clip,
@@ -132,6 +132,7 @@
     wanted: -1,
     fetchId: 0,
     abort: null,
+    retryTimer: 0,
     objectUrl: '',
   }));
 
@@ -147,8 +148,11 @@
   let fallback = 0;
 
   const release = (slot) => {
+    slot.fetchId += 1;
     slot.abort?.abort();
     slot.abort = null;
+    clearTimeout(slot.retryTimer);
+    slot.retryTimer = 0;
     if (slot.objectUrl) URL.revokeObjectURL(slot.objectUrl);
     slot.objectUrl = '';
     slot.ready = false;
@@ -188,8 +192,14 @@
         .catch(() => {
           clearTimeout(timeout);
           if (slot.fetchId !== fetchId) return;
-          if (attempt < 1) {
-            load(attempt + 1);
+          if (attempt < 2) {
+            // Blob transport occasionally loses an abandoned range while the
+            // scroll hand jumps chapters. Keep recovery bounded, but give the
+            // active shot one extra chance before falling back to its poster.
+            slot.retryTimer = setTimeout(() => {
+              slot.retryTimer = 0;
+              if (slot.fetchId === fetchId) load(attempt + 1);
+            }, 120 * (attempt + 1));
             return;
           }
           slot.abort = null;
@@ -292,6 +302,11 @@
     scene.style.setProperty('--journey', progress.toFixed(5));
     scene.style.setProperty('--pace-weight', weight.toFixed(2));
     setShot(index);
+    if (reduced) {
+      videos.forEach((video) => video.classList.remove('on'));
+      scene.dataset.mediaState = 'poster';
+      return;
+    }
     if (!live && !solo) return;
 
     const slot = slotFor(index);
