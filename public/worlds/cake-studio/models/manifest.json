@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "release": "1.3.0",
+  "generator": "Blender 5.1 Cake Studio web pipeline",
+  "compression": "KHR_draco_mesh_compression",
+  "texturePolicy": "JPEG quality 78, max edge 1024, generated normal map removed",
+  "normalization": "longest axis 2 units, horizontal center, base at zero",
+  "totalSourceBytes": 1541769952,
+  "totalBytes": 17519216,
+  "totalTriangles": 1794994,
+  "assets": [
+    {
+      "id": "cake-01",
+      "file": "cake-01-ivory-spiral.glb",
+      "role": "ready-form",
+      "sourceBytes": 47324604,
+      "bytes": 892072,
+      "sourceTriangles": 500004,
+      "triangles": 99999,
+      "normalizedDimensions": [
+        1.996644,
+        2.0,
+        1.792975
+      ],
+      "sha256": "b6410c9680b3a7250ceee3786bf5e6f065ef9f565e41dbaeb0feb01c02b5d39e"
+    },
+    {
+      "id": "cake-02",
+      "file": "cake-02-square-cocoa.glb",
+      "role": "ready-form",
+      "sourceBytes": 48452596,
+      "bytes": 878168,
+      "sourceTriangles": 508606,
+      "triangles": 85000,
+      "normalizedDimensions": [
+        1.996107,
+        2.0,
+        0.951927
+      ],
+      "sha256": "c19b0c309b1cb1e936ac00443679a36f0cceeae208132a39a9a4c61dcdcd196f"
+    },
+    {
+      "id": "cake-03",
+      "file": "cake-03-oval-blush.glb",
+      "role": "ready-form",
+      "sourceBytes": 48592236,
+      "bytes": 672764,
+      "sourceTriangles": 500000,
+      "triangles": 80000,
+      "normalizedDimensions": [
+        2.0,
+        1.383941,
+        0.689518
+      ],
+      "sha256": "b7c281791fbd33cd13579b43dd8bb357da8df1365f352fcb7033d0b1e8c73882"
+    },
+    {
+      "id": "cake-04",
+      "file": "cake-04-heart-art-deco.glb",
+      "role": "ready-form",
+      "sourceBytes": 46756068,
+      "bytes": 732292,
+      "sourceTriangles": 499852,
+      "triangles": 80000,
+      "normalizedDimensions": [
+        2.0,
+        1.996643,
+        1.063924
+      ],
+      "sha256": "bbe932545dfa366a22dff767703ff9d925bacc17480fdd2fd975c5697404a4a9"
+    },
+    {
+      "id": "cake-05",
+      "file": "cake-05-hex-caramel.glb",
+      "role": "ready-form",
+      "sourceBytes": 52131612,
+      "bytes": 745532,
+      "sourceTriangles": 499802,
+      "triangles": 80000,
+      "normalizedDimensions": [
+        1.763926,
+        2.0,
+        1.026153
+      ],
+      "sha256": "35ce5dc2cd2d0472fbd6e2537736ea3ad95f0d6c424bd6ba637f5770de04ab43"
+    },
+    {
+      "id": "cake-06",
+      "file": "cake-06-two-tier-cocoa.glb",
+      "role": "ready-form-selected",
+      "sourceBytes": 47335608,
+      "bytes": 776768,
+      "sourceTriangles": 500000,
+      "triangles": 119999,
+      "normalizedDimensions": [
+        1.999496,
+        2.0,
+        1.895621
+      ],
+      "sha256": "af3b2d41741b4de1c3243e37c2ee93bdbe3074d795704811951b0563e661ea94"
+    },
+    {
+      "id": "cake-07",
+      "file": "cake-07-rect-sheet-cocoa.glb",
+      "role": "ready-form",
+      "sourceBytes": 51150068,
+      "bytes": 878320,
+      "sourceTriangles": 505212,
+      "triangles": 85000,
+      "normalizedDimensions": [
+        2.0,
+        1.992585,
+        0.973306
+      ],
+      "sha256": "837817b06f406e626747b6da8656e79f8a439d60abae573ec70d0b325eb3d0d8"
+    },
+    {
+      "id": "cake-08",
+      "file": "cake-08-scalloped-ivory.glb",
+      "role": "ready-form",
+      "sourceBytes": 54882608,
+      "bytes": 895492,
+      "sourceTriangles": 500020,
+      "triangles": 100000,
+      "normalizedDimensions": [
+        2.0,
+        1.998637,
+        1.370992
+      ],
+      "sha256": "2d1c163f007393905461ebe1874f053e72cf6ca68fc40e09b4e745c1ac5e3579"
+    },
+    {
+      "id": "cake-09",
+      "file": "cake-09-tall-oval-teal.glb",
+      "role": "ready-form",
+      "sourceBytes": 88214240,
+      "bytes": 1252016,
+      "sourceTriangles": 1500000,
+      "triangles": 140000,
+      "normalizedDimensions": [
+        1.461779,
+        1.135027,
+        2.0
+      ],
+      "sha256": "b2e0a2767c2495ea5a95e178ee2f2a85b79e3c23683c38517c33469f1e908805"
+    },
+    {
+      "id": "assembly-10",
+      "file": "assembly-10-blank-two-tier-core.glb",
+      "role": "assembly-body",
+      "sourceBytes": 74016520,
+      "bytes": 1013280,
+      "sourceTriangles": 1499854,
+      "triangles": 99999,
+      "normalizedDimensions": [
+        1.99943,
+        2.0,
+        1.815909
+      ],
+      "sha256": "a1744f0096bca8876ca73449b17c29a73959d293fb9ebc6fa801b61de1e8a395"
+    },
+    {
+      "id": "assembly-11",
+      "file": "assembly-11-teal-fondant-collar.glb",
+      "role": "assembly-surface",
+      "sourceBytes": 42346936,
+      "bytes": 443472,
+      "sourceTriangles": 500004,
+      "triangles": 59999,
+      "normalizedDimensions": [
+        2.0,
+        1.996453,
+        1.00445
+      ],
+      "sha256": "4b1792c68abd121ea7f0c7601d1d8f1a8766edc8476b1755d32d22c317481f31"
+    },
+    {
+      "id": "assembly-12",
+      "file": "assembly-12-edible-image-panel.glb",
+      "role": "assembly-edible-image",
+      "sourceBytes": 34266920,
+      "bytes": 541888,
+      "sourceTriangles": 500000,
+      "triangles": 60000,
+      "normalizedDimensions": [
+        2.0,
+        0.439623,
+        1.385556
+      ],
+      "sha256": "6836a49ceb0454ed30d4c2417a1054f02ca89e09dd72ca35c0670b459e7cd6fd"
+    },
+    {
+      "id": "assembly-13",
+      "file": "assembly-13-blank-bilingual-plaque.glb",
+      "role": "assembly-plaque",
+      "sourceBytes": 48002180,
+      "bytes": 588760,
+      "sourceTriangles": 500000,
+      "triangles": 60000,
+      "normalizedDimensions": [
+        2.0,
+        0.821231,
+        1.29381
+      ],
+      "sha256": "78d331c0872b47d281feb1a69d8fae9178b7a3c9f593dbe5197a60e751614e76"
+    },
+    {
+      "id": "assembly-14",
+      "file": "assembly-14-connected-topper.glb",
+      "role": "assembly-decoration",
+      "sourceBytes": 54019348,
+      "bytes": 844316,
+      "sourceTriangles": 500000,
+      "triangles": 79999,
+      "normalizedDimensions": [
+        2.0,
+        1.967634,
+        0.320745
+      ],
+      "sha256": "34c37d92263995d9b31d237d46488cd237e8d7c6e1988a4abe4f93705fa8bb9a"
+    },
+    {
+      "id": "wafer-a",
+      "file": "data-wafer-a-teal-order.glb",
+      "role": "assembly-data-wafer",
+      "sourceBytes": 78181132,
+      "bytes": 541152,
+      "sourceTriangles": 1500000,
+      "triangles": 45000,
+      "normalizedDimensions": [
+        1.998239,
+        2.0,
+        0.32936
+      ],
+      "sha256": "ea7ea3f31b32cee15a8f1005b126802920195efbfd2ee0a424045d0e5d0b6d7d"
+    },
+    {
+      "id": "wafer-b",
+      "file": "data-wafer-b-rose-layout.glb",
+      "role": "assembly-data-wafer",
+      "sourceBytes": 70207552,
+      "bytes": 419268,
+      "sourceTriangles": 1499984,
+      "triangles": 45000,
+      "normalizedDimensions": [
+        2.0,
+        0.911174,
+        0.200434
+      ],
+      "sha256": "f6a3b4ad37e40754d1d808a0e69537fab1fbc7898943a0da7f11f97e69a6edc4"
+    },
+    {
+      "id": "wafer-c",
+      "file": "data-wafer-c-ivory-measure.glb",
+      "role": "assembly-data-wafer",
+      "sourceBytes": 79764936,
+      "bytes": 614068,
+      "sourceTriangles": 1500008,
+      "triangles": 45000,
+      "normalizedDimensions": [
+        2.0,
+        0.754934,
+        0.752189
+      ],
+      "sha256": "43a2c665d5a04afd17568f021db34c358d96eae828693e7cc73a5abd8e02add4"
+    },
+    {
+      "id": "wafer-d",
+      "file": "data-wafer-d-smoked-approval.glb",
+      "role": "assembly-data-wafer",
+      "sourceBytes": 78895864,
+      "bytes": 497428,
+      "sourceTriangles": 1500000,
+      "triangles": 45000,
+      "normalizedDimensions": [
+        2.0,
+        1.733628,
+        0.348952
+      ],
+      "sha256": "1af24941a8357e1032978da7a28469626648410a6a3f8d9e997ccd4c14e285d2"
+    },
+    {
+      "id": "wordmark-choose",
+      "file": "wordmark-01-choose.glb",
+      "role": "chapter-wordmark",
+      "sourceBytes": 79736068,
+      "bytes": 762568,
+      "sourceTriangles": 1499964,
+      "triangles": 75000,
+      "normalizedDimensions": [
+        2.0,
+        0.1601,
+        0.461683
+      ],
+      "sha256": "70ead04c40e6fc1da67c9e099fdbc6592be2c3e61b88c001dca24d11b554f614"
+    },
+    {
+      "id": "wordmark-assemble",
+      "file": "wordmark-02-assemble.glb",
+      "role": "chapter-wordmark",
+      "sourceBytes": 88930888,
+      "bytes": 842692,
+      "sourceTriangles": 1499972,
+      "triangles": 75000,
+      "normalizedDimensions": [
+        2.0,
+        0.129455,
+        0.421457
+      ],
+      "sha256": "bed5463b2e7d07657df863db32e102bb4ee98528e8c055cbc5c32bc5a51d4960"
+    },
+    {
+      "id": "wordmark-handoff",
+      "file": "wordmark-03-handoff.glb",
+      "role": "chapter-wordmark",
+      "sourceBytes": 75216308,
+      "bytes": 741224,
+      "sourceTriangles": 1499988,
+      "triangles": 75000,
+      "normalizedDimensions": [
+        2.0,
+        0.157149,
+        0.351284
+      ],
+      "sha256": "5b368eb40a2128ec5aee4b998e8ccbaa1a64c1645f7940d142db5b2c5cf3048c"
+    },
+    {
+      "id": "handoff-frame",
+      "file": "handoff-01-customer-mockup-frame.glb",
+      "role": "handoff-customer-mockup",
+      "sourceBytes": 84018264,
+      "bytes": 747300,
+      "sourceTriangles": 1500004,
+      "triangles": 70000,
+      "normalizedDimensions": [
+        2.0,
+        0.703007,
+        1.449521
+      ],
+      "sha256": "dcac538bda753718db6eeec2eb9f0a9c853b25ed6962439f272478f76882468a"
+    },
+    {
+      "id": "handoff-sheet",
+      "file": "handoff-02-baker-sheet.glb",
+      "role": "handoff-baker-sheet",
+      "sourceBytes": 82470260,
+      "bytes": 559448,
+      "sourceTriangles": 1513465,
+      "triangles": 44999,
+      "normalizedDimensions": [
+        2.0,
+        1.575569,
+        0.1349
+      ],
+      "sha256": "cfbdc0f5e5230f6066bb1b884a8e1cbdbc102583a92e4060cd5186710b181a02"
+    },
+    {
+      "id": "handoff-plaque",
+      "file": "handoff-03-true-size-plaque.glb",
+      "role": "handoff-true-size-plaque",
+      "sourceBytes": 86857136,
+      "bytes": 638928,
+      "sourceTriangles": 1500000,
+      "triangles": 45000,
+      "normalizedDimensions": [
+        2.0,
+        1.191117,
+        1.335545
+      ],
+      "sha256": "dd4d1989a754a97bfc5f7e383905612da4f5390e5d877ffc005c719bc3b644fb"
+    }
+  ]
+}

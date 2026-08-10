@@ -12,6 +12,7 @@ const cssPath = join(worldRoot, 'cake-studio.css');
 const scriptPath = join(worldRoot, 'cake-studio.js');
 const codaScriptPath = join(worldRoot, 'cake-studio-coda.js');
 const threePath = join(worldRoot, 'cake-studio', 'three.module.js');
+const threeCorePath = join(worldRoot, 'cake-studio', 'three.core.min.js');
 const threeLicensePath = join(worldRoot, 'cake-studio', 'THREE-LICENSE.txt');
 const manifestPath = join(worldRoot, 'cake-studio', 'manifest.json');
 const ownerPackRoot = join(worldRoot, 'assets', 'cake-studio');
@@ -53,11 +54,12 @@ const statOptional = async (path) => {
   try { return await stat(path); } catch { return null; }
 };
 
-const [css, originalScript, codaScript, threeFile, threeLicense, opticalPrompt, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
+const [css, originalScript, codaScript, threeFile, threeCoreFile, threeLicense, opticalPrompt, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
   readFile(cssPath, 'utf8'),
   readFile(scriptPath, 'utf8'),
   readOptional(codaScriptPath),
   statOptional(threePath),
+  statOptional(threeCorePath),
   readOptional(threeLicensePath),
   readOptional(opticalPromptPath),
   readFile(manifestPath, 'utf8'),
@@ -76,10 +78,10 @@ if (sabotage) {
 const manifest = JSON.parse(manifestRaw);
 const ownerPack = JSON.parse(clipsRaw);
 
-check('visible release badge', page.includes('v1.2 · WORLD 09') && page.includes('data-version="1.2.0"'), 'v1.2 / World 09');
+check('visible release badge', page.includes('v1.3 · WORLD 09') && page.includes('data-version="1.3.0"'), 'v1.3 / World 09');
 check('shared cinema engine', page.includes('cinema.css?v=6') && page.includes('cinema.js?v=6'), 'cinema v6 linked');
-check('page-local assets', page.includes('cake-studio.css?v=4') && page.includes('cake-studio.js?v=4'), 'directed CSS and JS linked');
-check('dimensional coda module', page.includes('type="module" src="cake-studio-coda.js?v=4"') && codaScript.includes("import * as THREE from './cake-studio/three.module.js';"), 'local Three.js module linked');
+check('page-local assets', page.includes('cake-studio.css?v=5') && page.includes('cake-studio.js?v=5'), 'directed CSS and JS linked');
+check('dimensional coda module', page.includes('type="module" src="cake-studio-coda.js?v=5"') && codaScript.includes("import * as THREE from './cake-studio/three.module.js';"), 'local Three.js module linked');
 check('one film scene', (page.match(/id="cake-reel"/g) ?? []).length === 1, 'single shared playhead');
 check('two video buffers', (page.match(/<video\b/g) ?? []).length === 2, 'exactly two video elements');
 const videoTags = [...page.matchAll(/<video\b[^>]*>/g)].map((match) => match[0]);
@@ -160,6 +162,31 @@ check(
   '9 cake forms · 4 controlled parts · 3 tangible outputs',
 );
 check(
+  'real model production layer',
+  codaScript.includes("import { GLTFLoader }")
+    && codaScript.includes("import { DRACOLoader }")
+    && (codaScript.match(/\.glb'/g) ?? []).length === 24
+    && codaScript.includes("modelSource = 'glb'"),
+  '24 optimized GLBs with procedural loading/failure fallback',
+);
+check(
+  'cinematic GLB choreography',
+  codaScript.includes('createChapterWords')
+    && codaScript.includes('renderChapterWords')
+    && codaScript.includes("waferSource: 'procedural'")
+    && codaScript.includes("handoffArtifactSource: 'procedural'")
+    && codaScript.includes('wordmarkModels: 0'),
+  '17 textured GLB wafers · 3 physical chapter words · 3 GLB handoff artifacts',
+);
+check(
+  'weighted coda camera',
+  codaScript.includes('CAMERA_TAU_MS')
+    && codaScript.includes("cameraState: 'idle'")
+    && codaScript.includes("style.setProperty('--object-p'")
+    && codaScript.includes('smootherstep'),
+  'one smoothed playhead drives camera, objects, copy and atmosphere',
+);
+check(
   'no schematic fallback',
   !page.includes('form-library')
     && !page.includes('cake-model')
@@ -189,10 +216,10 @@ const codaArabic = (page.match(/object-act[\s\S]*?class="L ar"/g) ?? []).length;
 check('dimensional coda bilingual', codaEnglish >= 3 && codaArabic >= 3, `${codaEnglish} English / ${codaArabic} Arabic act bodies`);
 check(
   'vendored Three license',
-  Boolean(threeFile && threeFile.size > 1_000_000)
+  Boolean(threeFile && threeCoreFile && threeFile.size + threeCoreFile.size > 700_000)
     && threeLicense.includes('MIT License')
-    && threeLicense.includes('Three.js Authors'),
-  `${threeFile?.size ?? 0} bytes · MIT notice`,
+    && threeLicense.toLowerCase().includes('three.js authors'),
+  `${(threeFile?.size ?? 0) + (threeCoreFile?.size ?? 0)} bytes · MIT notice`,
 );
 check(
   'linked optical bridge prompt',

@@ -144,6 +144,7 @@ try {
     const pageErrors = [];
     const badResponses = [];
     const failedRequests = [];
+    const requestUrls = new Map();
     cdp.onEvent((event) => {
       if (event.sessionId !== sessionId) return;
       if (event.method === 'Runtime.consoleAPICalled' && event.params.type === 'error') {
@@ -153,8 +154,14 @@ try {
       if (event.method === 'Network.responseReceived' && event.params.response.status >= 400) {
         badResponses.push(`${event.params.response.status} ${event.params.response.url}`);
       }
+      if (event.method === 'Network.requestWillBeSent') {
+        requestUrls.set(event.params.requestId, event.params.request.url);
+      }
       if (event.method === 'Network.loadingFailed' && !event.params.canceled && event.params.errorText !== 'net::ERR_ABORTED') {
-        failedRequests.push(event.params.errorText);
+        failedRequests.push(`${event.params.errorText} ${requestUrls.get(event.params.requestId) || 'unknown-url'}`);
+      }
+      if (event.method === 'Network.loadingFinished' || event.method === 'Network.loadingFailed') {
+        requestUrls.delete(event.params.requestId);
       }
     });
 
@@ -234,11 +241,11 @@ try {
       lang: document.documentElement.lang,
       dir: document.documentElement.dir
     }))()`);
-    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.2.0', `${basics.title} · ${basics.version}`);
+    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.3.0', `${basics.title} · ${basics.version}`);
     check(`${viewport.name} 50-shot DOM`, basics.figures === 50 && basics.videos === 2, `${basics.figures} figures / ${basics.videos} buffers`);
     check(
       `${viewport.name} directed score`,
-      basics.directorVersion === '1.2.0'
+      basics.directorVersion === '1.3.0'
         && basics.directorWeights === 50
         && basics.fastWeight < basics.choiceWeight
         && [basics.choiceWeight, basics.errorWeight, basics.rejectWeight, basics.loopWeight].every((weight) => weight >= 1.3),
@@ -246,7 +253,7 @@ try {
     );
     check(
       `${viewport.name} dimensional engine`,
-      basics.codaVersion === '1.2.0' && basics.codaReady && basics.webgl && basics.engine.startsWith('three-r') && basics.canvases === 1,
+      basics.codaVersion === '1.3.0' && basics.codaReady && basics.webgl && basics.engine.startsWith('three-r') && basics.canvases === 1,
       `v${basics.codaVersion} · ${basics.engine} · ready=${basics.codaReady} · canvas=${basics.canvases}`,
     );
     check(`${viewport.name} horizontal fit`, basics.overflow <= 1, `${basics.overflow}px overflow`);
@@ -278,14 +285,21 @@ try {
     }
 
     const scrollScene = async (selector, progress) => {
-      await evaluate(`(() => {
+      const target = await evaluate(`(async () => {
         const scene=document.querySelector(${JSON.stringify(selector)});
         const top=scene.getBoundingClientRect().top+scrollY;
         const travel=Math.max(0,scene.offsetHeight-innerHeight);
-        scrollTo(0,top+travel*${progress});
-        dispatchEvent(new Event('scroll'));
-        return true;
+        const root=document.documentElement;
+        const destination=Math.round(top+travel*${progress});
+        root.style.setProperty('scroll-behavior','auto','important');
+        for(let frame=0;frame<12;frame+=1){
+          document.scrollingElement.scrollTop=destination;
+          scrollTo({top:destination,left:0,behavior:'instant'});
+          await new Promise(resolve=>requestAnimationFrame(resolve));
+        }
+        return destination;
       })()`);
+      await waitFor(`Math.abs(scrollY-${target})<2`, 3_000);
       await delay(800);
     };
 
@@ -370,6 +384,22 @@ try {
       { name: 'coda-assembly', progress: .52, act: 'assembly', copyRequired: true },
       { name: 'coda-handoff', progress: .84, act: 'handoff', copyRequired: true },
     ];
+    await scrollScene('.dimensional-coda', .01);
+    const realModelsReady = await waitFor(`window.__cakeStudioCoda?.modelStatus==='ready'`, 30_000);
+    const modelProof = await evaluate(`({
+      status:window.__cakeStudioCoda?.modelStatus,
+      source:window.__cakeStudioCoda?.modelSource,
+      loaded:window.__cakeStudioCoda?.modelsLoaded,
+      expected:window.__cakeStudioCoda?.modelsExpected,
+      waferSource:window.__cakeStudioCoda?.waferSource,
+      waferModels:window.__cakeStudioCoda?.waferModels,
+      wordmarkModels:window.__cakeStudioCoda?.wordmarkModels,
+      handoffArtifactSource:window.__cakeStudioCoda?.handoffArtifactSource,
+      handoffArtifactModels:window.__cakeStudioCoda?.handoffArtifactModels,
+      dataset:document.querySelector('.dimensional-coda')?.dataset.models
+    })`);
+    check(`${viewport.name} real model batch`, realModelsReady && modelProof.source === 'glb' && modelProof.loaded === 24 && modelProof.expected === 24 && modelProof.dataset === 'ready', JSON.stringify(modelProof));
+    check(`${viewport.name} cinematic model roles`, modelProof.waferSource === 'glb' && modelProof.waferModels === 17 && modelProof.wordmarkModels === 3 && modelProof.handoffArtifactSource === 'glb' && modelProof.handoffArtifactModels === 3, JSON.stringify(modelProof));
     const codaResults = [];
     let priorRenders = -1;
     for (const state of codaStates) {
@@ -423,6 +453,15 @@ try {
           forms:runtime?.readyForms ?? 0,
           parts:runtime?.controlledParts ?? 0,
           outputs:runtime?.outputs ?? 0,
+          modelStatus:runtime?.modelStatus ?? '',
+          modelSource:runtime?.modelSource ?? '',
+          modelsLoaded:runtime?.modelsLoaded ?? 0,
+          waferSource:runtime?.waferSource ?? '',
+          waferModels:runtime?.waferModels ?? 0,
+          wordmarkModels:runtime?.wordmarkModels ?? 0,
+          wordmarkAct:runtime?.wordmarkAct ?? 'none',
+          handoffArtifactSource:runtime?.handoffArtifactSource ?? '',
+          handoffArtifactModels:runtime?.handoffArtifactModels ?? 0,
           renders:runtime?.renders ?? 0,
           drawCalls:runtime?.drawCalls ?? 0,
           triangles:runtime?.triangles ?? 0,
@@ -446,7 +485,10 @@ try {
       })()`);
       codaResults.push(result);
       check(`${viewport.name} ${state.name} state`, rendered && result.ready && result.webgl && result.act === state.act && Math.abs(result.progress - state.progress) < .025, `${result.act} @ ${result.progress} · ${result.engine}`);
-      check(`${viewport.name} ${state.name} object contract`, result.forms === 9 && result.parts === 4 && result.outputs === 3, `${result.forms} forms · ${result.parts} parts · ${result.outputs} outputs`);
+      check(`${viewport.name} ${state.name} object contract`, result.forms === 9 && result.parts === 4 && result.outputs === 3 && result.modelStatus === 'ready' && result.modelSource === 'glb' && result.modelsLoaded === 24 && result.waferSource === 'glb' && result.waferModels === 17 && result.wordmarkModels === 3 && result.handoffArtifactSource === 'glb' && result.handoffArtifactModels === 3, `${result.forms} forms · ${result.parts} parts · ${result.outputs} outputs · ${result.modelsLoaded} GLBs`);
+      if (state.copyRequired) {
+        check(`${viewport.name} ${state.name} physical wordmark`, result.wordmarkAct === state.act, `${result.wordmarkAct} / expected ${state.act}`);
+      }
       check(`${viewport.name} ${state.name} real render`, result.canvasDisplay !== 'none' && result.drawCalls >= 4 && result.triangles >= 500 && result.pixelNonZero > 120 && result.pixelRange > 8 && result.glVersion.includes('WebGL'), `${result.glVersion} · ${result.drawCalls} calls · ${result.triangles} triangles · pixels ${result.pixelNonZero}/${result.pixelSamples} range ${result.pixelRange.toFixed(1)}`);
       check(`${viewport.name} ${state.name} composition`, result.canvasContained && (!state.copyRequired || (result.actPresence > .3 && result.actContained)), `canvas=${result.canvasContained} · copy presence=${result.actPresence.toFixed(3)} · copy contained=${result.actContained}`);
       check(`${viewport.name} ${state.name} bounded rendering`, result.pixelRatio > 0 && result.pixelRatio <= 1.5 && result.renders > priorRenders, `${result.canvasWidth}×${result.canvasHeight} @ ${result.pixelRatio}x · render ${result.renders}`);
@@ -493,7 +535,7 @@ try {
 
     observations[viewport.name] = { basics, filmStates: stateResults, reverseState, codaStates: codaResults, codaReverseState, arabic };
     check(`${viewport.name} console clean`, consoleErrors.length === 0 && pageErrors.length === 0, `${consoleErrors.length} console / ${pageErrors.length} page errors`);
-    check(`${viewport.name} network clean`, badResponses.length === 0 && failedRequests.length === 0, `${badResponses.length} bad responses / ${failedRequests.length} failed requests`);
+    check(`${viewport.name} network clean`, badResponses.length === 0 && failedRequests.length === 0, `${badResponses.length} bad responses / ${failedRequests.length} failed requests${failedRequests.length ? ` · ${failedRequests.slice(0, 2).join(' | ')}` : ''}`);
     await cdp.send('Target.closeTarget', { targetId });
   }
 } finally {

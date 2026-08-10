@@ -1,5 +1,7 @@
 # PC handoff — Cake Studio real GLB pass
 
+> Status: **RETURNED AND INTEGRATED on 2026-08-10.** The original 14-asset instructions below are retained as production history. Ten later user-generated assets expanded the accepted batch to 24. The website now loads the optimized 17.52 MB runtime set while preserving the procedural scene only as a loading/error fallback.
+
 - Date: 2026-08-10
 - Source branch: `feature/cake-studio-world`
 - Current public release: `v1.2.0`

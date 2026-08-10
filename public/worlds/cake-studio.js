@@ -99,7 +99,7 @@
   };
 
   window.__cakeStudioDirector = Object.freeze({
-    version: '1.2.0',
+    version: '1.3.0',
     weights: DIRECTOR_WEIGHTS,
     chapters: DIRECTOR_CHAPTERS,
     progressForShot: (shotNumber, fraction = .5) => progressForIndex(
@@ -107,7 +107,7 @@
       fraction,
     ),
   });
-  scene.dataset.directorVersion = '1.2.0';
+  scene.dataset.directorVersion = '1.3.0';
 
   const shots = definitions.map((figure) => ({
     clip: figure.dataset.clip,

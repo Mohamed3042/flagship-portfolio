@@ -1,8 +1,41 @@
 import * as THREE from './cake-studio/three.module.js';
+import { GLTFLoader } from './cake-studio/GLTFLoader.js';
+import { DRACOLoader } from './cake-studio/DRACOLoader.js';
 
 const READY_FORM_COUNT = 9;
 const CONTROLLED_PART_COUNT = 4;
 const OUTPUT_COUNT = 3;
+const MODEL_ASSETS = [
+  ['cake-01', 'cake-01-ivory-spiral.glb'],
+  ['cake-02', 'cake-02-square-cocoa.glb'],
+  ['cake-03', 'cake-03-oval-blush.glb'],
+  ['cake-04', 'cake-04-heart-art-deco.glb'],
+  ['cake-05', 'cake-05-hex-caramel.glb'],
+  ['cake-06', 'cake-06-two-tier-cocoa.glb'],
+  ['cake-07', 'cake-07-rect-sheet-cocoa.glb'],
+  ['cake-08', 'cake-08-scalloped-ivory.glb'],
+  ['cake-09', 'cake-09-tall-oval-teal.glb'],
+  ['assembly-10', 'assembly-10-blank-two-tier-core.glb'],
+  ['assembly-11', 'assembly-11-teal-fondant-collar.glb'],
+  ['assembly-12', 'assembly-12-edible-image-panel.glb'],
+  ['assembly-13', 'assembly-13-blank-bilingual-plaque.glb'],
+  ['assembly-14', 'assembly-14-connected-topper.glb'],
+  ['wafer-a', 'data-wafer-a-teal-order.glb'],
+  ['wafer-b', 'data-wafer-b-rose-layout.glb'],
+  ['wafer-c', 'data-wafer-c-ivory-measure.glb'],
+  ['wafer-d', 'data-wafer-d-smoked-approval.glb'],
+  ['wordmark-choose', 'wordmark-01-choose.glb'],
+  ['wordmark-assemble', 'wordmark-02-assemble.glb'],
+  ['wordmark-handoff', 'wordmark-03-handoff.glb'],
+  ['handoff-frame', 'handoff-01-customer-mockup-frame.glb'],
+  ['handoff-sheet', 'handoff-02-baker-sheet.glb'],
+  ['handoff-plaque', 'handoff-03-true-size-plaque.glb'],
+];
+const CAMERA_TAU_MS = 80;
+const CAMERA_IDLE_EPSILON = 0.00008;
+const CAMERA_SNAP_DISTANCE = 0.36;
+const ZERO_VECTOR = new THREE.Vector3();
+const ZERO_EULER = new THREE.Euler();
 const textureCache = new Map();
 
 const sceneElement = document.querySelector('[data-object-coda]');
@@ -12,15 +45,29 @@ const actElements = sceneElement ? [...sceneElement.querySelectorAll('[data-obje
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const runtime = {
-  version: '1.2.0',
+  version: '1.3.0',
   engine: `three-r${THREE.REVISION}`,
   webglAvailable: false,
   ready: false,
   progress: 0,
+  rawProgress: 0,
+  cameraState: 'idle',
+  cameraPosition: { x: 0, y: 0, z: 0 },
+  cameraTarget: { x: 0, y: 0, z: 0 },
   act: 'forms',
   readyForms: READY_FORM_COUNT,
   controlledParts: CONTROLLED_PART_COUNT,
   outputs: OUTPUT_COUNT,
+  modelStatus: 'idle',
+  modelSource: 'procedural',
+  waferSource: 'procedural',
+  waferModels: 0,
+  wordmarkModels: 0,
+  wordmarkAct: 'none',
+  handoffArtifactSource: 'procedural',
+  handoffArtifactModels: 0,
+  modelsExpected: MODEL_ASSETS.length,
+  modelsLoaded: 0,
   renders: 0,
   drawCalls: 0,
   triangles: 0,
@@ -75,8 +122,13 @@ function initialise() {
   const readyForms = createReadyForms(scene);
   const assembly = createControlledAssembly(scene);
   const handoff = createProductionOutputs(scene);
+  const chapterWords = createChapterWords(scene);
 
   let frame = 0;
+  let lastFrameTime = 0;
+  let smoothProgress = 0;
+  let modelLoadStarted = false;
+  let modelObserver = null;
   let width = 0;
   let height = 0;
 
@@ -99,19 +151,22 @@ function initialise() {
   };
 
   const readProgress = () => clamp(Number.parseFloat(sceneElement.style.getPropertyValue('--p') || '0'));
+  smoothProgress = readProgress();
 
   function renderCoda(progress) {
     const compact = camera.aspect < 0.72;
     const p1 = range(progress, 0.025, 0.39);
     const p2 = range(progress, 0.31, 0.72);
     const p3 = range(progress, 0.64, 1);
+    sceneElement.style.setProperty('--object-p', progress.toFixed(6));
 
     renderSheet(sheet, progress, p1, compact);
     renderReadyForms(readyForms, p1, progress, compact);
     renderAssembly(assembly, p2, progress, compact);
     renderHandoff(handoff, p3, progress, compact);
+    renderChapterWords(chapterWords, progress, compact);
     renderSet(set, progress, compact);
-    renderCamera(camera, cameraTarget, p1, p2, p3, progress, compact);
+    renderCamera(camera, cameraTarget, progress, compact);
     renderCaptions(progress);
 
     renderer.render(scene, camera);
@@ -122,16 +177,74 @@ function initialise() {
     sceneElement.dataset.renderCount = String(runtime.renders);
   }
 
-  const draw = () => {
+  const draw = (now) => {
     frame = 0;
     resize();
-    renderCoda(readProgress());
+    const rawProgress = readProgress();
+    const distance = Math.abs(rawProgress - smoothProgress);
+    const deltaMs = lastFrameTime ? Math.min(64, Math.max(1, now - lastFrameTime)) : 1000 / 60;
+    lastFrameTime = now;
+
+    if (reducedMotion || distance > CAMERA_SNAP_DISTANCE) {
+      smoothProgress = rawProgress;
+    } else if (distance > CAMERA_IDLE_EPSILON) {
+      const blend = 1 - Math.exp(-deltaMs / CAMERA_TAU_MS);
+      smoothProgress = lerp(smoothProgress, rawProgress, blend);
+    } else {
+      smoothProgress = rawProgress;
+    }
+
+    runtime.rawProgress = Number(rawProgress.toFixed(6));
+    runtime.cameraState = Math.abs(rawProgress - smoothProgress) > CAMERA_IDLE_EPSILON ? 'moving' : 'idle';
+    sceneElement.dataset.cameraState = runtime.cameraState;
+    renderCoda(smoothProgress);
+    if (runtime.cameraState === 'moving') {
+      frame = requestAnimationFrame(draw);
+    } else {
+      lastFrameTime = 0;
+    }
   };
   const scheduleRender = () => {
     const bounds = sceneElement.getBoundingClientRect();
     if (bounds.top > innerHeight * 1.5 || bounds.bottom < -innerHeight * 0.5) return;
+    runtime.rawProgress = Number(readProgress().toFixed(6));
+    runtime.cameraState = Math.abs(runtime.rawProgress - smoothProgress) > CAMERA_IDLE_EPSILON ? 'moving' : 'idle';
+    sceneElement.dataset.cameraState = runtime.cameraState;
     if (!frame) frame = requestAnimationFrame(draw);
   };
+
+  const startModelLoad = () => {
+    if (modelLoadStarted) return;
+    modelLoadStarted = true;
+    runtime.modelStatus = 'loading';
+    sceneElement.dataset.models = 'loading';
+    loadProductionModels({ readyForms, assembly, handoff, chapterWords })
+      .then(() => {
+        runtime.modelStatus = 'ready';
+        runtime.modelSource = 'glb';
+        sceneElement.dataset.models = 'ready';
+        scheduleRender();
+      })
+      .catch((error) => {
+        runtime.modelStatus = 'fallback';
+        runtime.modelSource = 'procedural';
+        runtime.modelError = error?.message || 'model-load-failed';
+        sceneElement.dataset.models = 'fallback';
+        console.warn('Cake Studio real models unavailable; procedural stage retained.', error);
+        scheduleRender();
+      });
+  };
+
+  if ('IntersectionObserver' in window) {
+    modelObserver = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      modelObserver.disconnect();
+      startModelLoad();
+    }, { rootMargin: '180% 0px' });
+    modelObserver.observe(sceneElement);
+  } else {
+    startModelLoad();
+  }
 
   addEventListener('scroll', scheduleRender, { passive: true });
   addEventListener('resize', scheduleRender, { passive: true });
@@ -145,11 +258,13 @@ function initialise() {
   });
   addEventListener('pagehide', () => {
     if (frame) cancelAnimationFrame(frame);
+    modelObserver?.disconnect();
     renderer.dispose();
   }, { once: true });
 
   resize();
-  renderCoda(readProgress());
+  runtime.rawProgress = Number(smoothProgress.toFixed(6));
+  renderCoda(smoothProgress);
 }
 
 function createPhysicalSet(scene) {
@@ -254,7 +369,7 @@ function createReadyForms(scene) {
   const forms = Array.from({ length: READY_FORM_COUNT }, (_, index) => createCakeForm(index));
   forms.forEach((form) => root.add(form));
   scene.add(root);
-  return { root, forms, selectedIndex: 5 };
+  return { root, forms, fallbackForms: forms, selectedIndex: 5, usingModels: false };
 }
 
 function createControlledAssembly(scene) {
@@ -351,7 +466,16 @@ function createControlledAssembly(scene) {
   root.add(waferRoot);
   root.visible = false;
   scene.add(root);
-  return { root, body, parts, wafers, waferRoot };
+  return {
+    root,
+    body,
+    parts,
+    wafers,
+    waferRoot,
+    fallbackBody: body,
+    fallbackParts: parts,
+    usingModels: false,
+  };
 }
 
 function createProductionOutputs(scene) {
@@ -430,7 +554,181 @@ function createProductionOutputs(scene) {
   });
   root.visible = false;
   scene.add(root);
-  return { root, source, artifacts };
+  return { root, source, artifacts, mockup, miniature, bakerSheet, plaque, usingModels: false };
+}
+
+function createChapterWords(scene) {
+  const root = new THREE.Group();
+  root.name = 'physical-chapter-wordmarks';
+  scene.add(root);
+  return { root, words: [], usingModels: false };
+}
+
+async function loadProductionModels(states) {
+  THREE.Cache.enabled = true;
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath('./cake-studio/draco/gltf/');
+  dracoLoader.setDecoderConfig({ type: 'wasm' });
+  const loader = new GLTFLoader();
+  loader.setDRACOLoader(dracoLoader);
+  const models = new Map();
+
+  try {
+    await Promise.all(MODEL_ASSETS.map(async ([id, file]) => {
+      const gltf = await loader.loadAsync(`./cake-studio/models/${file}`);
+      const model = prepareProductionModel(gltf.scene, id);
+      models.set(id, model);
+      runtime.modelsLoaded = models.size;
+    }));
+  } finally {
+    dracoLoader.dispose();
+  }
+
+  if (models.size !== MODEL_ASSETS.length) {
+    throw new Error(`loaded ${models.size}/${MODEL_ASSETS.length} models`);
+  }
+  adoptProductionModels(states, models);
+}
+
+function prepareProductionModel(model, id) {
+  const wrapper = new THREE.Group();
+  wrapper.name = `${id}-web-model`;
+  model.name = `${id}-geometry`;
+  wrapper.add(model);
+
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+  model.position.sub(center);
+  wrapper.userData.modelId = id;
+  wrapper.userData.modelDimensions = box.getSize(new THREE.Vector3());
+  const isWordmark = id.startsWith('wordmark-');
+  const isWafer = id.startsWith('wafer-');
+  const isHandoffArtifact = id.startsWith('handoff-');
+  const minimumRoughness = isWordmark ? 0.4 : isWafer ? 0.44 : isHandoffArtifact ? 0.48 : 0.58;
+  const maximumMetalness = isWordmark ? 0.22 : isWafer ? 0.16 : isHandoffArtifact ? 0.12 : 0.06;
+
+  model.traverse((child) => {
+    if (!child.isMesh) return;
+    child.frustumCulled = true;
+    const materials = Array.isArray(child.material) ? child.material : [child.material];
+    materials.filter(Boolean).forEach((material) => {
+      if ('roughness' in material) material.roughness = Math.max(minimumRoughness, material.roughness);
+      if ('metalness' in material) material.metalness = Math.min(maximumMetalness, material.metalness);
+      if (material.map) material.map.anisotropy = 4;
+      if (material.metalnessMap) material.metalnessMap.anisotropy = 2;
+    });
+  });
+  return wrapper;
+}
+
+function adoptProductionModels({ readyForms, assembly, handoff, chapterWords }, models) {
+  readyForms.fallbackForms.forEach((form) => readyForms.root.remove(form));
+  readyForms.forms = Array.from({ length: READY_FORM_COUNT }, (_, index) => {
+    const form = models.get(`cake-${String(index + 1).padStart(2, '0')}`);
+    form.name = `ready-form-${String(index + 1).padStart(2, '0')}-glb`;
+    form.userData.formIndex = index;
+    readyForms.root.add(form);
+    return form;
+  });
+  readyForms.usingModels = true;
+
+  assembly.root.remove(assembly.fallbackBody, ...assembly.fallbackParts);
+  const body = models.get('assembly-10');
+  body.name = 'measured-body-glb';
+  body.scale.setScalar(1.55);
+  body.position.y = 0.18;
+  assembly.root.add(body);
+
+  const partSpecs = [
+    ['assembly-11', new THREE.Vector3(0, -0.08, 0), new THREE.Euler(0, 0, 0), 1.48],
+    ['assembly-12', new THREE.Vector3(0, 0.2, 1.28), new THREE.Euler(0, 0, 0), 0.92],
+    ['assembly-13', new THREE.Vector3(0, 0.14, 1.52), new THREE.Euler(0, 0, 0), 0.54],
+    ['assembly-14', new THREE.Vector3(0, 1.52, 0.05), new THREE.Euler(0, 0, 0), 0.58],
+  ];
+  const parts = partSpecs.map(([id, position, rotation, scale], index) => {
+    const part = models.get(id);
+    part.name = ['measured-surface-glb', 'edible-image-glb', 'bilingual-plaque-glb', 'decoration-glb'][index];
+    part.userData.attachPosition = position;
+    part.userData.attachRotation = rotation;
+    part.userData.attachScale = scale;
+    assembly.root.add(part);
+    return part;
+  });
+  assembly.body = body;
+  assembly.parts = parts;
+  assembly.waferRoot.remove(...assembly.wafers);
+  const waferIds = ['wafer-a', 'wafer-b', 'wafer-c', 'wafer-d'];
+  const waferScales = [0.43, 0.47, 0.45, 0.41];
+  const wafers = Array.from({ length: 17 }, (_, index) => {
+    const modelId = waferIds[index % waferIds.length];
+    const wafer = models.get(modelId).clone(true);
+    wafer.name = `data-wafer-${String(index + 1).padStart(2, '0')}-${modelId}`;
+    wafer.userData.phase = index / 17;
+    wafer.userData.baseScale = waferScales[index % waferScales.length];
+    wafer.userData.modelId = modelId;
+    assembly.waferRoot.add(wafer);
+    return wafer;
+  });
+  assembly.wafers = wafers;
+  assembly.usingModels = true;
+  runtime.waferSource = 'glb';
+  runtime.waferModels = wafers.length;
+  sceneElement.dataset.waferSource = 'glb';
+
+  handoff.root.remove(handoff.source);
+  const source = models.get('cake-06').clone(true);
+  source.name = 'approved-source-cake-glb';
+  handoff.root.add(source);
+  handoff.source = source;
+
+  handoff.mockup.clear();
+  const frame = models.get('handoff-frame');
+  frame.name = 'customer-mockup-frame-glb';
+  frame.scale.setScalar(1.46);
+  frame.position.set(0, 0.04, -0.12);
+  handoff.mockup.add(frame);
+  const miniature = models.get('cake-06').clone(true);
+  miniature.name = 'customer-mockup-cake-glb';
+  miniature.scale.setScalar(0.48);
+  miniature.position.set(0, -0.08, 0.16);
+  handoff.mockup.add(miniature);
+  handoff.miniature = miniature;
+
+  handoff.bakerSheet.clear();
+  const bakerSheet = models.get('handoff-sheet');
+  bakerSheet.name = 'baker-sheet-glb';
+  bakerSheet.scale.setScalar(1.5);
+  bakerSheet.position.y = 0.22;
+  bakerSheet.rotation.x = -0.86;
+  handoff.bakerSheet.add(bakerSheet);
+
+  handoff.plaque.clear();
+  const trueSizePlaque = models.get('handoff-plaque');
+  trueSizePlaque.name = 'true-size-plaque-glb';
+  trueSizePlaque.scale.setScalar(1.48);
+  trueSizePlaque.position.y = 0.12;
+  handoff.plaque.add(trueSizePlaque);
+  handoff.usingModels = true;
+  runtime.handoffArtifactSource = 'glb';
+  runtime.handoffArtifactModels = 3;
+  sceneElement.dataset.handoffArtifacts = 'glb';
+
+  const wordSpecs = [
+    ['wordmark-choose', 'forms'],
+    ['wordmark-assemble', 'assembly'],
+    ['wordmark-handoff', 'handoff'],
+  ];
+  chapterWords.words = wordSpecs.map(([id, act]) => {
+    const word = models.get(id);
+    word.name = `${act}-chapter-wordmark-glb`;
+    word.userData.act = act;
+    word.visible = false;
+    chapterWords.root.add(word);
+    return word;
+  });
+  chapterWords.usingModels = true;
+  runtime.wordmarkModels = chapterWords.words.length;
+  sceneElement.dataset.wordmarks = 'ready';
 }
 
 function createCakeForm(index, simplified = false) {
@@ -556,13 +854,15 @@ function renderAssembly(state, p2, progress, compact) {
   ];
   state.parts.forEach((part, index) => {
     const attach = smooth(0.18 + index * 0.135, 0.43 + index * 0.135, p2);
-    part.position.lerpVectors(exploded[index], new THREE.Vector3(), attach);
+    const attachPosition = part.userData.attachPosition || ZERO_VECTOR;
+    const attachRotation = part.userData.attachRotation || ZERO_EULER;
+    part.position.lerpVectors(exploded[index], attachPosition, attach);
     part.rotation.set(
-      lerp((index - 1.5) * 0.28, 0, attach),
-      lerp((index % 2 ? -1 : 1) * 0.7, 0, attach),
-      lerp((index % 2 ? 1 : -1) * 0.24, 0, attach),
+      lerp((index - 1.5) * 0.28, attachRotation.x, attach),
+      lerp((index % 2 ? -1 : 1) * 0.7, attachRotation.y, attach),
+      lerp((index % 2 ? 1 : -1) * 0.24, attachRotation.z, attach),
     );
-    const partScale = lerp(0.72, 1, attach);
+    const partScale = lerp(0.72, part.userData.attachScale || 1, attach);
     part.scale.setScalar(partScale);
   });
 
@@ -579,7 +879,8 @@ function renderAssembly(state, p2, progress, compact) {
       Math.sin(angle) * radius * 0.62 * (1 - collapse),
     );
     wafer.rotation.set(angle * 0.14, angle, phase * Math.PI);
-    wafer.scale.setScalar(Math.max(0.001, waferFade * lerp(1, 0.08, collapse)));
+    const baseScale = wafer.userData.baseScale || 1;
+    wafer.scale.setScalar(Math.max(0.001, baseScale * waferFade * lerp(1, 0.08, collapse)));
   });
 }
 
@@ -609,6 +910,75 @@ function renderHandoff(state, p3, progress, compact) {
   });
 }
 
+function renderChapterWords(state, progress, compact) {
+  if (!state.usingModels) {
+    runtime.wordmarkAct = 'none';
+    return;
+  }
+  const spans = [
+    { act: 'forms', start: 0.04, end: 0.405 },
+    { act: 'assembly', start: 0.3, end: 0.75 },
+    { act: 'handoff', start: 0.63, end: 0.93 },
+  ];
+  let active = 'none';
+  let strongestPresence = 0;
+
+  state.words.forEach((word, index) => {
+    const span = spans[index];
+    const local = range(progress, span.start, span.end);
+    const presence = smooth(span.start, span.start + 0.075, progress)
+      * (1 - smooth(span.end - 0.07, span.end, progress));
+    word.visible = presence > 0.002;
+    if (!word.visible) return;
+    if (presence > strongestPresence) {
+      strongestPresence = presence;
+      active = span.act;
+    }
+
+    const enter = smooth(0.02, 0.24, local);
+    if (index === 0) {
+      const depart = smooth(0.64, 1, local);
+      const scale = (compact ? 2.55 : 4.15) * lerp(0.76, 1, enter) * Math.max(0.001, presence);
+      word.position.set(
+        lerp(-2.8, 0, enter) + depart * 2.6,
+        compact ? 4.45 : 2.92,
+        lerp(-7.2, -4.15, enter) + depart * 5.4,
+      );
+      word.rotation.set(-0.035, lerp(-0.38, 0.08, enter) + depart * 0.24, 0.015);
+      word.scale.setScalar(scale);
+      return;
+    }
+
+    if (index === 1) {
+      const depart = smooth(0.68, 1, local);
+      const scale = (compact ? 2.05 : 3.5) * lerp(0.72, 1, enter) * Math.max(0.001, presence);
+      word.position.set(
+        lerp(4.8, 0, enter) - depart * 4.2,
+        compact ? 4.05 : 2.82,
+        -4.35 + depart * 4.1,
+      );
+      word.rotation.set(0.02, lerp(0.62, -0.06, enter) - depart * 0.26, -0.018);
+      word.scale.setScalar(scale);
+      return;
+    }
+
+    const passage = smooth(0.38, 0.78, local);
+    const scale = (compact ? 2.45 : 3.9)
+      * lerp(0.78, 1.12, passage)
+      * Math.max(0.001, presence);
+    word.position.set(
+      lerp(-1.4, 0, enter),
+      lerp(compact ? 1.25 : 0.42, compact ? 3.45 : 2.5, passage),
+      lerp(-5.2, compact ? 17.6 : 15.5, passage),
+    );
+    word.rotation.set(lerp(-0.04, 0, passage), lerp(0.24, 0, enter), 0);
+    word.scale.setScalar(scale);
+  });
+
+  runtime.wordmarkAct = active;
+  sceneElement.dataset.wordmarkAct = active;
+}
+
 function renderSet(set, progress, compact) {
   set.floor.material.map.offset.x = progress * 0.018;
   set.floor.material.map.offset.y = progress * -0.011;
@@ -618,42 +988,55 @@ function renderSet(set, progress, compact) {
   });
 }
 
-function renderCamera(camera, target, p1, p2, p3, progress, compact) {
-  let position;
-  let lookY;
-  if (progress < 0.36) {
-    position = new THREE.Vector3(
-      lerp(0, 0.78, p1),
-      compact ? lerp(3.6, 3.25, p1) : lerp(3.15, 2.75, p1),
-      (compact ? 15.8 : 13.1) - p1 * (compact ? 1.3 : 1.7),
-    );
-    lookY = compact ? 1.55 : 0.9;
-  } else if (progress < 0.69) {
-    position = new THREE.Vector3(
-      lerp(-1.1, 1.25, p2),
-      compact ? 3.45 : 2.45,
-      (compact ? 14.4 : 11.6) - Math.sin(p2 * Math.PI) * 1.05,
-    );
-    lookY = compact ? 1.5 : 0.72;
-  } else {
-    position = new THREE.Vector3(
-      lerp(1.1, 0, p3),
-      compact ? 3.55 : 2.62,
-      lerp(compact ? 14.8 : 12.2, compact ? 16.8 : 14.9, p3),
-    );
-    lookY = compact ? 1.2 : 0.35;
-  }
+function renderCamera(camera, target, progress, compact) {
+  const positions = compact
+    ? [
+      new THREE.Vector3(-0.3, 4.0, 15.7),
+      new THREE.Vector3(0.6, 3.4, 14.25),
+      new THREE.Vector3(-0.45, 3.55, 14.5),
+      new THREE.Vector3(0, 3.55, 16.8),
+    ]
+    : [
+      new THREE.Vector3(-0.55, 3.25, 13.2),
+      new THREE.Vector3(0.8, 2.75, 11.4),
+      new THREE.Vector3(-0.65, 2.45, 11.2),
+      new THREE.Vector3(0, 2.62, 14.9),
+    ];
+  const targets = compact
+    ? [1.55, 1.45, 1.35, 1.2]
+    : [0.95, 0.72, 0.68, 0.35];
+  const boundaries = [0, 0.36, 0.69, 1];
+  const segment = progress < boundaries[1] ? 0 : progress < boundaries[2] ? 1 : 2;
+  const local = range(progress, boundaries[segment], boundaries[segment + 1]);
+  const travel = smootherstep(local);
+  const arc = Math.pow(Math.sin(local * Math.PI), 2) * (reducedMotion ? 0.22 : 1);
+  const position = new THREE.Vector3().lerpVectors(positions[segment], positions[segment + 1], travel);
+  const arcDirections = compact
+    ? [new THREE.Vector3(-0.18, 0.16, -0.32), new THREE.Vector3(0.28, -0.18, -0.52), new THREE.Vector3(0.12, 0.12, -0.25)]
+    : [new THREE.Vector3(-0.42, 0.2, -0.46), new THREE.Vector3(0.68, -0.22, -0.78), new THREE.Vector3(0.34, 0.16, -0.38)];
+  position.addScaledVector(arcDirections[segment], arc);
   if (reducedMotion) position.x *= 0.25;
+
   camera.position.copy(position);
-  target.set(0, lookY, 0);
+  target.set(0, lerp(targets[segment], targets[segment + 1], travel), 0);
   camera.lookAt(target);
+  runtime.cameraPosition = {
+    x: Number(position.x.toFixed(5)),
+    y: Number(position.y.toFixed(5)),
+    z: Number(position.z.toFixed(5)),
+  };
+  runtime.cameraTarget = {
+    x: 0,
+    y: Number(target.y.toFixed(5)),
+    z: 0,
+  };
 }
 
 function renderCaptions(progress) {
   const spans = [
-    { element: actElements[0], start: 0.045, end: 0.41 },
-    { element: actElements[1], start: 0.33, end: 0.73 },
-    { element: actElements[2], start: 0.65, end: 1.02 },
+    { element: actElements[0], start: 0.045, end: 0.37 },
+    { element: actElements[1], start: 0.36, end: 0.70 },
+    { element: actElements[2], start: 0.69, end: 1.02 },
   ];
   let active = 'forms';
   let best = -1;
@@ -926,6 +1309,11 @@ function range(value, start, end) {
 function smooth(start, end, value) {
   const t = range(value, start, end);
   return t * t * (3 - 2 * t);
+}
+
+function smootherstep(value) {
+  const t = clamp(value);
+  return t * t * t * (t * (t * 6 - 15) + 10);
 }
 
 function lerp(from, to, value) {

@@ -15,6 +15,8 @@
     "verify:cake-studio": "node scripts/verify-cake-studio-world.mjs",
     "verify:cake-studio:browser": "node scripts/verify-cake-studio-browser.mjs",
     "verify:cake-studio:glb": "node scripts/verify-cake-studio-glb.mjs",
+    "verify:cake-studio:runtime-models": "node scripts/verify-cake-studio-runtime-models.mjs",
+    "verify:cake-studio:coda": "python scripts/verify-cake-studio-coda.py",
     "build:cake-studio:media": "node scripts/build-cake-studio-media.mjs",
     "astro": "astro"
   },

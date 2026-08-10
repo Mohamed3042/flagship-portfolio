@@ -33,6 +33,7 @@ const server = createServer((req, res) => {
   // keep-alive socket for whatever request is pooled onto it next. Closing
   // every connection costs nothing on localhost and removes the whole class.
   res.setHeader('connection', 'close');
+  res.shouldKeepAlive = false;
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   // the built site may be mounted under a base path; accept it either way
   p = p.replace(/^\/flagship-portfolio/, '') || '/';
@@ -78,7 +79,6 @@ const server = createServer((req, res) => {
   if (req.method === 'HEAD') { res.end(); return; }
   pipe(createReadStream(file), res);
 });
-server.keepAliveTimeout = 0;
 server.listen(port, () => console.log(`serving ${root} on http://127.0.0.1:${port} (Accept-Ranges: bytes)`));
 
 /**
@@ -89,13 +89,15 @@ server.listen(port, () => console.log(`serving ${root} on http://127.0.0.1:${por
  * ERR_INVALID_HTTP_RESPONSE. Tear the stream down with the response.
  */
 function pipe(stream, res) {
-  stream.on('error', () => res.destroy());
+  let finished = false;
+  stream.on('error', (error) => res.destroy(error));
   // Only ever tear down the FILE stream. An earlier version also destroyed the
   // response whenever `writableEnded` was false on 'close' — but 'close' fires
   // on normal completion too, and it can win the race against that flag, so it
   // was resetting sockets on responses that had finished perfectly well and
   // Chrome reported them as ERR_INVALID_HTTP_RESPONSE. Connection: close above
   // already means an abandoned response cannot poison a pooled socket.
-  res.on('close', () => stream.destroy());
+  res.on('finish', () => { finished = true; });
+  res.on('close', () => { if (!finished) stream.destroy(); });
   stream.pipe(res);
 }

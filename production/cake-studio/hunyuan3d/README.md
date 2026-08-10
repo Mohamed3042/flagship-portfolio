@@ -1,11 +1,12 @@
-# Cake Studio Hunyuan3D production pack
+# Cake Studio 3D production pack
 
-This non-public production directory carries the source images and handoff contract for the real-GLB upgrade to Cake Studio World 09.
+This non-public production directory carries the source images and user-returned GLBs for the real-model upgrade to Cake Studio World 09.
 
-- Start on the PC with [`PC-HANDOFF.md`](PC-HANDOFF.md).
-- Generate from the 14 independent PNG files in [`source-images/`](source-images/).
+- The original PC generation instructions are preserved in [`PC-HANDOFF.md`](PC-HANDOFF.md).
+- The manifest now covers 24 independent assets: nine ready cakes, five assembly parts, four data wafers, three chapter wordmarks, and three handoff artifacts.
 - Keep the output names defined in [`asset-manifest.json`](asset-manifest.json).
-- Put the finished files in `generated-glb/`.
+- Keep the untouched returned files in `generated-glb/`; the website loads only the optimized copies in `public/worlds/cake-studio/models/`.
 - Validate the complete return batch with `npm run verify:cake-studio:glb`.
+- Validate the deployed model budget with `npm run verify:cake-studio:runtime-models`.
 
 The source images live outside `public/` so cloning the feature branch transfers them between machines without adding them to the deployed website.

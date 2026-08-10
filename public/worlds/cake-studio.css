@@ -478,7 +478,7 @@ button:focus-visible {
    frame. The cake, not a diagram, carries the software-to-kitchen argument. */
 .dimensional-coda {
   height: 920vh;
-  --bridge: calc(1 - min(1, var(--p, 0) * 13));
+  --bridge: calc(1 - min(1, var(--object-p, var(--p, 0)) * 13));
 }
 .dimensional-coda .stage {
   isolation: isolate;
@@ -496,7 +496,7 @@ button:focus-visible {
     radial-gradient(34% 30% at 28% 50%, rgba(23, 104, 92, .2), transparent 72%),
     linear-gradient(112deg, transparent 34%, rgba(240, 223, 199, .025) 49%, transparent 62%);
   filter: blur(18px);
-  transform: translate3d(calc((var(--p, 0) - .5) * -3vw), calc((var(--p, 0) - .5) * 2vh), 0);
+  transform: translate3d(calc((var(--object-p, var(--p, 0)) - .5) * -3vw), calc((var(--object-p, var(--p, 0)) - .5) * 2vh), 0);
 }
 .object-window {
   position: absolute;
@@ -511,7 +511,7 @@ button:focus-visible {
   display: block;
   width: 100%;
   height: 100%;
-  opacity: calc(min(1, max(0, var(--p, 0) - .025) * 18));
+  opacity: calc(min(1, max(0, var(--object-p, var(--p, 0)) - .025) * 18));
   filter: saturate(1.04) contrast(1.02);
 }
 .film-bridge {
@@ -539,8 +539,8 @@ button:focus-visible {
   translate: -50% 0;
   background: linear-gradient(transparent, #f6c39a 18%, #fff1d4 48%, #d37f63 72%, transparent);
   box-shadow: 0 0 15px #f6b37d, 0 0 54px rgba(217, 163, 143, .62);
-  opacity: calc(min(1, max(0, .18 - var(--p, 0)) * 8));
-  transform: scaleY(calc(.08 + min(1, var(--p, 0) * 12) * .92));
+  opacity: calc(min(1, max(0, .18 - var(--object-p, var(--p, 0))) * 8));
+  transform: scaleY(calc(.08 + min(1, var(--object-p, var(--p, 0)) * 12) * .92));
 }
 .object-shadow {
   position: absolute;
