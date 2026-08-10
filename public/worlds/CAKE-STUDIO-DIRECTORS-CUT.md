@@ -1,6 +1,6 @@
 # CAKE STUDIO — director's cut
 
-Status: **v1.1 direction locked / implementation source of truth**.
+Status: **v1.2 direction locked / implementation source of truth**.
 
 This is not a shot list. It records the argument of the film, the role of the visitor's hand,
 why the rhythm changes, and how the generated motion and live browser scenes serve Cake Studio's
@@ -85,23 +85,56 @@ scroll. The browser normalizes the score so the scene height stays fixed.
 The page exposes the active chapter key, rhythm, weight and reason as DOM state. The pacing is
 therefore testable rather than an undocumented easing curve.
 
-## The live-browser coda
+## The dimensional live-browser coda
 
-The film provides the feeling. Three browser-rendered scenes state the operating logic plainly:
+The film provides the feeling; one scroll-driven physical stage continues its material language.
+The coda is not a dashboard and not a set of diagrams. It is a procedural Three.js patisserie on
+black marble, directed as three object acts:
 
-1. **Ready form, not blank canvas** — nine abstract production forms become one selected starting
-   point. Reusable pastry knowledge is visible as structure.
-2. **Flexible change, controlled geometry** — surface, image, bilingual plaque and decoration move
-   around one retained cake body. Flexibility changes the design without destroying the contract.
-3. **One decision, three production documents** — one CakeDocument resolves into the customer
-   mockup, baker sheet and true-size plaque. The kitchen receives decisions, not a screenshot.
+1. **Ready form, not blank canvas** — the final edible sheet unfolds into nine materially distinct
+   cake forms. The visitor sees reusable pastry knowledge as a whole library, then one production-
+   shaped starting point remains.
+2. **Flexible change, controlled geometry** — one retained two-tier cake is surrounded by seventeen
+   glass data wafers while surface, edible image, bilingual plaque and decoration separate, travel
+   and lock back onto the same measured body.
+3. **One decision, three useful objects** — the approved source resolves into a cake under a glass
+   customer vitrine, a curled baker sheet with roller, and a true-size plaque on a physical stand.
+   Software stops at the handoff; baking, printing and material approval remain human work.
 
-These are diagrams of the product logic, not fabricated interface screenshots.
+Each act has one dominant object proposition and one camera proposition. Copy occupies its own
+editorial field below the object. There are no connector lines, circles, generic boxes, autoplay
+loops or fabricated application screenshots.
+
+## The film-to-object match cut
+
+The coda begins with the exact accepted `CST-KF01-opening-sheet.png` endpoint. That frame remains
+fully painted while a thin rose-gold seam finds the sheet's centre. The live dimensional surface
+appears through the same size and screen position before the endpoint releases. The transition
+therefore changes medium without changing subject.
+
+The optional WAN 2.7 replacement ending follows the same law: `CST-KF50` is the first frame,
+`CST-KF01` is the last frame, the sheet creates one forced-perspective nine-form illusion, then
+returns to the exact endpoint by 4.5 seconds and holds it for the final 0.5 seconds. It is stored as
+`assets/cake-studio/wan-prompts/CST-A-050-V2-OPTICAL-BRIDGE.txt`; the accepted original remains
+untouched until this candidate passes endpoint review.
+
+## Browser direction gates
+
+- Scroll is the only coda playhead. Forward and reverse positions are deterministic.
+- WebGL renders only while the pinned coda is near the viewport; there is no continuous animation
+  loop and device pixel ratio is capped.
+- Desktop and phone use the same scene and object counts: nine forms, four controlled parts, three
+  physical outputs.
+- The runtime exposes engine, progress, act, render count, draw calls and triangles so the browser
+  proof can distinguish a real dimensional frame from an empty canvas.
+- The proof samples pixels across a nine-zone lattice, verifies English/Arabic parity, then runs a
+  deliberate sabotage that hides the canvas and removes an output; the gate must turn red.
 
 ## Visual grammar
 
 - Optical patisserie: black marble, deep-teal glass, ivory edible paper and rose-gold proof metal.
-- Generated footage remains fully contained at 16:9. Live words never cover generated pixels.
+- Generated footage remains fully contained at 16:9. Live words never cover generated pixels; the
+  dimensional coda preserves that hierarchy with object and copy on separate stage bands.
 - The frame is warm and fluid during possibility, cooler and more measured during proof, then warm
   again at release.
 - Typography behaves like a luxury production dossier, not a dashboard.

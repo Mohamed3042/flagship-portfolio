@@ -8,9 +8,9 @@
 <meta name="description" content="A directed 50-shot Cake Studio film about making a cake twice: first as a flexible production decision in software, then as a physical object in the kitchen.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%2307110f"/><path d="M8 20h16v4H8zm2-6h12v5H10zm3-5h6v4h-6z" fill="%23f0dfc7"/><circle cx="16" cy="7" r="2" fill="%23d9a38f"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=6">
-<link rel="stylesheet" href="cake-studio.css?v=2">
+<link rel="stylesheet" href="cake-studio.css?v=4">
 </head>
-<body data-version="1.1.0">
+<body data-version="1.2.0">
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="grade" aria-hidden="true"></div>
@@ -21,7 +21,7 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="Cake Studio World release">v1.1 · WORLD 09</span>
+    <span class="ver" title="Cake Studio World release">v1.2 · WORLD 09</span>
     <button type="button" data-lang-toggle aria-label="Switch language" aria-pressed="false">EN / ع</button>
   </div>
 </nav>
@@ -151,68 +151,60 @@
     </div>
   </section>
 
-  <section class="act" aria-labelledby="measure-heading">
-    <p class="no"><span class="L en">Film hands to code · operating logic 01</span><span class="L ar">الفيلم يسلّم للشيفرة · منطق التشغيل ٠١</span></p>
-    <h2 id="measure-heading"><span class="L en">The operator never starts from nothing</span><span class="L ar">لا يبدأ المشغّل من الصفر</span></h2>
-    <p><span class="L en">The film supplied the feeling. The next three scenes make the real Cake Studio handoff legible: ready structure, controlled change, production documents.</span><span class="L ar">قدّم الفيلم الإحساس. وتوضح المشاهد الثلاثة التالية تسليم «استوديو الكعك» الحقيقي: بنية جاهزة، وتغيير مضبوط، ومستندات إنتاج.</span></p>
-    <div class="rule" aria-hidden="true"></div>
-  </section>
-
-  <section class="scene measure starter" data-scene="pin" data-slate="Ready form library">
+  <section class="scene dimensional-coda" data-scene="pin" data-slate="Dimensional production coda" data-object-coda aria-label="A scroll-controlled dimensional explanation of the Cake Studio workflow">
     <div class="stage">
-      <div class="starter-bench" aria-hidden="true">
-        <p class="bench-label"><span class="L en">READY FORM LIBRARY · 09</span><span class="L ar">مكتبة الأشكال الجاهزة · ٠٩</span></p>
-        <div class="form-library"><i></i><i></i><i></i><i></i><i></i><i class="selected"></i><i></i><i></i><i></i></div>
-        <div class="choice-route"><span><span class="L en">ORDER BRIEF</span><span class="L ar">طلب العميل</span></span><b></b><span><span class="L en">READY FORM 06</span><span class="L ar">الشكل الجاهز ٠٦</span></span></div>
+      <div class="coda-atmosphere" aria-hidden="true"></div>
+      <div class="object-window" aria-hidden="true">
+        <img class="film-bridge" src="assets/cake-studio/keyframes/CST-KF01-opening-sheet.png" alt="">
+        <canvas data-cake-canvas></canvas>
+        <div class="optical-seam"></div>
+        <div class="object-shadow"></div>
       </div>
-      <div class="code-caption">
-        <p class="kick"><span class="L en">Ready form · rendered live</span><span class="L ar">شكل جاهز · معروض حيًا</span></p>
-        <h2><span class="L en">Expertise becomes a starting point</span><span class="L ar">الخبرة تصبح نقطة بداية</span></h2>
-        <p><span class="L en">Nine ready forms hold reusable pastry knowledge. A shop operator chooses a production-shaped starting point instead of asking a chef to redraw the cake from memory.</span><span class="L ar">تحفظ تسعة أشكال جاهزة خبرة صناعة الكعك القابلة لإعادة الاستخدام. يختار موظف المتجر نقطة بداية مهيأة للإنتاج بدل أن يطلب من الشيف إعادة رسم الكعكة من الذاكرة.</span></p>
-      </div>
-    </div>
-  </section>
 
-  <section class="act" aria-labelledby="ledger-heading">
-    <p class="no"><span class="L en">Operating logic 02 · flexible, not loose</span><span class="L ar">منطق التشغيل ٠٢ · مرن لا منفلت</span></p>
-    <h2 id="ledger-heading"><span class="L en">Change the design. Keep the cake.</span><span class="L ar">غيّر التصميم. واحتفظ بالكعكة.</span></h2>
-    <p><span class="L en">Flexibility is useful only when the production geometry survives every revision.</span><span class="L ar">لا تصبح المرونة مفيدة إلا عندما تنجو هندسة الإنتاج من كل مراجعة.</span></p>
-    <div class="rule" aria-hidden="true"></div>
-  </section>
+      <header class="coda-origin">
+        <span class="origin-film"><span class="L en">50 · LAST FRAME</span><span class="L ar">٥٠ · الإطار الأخير</span></span>
+        <span class="origin-object"><span class="L en">LIVE OBJECT · SAME SHEET</span><span class="L ar">عنصر حي · الورقة نفسها</span></span>
+      </header>
 
-  <section class="scene ledger adapt" data-scene="pin" data-slate="Controlled design change">
-    <div class="stage">
-      <div class="adapt-bench" aria-hidden="true">
-        <div class="cake-model"><i class="tier back"></i><i class="tier front"></i><i class="photo"></i><i class="plaque"></i><i class="topper"></i><span class="surface-guide"></span></div>
-        <ol class="control-stack"><li><b>01</b><span><span class="L en">SURFACE</span><span class="L ar">السطح</span></span><em><span class="L en">LOCKED</span><span class="L ar">ثابت</span></em></li><li><b>02</b><span><span class="L en">EDIBLE IMAGE</span><span class="L ar">الصورة الصالحة للأكل</span></span><em><span class="L en">PLACED</span><span class="L ar">موضوعة</span></em></li><li><b>03</b><span><span class="L en">BILINGUAL PLAQUE</span><span class="L ar">اللوحة الثنائية اللغة</span></span><em><span class="L en">SHAPED</span><span class="L ar">مشكّلة</span></em></li><li><b>04</b><span><span class="L en">DECORATION</span><span class="L ar">الزينة</span></span><em><span class="L en">FLEXIBLE</span><span class="L ar">مرنة</span></em></li></ol>
-      </div>
-      <div class="code-caption">
-        <p class="kick"><span class="L en">One body · many controlled decisions</span><span class="L ar">جسم واحد · قرارات مضبوطة كثيرة</span></p>
-        <h2><span class="L en">Flexibility without improvisation</span><span class="L ar">مرونة بلا ارتجال</span></h2>
-        <p><span class="L en">The surface stays measured while the edible image, bilingual plaque and decoration move. The operator can try a sweeter idea without rebuilding the production object.</span><span class="L ar">يبقى السطح مقاسًا بينما تتحرك الصورة الصالحة للأكل واللوحة الثنائية اللغة والزينة. يستطيع المشغّل تجربة فكرة أجمل من دون إعادة بناء عنصر الإنتاج.</span></p>
-      </div>
-    </div>
-  </section>
+      <div class="object-acts" aria-live="polite">
+        <article class="object-act" data-object-act="forms">
+          <p class="object-count">01 <span>· 09</span></p>
+          <div class="object-copy">
+            <p class="kick"><span class="L en">Ready form · expertise you can rotate</span><span class="L ar">شكل جاهز · خبرة يمكنك تدويرها</span></p>
+            <h2><span class="L en">Choose with the whole cake in view</span><span class="L ar">اختر والكعكة كاملة أمامك</span></h2>
+            <p><span class="L en">Nine ready forms hold reusable pastry knowledge and unfold from the final sheet. The operator chooses one production-shaped starting point; the other eight make the decision visible, then leave the stage.</span><span class="L ar">تحفظ تسعة أشكال جاهزة خبرة صناعة الكعك القابلة لإعادة الاستخدام وتنفتح من الورقة الأخيرة. يختار المشغّل نقطة بداية مهيأة للإنتاج؛ وتُظهر الأشكال الثمانية الأخرى معنى القرار ثم تغادر المنصة.</span></p>
+          </div>
+          <p class="object-proof"><span class="L en">ORDER BRIEF → READY FORM 06</span><span class="L ar">طلب العميل ← الشكل الجاهز ٠٦</span></p>
+        </article>
 
-  <section class="act" aria-labelledby="compile-heading">
-    <p class="no"><span class="L en">Operating logic 03 · one decision travels</span><span class="L ar">منطق التشغيل ٠٣ · قرار واحد ينتقل</span></p>
-    <h2 id="compile-heading"><span class="L en">The kitchen receives decisions, not a screenshot</span><span class="L ar">يستلم المطبخ قرارات لا لقطة شاشة</span></h2>
-    <p><span class="L en">Design and production read the same structured cake document, then receive the surface they actually need.</span><span class="L ar">يقرأ التصميم والإنتاج مستند الكعكة المنظم نفسه، ثم يحصل كل طرف على السطح الذي يحتاجه فعلًا.</span></p>
-    <div class="rule" aria-hidden="true"></div>
-  </section>
+        <article class="object-act" data-object-act="assembly">
+          <p class="object-count">02 <span>· 17</span></p>
+          <div class="object-copy">
+            <p class="kick"><span class="L en">CakeDocument · software becomes material</span><span class="L ar">مستند الكعكة · البرمجيات تصبح مادة</span></p>
+            <h2><span class="L en">The design moves. Production stays measured.</span><span class="L ar">يتحرك التصميم. ويبقى الإنتاج مقاسًا.</span></h2>
+            <p><span class="L en">Seventeen glass data wafers carry one approved cake. Surface, edible image, bilingual plaque and decoration travel independently, then lock onto the same physical body.</span><span class="L ar">تحمل سبع عشرة رقاقة بيانات زجاجية كعكةً واحدة معتمدة. يتحرك السطح والصورة الصالحة للأكل واللوحة الثنائية اللغة والزينة كلٌ على حدة، ثم تثبت على الجسم المادي نفسه.</span></p>
+          </div>
+          <p class="object-proof"><span class="L en">04 CONTROLLED PARTS · 01 MEASURED BODY</span><span class="L ar">٤ أجزاء مضبوطة · جسم واحد مقاس</span></p>
+        </article>
 
-  <section class="scene compile handoff" data-scene="pin" data-slate="Production handoff">
-    <div class="stage">
-      <div class="handoff-bench" aria-hidden="true">
-        <div class="source-document"><span><span class="L en">ONE CAKE DOCUMENT</span><span class="L ar">مستند كعكة واحد</span></span><strong>17</strong><small><span class="L en">STRUCTURED SLOTS</span><span class="L ar">خانة منظّمة</span></small></div>
-        <div class="handoff-line"><i></i><i></i><i></i></div>
-        <div class="handoff-outputs"><div data-output="customer mockup"><b>01</b><span><span class="L en">customer mockup</span><span class="L ar">معاينة العميل</span></span><small><span class="L en">APPROVAL</span><span class="L ar">اعتماد</span></small></div><div data-output="baker sheet"><b>02</b><span><span class="L en">baker sheet</span><span class="L ar">ورقة الخباز</span></span><small><span class="L en">KITCHEN</span><span class="L ar">المطبخ</span></small></div><div data-output="true-size plaque"><b>03</b><span><span class="L en">true-size plaque</span><span class="L ar">لوحة بالحجم الحقيقي</span></span><small><span class="L en">1 : 1 PRINT</span><span class="L ar">طباعة ١ : ١</span></small></div></div>
+        <article class="object-act" data-object-act="handoff">
+          <p class="object-count">03 <span>· 03</span></p>
+          <div class="object-copy">
+            <p class="kick"><span class="L en">One approved source · three useful objects</span><span class="L ar">مصدر واحد معتمد · ثلاثة أشياء مفيدة</span></p>
+            <h2><span class="L en">The kitchen receives the decision intact</span><span class="L ar">يستلم المطبخ القرار كاملًا</span></h2>
+            <p><span class="L en">The selected cake resolves into a customer mockup, baker sheet and true-size plaque. Software stops at the handoff; baking, printing and final material approval remain human craft.</span><span class="L ar">تستقر الكعكة المختارة في معاينة للعميل وورقة للخباز ولوحة بالحجم الحقيقي. تتوقف البرمجيات عند التسليم؛ ويبقى الخَبز والطباعة واعتماد المادة النهائي حرفة بشرية.</span></p>
+          </div>
+          <p class="object-proof"><span class="L en">APPROVAL · KITCHEN · 1:1 PRINT</span><span class="L ar">اعتماد · مطبخ · طباعة ١:١</span></p>
+        </article>
       </div>
-      <div class="code-caption">
-        <p class="kick"><span class="L en">One source · three production surfaces</span><span class="L ar">مصدر واحد · ثلاثة أسطح إنتاج</span></p>
-        <h2><span class="L en">The first cake makes the second possible</span><span class="L ar">الكعكة الأولى تجعل الثانية ممكنة</span></h2>
-        <p><span class="L en">One CakeDocument becomes the customer mockup, baker sheet and true-size plaque. Software does not bake the cake; it makes the approved decision survive the trip to the people who do.</span><span class="L ar">يصير مستند كعكة واحد معاينة العميل وورقة الخباز واللوحة بالحجم الحقيقي. لا تخبز البرمجيات الكعكة؛ بل تحافظ على القرار المعتمد حتى يصل إلى من يصنعها.</span></p>
+
+      <div class="artifact-names" aria-hidden="true">
+        <span data-output="customer mockup"><b>01</b><span class="L en">CUSTOMER MOCKUP</span><span class="L ar">معاينة العميل</span></span>
+        <span data-output="baker sheet"><b>02</b><span class="L en">BAKER SHEET</span><span class="L ar">ورقة الخباز</span></span>
+        <span data-output="true-size plaque"><b>03</b><span class="L en">TRUE-SIZE PLAQUE</span><span class="L ar">لوحة بالحجم الحقيقي</span></span>
       </div>
+
+      <p class="coda-fallback" data-coda-fallback hidden><span class="L en">The dimensional stage is unavailable on this browser; the complete production story remains in the live captions.</span><span class="L ar">المنصة المجسمة غير متاحة في هذا المتصفح؛ وتبقى قصة الإنتاج كاملة في الشروح الحية.</span></p>
     </div>
   </section>
 
@@ -231,7 +223,7 @@
           <dt><span class="L en">Projection</span><span class="L ar">العرض</span></dt><dd><span class="L en">Two-video buffer · scroll-scrubbed · desktop and phone · no autoplay</span><span class="L ar">ذاكرة فيديو مزدوجة · تحكم بالتمرير · حاسوب وهاتف · بلا تشغيل تلقائي</span></dd>
           <dt><span class="L en">Web media</span><span class="L ar">وسائط الويب</span></dt><dd><span class="L en">H.264 · 1280×720 · 30 fps · ten seek points per shot</span><span class="L ar">H.264 · ١٢٨٠×٧٢٠ · ٣٠ إطارًا/ث · عشر نقاط بحث لكل لقطة</span></dd>
           <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
-          <dt><span class="L en">World release</span><span class="L ar">إصدار العالم</span></dt><dd>v1.1.0 · 2026-08-10</dd>
+          <dt><span class="L en">World release</span><span class="L ar">إصدار العالم</span></dt><dd>v1.2.0 · 2026-08-10</dd>
         </dl>
         <p class="fine"><span class="L en">An original motion study of Mohamed Mahmoud's real Cake Studio demo. Generated imagery illustrates the workflow; product facts remain live text and trace to the project files. No interface screenshot is presented as generated film.</span><span class="L ar">دراسة حركية أصلية لعرض «استوديو الكعك» الحقيقي لمحمد محمود. توضح الصور المولّدة سير العمل، وتبقى حقائق المنتج نصًا حيًا يعود إلى ملفات المشروع. ولا تُقدَّم أي لقطة واجهة على أنها فيلم مولّد.</span></p>
         <p><span class="L en"><a href="../en/work/cake-studio">Read the Cake Studio story →</a></span><span class="L ar"><a href="../ar/work/cake-studio">اقرأ قصة استوديو الكعك ←</a></span></p>
@@ -248,6 +240,7 @@
 </footer>
 
 <script src="cinema.js?v=6"></script>
-<script src="cake-studio.js?v=2"></script>
+<script src="cake-studio.js?v=4"></script>
+<script type="module" src="cake-studio-coda.js?v=4"></script>
 </body>
 </html>

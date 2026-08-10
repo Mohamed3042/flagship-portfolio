@@ -99,7 +99,7 @@
   };
 
   window.__cakeStudioDirector = Object.freeze({
-    version: '1.1.0',
+    version: '1.2.0',
     weights: DIRECTOR_WEIGHTS,
     chapters: DIRECTOR_CHAPTERS,
     progressForShot: (shotNumber, fraction = .5) => progressForIndex(
@@ -107,7 +107,7 @@
       fraction,
     ),
   });
-  scene.dataset.directorVersion = '1.1.0';
+  scene.dataset.directorVersion = '1.2.0';
 
   const shots = definitions.map((figure) => ({
     clip: figure.dataset.clip,
@@ -221,7 +221,11 @@
       if (!slot.objectUrl || slot.video.currentSrc !== slot.objectUrl) return;
       slot.ready = true;
       scene.dataset.mediaState = 'ready';
-      render(smoothProgress, readRaw());
+      // A first-visit clip may finish loading after the scroll camera has parked.
+      // Seek from the hand's actual position so the first decoded frame never
+      // inherits an earlier eased fraction.
+      smoothProgress = readRaw();
+      render(smoothProgress, smoothProgress);
     });
     slot.video.addEventListener('seeked', () => {
       slot.seeking = false;

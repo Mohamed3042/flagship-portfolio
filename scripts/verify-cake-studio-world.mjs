@@ -10,8 +10,12 @@ const worldRoot = join(root, 'public', 'worlds');
 const pagePath = join(worldRoot, 'cake-studio.html');
 const cssPath = join(worldRoot, 'cake-studio.css');
 const scriptPath = join(worldRoot, 'cake-studio.js');
+const codaScriptPath = join(worldRoot, 'cake-studio-coda.js');
+const threePath = join(worldRoot, 'cake-studio', 'three.module.js');
+const threeLicensePath = join(worldRoot, 'cake-studio', 'THREE-LICENSE.txt');
 const manifestPath = join(worldRoot, 'cake-studio', 'manifest.json');
 const ownerPackRoot = join(worldRoot, 'assets', 'cake-studio');
+const opticalPromptPath = join(ownerPackRoot, 'wan-prompts', 'CST-A-050-V2-OPTICAL-BRIDGE.txt');
 const lobbyPath = join(worldRoot, 'index.html');
 const sabotage = process.argv.includes('--sabotage');
 
@@ -34,11 +38,28 @@ if (sabotage) {
     throw new Error('sabotage was requested but not applied');
   }
   console.log('SABOTAGE APPLIED: CST-050 was replaced in the in-memory page fixture.');
+  const codaFixture = page;
+  page = page.replace('data-cake-canvas', 'data-cake-flat');
+  if (page === codaFixture || page.includes('data-cake-canvas')) {
+    throw new Error('dimensional-coda sabotage was requested but not applied');
+  }
+  console.log('SABOTAGE APPLIED: the WebGL canvas contract was removed in memory.');
 }
 
-const [css, originalScript, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
+const readOptional = async (path) => {
+  try { return await readFile(path, 'utf8'); } catch { return ''; }
+};
+const statOptional = async (path) => {
+  try { return await stat(path); } catch { return null; }
+};
+
+const [css, originalScript, codaScript, threeFile, threeLicense, opticalPrompt, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
   readFile(cssPath, 'utf8'),
   readFile(scriptPath, 'utf8'),
+  readOptional(codaScriptPath),
+  statOptional(threePath),
+  readOptional(threeLicensePath),
+  readOptional(opticalPromptPath),
   readFile(manifestPath, 'utf8'),
   readFile(join(ownerPackRoot, 'clips.json'), 'utf8'),
   readFile(join(ownerPackRoot, 'run-log.csv'), 'utf8'),
@@ -55,9 +76,10 @@ if (sabotage) {
 const manifest = JSON.parse(manifestRaw);
 const ownerPack = JSON.parse(clipsRaw);
 
-check('visible release badge', page.includes('v1.1 · WORLD 09') && page.includes('data-version="1.1.0"'), 'v1.1 / World 09');
+check('visible release badge', page.includes('v1.2 · WORLD 09') && page.includes('data-version="1.2.0"'), 'v1.2 / World 09');
 check('shared cinema engine', page.includes('cinema.css?v=6') && page.includes('cinema.js?v=6'), 'cinema v6 linked');
-check('page-local assets', page.includes('cake-studio.css?v=2') && page.includes('cake-studio.js?v=2'), 'directed CSS and JS linked');
+check('page-local assets', page.includes('cake-studio.css?v=4') && page.includes('cake-studio.js?v=4'), 'directed CSS and JS linked');
+check('dimensional coda module', page.includes('type="module" src="cake-studio-coda.js?v=4"') && codaScript.includes("import * as THREE from './cake-studio/three.module.js';"), 'local Three.js module linked');
 check('one film scene', (page.match(/id="cake-reel"/g) ?? []).length === 1, 'single shared playhead');
 check('two video buffers', (page.match(/<video\b/g) ?? []).length === 2, 'exactly two video elements');
 const videoTags = [...page.matchAll(/<video\b[^>]*>/g)].map((match) => match[0]);
@@ -110,6 +132,76 @@ check(
   'operator handoff promise',
   ['reusable pastry knowledge', 'customer mockup', 'baker sheet', 'true-size plaque'].every((phrase) => page.includes(phrase)),
   'ready form → flexible design → production documents',
+);
+
+const objectActs = [...page.matchAll(/<article class="object-act"\s+data-object-act="([^"]+)"/g)].map((match) => match[1]);
+check(
+  'film-to-object match cut',
+  page.includes('class="film-bridge"')
+    && page.includes('src="assets/cake-studio/keyframes/CST-KF01-opening-sheet.png"')
+    && page.includes('data-cake-canvas'),
+  'exact KF01 endpoint holds until the dimensional sheet paints',
+);
+check(
+  'one dimensional coda',
+  (page.match(/data-object-coda/g) ?? []).length === 1
+    && (page.match(/data-cake-canvas/g) ?? []).length === 1
+    && JSON.stringify(objectActs) === JSON.stringify(['forms', 'assembly', 'handoff']),
+  `one canvas · acts ${objectActs.join(' → ') || 'missing'}`,
+);
+check(
+  'object-led visual contract',
+  /const READY_FORM_COUNT = 9;/.test(codaScript)
+    && /const CONTROLLED_PART_COUNT = 4;/.test(codaScript)
+    && /const OUTPUT_COUNT = 3;/.test(codaScript)
+    && codaScript.includes('createReadyForms')
+    && codaScript.includes('createControlledAssembly')
+    && codaScript.includes('createProductionOutputs'),
+  '9 cake forms · 4 controlled parts · 3 tangible outputs',
+);
+check(
+  'no schematic fallback',
+  !page.includes('form-library')
+    && !page.includes('cake-model')
+    && !page.includes('handoff-line')
+    && !css.includes('.form-library')
+    && !css.includes('.cake-model')
+    && !css.includes('.handoff-line'),
+  'old circles, connector lines and boxed silhouettes removed',
+);
+check(
+  'scroll is the coda playhead',
+  codaScript.includes('renderCoda(progress)')
+    && !/\.play\s*\(/.test(codaScript)
+    && !/setInterval\s*\(/.test(codaScript)
+    && !/function\s+animate\s*\(/.test(codaScript),
+  'deterministic forward/reverse render; no autoplay loop',
+);
+check(
+  'coda runtime proof surface',
+  codaScript.includes('window.__cakeStudioCoda')
+    && codaScript.includes('webglAvailable')
+    && page.includes('data-coda-fallback'),
+  'browser-verifiable state plus graceful fallback',
+);
+const codaEnglish = (page.match(/object-act[\s\S]*?class="L en"/g) ?? []).length;
+const codaArabic = (page.match(/object-act[\s\S]*?class="L ar"/g) ?? []).length;
+check('dimensional coda bilingual', codaEnglish >= 3 && codaArabic >= 3, `${codaEnglish} English / ${codaArabic} Arabic act bodies`);
+check(
+  'vendored Three license',
+  Boolean(threeFile && threeFile.size > 1_000_000)
+    && threeLicense.includes('MIT License')
+    && threeLicense.includes('Three.js Authors'),
+  `${threeFile?.size ?? 0} bytes · MIT notice`,
+);
+check(
+  'linked optical bridge prompt',
+  opticalPrompt.includes('First Frame: KF50')
+    && opticalPrompt.includes('Last Frame: KF01')
+    && opticalPrompt.includes('nine dimensional cake forms')
+    && opticalPrompt.includes('4.5 seconds')
+    && opticalPrompt.includes('final 0.5 seconds'),
+  'WAN 2.7 FLF candidate preserves endpoints and foreshadows the 3D coda',
 );
 
 check('owner pack complete', ownerPack.clips?.length === 50, `${ownerPack.clips?.length ?? 0}/50 source prompts`);

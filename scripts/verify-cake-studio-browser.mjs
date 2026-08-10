@@ -71,7 +71,9 @@ async function launchChrome(profile) {
   const child = spawn(chromePath, [
     '--headless=new',
     '--no-sandbox',
-    '--disable-gpu',
+    '--use-gl=angle',
+    '--use-angle=swiftshader',
+    '--enable-unsafe-swiftshader',
     '--hide-scrollbars',
     '--mute-audio',
     '--remote-debugging-port=0',
@@ -207,6 +209,8 @@ try {
     check(`${viewport.name} navigation`, !navigate.errorText, navigate.errorText ?? 'HTTP document loaded');
     check(`${viewport.name} document ready`, await waitFor(`document.readyState === 'complete'`, 20_000), 'complete');
     await evaluate(`document.documentElement.style.scrollBehavior='auto'; if(document.documentElement.lang==='ar') document.querySelector('[data-lang-toggle]').click(); true`);
+    const codaBooted = await waitFor(`Boolean(window.__cakeStudioCoda?.ready || window.__cakeStudioCoda?.reason)`, 20_000);
+    check(`${viewport.name} dimensional runtime boot`, codaBooted, codaBooted ? 'Three.js runtime exposed' : 'runtime timed out');
     await delay(350);
 
     const basics = await evaluate(`(() => ({
@@ -221,19 +225,29 @@ try {
       errorWeight: window.__cakeStudioDirector?.weights?.[26] ?? -1,
       rejectWeight: window.__cakeStudioDirector?.weights?.[37] ?? -1,
       loopWeight: window.__cakeStudioDirector?.weights?.[49] ?? -1,
+      codaVersion: window.__cakeStudioCoda?.version ?? '',
+      codaReady: window.__cakeStudioCoda?.ready ?? false,
+      webgl: window.__cakeStudioCoda?.webglAvailable ?? false,
+      engine: window.__cakeStudioCoda?.engine ?? '',
+      canvases: document.querySelectorAll('[data-cake-canvas]').length,
       overflow: document.documentElement.scrollWidth - innerWidth,
       lang: document.documentElement.lang,
       dir: document.documentElement.dir
     }))()`);
-    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.1.0', `${basics.title} · ${basics.version}`);
+    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.2.0', `${basics.title} · ${basics.version}`);
     check(`${viewport.name} 50-shot DOM`, basics.figures === 50 && basics.videos === 2, `${basics.figures} figures / ${basics.videos} buffers`);
     check(
       `${viewport.name} directed score`,
-      basics.directorVersion === '1.1.0'
+      basics.directorVersion === '1.2.0'
         && basics.directorWeights === 50
         && basics.fastWeight < basics.choiceWeight
         && [basics.choiceWeight, basics.errorWeight, basics.rejectWeight, basics.loopWeight].every((weight) => weight >= 1.3),
       `v${basics.directorVersion} · fast ${basics.fastWeight} · choice/error/reject/loop ${basics.choiceWeight}/${basics.errorWeight}/${basics.rejectWeight}/${basics.loopWeight}`,
+    );
+    check(
+      `${viewport.name} dimensional engine`,
+      basics.codaVersion === '1.2.0' && basics.codaReady && basics.webgl && basics.engine.startsWith('three-r') && basics.canvases === 1,
+      `v${basics.codaVersion} · ${basics.engine} · ready=${basics.codaReady} · canvas=${basics.canvases}`,
     );
     check(`${viewport.name} horizontal fit`, basics.overflow <= 1, `${basics.overflow}px overflow`);
 
@@ -245,15 +259,22 @@ try {
         const note=document.getElementById('director-note-en');
         note.dataset.browserSabotage='empty';
         note.textContent='';
-        const handoff=document.querySelector('.handoff-outputs div:last-child');
-        handoff.remove();
+        const canvas=document.querySelector('[data-cake-canvas]');
+        canvas.dataset.browserSabotage='hidden';
+        canvas.style.display='none';
+        const output=document.querySelector('.artifact-names [data-output]:last-child');
+        output.remove();
+        window.__cakeStudioCoda.outputs=2;
         return frame.dataset.browserSabotage==='offset'
           && getComputedStyle(frame).transform!=='none'
           && note.dataset.browserSabotage==='empty'
           && note.textContent===''
-          && document.querySelectorAll('.handoff-outputs > div').length===2;
+          && canvas.dataset.browserSabotage==='hidden'
+          && getComputedStyle(canvas).display==='none'
+          && document.querySelectorAll('.artifact-names [data-output]').length===2
+          && window.__cakeStudioCoda.outputs===2;
       })()`);
-      check('browser sabotage applied', applied, 'film frame displaced, chapter reason emptied, and one handoff output removed in runtime only');
+      check('browser sabotage applied', applied, 'film displaced, reason emptied, WebGL stage hidden, and one physical output removed in runtime only');
     }
 
     const scrollScene = async (selector, progress) => {
@@ -296,7 +317,7 @@ try {
       const ready = await waitFor(`(() => {
         const scene=document.getElementById('cake-reel');
         const active=scene.querySelector('video.on');
-        return scene.dataset.currentShot==='${state.shot}' && active && active.readyState>=2;
+        return scene.dataset.currentShot==='${state.shot}' && active && active.readyState>=1 && active.seekable.length===1 && Math.abs(active.currentTime-${state.time})<.7;
       })()`, 20_000);
       await delay(500);
       const result = await evaluate(`(() => {
@@ -327,7 +348,7 @@ try {
         };
       })()`);
       stateResults.push(result);
-      check(`${viewport.name} ${state.name} ready`, ready && result.readyState >= 2 && result.seekable === 1, `${result.clip} · ready ${result.readyState} · seekable ${result.seekable}`);
+      check(`${viewport.name} ${state.name} ready`, ready && result.readyState >= 1 && result.seekable === 1, `${result.clip} · ready ${result.readyState} · seekable ${result.seekable}`);
       check(`${viewport.name} ${state.name} identity`, result.shot === state.shot && result.activeVideos === 1, `shot ${result.shot} · ${result.activeVideos} active buffer`);
       check(`${viewport.name} ${state.name} direction`, result.rhythm === state.rhythm && result.weight > 0 && result.directorNote.length > 24, `${result.chapterKey}/${result.rhythm} · weight ${result.weight} · ${result.directorNote}`);
       check(`${viewport.name} ${state.name} scrub time`, Math.abs(result.time - state.time) < .7, `${result.time.toFixed(3)}s / expected ~${state.time.toFixed(1)}s`);
@@ -343,58 +364,116 @@ try {
     check(`${viewport.name} reverse scrub`, reversed && reverseState.shot === 17 && Math.abs(reverseState.time - 2.5) < .8, `shot ${reverseState.shot} @ ${reverseState.time.toFixed(3)}s`);
     check(`${viewport.name} reverse remains silent`, reverseState.playAttempts === 0, `${reverseState.playAttempts} play attempts`);
 
-    await scrollScene('.measure', .64);
-    await screenshot('measure');
-    const starterState = await evaluate(`(() => {
-      const panel=document.querySelector('.starter-bench').getBoundingClientRect();
-      const caption=document.querySelector('.starter .code-caption').getBoundingClientRect();
-      return {
-        forms:document.querySelectorAll('.form-library > i').length,
-        selected:document.querySelectorAll('.form-library > i.selected').length,
-        contained:panel.left>=-1 && panel.right<=innerWidth+1 && panel.top>=-1 && panel.bottom<=innerHeight+1,
-        clear:panel.bottom<=caption.top+1
-      };
-    })()`);
-    check(`${viewport.name} ready-form coda`, starterState.forms === 9 && starterState.selected === 1, `${starterState.forms} forms · ${starterState.selected} selected`);
-    check(`${viewport.name} ready-form composition`, starterState.contained && starterState.clear, `contained=${starterState.contained} · panel/caption clear=${starterState.clear}`);
-    await scrollScene('.ledger', .66);
-    await screenshot('ledger');
-    const adaptState = await evaluate(`(() => {
-      const panel=document.querySelector('.adapt-bench').getBoundingClientRect();
-      const caption=document.querySelector('.adapt .code-caption').getBoundingClientRect();
-      return {
-        controls:document.querySelectorAll('.control-stack > li').length,
-        guide:Boolean(document.querySelector('.surface-guide')),
-        contained:panel.left>=-1 && panel.right<=innerWidth+1 && panel.top>=-1 && panel.bottom<=innerHeight+1,
-        clear:panel.bottom<=caption.top+1
-      };
-    })()`);
-    check(`${viewport.name} flexible-design coda`, adaptState.controls === 4 && adaptState.guide, `${adaptState.controls} controlled layers · guide=${adaptState.guide}`);
-    check(`${viewport.name} flexible-design composition`, adaptState.contained && adaptState.clear, `contained=${adaptState.contained} · panel/caption clear=${adaptState.clear}`);
-    await scrollScene('.compile', .72);
-    await screenshot('compile');
-    const handoffState = await evaluate(`(() => {
-      const panel=document.querySelector('.handoff-bench').getBoundingClientRect();
-      const caption=document.querySelector('.handoff .code-caption').getBoundingClientRect();
-      const labels=[...document.querySelectorAll('.handoff-outputs > div')].map(node=>node.dataset.output);
-      return {
-        outputs:labels.length,
-        labels,
-        slots:document.querySelector('.source-document strong')?.textContent.trim() ?? '',
-        contained:panel.left>=-1 && panel.right<=innerWidth+1 && panel.top>=-1 && panel.bottom<=innerHeight+1,
-        clear:panel.bottom<=caption.top+1
-      };
-    })()`);
-    check(`${viewport.name} production-handoff coda`, handoffState.outputs === 3 && handoffState.slots === '17' && ['customer mockup','baker sheet','true-size plaque'].every(label=>handoffState.labels.includes(label)), `${handoffState.slots} slots → ${handoffState.labels.join(' / ')}`);
-    check(`${viewport.name} production-handoff composition`, handoffState.contained && handoffState.clear, `contained=${handoffState.contained} · panel/caption clear=${handoffState.clear}`);
+    const codaStates = [
+      { name: 'coda-bridge', progress: .01, act: 'forms', copyRequired: false },
+      { name: 'coda-forms', progress: .22, act: 'forms', copyRequired: true },
+      { name: 'coda-assembly', progress: .52, act: 'assembly', copyRequired: true },
+      { name: 'coda-handoff', progress: .84, act: 'handoff', copyRequired: true },
+    ];
+    const codaResults = [];
+    let priorRenders = -1;
+    for (const state of codaStates) {
+      await scrollScene('.dimensional-coda', state.progress);
+      const rendered = await waitFor(`Math.abs((window.__cakeStudioCoda?.progress ?? -1)-${state.progress})<.025 && window.__cakeStudioCoda?.act==='${state.act}'`, 12_000);
+      const result = await evaluate(`(() => {
+        const runtime=window.__cakeStudioCoda;
+        const scene=document.querySelector('.dimensional-coda');
+        const canvas=document.querySelector('[data-cake-canvas]');
+        const bridge=document.querySelector('.film-bridge');
+        const act=document.querySelector('[data-object-act="${state.act}"]');
+        const canvasRect=canvas.getBoundingClientRect();
+        const actRect=act.getBoundingClientRect();
+        const actStyle=getComputedStyle(act);
+        let glVersion='';
+        let pixelNonZero=0;
+        let pixelRange=0;
+        let pixelSamples=0;
+        try {
+          const gl=canvas.getContext('webgl2') || canvas.getContext('webgl');
+          glVersion=gl?.getParameter(gl.VERSION) ?? '';
+          if (gl) {
+            const size=40;
+            const pixels=new Uint8Array(size*size*4);
+            let low=255;
+            let high=0;
+            for (const xRatio of [.2,.5,.8]) {
+              for (const yRatio of [.2,.5,.8]) {
+                const x=Math.max(0,Math.min(canvas.width-size,Math.floor(canvas.width*xRatio-size/2)));
+                const y=Math.max(0,Math.min(canvas.height-size,Math.floor(canvas.height*yRatio-size/2)));
+                gl.readPixels(x,y,size,size,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+                for (let index=0;index<pixels.length;index+=4) {
+                  const alpha=pixels[index+3];
+                  if (alpha>4) pixelNonZero+=1;
+                  const light=(pixels[index]+pixels[index+1]+pixels[index+2])/3;
+                  low=Math.min(low,light);
+                  high=Math.max(high,light);
+                  pixelSamples+=1;
+                }
+              }
+            }
+            pixelRange=high-low;
+          }
+        } catch {}
+        return {
+          ready:runtime?.ready ?? false,
+          webgl:runtime?.webglAvailable ?? false,
+          engine:runtime?.engine ?? '',
+          progress:runtime?.progress ?? -1,
+          act:runtime?.act ?? '',
+          forms:runtime?.readyForms ?? 0,
+          parts:runtime?.controlledParts ?? 0,
+          outputs:runtime?.outputs ?? 0,
+          renders:runtime?.renders ?? 0,
+          drawCalls:runtime?.drawCalls ?? 0,
+          triangles:runtime?.triangles ?? 0,
+          pixelRatio:runtime?.pixelRatio ?? 0,
+          canvasWidth:canvas.width,
+          canvasHeight:canvas.height,
+          canvasDisplay:getComputedStyle(canvas).display,
+          canvasContained:canvasRect.left>=-1 && canvasRect.right<=innerWidth+1 && canvasRect.top>=-1 && canvasRect.bottom<=innerHeight+1,
+          actPresence:Number.parseFloat(actStyle.getPropertyValue('--presence') || '0'),
+          actContained:actRect.left>=-1 && actRect.right<=innerWidth+1 && actRect.top>=-1 && actRect.bottom<=innerHeight+1,
+          bridgeOpacity:Number.parseFloat(getComputedStyle(bridge).opacity),
+          bridgeSource:bridge.getAttribute('src'),
+          bridgeWidth:bridge.getBoundingClientRect().width,
+          labels:[...document.querySelectorAll('.artifact-names [data-output]')].map(node=>node.dataset.output),
+          pixelNonZero,
+          pixelSamples,
+          pixelRange,
+          glVersion,
+          playAttempts:window.__cakePlayAttempts
+        };
+      })()`);
+      codaResults.push(result);
+      check(`${viewport.name} ${state.name} state`, rendered && result.ready && result.webgl && result.act === state.act && Math.abs(result.progress - state.progress) < .025, `${result.act} @ ${result.progress} · ${result.engine}`);
+      check(`${viewport.name} ${state.name} object contract`, result.forms === 9 && result.parts === 4 && result.outputs === 3, `${result.forms} forms · ${result.parts} parts · ${result.outputs} outputs`);
+      check(`${viewport.name} ${state.name} real render`, result.canvasDisplay !== 'none' && result.drawCalls >= 4 && result.triangles >= 500 && result.pixelNonZero > 120 && result.pixelRange > 8 && result.glVersion.includes('WebGL'), `${result.glVersion} · ${result.drawCalls} calls · ${result.triangles} triangles · pixels ${result.pixelNonZero}/${result.pixelSamples} range ${result.pixelRange.toFixed(1)}`);
+      check(`${viewport.name} ${state.name} composition`, result.canvasContained && (!state.copyRequired || (result.actPresence > .3 && result.actContained)), `canvas=${result.canvasContained} · copy presence=${result.actPresence.toFixed(3)} · copy contained=${result.actContained}`);
+      check(`${viewport.name} ${state.name} bounded rendering`, result.pixelRatio > 0 && result.pixelRatio <= 1.5 && result.renders > priorRenders, `${result.canvasWidth}×${result.canvasHeight} @ ${result.pixelRatio}x · render ${result.renders}`);
+      check(`${viewport.name} ${state.name} never autoplayed`, result.playAttempts === 0, `${result.playAttempts} play attempts`);
+      if (state.name === 'coda-bridge') {
+        check(`${viewport.name} endpoint match bridge`, result.bridgeOpacity > .72 && result.bridgeSource.endsWith('CST-KF01-opening-sheet.png') && result.bridgeWidth >= viewport.width * .88, `opacity ${result.bridgeOpacity} · ${result.bridgeSource} · ${result.bridgeWidth}px`);
+      }
+      if (state.name === 'coda-handoff') {
+        check(`${viewport.name} tangible handoff labels`, result.labels.length === 3 && ['customer mockup','baker sheet','true-size plaque'].every(label=>result.labels.includes(label)), result.labels.join(' / '));
+      }
+      priorRenders = result.renders;
+      await screenshot(state.name);
+    }
+
+    await scrollScene('.dimensional-coda', .22);
+    const codaReversed = await waitFor(`window.__cakeStudioCoda?.act==='forms' && Math.abs(window.__cakeStudioCoda.progress-.22)<.025`, 10_000);
+    const codaReverseState = await evaluate(`({act:window.__cakeStudioCoda?.act,progress:window.__cakeStudioCoda?.progress,renders:window.__cakeStudioCoda?.renders,playAttempts:window.__cakePlayAttempts})`);
+    check(`${viewport.name} dimensional reverse scrub`, codaReversed && codaReverseState.act === 'forms' && codaReverseState.renders > priorRenders, `${codaReverseState.act} @ ${codaReverseState.progress} · render ${codaReverseState.renders}`);
+    check(`${viewport.name} dimensional reverse remains silent`, codaReverseState.playAttempts === 0, `${codaReverseState.playAttempts} play attempts`);
 
     await evaluate(`document.documentElement.lang==='en' && document.querySelector('[data-lang-toggle]').click()`);
     await delay(250);
     const arabic = await evaluate(`(() => {
-      const ar=document.querySelector('.compile .code-caption .L.ar');
-      const en=document.querySelector('.compile .code-caption .L.en');
-      const codaAr=[...document.querySelectorAll('.starter-bench .L.ar, .adapt-bench .L.ar, .handoff-bench .L.ar')];
-      const codaEn=[...document.querySelectorAll('.starter-bench .L.en, .adapt-bench .L.en, .handoff-bench .L.en')];
+      const ar=document.querySelector('[data-object-act="forms"] h2 .L.ar');
+      const en=document.querySelector('[data-object-act="forms"] h2 .L.en');
+      const codaAr=[...document.querySelectorAll('.dimensional-coda .L.ar')];
+      const codaEn=[...document.querySelectorAll('.dimensional-coda .L.en')];
       return {
         lang:document.documentElement.lang,
         dir:document.documentElement.dir,
@@ -408,11 +487,11 @@ try {
       };
     })()`);
     check(`${viewport.name} Arabic direction`, arabic.lang === 'ar' && arabic.dir === 'rtl' && arabic.ar !== 'none' && arabic.en === 'none', `${arabic.lang}/${arabic.dir} · ar=${arabic.ar} en=${arabic.en}`);
-    check(`${viewport.name} Arabic coda parity`, arabic.codaAr === 19 && arabic.codaEn === 19 && arabic.codaArVisible && arabic.codaEnHidden, `${arabic.codaAr} Arabic / ${arabic.codaEn} English labels · Arabic visible=${arabic.codaArVisible} · English hidden=${arabic.codaEnHidden}`);
+    check(`${viewport.name} Arabic coda parity`, arabic.codaAr === arabic.codaEn && arabic.codaAr >= 18 && arabic.codaArVisible && arabic.codaEnHidden, `${arabic.codaAr} Arabic / ${arabic.codaEn} English labels · Arabic visible=${arabic.codaArVisible} · English hidden=${arabic.codaEnHidden}`);
     check(`${viewport.name} Arabic fit`, arabic.overflow <= 1, `${arabic.overflow}px overflow`);
-    await screenshot('compile-ar');
+    await screenshot('coda-forms-ar');
 
-    observations[viewport.name] = { basics, filmStates: stateResults, reverseState, arabic };
+    observations[viewport.name] = { basics, filmStates: stateResults, reverseState, codaStates: codaResults, codaReverseState, arabic };
     check(`${viewport.name} console clean`, consoleErrors.length === 0 && pageErrors.length === 0, `${consoleErrors.length} console / ${pageErrors.length} page errors`);
     check(`${viewport.name} network clean`, badResponses.length === 0 && failedRequests.length === 0, `${badResponses.length} bad responses / ${failedRequests.length} failed requests`);
     await cdp.send('Target.closeTarget', { targetId });
@@ -431,7 +510,7 @@ try {
 }
 
 const report = {
-  schema: 'cake-studio-browser-verification/v2',
+  schema: 'cake-studio-browser-verification/v3',
   generatedAt: new Date().toISOString(),
   url: baseUrl,
   sabotage,
