@@ -1,0 +1,125 @@
+{
+  "schema": "cake-studio-bookends/v1",
+  "version": "1.7.0",
+  "ready": true,
+  "width": 1280,
+  "height": 720,
+  "fps": 30,
+  "duration": 5,
+  "delivery": {
+    "codec": "H.264",
+    "pixelFormat": "yuv420p",
+    "silent": true,
+    "keyframeInterval": 15,
+    "faststart": true,
+    "providerMarkTreatment": "WAN 2.7 lower-right mark removed before web encoding",
+    "endpointConditioning": {
+      "openingConvergenceFrames": 9,
+      "closingConvergenceStartFrame": 126,
+      "closingConvergenceEndFrame": 135,
+      "exactFinalHoldFrames": 15
+    }
+  },
+  "tracks": {
+    "intro": {
+      "poster": "cake-studio/v17/stills/CST17-I00-edge-in-darkness.webp",
+      "clips": [
+        {
+          "id": "I01",
+          "src": "cake-studio/v17/clips/CST17-I01.mp4",
+          "first": "cake-studio/v17/stills/CST17-I00-edge-in-darkness.webp",
+          "last": "cake-studio/v17/stills/CST17-I01-edge-reveals-sheet.webp"
+        },
+        {
+          "id": "I02",
+          "src": "cake-studio/v17/clips/CST17-I02.mp4",
+          "first": "cake-studio/v17/stills/CST17-I01-edge-reveals-sheet.webp",
+          "last": "cake-studio/v17/stills/CST17-I02-sheet-unfurls.webp"
+        },
+        {
+          "id": "I03",
+          "src": "cake-studio/v17/clips/CST17-I03.mp4",
+          "first": "cake-studio/v17/stills/CST17-I02-sheet-unfurls.webp",
+          "last": "cake-studio/v17/stills/CST17-I03-enter-paper-canyon.webp"
+        },
+        {
+          "id": "I04",
+          "src": "cake-studio/v17/clips/CST17-I04.mp4",
+          "first": "cake-studio/v17/stills/CST17-I03-enter-paper-canyon.webp",
+          "last": "cake-studio/v17/stills/CST17-I04-paper-fiber-cathedral.webp"
+        },
+        {
+          "id": "I05",
+          "src": "cake-studio/v17/clips/CST17-I05.mp4",
+          "first": "cake-studio/v17/stills/CST17-I04-paper-fiber-cathedral.webp",
+          "last": "cake-studio/v17/stills/CST17-I05-fibers-weave-helix.webp"
+        },
+        {
+          "id": "I06",
+          "src": "cake-studio/v17/clips/CST17-I06.mp4",
+          "first": "cake-studio/v17/stills/CST17-I05-fibers-weave-helix.webp",
+          "last": "cake-studio/v17/stills/CST17-I06-helix-becomes-door.webp"
+        },
+        {
+          "id": "I07",
+          "src": "cake-studio/v17/clips/CST17-I07.mp4",
+          "first": "cake-studio/v17/stills/CST17-I06-helix-becomes-door.webp",
+          "last": "cake-studio/v17/stills/CST17-I07-kitchen-doorway.webp"
+        },
+        {
+          "id": "I08",
+          "src": "cake-studio/v17/clips/CST17-I08.mp4",
+          "first": "cake-studio/v17/stills/CST17-I07-kitchen-doorway.webp",
+          "last": "cake-studio/v17/stills/CST17-I08-sheet-flies-to-baker.webp"
+        },
+        {
+          "id": "I09",
+          "src": "cake-studio/v17/clips/CST17-I09.mp4",
+          "first": "cake-studio/v17/stills/CST17-I08-sheet-flies-to-baker.webp",
+          "last": "cake-studio/v17/stills/CST17-I09-baker-catches-sheet.webp"
+        },
+        {
+          "id": "I10",
+          "src": "cake-studio/v17/clips/CST17-I10.mp4",
+          "first": "cake-studio/v17/stills/CST17-I09-baker-catches-sheet.webp",
+          "last": "cake-studio/v17/stills/CST17-I10-exact-cst001-frame000.webp"
+        }
+      ]
+    },
+    "outro": {
+      "poster": "cake-studio/v17/stills/CST17-O00-exact-cst050-frame149.webp",
+      "clips": [
+        {
+          "id": "O01",
+          "src": "cake-studio/v17/clips/CST17-O01.mp4",
+          "first": "cake-studio/v17/stills/CST17-O00-exact-cst050-frame149.webp",
+          "last": "cake-studio/v17/stills/CST17-O01-viewport-peels-to-sheet.webp"
+        },
+        {
+          "id": "O02",
+          "src": "cake-studio/v17/clips/CST17-O02.mp4",
+          "first": "cake-studio/v17/stills/CST17-O01-viewport-peels-to-sheet.webp",
+          "last": "cake-studio/v17/stills/CST17-O02-sheet-reveals-cake-core.webp"
+        },
+        {
+          "id": "O03",
+          "src": "cake-studio/v17/clips/CST17-O03.mp4",
+          "first": "cake-studio/v17/stills/CST17-O02-sheet-reveals-cake-core.webp",
+          "last": "cake-studio/v17/stills/CST17-O03-sheet-wraps-cake.webp"
+        },
+        {
+          "id": "O04",
+          "src": "cake-studio/v17/clips/CST17-O04.mp4",
+          "first": "cake-studio/v17/stills/CST17-O03-sheet-wraps-cake.webp",
+          "last": "cake-studio/v17/stills/CST17-O04-arch-nearly-locks.webp"
+        },
+        {
+          "id": "O05",
+          "src": "cake-studio/v17/clips/CST17-O05.mp4",
+          "first": "cake-studio/v17/stills/CST17-O04-arch-nearly-locks.webp",
+          "last": "cake-studio/v17/stills/CST17-O05-finished-mobius-cake.webp"
+        }
+      ]
+    }
+  }
+}

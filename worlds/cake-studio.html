@@ -8,9 +8,9 @@
 <meta name="description" content="A directed 50-shot Cake Studio film about making a cake twice: first as a flexible production decision in software, then as a physical object in the kitchen.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%2307110f"/><path d="M8 20h16v4H8zm2-6h12v5H10zm3-5h6v4h-6z" fill="%23f0dfc7"/><circle cx="16" cy="7" r="2" fill="%23d9a38f"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=6">
-<link rel="stylesheet" href="cake-studio.css?v=8">
+<link rel="stylesheet" href="cake-studio.css?v=10">
 </head>
-<body data-version="1.6.0">
+<body data-version="1.7.0">
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="grade" aria-hidden="true"></div>
@@ -21,19 +21,28 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="Cake Studio World release">v1.6 · WORLD 09</span>
+    <span class="ver" title="Cake Studio World release">v1.7 · WORLD 09</span>
     <button type="button" data-lang-toggle aria-label="Switch language" aria-pressed="false">EN / ع</button>
   </div>
 </nav>
 
 <main>
-  <section class="scene rplate bookend bookend-intro" id="top" data-scene="pin" data-slate="Cinematic prologue" data-bookend="intro" data-plate="cake-studio/bookends/cake-studio-intro.mp4" data-plate-poster="assets/cake-studio/keyframes/CST-KF00-style-anchor.png" data-plate-motion="always" aria-labelledby="bookend-intro-title">
+  <section class="scene bookend bookend-intro" id="top" data-scene="pin" data-slate="Cinematic prologue" data-bookend="intro" data-cake-bookend="intro" data-bookend-track="intro" data-bookend-manifest="cake-studio/v17/manifest.json?v=1.7.0-final" aria-labelledby="bookend-intro-title">
     <div class="stage">
-      <img class="bookend-poster" src="assets/cake-studio/keyframes/CST-KF00-style-anchor.png" alt="" aria-hidden="true">
+      <div class="bookend-sequence" data-bookend-sequence aria-hidden="true">
+        <div class="bookend-aperture">
+          <img class="bookend-poster" data-bookend-poster src="cake-studio/v17/stills/CST17-I00-edge-in-darkness.webp" alt="">
+          <canvas class="bookend-canvas" data-bookend-canvas width="1280" height="720"></canvas>
+        </div>
+        <div class="bookend-meter">
+          <i><b data-bookend-meter></b></i>
+          <output data-bookend-count>01 / 10</output>
+        </div>
+      </div>
       <header class="bookend-copy">
         <p class="bookend-kicker"><span class="L en">Cake Studio</span><span class="L ar">استوديو الكعك</span></p>
         <h1 id="bookend-intro-title"><span class="L en">The Cake Is<br>Made Twice</span><span class="L ar">تُصنع الكعكة<br>مرتين</span></h1>
-        <p class="bookend-direction"><span class="L en">Scroll to begin</span><span class="L ar">مرّر لتبدأ</span></p>
+        <p class="bookend-direction"><span class="L en">Follow the sheet</span><span class="L ar">اتبع الورقة</span></p>
       </header>
     </div>
   </section>
@@ -131,9 +140,18 @@
     </div>
   </section>
 
-  <section class="scene rplate bookend bookend-outro" data-scene="pin" data-slate="Cinematic epilogue" data-bookend="outro" data-plate="cake-studio/bookends/cake-studio-outro.mp4" data-plate-poster="cake-studio/bookends/cake-studio-outro-endpoint.png" data-plate-motion="always" aria-labelledby="bookend-outro-title">
+  <section class="scene bookend bookend-outro" data-scene="pin" data-slate="Cinematic epilogue" data-bookend="outro" data-cake-bookend="outro" data-bookend-track="outro" data-bookend-manifest="cake-studio/v17/manifest.json?v=1.7.0-final" aria-labelledby="bookend-outro-title">
     <div class="stage">
-      <img class="bookend-poster" src="cake-studio/bookends/cake-studio-outro-endpoint.png" alt="" aria-hidden="true">
+      <div class="bookend-sequence" data-bookend-sequence aria-hidden="true">
+        <div class="bookend-aperture">
+          <img class="bookend-poster" data-bookend-poster src="cake-studio/v17/stills/CST17-O00-exact-cst050-frame149.webp" alt="">
+          <canvas class="bookend-canvas" data-bookend-canvas width="1280" height="720"></canvas>
+        </div>
+        <div class="bookend-meter">
+          <i><b data-bookend-meter></b></i>
+          <output data-bookend-count>01 / 05</output>
+        </div>
+      </div>
       <footer class="bookend-copy bookend-copy-outro">
         <p class="bookend-kicker"><span class="L en">Cake Studio</span><span class="L ar">استوديو الكعك</span></p>
         <h2 id="bookend-outro-title"><span class="L en">Made twice.<br>Ready for the kitchen.</span><span class="L ar">تُصنع مرتين.<br>وتصل إلى المطبخ جاهزة.</span></h2>
@@ -304,6 +322,6 @@
 </footer>
 
 <script src="cinema.js?v=7"></script>
-<script src="cake-studio.js?v=8"></script>
+<script src="cake-studio.js?v=10"></script>
 </body>
 </html>
