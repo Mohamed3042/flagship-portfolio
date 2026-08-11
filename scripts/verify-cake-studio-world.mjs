@@ -80,10 +80,10 @@ if (sabotage) {
 const manifest = JSON.parse(manifestRaw);
 const ownerPack = JSON.parse(clipsRaw);
 
-check('visible release badge', page.includes('v1.4 · WORLD 09') && page.includes('data-version="1.4.0"'), 'v1.4 / World 09');
+check('visible release badge', page.includes('v1.5 · WORLD 09') && page.includes('data-version="1.5.0"'), 'v1.5 / World 09');
 check('shared cinema engine', page.includes('cinema.css?v=6') && page.includes('cinema.js?v=6'), 'cinema v6 linked');
-check('page-local assets', page.includes('cake-studio.css?v=6') && page.includes('cake-studio.js?v=6'), 'directed CSS and JS linked');
-check('dimensional coda module', page.includes('src="cake-studio-coda-loader.js?v=6"') && codaLoader.includes("import('./cake-studio-coda.js?v=6')") && codaScript.includes("import * as THREE from './cake-studio/three.module.js';"), 'motion-aware local Three.js module linked');
+check('page-local assets', page.includes('cake-studio.css?v=7') && page.includes('cake-studio.js?v=7'), 'directed CSS and JS linked');
+check('dimensional coda module', page.includes('src="cake-studio-coda-loader.js?v=7"') && codaLoader.trim() === "import('./cake-studio-coda.js?v=7');" && codaScript.includes("import * as THREE from './cake-studio/three.module.js';"), 'full-motion local Three.js module linked');
 check('one film scene', (page.match(/id="cake-reel"/g) ?? []).length === 1, 'single shared playhead');
 check('two video buffers', (page.match(/<video\b/g) ?? []).length === 2, 'exactly two video elements');
 const videoTags = [...page.matchAll(/<video\b[^>]*>/g)].map((match) => match[0]);
@@ -205,18 +205,19 @@ check(
 );
 check(
   'semantic production portal',
-  page.includes('data-proof-portal')
-    && page.includes('READY FORM 06')
-    && page.includes('MOCKUP · SHEET · 1:1 PLAQUE')
+  page.includes('data-cake-studio-live-ui')
+    && page.includes('Order fulfilment workflow')
+    && page.includes('WhatsApp proof')
+    && page.includes('Verify &amp; approve')
     && codaScript.includes('renderProofPortal'),
-  'approved source becomes three production objects at the doorway',
+  'source-backed Order Desk review and immutable proof-code loop',
 );
 check(
-  'true reduced-motion path',
-  page.includes('data-coda-reduced-poster')
-    && codaLoader.includes("modelSource: 'reduced-static'")
-    && script.includes("scene.dataset.mediaState = 'poster'"),
-  'poster-only film and coda path skips media seeking and WebGL',
+  'full motion forced',
+  !/prefers-reduced-motion|reduced-static|data-coda-reduced-poster/.test([page, css, script, codaScript, codaLoader].join('\n'))
+    && codaScript.includes('fullMotion: true')
+    && codaLoader.trim() === "import('./cake-studio-coda.js?v=7');",
+  'OS motion preference cannot replace the directed film or 3D runtime',
 );
 check(
   'weighted coda camera',

@@ -245,11 +245,11 @@ try {
       lang: document.documentElement.lang,
       dir: document.documentElement.dir
     }))()`);
-    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.4.0', `${basics.title} · ${basics.version}`);
+    check(`${viewport.name} page identity`, basics.title.includes('The Cake Is Made Twice') && basics.version === '1.5.0', `${basics.title} · ${basics.version}`);
     check(`${viewport.name} 50-shot DOM`, basics.figures === 50 && basics.videos === 2, `${basics.figures} figures / ${basics.videos} buffers`);
     check(
       `${viewport.name} directed score`,
-      basics.directorVersion === '1.4.0'
+      basics.directorVersion === '1.5.0'
         && basics.directorWeights === 50
         && basics.fastWeight < basics.choiceWeight
         && [basics.choiceWeight, basics.errorWeight, basics.rejectWeight, basics.loopWeight].every((weight) => weight >= 1.3),
@@ -257,7 +257,7 @@ try {
     );
     check(
       `${viewport.name} dimensional engine`,
-      basics.codaVersion === '1.4.0' && basics.codaReady && basics.webgl && basics.engine.startsWith('three-r') && basics.canvases === 1,
+      basics.codaVersion === '1.5.0' && basics.codaReady && basics.webgl && basics.engine.startsWith('three-r') && basics.canvases === 1,
       `v${basics.codaVersion} · ${basics.engine} · ready=${basics.codaReady} · canvas=${basics.canvases}`,
     );
     check(`${viewport.name} horizontal fit`, basics.overflow <= 1, `${basics.overflow}px overflow`);
@@ -415,6 +415,9 @@ try {
       setStatus:window.__cakeStudioCoda?.setStatus,
       setSource:window.__cakeStudioCoda?.setSource,
       cameraSource:window.__cakeStudioCoda?.cameraSource,
+      sheetSource:window.__cakeStudioCoda?.sheetSource,
+      sheetBones:window.__cakeStudioCoda?.sheetBones,
+      sheetAnimation:window.__cakeStudioCoda?.sheetAnimation,
       waferSource:window.__cakeStudioCoda?.waferSource,
       waferModels:window.__cakeStudioCoda?.waferModels,
       wordmarkModels:window.__cakeStudioCoda?.wordmarkModels,
@@ -423,7 +426,7 @@ try {
       dataset:document.querySelector('.dimensional-coda')?.dataset.models
     })`);
     check(`${viewport.name} staged forms residency`, realModelsReady && modelProof.source === 'staged-glb' && modelProof.resident === 10 && modelProof.groups.length === 1 && modelProof.groups[0] === 'forms' && modelProof.expected === 24 && modelProof.dataset === 'ready', JSON.stringify(modelProof));
-    check(`${viewport.name} authored proof room`, modelProof.setStatus === 'ready' && modelProof.setSource === 'cake-studio-proof-room.glb' && modelProof.cameraSource === 'authored-clip', JSON.stringify(modelProof));
+    check(`${viewport.name} authored proof room`, modelProof.setStatus === 'ready' && modelProof.setSource === 'cake-studio-proof-room.glb' && modelProof.cameraSource === 'authored-clip' && modelProof.sheetSource === 'blender-skinned-glb' && modelProof.sheetBones === 11 && modelProof.sheetAnimation === 'HeroSheet_Journey', JSON.stringify(modelProof));
     const codaResults = [];
     let priorRenders = -1;
     for (const state of codaStates) {
@@ -464,6 +467,12 @@ try {
           residentGroups:runtime?.residentModelGroups ?? [],
           setSource:runtime?.setSource ?? '',
           cameraSource:runtime?.cameraSource ?? '',
+          cameraPosition:runtime?.cameraPosition ?? {x:0,y:0,z:0},
+          sheetSource:runtime?.sheetSource ?? '',
+          sheetBones:runtime?.sheetBones ?? 0,
+          sheetAnimation:runtime?.sheetAnimation ?? '',
+          sheetPosition:runtime?.sheetPosition ?? {x:0,y:0,z:0},
+          sheetBoneQuaternion:runtime?.sheetBoneQuaternion ?? {x:0,y:0,z:0,w:1},
           waferSource:runtime?.waferSource ?? '',
           waferModels:runtime?.waferModels ?? 0,
           wordmarkModels:runtime?.wordmarkModels ?? 0,
@@ -501,13 +510,13 @@ try {
           ? result.wordmarkModels === 1 && result.waferSource === 'glb' && result.waferModels === 17
           : result.wordmarkModels === 1 && result.handoffArtifactSource === 'glb' && result.handoffArtifactModels === 3;
       check(`${viewport.name} ${state.name} state`, rendered && result.ready && result.webgl && result.act === state.act && Math.abs(result.progress - state.progress) < .025, `${result.act} @ ${result.progress} · ${result.engine}`);
-      check(`${viewport.name} ${state.name} object contract`, result.forms === 9 && result.parts === 4 && result.outputs === 3 && result.modelStatus === 'ready' && result.modelSource === 'staged-glb' && result.modelsResident === expectedResident && result.residentGroups.length === 1 && result.residentGroups[0] === state.act && roleReady && result.setSource === 'cake-studio-proof-room.glb' && result.cameraSource === 'authored-clip', `${result.forms} forms · ${result.parts} parts · ${result.outputs} outputs · ${result.modelsResident} resident / ${result.modelsLoaded} loaded`);
+      check(`${viewport.name} ${state.name} object contract`, result.forms === 9 && result.parts === 4 && result.outputs === 3 && result.modelStatus === 'ready' && result.modelSource === 'staged-glb' && result.modelsResident === expectedResident && result.residentGroups.length === 1 && result.residentGroups[0] === state.act && roleReady && result.setSource === 'cake-studio-proof-room.glb' && result.cameraSource === 'authored-clip' && result.sheetSource === 'blender-skinned-glb' && result.sheetBones === 11 && result.sheetAnimation === 'HeroSheet_Journey', `${result.forms} forms · ${result.parts} parts · ${result.outputs} outputs · ${result.modelsResident} resident / ${result.modelsLoaded} loaded · sheet ${result.sheetBones} bones`);
       if (state.copyRequired) {
         check(`${viewport.name} ${state.name} physical wordmark`, result.wordmarkAct === state.act, `${result.wordmarkAct} / expected ${state.act}`);
       }
       check(`${viewport.name} ${state.name} real render`, result.canvasDisplay !== 'none' && result.drawCalls >= 4 && result.triangles >= 500 && result.probe.nonDark > (state.copyRequired ? 320 : 60) && result.probe.luminanceRange > 8 && (!state.copyRequired || (result.subjectBounds.visible && result.subjectBounds.coverage > .01)) && result.glVersion.includes('WebGL'), `${result.glVersion} · ${result.drawCalls} calls · ${result.triangles} triangles · lit ${result.probe.nonDark}/${result.probe.samples} range ${result.probe.luminanceRange} · subject ${((result.subjectBounds.coverage || 0) * 100).toFixed(1)}%`);
       check(`${viewport.name} ${state.name} composition`, result.canvasContained && (!state.copyRequired || (result.actPresence > .3 && result.actContained)), `canvas=${result.canvasContained} · copy presence=${result.actPresence.toFixed(3)} · copy contained=${result.actContained}`);
-      check(`${viewport.name} ${state.name} bounded rendering`, result.pixelRatio > 0 && result.pixelRatio <= 1.5 && result.renders > priorRenders && result.drawCalls <= 150 && result.triangles <= 2_700_000 && result.gpuTextures <= 26, `${result.canvasWidth}×${result.canvasHeight} @ ${result.pixelRatio}x · render ${result.renders} · ${result.gpuTextures} textures / ${result.gpuGeometries} geometries`);
+      check(`${viewport.name} ${state.name} bounded rendering`, result.pixelRatio > 0 && result.pixelRatio <= 1.5 && result.renders > priorRenders && result.drawCalls <= 180 && result.triangles <= 2_700_000 && result.gpuTextures <= 40, `${result.canvasWidth}×${result.canvasHeight} @ ${result.pixelRatio}x · render ${result.renders} · ${result.gpuTextures} textures / ${result.gpuGeometries} geometries`);
       check(`${viewport.name} ${state.name} never autoplayed`, result.playAttempts === 0, `${result.playAttempts} play attempts`);
       if (state.name === 'coda-bridge') {
         check(`${viewport.name} endpoint match bridge`, result.bridgeOpacity > .72 && result.bridgeSource.endsWith('CST-KF01-opening-sheet.png') && result.bridgeWidth >= viewport.width * .88, `opacity ${result.bridgeOpacity} · ${result.bridgeSource} · ${result.bridgeWidth}px`);
@@ -519,10 +528,100 @@ try {
       await screenshot(state.name);
     }
 
+    const sheetActs = Object.fromEntries(codaResults.filter((result) => ['forms', 'assembly', 'handoff'].includes(result.act)).map((result) => [result.act, result]));
+    check(
+      `${viewport.name} rigged sheet traverses all rooms`,
+      sheetActs.forms?.sheetPosition.x < -5 && Math.abs(sheetActs.assembly?.sheetPosition.x || 99) < 2.5 && sheetActs.handoff?.sheetPosition.x > 4,
+      `x=${sheetActs.forms?.sheetPosition.x}/${sheetActs.assembly?.sheetPosition.x}/${sheetActs.handoff?.sheetPosition.x}`,
+    );
+    check(
+      `${viewport.name} sheet bones deform`,
+      JSON.stringify(sheetActs.forms?.sheetBoneQuaternion) !== JSON.stringify(sheetActs.assembly?.sheetBoneQuaternion)
+        && JSON.stringify(sheetActs.assembly?.sheetBoneQuaternion) !== JSON.stringify(sheetActs.handoff?.sheetBoneQuaternion),
+      JSON.stringify([sheetActs.forms?.sheetBoneQuaternion, sheetActs.assembly?.sheetBoneQuaternion, sheetActs.handoff?.sheetBoneQuaternion]),
+    );
+
+    await scrollScene('.dimensional-coda', .985);
+    const portalReady = await waitFor(`window.__cakeStudioCoda?.portalCrossed===true && window.__cakeStudioCoda?.uiReveal>.98`, 20_000);
+    await delay(180);
+    const portalProof = await evaluate(`(() => {
+      const runtime=window.__cakeStudioCoda;
+      const root=document.querySelector('[data-cake-studio-live-ui]');
+      const input=root?.querySelector('[data-proof-input]');
+      const verify=root?.querySelector('[data-proof-verify]');
+      if(input && verify){input.value='FXD-GDE';input.dispatchEvent(new Event('input',{bubbles:true}));verify.click();}
+      const actionButtons=[...root.querySelectorAll('.proof-workflow-actions button')];
+      const intersects=(a,b)=>a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+      const headerPieces=[...root.querySelectorAll('.proof-portal-kicker,.proof-portal-head h2,.proof-portal-head strong,.proof-portal-progress-value')];
+      const chromePieces=[...document.querySelectorAll('.chrome a,.chrome button,.chrome .ver')];
+      const headerOverlaps=headerPieces.flatMap((piece,index)=>{
+        const rect=piece.getBoundingClientRect();
+        const internal=headerPieces.slice(index+1).filter(other=>intersects(rect,other.getBoundingClientRect()));
+        const chrome=chromePieces.filter(other=>intersects(rect,other.getBoundingClientRect()));
+        return [...internal,...chrome].map(other=>(piece.className || piece.tagName)+':'+(other.className || other.tagName));
+      });
+      const verified={
+        status:runtime?.uiStatus,
+        stage:root?.dataset.workflowStage,
+        revision:root?.dataset.revisionStatus,
+        percent:root?.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow'),
+        actions:actionButtons.map(button=>button.disabled)
+      };
+      actionButtons[0]?.click();
+      return {
+        portalState:runtime?.portalState,
+        crossed:runtime?.portalCrossed,
+        camera:runtime?.cameraPosition,
+        reveal:runtime?.uiReveal,
+        ariaHidden:root?.getAttribute('aria-hidden'),
+        inert:root?.inert,
+        clip:getComputedStyle(root).clipPath,
+        form:Boolean(root?.querySelector('[data-ui-cake-form]')),
+        surface:Boolean(root?.querySelector('[data-ui-surface]')),
+        message:Boolean(root?.querySelector('[data-ui-message]')),
+        output:Boolean(root?.querySelector('[data-ui-output]')),
+        status:runtime?.uiStatus,
+        stage:root?.dataset.workflowStage,
+        revision:root?.dataset.revisionStatus,
+        percent:root?.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow'),
+        actions:actionButtons.map(button=>button.disabled),
+        verified,
+        artifactOpacity:Number.parseFloat(getComputedStyle(document.querySelector('.artifact-names')).opacity),
+        headerOverlaps
+      };
+    })()`);
+    check(`${viewport.name} physical portal crossing`, portalReady && portalProof.portalState === 'crossed' && portalProof.crossed && portalProof.camera.z < -4.2 && portalProof.reveal > .98, JSON.stringify(portalProof));
+    check(
+      `${viewport.name} semantic Order Desk reveal`,
+      portalProof.ariaHidden === 'false'
+        && portalProof.inert === false
+        && portalProof.form && portalProof.surface && portalProof.message && portalProof.output
+        && portalProof.verified.status === 'proof-verified'
+        && portalProof.verified.stage === 'customer-review'
+        && portalProof.verified.revision === 'in-review'
+        && portalProof.verified.percent === '31'
+        && portalProof.verified.actions.every((disabled) => !disabled)
+        && portalProof.status === 'approval-recorded'
+        && portalProof.stage === 'approved-locked'
+        && portalProof.revision === 'approved'
+        && portalProof.percent === '44'
+        && portalProof.actions.every((disabled) => disabled)
+        && portalProof.artifactOpacity < .05
+        && portalProof.headerOverlaps.length === 0,
+      JSON.stringify(portalProof),
+    );
+    await screenshot('coda-portal');
+
     const transitionPeaks = [];
     for (const transition of [
-      { progress: .34, groups: ['forms', 'assembly'], resident: 20, textureMax: 56 },
-      { progress: .72, groups: ['assembly', 'handoff'], resident: 15, textureMax: 42 },
+      // Twenty resident KTX2 models contribute 40 textures; the connected set,
+      // authored sheet and persistent procedural labels add 25 more after a
+      // full forward traversal. 68 leaves a three-texture guard while still
+      // rejecting the 73-texture all-24-model eager-residency regression.
+      { progress: .34, groups: ['forms', 'assembly'], resident: 20, textureMax: 68 },
+      // Fifteen resident models contribute 30 textures; the same 25 persistent
+      // textures yield a 55-texture authored maximum after a full traversal.
+      { progress: .72, groups: ['assembly', 'handoff'], resident: 15, textureMax: 58 },
     ]) {
       await scrollScene('.dimensional-coda', transition.progress);
       const resident = await waitFor(`window.__cakeStudioCoda?.residentModelGroups?.length===2 && ${JSON.stringify(transition.groups)}.every(group=>window.__cakeStudioCoda.residentModelGroups.includes(group))`, 30_000);
@@ -542,8 +641,8 @@ try {
 
     await scrollScene('.dimensional-coda', .22);
     const codaReversed = await waitFor(`window.__cakeStudioCoda?.act==='forms' && Math.abs(window.__cakeStudioCoda.progress-.22)<.025 && window.__cakeStudioCoda?.residentModelGroups?.length===1 && window.__cakeStudioCoda.residentModelGroups[0]==='forms'`, 30_000);
-    const codaReverseState = await evaluate(`({act:window.__cakeStudioCoda?.act,progress:window.__cakeStudioCoda?.progress,renders:window.__cakeStudioCoda?.renders,groups:window.__cakeStudioCoda?.residentModelGroups,resident:window.__cakeStudioCoda?.modelsResident,loaded:window.__cakeStudioCoda?.modelsLoaded,playAttempts:window.__cakePlayAttempts})`);
-    check(`${viewport.name} dimensional reverse scrub`, codaReversed && codaReverseState.act === 'forms' && codaReverseState.renders > priorRenders && codaReverseState.resident === 10 && codaReverseState.loaded === 24, `${codaReverseState.act} @ ${codaReverseState.progress} · ${codaReverseState.resident} resident / ${codaReverseState.loaded} loaded · render ${codaReverseState.renders}`);
+    const codaReverseState = await evaluate(`({act:window.__cakeStudioCoda?.act,progress:window.__cakeStudioCoda?.progress,renders:window.__cakeStudioCoda?.renders,groups:window.__cakeStudioCoda?.residentModelGroups,resident:window.__cakeStudioCoda?.modelsResident,loaded:window.__cakeStudioCoda?.modelsLoaded,sheetPosition:window.__cakeStudioCoda?.sheetPosition,sheetBoneQuaternion:window.__cakeStudioCoda?.sheetBoneQuaternion,playAttempts:window.__cakePlayAttempts})`);
+    check(`${viewport.name} dimensional reverse scrub`, codaReversed && codaReverseState.act === 'forms' && codaReverseState.renders > priorRenders && codaReverseState.resident === 10 && codaReverseState.loaded === 24 && codaReverseState.sheetPosition.x < -5, `${codaReverseState.act} @ ${codaReverseState.progress} · ${codaReverseState.resident} resident / ${codaReverseState.loaded} loaded · sheet x=${codaReverseState.sheetPosition.x} · render ${codaReverseState.renders}`);
     check(`${viewport.name} dimensional reverse remains silent`, codaReverseState.playAttempts === 0, `${codaReverseState.playAttempts} play attempts`);
 
     await evaluate(`document.documentElement.lang==='en' && document.querySelector('[data-lang-toggle]').click()`);

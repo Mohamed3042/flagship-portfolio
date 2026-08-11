@@ -8,9 +8,9 @@
 <meta name="description" content="A directed 50-shot Cake Studio film about making a cake twice: first as a flexible production decision in software, then as a physical object in the kitchen.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%2307110f"/><path d="M8 20h16v4H8zm2-6h12v5H10zm3-5h6v4h-6z" fill="%23f0dfc7"/><circle cx="16" cy="7" r="2" fill="%23d9a38f"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=6">
-<link rel="stylesheet" href="cake-studio.css?v=6">
+<link rel="stylesheet" href="cake-studio.css?v=7">
 </head>
-<body data-version="1.4.0">
+<body data-version="1.5.0">
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="grade" aria-hidden="true"></div>
@@ -21,7 +21,7 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="Cake Studio World release">v1.4 · WORLD 09</span>
+    <span class="ver" title="Cake Studio World release">v1.5 · WORLD 09</span>
     <button type="button" data-lang-toggle aria-label="Switch language" aria-pressed="false">EN / ع</button>
   </div>
 </nav>
@@ -161,21 +161,75 @@
       <div class="object-window" aria-hidden="true">
         <img class="film-bridge" src="assets/cake-studio/keyframes/CST-KF01-opening-sheet.png" alt="">
         <canvas data-cake-canvas></canvas>
-        <img class="coda-reduced-poster" data-coda-reduced-poster src="cake-studio/posters/coda-forms-desktop.jpg" alt="Static production proof from the Cake Studio story" hidden>
         <div class="optical-seam"></div>
         <div class="object-shadow"></div>
       </div>
 
-      <section class="proof-portal" data-proof-portal aria-label="Production proof handoff" aria-hidden="true">
+      <section class="proof-portal" data-proof-portal data-cake-studio-live-ui data-cake-studio-surface="order-fulfilment-workflow" data-workflow-stage="customer-review" data-revision-status="in-review" aria-labelledby="portal-workflow-title" aria-hidden="true" inert>
         <div class="proof-portal-shell">
-          <p class="proof-portal-kicker"><span class="L en">APPROVED SOURCE · PHYSICAL HANDOFF</span><span class="L ar">مصدر معتمد · تسليم مادي</span></p>
-          <h3><span class="L en">The decision survives the doorway.</span><span class="L ar">القرار يعبر الباب كاملًا.</span></h3>
-          <ol class="proof-portal-flow">
-            <li><b>01</b><span><span class="L en">READY FORM 06</span><span class="L ar">الشكل الجاهز ٠٦</span></span></li>
-            <li><b>02</b><span><span class="L en">4 CONTROLLED PARTS</span><span class="L ar">٤ أجزاء مضبوطة</span></span></li>
-            <li><b>03</b><span><span class="L en">MOCKUP · SHEET · 1:1 PLAQUE</span><span class="L ar">معاينة · ورقة · لوحة ١:١</span></span></li>
-          </ol>
-          <p class="proof-portal-status"><span></span><span class="L en">KITCHEN PACKET LOCKED</span><span class="L ar">حزمة المطبخ مقفلة</span></p>
+          <header class="proof-portal-head">
+            <div>
+              <p class="proof-portal-kicker"><span class="L en">V2 FULFILMENT · IMMUTABLE AUDIT</span><span class="L ar">تنفيذ V2 · تدقيق غير قابل للتبديل</span></p>
+              <h2 id="portal-workflow-title"><span class="L en">Order fulfilment workflow</span><span class="L ar">مسار تنفيذ الطلب</span></h2>
+              <strong data-workflow-stage-label><span class="L en">Customer review</span><span class="L ar">مراجعة العميل</span></strong>
+            </div>
+            <output class="proof-portal-progress-value" aria-label="Order fulfilment progress">31%</output>
+          </header>
+
+          <div class="proof-portal-progress" role="progressbar" aria-label="Order fulfilment progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="31" aria-valuetext="31% · Customer review"><i aria-hidden="true"></i></div>
+
+          <div class="proof-portal-grid">
+            <section class="proof-portal-order" aria-labelledby="portal-order-title">
+              <div class="proof-portal-section-head">
+                <p>CS-2048 · REVISION 3</p>
+                <h3 id="portal-order-title"><span class="L en">The production truth</span><span class="L ar">حقيقة الإنتاج</span></h3>
+              </div>
+
+              <article class="proof-cake-form" data-ui-cake-form="ready-form-06">
+                <div class="proof-cake-silhouette" aria-hidden="true"><span></span><i></i></div>
+                <div>
+                  <small><span class="L en">READY FORM 06</span><span class="L ar">الشكل الجاهز ٠٦</span></small>
+                  <b><span class="L en">Two-tier cocoa · graduation</span><span class="L ar">كاكاو بطبقتين · تخرّج</span></b>
+                  <p><span class="L en">Measured body · bilingual plaque · edible image</span><span class="L ar">جسم مقاس · لوحة ثنائية اللغة · صورة صالحة للأكل</span></p>
+                </div>
+              </article>
+
+              <dl class="proof-intake">
+                <div><dt><span class="L en">Channel</span><span class="L ar">القناة</span></dt><dd>WhatsApp</dd></div>
+                <div><dt><span class="L en">Occasion</span><span class="L ar">المناسبة</span></dt><dd><span class="L en">Graduation</span><span class="L ar">تخرّج</span></dd></div>
+                <div><dt><span class="L en">Image rights</span><span class="L ar">حقوق الصورة</span></dt><dd><span class="L en">Generated demo</span><span class="L ar">نموذج مولّد</span></dd></div>
+                <div><dt><span class="L en">Publishing</span><span class="L ar">النشر</span></dt><dd><span class="L en">No consent</span><span class="L ar">لا موافقة</span></dd></div>
+              </dl>
+
+              <div class="proof-revision" data-ui-surface="approved-cake-revision">
+                <div><b><span class="L en">Revision 3</span><span class="L ar">المراجعة ٣</span></b><span data-revision-status-label><span class="L en">IN REVIEW</span><span class="L ar">قيد المراجعة</span></span></div>
+                <code dir="ltr">sha256:demo-cake-studio-portal-v1</code>
+              </div>
+            </section>
+
+            <section class="proof-loop" aria-labelledby="portal-proof-title">
+              <div class="proof-portal-section-head">
+                <p><span class="L en">CUSTOMER RETURN CHANNEL</span><span class="L ar">قناة رد العميل</span></p>
+                <h3 id="portal-proof-title"><span class="L en">WhatsApp proof</span><span class="L ar">معاينة واتساب</span></h3>
+              </div>
+
+              <output class="proof-code" data-ui-output="proof-code" dir="ltr" aria-label="Proof code">FXD-GDE</output>
+              <button class="proof-button proof-button-secondary" type="button" data-proof-copy><span class="L en">Copy customer message</span><span class="L ar">انسخ رسالة العميل</span></button>
+              <output class="proof-message" data-ui-message aria-live="polite"><span class="L en">Message ready for the customer.</span><span class="L ar">الرسالة جاهزة للعميل.</span></output>
+
+              <label class="proof-entry" for="portal-proof-code">
+                <span><span class="L en">Code from customer</span><span class="L ar">الرمز من العميل</span></span>
+                <input id="portal-proof-code" data-proof-input type="text" inputmode="latin" autocomplete="off" maxlength="7" placeholder="ABC-DEF" aria-describedby="portal-proof-note">
+              </label>
+              <button class="proof-button" type="button" data-proof-verify><span class="L en">Verify &amp; approve</span><span class="L ar">تحقّق واعتمد</span></button>
+              <small id="portal-proof-note"><span class="L en">The code is bound to the current revision — any edit after sending invalidates it.</span><span class="L ar">الرمز مربوط بالنسخة الحالية — أي تعديل بعد الإرسال يُبطله.</span></small>
+
+              <div class="proof-workflow-actions" aria-label="Order Desk actions">
+                <button type="button" disabled><span class="L en">Record customer approval</span><span class="L ar">اعتماد العميل</span></button>
+                <button type="button" disabled><span class="L en">Request changes</span><span class="L ar">طلب تعديلات</span></button>
+              </div>
+            </section>
+          </div>
         </div>
       </section>
 
@@ -241,7 +295,7 @@
           <dt><span class="L en">Projection</span><span class="L ar">العرض</span></dt><dd><span class="L en">Two-video buffer · scroll-scrubbed · desktop and phone · no autoplay</span><span class="L ar">ذاكرة فيديو مزدوجة · تحكم بالتمرير · حاسوب وهاتف · بلا تشغيل تلقائي</span></dd>
           <dt><span class="L en">Web media</span><span class="L ar">وسائط الويب</span></dt><dd><span class="L en">H.264 · 1280×720 · 30 fps · ten seek points per shot</span><span class="L ar">H.264 · ١٢٨٠×٧٢٠ · ٣٠ إطارًا/ث · عشر نقاط بحث لكل لقطة</span></dd>
           <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
-          <dt><span class="L en">World release</span><span class="L ar">إصدار العالم</span></dt><dd>v1.4.0 · 2026-08-10</dd>
+          <dt><span class="L en">World release</span><span class="L ar">إصدار العالم</span></dt><dd>v1.5.0 · 2026-08-11</dd>
         </dl>
         <p class="fine"><span class="L en">An original motion study of Mohamed Mahmoud's real Cake Studio demo. Generated imagery illustrates the workflow; product facts remain live text and trace to the project files. No interface screenshot is presented as generated film.</span><span class="L ar">دراسة حركية أصلية لعرض «استوديو الكعك» الحقيقي لمحمد محمود. توضح الصور المولّدة سير العمل، وتبقى حقائق المنتج نصًا حيًا يعود إلى ملفات المشروع. ولا تُقدَّم أي لقطة واجهة على أنها فيلم مولّد.</span></p>
         <p><span class="L en"><a href="../en/work/cake-studio">Read the Cake Studio story →</a></span><span class="L ar"><a href="../ar/work/cake-studio">اقرأ قصة استوديو الكعك ←</a></span></p>
@@ -258,8 +312,8 @@
 </footer>
 
 <script src="cinema.js?v=6"></script>
-<script src="cake-studio.js?v=6"></script>
+<script src="cake-studio.js?v=7"></script>
 <script type="importmap">{"imports":{"three":"./cake-studio/three.module.js"}}</script>
-<script src="cake-studio-coda-loader.js?v=6"></script>
+<script src="cake-studio-coda-loader.js?v=7"></script>
 </body>
 </html>
