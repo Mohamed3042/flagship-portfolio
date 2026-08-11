@@ -1,0 +1,6 @@
+DSN2-093 | The Many Roads
+FIRST FRAME: keyframes/KF92.png
+LAST FRAME: keyframes/KF93.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot from immutable first to immutable last frame. The Maker stops while the one thread in the hand separates through visible mechanical unbraiding into exactly seven continuous raised paper routes; each folds outward from the common root one at a time and never crosses another. Crane gently upward to reveal all endpoints. Nothing grows from empty space: every route must feed from the original thread. End in the exact overhead last-frame geometry, settle by 4.5 seconds, hold. No cut, liquid morph, extra route, face reveal or new object. Dark handcrafted paper/felt/parchment/wire/brass; no text, logo, subtitles, music or watermark.

@@ -1,0 +1,6 @@
+DSN2-082 | The Nested Workshop
+FIRST FRAME: keyframes/KF81.png
+LAST FRAME: keyframes/KF82.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot between the immutable endpoint frames. Begin with the same gentle forward drift in the outer workshop, then crane smoothly upward and backward just enough to reveal that the familiar workshop is a complete miniature mounted on the page of a much larger open volume. Nothing materializes: scale is revealed only by camera movement and parallax. Keep the incoming gold beam continuous and physically attached to the miniature moon iris. Finish in the exact wide last-frame geometry, settle by 4.5 seconds, and hold. No cuts, speed ramps, dissolves, liquid morphs, exposure jumps or new objects. Dark handcrafted cut-paper, felt, parchment, wire, wax and tarnished brass; one candle-gold key, blue-grey fill; no text, face, logo, subtitles, music or watermark.

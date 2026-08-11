@@ -1,0 +1,6 @@
+DSN2-070 | Sunrise Through Paper
+FIRST FRAME: keyframes/KF69.png
+LAST FRAME: keyframes/KF70.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF69 and @Image2 KF70 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The lift completes its final short rise as the camera makes one controlled tilt from the connected yoke to the translucent page overhead; an already-present candle-gold backlight is gradually uncovered by a sliding paper shutter, revealing stable city silhouettes through the parchment. No sudden exposure or color change. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

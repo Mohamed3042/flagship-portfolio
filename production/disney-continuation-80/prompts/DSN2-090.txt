@@ -1,0 +1,6 @@
+DSN2-090 | The Far Door
+FIRST FRAME: keyframes/KF89.png
+LAST FRAME: keyframes/KF90.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoints. Follow the existing gold route forward through the newly awakened book towers; panels and bridges remain locked while foreground layers pass with strong but graceful parallax. At the far end, the circular mechanism turns and the immense paper door opens only enough to reveal the exact narrow dawn blade in the last frame. Do not cross it yet. End with the same slow forward drift and exact last-frame geometry by 4.5 seconds, then hold. No cuts, teleport, dissolve, morph, extra light or new objects. Dark handcrafted paper, felt, parchment, wire, wax and brass; no text, face, logo, subtitles, music or watermark.

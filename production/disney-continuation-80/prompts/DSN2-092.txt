@@ -1,0 +1,6 @@
+DSN2-092 | The First Step
+FIRST FRAME: keyframes/KF91.png
+LAST FRAME: keyframes/KF92.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoint images. Hold the landscape and road geometry. The same anonymous Maker silhouette enters from the threshold, back to camera, carrying the one continuous gold thread without severing it, and takes one slow deliberate step onto the road: anticipation, foot placement, weight transfer, hold. Track low and slightly forward so the long paper shadow advances naturally. End in the exact last-frame pose by 4.5 seconds and hold. No face reveal, extra person, cut, dissolve, morph or new object. Handcrafted paper/felt/parchment/wire/brass stop-motion, restrained dawn gold and blue-grey; no text, logo, subtitles, music or watermark. No cut.

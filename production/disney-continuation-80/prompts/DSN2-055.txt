@@ -1,0 +1,6 @@
+DSN2-055 | Kingdoms That Almost Worked
+FIRST FRAME: keyframes/KF54.png
+LAST FRAME: keyframes/KF55.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF54 to the immutable supplied last frame KF55. The existing rolled parchment attempts physically loosen from their cracked seals and unroll inside their own drawers; scored sections lift on wire tabs into the imperfect miniature kingdoms shown in the supplied last frame, with crooked gates and incomplete bridges retaining their exact endpoint shapes. Camera: one controlled slow crane backward and upward only to reveal the drawer interiors. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

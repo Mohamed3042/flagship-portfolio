@@ -1,0 +1,6 @@
+DSN2-028 | The First Pulse
+FIRST FRAME: keyframes/KF27.png
+LAST FRAME: keyframes/KF28.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF27 and KF28 as immutable exact endpoint frames. The firefly unfolds its wings once and presses down by a short hinge motion on the brass counterweight. The pendulum rotates through one first controlled arc; its axle rotates the nearest gear, and a narrow gold paper strip physically unwinds tooth by tooth into the closest lamp circuit. Tiny lamp shutters hinge open in sequence only where KF28 shows light. Use one restrained sideways camera arc. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF28 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

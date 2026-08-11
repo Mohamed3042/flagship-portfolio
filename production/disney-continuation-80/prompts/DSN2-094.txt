@@ -1,0 +1,6 @@
+DSN2-094 | The Trial Rings
+FIRST FRAME: keyframes/KF93.png
+LAST FRAME: keyframes/KF94.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoints. Three brass trial rings rise sequentially from flat page slots and rotate into exact alignment. Each of the seven routes is tested by a controlled pulse: six contact a ring edge and fold back into flat dark strips without breaking from the common root; the one central-right route remains raised and passes through every ring. Orbit slowly about twelve degrees to reveal the alignment. End exactly on the last frame, settle by 4.5 seconds, hold. No cut, dissolve, liquid morph, extra ring, face reveal or new object. Same handcrafted storybook materials; no text, logo, subtitles, music or watermark.

@@ -1,0 +1,6 @@
+DSN2-035 | The Silent Workshop
+FIRST FRAME: keyframes/KF34.png
+LAST FRAME: keyframes/KF35.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF34 and KF35 as immutable exact endpoint frames. The dark gate's existing layered leaves rotate inward on visible paper hinges, uncovering the sealed workshop already present behind them. The camera performs one slow centered push through the opened gate but stops outside the workshop. The firefly advances by a smooth wire-guided slide and settles before the round wax seal. The route, shutters, and workshop stay unlit and closed. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF35 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

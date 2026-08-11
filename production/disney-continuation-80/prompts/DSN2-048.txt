@@ -1,0 +1,6 @@
+DSN2-048 | The Storm Divides
+FIRST FRAME: keyframes/KF47.png
+LAST FRAME: keyframes/KF48.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF47 to the immutable supplied last frame KF48. The existing gold relay threads tighten toward the brass splitter over the gate; its two hinged vanes rotate outward and physically guide the layered black paper storm into two separate side channels, opening one stable clear corridor through the center. Camera: one controlled slow six-degree orbit clockwise only around the gate. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

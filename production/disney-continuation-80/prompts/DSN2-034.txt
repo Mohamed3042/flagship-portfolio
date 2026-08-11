@@ -1,0 +1,6 @@
+DSN2-034 | The Crossing
+FIRST FRAME: keyframes/KF33.png
+LAST FRAME: keyframes/KF34.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF33 and KF34 as immutable exact endpoint frames. The remaining bridge panels hinge into place; the last wire ribs rotate into the opposite bank and slide into their locks, straightening the one filament. The firefly then crosses on a smooth wire-guided slide just above the bridge, wings hinging in measured beats. Use one controlled tracking move from the near bank to the dark gate, never passing the firefly. Keep the route and district dark. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF34 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

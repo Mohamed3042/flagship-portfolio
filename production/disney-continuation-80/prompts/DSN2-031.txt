@@ -1,0 +1,6 @@
+DSN2-031 | The Torn Route
+FIRST FRAME: keyframes/KF30.png
+LAST FRAME: keyframes/KF31.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF30 and KF31 as immutable exact endpoint frames. Track the one firefly along the same dark route on a smooth wire-guided slide. The camera performs one measured forward tracking move as the torn chasm enters frame; the firefly hinges its wings closed and brakes at the near raw edge. Nothing breaks during the shot: the chasm and opposite dark gate are progressively revealed exactly as supplied in KF31. Keep the route unlit and introduce no bridge material. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF31 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

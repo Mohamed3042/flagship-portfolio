@@ -1,0 +1,6 @@
+DSN2-071 | The Observatory Unfolds
+FIRST FRAME: keyframes/KF70.png
+LAST FRAME: keyframes/KF71.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF70 and @Image2 KF71 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. One controlled upward push approaches the existing observatory rooftop while its nested charcoal-paper dome petals unfold radially on visible brass hinges, exposing the central aperture without spawning or replacing any part. The surrounding city silhouettes and page backlight remain stable. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

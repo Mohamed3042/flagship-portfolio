@@ -1,0 +1,6 @@
+DSN2-057 | Failure Finds Weight
+FIRST FRAME: keyframes/KF56.png
+LAST FRAME: keyframes/KF57.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF56 to the immutable supplied last frame KF57. The inspection wheel turns slowly while its existing brass fingers press and refold each of the exactly eight artifacts along visible scored creases: designated pieces close into compact counterweights and the remaining pieces flatten into interlocking tiles, then every part seats in its supplied endpoint gauge. Camera: one controlled slow tilt downward only from the wheel hub to the completed parts. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

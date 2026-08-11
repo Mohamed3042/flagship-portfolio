@@ -1,0 +1,6 @@
+DSN2-037 | The Ink Wedge
+FIRST FRAME: keyframes/KF36.png
+LAST FRAME: keyframes/KF37.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF36 and KF37 as immutable exact endpoint frames. The faint middle listening wire tightens and slides the round wax-sealed door sideways along its existing brass track. The camera makes one uninterrupted push through the opening, following that same wire into the workshop until the halted gear train and matte-black ink wedge fill the supplied KF37 composition. No gear moves. The firefly advances along the wire and stops beside the wedge. Motion is physical slide, rotate, and unwind only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF37 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

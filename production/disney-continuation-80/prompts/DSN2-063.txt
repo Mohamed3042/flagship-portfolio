@@ -1,0 +1,6 @@
+DSN2-063 | The Tension Chamber
+FIRST FRAME: keyframes/KF62.png
+LAST FRAME: keyframes/KF63.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF62 and @Image2 KF63 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. One controlled lateral camera track follows the existing golden thread from the spool forest into the single tension chamber; the connected brass wheel rotates and its spring compresses, drawing the same thread taut without snapping it. The chamber is revealed from behind the existing paper arch rather than appearing. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

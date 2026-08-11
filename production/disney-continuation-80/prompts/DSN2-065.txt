@@ -1,0 +1,6 @@
+DSN2-065 | The Unbroken Fibre
+FIRST FRAME: keyframes/KF64.png
+LAST FRAME: keyframes/KF65.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF64 and @Image2 KF65 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. Use one controlled slow macro push toward the same taut thread as the remaining mechanical strain separates only its outer parchment fibres along their natural grain; every fibre stays attached and the golden core never breaks. The lowered counterweights settle on their rails behind it. All visible changes occur only through physical slides, rotations, flexing fibres, or unwinding; no melting or transformation of material. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

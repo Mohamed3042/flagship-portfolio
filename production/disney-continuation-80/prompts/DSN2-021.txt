@@ -1,0 +1,6 @@
+DSN2-021 | The Last Ember
+FIRST FRAME: keyframes/KF01.png
+LAST FRAME: keyframes/KF21.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF01 and KF21 as immutable exact endpoint frames. Begin on the sealed book exactly as supplied. A hairline hinge in the central brass emblem opens; the one paper firefly already defined by KF21 unfolds from the emblem, raises itself on a smooth wire-guided slide, and opens its wings once. Use one very slow camera push toward the emblem. Preserve the book, candle, room, object counts, palette, and lighting. Motion is physical hinge, fold, rotate, and slide only. No cuts, dissolves, liquid morphing, teleportation, or objects beyond the supplied endpoints. Match KF21 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

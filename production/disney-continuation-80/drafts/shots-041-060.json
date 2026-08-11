@@ -1,0 +1,202 @@
+[
+  {
+    "shot": 41,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "Ink at the Horizon",
+    "first": "KF40",
+    "last": "KF41",
+    "still_prompt": "KF41 target still. Wide 2:1 center-safe composition in the established dark handcrafted cut-paper stop-motion kingdom. A low warning tide of lacquer-black paper ink has reached the outer archive road, its layered torn edge curling toward the distant brass gate while the tower district remains upright beyond it. One small candle-gold warning beacon reflects along the advancing edge; restrained blue-grey fill preserves the night depth. Match the existing kingdom scale, architecture, lens language, and material wear. Materials remain layered parchment, charcoal felt, exposed wire, tarnished brass, and dark sealing wax. Keep every story-critical object inside the central safe area. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF40 to the immutable supplied last frame KF41. The existing lacquer-black paper ink tide slides forward along the parchment road in short physical stop-motion increments; its torn leading folds rise and settle at the warning boundary while the existing candle beacon rocks once on its wire and steadies. Camera: one controlled slow push forward of five percent only, centered on the approaching tide and gate. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 42,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "The Gates Fold Shut",
+    "first": "KF41",
+    "last": "KF42",
+    "still_prompt": "KF42 target still. Wide 2:1 center-safe view of the same archive approach after every segmented gate leaf has folded shut into one defensive tarnished-brass wall. The lacquer-black paper ink tide presses against the lower parchment embankment without crossing it; hinge pins, wire pulls, and dark wax stops remain visibly handmade. Candle-gold seams outline the closed geometry against restrained blue-grey night fill. Maintain the established dark handcrafted cut-paper stop-motion style, exact district scale, weathering, and continuity. Keep the complete gate action readable inside the central safe area. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF41 to the immutable supplied last frame KF42. The existing segmented brass gate leaves rotate inward on visible wire hinges, each leaf closing in a measured mechanical sequence until their wax stops meet and the gate becomes one sealed wall; the black paper tide continues only to the fixed embankment and stops there. Camera: one controlled slow crane downward by a few centimetres only, keeping the gate centered. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 43,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "Anchor Threads",
+    "first": "KF42",
+    "last": "KF43",
+    "still_prompt": "KF43 target still. Wide 2:1 center-safe defensive tableau in the same cut-paper kingdom. Taut candle-gold anchor threads now run from the closed brass gate to the bases and upper braces of the surrounding parchment towers, each thread tied through a visible tarnished eyelet and wax-fastened spool. The black paper ink tide remains below the wall; cool blue-grey fill separates the layered tower silhouettes while candle-gold practical light traces the tether network. Preserve established handcrafted paper, felt, wire, brass, wax, scale, and weathering. Keep all anchors and the gate legible inside the central safe area. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF42 to the immutable supplied last frame KF43. Existing gold threads unwind from visible brass spools, travel through the existing eyelets, and draw physically taut between the sealed gate and tower braces; each spool turns, stops against its wax catch, and the towers take the tension without changing form. Camera: one controlled slow pullback only, revealing the full tether pattern while holding the gate on axis. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 44,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "Rain into Channels",
+    "first": "KF43",
+    "last": "KF44",
+    "still_prompt": "KF44 target still. Wide 2:1 center-safe storm view of the same tethered district. Discrete lacquer-black paper rain strips descend from the layered felt sky and land inside sharply folded parchment drainage channels that zigzag away from the closed gate. The gold anchor threads remain taut and countable; candle-gold channel rims guide the eye while blue-grey fill holds the storm depth. Everything reads as handmade stop-motion construction: torn paper edges, felt cloud layers, exposed wire, tarnished brass, and dark wax. Preserve exact architecture and continuity. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF43 to the immutable supplied last frame KF44. Existing black paper rain strips descend one physical increment at a time from the felt cloud layers, contact the pre-folded parchment gutters, and slide along those rigid channels away from the gate; the gold tether threads vibrate once under impact and settle. Camera: one controlled slow tilt downward only, following rain from cloud edge to folded channels. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 45,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "The Tower Takes the Wind",
+    "first": "KF44",
+    "last": "KF45",
+    "still_prompt": "KF45 target still. Wide 2:1 center-safe view of one tall parchment tower bent visibly but safely into the storm, held by two candle-gold anchor threads. At its base, existing tarnished-brass counterweights have shifted along a slotted paper rail to oppose the lean; nearby towers, closed gate, rain channels, and black paper storm remain continuous and unchanged. Blue-grey fill defines the bend without adding color, and candle-gold light reveals the working wire linkage. Maintain dark handcrafted cut-paper stop-motion materials and scale. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF44 to the immutable supplied last frame KF45. The existing tall paper tower bends gradually on its scored folds under the physical pull of the storm; simultaneously, its existing brass counterweights slide along their visible rail in the opposite direction until the gold anchor threads become evenly taut and the structure stabilizes. Camera: one controlled slow lateral track to camera right only, following the tower base and counterweights. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 46,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "One Lantern Route",
+    "first": "KF45",
+    "last": "KF46",
+    "still_prompt": "KF46 target still. Wide 2:1 center-safe blackout composition in the same storm-bound kingdom. Every district route is dark except one unbroken emergency line of small candle-gold lanterns running from the foreground archive road to the sealed gate and bent tower. The black paper rain, folded channels, tether lines, and counterweights remain present as restrained silhouettes under cool blue-grey fill. The lantern line is practical paper-and-wire construction with warm wax cups, not a graphic overlay. Preserve dark handcrafted cut-paper stop-motion continuity and exact architecture. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF45 to the immutable supplied last frame KF46. Existing route lanterns extinguish district by district through physical shutter tabs closing over their candle wells, leaving only the pre-existing emergency lantern line; that one line lights sequentially toward the gate as tiny brass shutters open and stop. Camera: one controlled slow centered push forward only along the emergency route. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 47,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "The District Relay",
+    "first": "KF46",
+    "last": "KF47",
+    "still_prompt": "KF47 target still. Wide 2:1 center-safe overview of the same paper kingdom during a mechanical light relay. Candle-gold illumination has propagated from the single emergency lantern line into distinct connected districts, each cluster linked by visible wire levers and tiny tarnished-brass transfer wheels; the farthest district is just catching light. The black rain and channels remain active around the closed gate while blue-grey fill preserves shadow separation. Maintain the established parchment, felt, wire, brass, wax, weathering, and stop-motion tactility. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF46 to the immutable supplied last frame KF47. Starting at the existing emergency line, one brass relay wheel turns and pulls its wire lever, opening the next district's candle shutters; the same physical handoff travels district by district until the final connected cluster glows, with each completed mechanism stopping before the next begins. Camera: one controlled slow crane upward only, revealing the relay path across the districts. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 48,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "The Storm Divides",
+    "first": "KF47",
+    "last": "KF48",
+    "still_prompt": "KF48 target still. Wide 2:1 center-safe hero view of the sealed archive gate as multiple candle-gold relay lines converge into a precise brass splitter above it. From that point the layered black paper storm is physically parted into two swept wings that pass around the gate and enter the folded side channels, leaving a calm clear corridor at center. All towers, anchors, and district lights remain continuous. Blue-grey fill shapes the parted storm; parchment fibers, felt, wire, tarnished brass, and wax remain tactile. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF47 to the immutable supplied last frame KF48. The existing gold relay threads tighten toward the brass splitter over the gate; its two hinged vanes rotate outward and physically guide the layered black paper storm into two separate side channels, opening one stable clear corridor through the center. Camera: one controlled slow six-degree orbit clockwise only around the gate. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 49,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "The Storm Sheet",
+    "first": "KF48",
+    "last": "KF49",
+    "still_prompt": "KF49 target still. Wide 2:1 center-safe aftermath mechanism at the same archive gate. The two parted storm wings have been accordion-folded into one flat matte-black origami sheet, caught squarely on the gate's central tarnished-brass hook; its layered creases remain visible and no loose storm remains in the clear central air. Gold relay threads, side channels, anchor lines, and towers hold their established positions under candle-gold practical light and blue-grey fill. Preserve the dark handcrafted cut-paper stop-motion material language. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF48 to the immutable supplied last frame KF49. The two existing black paper storm wings feed inward through the brass splitter, crease along their pre-scored lines, and accordion-fold into one flat origami sheet; the final fold swings onto the existing central gate hook and stops securely. Camera: one controlled slow push toward the gate hook only. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 50,
+    "act": "IX",
+    "act_title": "The Ink Storm",
+    "title": "Road after Rain",
+    "first": "KF49",
+    "last": "KF50",
+    "still_prompt": "KF50 target still. Wide 2:1 center-safe clear aftermath in the same handcrafted paper kingdom. The storm sheet remains caught on the closed gate while luminous candle-gold drainage paths run cleanly through the folded channels and join one restored archive road leading into the next dark passage. Towers have returned upright, counterweights are centered, anchor threads are relaxed but connected, and the blue-grey sky is clear enough to reveal layered parchment depth. Preserve felt, exposed wire, tarnished brass, dark wax, paper fibers, exact architecture, and stop-motion continuity. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF49 to the immutable supplied last frame KF50. Existing folded channels rotate their small brass sluice tabs open, sending candle-gold practical light along the drainage route and into the archive road; tower counterweights slide back to center, the bent tower straightens on its scored fold, and tether threads relax in one measured physical recovery. Camera: one controlled slow pullback only to reveal the restored road. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 51,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "The Gate Becomes a Stair",
+    "first": "KF50",
+    "last": "KF51",
+    "still_prompt": "KF51 target still. Wide 2:1 center-safe transition into the Archive of Attempts. The restored archive road ends at the former storm gate, whose segmented tarnished-brass leaves have rotated downward and nested into a broad mechanical staircase descending below the paper kingdom. The folded black storm sheet remains secured beneath the upper hinge as a quiet continuity marker; candle-gold step wells illuminate layered parchment edges while cool blue-grey fill opens the depth below. Maintain dark handcrafted cut-paper stop-motion, felt, wire, brass, wax, scale, and wear. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF50 to the immutable supplied last frame KF51. The existing gate unlocks through visible brass pins, and each gate segment rotates downward in order on its wire hinge until the leaves nest into one stable descending staircase; existing candle shutters under the steps open as each segment seats. Camera: one controlled slow tilt downward only, following the gate into stair form. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 52,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "The Drawer Canyon",
+    "first": "KF51",
+    "last": "KF52",
+    "still_prompt": "KF52 target still. Wide 2:1 center-safe view from the descending brass stair into a deep canyon of stacked unlabeled parchment drawers. The drawer walls rise on both sides with irregular wax pulls, exposed wire runners, and tarnished brass rails, leaving one candle-gold central path into blue-grey depth. The stair remains visible behind as the exact entrance; every drawer face is blank and tactile, with no written marks. Preserve the established dark handcrafted cut-paper stop-motion architecture and material wear. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF51 to the immutable supplied last frame KF52. Existing folded wall panels on both sides of the stair rotate upright on visible wire hinges, and their nested layers slide apart along brass rails to expose the pre-existing canyon of blank parchment drawers; all panels lock mechanically at their endpoint positions. Camera: one controlled slow forward dolly down the center path only. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 53,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "Routes That Did Not Hold",
+    "first": "KF52",
+    "last": "KF53",
+    "still_prompt": "KF53 target still. Wide 2:1 center-safe drawer-canyon composition. Selected blank drawers on alternating sides stand open and reveal rejected route attempts as tightly rolled strips of weathered parchment, each roll bound by plain dark wax and bent wire with no symbols or writing. The candle-gold central path remains uninterrupted between the walls; cool blue-grey fill separates the deeper closed drawers. Maintain exact stair entrance, canyon geometry, handcrafted paper fibers, felt shadows, tarnished brass runners, and stop-motion continuity. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF52 to the immutable supplied last frame KF53. Existing drawer pulls rotate and selected drawers slide outward one after another on their brass runners, exposing the supplied endpoint's pre-existing rolled parchment routes; each roll remains bound and physically contained, and every drawer stops cleanly at its endpoint depth. Camera: one controlled slow lateral track to camera left only along the drawer faces. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 54,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "Cracked Seals",
+    "first": "KF53",
+    "last": "KF54",
+    "still_prompt": "KF54 target still. Wide 2:1 center-safe intimate view within the same drawer canyon. Several exposed rolled routes rest in their open blank drawers, and their dark wax seals are visibly cracked into retained pieces around the wire bindings, never shattered into debris. Candle-gold rakes across the fracture lines and tarnished brass runners; blue-grey fill holds the deep canyon walls. Preserve the established handcrafted cut-paper stop-motion materials, exact rolls, drawer positions, and unmarked surfaces. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF53 to the immutable supplied last frame KF54. The existing wire bindings tighten by a small mechanical turn, causing the supplied dark wax seals to crack along their pre-scored seams; the resulting wax pieces hinge outward but remain attached around each roll, revealing the parchment edges without unrolling them. Camera: one controlled slow macro push forward only toward the central seal. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 55,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "Kingdoms That Almost Worked",
+    "first": "KF54",
+    "last": "KF55",
+    "still_prompt": "KF55 target still. Wide 2:1 center-safe revelation inside the same archive canyon. Open drawers now cradle imperfect duplicate miniature paper kingdoms in shadow: familiar towers with misaligned folds, incomplete bridges, crooked gates, and uneven routes, all clearly handcrafted attempts rather than a new realm. Cracked wax seals and rolled parchment remain attached at the drawer edges. Candle-gold catches only selected flaws while restrained blue-grey fill preserves the surrounding dark felt depth. Maintain established scale, materials, and continuity. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF54 to the immutable supplied last frame KF55. The existing rolled parchment attempts physically loosen from their cracked seals and unroll inside their own drawers; scored sections lift on wire tabs into the imperfect miniature kingdoms shown in the supplied last frame, with crooked gates and incomplete bridges retaining their exact endpoint shapes. Camera: one controlled slow crane backward and upward only to reveal the drawer interiors. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 56,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "Eight at the Inspection Wheel",
+    "first": "KF55",
+    "last": "KF56",
+    "still_prompt": "KF56 target still. Wide 2:1 center-safe inspection chamber reached from the drawer canyon. Exactly eight distinct failed artifacts taken from the imperfect miniature kingdoms rest evenly around one tarnished-brass inspection wheel: folded route, crooked gate piece, cracked tower brace, incomplete bridge span, miscut stair, wax hinge, bent channel, and small counterweight shell. Each artifact occupies its own physical parchment cradle with nothing extra. Candle-gold spokes illuminate the eight positions against blue-grey felt shadow. Preserve dark handcrafted cut-paper stop-motion continuity and unmarked surfaces. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF55 to the immutable supplied last frame KF56. Exactly eight existing failed artifacts slide from their open drawer cradles along visible brass guide rails and seat one by one around the existing inspection wheel, each occupying the exact supplied endpoint position; the wheel turns one eighth of a revolution and stops with all eight pieces separated and countable. Camera: one controlled slow clockwise orbit of eight degrees only around the wheel. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 57,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "Failure Finds Weight",
+    "first": "KF56",
+    "last": "KF57",
+    "still_prompt": "KF57 target still. Wide 2:1 center-safe view of the same brass inspection wheel after the exactly eight artifacts have been physically refolded into useful parts. Some now form compact tarnished-paper counterweights hanging from wire arms; the rest form flat interlocking route tiles seated in brass gauges, while every original material and crease remains traceable. Candle-gold practical light reveals function, and cool blue-grey fill preserves the archive depth. Maintain the dark handcrafted cut-paper stop-motion style, wheel geometry, and exact count of eight transformed pieces. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF56 to the immutable supplied last frame KF57. The inspection wheel turns slowly while its existing brass fingers press and refold each of the exactly eight artifacts along visible scored creases: designated pieces close into compact counterweights and the remaining pieces flatten into interlocking tiles, then every part seats in its supplied endpoint gauge. Camera: one controlled slow tilt downward only from the wheel hub to the completed parts. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 58,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "Bridge of Discards",
+    "first": "KF57",
+    "last": "KF58",
+    "still_prompt": "KF58 target still. Wide 2:1 center-safe archive-canyon view. The useful counterweights and route tiles made from the eight discarded artifacts have aligned into one narrow, structurally clear paper bridge spanning a circular shaft; wire stays descend from tarnished-brass anchors and the counterweights balance beneath the deck. The inspection wheel remains behind as provenance, and no piece is missing or extra. Candle-gold edge light traces the crossing above blue-grey felt depth. Preserve dark handcrafted cut-paper stop-motion materials and continuity. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF57 to the immutable supplied last frame KF58. The existing interlocking tiles slide out from the inspection wheel along brass guides and join edge to edge over the shaft; existing wire stays pull taut as the refolded counterweights descend beneath opposite sides, leveling the completed bridge without any piece appearing or vanishing. Camera: one controlled slow lateral follow to camera right only alongside the assembling deck. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 59,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "Eight Shadows, One Circle",
+    "first": "KF58",
+    "last": "KF59",
+    "still_prompt": "KF59 target still. Wide 2:1 center-safe overhead-leaning view of the completed discard bridge and circular shaft. Exactly eight distinct artifact silhouettes cast by eight candle-gold apertures meet around the shaft rim to form one precise unbroken shadow circle; the physical bridge, counterweights, inspection wheel, wire stays, and artifact-derived tile seams remain visible and unchanged. Cool blue-grey fill keeps every separate shadow source legible while the candle-gold circle becomes the focal geometry. Preserve the established handcrafted paper, felt, brass, wire, wax, and stop-motion texture. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF58 to the immutable supplied last frame KF59. The eight existing candle shutters around the shaft rotate mechanically in sequence, causing the eight separate artifact shadows to lengthen across the parchment rim until their tips meet and lock into one exact circular shadow; all physical parts and the bridge remain fixed. Camera: one controlled slow vertical rise only toward the overhead endpoint. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  },
+  {
+    "shot": 60,
+    "act": "X",
+    "act_title": "The Archive of Attempts",
+    "title": "The Door beneath the Kingdom",
+    "first": "KF59",
+    "last": "KF60",
+    "still_prompt": "KF60 target still. Wide 2:1 center-safe final reveal beneath the Archive of Attempts. The precise shadow circle has registered with a deep circular tarnished-brass vault door below the bridge, and that heavy layered door now stands open on visible wire hinges, revealing the crafted underside of the paper kingdom: structural folds, hanging counterweights, route channels, and candle-gold service paths receding into restrained blue-grey depth. The bridge and eight-source shadow circle remain readable above as continuity anchors. Maintain dark handcrafted cut-paper stop-motion, parchment, felt, brass, wax, exact scale, and material wear. Style lock: dark handcrafted cut-paper stop-motion; layered parchment, charcoal felt, exposed wire, tarnished brass, and dark wax; candle-gold practical light only with restrained blue-grey fill. No text, letters, numbers, logos, faces, captions, interface, or watermark.",
+    "video_prompt": "Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF59 to the immutable supplied last frame KF60. The completed eight-part shadow circle settles over the existing circular lock; brass pins retract, the deep layered vault door rotates open on its visible wire hinge, and the existing underside mechanisms are revealed physically behind it while bridge and counterweights remain stable. Camera: one controlled slow forward-and-downward dolly along a single straight path only through the opened doorway. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds."
+  }
+]

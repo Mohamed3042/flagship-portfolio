@@ -1,0 +1,6 @@
+DSN2-085 | The Paper Courier
+FIRST FRAME: keyframes/KF84.png
+LAST FRAME: keyframes/KF85.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot from immutable first image to immutable last image. Keep the gold thread taut and continuous. A single loose parchment square already visible beside the target emblem folds mechanically along crisp scored hinges into the exact paper courier bird shown in the last frame: body, wire legs, brass-pin joints, then folded wings. It rises onto the cover and closes its beak around the thread. Use a restrained half-orbit around the emblem; no magical spawn, dissolve, liquid morph or extra creature. End on the exact last-frame pose, settle by 4.5 seconds, and hold. Dark paper/felt/parchment/brass/wax stop-motion, candle-gold only; no text, face, logo, subtitles, music or watermark. No cut.

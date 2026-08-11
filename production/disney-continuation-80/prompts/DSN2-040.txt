@@ -1,0 +1,6 @@
+DSN2-040 | The District Wakes
+FIRST FRAME: keyframes/KF39.png
+LAST FRAME: keyframes/KF40.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF39 and KF40 as immutable exact endpoint frames. The repaired gear rotates and engages the halted train tooth by tooth. Existing workshop shutters hinge open; connected paper buildings unfold into their supplied working positions while lamp shutters rotate open in a controlled outward sequence. The camera performs one continuous crane backward through the workshop door, past the dark gate, and into the exact wide KF40 view. The gold route physically unwinds back across the reinforced bridge toward the kingdom. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF40 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

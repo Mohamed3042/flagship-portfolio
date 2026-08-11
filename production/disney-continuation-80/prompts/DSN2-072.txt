@@ -1,0 +1,6 @@
+DSN2-072 | The Lantern Constellation
+FIRST FRAME: keyframes/KF71.png
+LAST FRAME: keyframes/KF72.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF71 and @Image2 KF72 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The pre-folded lanterns already present in the endpoint frames open from the dome's existing slots and rise together on visible tether threads, spreading into the exact fixed constellation arrangement supplied in KF72; use one controlled crane upward that keeps the open dome in the lower frame. Preserve every endpoint lantern without adding, removing, merging, or duplicating lights. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

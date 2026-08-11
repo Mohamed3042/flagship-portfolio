@@ -1,0 +1,6 @@
+DSN2-026 | The Clock Without Time
+FIRST FRAME: keyframes/KF25.png
+LAST FRAME: keyframes/KF26.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF25 and KF26 as immutable exact endpoint frames. The camera performs one uninterrupted controlled descent through the round aperture toward the miniature kingdom, tilting only enough to center the one clocktower. Layered paper rooftops separate by parallax while the same firefly advances on a smooth wire-guided slide beside the camera and stops beside the tower's handless, numberless opening. Nothing transforms; scale changes only through the real camera move. Preserve every endpoint object and light. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF26 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

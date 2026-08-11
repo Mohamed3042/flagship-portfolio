@@ -1,0 +1,6 @@
+DSN2-100 | The Open Circle
+FIRST FRAME: keyframes/KF99.png
+LAST FRAME: keyframes/KF100.png
+
+PROMPT
+Generate the final single continuous 5-second Wan 2.7 FLF shot from immutable first image to immutable last image. The one gold thread moves across the blank right page at a measured pace, physically laying down a raised circular road with a true thin shadow. It nearly returns to its starting point but preserves the exact narrow opening shown in the last frame; the free end then lifts through that opening and aims toward the aligned moon window. Make one slow descending crane into the exact final composition, settle by 4.5 seconds, and hold. No cut, dissolve, liquid morph, closed loop, extra light or new object. Dark handcrafted cut-paper stop-motion, parchment, felt, wire, wax and tarnished brass; no text, face, logo, subtitles, music or watermark.

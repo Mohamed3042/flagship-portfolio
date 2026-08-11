@@ -1,0 +1,6 @@
+DSN2-079 | The Messenger Star
+FIRST FRAME: keyframes/KF78.png
+LAST FRAME: keyframes/KF79.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF78 and @Image2 KF79 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The already-visible messenger firefly follows the existing golden route in one smooth physical flight, folds its paper wings, and slides intact into the one dark socket; tiny brass retaining tabs hinge closed around it and the connected candle-gold light passes through that socket. Use one controlled lateral follow move. Do not morph the firefly into a star or change its identity. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

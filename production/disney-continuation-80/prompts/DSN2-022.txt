@@ -1,0 +1,6 @@
+DSN2-022 | The Listening Emblem
+FIRST FRAME: keyframes/KF21.png
+LAST FRAME: keyframes/KF22.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF21 and KF22 as immutable exact endpoint frames. The one paper firefly lowers by a smooth wire-guided slide onto the emblem, folds both wings on visible hinges, and settles. Under its weight, the outer brass ring rotates clockwise while the inner ring rotates counterclockwise until the supplied KF22 alignment is reached and the narrow gold seam is exposed. Use one controlled macro push-in, no orbit. Preserve every other object and all lighting. Motion is hinge, fold, rotate, and slide only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF22 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

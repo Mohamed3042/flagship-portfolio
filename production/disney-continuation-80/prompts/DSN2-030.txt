@@ -1,0 +1,6 @@
+DSN2-030 | The Messenger
+FIRST FRAME: keyframes/KF29.png
+LAST FRAME: keyframes/KF30.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF29 and KF30 as immutable exact endpoint frames. The one paper firefly unfolds its wings, releases from the clocktower, and advances down the unlit route on a smooth wire-guided slide while its wings hinge in two measured beats. Use one controlled low tracking move that turns the route into a diagonal and keeps the missing district ahead. All city lights behind remain fixed; the route ahead never lights. Preserve every structure and count. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF30 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

@@ -1,0 +1,6 @@
+DSN2-024 | The Night Page
+FIRST FRAME: keyframes/KF23.png
+LAST FRAME: keyframes/KF24.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF23 and KF24 as immutable exact endpoint frames. The unlocked front cover lifts and rotates only on its real spine hinge while the camera makes one gentle crane upward into the supplied overhead angle. Beneath it, layered ivory leaves fold aside in sequence to reveal the already-defined deep charcoal night page; its central brass-paper ring rotates flat until it reads as the single gold circle in KF24. The firefly slides with the mechanism to the circle's lower rim. Preserve all geometry and counts. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF24 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

@@ -1,0 +1,6 @@
+DSN2-058 | Bridge of Discards
+FIRST FRAME: keyframes/KF57.png
+LAST FRAME: keyframes/KF58.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF57 to the immutable supplied last frame KF58. The existing interlocking tiles slide out from the inspection wheel along brass guides and join edge to edge over the shaft; existing wire stays pull taut as the refolded counterweights descend beneath opposite sides, leveling the completed bridge without any piece appearing or vanishing. Camera: one controlled slow lateral follow to camera right only alongside the assembling deck. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

@@ -1,0 +1,6 @@
+DSN2-042 | The Gates Fold Shut
+FIRST FRAME: keyframes/KF41.png
+LAST FRAME: keyframes/KF42.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF41 to the immutable supplied last frame KF42. The existing segmented brass gate leaves rotate inward on visible wire hinges, each leaf closing in a measured mechanical sequence until their wax stops meet and the gate becomes one sealed wall; the black paper tide continues only to the fixed embankment and stops there. Camera: one controlled slow crane downward by a few centimetres only, keeping the gate centered. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

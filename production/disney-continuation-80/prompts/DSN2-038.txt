@@ -1,0 +1,6 @@
+DSN2-038 | The False Teeth
+FIRST FRAME: keyframes/KF37.png
+LAST FRAME: keyframes/KF38.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF37 and KF38 as immutable exact endpoint frames. The firefly presses an existing drawer pin with one wing hinge. The shallow parts drawer slides outward and three nested brass spare teeth unfold into the exact side-by-side KF38 arrangement: one wide, one narrow, one wrongly curved. The black ink wedge slides only partway from the damaged gap, exposing the edge of the concealed thin shape but not releasing it. Use one controlled downward macro tilt. Keep every gear halted. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF38 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

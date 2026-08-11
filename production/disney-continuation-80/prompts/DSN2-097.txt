@@ -1,0 +1,6 @@
+DSN2-097 | Every District Moves
+FIRST FRAME: keyframes/KF96.png
+LAST FRAME: keyframes/KF97.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Ride the returning gold pulse through the open door into the kingdom and crane upward as exactly eight known districts engage in a controlled sequence: lever, arena ring, hill carriage, cottage lock, route arm, observatory dome, box fold and tiered studio platform. Each moves once only after the shared pulse reaches it. Keep four districts per side and preserve the supplied lantern circle exactly. End on the exact last-frame synchronized tableau by 4.5 seconds, hold. No cut, dissolve, morph, extra district or readable text. Same dark handcrafted storybook materials; no face, logo, subtitles, music or watermark. No text, letters, numbers, logos, subtitles, faces or watermark.

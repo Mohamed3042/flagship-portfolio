@@ -1,0 +1,6 @@
+DSN2-023 | The Second Latch
+FIRST FRAME: keyframes/KF22.png
+LAST FRAME: keyframes/KF23.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF22 and KF23 as immutable exact endpoint frames. The aligned emblem rings rotate one final small increment, pulling the existing narrow brass linkage beneath the gilt border. The camera performs one slow lateral truck from the emblem toward the spine while the hidden second latch slides cleanly from under the upper rib and hinges into its fully unlocked KF23 position. The firefly stays folded and still. Preserve book identity, room geometry, counts, and light. Motion is physical rotate, slide, and hinge only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF23 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

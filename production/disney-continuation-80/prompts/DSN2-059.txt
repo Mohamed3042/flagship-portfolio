@@ -1,0 +1,6 @@
+DSN2-059 | Eight Shadows, One Circle
+FIRST FRAME: keyframes/KF58.png
+LAST FRAME: keyframes/KF59.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF58 to the immutable supplied last frame KF59. The eight existing candle shutters around the shaft rotate mechanically in sequence, causing the eight separate artifact shadows to lengthen across the parchment rim until their tips meet and lock into one exact circular shadow; all physical parts and the bridge remain fixed. Camera: one controlled slow vertical rise only toward the overhead endpoint. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

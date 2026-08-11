@@ -1,0 +1,6 @@
+DSN2-033 | The Wind Test
+FIRST FRAME: keyframes/KF32.png
+LAST FRAME: keyframes/KF33.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF32 and KF33 as immutable exact endpoint frames. Additional existing accordion panels hinge and unfold along the one filament. A controlled mechanical strain pulls the span sideways; the parchment bends at its scored folds without tearing. In response, the dark wire ribs stored flat along both chasm edges rotate upward one after another and slide beneath the bridge to form the supplied cradle. Use one restrained side-on camera arc. No cuts, dissolves, liquid morphing, teleportation, visible wind particles, or new objects. Match KF33 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

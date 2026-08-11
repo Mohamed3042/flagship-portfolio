@@ -1,0 +1,6 @@
+DSN2-064 | The Counterweight Descent
+FIRST FRAME: keyframes/KF63.png
+LAST FRAME: keyframes/KF64.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF63 and @Image2 KF64 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The connected counterweights descend once along their visible guide rails as their cords unwind over brass pulleys; the camera makes one controlled vertical tilt down to follow them, keeping the same tension wheel and unbroken golden thread anchored at the top of frame. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

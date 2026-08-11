@@ -1,0 +1,202 @@
+[
+  {
+    "shot": 81,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Moon Passage",
+    "first": "KF80",
+    "last": "KF81",
+    "still_prompt": "A very wide 2:1 endpoint frame just beyond the opened paper-moon aperture: its layered circular iris now frames the tiny turning sky engine behind, while the camera has entered an immense dark outer workshop of torn-paper rafters, felt shadows, tarnished brass tools and one distant candle-gold work light. The incoming gold beam remains continuous through the iris and ends at the center foreground. Preserve the handcrafted cut-paper stop-motion realism, blue-grey moon fill, heavy charcoal vignette and center-safe composition. No face, readable marks, letters, numbers, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from the provided first frame to the provided last frame. Both endpoint images are immutable. Continue the sky engine's slow forward drift as its single gold beam passes through the opened moon iris; the camera rides precisely along that beam, crosses the layered paper aperture without a cut, and emerges into the immense outer workshop. Paper iris leaves slide past the lens with clear foreground parallax. Do not invent objects beyond the two endpoints and do not dissolve or morph anything. End in the exact last-frame composition, settle into a slow forward drift by 4.5 seconds, and hold. Dark cut-paper storybook stop-motion, parchment, felt, wire, wax and tarnished brass; candle-gold only with restrained blue-grey fill; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 82,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Nested Workshop",
+    "first": "KF81",
+    "last": "KF82",
+    "still_prompt": "A grand wide 2:1 reveal inside the outer workshop: the entire familiar candlelit workshop is now visibly a handcrafted miniature stage sitting on the left page of a vastly larger open book on a giant wooden table. The circular moon aperture and tiny sky engine remain visible inside the miniature; the same uninterrupted gold beam reaches from it onto the giant page. Layered paper rafters and one distant candle establish impossible scale. Premium dark stop-motion diorama, center-safe, candle-gold and blue-grey only, no readable text, letters, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between the immutable endpoint frames. Begin with the same gentle forward drift in the outer workshop, then crane smoothly upward and backward just enough to reveal that the familiar workshop is a complete miniature mounted on the page of a much larger open volume. Nothing materializes: scale is revealed only by camera movement and parallax. Keep the incoming gold beam continuous and physically attached to the miniature moon iris. Finish in the exact wide last-frame geometry, settle by 4.5 seconds, and hold. No cuts, speed ramps, dissolves, liquid morphs, exposure jumps or new objects. Dark handcrafted cut-paper, felt, parchment, wire, wax and tarnished brass; one candle-gold key, blue-grey fill; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 83,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Other Volumes",
+    "first": "KF82",
+    "last": "KF83",
+    "still_prompt": "A wide overhead-oblique 2:1 frame reveals the giant table continuing into darkness with ordered rows of sealed handcrafted books surrounding the open volume that carries the tiny workshop. Every book has a distinct abstract circular brass emblem but no writing; all remain unlit except the original miniature's one gold beam. Shelves recede as finite paper layers beneath dark rafters, with the active book centered in the middle half. Same premium gothic storybook diorama, candle-gold and moonlit blue-grey palette, no readable symbols, letters, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Continue the crane from the nested-workshop reveal, rising and drifting laterally over the giant table until ordered rows of other sealed volumes enter view through natural foreground parallax. Their covers remain still and dark; only the original book's continuous beam glows. Reveal the scale rather than spawning anything. End exactly on the last-frame overhead-oblique composition, ease into a slow forward drift by 4.5 seconds, and hold. No cuts, dissolves, morphing, flicker, extra lights or unshown objects. Dark handcrafted paper, felt, parchment, wire, wax and brass; no text, letters, numbers, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 84,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Escaping Thread",
+    "first": "KF83",
+    "last": "KF84",
+    "still_prompt": "A low tracking 2:1 endpoint along the giant tabletop: the original book sits behind while its single gold beam has narrowed into a physical golden thread that crosses the table and hooks into the closed circular emblem of the nearest dark volume. The thread alternates between lying flat on wood and lifting over paper scraps, casting a true thin shadow. All other books remain dark. Dark cut-paper stop-motion realism, tarnished brass, worn leather, parchment fibres, center-safe action, candle-gold only, no text, letters, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between the immutable endpoint frames. The original gold beam must narrow physically into one unbroken thread, feed out from the active book, and slide across the giant tabletop toward the nearest closed volume. Track low beside it as it alternates between printed-flat line and raised fibre, passing over paper scraps with accurate shadows, then hooks cleanly into the target book's brass emblem. No teleporting, branching or liquid motion. Land on the exact last frame, settle by 4.5 seconds, hold. No cuts, dissolves, morphs, extra lights or objects. Same dark handcrafted storybook materials and restrained palette; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 85,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Paper Courier",
+    "first": "KF84",
+    "last": "KF85",
+    "still_prompt": "A centered wide 2:1 endpoint at the nearest closed volume: a loose square of parchment beside its emblem has folded through crisp visible hinges into one small mechanical paper bird with wire legs and brass-pin joints. The bird stands on the cover gripping the same continuous gold thread in its beak; the thread still reaches back to the original book. Wings remain folded, all other volumes dark. Premium handcrafted stop-motion diorama, candle-gold rim light, blue-grey fill, center-safe, no writing, letters, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first image to immutable last image. Keep the gold thread taut and continuous. A single loose parchment square already visible beside the target emblem folds mechanically along crisp scored hinges into the exact paper courier bird shown in the last frame: body, wire legs, brass-pin joints, then folded wings. It rises onto the cover and closes its beak around the thread. Use a restrained half-orbit around the emblem; no magical spawn, dissolve, liquid morph or extra creature. End on the exact last-frame pose, settle by 4.5 seconds, and hold. Dark paper/felt/parchment/brass/wax stop-motion, candle-gold only; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 86,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "Across the Shelves",
+    "first": "KF85",
+    "last": "KF86",
+    "still_prompt": "A dynamic but controlled 2:1 endpoint in the vast library workshop: the same small paper courier bird glides between layered shelves, wings spread, carrying the unbroken golden thread in its beak. The thread arcs back through the central corridor to the distant active book; dark sealed volumes pass as near and far paper planes. The bird is centered and fully visible for portrait crop, with one destination shelf ahead. Dark handcrafted stop-motion, paper fibre and brass joints, candle-gold thread, blue-grey shadow, no text, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between immutable first and last frames. The courier opens its scored-paper wings and takes off while keeping the same gold thread in its beak. Track alongside and slightly behind as it glides smoothly between shelf layers; foreground volumes cross faster than the distant active book, and the thread pays out continuously without snapping or multiplying. No flapping frenzy, collision, cut, dissolve, morph or new bird. End in the exact last-frame flight pose with a slow steady forward glide by 4.5 seconds, and hold. Dark cut-paper storybook stop-motion, parchment, felt, wire and tarnished brass; candle-gold only, blue-grey fill; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 87,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Sleeping Shelf",
+    "first": "KF86",
+    "last": "KF87",
+    "still_prompt": "A wide frontal 2:1 endpoint of one enormous sleeping shelf: the paper courier has landed on a narrow ledge at center before a row of dark sealed volumes. The continuous gold thread remains in its beak and reaches the unlit circular emblem of exactly one central book; every other emblem stays black. The surrounding shelves form deep finite paper theatre planes, with no labels or spine writing. Same dark handcrafted stop-motion realism, candle-gold focal light and blue-grey fill, no faces, text, letters, numbers, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Continue the bird's forward glide toward the destination shelf, ease into a shallow descending arc, and land it on the central ledge without losing or duplicating the thread. The thread tip reaches the one central book emblem but does not light it yet; all neighbouring volumes remain completely dark. Camera follows and settles into the exact frontal last-frame composition by 4.5 seconds, then holds. No cut, dissolve, morph, extra book movement, extra light or new object. Dark paper/felt/parchment/wire/brass stop-motion, restrained candle-gold and blue-grey; no readable text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 88,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Shared Spark",
+    "first": "KF87",
+    "last": "KF88",
+    "still_prompt": "A symmetrical wide 2:1 shelf endpoint: the courier has pressed the golden thread into the central volume's circular emblem, which now glows. A measured wave of warm light has reached only the two adjacent emblems on each side, four neighbours total, while the rest of the shelf remains dark and waiting. The same bird and continuous thread stay centered. Handcrafted gothic paper theatre, worn leather and brass, candle-gold glow with charcoal shadow, no labels, writing, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoint images. The bird lowers the same thread into the central emblem; after physical contact, its brass rings rotate one notch and light. A controlled relay then travels outward one book at a time to exactly two adjacent emblems per side, each lighting only after the previous ring finishes turning. The rest remain dark. Camera makes a very slow centered push and lands exactly on the last frame, settling by 4.5 seconds and holding. No simultaneous explosion, cut, dissolve, morph, extra bird or extra lights. Dark handcrafted paper, felt, parchment, wax and brass; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 89,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Library Wakes",
+    "first": "KF88",
+    "last": "KF89",
+    "still_prompt": "A grand center-safe 2:1 reveal of the awakened library: ordered shelves have unfolded through paper hinges into a deep architectural city of book towers, bridges and circular window-emblems, with one continuous gold route connecting them. Illumination is selective and structured, not every surface bright; the original courier remains a tiny silhouette on the central shelf. Finite layered paper planes, tarnished brass edges, candle-gold routes and blue-grey depth, no readable text, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first to immutable last frame. Continue the measured emblem relay beyond the initial five books. As each new group receives the pulse, the corresponding shelf panels rotate on visible hinges and rise into the exact book-tower architecture shown in the last frame; bridges unfold only after their supports lock. Crane slowly back and upward to reveal the complete awakened library without spawning or dissolving geometry. End exactly at the last-frame grand reveal, settle by 4.5 seconds, hold. No cut, liquid morph, uncontrolled glow or new objects. Dark handcrafted paper/felt/parchment/brass/wax stop-motion; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 90,
+    "act": "XIII",
+    "act_title": "Beyond the Book",
+    "title": "The Far Door",
+    "first": "KF89",
+    "last": "KF90",
+    "still_prompt": "A long-lens 2:1 endpoint down the awakened library's central golden route: at the far end an immense layered paper door with a circular moon emblem stands partly open, revealing a narrow blade of pale dawn beyond. Book towers frame both sides as dark paper silhouettes; the tiny courier and thread route point toward the opening. Candle-gold route remains the only warm light, center-safe and symmetrical, no inscriptions, letters, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoints. Follow the existing gold route forward through the newly awakened book towers; panels and bridges remain locked while foreground layers pass with strong but graceful parallax. At the far end, the circular mechanism turns and the immense paper door opens only enough to reveal the exact narrow dawn blade in the last frame. Do not cross it yet. End with the same slow forward drift and exact last-frame geometry by 4.5 seconds, then hold. No cuts, teleport, dissolve, morph, extra light or new objects. Dark handcrafted paper, felt, parchment, wire, wax and brass; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 91,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Open Horizon",
+    "first": "KF90",
+    "last": "KF91",
+    "still_prompt": "A sweeping but restrained 2:1 dawn endpoint beyond the far door: layered parchment hills and a charcoal paper valley open toward a pale circular sunrise, crossed by one continuous golden road from the library threshold in the foreground. The opened door frames the scene as dark torn-paper wings; no buildings or figures yet. Physical paper depth, fibre, brass route edging and faint blue-grey mist, warm gold limited to road and sunrise, center-safe, no text, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Continue the same forward drift through the partly open far door as its two layered leaves finish opening on visible hinges. Cross the threshold and descend gently along the single unbroken gold road into the parchment valley, revealing the circular dawn horizon through parallax rather than a dissolve. Land in the exact last-frame landscape, settle by 4.5 seconds, and hold. No cuts, speed ramps, morphs, added structures or figures. Dark-to-dawn handcrafted cut-paper stop-motion, parchment, felt, wire and brass; no readable text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 92,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The First Step",
+    "first": "KF91",
+    "last": "KF92",
+    "still_prompt": "A wide low 2:1 endpoint on the dawn road: the anonymous Maker has entered from the library threshold as the same flat black cut-paper silhouette, back turned and face unreadable, taking one deliberate first step into the valley. One hand carries the continuous golden thread loosely at hip height; its other end remains connected through the far door. Long paper shadow, pale circular dawn ahead, center-safe silhouette, no facial detail, text, letters, numbers, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoint images. Hold the landscape and road geometry. The same anonymous Maker silhouette enters from the threshold, back to camera, carrying the one continuous gold thread without severing it, and takes one slow deliberate step onto the road: anticipation, foot placement, weight transfer, hold. Track low and slightly forward so the long paper shadow advances naturally. End in the exact last-frame pose by 4.5 seconds and hold. No face reveal, extra person, cut, dissolve, morph or new object. Handcrafted paper/felt/parchment/wire/brass stop-motion, restrained dawn gold and blue-grey; no text, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 93,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Many Roads",
+    "first": "KF92",
+    "last": "KF93",
+    "still_prompt": "A high overhead-oblique 2:1 endpoint around the Maker: the single gold thread remains visibly braided at its root near the hand, then fans physically into seven raised paper routes across the valley, each ending at an abstract blank marker. All routes are candle-gold but vary subtly in thickness; none cross. The Maker stays a small faceless black silhouette at the origin and the far door remains behind. Center-safe, no writing, numbers, labels, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first to immutable last frame. The Maker stops while the one thread in the hand separates through visible mechanical unbraiding into exactly seven continuous raised paper routes; each folds outward from the common root one at a time and never crosses another. Crane gently upward to reveal all endpoints. Nothing grows from empty space: every route must feed from the original thread. End in the exact overhead last-frame geometry, settle by 4.5 seconds, hold. No cut, liquid morph, extra route, face reveal or new object. Dark handcrafted paper/felt/parchment/wire/brass; no text, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 94,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Trial Rings",
+    "first": "KF93",
+    "last": "KF94",
+    "still_prompt": "A precise wide 2:1 endpoint of the seven-route trial: three large tarnished-brass rings have risen on paper hinges across the valley. Only one central-right golden route passes cleanly through all three aligned openings; the other six routes are folded down into flat charcoal paper strips before the first ring, still attached at the common braided root. The faceless Maker watches from the origin. Circular dawn aligns through the rings, no text, numbers, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoints. Three brass trial rings rise sequentially from flat page slots and rotate into exact alignment. Each of the seven routes is tested by a controlled pulse: six contact a ring edge and fold back into flat dark strips without breaking from the common root; the one central-right route remains raised and passes through every ring. Orbit slowly about twelve degrees to reveal the alignment. End exactly on the last frame, settle by 4.5 seconds, hold. No cut, dissolve, liquid morph, extra ring, face reveal or new object. Same handcrafted storybook materials; no text, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 95,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Human Mark",
+    "first": "KF94",
+    "last": "KF95",
+    "still_prompt": "A ceremonial medium-wide 2:1 endpoint at the aligned route: the Maker's silhouetted hand presses the familiar square brass signet into one round wax junction just beyond the third trial ring. The chosen road holds raised and bright; all six rejected strips remain flat and dark behind. The wax bears abstract geometry only. Circular sunrise, three aligned rings and chosen route share one axis. No face, readable marks, letters, numbers, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. The Maker approaches the chosen junction and performs one deliberate authorization press with the square signet into the round wax seal: anticipation, descent, contact, compression, follow-through, hold. The selected route brightens only after full contact; rejected routes remain flat and unchanged. Push slowly toward the press and land on the exact last-frame composition by 4.5 seconds, then hold. No cut, dissolve, morph, extra light, face reveal or new object. Dark handcrafted paper/felt/parchment/wax/brass stop-motion; no text, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 96,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Kingdom Answers",
+    "first": "KF95",
+    "last": "KF96",
+    "still_prompt": "A deep telephoto 2:1 endpoint looking back through the three aligned rings and far library door: in the distant original kingdom the same lantern constellation has relit as one perfect gold circle around the tiny book, with every light separated in the supplied arrangement. The authorized chosen road connects foreground wax seal to that distant response as one unbroken line. Maker hand has withdrawn from the seal; no face, extra lanterns, text, numbers, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoint frames. After the signet lifts, a single gold pulse travels backward along the authorized route, through each aligned ring and the open library door. Follow it with a restrained rack of depth, not a cut. In the distant kingdom, the existing lantern constellation ignites sequentially around the book, pair by pair, until the exact circular last-frame formation is complete; no other lights ignite and no light is added, removed, merged, or duplicated. End on the exact last-frame response, settle by 4.5 seconds, and hold. No dissolve, morph, extra lantern, face or new object. Handcrafted paper/felt/parchment/wire/wax/brass; no text, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 97,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "Every District Moves",
+    "first": "KF96",
+    "last": "KF97",
+    "still_prompt": "A grand elevated 2:1 endpoint inside the original paper kingdom: exactly eight substantial districts, four left and four right of the central golden road, operate in synchronized physical states—one island workshop, arena bowl, artillery hill, sealed cottage, route station, domed observatory, folded-box atelier and tiered cake studio. Their mechanisms are visibly different but share one gold pulse; the same lantern constellation remains in a distant circle. No labels, flags, text, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Ride the returning gold pulse through the open door into the kingdom and crane upward as exactly eight known districts engage in a controlled sequence: lever, arena ring, hill carriage, cottage lock, route arm, observatory dome, box fold and tiered studio platform. Each moves once only after the shared pulse reaches it. Keep four districts per side and preserve the supplied lantern circle exactly. End on the exact last-frame synchronized tableau by 4.5 seconds, hold. No cut, dissolve, morph, extra district or readable text. Same dark handcrafted storybook materials; no face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 98,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Road Returns",
+    "first": "KF97",
+    "last": "KF98",
+    "still_prompt": "A wide 2:1 endpoint back in the familiar candlelit workshop: the chosen golden route enters from the open circular moon window, crosses the dark room as one raised thread, and lands on the sealed storybook's central brass emblem. The book is again centered, candle left, latch closed, but the thread remains connected to the world beyond. The lantern constellation and outer kingdom are no longer visible in this frame. Exact premium gothic stop-motion identity, no text, faces, logos or watermark.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF transition between immutable frames. Follow the one authorized route continuously home: accelerate only through its already-established paper corridor, pass the aligned rings, library and nested aperture as connected layers, then decelerate through the familiar moon window into the original workshop. Never cut or dissolve. The route narrows into a raised thread and lands physically on the sealed book emblem. End in the exact last-frame workshop composition with a slow forward settle by 4.5 seconds and hold. No object redesign, teleport, morph or extra light. Dark paper/felt/parchment/wire/wax/brass, candle-gold and blue-grey; no text, face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 99,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Unfinished Page",
+    "first": "KF98",
+    "last": "KF99",
+    "still_prompt": "A slightly overhead wide 2:1 endpoint of the familiar table: the same storybook now lies open, its left page carrying a small embossed circular trace of the completed kingdom while the right page is clean blank parchment except for the continuous golden thread entering from the moon window and touching its center. The candle remains at the exact left position; latch rests open at the fore edge. No written marks, letters, numbers, map labels, faces, logos or watermark. Dark handcrafted paper theatre, restrained gold and blue-grey.",
+    "video_prompt": "Generate one continuous 5-second Wan 2.7 FLF shot between immutable endpoint frames. The thread touching the emblem turns the brass ring one notch; the front latch opens on its hinge, then the cover lifts and pages separate through physical paper motion into the exact open-book last frame. Do not insert a cut or change the workshop geometry. The completed kingdom compresses only through successive page folds into the small embossed circular trace on the left page; the thread lands on the blank right page. Crane gently upward, settle by 4.5 seconds, hold. No dissolve, liquid morph, writing or new object. Same dark handcrafted materials; no face, logo, subtitles, music or watermark."
+  },
+  {
+    "shot": 100,
+    "act": "XIV",
+    "act_title": "The Kingdom Chooses",
+    "title": "The Open Circle",
+    "first": "KF99",
+    "last": "KF100",
+    "still_prompt": "The final premium 2:1 endpoint in the exact familiar workshop: the open book is centered on the table, candle left, moon window aligned behind. On the blank right parchment page, the single golden thread has drawn one clean raised circular road but leaves a deliberate narrow opening at the top; from that opening the same thread lifts physically off the page and travels toward the circular moon window. The left-page embossed kingdom remains subtle and honest. Open latch, deep charcoal room, candle-gold only, no writing, letters, numbers, faces, logos or watermark.",
+    "video_prompt": "Generate the final single continuous 5-second Wan 2.7 FLF shot from immutable first image to immutable last image. The one gold thread moves across the blank right page at a measured pace, physically laying down a raised circular road with a true thin shadow. It nearly returns to its starting point but preserves the exact narrow opening shown in the last frame; the free end then lifts through that opening and aims toward the aligned moon window. Make one slow descending crane into the exact final composition, settle by 4.5 seconds, and hold. No cut, dissolve, liquid morph, closed loop, extra light or new object. Dark handcrafted cut-paper stop-motion, parchment, felt, wire, wax and tarnished brass; no text, face, logo, subtitles, music or watermark."
+  }
+]

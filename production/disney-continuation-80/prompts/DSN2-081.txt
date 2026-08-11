@@ -1,0 +1,6 @@
+DSN2-081 | The Moon Passage
+FIRST FRAME: keyframes/KF80.png
+LAST FRAME: keyframes/KF81.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot from the provided first frame to the provided last frame. Both endpoint images are immutable. Continue the sky engine's slow forward drift as its single gold beam passes through the opened moon iris; the camera rides precisely along that beam, crosses the layered paper aperture without a cut, and emerges into the immense outer workshop. Paper iris leaves slide past the lens with clear foreground parallax. Do not invent objects beyond the two endpoints and do not dissolve or morph anything. End in the exact last-frame composition, settle into a slow forward drift by 4.5 seconds, and hold. Dark cut-paper storybook stop-motion, parchment, felt, wire, wax and tarnished brass; candle-gold only with restrained blue-grey fill; no text, face, logo, subtitles, music or watermark. No cut.

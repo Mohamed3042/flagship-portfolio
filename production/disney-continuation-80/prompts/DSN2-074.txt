@@ -1,0 +1,6 @@
+DSN2-074 | The Moon Iris
+FIRST FRAME: keyframes/KF73.png
+LAST FRAME: keyframes/KF74.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF73 and @Image2 KF74 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. One controlled forward push travels through the aligned brass rings toward the familiar moon window as its existing blue-grey paper iris blades rotate and fold back on visible pivots. The supplied lantern constellation remains unchanged and tethered behind the camera path; the circular frame never changes shape. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

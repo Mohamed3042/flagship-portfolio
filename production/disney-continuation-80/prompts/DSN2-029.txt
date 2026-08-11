@@ -1,0 +1,6 @@
+DSN2-029 | The Dark District
+FIRST FRAME: keyframes/KF28.png
+LAST FRAME: keyframes/KF29.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF28 and KF29 as immutable exact endpoint frames. Continue the pendulum's physical swing and gear rotation while the camera performs one steady crane backward through the tower opening to reveal the kingdom. Existing paper lamp shutters hinge open district by district along the already-defined routes, but the one far district and its route remain completely dark. The firefly stays at the tower opening. Preserve exact district count, geometry, and candle-gold-only illumination. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF29 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

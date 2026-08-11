@@ -1,0 +1,202 @@
+[
+  {
+    "shot": 21,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Last Ember",
+    "first": "KF01",
+    "last": "KF21",
+    "still_prompt": "Create one exact endpoint still for KF21, using KF01 as the sole authority for the sealed book, workshop geometry, palette, materials, and lighting. The same closed book remains centered on the same table with the single candle at left. Exactly one tiny handcrafted paper firefly has emerged through the central brass sun-wheel emblem and now hovers directly above it, wings open on delicate wire hinges, casting one small gold reflection onto the unchanged cover. Nothing else has moved. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra insects, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF01 and KF21 as immutable exact endpoint frames. Begin on the sealed book exactly as supplied. A hairline hinge in the central brass emblem opens; the one paper firefly already defined by KF21 unfolds from the emblem, raises itself on a smooth wire-guided slide, and opens its wings once. Use one very slow camera push toward the emblem. Preserve the book, candle, room, object counts, palette, and lighting. Motion is physical hinge, fold, rotate, and slide only. No cuts, dissolves, liquid morphing, teleportation, or objects beyond the supplied endpoints. Match KF21 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 22,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Listening Emblem",
+    "first": "KF21",
+    "last": "KF22",
+    "still_prompt": "Create one exact endpoint still for KF22 from the supplied KF21 composition. The same single paper firefly now rests at the exact center of the sealed book's brass sun-wheel emblem with its wings folded. Its tiny weight has rotated the emblem's two concentric brass rings into a newly aligned offset, exposing one narrow candle-gold seam between them. The cover, latch, candle, table, shelves, and moonlit window remain unchanged and no additional mechanism is visible. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra insects, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF21 and KF22 as immutable exact endpoint frames. The one paper firefly lowers by a smooth wire-guided slide onto the emblem, folds both wings on visible hinges, and settles. Under its weight, the outer brass ring rotates clockwise while the inner ring rotates counterclockwise until the supplied KF22 alignment is reached and the narrow gold seam is exposed. Use one controlled macro push-in, no orbit. Preserve every other object and all lighting. Motion is hinge, fold, rotate, and slide only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF22 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 23,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Second Latch",
+    "first": "KF22",
+    "last": "KF23",
+    "still_prompt": "Create one exact endpoint still for KF23, preserving the canonical sealed book and the mechanism state from KF22. Frame the book obliquely so the rotated central emblem remains visible at right while the rounded ribbed spine dominates the center. A previously hidden second tarnished-brass latch has physically slid out from beneath the upper spine rib and now rests fully unlocked, its small linkage continuing beneath the gilt cover border back toward the aligned emblem. The single paper firefly remains folded on the emblem. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra mechanisms, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF22 and KF23 as immutable exact endpoint frames. The aligned emblem rings rotate one final small increment, pulling the existing narrow brass linkage beneath the gilt border. The camera performs one slow lateral truck from the emblem toward the spine while the hidden second latch slides cleanly from under the upper rib and hinges into its fully unlocked KF23 position. The firefly stays folded and still. Preserve book identity, room geometry, counts, and light. Motion is physical rotate, slide, and hinge only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF23 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 24,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Night Page",
+    "first": "KF23",
+    "last": "KF24",
+    "still_prompt": "Create one exact endpoint still for KF24 from the same workshop and canonical book. Both latches are released and the front cover is fully open on its real spine hinge. The revealed spread is not ivory daylight parchment: it is one deep charcoal handmade night page filling the center like a paper theatre, with exactly one perfect flat candle-gold circle at its center. The folded paper firefly rests on the lower rim of that circle. The candle remains left and the dark room stays subordinate around the page. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, stars, extra circles, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF23 and KF24 as immutable exact endpoint frames. The unlocked front cover lifts and rotates only on its real spine hinge while the camera makes one gentle crane upward into the supplied overhead angle. Beneath it, layered ivory leaves fold aside in sequence to reveal the already-defined deep charcoal night page; its central brass-paper ring rotates flat until it reads as the single gold circle in KF24. The firefly slides with the mechanism to the circle's lower rim. Preserve all geometry and counts. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF24 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 25,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Aperture Kingdom",
+    "first": "KF24",
+    "last": "KF25",
+    "still_prompt": "Create one exact endpoint still for KF25, preserving the open book, charcoal night page, and one central gold circle from KF24. The circle is now a true round paper aperture with a thick layered parchment edge. Through it, and only through it, a miniature nocturnal paper kingdom is visible far below: compact folded rooftops, narrow dark routes, and sparse shuttered lamps arranged in believable forced perspective. The firefly perches on the near aperture rim as the sole bright point. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, skyline outside the aperture, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF24 and KF25 as immutable exact endpoint frames. The flat gold circle separates along concentric paper seams: its center slides downward and nested parchment rings hinge inward, physically forming the deep round aperture. As the rings open, the miniature kingdom already present in KF25 is progressively uncovered below. The firefly folds its wings and slides a few centimeters to the near rim. Use one slow centered camera push toward the opening. Preserve all endpoint geometry and counts. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF25 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 26,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Clock Without Time",
+    "first": "KF25",
+    "last": "KF26",
+    "still_prompt": "Create one exact endpoint still for KF26 as the physically continuous view below KF25's aperture. Center one tall handcrafted paper clocktower in the miniature night kingdom. Its circular clock opening is completely handless and numberless: only concentric cut-paper rings, exposed brass pivots, and one dark central axle are visible. The surrounding folded rooftops remain low and mostly unlit. The same single firefly hovers beside the upper opening, small against the tower. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, clock hands, faces, watermark, extra insects, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF25 and KF26 as immutable exact endpoint frames. The camera performs one uninterrupted controlled descent through the round aperture toward the miniature kingdom, tilting only enough to center the one clocktower. Layered paper rooftops separate by parallax while the same firefly advances on a smooth wire-guided slide beside the camera and stops beside the tower's handless, numberless opening. Nothing transforms; scale changes only through the real camera move. Preserve every endpoint object and light. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF26 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 27,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Stilled Heart",
+    "first": "KF26",
+    "last": "KF27",
+    "still_prompt": "Create one exact endpoint still for KF27 inside the same handless, numberless clocktower. A tall stopped pendulum hangs perfectly still in the center from a visible brass pivot; its dark paper rod ends in one heavy tarnished-brass counterweight. The single paper firefly now rests on the upper edge of that counterweight with wings folded. Behind it, a sparse train of paper gears is visible but motionless and unlit. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, clock hands, faces, watermark, extra insects, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF26 and KF27 as immutable exact endpoint frames. The camera makes one slow forward glide through the tower's existing circular opening into the mechanism chamber. The already-stopped pendulum remains still. The one firefly travels on a smooth wire-guided slide from the outer ring to the brass counterweight, hinges its wings closed, and settles on the exact KF27 edge. Exposed paper gears remain halted and dark. Preserve all object identities, counts, and lighting. Motion is physical slide, hinge, and fold only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF27 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 28,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The First Pulse",
+    "first": "KF27",
+    "last": "KF28",
+    "still_prompt": "Create one exact endpoint still for KF28 in the same clocktower chamber. The firefly remains pressed against the pendulum counterweight, which has moved through the first small arc of a renewed swing. One narrow candle-gold pulse has entered the nearest gear teeth and exactly the closest cluster of tiny shutter lamps has opened and lit; the farther gears and city beyond remain dark. The mechanism is readable as layered paper and brass, not magic mist. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, clock hands, faces, watermark, extra lights, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF27 and KF28 as immutable exact endpoint frames. The firefly unfolds its wings once and presses down by a short hinge motion on the brass counterweight. The pendulum rotates through one first controlled arc; its axle rotates the nearest gear, and a narrow gold paper strip physically unwinds tooth by tooth into the closest lamp circuit. Tiny lamp shutters hinge open in sequence only where KF28 shows light. Use one restrained sideways camera arc. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF28 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 29,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Dark District",
+    "first": "KF28",
+    "last": "KF29",
+    "still_prompt": "Create one exact endpoint still for KF29 as a wide nocturnal reveal from the same clocktower. The tower stands near center with its first lamps lit, and several compact folded-paper districts now glow along connected candle-gold routes. Exactly one substantial district at the far edge remains completely dark, separated visually by one unlit route. The composition makes that absence unmistakable without labels or symbols. The single firefly is a tiny point at the tower opening. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra dark districts, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF28 and KF29 as immutable exact endpoint frames. Continue the pendulum's physical swing and gear rotation while the camera performs one steady crane backward through the tower opening to reveal the kingdom. Existing paper lamp shutters hinge open district by district along the already-defined routes, but the one far district and its route remain completely dark. The firefly stays at the tower opening. Preserve exact district count, geometry, and candle-gold-only illumination. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF29 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 30,
+    "act": "VII",
+    "act_title": "The Last Ember",
+    "title": "The Messenger",
+    "first": "KF29",
+    "last": "KF30",
+    "still_prompt": "Create one exact endpoint still for KF30 from the kingdom layout in KF29. The same single paper firefly has launched from the clocktower and now travels low above the one unlit paper route toward the missing dark district, wings open on wire hinges and body angled forward. Lit districts remain behind; the route ahead stays dark. Compose a strong diagonal journey with the distant dark district and its gate still visible at the endpoint. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra insects, route glow ahead, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF29 and KF30 as immutable exact endpoint frames. The one paper firefly unfolds its wings, releases from the clocktower, and advances down the unlit route on a smooth wire-guided slide while its wings hinge in two measured beats. Use one controlled low tracking move that turns the route into a diagonal and keeps the missing district ahead. All city lights behind remain fixed; the route ahead never lights. Preserve every structure and count. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF30 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 31,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The Torn Route",
+    "first": "KF30",
+    "last": "KF31",
+    "still_prompt": "Create one exact endpoint still for KF31 by continuing along KF30's dark route. The route ends abruptly at a broad torn-paper chasm with raw parchment fibers visible along both broken edges. The single firefly hovers at the near edge with folded city lights far behind. Across the gap, the missing district's tall dark gate aligns with the broken route, unreachable but clearly part of the same path. No bridge material yet spans the void. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra insects, bridge, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF30 and KF31 as immutable exact endpoint frames. Track the one firefly along the same dark route on a smooth wire-guided slide. The camera performs one measured forward tracking move as the torn chasm enters frame; the firefly hinges its wings closed and brakes at the near raw edge. Nothing breaks during the shot: the chasm and opposite dark gate are progressively revealed exactly as supplied in KF31. Keep the route unlit and introduce no bridge material. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF31 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 32,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The First Fold",
+    "first": "KF31",
+    "last": "KF32",
+    "still_prompt": "Create one exact endpoint still for KF32 at the same torn chasm. A single fine candle-gold filament has physically unwound from inside the near route edge and crossed only the first portion of the void. Around that filament, the first three accordion-folded parchment bridge panels have hinged outward in a narrow partial span; most of the chasm remains open. The firefly rests beside the filament's small brass feed eye at the near edge. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, completed bridge, extra cables, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF31 and KF32 as immutable exact endpoint frames. The firefly presses the existing brass feed eye at the torn route edge. One fine gold filament unwinds from inside the route and slides toward the opposite bank while exactly the first three pre-folded parchment panels hinge outward around it in sequence, stopping at the partial KF32 span. Use one slow sideward camera slide to reveal depth across the gap. Preserve both torn edges and the distant gate. No cuts, dissolves, liquid morphing, teleportation, or objects beyond the endpoint frames. Match KF32 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 33,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The Wind Test",
+    "first": "KF32",
+    "last": "KF33",
+    "still_prompt": "Create one exact endpoint still for KF33 at the same chasm. The narrow folded bridge now reaches farther across the gap but bows sideways under a strong unseen draft; its parchment panels remain individually readable and attached to the one gold filament. From the torn route edges, slender dark wire ribs have hinged upward at regular intervals and caught the bridge, forming a visible structural cradle. The firefly braces beside the near anchor. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, visible wind effects, broken panels, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF32 and KF33 as immutable exact endpoint frames. Additional existing accordion panels hinge and unfold along the one filament. A controlled mechanical strain pulls the span sideways; the parchment bends at its scored folds without tearing. In response, the dark wire ribs stored flat along both chasm edges rotate upward one after another and slide beneath the bridge to form the supplied cradle. Use one restrained side-on camera arc. No cuts, dissolves, liquid morphing, teleportation, visible wind particles, or new objects. Match KF33 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 34,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The Crossing",
+    "first": "KF33",
+    "last": "KF34",
+    "still_prompt": "Create one exact endpoint still for KF34. The reinforced accordion bridge now spans the torn chasm completely, its wire ribs locked into both raw paper banks and its single gold filament taut through the center. The same firefly has crossed and hovers directly before the tall dark gate of the missing district on the far side, wings open and facing the sealed center. The route and district remain unlit behind the gate. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra insects, lit district, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF33 and KF34 as immutable exact endpoint frames. The remaining bridge panels hinge into place; the last wire ribs rotate into the opposite bank and slide into their locks, straightening the one filament. The firefly then crosses on a smooth wire-guided slide just above the bridge, wings hinging in measured beats. Use one controlled tracking move from the near bank to the dark gate, never passing the firefly. Keep the route and district dark. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF34 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 35,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The Silent Workshop",
+    "first": "KF34",
+    "last": "KF35",
+    "still_prompt": "Create one exact endpoint still for KF35 beyond the dark gate in KF34. The gate's layered leaves are now folded inward, revealing a small sealed workshop at the end of the same unlit route. Its facade is built from black felt panels, parchment seams, tarnished-brass hinges, and one round wax-sealed door; all shutters and mechanisms are closed and dark. The single firefly hovers before the wax seal as the only luminous subject. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, people, lit windows, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF34 and KF35 as immutable exact endpoint frames. The dark gate's existing layered leaves rotate inward on visible paper hinges, uncovering the sealed workshop already present behind them. The camera performs one slow centered push through the opened gate but stops outside the workshop. The firefly advances by a smooth wire-guided slide and settles before the round wax seal. The route, shutters, and workshop stay unlit and closed. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF35 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 36,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The Quiet Channel",
+    "first": "KF35",
+    "last": "KF36",
+    "still_prompt": "Create one exact endpoint still for KF36 on the same sealed workshop facade. A narrow brass service panel beside the wax-sealed door has opened on a real hinge, and exactly three small tarnished-brass listening cups have folded outward from it in an ordered row. Each cup connects to one thin dark wire entering the wall. Only the middle cup carries one extremely faint candle-gold line, identifying the quiet channel; the outer two remain completely dark. The firefly listens beside the middle rim. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra cups, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF35 and KF36 as immutable exact endpoint frames. The existing narrow service panel slides clear and hinges open. Exactly three nested brass listening cups rotate outward one after another while their three dark wires unwind into the wall. The firefly slides to the middle cup and folds its wings. Only the middle wire tightens and reveals the faint gold line; the other two stay dark. Use one controlled lateral macro move from the wax seal to the cups. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF36 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 37,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The Ink Wedge",
+    "first": "KF36",
+    "last": "KF37",
+    "still_prompt": "Create one exact endpoint still for KF37 inside the workshop, physically connected to KF36's middle listening wire. A compact layered gear train fills the center: parchment gear wheels on tarnished-brass axles, all perfectly halted. One missing-tooth gap interrupts the central gear, and a hard matte-black dried-ink wedge is visibly jammed between the adjacent teeth. The selected middle wire enters from the door channel and terminates beside that wedge. The single firefly hovers at the wire end. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, turning gears, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF36 and KF37 as immutable exact endpoint frames. The faint middle listening wire tightens and slides the round wax-sealed door sideways along its existing brass track. The camera makes one uninterrupted push through the opening, following that same wire into the workshop until the halted gear train and matte-black ink wedge fill the supplied KF37 composition. No gear moves. The firefly advances along the wire and stops beside the wedge. Motion is physical slide, rotate, and unwind only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF37 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 38,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The False Teeth",
+    "first": "KF37",
+    "last": "KF38",
+    "still_prompt": "Create one exact endpoint still for KF38 in the same halted gear chamber. A shallow brass parts drawer has slid open beneath the damaged central gear. Exactly three separate incorrect spare gear teeth lie side by side in the drawer, visibly wrong in three distinct physical ways: one too wide, one too narrow, and one with the wrong curve. The missing-tooth gap remains empty, while the matte-black ink wedge has slid partly aside but still conceals a thin shape beneath it. The firefly hovers over the gap. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra spare teeth, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF37 and KF38 as immutable exact endpoint frames. The firefly presses an existing drawer pin with one wing hinge. The shallow parts drawer slides outward and three nested brass spare teeth unfold into the exact side-by-side KF38 arrangement: one wide, one narrow, one wrongly curved. The black ink wedge slides only partway from the damaged gap, exposing the edge of the concealed thin shape but not releasing it. Use one controlled downward macro tilt. Keep every gear halted. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF38 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 39,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The True Tooth",
+    "first": "KF38",
+    "last": "KF39",
+    "still_prompt": "Create one exact endpoint still for KF39 in the same gear chamber. The black ink wedge has slid completely away, revealing the one true thin brass tooth that had been trapped beneath it. That tooth is now seated perfectly in the central gear's missing gap, aligned flush with both neighboring teeth. The three incorrect spares remain untouched in their drawer. A narrow candle-gold line enters through the selected listening wire, crosses the fitted tooth, and reaches the next gear only. The firefly rests beside the repair. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, extra teeth, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF38 and KF39 as immutable exact endpoint frames. The firefly folds one wing against the matte-black wedge, sliding it fully clear. The concealed true brass tooth then rises on its existing paper hinge, rotates once into alignment, and slides snugly into the damaged gear gap. The three incorrect spares never move. The selected listening wire unwinds one narrow gold strip across the fitted tooth to the next gear. Use one slow centered macro push. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF39 exactly by 4.5 seconds and hold through 5.0 seconds."
+  },
+  {
+    "shot": 40,
+    "act": "VIII",
+    "act_title": "The Missing District",
+    "title": "The District Wakes",
+    "first": "KF39",
+    "last": "KF40",
+    "still_prompt": "Create one exact endpoint still for KF40 as the wide exterior resolution of the repaired workshop and missing district. The once-dark district is now awake: the workshop gear train turns behind open shutters, compact paper buildings have unfolded into their working positions, and controlled candle-gold lamps glow along the streets. The repaired route shines continuously from the workshop gate, across the reinforced chasm bridge, and back toward the distant kingdom. The single firefly hovers above the workshop roof. Exact single frame, wide 2:1 composition, story action center-safe, dark handcrafted paper, felt, parchment, tarnished brass, and wax, candle-gold as the only warm luminous color, crisp fibers and hard puppet shadows. No readable text, letters, numbers, logos, faces, watermark, neon color, extra districts, or motion blur.",
+    "video_prompt": "Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF39 and KF40 as immutable exact endpoint frames. The repaired gear rotates and engages the halted train tooth by tooth. Existing workshop shutters hinge open; connected paper buildings unfold into their supplied working positions while lamp shutters rotate open in a controlled outward sequence. The camera performs one continuous crane backward through the workshop door, past the dark gate, and into the exact wide KF40 view. The gold route physically unwinds back across the reinforced bridge toward the kingdom. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF40 exactly by 4.5 seconds and hold through 5.0 seconds."
+  }
+]

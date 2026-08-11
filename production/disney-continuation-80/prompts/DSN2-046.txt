@@ -1,0 +1,6 @@
+DSN2-046 | One Lantern Route
+FIRST FRAME: keyframes/KF45.png
+LAST FRAME: keyframes/KF46.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF45 to the immutable supplied last frame KF46. Existing route lanterns extinguish district by district through physical shutter tabs closing over their candle wells, leaving only the pre-existing emergency lantern line; that one line lights sequentially toward the gate as tiny brass shutters open and stop. Camera: one controlled slow centered push forward only along the emergency route. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

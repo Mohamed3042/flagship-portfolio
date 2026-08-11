@@ -1,0 +1,6 @@
+DSN2-050 | Road after Rain
+FIRST FRAME: keyframes/KF49.png
+LAST FRAME: keyframes/KF50.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF49 to the immutable supplied last frame KF50. Existing folded channels rotate their small brass sluice tabs open, sending candle-gold practical light along the drainage route and into the archive road; tower counterweights slide back to center, the bent tower straightens on its scored fold, and tether threads relax in one measured physical recovery. Camera: one controlled slow pullback only to reveal the restored road. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

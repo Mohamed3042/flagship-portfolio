@@ -1,0 +1,6 @@
+DSN2-084 | The Escaping Thread
+FIRST FRAME: keyframes/KF83.png
+LAST FRAME: keyframes/KF84.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot between the immutable endpoint frames. The original gold beam must narrow physically into one unbroken thread, feed out from the active book, and slide across the giant tabletop toward the nearest closed volume. Track low beside it as it alternates between printed-flat line and raised fibre, passing over paper scraps with accurate shadows, then hooks cleanly into the target book's brass emblem. No teleporting, branching or liquid motion. Land on the exact last frame, settle by 4.5 seconds, hold. No cuts, dissolves, morphs, extra lights or objects. Same dark handcrafted storybook materials and restrained palette; no text, face, logo, subtitles, music or watermark.

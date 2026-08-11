@@ -1,0 +1,6 @@
+DSN2-027 | The Stilled Heart
+FIRST FRAME: keyframes/KF26.png
+LAST FRAME: keyframes/KF27.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF26 and KF27 as immutable exact endpoint frames. The camera makes one slow forward glide through the tower's existing circular opening into the mechanism chamber. The already-stopped pendulum remains still. The one firefly travels on a smooth wire-guided slide from the outer ring to the brass counterweight, hinges its wings closed, and settles on the exact KF27 edge. Exposed paper gears remain halted and dark. Preserve all object identities, counts, and lighting. Motion is physical slide, hinge, and fold only. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF27 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

@@ -1,0 +1,6 @@
+DSN2-061 | The Deep Door
+FIRST FRAME: keyframes/KF60.png
+LAST FRAME: keyframes/KF61.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF60 and @Image2 KF61 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The existing deep door swings inward on its visible brass hinge while the golden route stays physically threaded through it; the camera makes one slow controlled forward dolly through the opening, revealing the already-present hanging underside fibres and spools by occlusion and parallax. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

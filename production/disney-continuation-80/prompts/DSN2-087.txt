@@ -1,0 +1,6 @@
+DSN2-087 | The Sleeping Shelf
+FIRST FRAME: keyframes/KF86.png
+LAST FRAME: keyframes/KF87.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Continue the bird's forward glide toward the destination shelf, ease into a shallow descending arc, and land it on the central ledge without losing or duplicating the thread. The thread tip reaches the one central book emblem but does not light it yet; all neighbouring volumes remain completely dark. Camera follows and settles into the exact frontal last-frame composition by 4.5 seconds, then holds. No cut, dissolve, morph, extra book movement, extra light or new object. Dark paper/felt/parchment/wire/brass stop-motion, restrained candle-gold and blue-grey; no readable text, face, logo, subtitles, music or watermark. No text, letters, numbers, logos, subtitles, faces or watermark.

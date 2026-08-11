@@ -1,0 +1,6 @@
+DSN2-025 | The Aperture Kingdom
+FIRST FRAME: keyframes/KF24.png
+LAST FRAME: keyframes/KF25.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF24 and KF25 as immutable exact endpoint frames. The flat gold circle separates along concentric paper seams: its center slides downward and nested parchment rings hinge inward, physically forming the deep round aperture. As the rings open, the miniature kingdom already present in KF25 is progressively uncovered below. The firefly folds its wings and slides a few centimeters to the near rim. Use one slow centered camera push toward the opening. Preserve all endpoint geometry and counts. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF25 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

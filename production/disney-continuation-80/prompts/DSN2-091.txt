@@ -1,0 +1,6 @@
+DSN2-091 | The Open Horizon
+FIRST FRAME: keyframes/KF90.png
+LAST FRAME: keyframes/KF91.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Continue the same forward drift through the partly open far door as its two layered leaves finish opening on visible hinges. Cross the threshold and descend gently along the single unbroken gold road into the parchment valley, revealing the circular dawn horizon through parallax rather than a dissolve. Land in the exact last-frame landscape, settle by 4.5 seconds, and hold. No cuts, speed ramps, morphs, added structures or figures. Dark-to-dawn handcrafted cut-paper stop-motion, parchment, felt, wire and brass; no readable text, face, logo, subtitles, music or watermark. No text, letters, numbers, logos, subtitles, faces or watermark.

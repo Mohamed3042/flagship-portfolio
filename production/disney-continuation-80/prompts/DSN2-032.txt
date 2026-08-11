@@ -1,0 +1,6 @@
+DSN2-032 | The First Fold
+FIRST FRAME: keyframes/KF31.png
+LAST FRAME: keyframes/KF32.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF31 and KF32 as immutable exact endpoint frames. The firefly presses the existing brass feed eye at the torn route edge. One fine gold filament unwinds from inside the route and slides toward the opposite bank while exactly the first three pre-folded parchment panels hinge outward around it in sequence, stopping at the partial KF32 span. Use one slow sideward camera slide to reveal depth across the gap. Preserve both torn edges and the distant gate. No cuts, dissolves, liquid morphing, teleportation, or objects beyond the endpoint frames. Match KF32 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

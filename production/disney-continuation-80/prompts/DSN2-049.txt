@@ -1,0 +1,6 @@
+DSN2-049 | The Storm Sheet
+FIRST FRAME: keyframes/KF48.png
+LAST FRAME: keyframes/KF49.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF48 to the immutable supplied last frame KF49. The two existing black paper storm wings feed inward through the brass splitter, crease along their pre-scored lines, and accordion-fold into one flat origami sheet; the final fold swings onto the existing central gate hook and stops securely. Camera: one controlled slow push toward the gate hook only. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

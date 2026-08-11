@@ -1,0 +1,6 @@
+DSN2-036 | The Quiet Channel
+FIRST FRAME: keyframes/KF35.png
+LAST FRAME: keyframes/KF36.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF35 and KF36 as immutable exact endpoint frames. The existing narrow service panel slides clear and hinges open. Exactly three nested brass listening cups rotate outward one after another while their three dark wires unwind into the wall. The firefly slides to the middle cup and folds its wings. Only the middle wire tightens and reveals the faint gold line; the other two stay dark. Use one controlled lateral macro move from the wax seal to the cups. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF36 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

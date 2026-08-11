@@ -1,0 +1,6 @@
+DSN2-080 | The Outward Beam
+FIRST FRAME: keyframes/KF79.png
+LAST FRAME: keyframes/KF80.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF79 and @Image2 KF80 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The messenger firefly remains intact in its socket while connected loom axles and orbital drums rotate together; a hinged brass sight aligns and uncovers one existing candle-gold source, sending a narrow beam along the fixed route toward the distant outer-workshop opening. Use one controlled pullback that reveals the whole connected engine and its target. No explosive flare or sudden exposure shift. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

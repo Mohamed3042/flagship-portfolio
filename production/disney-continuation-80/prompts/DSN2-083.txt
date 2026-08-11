@@ -1,0 +1,6 @@
+DSN2-083 | The Other Volumes
+FIRST FRAME: keyframes/KF82.png
+LAST FRAME: keyframes/KF83.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot from immutable first frame to immutable last frame. Continue the crane from the nested-workshop reveal, rising and drifting laterally over the giant table until ordered rows of other sealed volumes enter view through natural foreground parallax. Their covers remain still and dark; only the original book's continuous beam glows. Reveal the scale rather than spawning anything. End exactly on the last-frame overhead-oblique composition, ease into a slow forward drift by 4.5 seconds, and hold. No cuts, dissolves, morphing, flicker, extra lights or unshown objects. Dark handcrafted paper, felt, parchment, wire, wax and brass; no text, letters, numbers, face, logo, subtitles, music or watermark.

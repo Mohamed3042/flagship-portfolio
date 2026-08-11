@@ -1,0 +1,6 @@
+DSN2-062 | The Spool Forest
+FIRST FRAME: keyframes/KF61.png
+LAST FRAME: keyframes/KF62.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF61 and @Image2 KF62 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The camera performs one slow controlled descending track along the existing golden route; foreground hanging fibres slide past by parallax and uncover the already-present brass spool forest, while only a few connected bobbins rotate gently on fixed axles. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

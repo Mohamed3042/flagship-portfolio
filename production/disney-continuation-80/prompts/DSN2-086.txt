@@ -1,0 +1,6 @@
+DSN2-086 | Across the Shelves
+FIRST FRAME: keyframes/KF85.png
+LAST FRAME: keyframes/KF86.png
+
+PROMPT
+Generate one continuous 5-second Wan 2.7 FLF shot between immutable first and last frames. The courier opens its scored-paper wings and takes off while keeping the same gold thread in its beak. Track alongside and slightly behind as it glides smoothly between shelf layers; foreground volumes cross faster than the distant active book, and the thread pays out continuously without snapping or multiplying. No flapping frenzy, collision, cut, dissolve, morph or new bird. End in the exact last-frame flight pose with a slow steady forward glide by 4.5 seconds, and hold. Dark cut-paper storybook stop-motion, parchment, felt, wire and tarnished brass; candle-gold only, blue-grey fill; no text, face, logo, subtitles, music or watermark. No cut.

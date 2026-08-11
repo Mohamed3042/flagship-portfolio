@@ -1,0 +1,6 @@
+DSN2-051 | The Gate Becomes a Stair
+FIRST FRAME: keyframes/KF50.png
+LAST FRAME: keyframes/KF51.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF50 to the immutable supplied last frame KF51. The existing gate unlocks through visible brass pins, and each gate segment rotates downward in order on its wire hinge until the leaves nest into one stable descending staircase; existing candle shutters under the steps open as each segment seats. Camera: one controlled slow tilt downward only, following the gate into stair form. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

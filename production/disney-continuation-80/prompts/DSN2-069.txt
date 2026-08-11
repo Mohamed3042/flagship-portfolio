@@ -1,0 +1,6 @@
+DSN2-069 | The Kingdom Lift
+FIRST FRAME: keyframes/KF68.png
+LAST FRAME: keyframes/KF69.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 first-frame-to-last-frame shot. @Image1 KF68 and @Image2 KF69 are immutable in geometry, object identity, material, lighting direction, palette, and art direction. The gold pulse reaches the existing lifting yoke; connected gears rotate, threaded columns rise, and folded scissor hinges open to raise the whole already-built paper kingdom as one platform. Use one controlled crane upward that stays beside the lift and preserves a visible cable connection below. All visible changes occur only through physical hinges, rotations, slides, folds, or unwinding. Do not add, remove, duplicate, replace, or teleport objects. No cut, dissolve, liquid morph, material morph, sudden exposure shift, color shift, jitter, or new objects. Preserve the dark handcrafted paper, felt, parchment, brass, and wax style, candle-gold only with blue-grey fill, 2:1 center-safe framing, and no people, hands, faces, text, letters, numbers, logos, or watermark. Motion settles by 4.5 seconds and holds @Image2 for the final 0.5 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

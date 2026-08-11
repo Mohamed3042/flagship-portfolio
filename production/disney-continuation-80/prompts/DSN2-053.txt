@@ -1,0 +1,6 @@
+DSN2-053 | Routes That Did Not Hold
+FIRST FRAME: keyframes/KF52.png
+LAST FRAME: keyframes/KF53.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF52 to the immutable supplied last frame KF53. Existing drawer pulls rotate and selected drawers slide outward one after another on their brass runners, exposing the supplied endpoint's pre-existing rolled parchment routes; each roll remains bound and physically contained, and every drawer stops cleanly at its endpoint depth. Camera: one controlled slow lateral track to camera left only along the drawer faces. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

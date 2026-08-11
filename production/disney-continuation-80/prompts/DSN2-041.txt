@@ -1,0 +1,6 @@
+DSN2-041 | Ink at the Horizon
+FIRST FRAME: keyframes/KF40.png
+LAST FRAME: keyframes/KF41.png
+
+PROMPT
+Wan 2.7 FLF. One single continuous 5-second shot from the immutable supplied first frame KF40 to the immutable supplied last frame KF41. The existing lacquer-black paper ink tide slides forward along the parchment road in short physical stop-motion increments; its torn leading folds rise and settle at the warning boundary while the existing candle beacon rocks once on its wire and steadies. Camera: one controlled slow push forward of five percent only, centered on the approaching tide and gate. Preserve both supplied endpoint frames exactly; use physical paper, felt, wire, brass, and wax operations only. Do not add, remove, invent, or duplicate objects. No cut, dissolve, transition, liquid morph, teleportation, secondary camera move, text, letters, numbers, logos, faces, or watermark. Complete all motion by 4.5 seconds, then hold the exact last-frame composition perfectly still through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.

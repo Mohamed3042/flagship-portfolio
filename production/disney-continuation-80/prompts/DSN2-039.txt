@@ -1,0 +1,6 @@
+DSN2-039 | The True Tooth
+FIRST FRAME: keyframes/KF38.png
+LAST FRAME: keyframes/KF39.png
+
+PROMPT
+Generate one single continuous 5-second Wan 2.7 First & Last Frame shot. Treat KF38 and KF39 as immutable exact endpoint frames. The firefly folds one wing against the matte-black wedge, sliding it fully clear. The concealed true brass tooth then rises on its existing paper hinge, rotates once into alignment, and slides snugly into the damaged gear gap. The three incorrect spares never move. The selected listening wire unwinds one narrow gold strip across the fitted tooth to the next gear. Use one slow centered macro push. No cuts, dissolves, liquid morphing, teleportation, or new objects. Match KF39 exactly by 4.5 seconds and hold through 5.0 seconds. No text, letters, numbers, logos, subtitles, faces or watermark.
