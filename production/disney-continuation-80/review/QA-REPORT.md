@@ -4,6 +4,10 @@
 
 `DISNEY_CONTINUATION_GREEN 80/80 keyframes=80 prompts=80 chain=KF01->KF100 canvas=1920x960`
 
+`WAN_BOARD_GREEN 80/80 cards=80 filters=act+status progress=localStorage`
+
+`WAN_BOARD_BROWSER_GREEN 20/20 desktop+phone`
+
 The gate verifies the exact eight-field schema, shots 21–100, eight acts of ten, the complete endpoint chain, one manifest-identical prompt file per clip, 80 exact run-manifest rows, 80 unique new RGB PNGs at 1920×960, and the inherited 1920×960 `KF01` anchor.
 
 ## Fail-first evidence
@@ -11,6 +15,21 @@ The gate verifies the exact eight-field schema, shots 21–100, eight acts of te
 - Before the image range existed, the pack gate reported `PACK_RED 87`: 79 required endpoint images were absent and eight prompt locks were incomplete.
 - After all assets landed, the strengthened semantic gate intentionally reported `PACK_RED 26`, then `PACK_RED 5`, exposing inconsistent wording around camera, material, text, and new-object locks.
 - Builder and verifier changes resolved those contract failures; the unchanged final command now returns the green sentinel above.
+- Before the visual operator board existed, its fail-first gate reported `BOARD_RED missing=2` for the required HTML and job-data files. The finished static and rendered-browser gates now return both WAN board green sentinels above.
+
+## Visual generation board
+
+The Cake Studio WAN board was used as the rendered interaction reference. The Disney board presents 80 exact manifest jobs with linked first/last references, complete prompts, copy controls, generated-state progress, eight act filters, pending/generated filters, and first-pending navigation.
+
+Playwright measured the actual page at 1440×1000 and 390×844. It verified 80 cards, 160 image elements, the `KF01 → KF21` first boundary, the `KF99 → KF100` last boundary, decoded 1920×960 reference pixels, 6-column/2-column settings layouts, stacked phone frames, no overflow, exact prompt clipboard content, progress persistence, malformed stored-state recovery, working filters, and zero console, page, or failed-request errors.
+
+The same 20-check gate also passed against the built `dist/worlds/assets/disney2/wan-production/` route, exercising the published-route raw-frame fallback rather than repository-local frame paths.
+
+Rendered proof:
+
+- `wan-board-desktop.png` — clean desktop operator view.
+- `wan-board-phone.png` — stacked phone card view.
+- `wan-board-browser.json` — machine-readable 20-check result.
 
 ## Rendered review
 

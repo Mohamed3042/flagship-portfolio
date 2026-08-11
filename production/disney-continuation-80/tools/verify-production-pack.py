@@ -15,6 +15,21 @@ MANIFEST = ROOT / "shot-manifest.json"
 KEYFRAMES = ROOT / "keyframes"
 PROMPTS = ROOT / "prompts"
 RUN_MANIFEST = ROOT / "RUN-MANIFEST.csv"
+BOARD_DIR = (
+    ROOT.parents[1]
+    / "public"
+    / "worlds"
+    / "assets"
+    / "disney2"
+    / "wan-production"
+)
+BOARD_HTML = BOARD_DIR / "WAN-GENERATION-BOARD.html"
+BOARD_JOBS = BOARD_DIR / "wan-jobs.js"
+REMOTE_KEYFRAME_ROOT = (
+    "https://raw.githubusercontent.com/Mohamed3042/flagship-portfolio/"
+    "b61e3f878c11851f65e4f2bd4c2425fd812a44c0/"
+    "production/disney-continuation-80/keyframes"
+)
 EXPECTED_FIELDS = {
     "shot",
     "act",
@@ -58,6 +73,29 @@ def expected_prompt_text(shot: dict) -> str:
         "PROMPT\n"
         f"{shot['video_prompt'].strip()}\n"
     )
+
+
+def load_board_jobs(errors: list[str]) -> list[dict]:
+    if not BOARD_JOBS.exists():
+        fail(errors, "missing WAN board jobs")
+        return []
+    text = BOARD_JOBS.read_text(encoding="utf-8")
+    prefix = (
+        "// Generated from production/disney-continuation-80/shot-manifest.json\n"
+        "window.DSN2_WAN_JOBS = "
+    )
+    if not text.startswith(prefix) or not text.endswith(";\n"):
+        fail(errors, "WAN board jobs wrapper is invalid")
+        return []
+    try:
+        payload = json.loads(text[len(prefix) : -2])
+    except Exception as exc:
+        fail(errors, f"WAN board jobs JSON is invalid: {exc}")
+        return []
+    if not isinstance(payload, list):
+        fail(errors, "WAN board jobs payload is not a list")
+        return []
+    return payload
 
 
 def main() -> int:
@@ -197,6 +235,61 @@ def main() -> int:
                 if row.get(field) != value:
                     fail(errors, f"run manifest row {index}: {field} is {row.get(field)!r}")
 
+    if not BOARD_HTML.exists():
+        fail(errors, "missing WAN-GENERATION-BOARD.html")
+    else:
+        board_html = BOARD_HTML.read_text(encoding="utf-8")
+        for marker in (
+            "Disney II · WAN Generation Board",
+            "First frame → last frame. One prompt.",
+            "window.DSN2_WAN_JOBS",
+            "disney2-continuation-80-wan-done-v1",
+            "loading=\"${index < 2 ? 'eager' : 'lazy'}\"",
+            "data-state-filter=\"pending\"",
+            "Act ${job.act}",
+        ):
+            if marker not in board_html:
+                fail(errors, f"WAN board HTML missing {marker!r}")
+        if "Cake Studio" in board_html or "CST17" in board_html:
+            fail(errors, "WAN board contains Cake Studio residue")
+
+    board_jobs = load_board_jobs(errors)
+    if len(board_jobs) != 80:
+        fail(errors, f"WAN board expected 80 jobs, got {len(board_jobs)}")
+    for position, (shot, job) in enumerate(zip(shots, board_jobs), 1):
+        number = shot["shot"]
+        expected_first = f"{shot['first']}.png"
+        expected_last = f"{shot['last']}.png"
+        expected = {
+            "id": f"DSN2-{number:03d}",
+            "position": position,
+            "shot": number,
+            "act": shot["act"],
+            "actTitle": shot["act_title"],
+            "title": shot["title"],
+            "output": f"DSN2-{number:03d}.mp4",
+            "firstName": expected_first,
+            "lastName": expected_last,
+            "first": (
+                "../../../../../production/disney-continuation-80/keyframes/"
+                + expected_first
+            ),
+            "last": (
+                "../../../../../production/disney-continuation-80/keyframes/"
+                + expected_last
+            ),
+            "promptFile": (
+                "../../../../../production/disney-continuation-80/prompts/"
+                f"DSN2-{number:03d}.txt"
+            ),
+            "firstRemote": f"{REMOTE_KEYFRAME_ROOT}/{expected_first}",
+            "lastRemote": f"{REMOTE_KEYFRAME_ROOT}/{expected_last}",
+            "prompt": shot["video_prompt"],
+        }
+        for field, value in expected.items():
+            if job.get(field) != value:
+                fail(errors, f"WAN board job {number}: {field} differs from manifest")
+
     if errors:
         print(f"PACK_RED {len(errors)} error(s)")
         for error in errors[:25]:
@@ -204,6 +297,7 @@ def main() -> int:
         if len(errors) > 25:
             print(f"- ... {len(errors) - 25} more")
         return 1
+    print("WAN_BOARD_GREEN 80/80 cards=80 filters=act+status progress=localStorage")
     print("DISNEY_CONTINUATION_GREEN 80/80 keyframes=80 prompts=80 chain=KF01->KF100 canvas=1920x960")
     return 0
 

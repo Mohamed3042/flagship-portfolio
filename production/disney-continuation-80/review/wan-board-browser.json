@@ -1,0 +1,109 @@
+{
+  "url": "http://127.0.0.1:41874/public/worlds/assets/disney2/wan-production/WAN-GENERATION-BOARD.html",
+  "checks": [
+    {
+      "name": "desktop title",
+      "pass": true,
+      "detail": "Disney II · WAN Generation Board"
+    },
+    {
+      "name": "desktop jobs",
+      "pass": true,
+      "detail": "{'title': 'Disney II · WAN Generation Board', 'cards': 80, 'images': 160, 'jobs': 80, 'firstId': 'DSN2-021', 'lastId': 'DSN2-100', 'firstNames': ['KF01.png', 'KF21.png'], 'lastNames': ['KF99.png', 'KF100.png'], 'overflow': 0, 'settingsColumns': 6, 'firstImage': {'width': 1920, 'height': 960}, 'secondImage': {'width': 1920, 'height': 960}}"
+    },
+    {
+      "name": "desktop image elements",
+      "pass": true,
+      "detail": "160"
+    },
+    {
+      "name": "desktop first boundary",
+      "pass": true,
+      "detail": "['KF01.png', 'KF21.png']"
+    },
+    {
+      "name": "desktop last boundary",
+      "pass": true,
+      "detail": "['KF99.png', 'KF100.png']"
+    },
+    {
+      "name": "desktop reference pixels",
+      "pass": true,
+      "detail": "({'width': 1920, 'height': 960}, {'width': 1920, 'height': 960})"
+    },
+    {
+      "name": "desktop six settings",
+      "pass": true,
+      "detail": "6"
+    },
+    {
+      "name": "desktop no overflow",
+      "pass": true,
+      "detail": "0"
+    },
+    {
+      "name": "corrupt stored state recovers",
+      "pass": true,
+      "detail": "{'cards': 80, 'done': '0'}"
+    },
+    {
+      "name": "Act VII filter",
+      "pass": true,
+      "detail": "10"
+    },
+    {
+      "name": "generated progress",
+      "pass": true,
+      "detail": "{'count': '1', 'width': 1.25, 'stored': ['DSN2-021']}"
+    },
+    {
+      "name": "generated state persists",
+      "pass": true,
+      "detail": "true"
+    },
+    {
+      "name": "status filters",
+      "pass": true,
+      "detail": "(79, 1)"
+    },
+    {
+      "name": "copy exact prompt",
+      "pass": true,
+      "detail": "767"
+    },
+    {
+      "name": "phone two settings columns",
+      "pass": true,
+      "detail": "{'overflow': 0, 'settingsColumns': 2, 'framesStacked': True, 'cardWidth': 372, 'viewport': 390}"
+    },
+    {
+      "name": "phone frames stack",
+      "pass": true,
+      "detail": "{'overflow': 0, 'settingsColumns': 2, 'framesStacked': True, 'cardWidth': 372, 'viewport': 390}"
+    },
+    {
+      "name": "phone no overflow",
+      "pass": true,
+      "detail": "{'overflow': 0, 'settingsColumns': 2, 'framesStacked': True, 'cardWidth': 372, 'viewport': 390}"
+    },
+    {
+      "name": "console errors",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "page errors",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "name": "failed requests",
+      "pass": true,
+      "detail": "[]"
+    }
+  ],
+  "failures": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "failedRequests": []
+}

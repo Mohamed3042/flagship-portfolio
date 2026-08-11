@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Disney II · WAN Generation Board</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f3eadc;
+      --muted: #ad9f89;
+      --line: rgba(213, 162, 76, .3);
+      --gold: #d5a24c;
+      --gold-soft: #f0c36d;
+      --blue: #14242c;
+      --panel: rgba(12, 11, 8, .92);
+      --page: #050403;
+      --green: #9fd6b8;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(35, 55, 65, .5), transparent 34rem),
+        radial-gradient(circle at 88% 8%, rgba(126, 80, 30, .2), transparent 30rem),
+        var(--page);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, a { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 3px; }
+
+    .shell {
+      width: min(1440px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 80px;
+    }
+
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(28px, 5vw, 68px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(15, 29, 35, .96), rgba(8, 7, 5, .97));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, .4);
+    }
+
+    .masthead::before,
+    .masthead::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(213, 162, 76, .22);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .masthead::before { inset: -80% 58% auto -18%; height: 145%; }
+    .masthead::after { inset: auto -12% -82% 44%; height: 180%; }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 14px;
+      color: var(--gold-soft);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 7vw, 92px);
+      font-weight: 400;
+      letter-spacing: -.045em;
+      line-height: .94;
+    }
+
+    .summary {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(14px, 1.5vw, 17px);
+      line-height: 1.6;
+    }
+
+    .settings {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 34px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--line);
+    }
+
+    .setting {
+      min-height: 72px;
+      padding: 14px 16px;
+      background: rgba(6, 8, 8, .94);
+    }
+
+    .setting span,
+    .frame-label,
+    .prompt-label {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .setting strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 28px 2px 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .progress strong { color: var(--ink); }
+
+    .bar {
+      flex: 1;
+      height: 4px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .bar > i {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--gold);
+      transition: width .25s ease;
+    }
+
+    .toolbar {
+      position: sticky;
+      z-index: 20;
+      top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 20px;
+      padding: 12px;
+      border: 1px solid rgba(213, 162, 76, .2);
+      border-radius: 18px;
+      background: rgba(5, 4, 3, .9);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .34);
+      backdrop-filter: blur(14px);
+    }
+
+    .filters { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    button {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid rgba(213, 162, 76, .4);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(213, 162, 76, .08);
+      cursor: pointer;
+    }
+
+    button:hover { background: rgba(213, 162, 76, .18); }
+    button[aria-pressed="true"] { color: #161006; background: var(--gold-soft); }
+    button.done[aria-pressed="true"] { color: var(--green); border-color: rgba(91, 188, 148, .45); background: rgba(91, 188, 148, .12); }
+    button.copy.ok { color: var(--green); border-color: rgba(91, 188, 148, .45); }
+
+    .visible-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .cards { display: grid; gap: 24px; }
+
+    .card {
+      scroll-margin-top: 96px;
+      padding: clamp(18px, 3vw, 34px);
+      border: 1px solid rgba(213, 162, 76, .2);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .28);
+    }
+
+    .card[hidden] { display: none; }
+
+    .card-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .shot-no {
+      color: var(--gold-soft);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 5px 0 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(25px, 4vw, 44px);
+      font-weight: 400;
+      line-height: 1;
+    }
+
+    .output {
+      color: var(--muted);
+      font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace;
+      text-align: right;
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+      align-items: center;
+      gap: 14px;
+    }
+
+    figure { margin: 0; min-width: 0; }
+
+    .frame-link {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      margin-top: 8px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 14px;
+      background: #000;
+      aspect-ratio: 2 / 1;
+    }
+
+    .frame-link img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform .35s ease;
+    }
+
+    .frame-link:hover img { transform: scale(1.012); }
+
+    figcaption {
+      overflow: hidden;
+      margin-top: 7px;
+      color: var(--muted);
+      font: 500 10px ui-monospace, SFMono-Regular, Consolas, monospace;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .arrow { color: var(--gold-soft); font-family: Georgia, serif; font-size: 34px; text-align: center; }
+
+    .prompt-box {
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 16px;
+      background: rgba(0, 0, 0, .24);
+    }
+
+    .prompt-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prompt { margin: 0; color: #e8dfd2; font-size: 14px; line-height: 1.65; white-space: pre-wrap; }
+
+    .empty {
+      padding: 48px 20px;
+      border: 1px dashed var(--line);
+      border-radius: 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .footer-note { margin: 30px 0 0; color: var(--muted); font-size: 13px; text-align: center; }
+
+    @media (max-width: 1000px) {
+      .settings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .toolbar { position: static; align-items: flex-start; flex-direction: column; }
+      .pair { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); line-height: .7; }
+    }
+
+    @media (max-width: 560px) {
+      .shell { width: min(calc(100% - 18px), 1440px); padding-top: 9px; }
+      .masthead, .card { border-radius: 18px; }
+      .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .card-head, .prompt-top { align-items: flex-start; flex-direction: column; }
+      .output { text-align: left; }
+      .actions { width: 100%; }
+      .actions button { flex: 1; }
+      .filters button { min-width: 56px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <p class="eyebrow">Disney II · 80-shot continuation · Owner generation pack</p>
+      <h1>First frame → last frame. One prompt.</h1>
+      <p class="summary">Generate DSN2-021 through DSN2-100 in order. Each card contains the exact two upload frames, one paste-ready prompt, and the required MP4 filename.</p>
+      <section class="settings" aria-label="WAN settings">
+        <div class="setting"><span>Model</span><strong>WAN 2.7</strong></div>
+        <div class="setting"><span>Mode</span><strong>First + Last</strong></div>
+        <div class="setting"><span>Resolution</span><strong>720P · 2:1</strong></div>
+        <div class="setting"><span>Duration</span><strong>5 seconds</strong></div>
+        <div class="setting"><span>Audio</span><strong>Off</strong></div>
+        <div class="setting"><span>Extension</span><strong>Off · 1 output</strong></div>
+      </section>
+    </header>
+
+    <div class="progress">
+      <span><strong id="done-count">0</strong> / <strong id="job-count">80</strong> generated</span>
+      <div class="bar" aria-hidden="true"><i id="bar-fill"></i></div>
+    </div>
+
+    <nav class="toolbar" aria-label="Board filters">
+      <div class="filters" id="act-filters" aria-label="Filter by act"></div>
+      <div class="filters" aria-label="Filter by status">
+        <button type="button" data-state-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-state-filter="pending" aria-pressed="false">Pending</button>
+        <button type="button" data-state-filter="generated" aria-pressed="false">Generated</button>
+        <button type="button" id="continue">First pending</button>
+      </div>
+      <span class="visible-count" id="visible-count">80 jobs visible</span>
+    </nav>
+
+    <section class="cards" id="cards" aria-label="WAN generation jobs"></section>
+    <p class="empty" id="empty" hidden>No jobs match this filter.</p>
+    <p class="footer-note">Click either image to open the exact 1920×960 reference. Return the original MP4 with the filename shown on its card.</p>
+  </main>
+
+  <script src="wan-jobs.js"></script>
+  <script>
+    const jobs = Array.isArray(window.DSN2_WAN_JOBS) ? window.DSN2_WAN_JOBS : [];
+    const cards = document.querySelector('#cards');
+    const empty = document.querySelector('#empty');
+    const stateKey = 'disney2-continuation-80-wan-done-v1';
+    let actFilter = 'all';
+    let stateFilter = 'all';
+    let stored = [];
+    try {
+      const parsed = JSON.parse(localStorage.getItem(stateKey) || '[]');
+      stored = Array.isArray(parsed) ? parsed : [];
+    } catch (_) { stored = []; }
+    const validIds = new Set(jobs.map(job => job.id));
+    const done = new Set(stored.filter(id => validIds.has(id)));
+
+    function saveState() {
+      try { localStorage.setItem(stateKey, JSON.stringify([...done])); } catch (_) {}
+    }
+
+    function fileName(path) { return path.split('/').pop(); }
+    function frameSource(localPath, remotePath) {
+      const isRepositoryView = location.pathname.includes('/public/');
+      return location.hostname.endsWith('github.io') || !isRepositoryView ? remotePath : localPath;
+    }
+
+    function updateProgress() {
+      document.querySelector('#done-count').textContent = done.size;
+      document.querySelector('#job-count').textContent = jobs.length;
+      document.querySelector('#bar-fill').style.width = `${jobs.length ? (done.size / jobs.length) * 100 : 0}%`;
+      saveState();
+      applyFilters();
+    }
+
+    async function copyPrompt(button, prompt) {
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(prompt);
+        copied = true;
+      } catch (_) {
+        const box = document.createElement('textarea');
+        box.value = prompt;
+        document.body.appendChild(box);
+        box.select();
+        try { copied = document.execCommand('copy'); } catch (_) { copied = false; }
+        finally { box.remove(); }
+      }
+      button.textContent = copied ? 'Copied' : 'Copy failed';
+      button.classList.toggle('ok', copied);
+      window.setTimeout(() => {
+        button.textContent = 'Copy one prompt';
+        button.classList.remove('ok');
+      }, 1600);
+    }
+
+    function applyFilters() {
+      let visible = 0;
+      document.querySelectorAll('.card').forEach(card => {
+        const actMatch = actFilter === 'all' || card.dataset.act === actFilter;
+        const generated = done.has(card.dataset.id);
+        const stateMatch = stateFilter === 'all' || (stateFilter === 'generated' ? generated : !generated);
+        card.hidden = !(actMatch && stateMatch);
+        if (!card.hidden) visible += 1;
+      });
+      document.querySelector('#visible-count').textContent = `${visible} ${visible === 1 ? 'job' : 'jobs'} visible`;
+      empty.hidden = visible !== 0;
+    }
+
+    function selectFilter(selector, button, value) {
+      document.querySelectorAll(selector).forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      return value;
+    }
+
+    const acts = [...new Map(jobs.map(job => [job.act, job.actTitle])).entries()];
+    const actFilters = document.querySelector('#act-filters');
+    [['all', 'All acts'], ...acts].forEach(([act, label]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.actFilter = act;
+      button.setAttribute('aria-pressed', String(act === 'all'));
+      button.textContent = act === 'all' ? label : `Act ${act}`;
+      button.title = act === 'all' ? label : label;
+      button.addEventListener('click', () => {
+        actFilter = selectFilter('[data-act-filter]', button, act);
+        applyFilters();
+      });
+      actFilters.appendChild(button);
+    });
+
+    document.querySelectorAll('[data-state-filter]').forEach(button => {
+      button.addEventListener('click', () => {
+        stateFilter = selectFilter('[data-state-filter]', button, button.dataset.stateFilter);
+        applyFilters();
+      });
+    });
+
+    jobs.forEach((job, index) => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.id = job.id;
+      card.dataset.id = job.id;
+      card.dataset.act = job.act;
+      const firstSource = frameSource(job.first, job.firstRemote);
+      const lastSource = frameSource(job.last, job.lastRemote);
+      card.innerHTML = `
+        <header class="card-head">
+          <div>
+            <div class="shot-no">Job ${String(job.position).padStart(2, '0')} / 80 · Shot ${String(job.shot).padStart(3, '0')} · Act ${job.act} · ${job.actTitle}</div>
+            <h2>${job.title}</h2>
+          </div>
+          <div class="output">Save as ${job.output}</div>
+        </header>
+        <div class="pair">
+          <figure>
+            <span class="frame-label">First frame</span>
+            <a class="frame-link" href="${firstSource}" target="_blank" rel="noopener"><img src="${firstSource}" data-fallback="${job.firstRemote}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} first frame"></a>
+            <figcaption>${job.firstName}</figcaption>
+          </figure>
+          <div class="arrow" aria-hidden="true">→</div>
+          <figure>
+            <span class="frame-label">Last frame</span>
+            <a class="frame-link" href="${lastSource}" target="_blank" rel="noopener"><img src="${lastSource}" data-fallback="${job.lastRemote}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} last frame"></a>
+            <figcaption>${job.lastName}</figcaption>
+          </figure>
+        </div>
+        <div class="prompt-box">
+          <div class="prompt-top">
+            <span class="prompt-label">One prompt · ${job.firstName.replace('.png', '')} → ${job.lastName.replace('.png', '')}</span>
+            <div class="actions">
+              <button class="copy" type="button">Copy one prompt</button>
+              <button class="done" type="button" aria-pressed="${done.has(job.id)}">${done.has(job.id) ? 'Generated ✓' : 'Mark generated'}</button>
+            </div>
+          </div>
+          <p class="prompt"></p>
+        </div>`;
+
+      card.querySelectorAll('img[data-fallback]').forEach(image => {
+        image.addEventListener('error', () => {
+          if (image.src !== image.dataset.fallback) image.src = image.dataset.fallback;
+        }, { once: true });
+      });
+      card.querySelector('.prompt').textContent = job.prompt;
+      card.querySelector('.copy').addEventListener('click', event => copyPrompt(event.currentTarget, job.prompt));
+      card.querySelector('.done').addEventListener('click', event => {
+        if (done.has(job.id)) done.delete(job.id); else done.add(job.id);
+        const active = done.has(job.id);
+        event.currentTarget.setAttribute('aria-pressed', String(active));
+        event.currentTarget.textContent = active ? 'Generated ✓' : 'Mark generated';
+        updateProgress();
+      });
+      cards.appendChild(card);
+    });
+
+    document.querySelector('#continue').addEventListener('click', () => {
+      const pending = jobs.find(job => !done.has(job.id));
+      if (pending) document.getElementById(pending.id)?.scrollIntoView({ block: 'start' });
+    });
+
+    if (!jobs.length) {
+      empty.hidden = false;
+      empty.textContent = 'Board data is missing. Rebuild wan-jobs.js from the production manifest.';
+    }
+    updateProgress();
+  </script>
+</body>
+</html>

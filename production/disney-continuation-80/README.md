@@ -2,6 +2,16 @@
 
 Status: reference-ready. The 80 endpoint stills and 80 single video prompts are production inputs; the Wan clips have not been generated or accepted yet. The deployed 20-shot page is intentionally unchanged.
 
+## Visual WAN generation board
+
+Serve the repository root, then open:
+
+`http://127.0.0.1:41874/public/worlds/assets/disney2/wan-production/WAN-GENERATION-BOARD.html`
+
+The board presents all 80 jobs in the same first-frame, last-frame, prompt, copy, and generated-status form used by the Cake Studio board. Act and status filters make the queue manageable. Generated marks are browser-local operator notes; the board cannot submit a Wan job or spend video credits.
+
+The public HTML/JavaScript shell references the canonical `production/disney-continuation-80/keyframes/` files while the repository root is served, so it does not duplicate the 200 MB reference set. An immutable source-commit raw-file fallback keeps the frames visible from a published Astro route.
+
 ## What this pack adds
 
 - 80 linear First & Last Frame shots: `DSN2-021` through `DSN2-100`.
@@ -47,8 +57,11 @@ Keep rejected results outside `wan/`. Regenerate against the same immutable endp
 - `keyframes/` — canonical FLF reference images, including the inherited `KF01` anchor.
 - `prompts/` — exactly one paste-ready Wan prompt per clip.
 - `review/` — act contact sheets for visual continuity review.
+- `public/worlds/assets/disney2/wan-production/WAN-GENERATION-BOARD.html` — visual 80-card operator board.
 - `drafts/` — four authored 20-shot source manifests retained for traceability.
 - `tools/build-pack.py` — deterministic merger and prompt/run-manifest builder.
+- `tools/build-generation-board.py` — deterministic board-data builder from the canonical manifest.
+- `tools/verify-generation-board-browser.py` — rendered desktop/phone interaction gate.
 - `tools/verify-production-pack.py` — fail-closed manifest, image, and prompt verifier.
 - `tools/make-contact-sheet.py` — rendered review-sheet generator.
 - `tools/normalize-keyframe.ps1` — exact 1920×960 RGB normalization through ffmpeg.
@@ -59,13 +72,16 @@ From the repository root:
 
 ```powershell
 python production\disney-continuation-80\tools\build-pack.py
+python production\disney-continuation-80\tools\build-generation-board.py
 python production\disney-continuation-80\tools\verify-production-pack.py
+python production\disney-continuation-80\tools\verify-generation-board-browser.py --url http://127.0.0.1:41874/public/worlds/assets/disney2/wan-production/WAN-GENERATION-BOARD.html
 ```
 
 The final required sentinel is:
 
 ```text
 DISNEY_CONTINUATION_GREEN 80/80 keyframes=80 prompts=80 chain=KF01->KF100 canvas=1920x960
+WAN_BOARD_BROWSER_GREEN 20/20 desktop+phone
 ```
 
 ## Integration remains gated
