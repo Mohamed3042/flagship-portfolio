@@ -26,6 +26,10 @@
     "verify:cake-studio:v17-pack": "node scripts/verify-cake-studio-v17-wan-pack.mjs",
     "verify:cake-studio:v17-shell": "node scripts/verify-cake-studio-v17-shell.mjs",
     "verify:cake-studio:v17-media": "python scripts/verify-cake-studio-v17-media.py",
+    "build:cake-studio:v17-phone-masters": "python scripts/build-cake-studio-v17-phone-masters.py",
+    "verify:cake-studio:v17-phone-masters": "python scripts/verify-cake-studio-v17-phone-masters.py",
+    "verify:cake-studio:v17-phone-performance": "python scripts/diagnose-cake-studio-v17-phone-performance.py",
+    "verify:cake-studio:v17": "npm run verify:cake-studio:v17-shell && npm run verify:cake-studio:v17-media",
     "verify:cake-studio:v17-browser-pending": "python scripts/verify-cake-studio-v17-browser.py",
     "verify:cake-studio:v17-browser-ready": "python scripts/verify-cake-studio-v17-browser-ready.py",
     "astro": "astro"
