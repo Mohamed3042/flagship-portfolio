@@ -2,7 +2,7 @@
 """Fail-capable media gate for the Cake Studio v1.7 WAN micro-film.
 
 Exit codes:
-  0  all 15 runtime clips satisfy the contract
+  0  all 15 desktop clips and both phone masters satisfy the runtime contract
   1  a contract check failed (including --sabotage)
   2  the contract is valid, but one or more runtime clips are not present yet
   3  all owner-return clips pass, but normalized runtime media is not integrated yet
@@ -43,6 +43,11 @@ RUNTIME_MEDIA = REPO / "public/worlds/cake-studio/v17/clips"
 RUNTIME_MANIFEST = REPO / "public/worlds/cake-studio/v17/manifest.json"
 OWNER_RETURNS = PACK / "accepted"
 EXISTING_REEL = REPO / "public/worlds/cake-studio/clips"
+PHONE_VERIFY = REPO / "scripts/verify-cake-studio-v17-phone-masters.py"
+PHONE_OUTPUTS = (
+    "CST17-INTRO-PHONE-v171.mp4",
+    "CST17-OUTRO-PHONE-v171.mp4",
+)
 
 EXPECTED_IDS = tuple(
     [f"I{number:02d}" for number in range(1, 11)]
@@ -246,7 +251,7 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
     require(path.is_file(), f"runtime manifest missing: {path}")
     payload = json.loads(path.read_text(encoding="utf-8-sig"))
     require(payload.get("schema") == "cake-studio-bookends/v1", "runtime manifest schema mismatch")
-    require(payload.get("version") == "1.7.0", "runtime manifest version mismatch")
+    require(payload.get("version") == "1.7.1", "runtime manifest version mismatch")
     require(
         (payload.get("width"), payload.get("height"), payload.get("fps"), payload.get("duration"))
         == (1280, 720, 30, 5),
@@ -272,6 +277,22 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
         },
         "runtime manifest endpoint conditioning mismatch",
     )
+    require(
+        delivery.get("phoneMaster")
+        == {
+            "codec": "H.264",
+            "pixelFormat": "yuv420p",
+            "width": 854,
+            "height": 480,
+            "fps": 30,
+            "beatFrames": 136,
+            "finalTailExtraFrames": 14,
+            "keyframeInterval": 15,
+            "silent": True,
+            "faststart": True,
+        },
+        "runtime manifest phone delivery contract mismatch",
+    )
     tracks = payload.get("tracks")
     require(isinstance(tracks, dict), "runtime manifest tracks missing")
     intro = tracks.get("intro", {}).get("clips", [])
@@ -291,6 +312,26 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
 
     require(tracks["intro"].get("poster") == runtime_still_url(jobs[0].first), "runtime intro poster mismatch")
     require(tracks["outro"].get("poster") == runtime_still_url(jobs[10].first), "runtime outro poster mismatch")
+    for track_name, output, beats in (
+        ("intro", PHONE_OUTPUTS[0], 10),
+        ("outro", PHONE_OUTPUTS[1], 5),
+    ):
+        phone = tracks[track_name].get("phoneMaster")
+        require(isinstance(phone, dict), f"runtime {track_name} phone master missing")
+        expected_frames = beats * 136 + 14
+        require(
+            phone
+            == {
+                "src": f"cake-studio/v17/clips/{output}",
+                "width": 854,
+                "height": 480,
+                "fps": 30,
+                "beatFrames": 136,
+                "frames": expected_frames,
+                "duration": round(expected_frames / 30, 6),
+            },
+            f"runtime {track_name} phone master contract mismatch",
+        )
     require(len(runtime_stills) == 17, f"runtime still contract has {len(runtime_stills)} unique endpoints, expected 17")
     for source_url in sorted(runtime_stills):
         still_path = REPO / "public/worlds" / Path(*source_url.split("/"))
@@ -596,6 +637,28 @@ def missing_outputs(media_dir: Path, jobs: Iterable[Job]) -> list[str]:
     return [job.output for job in jobs if not (media_dir / job.output).is_file()]
 
 
+def missing_phone_outputs() -> list[str]:
+    return [output for output in PHONE_OUTPUTS if not (RUNTIME_MEDIA / output).is_file()]
+
+
+def validate_phone_masters() -> str:
+    require(PHONE_VERIFY.is_file(), f"phone master verifier missing: {PHONE_VERIFY}")
+    completed = subprocess.run(
+        [sys.executable, str(PHONE_VERIFY)],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    output = (completed.stdout + completed.stderr).strip()
+    require(
+        completed.returncode == 0 and "CAKE_STUDIO_V17_PHONE_MASTERS_OK" in output,
+        f"phone master gate failed: {output}",
+    )
+    return output
+
+
 def main() -> int:
     args = parse_args()
     manifest = absolute_from_repo(args.manifest)
@@ -607,9 +670,11 @@ def main() -> int:
     runtime_manifest = absolute_from_repo(args.runtime_manifest)
     runtime_ready = validate_runtime_manifest(runtime_manifest, jobs)
     runtime_missing = missing_outputs(RUNTIME_MEDIA, jobs)
+    runtime_phone_missing = missing_phone_outputs()
+    runtime_all_missing = [*runtime_missing, *runtime_phone_missing]
     require(
-        not runtime_ready or not runtime_missing,
-        "runtime manifest is ready=true while runtime clips are missing: " + ",".join(runtime_missing),
+        not runtime_ready or not runtime_all_missing,
+        "runtime manifest is ready=true while runtime media are missing: " + ",".join(runtime_all_missing),
     )
 
     media_dir = pick_media_dir(args.media_dir, jobs)
@@ -667,7 +732,8 @@ def main() -> int:
             "V17_MEDIA_GATE_WAITING "
             f"manifest=15 order=10+5 anchors=17 exact_reel_seams=2 "
             f"validated={len(present_jobs)}/15 decoded_joins={verified_joins}/15 "
-            f"runtime_ready={str(runtime_ready).lower()} media_dir={media_dir} missing={','.join(missing)}"
+            f"runtime_ready={str(runtime_ready).lower()} phone_missing={len(runtime_phone_missing)} "
+            f"media_dir={media_dir} missing={','.join(missing)}"
         )
         return 2
 
@@ -679,10 +745,11 @@ def main() -> int:
             f"source_dir={media_dir} runtime_dir={RUNTIME_MEDIA}"
         )
         return 3
-    require(runtime_ready, "all 15 runtime clips validate, but runtime manifest ready is false")
+    require(runtime_ready, "all 15 desktop clips validate, but runtime manifest ready is false")
+    validate_phone_masters()
     print(
         "V17_MEDIA_GATE_OK "
-        f"clips=15 order=10+5 duration=75.000s format=h264/yuv420p/1280x720/30fps "
+        f"desktop_clips=15 phone_masters=2 order=10+5 duration=75.000s format=h264/yuv420p/1280x720/30fps "
         f"silent=15 faststart=15 max_gop={max_gop:.2f} decoded_anchors=30 "
         f"decoded_joins={len(joins) + 2} non_affine=" + ",".join(motion_summaries)
     )

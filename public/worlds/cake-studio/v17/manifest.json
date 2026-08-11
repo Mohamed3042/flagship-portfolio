@@ -1,6 +1,6 @@
 {
   "schema": "cake-studio-bookends/v1",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "ready": true,
   "width": 1280,
   "height": 720,
@@ -18,10 +18,31 @@
       "closingConvergenceStartFrame": 126,
       "closingConvergenceEndFrame": 135,
       "exactFinalHoldFrames": 15
+    },
+    "phoneMaster": {
+      "codec": "H.264",
+      "pixelFormat": "yuv420p",
+      "width": 854,
+      "height": 480,
+      "fps": 30,
+      "beatFrames": 136,
+      "finalTailExtraFrames": 14,
+      "keyframeInterval": 15,
+      "silent": true,
+      "faststart": true
     }
   },
   "tracks": {
     "intro": {
+      "phoneMaster": {
+        "src": "cake-studio/v17/clips/CST17-INTRO-PHONE-v171.mp4",
+        "width": 854,
+        "height": 480,
+        "fps": 30,
+        "beatFrames": 136,
+        "frames": 1374,
+        "duration": 45.8
+      },
       "poster": "cake-studio/v17/stills/CST17-I00-edge-in-darkness.webp",
       "clips": [
         {
@@ -87,6 +108,15 @@
       ]
     },
     "outro": {
+      "phoneMaster": {
+        "src": "cake-studio/v17/clips/CST17-OUTRO-PHONE-v171.mp4",
+        "width": 854,
+        "height": 480,
+        "fps": 30,
+        "beatFrames": 136,
+        "frames": 694,
+        "duration": 23.133333
+      },
       "poster": "cake-studio/v17/stills/CST17-O00-exact-cst050-frame149.webp",
       "clips": [
         {

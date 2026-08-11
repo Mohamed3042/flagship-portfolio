@@ -245,7 +245,7 @@ def main() -> int:
     pending_output = (pending_gate.stdout + pending_gate.stderr).strip()
     require(
         pending_gate.returncode == 1
-        and "all 15 runtime clips validate, but runtime manifest ready is false" in pending_output,
+        and "all 15 desktop clips validate, but runtime manifest ready is false" in pending_output,
         f"runtime validation did not stop only at readiness: {pending_output}",
     )
 
@@ -256,7 +256,7 @@ def main() -> int:
         write_manifest_ready(False)
         raise BuildFailure(f"final runtime gate failed; manifest returned to ready=false: {final_output}")
     print(final_output)
-    print(f"V17_MEDIA_BUILD_OK clips=15 runtime={RUNTIME} staging_preserved={staging}")
+    print(f"V17_MEDIA_BUILD_OK desktop_clips=15 phone_masters=2 runtime={RUNTIME} staging_preserved={staging}")
     return 0
 
 

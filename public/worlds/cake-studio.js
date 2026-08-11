@@ -435,15 +435,19 @@
 
   const bookendManifest = scenes[0].dataset.bookendManifest;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const solo = new URLSearchParams(location.search).has('solo');
+  const query = new URLSearchParams(location.search);
+  const solo = query.has('solo');
+  const phoneMedia = matchMedia('(max-width: 700px), (pointer: coarse)');
+  const usePhoneMaster = phoneMedia.matches && !query.has('bookendDesktop');
   const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
   const runtime = {
-    version: '1.7.0',
+    version: '1.7.1',
     state: 'loading',
     manifestReady: false,
     units: [],
     snapshot: () => runtime.units.map((unit) => ({
       track: unit.trackName,
+      transport: unit.scene.dataset.sequenceTransport || '',
       mode: unit.scene.dataset.sequenceMode,
       state: unit.scene.dataset.sequenceState,
       index: Number(unit.scene.dataset.sequenceIndex || 0),
@@ -451,7 +455,21 @@
       fraction: Number(unit.scene.dataset.sequenceFraction || 0),
       targetTime: Number(unit.scene.dataset.sequenceTargetTime || 0),
       time: unit.scene.dataset.sequenceTime ? Number(unit.scene.dataset.sequenceTime) : null,
+      lag: unit.scene.dataset.sequenceLag ? Number(unit.scene.dataset.sequenceLag) : null,
       painted: unit.scene.classList.contains('sequence-painted'),
+      phone: unit.phoneMode ? {
+        armed: unit.phoneSlot.armed,
+        metadata: unit.phoneSlot.metadata,
+        seeking: unit.phoneSlot.seeking,
+        wanted: unit.phoneSlot.wanted,
+        wantedExact: unit.phoneSlot.wantedExact,
+        slotTarget: unit.phoneSlot.target,
+        seekTimer: Boolean(unit.phoneSlot.seekTimer),
+        currentTime: unit.phoneSlot.video.currentTime,
+        readyState: unit.phoneSlot.video.readyState,
+        warmState: unit.warmState,
+        sourceMode: unit.phoneSlot.sourceOverride ? 'blob' : 'network',
+      } : null,
     })),
   };
   window.__cakeStudioBookends = runtime;
@@ -463,7 +481,7 @@
   }
 
   const validateManifest = (manifest) => {
-    if (manifest.schema !== 'cake-studio-bookends/v1' || manifest.version !== '1.7.0') {
+    if (manifest.schema !== 'cake-studio-bookends/v1' || manifest.version !== '1.7.1') {
       throw new Error('bookend manifest version mismatch');
     }
     if (manifest.width !== 1280 || manifest.height !== 720 || manifest.fps !== 30 || manifest.duration !== 5) {
@@ -471,12 +489,20 @@
     }
     const delivery = manifest.delivery;
     const conditioning = delivery?.endpointConditioning;
+    const phoneDelivery = delivery?.phoneMaster;
     if (delivery?.codec !== 'H.264' || delivery?.pixelFormat !== 'yuv420p'
       || delivery?.silent !== true || delivery?.keyframeInterval !== 15 || delivery?.faststart !== true
       || conditioning?.openingConvergenceFrames !== 9
       || conditioning?.closingConvergenceStartFrame !== 126
       || conditioning?.closingConvergenceEndFrame !== 135
-      || conditioning?.exactFinalHoldFrames !== 15) {
+      || conditioning?.exactFinalHoldFrames !== 15
+      || phoneDelivery?.codec !== 'H.264'
+      || phoneDelivery?.pixelFormat !== 'yuv420p'
+      || phoneDelivery?.width !== 854 || phoneDelivery?.height !== 480
+      || phoneDelivery?.fps !== 30 || phoneDelivery?.beatFrames !== 136
+      || phoneDelivery?.finalTailExtraFrames !== 14
+      || phoneDelivery?.keyframeInterval !== 15
+      || phoneDelivery?.silent !== true || phoneDelivery?.faststart !== true) {
       throw new Error('bookend manifest delivery contract mismatch');
     }
     if (typeof manifest.ready !== 'boolean' || !manifest.tracks || typeof manifest.tracks !== 'object') {
@@ -497,6 +523,17 @@
       }
       if (!/^cake-studio\/v17\/stills\/CST17-[IO][0-9]{2}-.+\.webp$/.test(track.poster || '')) {
         throw new Error(`bookend ${trackName} poster path mismatch`);
+      }
+      const phone = track.phoneMaster;
+      const phoneFrames = ids.length * phoneDelivery.beatFrames + phoneDelivery.finalTailExtraFrames;
+      const phoneSource = `cake-studio/v17/clips/CST17-${trackName === 'intro' ? 'INTRO' : 'OUTRO'}-PHONE-v171.mp4`;
+      if (!phone
+        || phone.src !== phoneSource
+        || phone.width !== phoneDelivery.width || phone.height !== phoneDelivery.height
+        || phone.fps !== phoneDelivery.fps || phone.beatFrames !== phoneDelivery.beatFrames
+        || phone.frames !== phoneFrames
+        || Math.abs(phone.duration - phoneFrames / phone.fps) > .001) {
+        throw new Error(`bookend ${trackName} phone master contract mismatch`);
       }
       track.clips.forEach((clip, index) => {
         if (clip.id !== ids[index]) throw new Error(`bookend ${trackName} order mismatch`);
@@ -539,6 +576,175 @@
   const setPoster = (unit, source) => {
     if (!source || unit.poster.getAttribute('src') === source) return;
     unit.poster.src = source;
+  };
+
+  const commitPhoneFrame = (unit) => {
+    const slot = unit.phoneSlot;
+    if (!slot?.armed || !slot.metadata || slot.video.readyState < 2) return;
+    const mediaTime = slot.video.currentTime;
+    slot.lastPainted = mediaTime;
+    unit.scene.dataset.sequenceTime = mediaTime.toFixed(4);
+    unit.scene.dataset.sequenceLag = Math.abs(mediaTime - unit.phoneTarget).toFixed(4);
+    unit.scene.dataset.sequenceState = 'ready';
+    unit.scene.classList.add('sequence-painted');
+  };
+
+  const issuePhoneSeek = (unit) => {
+    const slot = unit.phoneSlot;
+    if (!slot?.armed || !slot.metadata || slot.seeking || slot.wanted < 0) return;
+    clearTimeout(slot.seekTimer);
+    slot.seekTimer = 0;
+    const target = slot.wanted;
+    slot.wanted = -1;
+    slot.wantedExact = false;
+    slot.target = target;
+    if (Math.abs(slot.video.currentTime - target) < .009) {
+      commitPhoneFrame(unit);
+      return;
+    }
+    slot.seeking = true;
+    slot.lastIssued = performance.now();
+    try {
+      slot.video.currentTime = target;
+    } catch {
+      slot.seeking = false;
+      unit.scene.dataset.sequenceState = 'phone-seek-error';
+    }
+  };
+
+  const queuePhoneSeek = (unit, time, exact = false) => {
+    const slot = unit.phoneSlot;
+    if (!slot?.armed) return;
+    const duration = slot.video.duration || unit.phoneMaster.duration;
+    const target = Math.min(duration - 1 / unit.phoneMaster.fps, Math.max(.001, time));
+    slot.wanted = target;
+    slot.wantedExact ||= exact;
+    if (!slot.metadata) return;
+    if (slot.seeking) {
+      if (exact && Math.abs(slot.target - target) >= .009) {
+        // After the finger settles, cancel the obsolete network seek instead
+        // of waiting for it to finish before requesting the actual resting
+        // frame. Assigning currentTime while the element is already seeking
+        // is the browser-supported cancellation path.
+        slot.seeking = false;
+        issuePhoneSeek(unit);
+      }
+      return;
+    }
+    const minimumInterval = slot.wantedExact ? 0 : 66;
+    const delay = Math.max(0, minimumInterval - (performance.now() - slot.lastIssued));
+    if (!delay) {
+      issuePhoneSeek(unit);
+      return;
+    }
+    if (slot.seekTimer) return;
+    slot.seekTimer = setTimeout(() => {
+      slot.seekTimer = 0;
+      issuePhoneSeek(unit);
+    }, delay);
+  };
+
+  const armPhoneMaster = (unit) => {
+    const slot = unit.phoneSlot;
+    if (!slot || slot.armed || reducedMotion.matches) return;
+    slot.armed = true;
+    slot.generation += 1;
+    slot.video.preload = unit.trackName === 'intro' ? 'auto' : 'metadata';
+    slot.video.src = slot.sourceOverride || unit.phoneMaster.src;
+    slot.video.dataset.sequenceClip = `${unit.trackName}-phone-master`;
+    unit.scene.dataset.sequenceState = 'phone-loading';
+    slot.video.load();
+  };
+
+  const releasePhoneMaster = (unit) => {
+    const slot = unit.phoneSlot;
+    if (!slot) return;
+    slot.generation += 1;
+    clearTimeout(slot.seekTimer);
+    clearTimeout(unit.phoneSettleTimer);
+    slot.seekTimer = 0;
+    unit.phoneSettleTimer = 0;
+    slot.armed = false;
+    slot.metadata = false;
+    slot.seeking = false;
+    slot.wanted = -1;
+    slot.wantedExact = false;
+    slot.lastPainted = null;
+    slot.video.removeAttribute('src');
+    slot.video.load();
+    unit.scene.classList.remove('sequence-painted');
+    delete unit.scene.dataset.sequenceTime;
+    delete unit.scene.dataset.sequenceLag;
+  };
+
+  const activatePhoneBlob = (unit, source) => {
+    const slot = unit.phoneSlot;
+    if (!slot) return;
+    if (unit.live || reducedMotion.matches) {
+      slot.pendingSource = source;
+      return;
+    }
+    clearTimeout(slot.seekTimer);
+    slot.seekTimer = 0;
+    slot.generation += 1;
+    slot.armed = false;
+    slot.metadata = false;
+    slot.seeking = false;
+    slot.wanted = -1;
+    slot.wantedExact = false;
+    slot.sourceOverride = source;
+    slot.pendingSource = '';
+    slot.video.removeAttribute('src');
+    slot.video.load();
+    unit.scene.classList.remove('sequence-painted');
+    delete unit.scene.dataset.sequenceTime;
+    armPhoneMaster(unit);
+    queuePhoneSeek(unit, unit.phoneTarget, true);
+  };
+
+  const warmPhoneMaster = (unit) => {
+    if (!unit?.phoneMode || reducedMotion.matches || unit.warmState !== 'idle') return unit?.warmPromise;
+    unit.warmState = 'loading';
+    unit.scene.dataset.sequenceWarm = 'loading';
+    unit.warmAbort = new AbortController();
+    unit.warmPromise = fetch(unit.phoneMaster.src, {
+      cache: 'force-cache',
+      signal: unit.warmAbort.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`phone warm HTTP ${response.status}`);
+        return response.blob();
+      })
+      .then((blob) => {
+        if (reducedMotion.matches) return;
+        unit.phoneBlobUrl = URL.createObjectURL(blob);
+        unit.warmState = 'ready';
+        unit.scene.dataset.sequenceWarm = 'ready';
+        unit.scene.dataset.sequenceWarmBytes = String(blob.size);
+        activatePhoneBlob(unit, unit.phoneBlobUrl);
+      })
+      .catch((error) => {
+        if (error?.name === 'AbortError') return;
+        unit.warmState = 'network-fallback';
+        unit.scene.dataset.sequenceWarm = 'network-fallback';
+      });
+    return unit.warmPromise;
+  };
+
+  const renderPhoneMaster = (unit, progress) => {
+    unit.phoneTarget = Math.min(
+      unit.phoneMaster.duration - 1 / unit.phoneMaster.fps,
+      progress * unit.phoneMaster.duration,
+    );
+    unit.scene.dataset.sequenceTargetTime = unit.phoneTarget.toFixed(4);
+    if (!solo && !unit.live) return;
+    armPhoneMaster(unit);
+    queuePhoneSeek(unit, unit.phoneTarget);
+    clearTimeout(unit.phoneSettleTimer);
+    unit.phoneSettleTimer = setTimeout(() => {
+      unit.phoneSettleTimer = 0;
+      queuePhoneSeek(unit, unit.phoneTarget, true);
+    }, 110);
   };
 
   const draw = (unit, slot, immediate = false) => {
@@ -643,21 +849,30 @@
     unit.meter.style.setProperty('--sequence-progress', progress.toFixed(5));
 
     const endpointIndex = Math.min(unit.clips.length, Math.round(progress * unit.clips.length));
-    setPoster(unit, unit.endpoints[endpointIndex]);
+    if (reducedMotion.matches || !unit.phoneMode) {
+      setPoster(unit, unit.endpoints[endpointIndex]);
+    }
 
-    if (targetChanged) {
+    if (targetChanged && !unit.phoneMode) {
       unit.scene.classList.remove('sequence-painted');
       delete unit.scene.dataset.sequenceTime;
     }
 
     if (reducedMotion.matches || !unit.mediaReady) {
       unit.scene.dataset.sequenceMode = 'still';
+      unit.scene.dataset.sequenceTransport = 'poster';
       unit.scene.dataset.sequenceState = unit.mediaReady ? 'reduced-motion' : 'awaiting-media';
       unit.scene.classList.remove('sequence-painted');
       return;
     }
 
     unit.scene.dataset.sequenceMode = 'motion';
+    if (unit.phoneMode) {
+      unit.scene.dataset.sequenceTransport = 'phone-master';
+      renderPhoneMaster(unit, progress);
+      return;
+    }
+    unit.scene.dataset.sequenceTransport = 'clip-canvas';
     if (!solo && !unit.live) return;
 
     const slot = chooseSlot(unit, beat.index);
@@ -683,11 +898,12 @@
     if (!track || !Array.isArray(track.clips) || !track.clips.length) return null;
     const sequence = scene.querySelector('[data-bookend-sequence]');
     const canvas = scene.querySelector('[data-bookend-canvas]');
+    const phoneVideo = scene.querySelector('[data-bookend-phone-video]');
     const poster = scene.querySelector('[data-bookend-poster]');
     const meter = scene.querySelector('[data-bookend-meter]');
     const counter = scene.querySelector('[data-bookend-count]');
     const context = canvas?.getContext('2d', { alpha: false });
-    if (!sequence || !canvas || !poster || !meter || !counter || !context) return null;
+    if (!sequence || !canvas || !phoneVideo || !poster || !meter || !counter || !context) return null;
 
     const unit = {
       scene,
@@ -699,6 +915,15 @@
       counter,
       trackName,
       clips: track.clips,
+      phoneMode: usePhoneMaster,
+      phoneMaster: track.phoneMaster,
+      phoneSlot: null,
+      phoneTarget: 0,
+      phoneSettleTimer: 0,
+      warmState: 'idle',
+      warmPromise: null,
+      warmAbort: null,
+      phoneBlobUrl: '',
       endpoints: [track.clips[0].first, ...track.clips.map((clip) => clip.last)],
       duration: manifest.duration,
       mediaReady: manifest.ready === true,
@@ -711,7 +936,62 @@
       slots: [],
     };
 
-    unit.slots = Array.from({ length: 2 }, () => {
+    unit.phoneSlot = {
+      video: phoneVideo,
+      armed: false,
+      metadata: false,
+      seeking: false,
+      wanted: -1,
+      wantedExact: false,
+      target: 0,
+      lastPainted: null,
+      lastIssued: -Infinity,
+      seekTimer: 0,
+      generation: 0,
+      sourceOverride: '',
+      pendingSource: '',
+    };
+    phoneVideo.addEventListener('loadedmetadata', () => {
+      const slot = unit.phoneSlot;
+      if (!slot.armed || !phoneVideo.getAttribute('src')) return;
+      slot.metadata = true;
+      unit.scene.dataset.sequenceState = 'phone-metadata';
+      queuePhoneSeek(unit, unit.phoneTarget, true);
+    });
+    phoneVideo.addEventListener('loadeddata', () => {
+      const slot = unit.phoneSlot;
+      if (!slot.armed || !slot.metadata) return;
+      if (Math.abs(phoneVideo.currentTime - unit.phoneTarget) < .05) commitPhoneFrame(unit);
+    });
+    phoneVideo.addEventListener('seeked', () => {
+      const slot = unit.phoneSlot;
+      if (!slot.armed) return;
+      slot.seeking = false;
+      // The native video has already composited this decoded frame. Keep it
+      // visible before chasing the newest touch target instead of blanking the
+      // surface as the old canvas transport did.
+      commitPhoneFrame(unit);
+      if (slot.wanted >= 0) {
+        const wanted = slot.wanted;
+        const exact = slot.wantedExact;
+        slot.wanted = -1;
+        slot.wantedExact = false;
+        queuePhoneSeek(unit, wanted, exact);
+      }
+    });
+    phoneVideo.addEventListener('error', () => {
+      const slot = unit.phoneSlot;
+      if (!slot.armed || !phoneVideo.getAttribute('src')) return;
+      clearTimeout(slot.seekTimer);
+      slot.seekTimer = 0;
+      slot.seeking = false;
+      unit.scene.dataset.sequenceState = 'phone-media-error';
+      unit.scene.classList.remove('sequence-painted');
+      delete unit.scene.dataset.sequenceTime;
+      delete unit.scene.dataset.sequenceLag;
+    });
+
+    unit.slots = unit.phoneMode ? [] : Array.from({ length: 2 }, () => {
       const video = document.createElement('video');
       video.className = 'bookend-buffer';
       video.muted = true;
@@ -759,6 +1039,9 @@
     });
 
     scene.dataset.sequenceMode = reducedMotion.matches || !unit.mediaReady ? 'still' : 'motion';
+    scene.dataset.sequenceTransport = reducedMotion.matches
+      ? 'poster'
+      : unit.phoneMode ? 'phone-master' : 'clip-canvas';
     scene.dataset.sequenceState = unit.mediaReady ? 'ready' : 'awaiting-media';
     scene.dataset.sequenceCount = String(unit.clips.length);
     scene.addEventListener('scene:live', () => {
@@ -767,8 +1050,12 @@
     });
     scene.addEventListener('scene:idle', () => {
       unit.live = false;
-      unit.scene.classList.remove('sequence-painted');
-      delete unit.scene.dataset.sequenceTime;
+      if (unit.phoneMode && unit.phoneSlot.pendingSource) {
+        activatePhoneBlob(unit, unit.phoneSlot.pendingSource);
+      } else if (!unit.phoneMode) {
+        unit.scene.classList.remove('sequence-painted');
+        delete unit.scene.dataset.sequenceTime;
+      }
     });
     renderUnit(unit, unit.lastProgress);
     return unit;
@@ -796,12 +1083,32 @@
       const units = scenes.map((scene) => createUnit(scene, manifest)).filter(Boolean);
       if (units.length !== 2) throw new Error('bookend runtime did not create both tracks');
       runtime.units = units;
+      if (usePhoneMaster && manifest.ready === true && !reducedMotion.matches) {
+        // Prime each persistent source at its opening frame. This downloads
+        // only enough for a decoded cold-start surface; later scroll seeks
+        // keep the same URL attached. The intro may buffer ahead while the
+        // visitor reads the opening copy, while the distant outro stays at
+        // metadata/first-frame cost until approached.
+        for (const unit of runtime.units) {
+          armPhoneMaster(unit);
+          queuePhoneSeek(unit, unit.phoneTarget, true);
+        }
+        const intro = runtime.units.find((unit) => unit.trackName === 'intro');
+        const outro = runtime.units.find((unit) => unit.trackName === 'outro');
+        const warmOutro = () => warmPhoneMaster(outro);
+        intro?.scene.addEventListener('scene:idle', warmOutro, { once: true });
+        outro?.scene.addEventListener('scene:live', warmOutro, { once: true });
+      }
       runtime.state = manifest.ready === true ? 'ready' : 'awaiting-media';
       addEventListener('scroll', schedule, { passive: true });
       addEventListener('resize', schedule, { passive: true });
       reducedMotion.addEventListener?.('change', () => {
         if (reducedMotion.matches) {
-          for (const unit of runtime.units) unit.slots.forEach(release);
+          for (const unit of runtime.units) {
+            unit.warmAbort?.abort();
+            unit.slots.forEach(release);
+            if (unit.phoneMode) releasePhoneMaster(unit);
+          }
         }
         paint();
       });
@@ -812,11 +1119,17 @@
       runtime.error = error instanceof Error ? error.message : String(error);
       for (const scene of scenes) {
         scene.dataset.sequenceMode = 'still';
+        scene.dataset.sequenceTransport = 'poster';
         scene.dataset.sequenceState = 'manifest-error';
       }
     });
 
   addEventListener('pagehide', () => {
-    for (const unit of runtime.units) unit.slots.forEach(release);
+    for (const unit of runtime.units) {
+      unit.warmAbort?.abort();
+      unit.slots.forEach(release);
+      if (unit.phoneMode) releasePhoneMaster(unit);
+      if (unit.phoneBlobUrl) URL.revokeObjectURL(unit.phoneBlobUrl);
+    }
   }, { once: true });
 })();
