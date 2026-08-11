@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "release": "1.4.0",
+  "release": "1.5.0",
   "asset": "cake-studio-proof-room.glb",
   "generator": "Blender 5.1 original procedural proof-room authoring",
   "license": "Original work for Mohamed Mahmoud",
-  "bytes": 669916,
-  "sha256": "f0eed57c01b5509f80e4a9abff30931b2eb2a3f13ca057423d7819a27858ae98",
+  "bytes": 894144,
+  "sha256": "ac3db4dedee23126dd4a6ed49dc2336a8acfa987e930671f374f1cdd0adc91e1",
   "zones": [
     "Zone_Archive",
     "Zone_Assembly",
@@ -21,6 +21,24 @@
     "Camera_Phone"
   ],
   "animation": "ProofRoom_Cameras",
+  "animations": [
+    "ProofRoom_Cameras",
+    "HeroSheet_Journey"
+  ],
+  "heroSheet": {
+    "rig": "HeroSheet_Rig",
+    "mesh": "HeroSheet_Mesh",
+    "bones": 11,
+    "bonePrefix": "SheetBone_",
+    "animation": "HeroSheet_Journey",
+    "sourceShot": "CST-050"
+  },
+  "portal": {
+    "aperture": "CustomerFrame_Aperture",
+    "semanticPlane": "Portal_SemanticPlane",
+    "planeY": 4.22,
+    "cameraCrossing": true
+  },
   "fovCurves": {
     "Camera_Desktop": [
       [
@@ -48,8 +66,20 @@
         36.0
       ],
       [
+        200,
+        35.0
+      ],
+      [
         214,
         33.0
+      ],
+      [
+        225,
+        32.0
+      ],
+      [
+        232,
+        31.0
       ],
       [
         240,
@@ -86,12 +116,24 @@
         44.0
       ],
       [
+        200,
+        43.0
+      ],
+      [
         214,
         42.0
       ],
       [
-        240,
+        225,
+        41.0
+      ],
+      [
+        232,
         40.0
+      ],
+      [
+        240,
+        39.0
       ]
     ]
   },
