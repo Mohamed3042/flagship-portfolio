@@ -22,8 +22,8 @@ Use the supplied PNGs exactly. Do not extract a new boundary frame from a genera
 
 ## Return filenames
 
-Opening: `CST17-I01.mp4` through `CST17-I10.mp4`  
-Ending: `CST17-O01.mp4` through `CST17-O05.mp4`
+- Opening: `CST17-I01.mp4` through `CST17-I10.mp4`
+- Ending: `CST17-O01.mp4` through `CST17-O05.mp4`
 
 Keep the original WAN downloads: no trim, conversion, recompression, or joining. Put the 15 MP4s in a folder named `CST17-WAN-RETURNS`, zip it, and attach it to the thread. If one ZIP is too large, return `CST17-WAN-INTRO.zip` and `CST17-WAN-OUTRO.zip` with the MP4 filenames unchanged.
 
