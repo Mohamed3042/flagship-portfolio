@@ -51,48 +51,131 @@ button:focus-visible {
 
 .rail { height: 2px; }
 
-/* Cinematic bookends: one photographic breath before and after the reel. */
-.bookend { height: 190vh; }
-.bookend-outro { height: 230vh; }
+/* v1.7 cinematic micro-film: the 16:9 source is always fully visible. */
+.bookend { height: 820vh; }
+.bookend-intro { height: 820vh; }
+.bookend-outro { height: 470vh; }
 .bookend .stage {
   isolation: isolate;
-  background: #06100d;
+  display: grid;
+  place-items: center;
+  background: #030a08;
+}
+.bookend-sequence {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(68% 52% at 50% 48%, rgba(28, 90, 78, .17), transparent 72%),
+    linear-gradient(180deg, #020706 0%, #07120f 48%, #020706 100%);
+}
+.bookend-sequence::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0 auto 0 50%;
+  width: 1px;
+  transform: scaleY(clamp(.04, var(--p, 0), 1));
+  transform-origin: 50% 0;
+  background: linear-gradient(180deg, transparent, rgba(217, 163, 143, .78) 18% 82%, transparent);
+  box-shadow: 0 0 24px rgba(217, 163, 143, .18);
+}
+.bookend-sequence::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(1, 6, 5, .7) 0%, transparent 22% 72%, rgba(1, 6, 5, .78) 100%),
+    radial-gradient(106% 82% at 50% 48%, transparent 58%, rgba(0, 4, 3, .46) 100%);
+}
+.bookend-aperture {
+  position: relative;
+  z-index: 1;
+  width: min(100vw, calc(100svh * 16 / 9));
+  max-width: 100vw;
+  max-height: 100svh;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  isolation: isolate;
+  background: #010403;
+  box-shadow:
+    0 0 0 1px rgba(217, 163, 143, .18),
+    0 30px 90px rgba(0, 0, 0, .58);
+}
+.bookend-aperture::before,
+.bookend-aperture::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  inset-inline: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(217, 163, 143, .62), transparent);
+}
+.bookend-aperture::before { top: 0; }
+.bookend-aperture::after { bottom: 0; }
+.bookend-poster,
+.bookend-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: #010403;
 }
 .bookend-poster {
-  position: absolute;
-  inset: 0;
   z-index: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center;
+  opacity: 1;
 }
-.scene.rplate.bookend .plate { z-index: 1; }
-.bookend .plate video {
-  position: absolute;
-  inset: 0;
+.bookend-canvas {
+  z-index: 1;
   opacity: 0;
-  filter: none;
+}
+.bookend[data-sequence-mode="motion"].sequence-painted .bookend-canvas { opacity: 1; }
+.bookend[data-sequence-mode="motion"].sequence-painted .bookend-poster { opacity: 0; }
+.bookend-buffer {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
   pointer-events: none;
 }
-.scene.bookend.plate-ready .plate video { opacity: 0; }
-.bookend .plate-frame {
+.bookend-meter {
+  position: absolute;
+  z-index: 4;
+  inset-inline: 50%;
+  top: clamp(62px, 8vh, 88px);
+  width: min(460px, calc(100vw - 40px));
+  translate: -50% 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  color: rgba(245, 234, 220, .66);
+  font: 700 9px/1 var(--w-ui);
+  letter-spacing: .15em;
+}
+[dir="rtl"] .bookend-meter { translate: 50% 0; }
+.bookend-meter i {
+  height: 1px;
+  overflow: hidden;
+  background: rgba(245, 234, 220, .18);
+}
+.bookend-meter b {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
-  object-fit: cover;
-  opacity: 0;
-  filter: none;
-  transition: opacity .28s ease;
+  transform: scaleX(var(--sequence-progress, 0));
+  transform-origin: 0 50%;
+  background: var(--rose);
 }
-.bookend.plate-painted .plate-frame { opacity: 1; }
-.bookend .stage::after {
-  z-index: 2;
-  background:
-    linear-gradient(180deg, rgba(2, 9, 7, .22) 0%, transparent 34%, rgba(2, 8, 7, .2) 58%, rgba(2, 8, 7, .88) 100%),
-    radial-gradient(115% 92% at 50% 42%, transparent 48%, rgba(1, 7, 5, .54) 100%);
-}
+[dir="rtl"] .bookend-meter b { transform-origin: 100% 50%; }
 .bookend-copy {
   position: absolute;
   z-index: 4;
@@ -103,8 +186,8 @@ button:focus-visible {
   text-shadow: 0 3px 28px rgba(0, 0, 0, .72);
 }
 .bookend-intro .bookend-copy {
-  opacity: clamp(0, calc(1 - var(--p, 0) * 2.2), 1);
-  transform: translateY(calc(var(--p, 0) * -3vh));
+  opacity: clamp(0, calc(1 - var(--p, 0) * 4.4), 1);
+  transform: translateY(calc(var(--p, 0) * -4vh));
 }
 .bookend-kicker {
   margin-bottom: clamp(10px, 1.8vh, 18px);
@@ -134,8 +217,8 @@ button:focus-visible {
   color: var(--rose);
 }
 .bookend-copy-outro {
-  opacity: clamp(0, calc((var(--p, 0) - .42) * 3.2), 1);
-  transform: translateY(clamp(0px, calc((.62 - var(--p, 0)) * 40px), 24px));
+  opacity: clamp(0, calc((var(--p, 0) - .76) * 5.2), 1);
+  transform: translateY(clamp(0px, calc((.9 - var(--p, 0)) * 48px), 28px));
 }
 .bookend-copy-outro h2 { max-width: 12ch; }
 .bookend-links {
@@ -1037,17 +1120,30 @@ button:focus-visible {
 }
 
 @media (max-width: 700px) {
-  .bookend { height: 165vh; }
-  .bookend-outro { height: 210vh; }
+  .bookend-intro { height: 860vh; }
+  .bookend-outro { height: 490vh; }
+  .bookend-aperture {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: none;
+  }
+  .bookend-meter {
+    top: calc(58px + env(safe-area-inset-top, 0px));
+    width: calc(100vw - 40px);
+  }
   .bookend-copy {
     inset-inline: 20px;
     bottom: calc(28px + env(safe-area-inset-bottom, 0px));
     max-width: calc(100vw - 40px);
   }
+  .bookend-intro .bookend-copy {
+    top: calc(92px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+  }
   .bookend h1,
   .bookend h2 {
     max-width: 10ch;
-    font-size: clamp(44px, 13.8vw, 62px);
+    font-size: clamp(40px, 12.4vw, 56px);
     line-height: .92;
   }
   .bookend-kicker { font-size: 8px; }
@@ -1119,6 +1215,20 @@ button:focus-visible {
   .proof-code { padding: 10px; font-size: 24px; }
   #portal-proof-note { font-size: 7px; }
   .artifact-names > span { font-size: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bookend-copy,
+  .bookend-intro .bookend-copy,
+  .bookend-copy-outro {
+    transition: none;
+  }
+  .bookend-canvas { display: none; }
+  .bookend-poster { opacity: 1 !important; }
+  .bookend-sequence::before {
+    opacity: .35;
+    transform: none;
+  }
 }
 
 /* Real 44px hit areas; the visual dots remain deliberately small. */

@@ -22,6 +22,12 @@
     "build:cake-studio:media": "node scripts/build-cake-studio-media.mjs",
     "build:cake-studio:bookends": "node scripts/build-cake-studio-bookends.mjs",
     "verify:cake-studio:bookends": "node scripts/verify-cake-studio-bookends.mjs",
+    "build:cake-studio:v17-media": "python scripts/build-cake-studio-v17-media.py",
+    "verify:cake-studio:v17-pack": "node scripts/verify-cake-studio-v17-wan-pack.mjs",
+    "verify:cake-studio:v17-shell": "node scripts/verify-cake-studio-v17-shell.mjs",
+    "verify:cake-studio:v17-media": "python scripts/verify-cake-studio-v17-media.py",
+    "verify:cake-studio:v17-browser-pending": "python scripts/verify-cake-studio-v17-browser.py",
+    "verify:cake-studio:v17-browser-ready": "python scripts/verify-cake-studio-v17-browser-ready.py",
     "astro": "astro"
   },
   "dependencies": {
