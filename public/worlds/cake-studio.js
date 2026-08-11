@@ -425,3 +425,398 @@
   park();
   if (live && !solo) start();
 })();
+
+/* v1.7 bookend director: two page-local, manifest-driven micro-films. */
+(() => {
+  'use strict';
+
+  const scenes = [...document.querySelectorAll('[data-cake-bookend]')];
+  if (!scenes.length) return;
+
+  const bookendManifest = scenes[0].dataset.bookendManifest;
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const solo = new URLSearchParams(location.search).has('solo');
+  const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
+  const runtime = {
+    version: '1.7.0',
+    state: 'loading',
+    manifestReady: false,
+    units: [],
+    snapshot: () => runtime.units.map((unit) => ({
+      track: unit.trackName,
+      mode: unit.scene.dataset.sequenceMode,
+      state: unit.scene.dataset.sequenceState,
+      index: Number(unit.scene.dataset.sequenceIndex || 0),
+      clip: unit.scene.dataset.sequenceClip || '',
+      fraction: Number(unit.scene.dataset.sequenceFraction || 0),
+      targetTime: Number(unit.scene.dataset.sequenceTargetTime || 0),
+      time: unit.scene.dataset.sequenceTime ? Number(unit.scene.dataset.sequenceTime) : null,
+      painted: unit.scene.classList.contains('sequence-painted'),
+    })),
+  };
+  window.__cakeStudioBookends = runtime;
+
+  if (!bookendManifest || scenes.some((scene) => scene.dataset.bookendManifest !== bookendManifest)) {
+    runtime.state = 'manifest-error';
+    runtime.error = 'bookend scenes do not share one manifest URL';
+    return;
+  }
+
+  const validateManifest = (manifest) => {
+    if (manifest.schema !== 'cake-studio-bookends/v1' || manifest.version !== '1.7.0') {
+      throw new Error('bookend manifest version mismatch');
+    }
+    if (manifest.width !== 1280 || manifest.height !== 720 || manifest.fps !== 30 || manifest.duration !== 5) {
+      throw new Error('bookend manifest media contract mismatch');
+    }
+    const delivery = manifest.delivery;
+    const conditioning = delivery?.endpointConditioning;
+    if (delivery?.codec !== 'H.264' || delivery?.pixelFormat !== 'yuv420p'
+      || delivery?.silent !== true || delivery?.keyframeInterval !== 15 || delivery?.faststart !== true
+      || conditioning?.openingConvergenceFrames !== 9
+      || conditioning?.closingConvergenceStartFrame !== 126
+      || conditioning?.closingConvergenceEndFrame !== 135
+      || conditioning?.exactFinalHoldFrames !== 15) {
+      throw new Error('bookend manifest delivery contract mismatch');
+    }
+    if (typeof manifest.ready !== 'boolean' || !manifest.tracks || typeof manifest.tracks !== 'object') {
+      throw new Error('bookend manifest readiness or tracks missing');
+    }
+    const expected = {
+      intro: Array.from({ length: 10 }, (_, index) => `I${String(index + 1).padStart(2, '0')}`),
+      outro: Array.from({ length: 5 }, (_, index) => `O${String(index + 1).padStart(2, '0')}`),
+    };
+    if (Object.keys(manifest.tracks).sort().join(',') !== 'intro,outro') {
+      throw new Error('bookend manifest must expose exactly intro and outro tracks');
+    }
+    const sources = new Set();
+    for (const [trackName, ids] of Object.entries(expected)) {
+      const track = manifest.tracks[trackName];
+      if (!track || !Array.isArray(track.clips) || track.clips.length !== ids.length) {
+        throw new Error(`bookend ${trackName} clip count mismatch`);
+      }
+      if (!/^cake-studio\/v17\/stills\/CST17-[IO][0-9]{2}-.+\.webp$/.test(track.poster || '')) {
+        throw new Error(`bookend ${trackName} poster path mismatch`);
+      }
+      track.clips.forEach((clip, index) => {
+        if (clip.id !== ids[index]) throw new Error(`bookend ${trackName} order mismatch`);
+        if (!/^cake-studio\/v17\/clips\/CST17-[IO][0-9]{2}\.mp4$/.test(clip.src || '')) {
+          throw new Error(`bookend ${clip.id} media path mismatch`);
+        }
+        if (!/^cake-studio\/v17\/stills\/CST17-[IO][0-9]{2}-.+\.webp$/.test(clip.first || '')
+          || !/^cake-studio\/v17\/stills\/CST17-[IO][0-9]{2}-.+\.webp$/.test(clip.last || '')) {
+          throw new Error(`bookend ${clip.id} endpoint path mismatch`);
+        }
+        if (index && track.clips[index - 1].last !== clip.first) {
+          throw new Error(`bookend ${trackName} endpoint continuity mismatch`);
+        }
+        if (sources.has(clip.src)) throw new Error(`bookend duplicate media source ${clip.src}`);
+        sources.add(clip.src);
+      });
+    }
+    if (sources.size !== 15) throw new Error('bookend media source count mismatch');
+    return manifest;
+  };
+
+  const readProgress = (scene) => clamp(Number.parseFloat(scene.style.getPropertyValue('--p') || '0'));
+  const locate = (clips, progress) => {
+    if (progress >= .999999) return { index: clips.length - 1, fraction: 1 };
+    const scaled = progress * clips.length;
+    const index = Math.min(clips.length - 1, Math.floor(scaled));
+    return { index, fraction: scaled - index };
+  };
+
+  const release = (slot) => {
+    slot.generation += 1;
+    slot.ready = false;
+    slot.seeking = false;
+    slot.wanted = -1;
+    slot.index = -1;
+    slot.video.removeAttribute('src');
+    slot.video.load();
+  };
+
+  const setPoster = (unit, source) => {
+    if (!source || unit.poster.getAttribute('src') === source) return;
+    unit.poster.src = source;
+  };
+
+  const draw = (unit, slot, immediate = false) => {
+    if (unit.active !== slot || !slot.ready || slot.video.readyState < 2) return;
+    const generation = slot.generation;
+    const target = slot.target;
+    const commit = (_now, metadata = {}) => {
+      if (generation !== slot.generation || unit.active !== slot || slot.video.readyState < 2) return;
+      if (target !== slot.target) return;
+      const mediaTime = metadata.mediaTime ?? slot.video.currentTime;
+      if (Math.abs(mediaTime - target) > .05) return;
+      const width = slot.video.videoWidth || 1280;
+      const height = slot.video.videoHeight || 720;
+      if (unit.canvas.width !== width || unit.canvas.height !== height) {
+        unit.canvas.width = width;
+        unit.canvas.height = height;
+      }
+      unit.context.drawImage(slot.video, 0, 0, width, height);
+      unit.scene.dataset.sequenceTime = mediaTime.toFixed(4);
+      unit.scene.classList.add('sequence-painted');
+    };
+    if (immediate) {
+      commit(performance.now(), { mediaTime: slot.video.currentTime });
+    } else if (typeof slot.video.requestVideoFrameCallback === 'function') {
+      slot.video.requestVideoFrameCallback(commit);
+    } else {
+      setTimeout(() => commit(performance.now()), 90);
+    }
+  };
+
+  const seek = (unit, slot, time) => {
+    if (!slot.ready) return;
+    const duration = slot.video.duration || unit.duration;
+    const target = Math.min(Math.max(.001, duration - 1 / 30), Math.max(.001, time));
+    slot.target = target;
+    if (slot.seeking) {
+      slot.wanted = target;
+      return;
+    }
+    if (Math.abs(slot.video.currentTime - target) < .009) {
+      // A paused frame that is already at the requested time will not emit a
+      // future video-frame callback. It is decoded now, so commit it through
+      // the same generation, active-slot and target-distance guards.
+      draw(unit, slot, true);
+      return;
+    }
+    slot.seeking = true;
+    try {
+      slot.video.currentTime = target;
+    } catch {
+      slot.seeking = false;
+    }
+  };
+
+  const arm = (unit, slot, index) => {
+    if (slot.index === index && slot.video.getAttribute('src')) return slot;
+    release(slot);
+    slot.index = index;
+    slot.generation += 1;
+    const generation = slot.generation;
+    const clip = unit.clips[index];
+    slot.video.dataset.sequenceClip = clip.id;
+    // Arm before assigning the URL, and wait for a decoded frame rather than
+    // metadata alone. A paused video can reach loadedmetadata at readyState 1;
+    // rendering there would be dropped and no later scroll event is assured.
+    slot.video.addEventListener('loadeddata', () => {
+      if (generation !== slot.generation) return;
+      slot.ready = true;
+      unit.scene.dataset.sequenceState = 'ready';
+      renderUnit(unit, readProgress(unit.scene));
+    }, { once: true });
+    slot.video.src = clip.src;
+    slot.video.load();
+    return slot;
+  };
+
+  const chooseSlot = (unit, index) => {
+    const existing = unit.slots.find((slot) => slot.index === index);
+    if (existing) return existing;
+    const available = unit.slots.find((slot) => slot !== unit.active) || unit.slots[0];
+    return arm(unit, available, index);
+  };
+
+  function renderUnit(unit, progress) {
+    const beat = locate(unit.clips, progress);
+    const clip = unit.clips[beat.index];
+    const clipChanged = unit.currentIndex !== beat.index;
+    const targetTime = Math.min(unit.duration - 1 / 30, beat.fraction * unit.duration);
+    const targetChanged = clipChanged || Math.abs(unit.targetTime - targetTime) >= .009;
+    unit.currentIndex = beat.index;
+    unit.targetTime = targetTime;
+    const previousProgress = unit.lastProgress;
+    unit.direction = progress >= previousProgress ? 1 : -1;
+    unit.lastProgress = progress;
+    unit.scene.style.setProperty('--sequence-progress', progress.toFixed(5));
+    unit.scene.style.setProperty('--sequence-local', beat.fraction.toFixed(5));
+    unit.scene.dataset.sequenceIndex = String(beat.index + 1);
+    unit.scene.dataset.sequenceClip = clip.id;
+    unit.scene.dataset.sequenceFraction = beat.fraction.toFixed(5);
+    unit.scene.dataset.sequenceTargetTime = targetTime.toFixed(4);
+    unit.counter.textContent = `${String(beat.index + 1).padStart(2, '0')} / ${String(unit.clips.length).padStart(2, '0')}`;
+    unit.meter.style.setProperty('--sequence-progress', progress.toFixed(5));
+
+    const endpointIndex = Math.min(unit.clips.length, Math.round(progress * unit.clips.length));
+    setPoster(unit, unit.endpoints[endpointIndex]);
+
+    if (targetChanged) {
+      unit.scene.classList.remove('sequence-painted');
+      delete unit.scene.dataset.sequenceTime;
+    }
+
+    if (reducedMotion.matches || !unit.mediaReady) {
+      unit.scene.dataset.sequenceMode = 'still';
+      unit.scene.dataset.sequenceState = unit.mediaReady ? 'reduced-motion' : 'awaiting-media';
+      unit.scene.classList.remove('sequence-painted');
+      return;
+    }
+
+    unit.scene.dataset.sequenceMode = 'motion';
+    if (!solo && !unit.live) return;
+
+    const slot = chooseSlot(unit, beat.index);
+    if (unit.active !== slot) {
+      unit.active = slot;
+      unit.scene.classList.remove('sequence-painted');
+    }
+    if (slot.ready) {
+      const duration = slot.video.duration || unit.duration;
+      seek(unit, slot, beat.fraction >= .999999 ? duration - 1 / 30 : beat.fraction * duration);
+    }
+
+    const neighbour = beat.index + unit.direction;
+    if (neighbour >= 0 && neighbour < unit.clips.length) {
+      const preload = unit.slots.find((candidate) => candidate !== slot);
+      if (preload && preload.index !== neighbour) arm(unit, preload, neighbour);
+    }
+  }
+
+  const createUnit = (scene, manifest) => {
+    const trackName = scene.dataset.bookendTrack;
+    const track = manifest.tracks[trackName];
+    if (!track || !Array.isArray(track.clips) || !track.clips.length) return null;
+    const sequence = scene.querySelector('[data-bookend-sequence]');
+    const canvas = scene.querySelector('[data-bookend-canvas]');
+    const poster = scene.querySelector('[data-bookend-poster]');
+    const meter = scene.querySelector('[data-bookend-meter]');
+    const counter = scene.querySelector('[data-bookend-count]');
+    const context = canvas?.getContext('2d', { alpha: false });
+    if (!sequence || !canvas || !poster || !meter || !counter || !context) return null;
+
+    const unit = {
+      scene,
+      sequence,
+      canvas,
+      context,
+      poster,
+      meter,
+      counter,
+      trackName,
+      clips: track.clips,
+      endpoints: [track.clips[0].first, ...track.clips.map((clip) => clip.last)],
+      duration: manifest.duration,
+      mediaReady: manifest.ready === true,
+      active: null,
+      live: solo || scene.classList.contains('is-live'),
+      direction: 1,
+      lastProgress: readProgress(scene),
+      currentIndex: -1,
+      targetTime: -1,
+      slots: [],
+    };
+
+    unit.slots = Array.from({ length: 2 }, () => {
+      const video = document.createElement('video');
+      video.className = 'bookend-buffer';
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = 'auto';
+      video.disablePictureInPicture = true;
+      video.setAttribute('muted', '');
+      video.setAttribute('playsinline', '');
+      video.setAttribute('aria-hidden', 'true');
+      sequence.appendChild(video);
+      const slot = {
+        video,
+        index: -1,
+        generation: 0,
+        ready: false,
+        seeking: false,
+        wanted: -1,
+        target: 0,
+      };
+      video.addEventListener('seeked', () => {
+        slot.seeking = false;
+        if (slot.wanted >= 0) {
+          const wanted = slot.wanted;
+          slot.wanted = -1;
+          seek(unit, slot, wanted);
+          return;
+        }
+        // `seeked` means this paused frame is decoded. Waiting for another
+        // requestVideoFrameCallback would stall until playback, which this
+        // scroll-scrubber deliberately never starts.
+        draw(unit, slot, true);
+      });
+      video.addEventListener('error', () => {
+        if (!video.getAttribute('src')) return;
+        const activeFailure = unit.active === slot;
+        release(slot);
+        if (activeFailure) {
+          unit.active = null;
+          unit.scene.dataset.sequenceState = 'poster';
+          unit.scene.classList.remove('sequence-painted');
+          delete unit.scene.dataset.sequenceTime;
+        }
+      });
+      return slot;
+    });
+
+    scene.dataset.sequenceMode = reducedMotion.matches || !unit.mediaReady ? 'still' : 'motion';
+    scene.dataset.sequenceState = unit.mediaReady ? 'ready' : 'awaiting-media';
+    scene.dataset.sequenceCount = String(unit.clips.length);
+    scene.addEventListener('scene:live', () => {
+      unit.live = true;
+      renderUnit(unit, readProgress(scene));
+    });
+    scene.addEventListener('scene:idle', () => {
+      unit.live = false;
+      unit.scene.classList.remove('sequence-painted');
+      delete unit.scene.dataset.sequenceTime;
+    });
+    renderUnit(unit, unit.lastProgress);
+    return unit;
+  };
+
+  let ticking = false;
+  const paint = () => {
+    ticking = false;
+    for (const unit of runtime.units) renderUnit(unit, readProgress(unit.scene));
+  };
+  const schedule = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(paint);
+  };
+
+  fetch(bookendManifest, { cache: 'no-cache' })
+    .then((response) => {
+      if (!response.ok) throw new Error(`bookend manifest HTTP ${response.status}`);
+      return response.json();
+    })
+    .then((manifest) => {
+      validateManifest(manifest);
+      runtime.manifestReady = manifest.ready === true;
+      const units = scenes.map((scene) => createUnit(scene, manifest)).filter(Boolean);
+      if (units.length !== 2) throw new Error('bookend runtime did not create both tracks');
+      runtime.units = units;
+      runtime.state = manifest.ready === true ? 'ready' : 'awaiting-media';
+      addEventListener('scroll', schedule, { passive: true });
+      addEventListener('resize', schedule, { passive: true });
+      reducedMotion.addEventListener?.('change', () => {
+        if (reducedMotion.matches) {
+          for (const unit of runtime.units) unit.slots.forEach(release);
+        }
+        paint();
+      });
+      paint();
+    })
+    .catch((error) => {
+      runtime.state = 'manifest-error';
+      runtime.error = error instanceof Error ? error.message : String(error);
+      for (const scene of scenes) {
+        scene.dataset.sequenceMode = 'still';
+        scene.dataset.sequenceState = 'manifest-error';
+      }
+    });
+
+  addEventListener('pagehide', () => {
+    for (const unit of runtime.units) unit.slots.forEach(release);
+  }, { once: true });
+})();

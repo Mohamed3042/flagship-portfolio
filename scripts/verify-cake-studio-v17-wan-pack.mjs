@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const pack = path.join(repo, 'public', 'worlds', 'assets', 'cake-studio-v17', 'wan-production');
+const pack = path.join(repo, 'production', 'cake-studio-v17', 'wan-production');
 const jobsFile = path.join(pack, 'wan-jobs.js');
 const boardFile = path.join(pack, 'WAN-GENERATION-BOARD.html');
 const sabotage = process.argv.includes('--sabotage');
