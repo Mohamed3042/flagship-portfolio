@@ -529,7 +529,24 @@ class Verification:
                 f"{track} {expected_id} at {fraction:.3f} did not paint: "
                 + json.dumps(detail, ensure_ascii=False, sort_keys=True)
             )
-        page.wait_for_timeout(80)
+        # The poster is the fail-safe while a new paused video frame decodes.
+        # Local disk usually resolves it before the canvas, but a cold public
+        # CDN does not.  Grade the fallback only after the currently selected
+        # endpoint has decoded instead of racing it with an arbitrary sleep.
+        page.wait_for_function(
+            """selector => {
+              const poster = document.querySelector(selector)
+                ?.querySelector('[data-bookend-poster]');
+              return Boolean(
+                poster?.complete
+                && poster.naturalWidth === 1280
+                && poster.naturalHeight === 720
+              );
+            }""",
+            arg=selector,
+            timeout=15_000,
+        )
+        page.wait_for_timeout(40)
         return self.capture_bookend(page, track)
 
     @staticmethod
