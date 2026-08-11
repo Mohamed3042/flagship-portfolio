@@ -301,7 +301,8 @@ The Cosmic Keynote is **live on both hosts** (`npm run build` green, 22 pages). 
     is **39/39** and local rendered proof is **81 checks** across desktop/phone, forward/reverse and
     reduced motion. The former WebGL coda and technical credits remain preserved as inert templates
     and archived assets, but no longer execute or request Three.js/GLBs. Direction source:
-    `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md`.
+    `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md`. Published at Pages commit `ba10b17`; build
+    `31463600293` and the public **81-check** browser gate completed successfully.
 
 ## 9. Companion docs
 - `NOTES.md` — the engineering rationale & "what I improved over the original".

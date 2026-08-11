@@ -64,6 +64,10 @@ npm run build:ghpages
 
 ## Publication
 
-Live URL: <https://mohamed3042.github.io/flagship-portfolio/worlds/cake-studio.html>
-
-Source, Pages commit and public proof are recorded after deployment.
+- Source commit: `34cd53e`.
+- Main merge: PR `#4`, commit `40ac8c9`.
+- Pages tree: `ba10b17`; Pages build `31463600293` completed successfully.
+- Public browser gate: **81 checks GREEN** at desktop and reduced-motion phone viewports.
+- Public evidence:
+  `C:\Users\GAMING\Documents\Codex\2026-08-11\cake-studio-v16-public`.
+- Live URL: <https://mohamed3042.github.io/flagship-portfolio/worlds/cake-studio.html>
