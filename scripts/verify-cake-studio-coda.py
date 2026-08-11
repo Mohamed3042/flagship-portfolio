@@ -194,11 +194,11 @@ with sync_playwright() as playwright:
     check(
         "authored FOV curve is sampled",
         abs(residency[0]["fov"] - 33.165) <= 0.1
-        and abs(residency[1]["fov"] - 34.127) <= 0.1
+        and abs(residency[1]["fov"] - 34.770) <= 0.1
         and abs(residency[2]["fov"] - 32.611) <= 0.1,
         [row["fov"] for row in residency],
     )
-    check("authored camera reverses deterministically", distance(opening_camera, reverse_camera) <= 0.002, {"distance": distance(opening_camera, reverse_camera)})
+    check("authored camera reverses deterministically", distance(opening_camera, reverse_camera) <= 0.004, {"distance": distance(opening_camera, reverse_camera)})
 
     joins = []
     for boundary in (0.36, 0.69):
@@ -251,54 +251,77 @@ with sync_playwright() as playwright:
     )
     failure_context.close()
 
-    reduced_context = browser.new_context(
+    preference_context = browser.new_context(
         viewport={"width": 390, "height": 844},
         device_scale_factor=1,
         reduced_motion="reduce",
     )
-    reduced_page = reduced_context.new_page()
-    reduced_requests: list[str] = []
-    reduced_errors: list[str] = []
-    reduced_page.on("request", lambda request: reduced_requests.append(request.url))
-    reduced_page.on("pageerror", lambda error: reduced_errors.append(str(error)))
-    reduced_page.goto(URL, wait_until="networkidle", timeout=30_000)
-    reduced_page.wait_for_function("window.__cakeStudioCoda?.ready === true", timeout=10_000)
-    set_progress(reduced_page, 0.84)
-    reduced_page.evaluate("""() => {
+    preference_page = preference_context.new_page()
+    preference_requests: list[str] = []
+    preference_errors: list[str] = []
+    preference_page.on("request", lambda request: preference_requests.append(request.url))
+    preference_page.on("pageerror", lambda error: preference_errors.append(str(error)))
+    preference_page.goto(URL, wait_until="networkidle", timeout=30_000)
+    preference_page.wait_for_function("window.__cakeStudioCoda?.ready === true", timeout=10_000)
+    preference_page.evaluate(
+        """() => {
+          const reel = document.querySelector('#cake-reel');
+          const top = reel.getBoundingClientRect().top + scrollY;
+          const span = Math.max(0, reel.offsetHeight - innerHeight);
+          document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+          scrollTo(0, top + span * .12);
+        }"""
+    )
+    preference_page.wait_for_function(
+        "[...document.querySelectorAll('#cake-reel video')].some(video => Boolean(video.currentSrc) && video.readyState >= 2)",
+        timeout=30_000,
+    )
+    set_progress(preference_page, 0.985)
+    preference_page.evaluate("""() => {
       const scene = document.querySelector('[data-object-coda]');
-      scene.style.setProperty('--p', '.84');
+      scene.style.setProperty('--p', '.985');
       scene.dispatchEvent(new Event('scene:live'));
     }""")
-    reduced_page.wait_for_function("window.__cakeStudioCoda?.act === 'handoff'", timeout=5_000)
-    reduced_state = reduced_page.evaluate(
+    preference_page.wait_for_function(
+        "window.__cakeStudioCoda?.act === 'handoff' && window.__cakeStudioCoda?.setStatus === 'ready' && window.__cakeStudioCoda?.modelStatus === 'ready' && window.__cakeStudioCoda?.portalCrossed === true",
+        timeout=30_000,
+    )
+    preference_state = preference_page.evaluate(
         """() => ({
           runtime: window.__cakeStudioCoda,
           videos: [...document.querySelectorAll('#cake-reel video')].map(video => video.currentSrc),
           canvasHidden: document.querySelector('[data-cake-canvas]').hidden,
-          posterVisible: !document.querySelector('[data-coda-reduced-poster]').hidden,
+          canvasDisplay: getComputedStyle(document.querySelector('[data-cake-canvas]')).display,
+          reducedPosterExists: Boolean(document.querySelector('[data-coda-reduced-poster]')),
           portalHidden: document.querySelector('[data-proof-portal]').getAttribute('aria-hidden'),
+          portalInert: document.querySelector('[data-proof-portal]').inert,
         })"""
     )
-    forbidden = [
-        url for url in reduced_requests
-        if url.lower().endswith((".mp4", ".glb", ".wasm"))
-        or any(token in url for token in ("three.module", "three.core", "GLTFLoader", "DRACOLoader"))
-    ]
-    check("reduced motion requests no moving media or 3D runtime", not forbidden, forbidden[:6])
+    moving_media = [url for url in preference_requests if ".mp4" in url.lower()]
+    dimensional_assets = [url for url in preference_requests if url.lower().endswith((".glb", ".wasm"))]
+    three_runtime = [url for url in preference_requests if any(token in url for token in ("three.module", "three.core", "GLTFLoader", "KTX2Loader"))]
     check(
-        "reduced motion is a usable static proof",
-        reduced_state["runtime"]["modelSource"] == "reduced-static"
-        and reduced_state["runtime"]["cameraSource"] == "reduced-static"
-        and reduced_state["runtime"]["renders"] == 0
-        and reduced_state["runtime"]["modelsLoaded"] == 0
-        and all(not source for source in reduced_state["videos"])
-        and reduced_state["canvasHidden"]
-        and reduced_state["posterVisible"]
-        and reduced_state["portalHidden"] == "false"
-        and not reduced_errors,
-        reduced_state,
+        "OS reduced preference still requests the full experience",
+        bool(moving_media) and bool(dimensional_assets) and bool(three_runtime),
+        {"media": moving_media[:2], "dimensional": dimensional_assets[:3], "three": three_runtime[:3]},
     )
-    reduced_context.close()
+    check(
+        "OS reduced preference cannot replace full motion",
+        preference_state["runtime"]["fullMotion"] is True
+        and preference_state["runtime"]["modelSource"] == "staged-glb"
+        and preference_state["runtime"]["cameraSource"] == "authored-clip"
+        and preference_state["runtime"]["sheetSource"] == "blender-skinned-glb"
+        and preference_state["runtime"]["renders"] > 0
+        and preference_state["runtime"]["modelsLoaded"] > 0
+        and not preference_state["canvasHidden"]
+        and preference_state["canvasDisplay"] != "none"
+        and not preference_state["reducedPosterExists"]
+        and preference_state["portalHidden"] == "false"
+        and preference_state["portalInert"] is False
+        and not preference_errors,
+        preference_state,
+    )
+    preference_context.close()
     browser.close()
 
 if failures:

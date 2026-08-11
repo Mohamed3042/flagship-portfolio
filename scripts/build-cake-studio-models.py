@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import struct
+import subprocess
 from pathlib import Path
 
 import bpy
@@ -17,6 +19,11 @@ SOURCE_DIR = ROOT / "production" / "cake-studio" / "hunyuan3d" / "generated-glb"
 OUTPUT_DIR = ROOT / "public" / "worlds" / "cake-studio" / "models"
 OUTPUT_MANIFEST = OUTPUT_DIR / "manifest.json"
 TEXTURE_MAX_EDGE = 512
+KTX2_MAGIC = b"\xabKTX 20\xbb\r\n\x1a\n"
+GLTFPACK = Path(os.environ.get(
+    "CAKE_STUDIO_GLTFPACK",
+    r"C:\Users\GAMING\Downloads\tools\gltfpack-v1.2\gltfpack.exe",
+))
 
 TARGET_TRIANGLES = {
     "cake-01": 100_000,
@@ -89,31 +96,13 @@ def resize_textures() -> None:
         image.pack()
 
 
-def jpeg_dimensions(data: bytes) -> tuple[int, int]:
-    if data[:2] != b"\xff\xd8":
-        raise RuntimeError("embedded texture is not JPEG")
-    sof_markers = {0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF}
-    offset = 2
-    while offset + 8 <= len(data):
-        while offset < len(data) and data[offset] == 0xFF:
-            offset += 1
-        if offset >= len(data):
-            break
-        marker = data[offset]
-        offset += 1
-        if marker in sof_markers:
-            height = int.from_bytes(data[offset + 3:offset + 5], "big")
-            width = int.from_bytes(data[offset + 5:offset + 7], "big")
-            return width, height
-        if marker in {0x01, *range(0xD0, 0xDA)}:
-            continue
-        if offset + 2 > len(data):
-            break
-        segment_length = int.from_bytes(data[offset:offset + 2], "big")
-        if segment_length < 2:
-            break
-        offset += segment_length
-    raise RuntimeError("JPEG dimensions unavailable")
+def ktx2_dimensions(data: bytes) -> tuple[int, int]:
+    if data[:12] != KTX2_MAGIC or len(data) < 68:
+        raise RuntimeError("embedded texture is not KTX2")
+    width, height = struct.unpack_from("<II", data, 20)
+    if width < 1 or height < 1:
+        raise RuntimeError("embedded KTX2 dimensions invalid")
+    return width, height
 
 
 def full_mip_bytes(width: int, height: int) -> int:
@@ -136,18 +125,23 @@ def exported_texture_stats(output_path: Path) -> dict[str, int]:
     binary_start = binary_header + 8
     dimensions = []
     for image in document.get("images", []):
-        if image.get("mimeType") != "image/jpeg" or "bufferView" not in image:
-            raise RuntimeError(f"{output_path.name}: non-embedded JPEG texture")
+        if image.get("mimeType") != "image/ktx2" or "bufferView" not in image:
+            raise RuntimeError(f"{output_path.name}: non-embedded KTX2 texture")
         view = document["bufferViews"][image["bufferView"]]
         start = binary_start + int(view.get("byteOffset", 0))
         end = start + int(view["byteLength"])
-        dimensions.append(jpeg_dimensions(data[start:end]))
-    decoded_base_bytes = sum(width * height * 4 for width, height in dimensions)
+        dimensions.append(ktx2_dimensions(data[start:end]))
+    rgba_equivalent_base_bytes = sum(width * height * 4 for width, height in dimensions)
+    ktx_payload_bytes = sum(
+        document["bufferViews"][image["bufferView"]]["byteLength"]
+        for image in document.get("images", [])
+    )
     return {
         "textureCount": len(dimensions),
         "textureMaxEdge": max((max(width, height) for width, height in dimensions), default=0),
-        "decodedBaseBytes": decoded_base_bytes,
-        "estimatedMipBytes": sum(full_mip_bytes(width, height) for width, height in dimensions),
+        "ktxPayloadBytes": ktx_payload_bytes,
+        "rgbaEquivalentBaseBytes": rgba_equivalent_base_bytes,
+        "rgbaEquivalentMipBytes": sum(full_mip_bytes(width, height) for width, height in dimensions),
     }
 
 
@@ -185,21 +179,31 @@ def normalize(asset_id: str, objects: list[bpy.types.Object]) -> list[float]:
 
 
 def export_glb(output_path: Path) -> None:
-    bpy.ops.export_scene.gltf(
-        filepath=str(output_path),
-        export_format="GLB",
-        use_selection=False,
-        export_apply=True,
-        export_animations=False,
-        export_image_format="JPEG",
-        export_image_quality=78,
-        export_use_gltfpack=False,
-        export_draco_mesh_compression_enable=True,
-        export_draco_mesh_compression_level=7,
-        export_draco_position_quantization=14,
-        export_draco_normal_quantization=12,
-        export_draco_texcoord_quantization=12,
-    )
+    if not GLTFPACK.is_file():
+        raise FileNotFoundError(f"Official gltfpack binary missing: {GLTFPACK}")
+    intermediate = output_path.with_suffix(".uncompressed.glb")
+    try:
+        bpy.ops.export_scene.gltf(
+            filepath=str(intermediate),
+            export_format="GLB",
+            use_selection=False,
+            export_apply=True,
+            export_animations=False,
+            export_image_format="JPEG",
+            export_image_quality=78,
+            export_use_gltfpack=False,
+            export_draco_mesh_compression_enable=False,
+        )
+        subprocess.run([
+            str(GLTFPACK),
+            "-i", str(intermediate),
+            "-o", str(output_path),
+            "-tc", "-tq", "10", "-tj", "4",
+            "-cc", "-kn", "-ke",
+            "-vp", "14", "-vt", "12", "-vn", "10",
+        ], check=True)
+    finally:
+        intermediate.unlink(missing_ok=True)
 
 
 def build_asset(asset: dict) -> dict:
@@ -248,14 +252,15 @@ def main() -> None:
     source_manifest = json.loads(SOURCE_MANIFEST.read_text(encoding="utf-8"))
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     records = [build_asset(asset) for asset in source_manifest["assets"]]
-    decoded_base_bytes = sum(record["decodedBaseBytes"] for record in records)
-    estimated_mip_bytes = sum(record["estimatedMipBytes"] for record in records)
+    ktx_payload_bytes = sum(record["ktxPayloadBytes"] for record in records)
+    rgba_equivalent_base_bytes = sum(record["rgbaEquivalentBaseBytes"] for record in records)
+    rgba_equivalent_mip_bytes = sum(record["rgbaEquivalentMipBytes"] for record in records)
     manifest = {
         "schemaVersion": 2,
-        "release": "1.4.0",
-        "generator": "Blender 5.1 Cake Studio web pipeline",
-        "compression": "KHR_draco_mesh_compression",
-        "texturePolicy": "JPEG quality 78, max edge 512, generated normal map removed",
+        "release": "1.5.0",
+        "generator": "Blender 5.1 + official gltfpack 1.2 Cake Studio web pipeline",
+        "compression": "EXT_meshopt_compression + KHR_texture_basisu",
+        "texturePolicy": "ETC1S KTX2 quality 10, max edge 512, generated normal map removed",
         "normalization": "longest axis 2 units, horizontal center, base at zero",
         "totalSourceBytes": sum(record["sourceBytes"] for record in records),
         "totalBytes": sum(record["bytes"] for record in records),
@@ -263,16 +268,19 @@ def main() -> None:
         "textureStats": {
             "textureCount": sum(record["textureCount"] for record in records),
             "maxEdge": max(record["textureMaxEdge"] for record in records),
-            "decodedBaseBytes": decoded_base_bytes,
-            "estimatedMipBytes": estimated_mip_bytes,
+            "ktxPayloadBytes": ktx_payload_bytes,
+            "rgbaEquivalentBaseBytes": rgba_equivalent_base_bytes,
+            "rgbaEquivalentMipBytes": rgba_equivalent_mip_bytes,
+            "compressedGpuMipEstimateBytes": rgba_equivalent_mip_bytes // 8,
+            "rgbaFallbackMipBytes": rgba_equivalent_mip_bytes,
         },
         "assets": records,
     }
     OUTPUT_MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(
         f"CAKE_STUDIO_MODELS_OK assets={len(records)} bytes={manifest['totalBytes']} "
-        f"triangles={manifest['totalTriangles']} textureBase={decoded_base_bytes} "
-        f"textureMip={estimated_mip_bytes} manifest={OUTPUT_MANIFEST}",
+        f"triangles={manifest['totalTriangles']} ktxPayload={ktx_payload_bytes} "
+        f"compressedGpuMip={rgba_equivalent_mip_bytes // 8} manifest={OUTPUT_MANIFEST}",
         flush=True,
     )
 

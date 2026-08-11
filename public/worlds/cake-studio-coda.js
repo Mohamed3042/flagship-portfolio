@@ -1,6 +1,8 @@
 import * as THREE from './cake-studio/three.module.js';
 import { GLTFLoader } from './cake-studio/GLTFLoader.js';
 import { DRACOLoader } from './cake-studio/DRACOLoader.js';
+import { KTX2Loader } from './cake-studio/addons/loaders/KTX2Loader.js';
+import { MeshoptDecoder } from './cake-studio/addons/libs/meshopt_decoder.module.js';
 
 const READY_FORM_COUNT = 9;
 const CONTROLLED_PART_COUNT = 4;
@@ -52,19 +54,19 @@ const ZERO_VECTOR = new THREE.Vector3();
 const ZERO_EULER = new THREE.Euler();
 const CAMERA_WORLD_SCALE = new THREE.Vector3();
 const CAMERA_WORLD_DIRECTION = new THREE.Vector3();
+const SHEET_WORLD_POSITION = new THREE.Vector3();
 const authoredFovCurves = new WeakMap();
 const textureCache = new Map();
 
 const sceneElement = document.querySelector('[data-object-coda]');
 const canvas = sceneElement?.querySelector('[data-cake-canvas]');
 const fallback = sceneElement?.querySelector('[data-coda-fallback]');
-const reducedPoster = sceneElement?.querySelector('[data-coda-reduced-poster]');
 const proofPortal = sceneElement?.querySelector('[data-proof-portal]');
+const cakeStudioLiveUi = sceneElement?.querySelector('[data-cake-studio-live-ui]');
 const actElements = sceneElement ? [...sceneElement.querySelectorAll('[data-object-act]')] : [];
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const runtime = {
-  version: '1.4.0',
+  version: '1.5.0',
   engine: `three-r${THREE.REVISION}`,
   webglAvailable: false,
   ready: false,
@@ -94,21 +96,27 @@ const runtime = {
   setStatus: 'idle',
   setSource: 'procedural',
   cameraSource: 'waypoint-fallback',
+  sheetSource: 'procedural-fallback',
+  sheetBones: 0,
+  sheetAnimation: 'none',
+  sheetPosition: { x: 0, y: 0, z: 0 },
+  sheetBoneQuaternion: { x: 0, y: 0, z: 0, w: 1 },
   portalState: 'hidden',
+  portalCrossed: false,
+  uiReveal: 0,
   renders: 0,
   drawCalls: 0,
   triangles: 0,
   gpuTextures: 0,
   gpuGeometries: 0,
   pixelRatio: 0,
-  reducedMotion,
+  fullMotion: true,
 };
 window.__cakeStudioCoda = runtime;
+if (cakeStudioLiveUi) wireCakeStudioLiveUi(cakeStudioLiveUi);
 
 if (!sceneElement || !canvas) {
   runtime.reason = 'markup-missing';
-} else if (reducedMotion) {
-  initialiseReducedMotion();
 } else {
   try {
     initialise();
@@ -147,7 +155,7 @@ function initialise() {
   scene.fog = new THREE.FogExp2(0x020705, 0.046);
   const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 80);
   const cameraTarget = new THREE.Vector3(0, 0.8, 0);
-  const productionLoader = createProductionLoader();
+  const productionLoader = createProductionLoader(renderer);
 
   const set = createPhysicalSet(scene);
   const sheet = createOpticalSheet(scene);
@@ -237,7 +245,7 @@ function initialise() {
     const deltaMs = lastFrameTime ? Math.min(64, Math.max(1, now - lastFrameTime)) : 1000 / 60;
     lastFrameTime = now;
 
-    if (reducedMotion || distance > CAMERA_SNAP_DISTANCE) {
+    if (distance > CAMERA_SNAP_DISTANCE) {
       smoothProgress = rawProgress;
     } else if (distance > CAMERA_IDLE_EPSILON) {
       const blend = 1 - Math.exp(-deltaMs / CAMERA_TAU_MS);
@@ -283,7 +291,7 @@ function initialise() {
     runtime.modelStatus = 'loading';
     runtime.setStatus = 'loading';
     sceneElement.dataset.models = 'loading';
-    loadProofRoom(set, scene, productionLoader.loader)
+    loadProofRoom(set, sheet, scene, productionLoader.loader)
       .then(() => scheduleRender())
       .catch((error) => {
         runtime.setStatus = 'fallback';
@@ -335,6 +343,7 @@ function initialise() {
     if (progressRefreshFrame) cancelAnimationFrame(progressRefreshFrame);
     modelObserver?.disconnect();
     for (const group of groupStates.keys()) disposeModelGroup(group, groupStates, states);
+    productionLoader.ktx2.dispose();
     productionLoader.draco.dispose();
     renderer.dispose();
   }, { once: true });
@@ -342,41 +351,6 @@ function initialise() {
   resize();
   runtime.rawProgress = Number(smoothProgress.toFixed(6));
   renderCoda(smoothProgress);
-}
-
-function initialiseReducedMotion() {
-  runtime.webglAvailable = false;
-  runtime.ready = true;
-  runtime.modelStatus = 'skipped';
-  runtime.modelSource = 'reduced-static';
-  runtime.setStatus = 'poster';
-  runtime.setSource = 'reduced-static';
-  runtime.cameraSource = 'reduced-static';
-  sceneElement.dataset.mode = 'reduced-static';
-  sceneElement.dataset.models = 'skipped';
-  canvas.hidden = true;
-  if (reducedPoster) reducedPoster.hidden = false;
-
-  const posterFor = (act) => `./cake-studio/posters/coda-${act}-${innerWidth <= 700 ? 'phone' : 'desktop'}.jpg`;
-  const renderStatic = () => {
-    const progress = clamp(Number.parseFloat(sceneElement.style.getPropertyValue('--p') || '0'));
-    const act = actForProgress(progress);
-    runtime.progress = progress;
-    runtime.rawProgress = progress;
-    runtime.act = act;
-    runtime.portalState = progress > 0.82 ? 'locked' : progress > 0.7 ? 'open' : 'hidden';
-    sceneElement.dataset.act = act;
-    sceneElement.dataset.portalState = runtime.portalState;
-    sceneElement.style.setProperty('--object-p', progress.toFixed(6));
-    sceneElement.style.setProperty('--portal-p', (act === 'handoff' ? 1 : 0).toFixed(3));
-    const posterSource = posterFor(act);
-    if (reducedPoster && reducedPoster.getAttribute('src') !== posterSource) reducedPoster.setAttribute('src', posterSource);
-    renderCaptions(progress);
-  };
-  addEventListener('scroll', renderStatic, { passive: true });
-  addEventListener('resize', renderStatic, { passive: true });
-  sceneElement.addEventListener('scene:live', renderStatic);
-  renderStatic();
 }
 
 function createPhysicalSet(scene) {
@@ -695,28 +669,42 @@ function createChapterWords(scene) {
   return { root, wordsByAct: new Map(), usingModels: false };
 }
 
-function createProductionLoader() {
+function createProductionLoader(renderer) {
   THREE.Cache.enabled = false;
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath('./cake-studio/draco/gltf/');
   dracoLoader.setDecoderConfig({ type: 'wasm' });
+  const ktx2Loader = new KTX2Loader();
+  ktx2Loader.setTranscoderPath('./cake-studio/addons/libs/basis/');
+  ktx2Loader.detectSupport(renderer);
   const loader = new GLTFLoader();
   loader.setDRACOLoader(dracoLoader);
-  return { loader, draco: dracoLoader };
+  loader.setKTX2Loader(ktx2Loader);
+  loader.setMeshoptDecoder(MeshoptDecoder);
+  return { loader, draco: dracoLoader, ktx2: ktx2Loader };
 }
 
-async function loadProofRoom(set, scene, loader) {
+async function loadProofRoom(set, sheet, scene, loader) {
   const gltf = await loader.loadAsync(SET_ASSET);
   const clip = gltf.animations.find((animation) => animation.name === 'ProofRoom_Cameras');
+  const sheetClip = gltf.animations.find((animation) => animation.name === 'HeroSheet_Journey');
   const desktop = gltf.scene.getObjectByName('Camera_Desktop');
   const phone = gltf.scene.getObjectByName('Camera_Phone');
-  if (!clip || !desktop?.isCamera || !phone?.isCamera) {
-    throw new Error('proof-room camera contract missing');
+  const heroRig = gltf.scene.getObjectByName('HeroSheet_Rig');
+  const heroMeshRoot = gltf.scene.getObjectByName('HeroSheet_Mesh');
+  const heroMeshes = [];
+  heroMeshRoot?.traverse((child) => { if (child.isSkinnedMesh) heroMeshes.push(child); });
+  const heroMesh = heroMeshes[0];
+  const aperture = gltf.scene.getObjectByName('CustomerFrame_Aperture');
+  const semanticPlane = gltf.scene.getObjectByName('Portal_SemanticPlane');
+  if (!clip || !desktop?.isCamera || !phone?.isCamera || !sheetClip
+      || !heroRig || !heroMesh || !aperture || !semanticPlane) {
+    throw new Error('proof-room camera, hero-sheet or aperture contract missing');
   }
   gltf.scene.name = 'cake-studio-authored-proof-room';
   gltf.scene.traverse((child) => {
     if (!child.isMesh) return;
-    child.frustumCulled = true;
+    child.frustumCulled = !child.isSkinnedMesh;
     const materials = Array.isArray(child.material) ? child.material : [child.material];
     materials.filter(Boolean).forEach((material) => {
       if (material.map) material.map.anisotropy = 4;
@@ -732,11 +720,37 @@ async function loadProofRoom(set, scene, loader) {
   action.setLoop(THREE.LoopOnce, 1);
   action.clampWhenFinished = true;
   action.play();
+  const sheetAction = mixer.clipAction(sheetClip);
+  sheetAction.enabled = true;
+  sheetAction.paused = false;
+  sheetAction.setLoop(THREE.LoopOnce, 1);
+  sheetAction.clampWhenFinished = true;
+  sheetAction.play();
   mixer.setTime(0);
-  set.authored = { root: gltf.scene, clip, mixer, action, desktop, phone };
+  set.authored = {
+    root: gltf.scene,
+    clip,
+    mixer,
+    action,
+    desktop,
+    phone,
+    sheetClip,
+    sheetAction,
+    heroRig,
+    heroMeshRoot,
+    heroMeshes,
+    heroMesh,
+    aperture,
+    semanticPlane,
+  };
+  sheet.group.visible = false;
+  sheet.authored = { rig: heroRig, root: heroMeshRoot, meshes: heroMeshes, clip: sheetClip, action: sheetAction };
   runtime.setStatus = 'ready';
   runtime.setSource = 'cake-studio-proof-room.glb';
   runtime.cameraSource = 'authored-clip';
+  runtime.sheetSource = 'blender-skinned-glb';
+  runtime.sheetBones = Math.max(...heroMeshes.map((mesh) => mesh.skeleton?.bones?.length || 0));
+  runtime.sheetAnimation = sheetClip.name;
   sceneElement.dataset.set = 'authored';
   sceneElement.dataset.camera = 'authored-clip';
 }
@@ -1103,6 +1117,10 @@ function createCakeForm(index, simplified = false) {
 }
 
 function renderSheet(sheet, progress, p1, compact) {
+  if (sheet.authored) {
+    sheet.group.visible = false;
+    return;
+  }
   const release = smooth(0.025, 0.155, progress);
   const toAssembly = smooth(0.25, 0.37, progress);
   const toHandoff = smooth(0.58, 0.71, progress);
@@ -1339,14 +1357,12 @@ function renderCamera(camera, target, progress, compact) {
   const segment = progress < boundaries[1] ? 0 : progress < boundaries[2] ? 1 : 2;
   const local = range(progress, boundaries[segment], boundaries[segment + 1]);
   const travel = smootherstep(local);
-  const arc = Math.pow(Math.sin(local * Math.PI), 2) * (reducedMotion ? 0.22 : 1);
+  const arc = Math.pow(Math.sin(local * Math.PI), 2);
   const position = new THREE.Vector3().lerpVectors(positions[segment], positions[segment + 1], travel);
   const arcDirections = compact
     ? [new THREE.Vector3(-0.18, 0.16, -0.32), new THREE.Vector3(0.28, -0.18, -0.52), new THREE.Vector3(0.12, 0.12, -0.25)]
     : [new THREE.Vector3(-0.42, 0.2, -0.46), new THREE.Vector3(0.68, -0.22, -0.78), new THREE.Vector3(0.34, 0.16, -0.38)];
   position.addScaledVector(arcDirections[segment], arc);
-  if (reducedMotion) position.x *= 0.25;
-
   camera.position.copy(position);
   target.set(0, lerp(targets[segment], targets[segment + 1], travel), 0);
   camera.lookAt(target);
@@ -1363,10 +1379,28 @@ function renderCamera(camera, target, progress, compact) {
 }
 
 function renderAuthoredCamera(set, camera, progress, compact) {
-  const { action, mixer, clip, desktop, phone } = set.authored;
+  const { action, sheetAction, mixer, clip, desktop, phone, heroRig, heroMesh } = set.authored;
   action.enabled = true;
   action.paused = false;
+  sheetAction.enabled = true;
+  sheetAction.paused = false;
   mixer.setTime(progress * clip.duration);
+  heroRig.updateWorldMatrix(true, true);
+  heroRig.getWorldPosition(SHEET_WORLD_POSITION);
+  const proofBone = heroMesh.skeleton?.bones?.[Math.floor((heroMesh.skeleton?.bones?.length || 1) / 2)];
+  runtime.sheetPosition = {
+    x: Number(SHEET_WORLD_POSITION.x.toFixed(5)),
+    y: Number(SHEET_WORLD_POSITION.y.toFixed(5)),
+    z: Number(SHEET_WORLD_POSITION.z.toFixed(5)),
+  };
+  if (proofBone) {
+    runtime.sheetBoneQuaternion = {
+      x: Number(proofBone.quaternion.x.toFixed(5)),
+      y: Number(proofBone.quaternion.y.toFixed(5)),
+      z: Number(proofBone.quaternion.z.toFixed(5)),
+      w: Number(proofBone.quaternion.w.toFixed(5)),
+    };
+  }
   const source = compact ? phone : desktop;
   source.updateWorldMatrix(true, false);
   source.matrixWorld.decompose(camera.position, camera.quaternion, CAMERA_WORLD_SCALE);
@@ -1416,12 +1450,128 @@ function actForProgress(progress) {
 }
 
 function renderProofPortal(progress) {
-  const portalProgress = smooth(0.72, 0.94, progress);
-  const state = progress >= 0.9 ? 'locked' : progress >= 0.72 ? 'open' : 'hidden';
+  const portalProgress = smooth(0.82, 0.965, progress);
+  const apertureProgress = smooth(0.885, 0.985, progress);
+  const state = progress >= 0.94 ? 'crossed' : progress >= 0.82 ? 'open' : 'hidden';
   sceneElement.style.setProperty('--portal-p', portalProgress.toFixed(4));
+  sceneElement.style.setProperty('--portal-aperture', apertureProgress.toFixed(4));
   sceneElement.dataset.portalState = state;
   runtime.portalState = state;
-  if (proofPortal) proofPortal.setAttribute('aria-hidden', state === 'hidden' ? 'true' : 'false');
+  runtime.portalCrossed = progress >= 0.94;
+  runtime.uiReveal = Number(apertureProgress.toFixed(4));
+  if (proofPortal) {
+    proofPortal.setAttribute('aria-hidden', state === 'hidden' ? 'true' : 'false');
+    proofPortal.inert = state !== 'crossed';
+  }
+}
+
+function wireCakeStudioLiveUi(root) {
+  const input = root.querySelector('[data-proof-input]');
+  const copyButton = root.querySelector('[data-proof-copy]');
+  const verifyButton = root.querySelector('[data-proof-verify]');
+  const message = root.querySelector('[data-ui-message]');
+  const progress = root.querySelector('[role="progressbar"]');
+  const progressValue = root.querySelector('.proof-portal-progress-value');
+  const stageLabel = root.querySelector('[data-workflow-stage-label]');
+  const revisionStatusLabel = root.querySelector('[data-revision-status-label]');
+  const actionButtons = [...root.querySelectorAll('.proof-workflow-actions button')];
+  if (!input || !copyButton || !verifyButton || !message) return;
+
+  const setMessage = (en, ar, state = 'ready') => {
+    const english = message.querySelector('.en');
+    const arabic = message.querySelector('.ar');
+    if (english) english.textContent = en;
+    if (arabic) arabic.textContent = ar;
+    message.dataset.state = state;
+  };
+
+  const setLocalizedText = (element, en, ar) => {
+    const english = element?.querySelector('.en');
+    const arabic = element?.querySelector('.ar');
+    if (english) english.textContent = en;
+    if (arabic) arabic.textContent = ar;
+  };
+
+  const setWorkflowState = ({ stage, stageEn, stageAr, revision, revisionEn, revisionAr, percent, status }) => {
+    root.dataset.workflowStage = stage;
+    root.dataset.revisionStatus = revision;
+    setLocalizedText(stageLabel, stageEn, stageAr);
+    setLocalizedText(revisionStatusLabel, revisionEn, revisionAr);
+    if (progress) {
+      progress.setAttribute('aria-valuenow', String(percent));
+      progress.setAttribute('aria-valuetext', `${percent}% · ${stageEn}`);
+      const bar = progress.querySelector('i');
+      if (bar) bar.style.width = `${percent}%`;
+    }
+    if (progressValue) progressValue.textContent = `${percent}%`;
+    runtime.uiStatus = status;
+  };
+
+  input.addEventListener('input', () => {
+    const letters = input.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 6);
+    input.value = letters.length > 3 ? `${letters.slice(0, 3)}-${letters.slice(3)}` : letters;
+    input.setAttribute('aria-invalid', 'false');
+  });
+
+  copyButton.addEventListener('click', async () => {
+    const english = 'Please review Cake Studio order CS-2048, revision 3. Return code FXD-GDE to approve this exact revision. Any edit invalidates the code.';
+    const arabic = 'يرجى مراجعة طلب Cake Studio رقم CS-2048، المراجعة ٣. أرسل الرمز FXD-GDE لاعتماد هذه النسخة تحديدًا. أي تعديل يُبطل الرمز.';
+    try {
+      await navigator.clipboard.writeText(document.body.classList.contains('lang-ar') ? arabic : english);
+      setMessage('Customer message copied.', 'تم نسخ رسالة العميل.', 'copied');
+    } catch {
+      setMessage('Copy is unavailable; the proof code remains visible.', 'النسخ غير متاح؛ يظل رمز المعاينة ظاهرًا.', 'error');
+    }
+  });
+
+  verifyButton.addEventListener('click', () => {
+    if (input.value !== 'FXD-GDE') {
+      input.setAttribute('aria-invalid', 'true');
+      setMessage('Code does not match revision 3.', 'الرمز لا يطابق المراجعة ٣.', 'error');
+      return;
+    }
+    input.setAttribute('aria-invalid', 'false');
+    actionButtons.forEach((button) => { button.disabled = false; });
+    runtime.uiStatus = 'proof-verified';
+    root.dataset.proofStatus = 'verified';
+    setMessage('Revision 3 verified. Approval actions unlocked.', 'تم التحقق من المراجعة ٣. فُتحت إجراءات الاعتماد.', 'verified');
+  });
+
+  actionButtons.forEach((button, index) => {
+    button.addEventListener('click', () => {
+      if (button.disabled) return;
+      if (index === 0) {
+        setWorkflowState({
+          stage: 'approved-locked',
+          stageEn: 'Approved & locked',
+          stageAr: 'معتمد ومقفول',
+          revision: 'approved',
+          revisionEn: 'APPROVED',
+          revisionAr: 'معتمد',
+          percent: 44,
+          status: 'approval-recorded',
+        });
+        root.dataset.proofStatus = 'approved';
+        setMessage('Customer approval recorded. Revision 3 is locked.', 'تم تسجيل اعتماد العميل. المراجعة ٣ مقفلة.', 'verified');
+      } else {
+        setWorkflowState({
+          stage: 'changes-requested',
+          stageEn: 'Changes requested',
+          stageAr: 'تعديلات مطلوبة',
+          revision: 'changes-requested',
+          revisionEn: 'CHANGES REQUESTED',
+          revisionAr: 'تعديلات مطلوبة',
+          percent: 38,
+          status: 'changes-requested',
+        });
+        root.dataset.proofStatus = 'changes-requested';
+        setMessage('Changes requested against revision 3. A new mockup is required.', 'طُلبت تعديلات على المراجعة ٣. يلزم نموذج جديد.', 'copied');
+      }
+      actionButtons.forEach((actionButton) => { actionButton.disabled = true; });
+      input.disabled = true;
+      verifyButton.disabled = true;
+    });
+  });
 }
 
 function renderCaptions(progress) {

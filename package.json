@@ -18,6 +18,7 @@
     "verify:cake-studio:runtime-models": "node scripts/verify-cake-studio-runtime-models.mjs",
     "verify:cake-studio:coda": "python scripts/verify-cake-studio-coda.py",
     "verify:cake-studio:vnext": "node scripts/verify-cake-studio-vnext.mjs",
+    "verify:cake-studio:impossible-proof-room": "node scripts/verify-cake-studio-impossible-proof-room.mjs",
     "build:cake-studio:media": "node scripts/build-cake-studio-media.mjs",
     "astro": "astro"
   },

@@ -99,7 +99,7 @@
   };
 
   window.__cakeStudioDirector = Object.freeze({
-    version: '1.4.0',
+    version: '1.5.0',
     weights: DIRECTOR_WEIGHTS,
     chapters: DIRECTOR_CHAPTERS,
     progressForShot: (shotNumber, fraction = .5) => progressForIndex(
@@ -107,7 +107,7 @@
       fraction,
     ),
   });
-  scene.dataset.directorVersion = '1.4.0';
+  scene.dataset.directorVersion = '1.5.0';
 
   const shots = definitions.map((figure) => ({
     clip: figure.dataset.clip,
@@ -121,7 +121,6 @@
   }));
 
   const solo = new URLSearchParams(location.search).has('solo');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
   const readRaw = () => clamp(Number.parseFloat(scene.style.getPropertyValue('--p') || '0'));
   const slots = videos.map((video) => ({
@@ -302,11 +301,6 @@
     scene.style.setProperty('--journey', progress.toFixed(5));
     scene.style.setProperty('--pace-weight', weight.toFixed(2));
     setShot(index);
-    if (reduced) {
-      videos.forEach((video) => video.classList.remove('on'));
-      scene.dataset.mediaState = 'poster';
-      return;
-    }
     if (!live && !solo) return;
 
     const slot = slotFor(index);
@@ -393,7 +387,7 @@
       const travel = Math.max(0, scene.offsetHeight - innerHeight);
       scrollTo({
         top: top + travel * progress,
-        behavior: reduced ? 'auto' : 'smooth',
+        behavior: 'smooth',
       });
     });
   });

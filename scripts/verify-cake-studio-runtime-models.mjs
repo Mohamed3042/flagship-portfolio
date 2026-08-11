@@ -43,6 +43,7 @@ const runtimeManifest = fs.existsSync(runtimeManifestPath)
   : { assets: [] };
 const runtimeById = new Map((runtimeManifest.assets || []).map((asset) => [asset.id, asset]));
 let totalBytes = 0;
+if (runtimeManifest.release !== '1.5.0') failures.push(`runtime release is ${runtimeManifest.release || 'missing'}, expected 1.5.0`);
 
 for (const expected of sourceManifest?.assets || []) {
   const filePath = path.join(runtimeDir, expected.output);
@@ -58,8 +59,10 @@ for (const expected of sourceManifest?.assets || []) {
     if (bytes > MAX_FILE_BYTES) {
       failures.push(`${expected.id}: ${(bytes / 1_000_000).toFixed(2)} MB exceeds 2 MB file budget`);
     }
-    if (!(json.extensionsUsed || []).includes('KHR_draco_mesh_compression')) {
-      failures.push(`${expected.id}: missing KHR_draco_mesh_compression`);
+    if (!(json.extensionsUsed || []).includes('EXT_meshopt_compression')) failures.push(`${expected.id}: missing EXT_meshopt_compression`);
+    if (!(json.extensionsUsed || []).includes('KHR_texture_basisu')) failures.push(`${expected.id}: missing KHR_texture_basisu`);
+    if ((json.images || []).length !== 2 || (json.images || []).some((image) => image.mimeType !== 'image/ktx2')) {
+      failures.push(`${expected.id}: expected two embedded KTX2 images`);
     }
     const externalUris = [
       ...(json.buffers || []).map((buffer) => buffer.uri),
@@ -92,4 +95,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Cake Studio runtime models: GREEN — ${expectedCount}/${expectedCount}, ${(totalBytes / 1_000_000).toFixed(2)} MB total, Draco embedded.`);
+console.log(`Cake Studio runtime models: GREEN — ${expectedCount}/${expectedCount}, ${(totalBytes / 1_000_000).toFixed(2)} MB total, Meshopt + KTX2 embedded.`);
