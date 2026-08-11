@@ -295,6 +295,14 @@ The Cosmic Keynote is **live on both hosts** (`npm run build` green, 22 pages). 
     `public/worlds/assets/cake-studio/wan-prompts/CST-A-050-V2-OPTICAL-BRIDGE.txt`. Published to
     GitHub Pages at `gh-pages` commit `7fd9d97`; the live CDN also passes **159/159**.
 
+13. **Cake Studio World v1.6 — cinematic bookends (2026-08-11).** The active experience now enters
+    the 50-shot film after one short photographic title beat and leaves it through one photographic
+    closing beat. Both six-second H.264 bookends use exact decoded core-film endpoints; source proof
+    is **39/39** and local rendered proof is **81 checks** across desktop/phone, forward/reverse and
+    reduced motion. The former WebGL coda and technical credits remain preserved as inert templates
+    and archived assets, but no longer execute or request Three.js/GLBs. Direction source:
+    `public/worlds/CAKE-STUDIO-DIRECTORS-CUT.md`.
+
 ## 9. Companion docs
 - `NOTES.md` — the engineering rationale & "what I improved over the original".
 - `README.md` — quickstart (preview/build/deploy).

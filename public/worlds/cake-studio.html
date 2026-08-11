@@ -8,9 +8,9 @@
 <meta name="description" content="A directed 50-shot Cake Studio film about making a cake twice: first as a flexible production decision in software, then as a physical object in the kitchen.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%2307110f"/><path d="M8 20h16v4H8zm2-6h12v5H10zm3-5h6v4h-6z" fill="%23f0dfc7"/><circle cx="16" cy="7" r="2" fill="%23d9a38f"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=6">
-<link rel="stylesheet" href="cake-studio.css?v=7">
+<link rel="stylesheet" href="cake-studio.css?v=8">
 </head>
-<body data-version="1.5.0">
+<body data-version="1.6.0">
 <div class="rail" data-rail aria-hidden="true"><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="grade" aria-hidden="true"></div>
@@ -21,45 +21,21 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="Cake Studio World release">v1.5 · WORLD 09</span>
+    <span class="ver" title="Cake Studio World release">v1.6 · WORLD 09</span>
     <button type="button" data-lang-toggle aria-label="Switch language" aria-pressed="false">EN / ع</button>
   </div>
 </nav>
 
 <main>
-  <section class="scene cake-ident" data-scene="pin" data-slate="Studio ident">
+  <section class="scene rplate bookend bookend-intro" id="top" data-scene="pin" data-slate="Cinematic prologue" data-bookend="intro" data-plate="cake-studio/bookends/cake-studio-intro.mp4" data-plate-poster="assets/cake-studio/keyframes/CST-KF00-style-anchor.png" data-plate-motion="always" aria-labelledby="bookend-intro-title">
     <div class="stage">
-      <div class="card">
-        <div class="sigil" aria-hidden="true"><i></i><i></i><i></i></div>
-        <p class="word"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
-        <p class="pres"><span class="L en">presents · a software-to-kitchen film</span><span class="L ar">يقدّم · فيلمًا من البرمجيات إلى المطبخ</span></p>
-        <p class="title"><span class="L en">The Cake Is Made Twice</span><span class="L ar">تُصنع الكعكة مرتين</span></p>
-      </div>
-      <div class="ident-brief">
-        <p><span class="L en">A software-to-kitchen system · 9 reusable forms → 3 production proofs</span><span class="L ar">نظام من البرمجيات إلى المطبخ · ٩ أشكال قابلة لإعادة الاستخدام ← ٣ إثباتات إنتاج</span></p>
-        <a href="#cake-reel"><span class="L en">Enter the build ↓</span><span class="L ar">ادخل إلى البناء ↓</span></a>
-      </div>
+      <img class="bookend-poster" src="assets/cake-studio/keyframes/CST-KF00-style-anchor.png" alt="" aria-hidden="true">
+      <header class="bookend-copy">
+        <p class="bookend-kicker"><span class="L en">Cake Studio</span><span class="L ar">استوديو الكعك</span></p>
+        <h1 id="bookend-intro-title"><span class="L en">The Cake Is<br>Made Twice</span><span class="L ar">تُصنع الكعكة<br>مرتين</span></h1>
+        <p class="bookend-direction"><span class="L en">Scroll to begin</span><span class="L ar">مرّر لتبدأ</span></p>
+      </header>
     </div>
-  </section>
-
-  <section class="scene open" id="top" data-scene="pin" data-slate="Cold open">
-    <div class="stage">
-      <div class="sheet-rig" aria-hidden="true"><div class="sheet"><div class="datum"></div></div></div>
-      <div class="card">
-        <p class="kick"><span class="L en">World 09 · software first · kitchen second</span><span class="L ar">العالم ٠٩ · البرمجيات أولًا · المطبخ ثانيًا</span></p>
-        <h1><span class="L en">The Cake Is<br>Made Twice</span><span class="L ar">تُصنع الكعكة<br>مرتين</span></h1>
-        <p class="sub"><span class="L en">Cake Studio turns reusable pastry knowledge into a visual system. A shop operator starts from a ready cake, adapts its surface and bilingual details, approves one exact revision, then gives the kitchen a customer mockup, baker sheet and true-size plaque—without starting from a chef's sketch every time.</span><span class="L ar">يحوّل «استوديو الكعك» خبرة صناعة الكعك القابلة لإعادة الاستخدام إلى نظام بصري. يبدأ موظف المتجر من كعكة جاهزة، ويعدّل سطحها وتفاصيلها الثنائية اللغة، ويعتمد مراجعة دقيقة، ثم يسلّم المطبخ معاينة العميل وورقة الخباز ولوحة بالحجم الحقيقي—من دون البدء كل مرة من رسم الشيف.</span></p>
-        <p class="promise"><span class="L en">First as a decision in software. Then as an object in the kitchen.</span><span class="L ar">أولًا كقرار في البرمجيات. ثم كشيء حقيقي في المطبخ.</span></p>
-      </div>
-      <p class="hint"><span class="L en">Scroll like the operator</span><span class="L ar">مرّر كأنك المشغّل</span></p>
-    </div>
-  </section>
-
-  <section class="act" aria-labelledby="reel-heading">
-    <p class="no"><span class="L en">Eight decisions · one production handoff</span><span class="L ar">ثمانية قرارات · تسليم إنتاج واحد</span></p>
-    <h2 id="reel-heading"><span class="L en">Your hand is the operator</span><span class="L ar">يدك هي المشغّل</span></h2>
-    <p><span class="L en">The rhythm is the argument: ready forms move quickly, one choice holds, proof slows the hand, and the approved design releases into production. Scroll back and every decision remains reversible. Desktop and phone run the same directed cut.</span><span class="L ar">الإيقاع هو الحجة: تتحرك الأشكال الجاهزة بسرعة، ويثبت الاختيار، ويبطئ الإثبات اليد، ثم ينطلق التصميم المعتمد إلى الإنتاج. مرّر للخلف فتبقى كل القرارات قابلة للرجوع. يعمل القصّ الموجّه نفسه على الحاسوب والهاتف.</span></p>
-    <div class="rule" aria-hidden="true"></div>
   </section>
 
   <section class="scene film" id="cake-reel" data-scene="pin" data-slate="The 50-shot reel" aria-label="A fifty-shot scroll-controlled Cake Studio film">
@@ -155,7 +131,23 @@
     </div>
   </section>
 
-  <section class="scene dimensional-coda" data-scene="pin" data-slate="Dimensional production coda" data-object-coda aria-label="A scroll-controlled dimensional explanation of the Cake Studio workflow">
+  <section class="scene rplate bookend bookend-outro" data-scene="pin" data-slate="Cinematic epilogue" data-bookend="outro" data-plate="cake-studio/bookends/cake-studio-outro.mp4" data-plate-poster="cake-studio/bookends/cake-studio-outro-endpoint.png" data-plate-motion="always" aria-labelledby="bookend-outro-title">
+    <div class="stage">
+      <img class="bookend-poster" src="cake-studio/bookends/cake-studio-outro-endpoint.png" alt="" aria-hidden="true">
+      <footer class="bookend-copy bookend-copy-outro">
+        <p class="bookend-kicker"><span class="L en">Cake Studio</span><span class="L ar">استوديو الكعك</span></p>
+        <h2 id="bookend-outro-title"><span class="L en">Made twice.<br>Ready for the kitchen.</span><span class="L ar">تُصنع مرتين.<br>وتصل إلى المطبخ جاهزة.</span></h2>
+        <p class="bookend-thesis"><span class="L en">First a decision. Then a real object.</span><span class="L ar">أولًا قرار. ثم شيء حقيقي.</span></p>
+        <nav class="bookend-links" aria-label="Cake Studio closing links">
+          <span class="L en"><a href="../en/work/cake-studio">Read the project story</a></span>
+          <span class="L ar"><a href="../ar/work/cake-studio">اقرأ قصة المشروع</a></span>
+          <a href="./"><span class="L en">Back to Worlds</span><span class="L ar">العودة إلى العوالم</span></a>
+        </nav>
+      </footer>
+    </div>
+  </section>
+
+  <template data-retired-coda>
     <div class="stage">
       <div class="coda-atmosphere" aria-hidden="true"></div>
       <div class="object-window" aria-hidden="true">
@@ -278,9 +270,9 @@
 
       <p class="coda-fallback" data-coda-fallback hidden><span class="L en">The dimensional stage is unavailable on this browser; the complete production story remains in the live captions.</span><span class="L ar">المنصة المجسمة غير متاحة في هذا المتصفح؛ وتبقى قصة الإنتاج كاملة في الشروح الحية.</span></p>
     </div>
-  </section>
+  </template>
 
-  <section class="scene credits" data-scene="pin" data-slate="End credits" style="height: 360vh">
+  <template data-retired-credits>
     <div class="stage">
       <div class="roll">
         <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
@@ -304,16 +296,14 @@
       </div>
       <div class="vig" aria-hidden="true"></div>
     </div>
-  </section>
+  </template>
 </main>
 
 <footer class="disclosure">
-  <p><span class="L en">Cake Studio World is an original portfolio production for Mohamed Mahmoud. Its 50 silent WAN 2.7 shots follow an endpoint-locked First &amp; Last Frame plan and a weighted director map; the ready-form library, controlled design and production handoff render live in code. Generated imagery illustrates the workflow rather than the application interface. The scroll—not autoplay—is the playhead on desktop and phone. Physical baking, printing and final material approval remain human production work.</span><span class="L ar">عالم «استوديو الكعك» إنتاج أصلي لملف محمد محمود. تتبع لقطاته الصامتة الخمسون عبر WAN 2.7 خطة مقفلة النهايات بإطار أول وأخير وخريطة إخراج موزونة؛ وتُعرض مكتبة الأشكال الجاهزة والتصميم المضبوط وتسليم الإنتاج حيّة بالشيفرة. توضح الصور المولّدة سير العمل ولا تمثّل واجهة التطبيق. التمرير—لا التشغيل التلقائي—هو رأس القراءة على الحاسوب والهاتف. ويبقى الخَبز والطباعة واعتماد المواد النهائي عملًا إنتاجيًا بشريًا.</span></p>
+  <p><span class="L en">Generated film illustrates Mohamed Mahmoud's real Cake Studio workflow. Baking, printing and final approval remain human work.</span><span class="L ar">يوضح الفيلم المولّد سير عمل «استوديو الكعك» الحقيقي لمحمد محمود. ويبقى الخَبز والطباعة والاعتماد النهائي عملًا بشريًا.</span></p>
 </footer>
 
-<script src="cinema.js?v=6"></script>
-<script src="cake-studio.js?v=7"></script>
-<script type="importmap">{"imports":{"three":"./cake-studio/three.module.js"}}</script>
-<script src="cake-studio-coda-loader.js?v=7"></script>
+<script src="cinema.js?v=7"></script>
+<script src="cake-studio.js?v=8"></script>
 </body>
 </html>
