@@ -99,7 +99,7 @@
   };
 
   window.__cakeStudioDirector = Object.freeze({
-    version: '1.5.0',
+    version: '1.6.0',
     weights: DIRECTOR_WEIGHTS,
     chapters: DIRECTOR_CHAPTERS,
     progressForShot: (shotNumber, fraction = .5) => progressForIndex(
@@ -107,7 +107,7 @@
       fraction,
     ),
   });
-  scene.dataset.directorVersion = '1.5.0';
+  scene.dataset.directorVersion = '1.6.0';
 
   const shots = definitions.map((figure) => ({
     clip: figure.dataset.clip,
@@ -158,6 +158,7 @@
     slot.seeking = false;
     slot.wanted = -1;
     slot.video.classList.remove('on');
+    delete slot.video.dataset.firstFrameDecoded;
     slot.video.removeAttribute('src');
     slot.video.load();
   };
@@ -216,10 +217,16 @@
       slot.wanted = time;
       return;
     }
-    if (Math.abs(slot.video.currentTime - time) < 0.012) return;
+    const firstDecode = time <= .012
+      && slot.video.currentTime === 0
+      && slot.video.dataset.firstFrameDecoded !== 'true';
+    if (!firstDecode && Math.abs(slot.video.currentTime - time) < 0.012) return;
     slot.seeking = true;
+    if (firstDecode) slot.video.dataset.firstFrameDecoded = 'true';
     try {
-      slot.video.currentTime = time;
+      // A tiny non-zero seek forces Chromium to replace the poster with the
+      // decoded first frame while preserving frame zero visually.
+      slot.video.currentTime = firstDecode ? .001 : time;
     } catch {
       slot.seeking = false;
     }

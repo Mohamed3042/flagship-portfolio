@@ -1,10 +1,9 @@
 # CAKE STUDIO — director's cut
 
-Status: **v1.4 authored proof-room release / implementation source of truth**.
+Status: **v1.6 cinematic bookend release / implementation source of truth**.
 
 This is not a shot list. It records the argument of the film, the role of the visitor's hand,
-why the rhythm changes, and how the generated motion and live browser scenes serve Cake Studio's
-actual use case.
+why the rhythm changes, and how the generated motion serves Cake Studio's actual use case.
 
 ## The product truth
 
@@ -85,70 +84,46 @@ scroll. The browser normalizes the score so the scene height stays fixed.
 The page exposes the active chapter key, rhythm, weight and reason as DOM state. The pacing is
 therefore testable rather than an undocumented easing curve.
 
-## The dimensional live-browser coda
+## The cinematic bookends
 
-The film provides the feeling; one scroll-driven physical stage continues its material language.
-The coda is not a dashboard and not a set of diagrams. It is one connected Blender-authored proof
-room on black marble, rendered by Three.js as three object acts. A single ten-second camera clip
-contains independent desktop and phone transform tracks plus exported lens curves, so the visitor
-travels through one place rather than cutting between unrelated podiums:
+The film is now the entire visual language. There is one short photographic title beat before shot
+01 and one photographic closing beat after shot 50. No dashboard, proof-room walkthrough or live 3D
+asset showroom interrupts the path.
 
-1. **Ready form, not blank canvas** — nine optimized cake GLBs occupy an authored archive wall. The
-   visitor sees reusable pastry knowledge as a whole library while the accepted sheet remains the
-   material thread into the next room.
-2. **Flexible change, controlled geometry** — one retained two-tier cake is surrounded by seventeen
-   optimized glass data wafers while surface, edible image, bilingual plaque and decoration travel
-   around the same measured body.
-3. **One decision, three useful objects** — the camera crosses a physical portal into the handoff
-   bay, where the approved source becomes a customer mockup frame, baker sheet and true-size plaque.
-   Software stops at the doorway; baking, printing and material approval remain human work.
+- The six-second intro begins on the accepted `CST-KF00` cake composition and dissolves into an
+  exact decoded copy of the first frame of `CST-001`.
+- The six-second outro begins on an exact decoded copy of the last frame of `CST-050`, then dissolves
+  back to the `CST-KF00` cake composition.
+- Both bookends are silent 1280×720 H.264 plates with dense keyframes, deterministic scroll seeking
+  and endpoint holds. They never call `play()`.
+- The active path uses three short live-English lines before frame 01 and two closing lines after
+  frame 50. The two closing links remain live, bilingual and keyboard accessible.
+- The former Three.js coda and technical credits remain preserved in inert HTML templates and their
+  source assets remain in the repository, but none of them execute, request media or enter the
+  accessibility tree.
 
-Each act has one dominant object proposition and one camera proposition. Copy occupies its own
-editorial field below the object. There are no connector lines, circles, generic boxes, autoplay
-loops or fabricated application screenshots.
-
-## The film-to-object match cut
-
-The coda begins with the exact accepted `CST-KF01-opening-sheet.png` endpoint. That frame remains
-fully painted while a thin rose-gold seam finds the sheet's centre. The live dimensional surface
-appears through the same size and screen position before the endpoint releases. The transition
-therefore changes medium without changing subject.
-
-The optional WAN 2.7 replacement ending follows the same law: `CST-KF50` is the first frame,
-`CST-KF01` is the last frame, the sheet creates one forced-perspective nine-form illusion, then
-returns to the exact endpoint by 4.5 seconds and holds it for the final 0.5 seconds. It is stored as
-`assets/cake-studio/wan-prompts/CST-A-050-V2-OPTICAL-BRIDGE.txt`; the accepted original remains
-untouched until this candidate passes endpoint review.
+The decoded endpoints—not the visually similar source PNGs—are the seam masters. That distinction
+prevents colour, crop and encode differences from flashing at either join.
 
 ## Browser direction gates
 
-- Scroll is the only coda playhead. Forward and reverse positions are deterministic.
-- WebGL renders only while the pinned coda is near the viewport; there is no continuous animation
-  loop and device pixel ratio is capped.
-- Model residency is act-bounded: forms, assembly and handoff retain only `10`, `10` and `5` runtime
-  GLBs respectively, with bounded decode concurrency and explicit geometry/material/texture disposal.
-  The two overlap knots are separately tested at `20` and `15` resident models, capped at `56` and
-  `42` desktop GPU textures.
-- All 48 embedded PBR images are capped at 512px: `48 MiB` decoded base residency and `64 MiB` with
-  mip chains, down from `192/256 MiB` in v1.3.
-- Desktop and phone use the same scene and object counts: nine forms, four controlled parts, three
-  physical outputs.
-- Full authored motion is the default. When the operating system explicitly requests less motion,
-  the page substitutes six fully lit proof-room tableaux without importing Three.js, GLB or Draco
-  code or requesting MP4, while retaining bilingual copy, portal facts and normal navigation.
-- A failed production GLB group becomes terminal for the page view and leaves the authored
-  procedural stand-in in place. A request-abort gate proves one failed request and no retry/render
-  storm; rapid film chapter jumps use a separate bounded three-attempt transport recovery.
-- The runtime exposes engine, progress, act, render count, draw calls and triangles so the browser
-  proof can distinguish a real dimensional frame from an empty canvas.
-- The proof samples pixels across a nine-zone lattice, verifies English/Arabic parity, then runs a
-  deliberate sabotage that hides the canvas and removes an output; the gate must turn red.
+- Scroll is the only playhead. Intro, all 50 film clips and outro resolve deterministically in both
+  directions, including when the operating system requests reduced motion.
+- The bookend video is decoded into a canvas after every seek. Proof reads that painted surface, so
+  metadata-only `currentTime` changes or a poster hiding the real frame cannot pass.
+- At most two film buffers are resident. Neither bookend nor any core shot calls `play()`.
+- HTTP byte-range responses are required for both bookends and the first/last core clips.
+- The browser proof covers desktop and phone, forward and reverse seams, selected core shots,
+  English/Arabic parity, 44px closing targets, overflow, console errors and failed requests.
+- The structural gate checks 39 source/media facts. The browser gate checks 81 rendered/runtime
+  facts. Deliberate sabotage hides the intro, removes a closing action and displaces the film; the
+  browser gate must turn red before the clean release can pass.
 
 ## Visual grammar
 
 - Optical patisserie: black marble, deep-teal glass, ivory edible paper and rose-gold proof metal.
-- Generated footage remains fully contained at 16:9. Live words never cover generated pixels; the
-  dimensional coda preserves that hierarchy with object and copy on separate stage bands.
+- Generated footage remains fully contained at 16:9. Live words occupy restrained title-safe fields
+  and never become a second explanatory interface over the film.
 - The frame is warm and fluid during possibility, cooler and more measured during proof, then warm
   again at release.
 - Typography behaves like a luxury production dossier, not a dashboard.

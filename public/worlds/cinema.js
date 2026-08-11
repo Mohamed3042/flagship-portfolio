@@ -327,11 +327,36 @@
     const v = document.createElement('video');
     v.muted = true; v.playsInline = true; v.preload = 'none';
     v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
-    if (scene.dataset.platePoster) v.poster = scene.dataset.platePoster;
-    wrap.appendChild(v);
     const stage = scene.querySelector('.stage') || scene;
+    const hasInlinePoster = Boolean(stage.querySelector('.bookend-poster'));
+    // Bookends already carry a real <img> fallback underneath the video.
+    // Keeping the same image in video.poster makes Chromium paint that poster
+    // forever while currentTime changes on a paused element.
+    if (scene.dataset.platePoster && !hasInlinePoster) {
+      v.poster = scene.dataset.platePoster;
+    }
+    wrap.appendChild(v);
+    let canvas = null;
+    let context = null;
+    if (hasInlinePoster) {
+      canvas = document.createElement('canvas');
+      canvas.className = 'plate-frame';
+      canvas.setAttribute('aria-hidden', 'true');
+      context = canvas.getContext('2d', { alpha: false });
+      wrap.appendChild(canvas);
+    }
     stage.insertBefore(wrap, stage.firstChild);
-    return { scene, v, armed: false, ready: false, want: -1, seeking: false };
+    return {
+      scene,
+      v,
+      canvas,
+      context,
+      always: scene.dataset.plateMotion === 'always',
+      armed: false,
+      ready: false,
+      want: -1,
+      seeking: false,
+    };
   });
 
   const seek = (u, t) => {
@@ -349,12 +374,34 @@
   const arm = (u) => {
     if (u.armed) return;
     u.armed = true;
+    let drawVersion = 0;
+    const draw = () => {
+      if (!u.canvas || !u.context || u.v.readyState < 2) return;
+      const version = ++drawVersion;
+      const commit = (_now, metadata = {}) => {
+        if (version !== drawVersion) return;
+        u.canvas.width = u.v.videoWidth;
+        u.canvas.height = u.v.videoHeight;
+        u.context.drawImage(u.v, 0, 0, u.canvas.width, u.canvas.height);
+        u.scene.dataset.plateTime = String(metadata.mediaTime ?? u.v.currentTime);
+        u.scene.classList.add('plate-painted');
+      };
+      if (typeof u.v.requestVideoFrameCallback === 'function') {
+        u.v.requestVideoFrameCallback(commit);
+      }
+      // Headless Chromium and some power-saving mobile modes occasionally do
+      // not deliver rVFC for a paused backward seek. Re-copy after the decoder
+      // has had one paint interval; a later rVFC can still refine the frame.
+      setTimeout(() => commit(performance.now()), 90);
+    };
     u.v.addEventListener('loadedmetadata', () => {
       u.ready = true;
       u.scene.classList.add('plate-ready');
-      seek(u, reduced ? 0.001 : at(u));
+      seek(u, reduced && !u.always ? 0.001 : at(u));
     }, { once: true });
+    u.v.addEventListener('loadeddata', draw, { once: true });
     u.v.addEventListener('seeked', () => {
+      draw();
       u.seeking = false;
       if (u.want >= 0) { const t = u.want; u.want = -1; seek(u, t); }
     });
@@ -363,6 +410,7 @@
     u.v.addEventListener('error', () => {
       u.scene.classList.add('plate-missing');
       u.scene.classList.remove('plate-ready');
+      u.scene.classList.remove('plate-painted');
     }, { once: true });
     u.v.src = u.scene.dataset.plate;
     u.v.load();
@@ -383,7 +431,7 @@
       const r = u.scene.getBoundingClientRect();
       if (r.bottom < -vh * 1.5 || r.top > vh * 2.5) continue;
       arm(u);
-      if (u.ready && !reduced) seek(u, at(u));
+      if (u.ready && (!reduced || u.always)) seek(u, at(u));
     }
   };
   let tick = false;
