@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Normalize and fail-closed publish the 15 owner-returned Cake Studio v1.7 clips.
+"""Normalize and fail-closed publish the Cake Studio v1.7.2 media contract.
 
 The original WAN downloads stay under production/. Outputs are built in a new,
 ignored staging directory, validated with the media gate, then copied into the
@@ -25,6 +25,80 @@ DEFAULT_SOURCE = PACK / "accepted"
 RUNTIME = REPO / "public/worlds/cake-studio/v17/clips"
 MANIFEST = REPO / "public/worlds/cake-studio/v17/manifest.json"
 VERIFY = REPO / "scripts/verify-cake-studio-v17-media.py"
+PHONE_BUILD = REPO / "scripts/build-cake-studio-v17-phone-masters.py"
+RELEASE_VERSION = "1.7.2"
+PHONE_DELIVERY = {
+    "codec": "H.264",
+    "pixelFormat": "yuv420p",
+    "width": 640,
+    "height": 360,
+    "fps": 15,
+    "beatFrames": 68,
+    "finalTailExtraFrames": 7,
+    "keyframeInterval": 8,
+    "terminalFrameOffset": 2,
+    "silent": True,
+    "faststart": True,
+}
+PHONE_SCRUB_DELIVERY = {
+    "mimeType": "image/webp",
+    "tileWidth": 384,
+    "tileHeight": 216,
+    "quality": 85,
+}
+PHONE_TERMINAL_DELIVERY = {
+    "mimeType": "image/webp",
+    "width": 640,
+    "height": 360,
+    "quality": 100,
+}
+PHONE_TRACKS = {
+    "intro": {
+        "file": "CST17-INTRO-PHONE-v172.mp4",
+        "beats": 10,
+        "scrubAtlas": {
+            "file": "CST17-INTRO-PHONE-SCRUB-v172.webp",
+            "bytes": 326_692,
+            "sha256": "1e94474cee9abdd7e0af7ea7679d4b004cf5d3313287c06c358f4368e3c1f1c5",
+            "columns": 8,
+            "rows": 4,
+            "frames": [0, 22, 44, 66, 88, 110, 133, 155, 177, 199, 221, 243, 265, 287, 309, 331, 354, 376, 398, 420, 442, 464, 486, 508, 530, 552, 575, 597, 619, 641, 663, 685],
+        },
+        "terminalStill": {
+            "file": "CST17-INTRO-PHONE-TERMINAL-v172.webp",
+            "bytes": 106_416,
+            "sha256": "513bcc97d522d84cb0ead674be5aa59b8b04d8cbb62527c1e63a4d9afe1fc4ee",
+            "frame": 685,
+        },
+    },
+    "outro": {
+        "file": "CST17-OUTRO-PHONE-v172.mp4",
+        "beats": 5,
+        "scrubAtlas": {
+            "file": "CST17-OUTRO-PHONE-SCRUB-v172.webp",
+            "bytes": 179_822,
+            "sha256": "5717337b6e0674f08f99a945fc4aa2dee69f2ab09380bdd04c2da6218a0b9c2c",
+            "columns": 8,
+            "rows": 2,
+            "frames": [0, 23, 46, 69, 92, 115, 138, 161, 184, 207, 230, 253, 276, 299, 322, 345],
+        },
+        "terminalStill": {
+            "file": "CST17-OUTRO-PHONE-TERMINAL-v172.webp",
+            "bytes": 91_242,
+            "sha256": "df40c40bbaf66b867bcdb4ffc95d095f1b7d5a97f7815498f2f122ee380037eb",
+            "frame": 345,
+        },
+    },
+}
+PHONE_OUTPUTS = tuple(
+    output
+    for contract in PHONE_TRACKS.values()
+    for output in (
+        str(contract["file"]),
+        str(contract["scrubAtlas"]["file"]),
+        str(contract["terminalStill"]["file"]),
+    )
+)
 EXPECTED = tuple(
     [f"CST17-I{number:02d}.mp4" for number in range(1, 11)]
     + [f"CST17-O{number:02d}.mp4" for number in range(1, 6)]
@@ -97,6 +171,70 @@ def write_manifest_ready(ready: bool) -> None:
     os.replace(temporary, MANIFEST)
 
 
+def validate_runtime_phone_contract(payload: dict) -> None:
+    require(payload.get("version") == RELEASE_VERSION, f"runtime manifest version must be {RELEASE_VERSION}")
+    require(
+        payload.get("delivery", {}).get("phoneMaster") == PHONE_DELIVERY,
+        "runtime manifest phone delivery contract mismatch",
+    )
+    require(
+        payload.get("delivery", {}).get("phoneScrubAtlas") == PHONE_SCRUB_DELIVERY,
+        "runtime manifest phone scrub atlas delivery contract mismatch",
+    )
+    require(
+        payload.get("delivery", {}).get("phoneTerminalStill") == PHONE_TERMINAL_DELIVERY,
+        "runtime manifest phone terminal still delivery contract mismatch",
+    )
+    tracks = payload.get("tracks", {})
+    for name, contract in PHONE_TRACKS.items():
+        expected_frames = (
+            int(contract["beats"]) * int(PHONE_DELIVERY["beatFrames"])
+            + int(PHONE_DELIVERY["finalTailExtraFrames"])
+        )
+        atlas = contract["scrubAtlas"]
+        terminal = contract["terminalStill"]
+        require(
+            tracks.get(name, {}).get("phoneMaster")
+            == {
+                "src": f"cake-studio/v17/clips/{contract['file']}",
+                "width": PHONE_DELIVERY["width"],
+                "height": PHONE_DELIVERY["height"],
+                "fps": PHONE_DELIVERY["fps"],
+                "beatFrames": PHONE_DELIVERY["beatFrames"],
+                "finalTailExtraFrames": PHONE_DELIVERY["finalTailExtraFrames"],
+                "keyframeInterval": PHONE_DELIVERY["keyframeInterval"],
+                "terminalFrameOffset": PHONE_DELIVERY["terminalFrameOffset"],
+                "frames": expected_frames,
+                "duration": round(expected_frames / int(PHONE_DELIVERY["fps"]), 6),
+                "scrubAtlas": {
+                    "src": f"cake-studio/v17/clips/{atlas['file']}",
+                    "bytes": int(atlas["bytes"]),
+                    "sha256": str(atlas["sha256"]),
+                    "width": int(atlas["columns"]) * PHONE_SCRUB_DELIVERY["tileWidth"],
+                    "height": int(atlas["rows"]) * PHONE_SCRUB_DELIVERY["tileHeight"],
+                    "tileWidth": PHONE_SCRUB_DELIVERY["tileWidth"],
+                    "tileHeight": PHONE_SCRUB_DELIVERY["tileHeight"],
+                    "quality": PHONE_SCRUB_DELIVERY["quality"],
+                    "columns": int(atlas["columns"]),
+                    "rows": int(atlas["rows"]),
+                    "samples": len(atlas["frames"]),
+                    "frames": [int(index) for index in atlas["frames"]],
+                },
+                "terminalStill": {
+                    "src": f"cake-studio/v17/clips/{terminal['file']}",
+                    "bytes": int(terminal["bytes"]),
+                    "sha256": str(terminal["sha256"]),
+                    "width": PHONE_TERMINAL_DELIVERY["width"],
+                    "height": PHONE_TERMINAL_DELIVERY["height"],
+                    "quality": PHONE_TERMINAL_DELIVERY["quality"],
+                    "frame": int(terminal["frame"]),
+                    "time": round(int(terminal["frame"]) / int(PHONE_DELIVERY["fps"]), 6),
+                },
+            },
+            f"runtime {name} phone master contract mismatch",
+        )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-dir", type=Path, default=DEFAULT_SOURCE)
@@ -118,8 +256,12 @@ def main() -> int:
     extras = sorted(set(inputs) - set(EXPECTED))
     require(not missing, f"missing owner downloads: {','.join(missing)}")
     require(not extras, f"unexpected MP4 files: {','.join(extras)}")
-    require(MANIFEST.is_file() and VERIFY.is_file(), "runtime manifest or media verifier missing")
+    require(
+        MANIFEST.is_file() and VERIFY.is_file() and PHONE_BUILD.is_file(),
+        "runtime manifest, media verifier, or phone builder missing",
+    )
     runtime_manifest = json.loads(MANIFEST.read_text(encoding="utf-8-sig"))
+    validate_runtime_phone_contract(runtime_manifest)
     runtime_records = [
         *runtime_manifest.get("tracks", {}).get("intro", {}).get("clips", []),
         *runtime_manifest.get("tracks", {}).get("outro", {}).get("clips", []),
@@ -222,6 +364,12 @@ def main() -> int:
         )
         print(f"[{index:02d}/15] {name} {width}x{height} delogo={str(use_delogo).lower()}")
 
+    phone_build = command(
+        [sys.executable, str(PHONE_BUILD), "--media-dir", str(staging), "--force"],
+        "build v1.7.2 phone masters and companions",
+    )
+    print(phone_build.stdout.strip())
+
     staged_gate = run_gate(staging)
     staged_output = (staged_gate.stdout + staged_gate.stderr).strip()
     require(
@@ -231,7 +379,7 @@ def main() -> int:
 
     write_manifest_ready(False)
     RUNTIME.mkdir(parents=True, exist_ok=True)
-    for name in EXPECTED:
+    for name in (*EXPECTED, *PHONE_OUTPUTS):
         source = staging / name
         target = RUNTIME / name
         if target.exists():
@@ -256,7 +404,10 @@ def main() -> int:
         write_manifest_ready(False)
         raise BuildFailure(f"final runtime gate failed; manifest returned to ready=false: {final_output}")
     print(final_output)
-    print(f"V17_MEDIA_BUILD_OK desktop_clips=15 phone_masters=2 runtime={RUNTIME} staging_preserved={staging}")
+    print(
+        f"V17_MEDIA_BUILD_OK desktop_clips=15 phone_masters=2 phone_atlases=2 "
+        f"phone_terminal_stills=2 runtime={RUNTIME} staging_preserved={staging}"
+    )
     return 0
 
 

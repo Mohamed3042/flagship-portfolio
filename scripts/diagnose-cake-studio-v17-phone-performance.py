@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-before phone performance gate for Cake Studio v1.7 bookends.
+"""Fail-before phone performance gate for Cake Studio v1.7.2 bookends.
 
 This is deliberately separate from the final correctness verifier.  It uses a
 cold, throttled 390x844 Chrome context and real CDP touch input to measure what
@@ -36,6 +36,32 @@ if hasattr(sys.stderr, "reconfigure"):
 
 
 V17_CLIP_MARKER = "/cake-studio/v17/clips/"
+EXPECTED_VERSION = "1.7.2"
+EXPECTED_MANIFEST = "cake-studio/v17/manifest.json?v=1.7.2-phone-final"
+PHONE_MASTER_FILES = {
+    "intro": "CST17-INTRO-PHONE-v172.mp4",
+    "outro": "CST17-OUTRO-PHONE-v172.mp4",
+}
+PHONE_MASTER_BYTES = {"intro": 5_091_536, "outro": 2_479_879}
+PHONE_MASTER_SHA256 = {
+    "intro": "6c735d09ccd30cf70ff031ddbef7060ede653bfb680d11b78042d19188ad5670",
+    "outro": "65e51883d99862fd86ca159bda4fd1c7bdd0f394734be422cb650516f31dca15",
+}
+PHONE_WIDTH = 640
+PHONE_HEIGHT = 360
+PHONE_FPS = 15
+PHONE_BEAT_FRAMES = 68
+PHONE_FINAL_TAIL_EXTRA_FRAMES = 7
+PHONE_TERMINAL_FRAME_OFFSET = 2
+PHONE_KEYFRAME_INTERVAL = 8
+PHONE_TRACK_CLIPS = {"intro": 10, "outro": 5}
+PHONE_MASTER_FRAMES = {
+    track: count * PHONE_BEAT_FRAMES + PHONE_FINAL_TAIL_EXTRA_FRAMES
+    for track, count in PHONE_TRACK_CLIPS.items()
+}
+PHONE_MASTER_DURATIONS = {
+    track: frames / PHONE_FPS for track, frames in PHONE_MASTER_FRAMES.items()
+}
 CLIP_RE = re.compile(
     r"CST17-(?:(?P<clip>[IO]\d{2})|(?P<master>INTRO|OUTRO)-PHONE-v\d+)\.mp4",
     re.IGNORECASE,
@@ -297,6 +323,104 @@ INSTRUMENTATION = rf"""
 def clean_url(url: str) -> str:
     parts = urlsplit(url)
     return urlunsplit((parts.scheme, parts.netloc, parts.path, parts.query, ""))
+
+
+def phone_terminal_target(duration: float) -> float:
+    return duration - PHONE_TERMINAL_FRAME_OFFSET / PHONE_FPS
+
+
+def expected_contract() -> dict[str, Any]:
+    return {
+        "version": EXPECTED_VERSION,
+        "manifest": EXPECTED_MANIFEST,
+        "delivery": {
+            "width": PHONE_WIDTH,
+            "height": PHONE_HEIGHT,
+            "fps": PHONE_FPS,
+            "beatFrames": PHONE_BEAT_FRAMES,
+            "finalTailExtraFrames": PHONE_FINAL_TAIL_EXTRA_FRAMES,
+            "terminalFrameOffset": PHONE_TERMINAL_FRAME_OFFSET,
+            "keyframeInterval": PHONE_KEYFRAME_INTERVAL,
+        },
+        "tracks": {
+            track: {
+                "file": PHONE_MASTER_FILES[track],
+                "bytes": PHONE_MASTER_BYTES[track],
+                "sha256": PHONE_MASTER_SHA256[track],
+                "frames": PHONE_MASTER_FRAMES[track],
+                "duration": PHONE_MASTER_DURATIONS[track],
+                "terminalTarget": phone_terminal_target(PHONE_MASTER_DURATIONS[track]),
+            }
+            for track in ("intro", "outro")
+        },
+    }
+
+
+def runtime_contract_failures(state: dict[str, Any]) -> list[str]:
+    failures: list[str] = []
+    if state.get("bodyVersion") != EXPECTED_VERSION:
+        failures.append("body version")
+    if state.get("runtimeVersion") != EXPECTED_VERSION:
+        failures.append("runtime version")
+    if state.get("references") != [EXPECTED_MANIFEST, EXPECTED_MANIFEST]:
+        failures.append("manifest cache key")
+    manifest = state.get("manifest") or {}
+    if manifest.get("version") != EXPECTED_VERSION or manifest.get("ready") is not True:
+        failures.append("manifest readiness/version")
+    delivery = (manifest.get("delivery") or {}).get("phoneMaster") or {}
+    expected_delivery = expected_contract()["delivery"]
+    if any(delivery.get(key) != value for key, value in expected_delivery.items()):
+        failures.append("manifest phone delivery")
+    units = {unit.get("track"): unit.get("phoneMaster") or {} for unit in state.get("units", [])}
+    if set(units) != {"intro", "outro"}:
+        failures.append("runtime phone tracks")
+        return failures
+    for track, master in units.items():
+        expected_source = f"cake-studio/v17/clips/{PHONE_MASTER_FILES[track]}"
+        if (
+            master.get("src") != expected_source
+            or master.get("width") != PHONE_WIDTH
+            or master.get("height") != PHONE_HEIGHT
+            or master.get("fps") != PHONE_FPS
+            or master.get("beatFrames") != PHONE_BEAT_FRAMES
+            or master.get("finalTailExtraFrames") != PHONE_FINAL_TAIL_EXTRA_FRAMES
+            or master.get("terminalFrameOffset") != PHONE_TERMINAL_FRAME_OFFSET
+            or master.get("keyframeInterval") != PHONE_KEYFRAME_INTERVAL
+            or master.get("frames") != PHONE_MASTER_FRAMES[track]
+            or abs(float(master.get("duration", -1)) - PHONE_MASTER_DURATIONS[track]) > .001
+        ):
+            failures.append(f"{track} phone master")
+    return failures
+
+
+def read_runtime_contract(page: Page) -> dict[str, Any]:
+    return page.evaluate(
+        """async () => {
+          const runtime = window.__cakeStudioBookends;
+          const scenes = [...document.querySelectorAll('[data-cake-bookend]')];
+          const references = scenes.map(scene => scene.dataset.bookendManifest || '');
+          let manifest = null;
+          let manifestError = '';
+          try {
+            const response = await fetch(references[0], {cache: 'no-cache'});
+            if (!response.ok) throw new Error(`manifest HTTP ${response.status}`);
+            manifest = await response.json();
+          } catch (error) {
+            manifestError = String(error);
+          }
+          return {
+            bodyVersion: document.body.dataset.version || '',
+            runtimeVersion: runtime?.version || '',
+            references,
+            manifest,
+            manifestError,
+            units: (runtime?.units || []).map(unit => ({
+              track: unit.trackName,
+              phoneMaster: unit.phoneMaster,
+            })),
+          };
+        }"""
+    )
 
 
 def percentile(values: Iterable[float], fraction: float) -> float | None:
@@ -617,6 +741,21 @@ def performance_contract(profile: TouchProfile, metric: dict[str, Any]) -> list[
     frame_age = metric["visibleFrameAgeP95Ms"]
     p95_error = metric["desiredVsPaintedP95Sec"]
     responses = metric["clipResponses"]
+    expected_filename = PHONE_MASTER_FILES[profile.track]
+    exact_media_urls = bool(metric["uniqueMediaUrls"]) and all(
+        urlsplit(url).path.endswith(f"/{expected_filename}")
+        for url in metric["uniqueMediaUrls"]
+    )
+    terminal_target = metric.get("terminalTargetSec")
+    expected_terminal_target = metric.get("expectedTerminalTargetSec")
+    valid_phone_delivery = (
+        metric["correctRangeResponses"] > 0
+        if profile.track == "intro"
+        else (
+            metric["correctRangeResponses"] > 0
+            or metric["fullWarmResponses"] == 1
+        )
+    )
     checks = [
         check("touch traversed scene", metric["endProgress"] >= .90, metric["endProgress"], ">= 0.90"),
         check("persistent phone-master transport", metric["transportModes"] == ["phone-master"], metric["transportModes"], "['phone-master']"),
@@ -637,19 +776,34 @@ def performance_contract(profile: TouchProfile, metric: dict[str, Any]) -> list[
         ),
         check("bounded dropped target updates", metric["targetCompletionRatio"] >= minimum_target_completion, {"completedRatio": metric["targetCompletionRatio"], "superseded": metric["supersededTargetUpdates"]}, f">= {minimum_target_completion} completed"),
         check("one persistent media URL", metric["uniqueMediaUrlCount"] == 1, metric["uniqueMediaUrls"], "exactly one URL"),
+        check(
+            "exact v1.7.2 phone master URL",
+            exact_media_urls,
+            metric["uniqueMediaUrls"],
+            expected_filename,
+        ),
+        check(
+            "EOF-safe terminal target",
+            terminal_target is not None
+            and expected_terminal_target is not None
+            and abs(float(terminal_target) - float(expected_terminal_target)) <= .002,
+            {"actual": terminal_target, "expected": expected_terminal_target},
+            "duration - terminalFrameOffset/fps",
+        ),
         check("phone master requested without individual clips", metric["phoneMasterRequests"] > 0 and metric["individualClipRequests"] == 0, {"master": metric["phoneMasterRequests"], "individual": metric["individualClipRequests"]}, "master > 0 and individual = 0"),
         check("bounded same-source range cancellations", metric["clipAborts"] <= metric["paintsDuringTouch"] + 2, {"cancellations": metric["clipAborts"], "paints": metric["paintsDuringTouch"]}, "cancellations <= paints + 2"),
         check(
-            "active range delivery plus optional full warm",
+            "valid phone-master delivery for active source mode",
             responses > 0
-            and metric["correctRangeResponses"] > 0
+            and valid_phone_delivery
+            and metric["fullWarmResponses"] <= 1
             and metric["correctTransportResponses"] == responses,
             {
                 "responses": responses,
                 "ranges206": metric["correctRangeResponses"],
                 "fullWarm200": metric["fullWarmResponses"],
             },
-            "all responses are valid 206 ranges or one full 200 warm fetch",
+            "intro has 206 range; warmed outro may use one full 200; all responses valid",
         ),
         check("zero bookend play calls", metric["playCalls"] == 0, metric["playCalls"], "0"),
         check("zero unexpected clip failures", not metric["unexpectedClipFailures"], metric["unexpectedClipFailures"], "[]"),
@@ -816,6 +970,8 @@ class PhonePerformanceGate:
                 "() => window.__cakeStudioBookends?.state === 'ready' && window.__cakePhonePerf",
                 timeout=20_000,
             )
+            contract_state = read_runtime_contract(page)
+            contract_errors = runtime_contract_failures(contract_state)
             geometry = self.scene_geometry(page, profile.track)
             warm_latency_ms = None
             if profile.track == "outro":
@@ -884,7 +1040,64 @@ class PhonePerformanceGate:
             page.screenshot(path=str(screenshot), full_page=False)
 
             report = summarize_recording(recording, network, profile)
+            expected_terminal_target = phone_terminal_target(
+                PHONE_MASTER_DURATIONS[profile.track]
+            )
+            # Keep the touch metrics untouched, then make one deterministic
+            # settled-position probe at the exact scene end. Sampling alone is
+            # not proof: a 40 ms recorder tick can legitimately miss progress
+            # 1.0 even when the gesture reached the end.
+            page.evaluate("end => scrollTo(0, end)", geometry["end"])
+            terminal_probe_timed_out = False
+            try:
+                page.wait_for_function(
+                    """({track, expected}) => {
+                      const scene = document.querySelector(`[data-cake-bookend="${track}"]`);
+                      const target = Number.parseFloat(
+                        scene?.dataset.sequenceTargetTime || 'NaN'
+                      );
+                      return Number.isFinite(target) && Math.abs(target - expected) <= .002;
+                    }""",
+                    arg={"track": profile.track, "expected": expected_terminal_target},
+                    timeout=3_000,
+                )
+            except TimeoutError:
+                terminal_probe_timed_out = True
+            terminal_probe = page.evaluate(
+                """track => {
+                  const scene = document.querySelector(`[data-cake-bookend="${track}"]`);
+                  const unit = window.__cakeStudioBookends?.units?.find(
+                    item => item.trackName === track
+                  );
+                  const target = Number.parseFloat(
+                    scene?.dataset.sequenceTargetTime || 'NaN'
+                  );
+                  return {
+                    progress: Number.parseFloat(
+                      scene?.style.getPropertyValue('--p') || 'NaN'
+                    ),
+                    target: Number.isFinite(target) ? target : null,
+                    duration: unit?.phoneMaster?.duration ?? null,
+                    finalTailExtraFrames: unit?.phoneMaster?.finalTailExtraFrames ?? null,
+                    fps: unit?.phoneMaster?.fps ?? null,
+                  };
+                }""",
+                profile.track,
+            )
+            terminal_target = terminal_probe["target"]
+            report["metrics"]["terminalTargetSec"] = terminal_target
+            report["metrics"]["expectedTerminalTargetSec"] = expected_terminal_target
+            report["terminalProbe"] = {
+                **terminal_probe,
+                "expected": expected_terminal_target,
+                "waitTimedOut": terminal_probe_timed_out,
+            }
             report["profile"] = asdict(profile)
+            report["contract"] = {
+                "expected": expected_contract(),
+                "observed": contract_state,
+                "failures": contract_errors,
+            }
             report["environment"] = {
                 "url": self.url,
                 "viewport": VIEWPORT,
@@ -910,6 +1123,12 @@ class PhonePerformanceGate:
                 "unexpectedRequests": network["unexpected_failures"],
             }
             checks = performance_contract(profile, report["metrics"])
+            checks.insert(0, {
+                "name": "exact v1.7.2 phone runtime contract",
+                "pass": not contract_errors,
+                "actual": contract_errors or contract_state,
+                "limit": "version/cache/media mapping exactly match v1.7.2",
+            })
             checks.append({
                 "name": "bounded cold first-frame prime",
                 "pass": prime_latency_ms <= 3_000,
@@ -965,7 +1184,8 @@ class PhonePerformanceGate:
             "schema": "cake-studio-v17-phone-performance/v1",
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "url": self.url,
-            "expectedCurrentResult": "pass only with persistent native phone-master transport",
+            "expectedCurrentResult": "pass only with the exact v1.7.2 persistent native phone-master transport",
+            "expectedContract": expected_contract(),
             "scope": {
                 "profiles": [asdict(profile) for profile in PROFILES],
                 "measurement": "visible transition performance during real touch scroll plus bounded recovery",
@@ -1018,8 +1238,76 @@ def self_test() -> int:
     require(clip_id("https://x/cake-studio/v17/clips/CST17-I09.mp4") == "I09", "intro clip id")
     require(clip_id("https://x/CST17-o05.mp4?v=1") == "O05", "outro clip id")
     require(
-        clip_id("https://x/cake-studio/v17/clips/CST17-INTRO-PHONE-v171.mp4") == "INTRO_PHONE",
+        clip_id("https://x/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4") == "INTRO_PHONE",
         "intro phone master id",
+    )
+    require(
+        PHONE_MASTER_FILES
+        == {
+            "intro": "CST17-INTRO-PHONE-v172.mp4",
+            "outro": "CST17-OUTRO-PHONE-v172.mp4",
+        }
+        and PHONE_MASTER_BYTES == {"intro": 5_091_536, "outro": 2_479_879}
+        and PHONE_MASTER_SHA256
+        == {
+            "intro": "6c735d09ccd30cf70ff031ddbef7060ede653bfb680d11b78042d19188ad5670",
+            "outro": "65e51883d99862fd86ca159bda4fd1c7bdd0f394734be422cb650516f31dca15",
+        },
+        "exact v1.7.2 media identity",
+    )
+    require(
+        (
+            PHONE_WIDTH,
+            PHONE_HEIGHT,
+            PHONE_FPS,
+            PHONE_BEAT_FRAMES,
+            PHONE_FINAL_TAIL_EXTRA_FRAMES,
+            PHONE_TERMINAL_FRAME_OFFSET,
+            PHONE_KEYFRAME_INTERVAL,
+        )
+        == (640, 360, 15, 68, 7, 2, 8)
+        and PHONE_MASTER_FRAMES == {"intro": 687, "outro": 347},
+        "exact v1.7.2 phone cadence",
+    )
+    require(
+        math.isclose(phone_terminal_target(PHONE_MASTER_DURATIONS["intro"]), 45.666666666666664)
+        and math.isclose(phone_terminal_target(PHONE_MASTER_DURATIONS["outro"]), 23.0),
+        "EOF-safe terminal targets",
+    )
+    valid_state = {
+        "bodyVersion": EXPECTED_VERSION,
+        "runtimeVersion": EXPECTED_VERSION,
+        "references": [EXPECTED_MANIFEST, EXPECTED_MANIFEST],
+        "manifest": {
+            "version": EXPECTED_VERSION,
+            "ready": True,
+            "delivery": {"phoneMaster": expected_contract()["delivery"]},
+        },
+        "units": [
+            {
+                "track": track,
+                "phoneMaster": {
+                    "src": f"cake-studio/v17/clips/{PHONE_MASTER_FILES[track]}",
+                    "width": PHONE_WIDTH,
+                    "height": PHONE_HEIGHT,
+                    "fps": PHONE_FPS,
+                    "beatFrames": PHONE_BEAT_FRAMES,
+                    "finalTailExtraFrames": PHONE_FINAL_TAIL_EXTRA_FRAMES,
+                    "terminalFrameOffset": PHONE_TERMINAL_FRAME_OFFSET,
+                    "keyframeInterval": PHONE_KEYFRAME_INTERVAL,
+                    "frames": PHONE_MASTER_FRAMES[track],
+                    "duration": PHONE_MASTER_DURATIONS[track],
+                },
+            }
+            for track in ("intro", "outro")
+        ],
+    }
+    require(not runtime_contract_failures(valid_state), "passing runtime contract")
+    wrong_state = json.loads(json.dumps(valid_state))
+    wrong_state["units"][0]["phoneMaster"]["src"] = "cake-studio/v17/clips/CST17-INTRO-PHONE-v171.mp4"
+    require(
+        "intro phone master" in runtime_contract_failures(wrong_state),
+        "runtime contract rejects stale phone master",
     )
     require(clip_id("https://x/not-media.webp") is None, "non clip")
     require(percentile([0, 10, 20], .95) == 19, "linear percentile")
@@ -1079,7 +1367,9 @@ def self_test() -> int:
         "staleVisibleRatio": 0,
         "desiredVsPaintedMaxSec": .01,
         "uniqueMediaUrlCount": 1,
-        "uniqueMediaUrls": ["https://x/CST17-INTRO-PHONE-v171.mp4"],
+        "uniqueMediaUrls": ["https://x/CST17-INTRO-PHONE-v172.mp4"],
+        "terminalTargetSec": phone_terminal_target(PHONE_MASTER_DURATIONS["intro"]),
+        "expectedTerminalTargetSec": phone_terminal_target(PHONE_MASTER_DURATIONS["intro"]),
         "phoneMasterRequests": 1,
         "individualClipRequests": 0,
         "clipAborts": 0,
@@ -1091,10 +1381,38 @@ def self_test() -> int:
         "unexpectedClipFailures": [],
     }
     require(all(check["pass"] for check in performance_contract(PROFILES[0], rapid_metric)), "passing contract")
+    warmed_outro_metric = dict(rapid_metric)
+    warmed_outro_metric.update({
+        "uniqueMediaUrls": ["https://x/CST17-OUTRO-PHONE-v172.mp4"],
+        "correctRangeResponses": 0,
+        "fullWarmResponses": 1,
+        "correctTransportResponses": 1,
+    })
+    require(
+        all(check["pass"] for check in performance_contract(PROFILES[2], warmed_outro_metric)),
+        "warmed outro full 200 contract",
+    )
+    require(
+        any(
+            not check["pass"]
+            and check["name"] == "valid phone-master delivery for active source mode"
+            for check in performance_contract(PROFILES[0], warmed_outro_metric)
+        ),
+        "intro rejects full-only warm delivery",
+    )
     rapid_metric["surfaceVisibleRatio"] = 0
     require(
         any(not check["pass"] and check["name"] == "active decoded surface coverage" for check in performance_contract(PROFILES[0], rapid_metric)),
         "contract is fail capable",
+    )
+    rapid_metric["surfaceVisibleRatio"] = 1
+    rapid_metric["terminalTargetSec"] = PHONE_MASTER_DURATIONS["intro"] - 1 / PHONE_FPS
+    require(
+        any(
+            not check["pass"] and check["name"] == "EOF-safe terminal target"
+            for check in performance_contract(PROFILES[0], rapid_metric)
+        ),
+        "terminal target contract rejects final PTS",
     )
     print(f"CAKE_STUDIO_V17_PHONE_PERF_SELF_TEST_OK tests={tests}")
     return 0
@@ -1102,7 +1420,7 @@ def self_test() -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Measure Cake Studio v1.7 phone transition performance under cold throttled touch scroll."
+        description="Measure Cake Studio v1.7.2 phone transition performance under cold throttled touch scroll."
     )
     parser.add_argument("--url", help="Public or local Cake Studio page URL")
     parser.add_argument("--output", type=Path, help="Diagnostic artifact directory")
