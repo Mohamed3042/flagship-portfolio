@@ -39,7 +39,10 @@ EXPECTED_TITLES = {
     10: "The Chosen Light",
     11: "The Golden Thread",
     19: "The Human Gate",
-    20: "Proof, Vault, Return",
+    20: "The Ember Remains",
+    50: "Road after Rain",
+    80: "The Outward Beam",
+    100: "The Open Circle",
 }
 
 FORBIDDEN_CHROME = (
@@ -55,6 +58,13 @@ def with_query(url: str, **items: object) -> str:
     query = dict(parse_qsl(parts.query, keep_blank_values=True))
     query.update({key: str(value) for key, value in items.items()})
     return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+
+
+def runtime_clip_url(page_url: str, shot: int) -> str:
+    parts = urlsplit(page_url)
+    if parts.hostname == "mohamed3042.github.io":
+        return f"{parts.scheme}://{parts.netloc}/flagship-disney-media/disney2/clips/DSN2-{shot:03d}.mp4"
+    return urljoin(page_url, f"disney2/clips/DSN2-{shot:03d}.mp4")
 
 
 def mean_luma(image: Image.Image) -> float:
@@ -80,6 +90,7 @@ class Verification:
         self.url = url
         self.output_dir = output_dir
         self.minimum_runway_vh = minimum_runway_vh
+        self.chapter_count = 0
         self.checks: list[dict[str, object]] = []
         self.failures: list[str] = []
         self.console_errors: list[str] = []
@@ -93,6 +104,42 @@ class Verification:
         print(f"{state} {name}: {detail_text}")
         if not condition:
             self.failures.append(f"{name}: {detail_text}")
+
+    def discover_chapters(self, page: Page) -> None:
+        """Grade the rendered manifest, then use its length for camera math."""
+        manifest = page.locator("#book .legcap").evaluate_all(
+            """caps => caps.map(cap => ({
+              clip: (cap.dataset.clip || '').split('/').pop(),
+              poster: (cap.dataset.poster || '').split('/').pop(),
+              title: cap.dataset.tEn || '',
+            }))"""
+        )
+        self.chapter_count = len(manifest)
+        expected = [
+            {
+                "clip": f"DSN2-{number:03d}.mp4",
+                "poster": f"kf-{number:02d}.jpg",
+            }
+            for number in range(1, self.chapter_count + 1)
+        ]
+        ordered = all(
+            item["clip"] == wanted["clip"] and item["poster"] == wanted["poster"]
+            for item, wanted in zip(manifest, expected)
+        )
+        titled = sum(bool(item["title"].strip()) for item in manifest)
+        self.check("v4.0 chapter count", self.chapter_count == 100, self.chapter_count)
+        self.check(
+            "ordered chapter media manifest",
+            ordered and titled == self.chapter_count,
+            f"ordered={ordered}, titled={titled}/{self.chapter_count}",
+        )
+
+    def chapter_progress(self, leg: int, fraction: float) -> float:
+        if self.chapter_count <= 0:
+            raise RuntimeError("chapter manifest has not been discovered")
+        if not 1 <= leg <= self.chapter_count:
+            raise ValueError(f"chapter {leg} outside 1..{self.chapter_count}")
+        return ((leg - 1) + fraction) / self.chapter_count
 
     def observe(self, page: Page) -> None:
         def on_console(message: object) -> None:
@@ -164,9 +211,11 @@ class Verification:
         handle = page.wait_for_function(
             """arg => {
               const n = String(arg.leg).padStart(3, '0');
+              const cap = document.querySelectorAll('#book .legcap')[arg.leg - 1];
               const floor = document.querySelector('#book .floor');
               const video = document.querySelector('#book video.on');
-              if (!floor || !floor.complete || !floor.currentSrc.endsWith('kf-' + n.slice(-2) + '.jpg')) return false;
+              const poster = (cap?.dataset.poster || '').split('/').pop();
+              if (!cap || !poster || !floor || !floor.complete || !floor.currentSrc.endsWith(poster)) return false;
               if (!video || !(video.dataset.clip || '').endsWith('DSN2-' + n + '.mp4')) return false;
               if (video.readyState < 1 || !Number.isFinite(video.duration) || video.seekable.length < 1) return false;
               if (video.seeking) return false;
@@ -179,7 +228,7 @@ class Verification:
               }
               return {
                 clip: video.dataset.clip.split('/').pop(),
-                poster: floor.currentSrc.split('/').pop(),
+                 poster: floor.currentSrc.split('/').pop(), manifestPoster: poster,
                 currentTime: video.currentTime, duration: video.duration,
                 paused: video.paused, readyState: video.readyState,
                 title: document.querySelector('#cue-title .en')?.textContent.trim() || ''
@@ -192,7 +241,11 @@ class Verification:
         expected_title = EXPECTED_TITLES.get(leg)
         if expected_title:
             self.check(f"{prefix}leg {leg:02d} cue", info["title"] == expected_title, info["title"])
-        self.check(f"{prefix}leg {leg:02d} floor poster", info["poster"] == f"kf-{leg:02d}.jpg", info["poster"])
+        self.check(
+            f"{prefix}leg {leg:02d} floor poster",
+            info["poster"] == info["manifestPoster"] == f"kf-{leg:02d}.jpg",
+            info["poster"],
+        )
         self.check(
             f"{prefix}leg {leg:02d} film paused (scrub, not playback)",
             bool(info["paused"]),
@@ -260,7 +313,7 @@ class Verification:
         same scroll (that difference is the parallax), the glow must drift
         across the whole film, and the film time must move WITH the same
         scroll — unlike the retired autoplay edition."""
-        self.set_progress(page, "#book", 0.462)
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.24))
         first_info = self.wait_leg(page, 10, 0.24, label=label)
         first = self.depth_snapshot(page)
         planes = all(first["rects"].values())
@@ -269,7 +322,7 @@ class Verification:
             return
         self.screenshot(page, f"{label}-parallax-before.png")
 
-        self.set_progress(page, "#book", 0.488)
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.76))
         second_info = self.wait_leg(page, 10, 0.76, label=label)
         second = self.depth_snapshot(page)
         deltas = {
@@ -290,8 +343,9 @@ class Verification:
         )
         self.screenshot(page, f"{label}-parallax-depth.png")
 
-        self.set_progress(page, "#book", 0.912)
-        self.wait_leg(page, 19)
+        long_leg = max(19, round(self.chapter_count * 0.9))
+        self.set_progress(page, "#book", self.chapter_progress(long_leg, 0.24))
+        self.wait_leg(page, long_leg, 0.24, label=label)
         long_run = self.depth_snapshot(page)
         far_drift = abs(long_run["rects"][".depth-far"]["left"] - second["rects"][".depth-far"]["left"])
         journey_moved = abs(float(long_run["journey"] or 0) - float(second["journey"] or 0))
@@ -384,19 +438,19 @@ class Verification:
         queue to reach the requested film position."""
         self.set_progress(page, "#book", progress, delay_ms=0)
         page.wait_for_function(
-            """target => {
+            """arg => {
               const scene = document.querySelector('#book');
               const journey = parseFloat(scene.style.getPropertyValue('--journey') || '-1');
-              const g = Math.min(target, .999999) * 20;
+              const g = Math.min(arg.target, .999999) * arg.count;
               const leg = Math.floor(g);
               const fraction = g - leg;
               const video = scene.querySelector('video.on');
-              if (Math.abs(journey - target) > 1e-4 || !video || video.readyState < 1 || video.seeking) return false;
+              if (Math.abs(journey - arg.target) > 1e-4 || !video || video.readyState < 1 || video.seeking) return false;
               if (!(video.dataset.clip || '').endsWith('DSN2-' + String(leg + 1).padStart(3, '0') + '.mp4')) return false;
               const wanted = Math.min(video.duration - .04, Math.max(0, fraction * video.duration));
               return Math.abs(video.currentTime - wanted) <= .12;
             }""",
-            arg=progress,
+            arg={"target": progress, "count": self.chapter_count},
             timeout=30_000,
         )
 
@@ -442,8 +496,8 @@ class Verification:
         """Instantly move half a leg and sample the rendered camera once per rAF."""
         leg_index = 10  # leg 11, even: pan travels left -> right
         start_fraction, target_fraction = 0.25, 0.75
-        start_progress = (leg_index + start_fraction) / 20
-        target_progress = (leg_index + target_fraction) / 20
+        start_progress = (leg_index + start_fraction) / self.chapter_count
+        target_progress = (leg_index + target_fraction) / self.chapter_count
         self.settle_progress(page, start_progress)
         duration = float(page.locator("#book video.on").evaluate("video => video.duration"))
         samples = page.evaluate(
@@ -513,8 +567,8 @@ class Verification:
     def check_glide_to_rest(self, page: Page, label: str) -> None:
         """A short equal-step wheel burst must leave camera motion after the
         hand stops, then converge and park its rAF loop."""
-        start = (10 + 0.20) / 20
-        targets = [(10 + fraction) / 20 for fraction in (0.30, 0.40, 0.50)]
+        start = (10 + 0.20) / self.chapter_count
+        targets = [(10 + fraction) / self.chapter_count for fraction in (0.30, 0.40, 0.50)]
         self.settle_progress(page, start)
         result = page.evaluate(
             """arg => new Promise(resolve => {
@@ -550,7 +604,10 @@ class Verification:
                 continue
             if abs(float(current["journey"]) - float(previous["journey"])) >= 1e-5:
                 post_stop_moves += 1
-        final_error_legs = abs(float(samples[-1]["journey"]) - float(result["finalTarget"])) * 20
+        final_error_legs = (
+            abs(float(samples[-1]["journey"]) - float(result["finalTarget"]))
+            * self.chapter_count
+        )
         self.check(
             f"{label} camera glides after input stops",
             post_stop_moves >= 2,
@@ -568,8 +625,10 @@ class Verification:
     def check_steady_scroll_evenness(self, page: Page, label: str) -> None:
         """A constant-rate train of wheel-sized inputs must not appear as
         event-sized pan spikes."""
-        start = (10 + 0.30) / 20
-        targets = [(10 + 0.30 + 0.05 * step) / 20 for step in range(1, 9)]
+        start = (10 + 0.30) / self.chapter_count
+        targets = [
+            (10 + 0.30 + 0.05 * step) / self.chapter_count for step in range(1, 9)
+        ]
         self.settle_progress(page, start)
         result = page.evaluate(
             """arg => new Promise(resolve => {
@@ -617,7 +676,7 @@ class Verification:
             ("even_arrive", 10, 0.10), ("even_mid", 10, 0.50), ("even_settle", 10, 0.90),
             ("odd_arrive", 9, 0.10), ("odd_mid", 9, 0.50), ("odd_settle", 9, 0.90),
         ):
-            self.settle_progress(page, (leg_index + fraction) / 20)
+            self.settle_progress(page, (leg_index + fraction) / self.chapter_count)
             values[name] = self.pan_position(page)
         parked = (
             values["even_arrive"] <= 0.02 and values["even_settle"] >= 0.98
@@ -628,7 +687,8 @@ class Verification:
         self.check(f"{label} chapter cross is centered at halfway", midpoint, values)
 
     def check_jump_snap(self, page: Page, label: str) -> None:
-        start, target = (2 + 0.5) / 20, (6 + 0.5) / 20  # four-leg navigation jump
+        start = (2 + 0.5) / self.chapter_count
+        target = (6 + 0.5) / self.chapter_count  # four-chapter navigation jump
         self.settle_progress(page, start)
         samples = page.evaluate(
             """target => new Promise(resolve => {
@@ -654,10 +714,10 @@ class Verification:
     def check_rostrum_pan(self, page: Page, label: str) -> None:
         """The scroll must PAN the frame's hidden width inside each chapter,
         serpentine across chapters so the camera never jumps at a join."""
-        self.set_progress(page, "#book", 0.4575)  # leg 10 (index 9, odd), f=.15
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.15))
         self.wait_leg(page, 10, 0.15, label=label)
         early = self.pan_position(page)
-        self.set_progress(page, "#book", 0.4925)  # f=.85; plateaus sit outside this window
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.85))
         self.wait_leg(page, 10, 0.85, label=label)
         late = self.pan_position(page)
         sweep = abs(late - early)
@@ -675,7 +735,7 @@ class Verification:
             f"object-position={rendered} at pan={late:.2f}",
         )
         boundary_before = self.pan_position(page)
-        self.set_progress(page, "#book", 0.5005)
+        self.set_progress(page, "#book", self.chapter_progress(11, 0.01))
         self.wait_leg(page, 11, 0.01, tolerance=0.45, label=label)
         boundary_after = self.pan_position(page)
         self.check(
@@ -705,7 +765,9 @@ class Verification:
         title = (page.locator(".ver").get_attribute("title") or "").casefold()
         self.check(
             "weighted camera version badge",
-            badge == "v3.3 · II" and "weighted camera" in title,
+            badge == "v4.0 · II"
+            and "weighted camera" in title
+            and "open circle" in title,
             {"badge": badge, "title": title},
         )
 
@@ -757,14 +819,14 @@ class Verification:
         ratio, progress, rect = best
         text = page.locator(".credits .fin .en").text_content().strip()
         self.check(
-            f"{prefix} FIN intact",
-            ratio >= 0.99 and text == "FIN",
+            f"{prefix} open-circle finale intact",
+            ratio >= 0.99 and text == "THE CIRCLE REMAINS OPEN",
             f"p={progress:.2f} visible={ratio:.2f} top={rect['top']:.1f} bottom={rect['bottom']:.1f}",
         )
         self.screenshot(page, f"{prefix}-credits.png")
 
     def transport_pass(self, context: BrowserContext) -> None:
-        clip_url = urljoin(self.url, "disney2/clips/DSN2-010.mp4")
+        clip_url = runtime_clip_url(self.url, 10)
         head = context.request.head(clip_url, timeout=30_000)
         accept_ranges = head.headers.get("accept-ranges", "")
         self.check("clip HEAD status", head.status == 200, head.status)
@@ -783,35 +845,35 @@ class Verification:
     def scrub_journey(self, page: Page, label: str) -> None:
         """The heart of the contract: positions on the runway map to exact
         film times, forward AND reverse, with the film always paused."""
-        self.set_progress(page, "#book", 0.025)
+        self.set_progress(page, "#book", self.chapter_progress(1, 0.5))
         self.wait_leg(page, 1, 0.5, label=label)
         self.check_frame_geometry(page, label)
         self.screenshot(page, f"{label}-leg-01.png")
 
-        self.set_progress(page, "#book", 0.125)
+        self.set_progress(page, "#book", self.chapter_progress(3, 0.5))
         self.wait_leg(page, 3, 0.5, label=label)
 
-        self.set_progress(page, "#book", 0.475)
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.5))
         self.wait_leg(page, 10, 0.5, label=label)
         self.check_clock_freeze(page, label)
         self.screenshot(page, f"{label}-leg-10.png")
 
         # chapter boundary 10 -> 11: the join must land on the same drawn frame
-        self.set_progress(page, "#book", 0.4995)
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.99))
         self.wait_leg(page, 10, 0.99, tolerance=0.45, label=label)
         before = self.media_screenshot(page, f"{label}-boundary-10-before-media.png")
-        self.set_progress(page, "#book", 0.5005)
+        self.set_progress(page, "#book", self.chapter_progress(11, 0.01))
         self.wait_leg(page, 11, 0.01, tolerance=0.45, label=label)
         after = self.media_screenshot(page, f"{label}-boundary-10-after-media.png")
         raw, edge = boundary_metrics(before, after)
         self.check(f"{label} boundary continuity 10→11", raw <= 20 and edge <= 50, f"raw={raw:.1f}, edge={edge:.1f}")
 
-        self.set_progress(page, "#book", 0.975)
-        self.wait_leg(page, 20, 0.5, label=label)
-        self.screenshot(page, f"{label}-leg-20.png")
+        self.set_progress(page, "#book", self.chapter_progress(self.chapter_count, 0.5))
+        self.wait_leg(page, self.chapter_count, 0.5, label=label)
+        self.screenshot(page, f"{label}-leg-{self.chapter_count:02d}.png")
 
         # reverse: the film must obey the hand backwards too
-        self.set_progress(page, "#book", 0.225)
+        self.set_progress(page, "#book", self.chapter_progress(5, 0.5))
         self.wait_leg(page, 5, 0.5, label=label)
         self.screenshot(page, f"{label}-reverse-leg-05.png")
 
@@ -820,11 +882,16 @@ class Verification:
         self.install_play_instrument(context)
         page = self.open_page(context, self.url)
         page.wait_for_selector("#book.mode-scrub")
+        self.discover_chapters(page)
         self.transport_pass(context)
 
         runway = page.locator("#book").evaluate("el => ({height: el.offsetHeight, vh: innerHeight})")
-        ratio = runway["height"] / runway["vh"]
-        self.check("rendered film runway", ratio + 0.01 >= self.minimum_runway_vh, f"{ratio:.2f}vh")
+        runway_css_vh = runway["height"] / runway["vh"] * 100
+        self.check(
+            "rendered film runway",
+            runway_css_vh + 1 >= self.minimum_runway_vh,
+            f"{runway_css_vh:.0f}vh",
+        )
 
         self.assert_mode(page, "desktop")
         self.assert_no_side_chrome(page, "desktop")
@@ -845,7 +912,7 @@ class Verification:
         self.check_chrome_fade(page, "desktop")
 
         # bilingual: the cue must re-render in Arabic with RTL direction
-        self.set_progress(page, "#book", 0.475)
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.5))
         self.wait_leg(page, 10, label="desktop")
         page.evaluate("document.querySelector('[data-lang-toggle]').click()")
         page.wait_for_function("document.documentElement.lang === 'ar' && document.documentElement.dir === 'rtl'")
@@ -869,7 +936,8 @@ class Verification:
         self.assert_zero_autoplay(page, "desktop")
         page.close()
 
-        solo = self.open_page(context, with_query(self.url, solo=2, p=0.525))
+        solo_progress = self.chapter_progress(11, 0.5)
+        solo = self.open_page(context, with_query(self.url, solo=2, p=solo_progress))
         solo.wait_for_selector("#book.mode-scrub")
         self.wait_leg(solo, 11, 0.5, tolerance=0.6, label="solo")
         visible_scenes = solo.locator("[data-scene]").evaluate_all(
@@ -896,7 +964,7 @@ class Verification:
         self.assert_mode(page, "motion-preference")
         self.check_step_response(page, "motion-preference")
         self.check_glide_to_rest(page, "motion-preference")
-        self.set_progress(page, "#book", 0.475)
+        self.set_progress(page, "#book", self.chapter_progress(10, 0.5))
         self.wait_leg(page, 10, 0.5, label="motion-preference")
         candle = page.evaluate(
             "getComputedStyle(document.querySelector('.open .candle')).animationDuration"
@@ -918,17 +986,32 @@ class Verification:
         state = image.evaluate(
             "img => ({src: img.currentSrc.split('/').slice(-3).join('/'), width: img.naturalWidth})"
         )
-        body = page.locator("body").inner_text()
+        marquee = " ".join(page.locator(".marquee").inner_text().split())
+        badge = " ".join(card.locator(".badge").inner_text().split())
+        footage = " ".join(
+            page.locator(".manifest .line")
+            .filter(has_text="The footage")
+            .locator(".v")
+            .inner_text()
+            .split()
+        )
         spec = " ".join(card.locator(".spec").inner_text().split()).casefold()
-        self.check("lobby Edition II poster", state["src"] == "disney2/posters/kf-19.jpg", state)
+        self.check("lobby Edition II poster", state["src"] == "disney2/posters/kf-100.jpg", state)
         self.check(
             "lobby Edition II truth copy",
-            "Edition II from 20 real WAN 2.7" in body and "32-shot first edition is retired" in body,
-            "20 current / 32 retired",
+            "current edition · 150 wan shots" in marquee.casefold()
+            and "100 real wan shots" in badge.casefold()
+            and "150 real wan 2.7 shots" in footage.casefold()
+            and "100-shot storybook chain" in footage.casefold(),
+            {"marquee": marquee, "badge": badge, "footage": footage},
         )
         self.check(
-            "lobby card names the scrub, not a master button",
-            "scroll-scrubbed" in spec and "master cut" not in spec,
+            "lobby card names scrub and open-circle ending",
+            "100 real shots" in spec
+            and "scroll-scrubbed" in spec
+            and "8:20" in spec
+            and "open-circle ending" in spec
+            and "live code" not in spec,
             spec,
         )
         card.scroll_into_view_if_needed()
@@ -979,6 +1062,8 @@ class Verification:
             "verified_at_utc": datetime.now(timezone.utc).isoformat(),
             "viewport_desktop": [1440, 900],
             "viewport_phone": [390, 844],
+            "chapter_count": self.chapter_count,
+            "minimum_runway_vh": self.minimum_runway_vh,
             "checks": self.checks,
             "failures": self.failures,
             "console_errors": self.console_errors,
@@ -999,7 +1084,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("url")
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--minimum-runway-vh", type=float, default=19.0)
+    parser.add_argument("--minimum-runway-vh", type=float, default=9100.0)
     args = parser.parse_args()
 
     verification = Verification(args.url, args.output_dir.resolve(), args.minimum_runway_vh)
