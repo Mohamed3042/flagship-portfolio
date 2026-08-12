@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Final rendered-browser gate for the ready Cake Studio v1.7.1 bookends.
+"""Final rendered-browser gate for the ready Cake Studio v1.7.2 bookends.
 
 Run behind ``scripts/serve-static.mjs`` via the webapp-testing skill's
 ``with_server.py`` helper.  This verifier is intentionally separate from the
@@ -7,9 +7,10 @@ pending-shell gate: it fails closed until the canonical manifest is
 ``ready:true`` and the page points at its final cache key.
 
 The full desktop motion pass retains the fifteen-clip canvas proof. Phone
-motion proves the two persistent direct-video masters, their rendered pixels,
-logical samples, endpoint anchors, URL isolation, and no-poster reentry.
-Desktop and phone reduced-motion contexts must request zero v1.7 MP4 media.
+motion proves the two persistent direct-video masters, decoded scrub atlases,
+terminal landing stills, rendered pixels, logical samples, endpoint anchors,
+URL isolation, and no-poster reentry. Desktop and phone reduced-motion
+contexts must request zero v1.7 MP4, atlas, or terminal media.
 """
 
 from __future__ import annotations
@@ -44,26 +45,62 @@ INTRO_IDS = [f"I{index:02d}" for index in range(1, 11)]
 OUTRO_IDS = [f"O{index:02d}" for index in range(1, 6)]
 EXPECTED_IDS = {"intro": INTRO_IDS, "outro": OUTRO_IDS}
 EXPECTED_CLIP_IDS = INTRO_IDS + OUTRO_IDS
-EXPECTED_FINAL_MANIFEST = "cake-studio/v17/manifest.json?v=1.7.1-phone-final"
+EXPECTED_VERSION = "1.7.2"
+EXPECTED_FINAL_MANIFEST = "cake-studio/v17/manifest.json?v=1.7.2-phone-final"
 V17_CLIP_MARKER = "/cake-studio/v17/clips/"
 PHONE_MASTER_FILES = {
-    "intro": "CST17-INTRO-PHONE-v171.mp4",
-    "outro": "CST17-OUTRO-PHONE-v171.mp4",
+    "intro": "CST17-INTRO-PHONE-v172.mp4",
+    "outro": "CST17-OUTRO-PHONE-v172.mp4",
 }
 PHONE_MASTER_BYTES = {
-    "intro": 8_739_907,
-    "outro": 4_176_988,
+    "intro": 5_091_536,
+    "outro": 2_479_879,
 }
 PHONE_MASTER_SHA256 = {
-    "intro": "97144d9a333d3de863f8781ef9693545fde06bcaac93f721e0701526bd7cb080",
-    "outro": "84c99da4f77ad2f203ff1783a5dc3aadfb03a342d4d70153f2f1c15e2d6a7434",
+    "intro": "6c735d09ccd30cf70ff031ddbef7060ede653bfb680d11b78042d19188ad5670",
+    "outro": "65e51883d99862fd86ca159bda4fd1c7bdd0f394734be422cb650516f31dca15",
 }
-PHONE_WIDTH = 854
-PHONE_HEIGHT = 480
-PHONE_FPS = 30
-PHONE_BEAT_FRAMES = 136
-PHONE_FINAL_TAIL_EXTRA_FRAMES = 14
-PHONE_KEYFRAME_INTERVAL = 15
+PHONE_SCRUB_FILES = {
+    "intro": "CST17-INTRO-PHONE-SCRUB-v172.webp",
+    "outro": "CST17-OUTRO-PHONE-SCRUB-v172.webp",
+}
+PHONE_SCRUB_BYTES = {"intro": 326_692, "outro": 179_822}
+PHONE_SCRUB_SHA256 = {
+    "intro": "1e94474cee9abdd7e0af7ea7679d4b004cf5d3313287c06c358f4368e3c1f1c5",
+    "outro": "5717337b6e0674f08f99a945fc4aa2dee69f2ab09380bdd04c2da6218a0b9c2c",
+}
+PHONE_SCRUB_FRAMES = {
+    "intro": [
+        0, 22, 44, 66, 88, 110, 133, 155, 177, 199, 221, 243, 265, 287,
+        309, 331, 354, 376, 398, 420, 442, 464, 486, 508, 530, 552, 575,
+        597, 619, 641, 663, 685,
+    ],
+    "outro": [
+        0, 23, 46, 69, 92, 115, 138, 161, 184, 207, 230, 253, 276, 299,
+        322, 345,
+    ],
+}
+PHONE_TERMINAL_FILES = {
+    "intro": "CST17-INTRO-PHONE-TERMINAL-v172.webp",
+    "outro": "CST17-OUTRO-PHONE-TERMINAL-v172.webp",
+}
+PHONE_TERMINAL_BYTES = {"intro": 106_416, "outro": 91_242}
+PHONE_TERMINAL_SHA256 = {
+    "intro": "513bcc97d522d84cb0ead674be5aa59b8b04d8cbb62527c1e63a4d9afe1fc4ee",
+    "outro": "df40c40bbaf66b867bcdb4ffc95d095f1b7d5a97f7815498f2f122ee380037eb",
+}
+PHONE_AUX_FILES = set(PHONE_SCRUB_FILES.values()) | set(PHONE_TERMINAL_FILES.values())
+PHONE_WIDTH = 640
+PHONE_HEIGHT = 360
+PHONE_FPS = 15
+PHONE_BEAT_FRAMES = 68
+PHONE_FINAL_TAIL_EXTRA_FRAMES = 7
+PHONE_TERMINAL_FRAME_OFFSET = 2
+PHONE_KEYFRAME_INTERVAL = 8
+PHONE_SCRUB_TILE_WIDTH = 384
+PHONE_SCRUB_TILE_HEIGHT = 216
+PHONE_SCRUB_QUALITY = 85
+PHONE_TERMINAL_QUALITY = 100
 PHONE_DISPLAY_WIDTH = 390
 PHONE_DISPLAY_HEIGHT = 219
 PROBE_WIDTH = 320
@@ -89,10 +126,26 @@ DETERMINISTIC_MAX_MAE = 0.35
 # the two rasterizers as bit-equivalent.
 PHONE_RENDER_MIN_SSIM = 0.800
 PHONE_RENDER_MAX_MAE = 7.5
-PHONE_ANCHOR_MIN_SSIM = 0.970
-PHONE_ANCHOR_MAX_MAE = 7.0
-PHONE_JOIN_MIN_SSIM = 0.984
-PHONE_JOIN_MAX_MAE = 2.4
+# Exact frame-0 rVFC and terminal-landing identity are checked independently.
+# Focused Chromium compositor/readback measurements of those correct surfaces
+# bottomed at .960219 SSIM / 3.097 MAE against the legacy 1280 endpoint stills,
+# while the deliberately opposite endpoint measured about .17-.19 / 46-48.
+# Grade the intended visual match and require that large wrong-frame separation;
+# the MAE ceiling is tighter than the prior 7.0 allowance.
+PHONE_ANCHOR_MIN_SSIM = 0.950
+PHONE_ANCHOR_MAX_MAE = 4.0
+PHONE_ANCHOR_MIN_SSIM_MARGIN = 0.50
+PHONE_ANCHOR_MIN_MAE_MARGIN = 20.0
+# The same terminal WebP decoded through an <img> versus createImageBitmap has
+# a small Chromium colour-management delta (.998006 SSIM / .661 MAE measured).
+PHONE_TERMINAL_IDENTITY_MIN_SSIM = 0.997
+PHONE_TERMINAL_IDENTITY_MAX_MAE = 1.0
+# Accepted CRF28 v1.7.2 browser-decoded joins measured a .982033 SSIM floor
+# and 2.464 MAE ceiling. Keep a narrow truthful allowance while the deliberate
+# wrong-frame sabotage remains far outside either boundary.
+PHONE_JOIN_MIN_SSIM = 0.982
+PHONE_JOIN_MAX_MAE = 2.5
+PHONE_PRESENTATION_TOLERANCE = 1 / PHONE_FPS + .002
 
 SABOTAGE_FREEZE = "freeze-draw"
 SABOTAGE_ENDPOINT = "wrong-endpoint"
@@ -204,10 +257,95 @@ def clip_progress(index: int, count: int, fraction: float) -> float:
     return (index + fraction) / count
 
 
+def phone_terminal_target(duration: float) -> float:
+    """Visually exact I-frame with a bounded two-frame-duration EOF margin."""
+    return duration - PHONE_TERMINAL_FRAME_OFFSET / PHONE_FPS
+
+
+def phone_progress_target(duration: float, progress: float) -> float:
+    if progress < 0 or progress > 1:
+        raise ValueError(f"phone progress {progress} outside 0..1")
+    return min(phone_terminal_target(duration), progress * duration)
+
+
+def expected_phone_scrub_contract(track: str) -> dict[str, Any]:
+    frames = PHONE_SCRUB_FRAMES[track]
+    rows = 4 if track == "intro" else 2
+    return {
+        "src": f"cake-studio/v17/clips/{PHONE_SCRUB_FILES[track]}",
+        "bytes": PHONE_SCRUB_BYTES[track],
+        "sha256": PHONE_SCRUB_SHA256[track],
+        "width": 8 * PHONE_SCRUB_TILE_WIDTH,
+        "height": rows * PHONE_SCRUB_TILE_HEIGHT,
+        "tileWidth": PHONE_SCRUB_TILE_WIDTH,
+        "tileHeight": PHONE_SCRUB_TILE_HEIGHT,
+        "quality": PHONE_SCRUB_QUALITY,
+        "columns": 8,
+        "rows": rows,
+        "samples": len(frames),
+        "frames": frames,
+    }
+
+
+def expected_phone_terminal_contract(track: str) -> dict[str, Any]:
+    frame = 685 if track == "intro" else 345
+    return {
+        "src": f"cake-studio/v17/clips/{PHONE_TERMINAL_FILES[track]}",
+        "bytes": PHONE_TERMINAL_BYTES[track],
+        "sha256": PHONE_TERMINAL_SHA256[track],
+        "width": PHONE_WIDTH,
+        "height": PHONE_HEIGHT,
+        "quality": PHONE_TERMINAL_QUALITY,
+        "frame": frame,
+        "time": round(frame / PHONE_FPS, 6),
+    }
+
+
+def phone_join_accepted(ssim: float, mae: float) -> bool:
+    return ssim >= PHONE_JOIN_MIN_SSIM and mae <= PHONE_JOIN_MAX_MAE
+
+
+def phone_anchor_accepted(
+    correct_ssim: float,
+    correct_mae: float,
+    wrong_ssim: float,
+    wrong_mae: float,
+) -> bool:
+    """Accept a compositor anchor only when the opposite endpoint is far worse."""
+    return (
+        correct_ssim >= PHONE_ANCHOR_MIN_SSIM
+        and correct_mae <= PHONE_ANCHOR_MAX_MAE
+        and correct_ssim - wrong_ssim >= PHONE_ANCHOR_MIN_SSIM_MARGIN
+        and wrong_mae - correct_mae >= PHONE_ANCHOR_MIN_MAE_MARGIN
+    )
+
+
+def phone_presentation_matches(media_time: float, target_time: float) -> bool:
+    """Accept the decoded 15 fps frame containing an arbitrary seek target."""
+    return abs(media_time - target_time) <= PHONE_PRESENTATION_TOLERANCE
+
+
 def expected_joins() -> list[tuple[str, str]]:
     joins = [(f"I{index:02d}", f"I{index + 1:02d}") for index in range(1, 10)]
     joins.extend((f"O{index:02d}", f"O{index + 1:02d}") for index in range(1, 5))
     return joins
+
+
+def phone_transport_response_kind(response: dict[str, Any]) -> str | None:
+    """Classify the two intentional v1.7.2 phone delivery modes."""
+    content_type = str(response.get("contentType", "")).lower()
+    if not content_type.startswith("video/mp4"):
+        return None
+    if (
+        response.get("status") == 206
+        and str(response.get("range", "")).lower().startswith("bytes=")
+        and str(response.get("acceptRanges", "")).lower() == "bytes"
+        and str(response.get("contentRange", "")).lower().startswith("bytes ")
+    ):
+        return "range"
+    if response.get("status") == 200 and not response.get("range"):
+        return "full-warm"
+    return None
 
 
 def expected_cancellation_reason(url: str, failure: str) -> str | None:
@@ -291,6 +429,8 @@ class Verification:
             "manifest_requests": [],
             "media_requests": [],
             "media_responses": [],
+            "phone_asset_requests": [],
+            "phone_asset_responses": [],
             "request_failures": [],
             "expected_cancellations": [],
             "http_errors": [],
@@ -318,6 +458,8 @@ class Verification:
                 events["media_requests"].append(
                     {"url": url, "range": headers.get("range", "")}
                 )
+            if Path(urlsplit(url).path).name in PHONE_AUX_FILES:
+                events["phone_asset_requests"].append({"url": url})
 
         def on_response(response: Any) -> None:
             url = response.url
@@ -334,6 +476,16 @@ class Verification:
                         "acceptRanges": headers.get("accept-ranges", ""),
                         "contentRange": headers.get("content-range", ""),
                         "contentType": headers.get("content-type", ""),
+                    }
+                )
+            if Path(urlsplit(url).path).name in PHONE_AUX_FILES:
+                headers = {key.lower(): value for key, value in response.headers.items()}
+                events["phone_asset_responses"].append(
+                    {
+                        "url": url,
+                        "status": response.status,
+                        "contentType": headers.get("content-type", ""),
+                        "contentLength": headers.get("content-length", ""),
                     }
                 )
             if response.status >= 400:
@@ -372,7 +524,9 @@ class Verification:
               try {{ localStorage.removeItem('mm-lang'); }} catch {{}}
               window.__cakeV17PlayAttempts = [];
               window.__cakeV17DrawAttempts = 0;
+              window.__cakeV17AtlasDrawAttempts = 0;
               window.__cakeV17FrozenDraws = 0;
+              window.__cakeV17FrozenAtlasDraws = 0;
               const originalPlay = HTMLMediaElement.prototype.play;
               HTMLMediaElement.prototype.play = function(...args) {{
                 if (this.closest?.('[data-bookend-sequence]')) {{
@@ -385,6 +539,13 @@ class Verification:
               }};
               const originalDraw = CanvasRenderingContext2D.prototype.drawImage;
               CanvasRenderingContext2D.prototype.drawImage = function(...args) {{
+                if (this.canvas?.matches?.('[data-phone-scrub-atlas]')) {{
+                  window.__cakeV17AtlasDrawAttempts += 1;
+                  if ({str(freeze).lower()}) {{
+                    window.__cakeV17FrozenAtlasDraws += 1;
+                    return;
+                  }}
+                }}
                 if (this.canvas?.matches?.('[data-bookend-canvas]')) {{
                   window.__cakeV17DrawAttempts += 1;
                   if ({str(freeze).lower()}) {{
@@ -401,7 +562,10 @@ class Verification:
         return context
 
     def install_endpoint_sabotage(self, context: BrowserContext) -> None:
-        pattern = "**/CST17-I01-edge-reveals-sheet.webp*"
+        # Replace the actual intro frame-0 anchor so the phone rVFC identity and
+        # opposite-endpoint separation gate are exercised, not only a desktop
+        # intermediate join.
+        pattern = "**/CST17-I00-edge-in-darkness.webp*"
 
         def replace_endpoint(route: Any) -> None:
             wrong_url = urljoin(
@@ -476,13 +640,13 @@ class Verification:
             kind="readiness",
         )
         runtime_ready = (
-            state["bodyVersion"] == "1.7.1"
-            and state["runtimeVersion"] == "1.7.1"
+            state["bodyVersion"] == EXPECTED_VERSION
+            and state["runtimeVersion"] == EXPECTED_VERSION
             and state["runtimeState"] == "ready"
             and state["manifestReady"] is True
             and state["tracks"] == ["intro", "outro"]
             and state["manifest"] is not None
-            and state["manifest"].get("version") == "1.7.1"
+            and state["manifest"].get("version") == EXPECTED_VERSION
             and state["manifest"].get("ready") is True
             and (state["manifest"].get("delivery") or {}).get("phoneMaster")
             == {
@@ -493,9 +657,24 @@ class Verification:
                 "fps": PHONE_FPS,
                 "beatFrames": PHONE_BEAT_FRAMES,
                 "finalTailExtraFrames": PHONE_FINAL_TAIL_EXTRA_FRAMES,
+                "terminalFrameOffset": PHONE_TERMINAL_FRAME_OFFSET,
                 "keyframeInterval": PHONE_KEYFRAME_INTERVAL,
                 "silent": True,
                 "faststart": True,
+            }
+            and (state["manifest"].get("delivery") or {}).get("phoneScrubAtlas")
+            == {
+                "mimeType": "image/webp",
+                "tileWidth": PHONE_SCRUB_TILE_WIDTH,
+                "tileHeight": PHONE_SCRUB_TILE_HEIGHT,
+                "quality": PHONE_SCRUB_QUALITY,
+            }
+            and (state["manifest"].get("delivery") or {}).get("phoneTerminalStill")
+            == {
+                "mimeType": "image/webp",
+                "width": PHONE_WIDTH,
+                "height": PHONE_HEIGHT,
+                "quality": PHONE_TERMINAL_QUALITY,
             }
         )
         self.check(
@@ -545,8 +724,13 @@ class Verification:
                 and master.get("height") == PHONE_HEIGHT
                 and master.get("fps") == PHONE_FPS
                 and master.get("beatFrames") == PHONE_BEAT_FRAMES
+                and master.get("finalTailExtraFrames") == PHONE_FINAL_TAIL_EXTRA_FRAMES
+                and master.get("terminalFrameOffset") == PHONE_TERMINAL_FRAME_OFFSET
+                and master.get("keyframeInterval") == PHONE_KEYFRAME_INTERVAL
                 and master.get("frames") == expected_frames
                 and abs(float(master.get("duration", -1)) - expected_duration) <= .001
+                and master.get("scrubAtlas") == expected_phone_scrub_contract(track)
+                and master.get("terminalStill") == expected_phone_terminal_contract(track)
             )
             phone_mapping_ok = phone_mapping_ok and valid
             phone_mapping[track] = master
@@ -852,7 +1036,8 @@ class Verification:
         expected_source = PHONE_MASTER_FILES[track]
         assert self.manifest is not None
         duration = float(self.manifest["tracks"][track]["phoneMaster"]["duration"])
-        expected_target = min(duration - 1 / PHONE_FPS, progress * duration)
+        expected_target = phone_progress_target(duration, progress)
+        terminal_surface = progress >= .999
         selector = f'[data-cake-bookend="{track}"]'
         presentation = page.evaluate(
             """track => {
@@ -883,12 +1068,13 @@ class Verification:
         self.set_progress(page, selector, progress)
         try:
             page.wait_for_function(
-                """({selector, clip, source, expectedTarget}) => {
+                """({selector, clip, source, expectedTarget, terminalTarget}) => {
                   const scene = document.querySelector(selector);
                   const unit = window.__cakeStudioBookends?.units?.find(
                     item => item.trackName === scene?.dataset.bookendTrack
                   );
                   const video = unit?.phoneSlot?.video;
+                  const landing = unit?.phoneLanding;
                   const target = Number.parseFloat(scene?.dataset.sequenceTargetTime || '-1');
                   const painted = Number.parseFloat(scene?.dataset.sequenceTime || '-9');
                   const actualProgress = Number.parseFloat(
@@ -899,6 +1085,21 @@ class Verification:
                     || (unit?.trackName === 'outro'
                       && unit?.phoneSlot?.sourceOverride?.startsWith('blob:')
                       && video?.currentSrc.startsWith('blob:'));
+                  const terminalSurface = expectedTarget >= terminalTarget - .002;
+                  const surfaceOk = terminalSurface
+                    ? unit?.phoneLandingReady === true
+                      && unit?.phoneLandingVisible === true
+                      && landing?.complete
+                      && landing.naturalWidth === 640
+                      && landing.naturalHeight === 360
+                      && landing.dataset.visible === 'true'
+                      && scene.classList.contains('sequence-terminal-landing')
+                      && Math.abs(painted - terminalTarget) <= .002
+                    : unit?.phoneLandingVisible !== true
+                      && unit?.phoneAtlasVisible !== true
+                      && !video?.seeking
+                      && Math.abs(video.currentTime - target) <= .05
+                      && Math.abs(painted - target) <= .05;
                   return unit?.phoneMode === true
                     && unit.slots.length === 0
                     && scene?.dataset.sequenceTransport === 'phone-master'
@@ -907,20 +1108,19 @@ class Verification:
                     && scene.dataset.sequenceClip === clip
                     && scene.classList.contains('sequence-painted')
                     && video?.readyState >= 2
-                    && !video.seeking
                     && video.paused
                     && unit.phoneMaster.src.endsWith(source)
                     && sourceOk
                     && Math.abs(target - expectedTarget) <= .02
-                    && Math.abs(target - Math.min(duration - 1 / 30, actualProgress * duration)) <= .002
-                    && Math.abs(video.currentTime - target) <= .05
-                    && Math.abs(painted - target) <= .05;
+                    && Math.abs(target - Math.min(terminalTarget, actualProgress * duration)) <= .002
+                    && surfaceOk;
                 }""",
                 arg={
                     "selector": selector,
                     "clip": expected_clip,
                     "source": expected_source,
                     "expectedTarget": expected_target,
+                    "terminalTarget": phone_terminal_target(duration),
                 },
                 timeout=30_000,
             )
@@ -977,19 +1177,54 @@ class Verification:
                 f"phone {track} {expected_clip} at {progress:.6f} did not settle: "
                 + json.dumps(detail, ensure_ascii=False, sort_keys=True)
             )
-        if abs(float(presentation["currentTime"]) - expected_target) >= .009:
-            page.wait_for_function(
-                """({track, before}) => {
-                  const unit = window.__cakeStudioBookends.units.find(
-                    item => item.trackName === track
-                  );
-                  const watch = window.__cakeV17PresentedFrames[track];
-                  return watch.count > before
-                    && Math.abs(watch.mediaTime - unit.phoneSlot.video.currentTime) <= .05;
-                }""",
-                arg={"track": track, "before": presentation["count"]},
-                timeout=10_000,
-            )
+        if (
+            not terminal_surface
+            and abs(float(presentation["currentTime"]) - expected_target) >= .009
+        ):
+            try:
+                page.wait_for_function(
+                    """({track, before, tolerance}) => {
+                      const unit = window.__cakeStudioBookends.units.find(
+                        item => item.trackName === track
+                      );
+                      const watch = window.__cakeV17PresentedFrames[track];
+                      return watch.count > before
+                        && Math.abs(
+                          watch.mediaTime - unit.phoneSlot.video.currentTime
+                        ) <= tolerance;
+                    }""",
+                    arg={
+                        "track": track,
+                        "before": presentation["count"],
+                        "tolerance": PHONE_PRESENTATION_TOLERANCE,
+                    },
+                    timeout=10_000,
+                )
+            except TimeoutError:
+                detail = page.evaluate(
+                    """track => {
+                      const unit = window.__cakeStudioBookends.units.find(
+                        item => item.trackName === track
+                      );
+                      const watch = window.__cakeV17PresentedFrames?.[track];
+                      const video = unit?.phoneSlot?.video;
+                      return {
+                        watchCount: watch?.count ?? -1,
+                        watchMediaTime: watch?.mediaTime ?? -1,
+                        currentTime: video?.currentTime ?? -1,
+                        readyState: video?.readyState ?? -1,
+                        seeking: video?.seeking,
+                        slotTarget: unit?.phoneSlot?.target ?? -1,
+                        lastPainted: unit?.phoneSlot?.lastPainted ?? -1,
+                      };
+                    }""",
+                    track,
+                )
+                raise RuntimeError(
+                    f"phone {track} {expected_clip} produced no matching new "
+                    f"{PHONE_FPS} fps presentation: "
+                    + json.dumps(detail, ensure_ascii=False, sort_keys=True)
+                )
         page.wait_for_timeout(35)
         return self.capture_phone_bookend(page, track)
 
@@ -1004,23 +1239,41 @@ class Verification:
               const video = unit.phoneSlot.video;
               const canvas = unit.canvas;
               const poster = unit.poster;
+              const atlas = unit.phoneAtlasCanvas;
+              const landing = unit.phoneLanding;
+              const presented = window.__cakeV17PresentedFrames?.[unit.trackName];
               const aperture = scene.querySelector('.bookend-aperture');
               const videoStyle = getComputedStyle(video);
               const canvasStyle = getComputedStyle(canvas);
               const posterStyle = getComputedStyle(poster);
+              const atlasStyle = getComputedStyle(atlas);
+              const landingStyle = getComputedStyle(landing);
               const apertureRect = aperture.getBoundingClientRect();
               const videoRect = video.getBoundingClientRect();
+              const atlasRect = atlas.getBoundingClientRect();
+              const landingRect = landing.getBoundingClientRect();
+              const surfaceKind = unit.phoneLandingVisible
+                ? 'terminal-landing'
+                : unit.phoneAtlasVisible ? 'scrub-atlas' : 'video';
+              const surface = surfaceKind === 'terminal-landing'
+                ? landing : surfaceKind === 'scrub-atlas' ? atlas : video;
+              const sourceWidth = surfaceKind === 'terminal-landing'
+                ? landing.naturalWidth
+                : surfaceKind === 'scrub-atlas' ? atlas.width : video.videoWidth;
+              const sourceHeight = surfaceKind === 'terminal-landing'
+                ? landing.naturalHeight
+                : surfaceKind === 'scrub-atlas' ? atlas.height : video.videoHeight;
               const probe = document.createElement('canvas');
               probe.width = {PROBE_WIDTH};
               probe.height = {PROBE_HEIGHT};
               probe.getContext('2d', {{alpha: false}}).drawImage(
-                video, 0, 0, probe.width, probe.height
+                surface, 0, 0, probe.width, probe.height
               );
               const joinProbe = document.createElement('canvas');
-              joinProbe.width = video.videoWidth;
-              joinProbe.height = video.videoHeight;
+              joinProbe.width = sourceWidth;
+              joinProbe.height = sourceHeight;
               joinProbe.getContext('2d', {{alpha: false}}).drawImage(
-                video, 0, 0, joinProbe.width, joinProbe.height
+                surface, 0, 0, joinProbe.width, joinProbe.height
               );
               return {{
                 track: unit.trackName,
@@ -1042,7 +1295,10 @@ class Verification:
                 sourceMode: unit.phoneSlot.sourceOverride ? 'blob' : 'network',
                 sourceOverride: unit.phoneSlot.sourceOverride,
                 pendingSource: unit.phoneSlot.pendingSource,
-                videoData: probe.toDataURL('image/png'),
+                presentedTime: presented?.mediaTime ?? -1,
+                presentedCount: presented?.count ?? 0,
+                surfaceKind,
+                surfaceData: probe.toDataURL('image/png'),
                 joinVideoData: joinProbe.toDataURL('image/png'),
                 phone: {{
                   width: video.videoWidth,
@@ -1071,6 +1327,39 @@ class Verification:
                   opacity: Number.parseFloat(canvasStyle.opacity),
                   fit: canvasStyle.objectFit,
                 }},
+                atlas: {{
+                  visible: unit.phoneAtlasVisible,
+                  ready: unit.phoneAtlasReady,
+                  tile: unit.phoneAtlasTile,
+                  frame: Number(atlas.dataset.frame || -1),
+                  time: Number(atlas.dataset.time || -1),
+                  width: atlas.width,
+                  height: atlas.height,
+                  display: atlasStyle.display,
+                  opacity: Number.parseFloat(atlasStyle.opacity),
+                  fit: atlasStyle.objectFit,
+                  rect: {{
+                    left: atlasRect.left, top: atlasRect.top,
+                    right: atlasRect.right, bottom: atlasRect.bottom,
+                    width: atlasRect.width, height: atlasRect.height,
+                  }},
+                }},
+                landing: {{
+                  visible: unit.phoneLandingVisible,
+                  ready: unit.phoneLandingReady,
+                  src: landing.getAttribute('src') || '',
+                  complete: landing.complete,
+                  width: landing.naturalWidth,
+                  height: landing.naturalHeight,
+                  display: landingStyle.display,
+                  opacity: Number.parseFloat(landingStyle.opacity),
+                  fit: landingStyle.objectFit,
+                  rect: {{
+                    left: landingRect.left, top: landingRect.top,
+                    right: landingRect.right, bottom: landingRect.bottom,
+                    width: landingRect.width, height: landingRect.height,
+                  }},
+                }},
                 poster: {{
                   src: poster.getAttribute('src') || '',
                   width: poster.naturalWidth,
@@ -1086,29 +1375,40 @@ class Verification:
               }};
             }}"""
         )
-        video_locator = page.locator(f'{selector} [data-bookend-phone-video]')
-        video_bytes = data_url_bytes(capture.pop("videoData"))
+        surface_selector = {
+            "video": "[data-bookend-phone-video]",
+            "scrub-atlas": "[data-phone-scrub-atlas]",
+            "terminal-landing": "[data-phone-terminal-landing]",
+        }[capture["surfaceKind"]]
+        surface_locator = page.locator(f"{selector} {surface_selector}")
+        surface_bytes = data_url_bytes(capture.pop("surfaceData"))
         join_bytes = data_url_bytes(capture.pop("joinVideoData"))
         attempts: list[dict[str, float]] = []
         best: tuple[float, bytes, bytes] | None = None
         for attempt in range(21):
             if attempt:
                 page.wait_for_timeout(50)
-            rendered = video_locator.screenshot(animations="allow")
+            rendered = surface_locator.screenshot(animations="allow")
             rendered_frame = decode_png(rendered)
             render_height, render_width = rendered_frame.shape[:2]
             render_reference = data_url_bytes(
-                video_locator.evaluate(
-                    """(video, size) => {
+                surface_locator.evaluate(
+                    """(surface, size) => {
                       const probe = document.createElement('canvas');
                       probe.width = size.width;
                       probe.height = size.height;
                       const context = probe.getContext('2d', {alpha: false});
-                      context.fillStyle = getComputedStyle(video).backgroundColor;
+                      context.fillStyle = getComputedStyle(surface).backgroundColor;
                       context.fillRect(0, 0, probe.width, probe.height);
-                      const rect = video.getBoundingClientRect();
-                      const sourceWidth = video.videoWidth;
-                      const sourceHeight = video.videoHeight;
+                      const rect = surface.getBoundingClientRect();
+                      const sourceWidth = surface instanceof HTMLVideoElement
+                        ? surface.videoWidth
+                        : surface instanceof HTMLImageElement
+                          ? surface.naturalWidth : surface.width;
+                      const sourceHeight = surface instanceof HTMLVideoElement
+                        ? surface.videoHeight
+                        : surface instanceof HTMLImageElement
+                          ? surface.naturalHeight : surface.height;
                       const scale = Math.min(
                         rect.width / sourceWidth,
                         rect.height / sourceHeight
@@ -1117,7 +1417,7 @@ class Verification:
                       const drawHeight = sourceHeight * scale * size.height / rect.height;
                       const x = (size.width - drawWidth) / 2;
                       const y = (size.height - drawHeight) / 2;
-                      context.drawImage(video, x, y, drawWidth, drawHeight);
+                      context.drawImage(surface, x, y, drawWidth, drawHeight);
                       return probe.toDataURL('image/png');
                     }""",
                     {"width": render_width, "height": render_height},
@@ -1133,7 +1433,9 @@ class Verification:
         assert best is not None
         capture["renderedBytes"] = best[1]
         capture["renderExpectedBytes"] = best[2]
-        capture["videoBytes"] = video_bytes
+        # Historical field name retained for report consumers; it now carries
+        # the actual visible phone surface (video, atlas tile, or landing).
+        capture["videoBytes"] = surface_bytes
         capture["joinBytes"] = join_bytes
         capture["renderAttempts"] = attempts
         return capture
@@ -1244,6 +1546,8 @@ class Verification:
     ) -> tuple[float, float]:
         phone = capture["phone"]
         canvas = capture["canvas"]
+        atlas = capture["atlas"]
+        landing = capture["landing"]
         poster = capture["poster"]
         aperture = capture["aperture"]
         assert self.manifest is not None
@@ -1270,6 +1574,31 @@ class Verification:
             capture["renderedBytes"], capture["renderExpectedBytes"]
         )
         mean, spread = frame_energy(capture["renderedBytes"])
+        terminal_surface = capture["surfaceKind"] == "terminal-landing"
+        video_surface_ok = (
+            capture["surfaceKind"] == "video"
+            and not atlas["visible"]
+            and not landing["visible"]
+            and not phone["seeking"]
+            and abs(phone["currentTime"] - capture["targetTime"]) <= .05
+            and abs(phone["rect"]["width"] - aperture["width"]) <= 1
+            and abs(phone["rect"]["height"] - aperture["height"]) <= 1
+        )
+        landing_surface_ok = (
+            terminal_surface
+            and landing["visible"]
+            and landing["ready"]
+            and landing["complete"]
+            and landing["src"].endswith(PHONE_TERMINAL_FILES[capture["track"]])
+            and landing["width"] == PHONE_WIDTH
+            and landing["height"] == PHONE_HEIGHT
+            and landing["display"] != "none"
+            and landing["opacity"] >= .99
+            and landing["fit"] == "contain"
+            and abs(landing["rect"]["width"] - aperture["width"]) <= 1
+            and abs(landing["rect"]["height"] - aperture["height"]) <= 1
+            and not atlas["visible"]
+        )
         visible = (
             capture["transport"] == "phone-master"
             and capture["mode"] == "motion"
@@ -1283,12 +1612,10 @@ class Verification:
             and phone["height"] == PHONE_HEIGHT
             and abs(phone["duration"] - expected_duration) <= .08
             and phone["paused"]
-            and not phone["seeking"]
             and phone["readyState"] >= 2
             and phone["seekable"] >= 1
             and capture["canonicalSource"].endswith(expected_source)
             and (network_source or blob_source)
-            and abs(phone["currentTime"] - capture["targetTime"]) <= .05
             and abs(capture["paintedTime"] - capture["targetTime"]) <= .05
             and 0 <= capture["lag"] <= .05
             and canvas["opacity"] <= .01
@@ -1302,12 +1629,11 @@ class Verification:
             and aperture["top"] >= -1
             and aperture["bottom"] <= profile.height + 1
             and abs(aperture["width"] / aperture["height"] - 16 / 9) <= .01
-            and abs(phone["rect"]["width"] - aperture["width"]) <= 1
-            and abs(phone["rect"]["height"] - aperture["height"]) <= 1
+            and (video_surface_ok or landing_surface_ok)
             and (expected_target is None or abs(capture["targetTime"] - expected_target) <= .02)
         )
         self.check(
-            f"{label} visible direct phone master",
+            f"{label} visible phone master surface",
             visible and spread >= 2.0,
             {
                 "track": capture["track"],
@@ -1320,6 +1646,9 @@ class Verification:
                 "lag": round(capture["lag"], 4),
                 "phone": phone,
                 "canvas": canvas,
+                "surfaceKind": capture["surfaceKind"],
+                "atlas": atlas,
+                "landing": landing,
                 "poster": poster,
                 "aperture": aperture,
                 "pixelMean": round(mean, 3),
@@ -1329,7 +1658,7 @@ class Verification:
             kind="render",
         )
         self.check(
-            f"{label} rendered pixels equal decoded master",
+            f"{label} rendered pixels equal decoded phone surface",
             ssim >= PHONE_RENDER_MIN_SSIM and mae <= PHONE_RENDER_MAX_MAE,
             f"SSIM={ssim:.6f} MAE={mae:.3f}",
             kind="pixel",
@@ -1350,26 +1679,38 @@ class Verification:
               const unit = window.__cakeStudioBookends.units.find(item => item.trackName === track);
               const video = scene.querySelector('[data-bookend-phone-video]');
               const poster = scene.querySelector('[data-bookend-poster]');
+              const atlas = scene.querySelector('[data-phone-scrub-atlas]');
+              const landing = scene.querySelector('[data-phone-terminal-landing]');
               const initialSrc = video.getAttribute('src') || '';
               const watch = {
                 track, initialSrc, lastSrc: initialSrc, samples: 0, visibleSamples: 0,
-                violations: [], srcMutations: 0, visibleSrcMutations: 0,
-                offscreenSrcMutations: 0,
+                 violations: [], srcMutations: 0, visibleSrcMutations: 0,
+                 offscreenSrcMutations: 0, atlasVisibleSamples: 0,
+                 landingVisibleSamples: 0,
                 sample(reason) {
                   this.samples += 1;
                   const videoOpacity = Number.parseFloat(getComputedStyle(video).opacity || '0');
-                  const posterOpacity = Number.parseFloat(getComputedStyle(poster).opacity || '0');
+                   const posterOpacity = Number.parseFloat(getComputedStyle(poster).opacity || '0');
+                   const atlasOpacity = Number.parseFloat(getComputedStyle(atlas).opacity || '0');
+                   const landingOpacity = Number.parseFloat(getComputedStyle(landing).opacity || '0');
+                   const atlasVisible = unit.phoneAtlasVisible && atlasOpacity >= .99;
+                   const landingVisible = unit.phoneLandingVisible && landingOpacity >= .99;
                   const currentSrc = video.getAttribute('src') || '';
                   if (!unit.live) {
                     this.lastSrc = currentSrc;
                     return;
                   }
-                  this.visibleSamples += 1;
-                  if (!scene.classList.contains('sequence-painted')
-                    || videoOpacity < .99 || posterOpacity > .01) {
+                   this.visibleSamples += 1;
+                   if (atlasVisible) this.atlasVisibleSamples += 1;
+                   if (landingVisible) this.landingVisibleSamples += 1;
+                   if (!scene.classList.contains('sequence-painted')
+                     || videoOpacity < .99 || posterOpacity > .01
+                     || (unit.phoneAtlasVisible && !atlasVisible)
+                     || (unit.phoneLandingVisible && (!landingVisible || !landing.complete))) {
                     if (this.violations.length < 100) this.violations.push({
                       at: performance.now(), reason, painted: scene.classList.contains('sequence-painted'),
-                      videoOpacity, posterOpacity, currentSrc, live: unit.live,
+                       videoOpacity, posterOpacity, atlasOpacity, landingOpacity,
+                       atlasVisible, landingVisible, currentSrc, live: unit.live,
                       target: scene.dataset.sequenceTargetTime || '',
                       time: scene.dataset.sequenceTime || '',
                     });
@@ -1416,7 +1757,9 @@ class Verification:
                   visibleSamples: watch.visibleSamples,
                   srcMutations: watch.srcMutations,
                   visibleSrcMutations: watch.visibleSrcMutations,
-                  offscreenSrcMutations: watch.offscreenSrcMutations,
+                   offscreenSrcMutations: watch.offscreenSrcMutations,
+                   atlasVisibleSamples: watch.atlasVisibleSamples,
+                   landingVisibleSamples: watch.landingVisibleSamples,
                   violations: watch.violations,
                 }];
               }
@@ -1443,13 +1786,41 @@ class Verification:
                 f"phone {track} first", first, profile, expected_target=first_target
             )
             self.start_phone_visibility_watch(page, track)
+            # Force an independently witnessed frame-0 presentation. The
+            # controller's already-at-zero branch can legitimately paint the
+            # paused frame without causing a new rVFC callback.
+            first_anchor = self.capture_exact_phone_frame(page, track, 0)
             first_ssim, first_mae = similarity(
-                first["videoBytes"], endpoint_frames[clips[0]["first"]]
+                first_anchor["videoBytes"], endpoint_frames[clips[0]["first"]]
             )
+            first_wrong_ssim, first_wrong_mae = similarity(
+                first_anchor["videoBytes"], endpoint_frames[clips[-1]["last"]]
+            )
+            first_detail = {
+                "surfaceKind": first_anchor["surfaceKind"],
+                "target": first_anchor["exactTarget"],
+                "currentTime": first_anchor["phone"]["currentTime"],
+                "presentedTime": first_anchor["presentedTime"],
+                "presentedCount": first_anchor["presentedCount"],
+                "correct": {"ssim": first_ssim, "mae": first_mae},
+                "oppositeEndpoint": {
+                    "ssim": first_wrong_ssim,
+                    "mae": first_wrong_mae,
+                },
+            }
             self.check(
                 f"phone {track} first endpoint sample",
-                first_ssim >= PHONE_ANCHOR_MIN_SSIM and first_mae <= PHONE_ANCHOR_MAX_MAE,
-                f"SSIM={first_ssim:.6f} MAE={first_mae:.3f}",
+                first_anchor["surfaceKind"] == "video"
+                and phone_presentation_matches(
+                    first_anchor["presentedTime"], first_anchor["exactTarget"]
+                )
+                and phone_anchor_accepted(
+                    first_ssim,
+                    first_mae,
+                    first_wrong_ssim,
+                    first_wrong_mae,
+                ),
+                first_detail,
                 kind="anchor",
             )
 
@@ -1502,8 +1873,7 @@ class Verification:
                 }
                 self.check(
                     f"phone {join_name} decoded master join",
-                    join_ssim >= PHONE_JOIN_MIN_SSIM
-                    and join_mae <= PHONE_JOIN_MAX_MAE,
+                    phone_join_accepted(join_ssim, join_mae),
                     join_detail,
                     kind="join",
                 )
@@ -1511,7 +1881,7 @@ class Verification:
 
             last_progress = .999999
             expected_duration = master_duration
-            last_target = expected_duration - 1 / PHONE_FPS
+            last_target = phone_terminal_target(expected_duration)
             last = self.seek_phone_bookend(page, track, last_progress)
             self.check_phone_capture(
                 f"phone {track} last", last, profile, expected_target=last_target
@@ -1519,10 +1889,46 @@ class Verification:
             last_ssim, last_mae = similarity(
                 last["videoBytes"], endpoint_frames[clips[-1]["last"]]
             )
+            last_wrong_ssim, last_wrong_mae = similarity(
+                last["videoBytes"], endpoint_frames[clips[0]["first"]]
+            )
+            terminal_reference = self.fetch_endpoint(
+                page,
+                f"cake-studio/v17/clips/{PHONE_TERMINAL_FILES[track]}",
+            )
+            terminal_ssim, terminal_mae = similarity(
+                last["videoBytes"], terminal_reference
+            )
+            last_detail = {
+                "surfaceKind": last["surfaceKind"],
+                "target": last["targetTime"],
+                "painted": last["paintedTime"],
+                "presentedTime": last["presentedTime"],
+                "landing": last["landing"],
+                "terminalAsset": {"ssim": terminal_ssim, "mae": terminal_mae},
+                "correct": {"ssim": last_ssim, "mae": last_mae},
+                "oppositeEndpoint": {
+                    "ssim": last_wrong_ssim,
+                    "mae": last_wrong_mae,
+                },
+            }
             self.check(
                 f"phone {track} last endpoint sample",
-                last_ssim >= PHONE_ANCHOR_MIN_SSIM and last_mae <= PHONE_ANCHOR_MAX_MAE,
-                f"SSIM={last_ssim:.6f} MAE={last_mae:.3f}",
+                last["surfaceKind"] == "terminal-landing"
+                and last["landing"]["visible"]
+                and last["landing"]["ready"]
+                and last["landing"]["complete"]
+                and last["landing"]["width"] == PHONE_WIDTH
+                and last["landing"]["height"] == PHONE_HEIGHT
+                and terminal_ssim >= PHONE_TERMINAL_IDENTITY_MIN_SSIM
+                and terminal_mae <= PHONE_TERMINAL_IDENTITY_MAX_MAE
+                and phone_anchor_accepted(
+                    last_ssim,
+                    last_mae,
+                    last_wrong_ssim,
+                    last_wrong_mae,
+                ),
+                last_detail,
                 kind="anchor",
             )
             page.locator(f'[data-cake-bookend="{track}"]').evaluate(
@@ -1703,8 +2109,8 @@ class Verification:
             sample_report[track] = {
                 "samples": track_samples,
                 "joins": track_joins,
-                "first": {"ssim": first_ssim, "mae": first_mae},
-                "last": {"ssim": last_ssim, "mae": last_mae},
+                "first": first_detail,
+                "last": last_detail,
             }
 
         # Return to an already armed intro master. Its URL and last decoded
@@ -2192,9 +2598,13 @@ class Verification:
             kind="network",
         )
         self.check(
-            "desktop uses legacy clips and no phone masters",
-            not (requested_names & set(PHONE_MASTER_FILES.values())),
-            sorted(requested_names),
+            "desktop uses legacy clips and no phone delivery assets",
+            not (requested_names & set(PHONE_MASTER_FILES.values()))
+            and not events["phone_asset_requests"],
+            {
+                "media": sorted(requested_names),
+                "phoneAssets": events["phone_asset_requests"],
+            },
             kind="network",
         )
         self.check(
@@ -2235,6 +2645,10 @@ class Verification:
             without_fragment(urljoin(self.url, f"cake-studio/v17/clips/{filename}"))
             for filename in PHONE_MASTER_FILES.values()
         }
+        expected_asset_urls = {
+            without_fragment(urljoin(self.url, f"cake-studio/v17/clips/{filename}"))
+            for filename in PHONE_AUX_FILES
+        }
         request_urls = {
             without_fragment(request["url"])
             for request in events["media_requests"]
@@ -2243,14 +2657,46 @@ class Verification:
             without_fragment(response["url"])
             for response in events["media_responses"]
         }
-        good_urls = {
+        range_urls = {
             without_fragment(response["url"])
             for response in events["media_responses"]
-            if response["status"] == 206
-            and response["range"].lower().startswith("bytes=")
-            and response["acceptRanges"].lower() == "bytes"
-            and response["contentRange"].lower().startswith("bytes ")
-            and response["contentType"].lower().startswith("video/mp4")
+            if phone_transport_response_kind(response) == "range"
+        }
+        full_warm_urls = {
+            without_fragment(response["url"])
+            for response in events["media_responses"]
+            if phone_transport_response_kind(response) == "full-warm"
+        }
+        invalid_transport_responses = [
+            response
+            for response in events["media_responses"]
+            if phone_transport_response_kind(response) is None
+        ]
+        intro_url = without_fragment(
+            urljoin(
+                self.url,
+                f"cake-studio/v17/clips/{PHONE_MASTER_FILES['intro']}",
+            )
+        )
+        outro_url = without_fragment(
+            urljoin(
+                self.url,
+                f"cake-studio/v17/clips/{PHONE_MASTER_FILES['outro']}",
+            )
+        )
+        asset_request_urls = {
+            without_fragment(request["url"])
+            for request in events["phone_asset_requests"]
+        }
+        asset_response_urls = {
+            without_fragment(response["url"])
+            for response in events["phone_asset_responses"]
+        }
+        good_asset_urls = {
+            without_fragment(response["url"])
+            for response in events["phone_asset_responses"]
+            if response["status"] == 200
+            and response["contentType"].lower().startswith("image/webp")
         }
         state = page.evaluate(
             """() => {
@@ -2273,7 +2719,9 @@ class Verification:
               return {
                 playAttempts: window.__cakeV17PlayAttempts || [],
                 drawAttempts: window.__cakeV17DrawAttempts || 0,
+                atlasDrawAttempts: window.__cakeV17AtlasDrawAttempts || 0,
                 frozenDraws: window.__cakeV17FrozenDraws || 0,
+                frozenAtlasDraws: window.__cakeV17FrozenAtlasDraws || 0,
                 buffers: document.querySelectorAll('.bookend-buffer').length,
                 units,
               };
@@ -2286,9 +2734,31 @@ class Verification:
             kind="network",
         )
         self.check(
-            "phone masters receive correct 206 range delivery",
-            response_urls == expected_urls and good_urls == expected_urls,
-            {"expected": sorted(expected_urls), "responded": sorted(response_urls), "good": sorted(good_urls)},
+            "phone masters use intro 206 range plus outro full warm 200",
+            response_urls == expected_urls
+            and intro_url in range_urls
+            and full_warm_urls == {outro_url}
+            and not invalid_transport_responses,
+            {
+                "expected": sorted(expected_urls),
+                "responded": sorted(response_urls),
+                "ranges206": sorted(range_urls),
+                "fullWarm200": sorted(full_warm_urls),
+                "invalid": invalid_transport_responses,
+            },
+            kind="network",
+        )
+        self.check(
+            "phone runtime requests each canonical atlas and terminal still",
+            asset_request_urls == expected_asset_urls
+            and asset_response_urls == expected_asset_urls
+            and good_asset_urls == expected_asset_urls,
+            {
+                "expected": sorted(expected_asset_urls),
+                "requested": sorted(asset_request_urls),
+                "responded": sorted(asset_response_urls),
+                "good": sorted(good_asset_urls),
+            },
             kind="network",
         )
         self.check(
@@ -2340,9 +2810,44 @@ class Verification:
             )
             hashes[track] = detail
             response.dispose()
+        asset_hashes: dict[str, Any] = {}
+        for kind, files, sizes, digests in (
+            ("scrub atlas", PHONE_SCRUB_FILES, PHONE_SCRUB_BYTES, PHONE_SCRUB_SHA256),
+            (
+                "terminal still",
+                PHONE_TERMINAL_FILES,
+                PHONE_TERMINAL_BYTES,
+                PHONE_TERMINAL_SHA256,
+            ),
+        ):
+            for track, filename in files.items():
+                url = urljoin(self.url, f"cake-studio/v17/clips/{filename}")
+                response = context.request.get(url, timeout=45_000)
+                payload = response.body()
+                headers = {key.lower(): value for key, value in response.headers.items()}
+                detail = {
+                    "url": url,
+                    "status": response.status,
+                    "contentType": headers.get("content-type", ""),
+                    "bytes": len(payload),
+                    "sha256": hashlib.sha256(payload).hexdigest(),
+                }
+                self.check(
+                    f"phone {track} exact accepted {kind} bytes",
+                    response.status == 200
+                    and detail["contentType"].lower().startswith("image/webp")
+                    and detail["bytes"] == sizes[track]
+                    and detail["sha256"] == digests[track],
+                    detail,
+                    kind="transport",
+                )
+                asset_hashes[f"{track}-{kind.replace(' ', '-')}"] = detail
+                response.dispose()
         self.check(
-            "phone runtime never calls play or canvas draw",
-            not state["playAttempts"] and state["drawAttempts"] == 0,
+            "phone runtime never calls play or legacy canvas draw",
+            not state["playAttempts"]
+            and state["drawAttempts"] == 0
+            and state["atlasDrawAttempts"] >= 2,
             state,
             kind="network",
         )
@@ -2360,7 +2865,12 @@ class Verification:
             },
             kind="network",
         )
-        return {"events": events, "state": state, "hashes": hashes}
+        return {
+            "events": events,
+            "state": state,
+            "hashes": hashes,
+            "assetHashes": asset_hashes,
+        }
 
     def language_layout_pass(
         self,
@@ -2632,6 +3142,12 @@ class Verification:
                     phoneBlobUrl: unit.phoneBlobUrl,
                     sourceOverride: unit.phoneSlot.sourceOverride,
                     pendingSource: unit.phoneSlot.pendingSource,
+                    atlasReady: unit.phoneAtlasReady,
+                    atlasLoading: unit.phoneAtlasLoading,
+                    atlasSrc: unit.phoneAtlasImage?.src || '',
+                    landingReady: unit.phoneLandingReady,
+                    landingLoading: unit.phoneLandingLoading,
+                    landingSrc: unit.phoneLanding?.getAttribute('src') || '',
                   })),
                 })"""
             )
@@ -2651,6 +3167,12 @@ class Verification:
                     and not unit["phoneBlobUrl"]
                     and not unit["sourceOverride"]
                     and not unit["pendingSource"]
+                    and not unit["atlasReady"]
+                    and not unit["atlasLoading"]
+                    and not unit["atlasSrc"]
+                    and not unit["landingReady"]
+                    and not unit["landingLoading"]
+                    and not unit["landingSrc"]
                     for unit in state["phoneState"]
                 ),
                 state,
@@ -2667,6 +3189,7 @@ class Verification:
             after = page.evaluate(
                 """() => ({
                   playAttempts: window.__cakeV17PlayAttempts || [],
+                  atlasDrawAttempts: window.__cakeV17AtlasDrawAttempts || 0,
                   slots: [...document.querySelectorAll('.bookend-buffer')].map(video => ({
                     src: video.getAttribute('src') || '',
                     currentSrc: video.currentSrc || '',
@@ -2683,13 +3206,22 @@ class Verification:
                     phoneBlobUrl: unit.phoneBlobUrl,
                     sourceOverride: unit.phoneSlot.sourceOverride,
                     pendingSource: unit.phoneSlot.pendingSource,
+                    atlasReady: unit.phoneAtlasReady,
+                    atlasLoading: unit.phoneAtlasLoading,
+                    atlasSrc: unit.phoneAtlasImage?.src || '',
+                    landingReady: unit.phoneLandingReady,
+                    landingLoading: unit.phoneLandingLoading,
+                    landingSrc: unit.phoneLanding?.getAttribute('src') || '',
                   })),
                 })"""
             )
             no_media = (
                 not events["media_requests"]
                 and not events["media_responses"]
+                and not events["phone_asset_requests"]
+                and not events["phone_asset_responses"]
                 and not after["playAttempts"]
+                and after["atlasDrawAttempts"] == 0
                 and all(not slot["src"] and not slot["currentSrc"] for slot in after["slots"])
                 and all(not video["src"] and not video["currentSrc"] for video in after["phoneVideos"])
                 and all(
@@ -2697,13 +3229,25 @@ class Verification:
                     and not unit["phoneBlobUrl"]
                     and not unit["sourceOverride"]
                     and not unit["pendingSource"]
+                    and not unit["atlasReady"]
+                    and not unit["atlasLoading"]
+                    and not unit["atlasSrc"]
+                    and not unit["landingReady"]
+                    and not unit["landingLoading"]
+                    and not unit["landingSrc"]
                     for unit in after["phoneState"]
                 )
             )
             self.check(
-                f"{profile.name} requests zero v1.7 MP4 and creates zero phone blob",
+                f"{profile.name} requests zero phone motion media and creates zero blob",
                 no_media,
-                {"requests": events["media_requests"], "responses": events["media_responses"], **after},
+                {
+                    "mp4Requests": events["media_requests"],
+                    "mp4Responses": events["media_responses"],
+                    "imageRequests": events["phone_asset_requests"],
+                    "imageResponses": events["phone_asset_responses"],
+                    **after,
+                },
                 kind="reduced",
             )
             self.check(
@@ -2762,6 +3306,20 @@ class Verification:
                 for check in self.checks
                 if check["kind"] == "pixel" and not check["pass"]
             ]
+            phone_state = (
+                self.profile_reports.get(PHONE_MOTION.name, {})
+                .get("network", {})
+                .get("state", {})
+            )
+            self.check(
+                "freeze-draw sabotage intercepted phone atlas canvas",
+                int(phone_state.get("frozenAtlasDraws", 0)) > 0,
+                {
+                    "attempts": phone_state.get("atlasDrawAttempts", 0),
+                    "frozen": phone_state.get("frozenAtlasDraws", 0),
+                },
+                kind="sabotage",
+            )
             self.check(
                 "freeze-draw sabotage tripped decoded pixel gate",
                 bool(sensitive),
@@ -2792,6 +3350,30 @@ class Verification:
             "generatedAt": datetime.now(timezone.utc).isoformat(),
             "url": self.url,
             "sabotage": self.sabotage,
+            "expectedContract": {
+                "version": EXPECTED_VERSION,
+                "manifest": EXPECTED_FINAL_MANIFEST,
+                "phoneFiles": PHONE_MASTER_FILES,
+                "phoneBytes": PHONE_MASTER_BYTES,
+                "phoneSha256": PHONE_MASTER_SHA256,
+                "phoneDelivery": {
+                    "width": PHONE_WIDTH,
+                    "height": PHONE_HEIGHT,
+                    "fps": PHONE_FPS,
+                    "beatFrames": PHONE_BEAT_FRAMES,
+                    "finalTailExtraFrames": PHONE_FINAL_TAIL_EXTRA_FRAMES,
+                    "terminalFrameOffset": PHONE_TERMINAL_FRAME_OFFSET,
+                    "keyframeInterval": PHONE_KEYFRAME_INTERVAL,
+                },
+                "terminalTargets": {
+                    "intro": phone_terminal_target(687 / PHONE_FPS),
+                    "outro": phone_terminal_target(347 / PHONE_FPS),
+                },
+                "phoneJoinThreshold": {
+                    "minSsim": PHONE_JOIN_MIN_SSIM,
+                    "maxMae": PHONE_JOIN_MAX_MAE,
+                },
+            },
             "checks": self.checks,
             "failures": self.failures,
             "profiles": self.profile_reports,
@@ -2864,28 +3446,143 @@ def self_test() -> int:
     require(clip_progress(0, 10, 0.4) == 0.04, "first clip progress")
     require(math.isclose(clip_progress(9, 10, 0.999), 0.9999), "last clip progress")
     require(without_fragment("http://x/a?b=1#c") == "http://x/a?b=1", "fragment removal")
-    require(EXPECTED_FINAL_MANIFEST.endswith("v=1.7.1-phone-final"), "v1.7.1 cache key")
-    require(set(PHONE_MASTER_FILES) == {"intro", "outro"}, "phone master tracks")
+    require(EXPECTED_VERSION == "1.7.2", "v1.7.2 version")
+    require(EXPECTED_FINAL_MANIFEST.endswith("v=1.7.2-phone-final"), "v1.7.2 cache key")
     require(
-        PHONE_MASTER_BYTES == {"intro": 8_739_907, "outro": 4_176_988},
+        PHONE_MASTER_FILES
+        == {
+            "intro": "CST17-INTRO-PHONE-v172.mp4",
+            "outro": "CST17-OUTRO-PHONE-v172.mp4",
+        },
+        "phone master filenames",
+    )
+    require(
+        PHONE_MASTER_BYTES == {"intro": 5_091_536, "outro": 2_479_879},
         "accepted phone master byte sizes",
     )
     require(
-        set(PHONE_MASTER_SHA256) == {"intro", "outro"}
-        and all(len(value) == 64 for value in PHONE_MASTER_SHA256.values())
-        and PHONE_MASTER_SHA256["intro"].startswith("97144d9a")
-        and PHONE_MASTER_SHA256["outro"].startswith("84c99da4"),
+        PHONE_MASTER_SHA256
+        == {
+            "intro": "6c735d09ccd30cf70ff031ddbef7060ede653bfb680d11b78042d19188ad5670",
+            "outro": "65e51883d99862fd86ca159bda4fd1c7bdd0f394734be422cb650516f31dca15",
+        },
         "accepted phone master hashes",
     )
     require(
-        PHONE_KEYFRAME_INTERVAL == 15
-        and PHONE_JOIN_MIN_SSIM == .984
-        and PHONE_JOIN_MAX_MAE == 2.4,
-        "accepted phone GOP and join thresholds",
+        PHONE_SCRUB_BYTES == {"intro": 326_692, "outro": 179_822}
+        and PHONE_TERMINAL_BYTES == {"intro": 106_416, "outro": 91_242}
+        and len(PHONE_AUX_FILES) == 4,
+        "accepted phone atlas and terminal sizes",
     )
     require(
-        (10 * PHONE_BEAT_FRAMES + PHONE_FINAL_TAIL_EXTRA_FRAMES) / PHONE_FPS == 45.8,
-        "intro phone duration",
+        expected_phone_scrub_contract("intro")["frames"][-1] == 685
+        and expected_phone_scrub_contract("outro")["frames"][-1] == 345
+        and expected_phone_scrub_contract("intro")["samples"] == 32
+        and expected_phone_scrub_contract("outro")["samples"] == 16,
+        "phone scrub atlas terminal tiles",
+    )
+    require(
+        expected_phone_terminal_contract("intro")["time"] == 45.666667
+        and expected_phone_terminal_contract("outro")["time"] == 23.0
+        and expected_phone_terminal_contract("intro")["quality"] == 100,
+        "phone terminal landing contract",
+    )
+    require(
+        (
+            PHONE_WIDTH,
+            PHONE_HEIGHT,
+            PHONE_FPS,
+            PHONE_BEAT_FRAMES,
+            PHONE_FINAL_TAIL_EXTRA_FRAMES,
+            PHONE_TERMINAL_FRAME_OFFSET,
+            PHONE_KEYFRAME_INTERVAL,
+        )
+        == (640, 360, 15, 68, 7, 2, 8),
+        "accepted phone delivery geometry and cadence",
+    )
+    require(
+        10 * PHONE_BEAT_FRAMES + PHONE_FINAL_TAIL_EXTRA_FRAMES == 687
+        and 5 * PHONE_BEAT_FRAMES + PHONE_FINAL_TAIL_EXTRA_FRAMES == 347,
+        "phone frame counts",
+    )
+    require(
+        math.isclose(687 / PHONE_FPS, 45.8)
+        and math.isclose(347 / PHONE_FPS, 23.133333333333333),
+        "phone durations",
+    )
+    require(
+        math.isclose(phone_terminal_target(45.8), 45.666666666666664)
+        and math.isclose(phone_terminal_target(347 / PHONE_FPS), 23.0)
+        and math.isclose(phone_progress_target(45.8, 1), 45.666666666666664),
+        "EOF-safe terminal targets",
+    )
+    require(
+        phone_join_accepted(.982033, 2.464),
+        "measured accepted CRF28 join remains green",
+    )
+    require(
+        not phone_join_accepted(.981999, 2.464)
+        and not phone_join_accepted(.982033, 2.501)
+        and not phone_join_accepted(.737486, 15.531),
+        "phone join thresholds remain fail capable",
+    )
+    require(
+        phone_anchor_accepted(.960219, 2.878, .174524, 47.583),
+        "measured browser compositor anchor remains green",
+    )
+    require(
+        not phone_anchor_accepted(.174524, 47.583, .960219, 2.878)
+        and not phone_anchor_accepted(.949999, 2.878, .174524, 47.583)
+        and not phone_anchor_accepted(.960219, 4.001, .174524, 47.583),
+        "wrong and out-of-bound phone anchors remain red",
+    )
+    require(
+        .998005 >= PHONE_TERMINAL_IDENTITY_MIN_SSIM
+        and .661 <= PHONE_TERMINAL_IDENTITY_MAX_MAE
+        and not (
+            .996999 >= PHONE_TERMINAL_IDENTITY_MIN_SSIM
+            and .661 <= PHONE_TERMINAL_IDENTITY_MAX_MAE
+        )
+        and not (
+            .998005 >= PHONE_TERMINAL_IDENTITY_MIN_SSIM
+            and 1.001 <= PHONE_TERMINAL_IDENTITY_MAX_MAE
+        ),
+        "terminal image decode identity remains calibrated and fail capable",
+    )
+    require(
+        phone_presentation_matches(10.933333, 10.987420)
+        and not phone_presentation_matches(10.866667, 10.987420),
+        "15 fps presentation tolerance accepts containing frame and rejects stale frame",
+    )
+    require(
+        phone_transport_response_kind({
+            "status": 206,
+            "range": "bytes=0-",
+            "acceptRanges": "bytes",
+            "contentRange": "bytes 0-99/100",
+            "contentType": "video/mp4",
+        }) == "range",
+        "phone range response classification",
+    )
+    require(
+        phone_transport_response_kind({
+            "status": 200,
+            "range": "",
+            "acceptRanges": "bytes",
+            "contentRange": "",
+            "contentType": "video/mp4",
+        }) == "full-warm",
+        "phone full warm response classification",
+    )
+    require(
+        phone_transport_response_kind({
+            "status": 200,
+            "range": "bytes=0-",
+            "acceptRanges": "bytes",
+            "contentRange": "",
+            "contentType": "video/mp4",
+        }) is None,
+        "malformed phone transport remains fatal",
     )
 
     first = np.zeros((PROBE_HEIGHT, PROBE_WIDTH, 3), dtype=np.uint8)
@@ -2953,7 +3650,7 @@ def self_test() -> int:
     )
     require(
         expected_cancellation_reason(
-            "http://127.0.0.1/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v171.mp4",
+            "http://127.0.0.1/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
             "net::ERR_ABORTED",
         )
         == "v17-media-rearm",
@@ -2961,7 +3658,7 @@ def self_test() -> int:
     )
     require(
         expected_cancellation_reason(
-            "http://127.0.0.1/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v171.mp4",
+            "http://127.0.0.1/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
             "net::ERR_INVALID_HTTP_RESPONSE",
         )
         == "v17-local-range-cancel",
@@ -2969,7 +3666,7 @@ def self_test() -> int:
     )
     require(
         expected_cancellation_reason(
-            "https://example.com/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v171.mp4",
+            "https://example.com/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
             "net::ERR_INVALID_HTTP_RESPONSE",
         )
         is None,
@@ -3029,7 +3726,7 @@ def self_test() -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Verify the final ready Cake Studio v1.7.1 split bookend runtime."
+        description="Verify the final ready Cake Studio v1.7.2 split bookend runtime."
     )
     parser.add_argument("--url", help="Local or public Cake Studio page URL")
     parser.add_argument("--output", type=Path, help="Proof output directory")

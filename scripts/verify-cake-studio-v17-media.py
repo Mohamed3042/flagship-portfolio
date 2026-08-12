@@ -44,9 +44,52 @@ RUNTIME_MANIFEST = REPO / "public/worlds/cake-studio/v17/manifest.json"
 OWNER_RETURNS = PACK / "accepted"
 EXISTING_REEL = REPO / "public/worlds/cake-studio/clips"
 PHONE_VERIFY = REPO / "scripts/verify-cake-studio-v17-phone-masters.py"
-PHONE_OUTPUTS = (
-    "CST17-INTRO-PHONE-v171.mp4",
-    "CST17-OUTRO-PHONE-v171.mp4",
+PHONE_TRACKS = {
+    "intro": {
+        "master": "CST17-INTRO-PHONE-v172.mp4",
+        "beats": 10,
+        "atlas": {
+            "file": "CST17-INTRO-PHONE-SCRUB-v172.webp",
+            "bytes": 326_692,
+            "sha256": "1e94474cee9abdd7e0af7ea7679d4b004cf5d3313287c06c358f4368e3c1f1c5",
+            "columns": 8,
+            "rows": 4,
+            "frames": [0, 22, 44, 66, 88, 110, 133, 155, 177, 199, 221, 243, 265, 287, 309, 331, 354, 376, 398, 420, 442, 464, 486, 508, 530, 552, 575, 597, 619, 641, 663, 685],
+        },
+        "terminal": {
+            "file": "CST17-INTRO-PHONE-TERMINAL-v172.webp",
+            "bytes": 106_416,
+            "sha256": "513bcc97d522d84cb0ead674be5aa59b8b04d8cbb62527c1e63a4d9afe1fc4ee",
+            "frame": 685,
+        },
+    },
+    "outro": {
+        "master": "CST17-OUTRO-PHONE-v172.mp4",
+        "beats": 5,
+        "atlas": {
+            "file": "CST17-OUTRO-PHONE-SCRUB-v172.webp",
+            "bytes": 179_822,
+            "sha256": "5717337b6e0674f08f99a945fc4aa2dee69f2ab09380bdd04c2da6218a0b9c2c",
+            "columns": 8,
+            "rows": 2,
+            "frames": [0, 23, 46, 69, 92, 115, 138, 161, 184, 207, 230, 253, 276, 299, 322, 345],
+        },
+        "terminal": {
+            "file": "CST17-OUTRO-PHONE-TERMINAL-v172.webp",
+            "bytes": 91_242,
+            "sha256": "df40c40bbaf66b867bcdb4ffc95d095f1b7d5a97f7815498f2f122ee380037eb",
+            "frame": 345,
+        },
+    },
+}
+PHONE_OUTPUTS = tuple(
+    output
+    for contract in PHONE_TRACKS.values()
+    for output in (
+        str(contract["master"]),
+        str(contract["atlas"]["file"]),
+        str(contract["terminal"]["file"]),
+    )
 )
 
 EXPECTED_IDS = tuple(
@@ -251,7 +294,7 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
     require(path.is_file(), f"runtime manifest missing: {path}")
     payload = json.loads(path.read_text(encoding="utf-8-sig"))
     require(payload.get("schema") == "cake-studio-bookends/v1", "runtime manifest schema mismatch")
-    require(payload.get("version") == "1.7.1", "runtime manifest version mismatch")
+    require(payload.get("version") == "1.7.2", "runtime manifest version mismatch")
     require(
         (payload.get("width"), payload.get("height"), payload.get("fps"), payload.get("duration"))
         == (1280, 720, 30, 5),
@@ -282,16 +325,37 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
         == {
             "codec": "H.264",
             "pixelFormat": "yuv420p",
-            "width": 854,
-            "height": 480,
-            "fps": 30,
-            "beatFrames": 136,
-            "finalTailExtraFrames": 14,
-            "keyframeInterval": 15,
+            "width": 640,
+            "height": 360,
+            "fps": 15,
+            "beatFrames": 68,
+            "finalTailExtraFrames": 7,
+            "keyframeInterval": 8,
+            "terminalFrameOffset": 2,
             "silent": True,
             "faststart": True,
         },
         "runtime manifest phone delivery contract mismatch",
+    )
+    require(
+        delivery.get("phoneScrubAtlas")
+        == {
+            "mimeType": "image/webp",
+            "tileWidth": 384,
+            "tileHeight": 216,
+            "quality": 85,
+        },
+        "runtime manifest phone scrub atlas delivery contract mismatch",
+    )
+    require(
+        delivery.get("phoneTerminalStill")
+        == {
+            "mimeType": "image/webp",
+            "width": 640,
+            "height": 360,
+            "quality": 100,
+        },
+        "runtime manifest phone terminal still delivery contract mismatch",
     )
     tracks = payload.get("tracks")
     require(isinstance(tracks, dict), "runtime manifest tracks missing")
@@ -312,23 +376,49 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
 
     require(tracks["intro"].get("poster") == runtime_still_url(jobs[0].first), "runtime intro poster mismatch")
     require(tracks["outro"].get("poster") == runtime_still_url(jobs[10].first), "runtime outro poster mismatch")
-    for track_name, output, beats in (
-        ("intro", PHONE_OUTPUTS[0], 10),
-        ("outro", PHONE_OUTPUTS[1], 5),
-    ):
+    for track_name, contract in PHONE_TRACKS.items():
         phone = tracks[track_name].get("phoneMaster")
         require(isinstance(phone, dict), f"runtime {track_name} phone master missing")
-        expected_frames = beats * 136 + 14
+        expected_frames = int(contract["beats"]) * 68 + 7
+        atlas = contract["atlas"]
+        terminal = contract["terminal"]
         require(
             phone
             == {
-                "src": f"cake-studio/v17/clips/{output}",
-                "width": 854,
-                "height": 480,
-                "fps": 30,
-                "beatFrames": 136,
+                "src": f"cake-studio/v17/clips/{contract['master']}",
+                "width": 640,
+                "height": 360,
+                "fps": 15,
+                "beatFrames": 68,
+                "finalTailExtraFrames": 7,
+                "keyframeInterval": 8,
+                "terminalFrameOffset": 2,
                 "frames": expected_frames,
-                "duration": round(expected_frames / 30, 6),
+                "duration": round(expected_frames / 15, 6),
+                "scrubAtlas": {
+                    "src": f"cake-studio/v17/clips/{atlas['file']}",
+                    "bytes": int(atlas["bytes"]),
+                    "sha256": str(atlas["sha256"]),
+                    "width": int(atlas["columns"]) * 384,
+                    "height": int(atlas["rows"]) * 216,
+                    "tileWidth": 384,
+                    "tileHeight": 216,
+                    "quality": 85,
+                    "columns": int(atlas["columns"]),
+                    "rows": int(atlas["rows"]),
+                    "samples": len(atlas["frames"]),
+                    "frames": [int(index) for index in atlas["frames"]],
+                },
+                "terminalStill": {
+                    "src": f"cake-studio/v17/clips/{terminal['file']}",
+                    "bytes": int(terminal["bytes"]),
+                    "sha256": str(terminal["sha256"]),
+                    "width": 640,
+                    "height": 360,
+                    "quality": 100,
+                    "frame": int(terminal["frame"]),
+                    "time": round(int(terminal["frame"]) / 15, 6),
+                },
             },
             f"runtime {track_name} phone master contract mismatch",
         )
@@ -637,14 +727,17 @@ def missing_outputs(media_dir: Path, jobs: Iterable[Job]) -> list[str]:
     return [job.output for job in jobs if not (media_dir / job.output).is_file()]
 
 
-def missing_phone_outputs() -> list[str]:
-    return [output for output in PHONE_OUTPUTS if not (RUNTIME_MEDIA / output).is_file()]
+def missing_phone_outputs(media_dir: Path) -> list[str]:
+    return [output for output in PHONE_OUTPUTS if not (media_dir / output).is_file()]
 
 
-def validate_phone_masters() -> str:
+def validate_phone_masters(media_dir: Path, media_only: bool) -> str:
     require(PHONE_VERIFY.is_file(), f"phone master verifier missing: {PHONE_VERIFY}")
+    command = [sys.executable, str(PHONE_VERIFY), "--media-dir", str(media_dir)]
+    if media_only:
+        command.append("--media-only")
     completed = subprocess.run(
-        [sys.executable, str(PHONE_VERIFY)],
+        command,
         cwd=REPO,
         capture_output=True,
         text=True,
@@ -670,7 +763,7 @@ def main() -> int:
     runtime_manifest = absolute_from_repo(args.runtime_manifest)
     runtime_ready = validate_runtime_manifest(runtime_manifest, jobs)
     runtime_missing = missing_outputs(RUNTIME_MEDIA, jobs)
-    runtime_phone_missing = missing_phone_outputs()
+    runtime_phone_missing = missing_phone_outputs(RUNTIME_MEDIA)
     runtime_all_missing = [*runtime_missing, *runtime_phone_missing]
     require(
         not runtime_ready or not runtime_all_missing,
@@ -680,6 +773,7 @@ def main() -> int:
     media_dir = pick_media_dir(args.media_dir, jobs)
     is_runtime_media = media_dir.resolve() == RUNTIME_MEDIA.resolve()
     missing = missing_outputs(media_dir, jobs)
+    phone_missing = missing_phone_outputs(media_dir)
     present_jobs = [job for job in jobs if (media_dir / job.output).is_file()]
     ffprobe = shutil.which("ffprobe") if present_jobs else None
     require(not present_jobs or ffprobe is not None, "ffprobe is not installed or not on PATH")
@@ -725,20 +819,21 @@ def main() -> int:
         assert_similarity(cst050_last, decoded["O01"].first, "decoded CST-050->O01 seam", JOIN_MIN_SSIM, JOIN_MAX_MAE)
         verified_joins += 1
 
-    if missing:
+    if missing or phone_missing:
         if is_runtime_media:
             require(not runtime_ready, "runtime manifest is ready=true while one or more runtime clips are missing")
         print(
             "V17_MEDIA_GATE_WAITING "
             f"manifest=15 order=10+5 anchors=17 exact_reel_seams=2 "
             f"validated={len(present_jobs)}/15 decoded_joins={verified_joins}/15 "
-            f"runtime_ready={str(runtime_ready).lower()} phone_missing={len(runtime_phone_missing)} "
-            f"media_dir={media_dir} missing={','.join(missing)}"
+            f"runtime_ready={str(runtime_ready).lower()} phone_missing={len(phone_missing)} "
+            f"media_dir={media_dir} missing={','.join([*missing, *phone_missing])}"
         )
         return 2
 
     max_gop = max(metric["max_gop"] for metric in media_metrics.values())
     if not is_runtime_media:
+        validate_phone_masters(media_dir, media_only=True)
         print(
             "V17_MEDIA_GATE_SOURCE_OK_NEEDS_INTEGRATION "
             f"clips=15 order=10+5 decoded_joins={len(joins) + 2} "
@@ -746,10 +841,11 @@ def main() -> int:
         )
         return 3
     require(runtime_ready, "all 15 desktop clips validate, but runtime manifest ready is false")
-    validate_phone_masters()
+    validate_phone_masters(media_dir, media_only=False)
     print(
         "V17_MEDIA_GATE_OK "
-        f"desktop_clips=15 phone_masters=2 order=10+5 duration=75.000s format=h264/yuv420p/1280x720/30fps "
+        f"desktop_clips=15 phone_masters=2 phone_atlases=2 phone_terminal_stills=2 "
+        f"order=10+5 duration=75.000s format=h264/yuv420p/1280x720/30fps "
         f"silent=15 faststart=15 max_gop={max_gop:.2f} decoded_anchors=30 "
         f"decoded_joins={len(joins) + 2} non_affine=" + ",".join(motion_summaries)
     )
