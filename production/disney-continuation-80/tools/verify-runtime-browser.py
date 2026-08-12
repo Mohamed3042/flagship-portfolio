@@ -13,16 +13,20 @@ from __future__ import annotations
 
 import argparse
 import base64
+import concurrent.futures
 import copy
 import json
 import os
 import re
 import sys
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
+from urllib.request import Request, urlopen
 
 from PIL import Image, ImageChops, ImageFilter, ImageStat
 from playwright.sync_api import (
@@ -342,7 +346,7 @@ class Verification:
         )
         return snapshot, all(passed for passed, _ in results.values())
 
-    def check_asset_heads(self, page: Page, snapshot: dict[str, Any], label: str) -> None:
+    def check_asset_heads(self, snapshot: dict[str, Any], label: str) -> None:
         paths = [
             resolved_media_url(self.expected_media_base, item["clip"])
             for item in snapshot["legs"]
@@ -350,38 +354,54 @@ class Verification:
             resolved_media_url(self.expected_media_base, item["poster"])
             for item in snapshot["legs"]
         ]
-        results = page.evaluate(
-            """async ({paths, concurrency}) => {
-              const out = new Array(paths.length);
-              let next = 0;
-              async function worker() {
-                while (true) {
-                  const index = next++;
-                  if (index >= paths.length) return;
-                  const path = paths[index];
-                  const controller = new AbortController();
-                  const timer = setTimeout(() => controller.abort(), 20000);
-                  try {
-                    const response = await fetch(path, {
-                      method: 'HEAD', cache: 'no-store', signal: controller.signal,
-                    });
-                    out[index] = {
-                      path, status: response.status,
-                      type: response.headers.get('content-type') || '',
-                      length: response.headers.get('content-length') || '',
-                    };
-                  } catch (error) {
-                    out[index] = {path, status: 0, type: '', length: '', error: String(error)};
-                  } finally {
-                    clearTimeout(timer);
-                  }
-                }
-              }
-              await Promise.all(Array.from({length: concurrency}, worker));
-              return out;
-            }""",
-            {"paths": paths, "concurrency": 12},
-        )
+
+        # Keep the exhaustive transport audit outside the rendered page so a
+        # transient host retry cannot pollute the page's runtime error log.
+        # The actual cross-origin fetch/blob/decode path is still exercised by
+        # run_journey below.
+        transient_statuses = {429, 500, 502, 503, 504}
+
+        def probe(path: str) -> dict[str, Any]:
+            result: dict[str, Any] = {
+                "path": path,
+                "status": 0,
+                "type": "",
+                "length": "",
+                "attempts": 0,
+            }
+            for attempt in range(3):
+                result["attempts"] = attempt + 1
+                request = Request(
+                    path,
+                    method="HEAD",
+                    headers={"User-Agent": "DisneyRuntimeVerifier/1.0"},
+                )
+                try:
+                    with urlopen(request, timeout=20) as response:
+                        result.update(
+                            status=response.status,
+                            type=response.headers.get("content-type", ""),
+                            length=response.headers.get("content-length", ""),
+                        )
+                except HTTPError as error:
+                    result.update(
+                        status=error.code,
+                        type=error.headers.get("content-type", ""),
+                        length=error.headers.get("content-length", ""),
+                        error=str(error),
+                    )
+                except (URLError, TimeoutError, OSError) as error:
+                    result.update(status=0, error=str(error))
+                if result["status"] == 200:
+                    return result
+                if result["status"] not in transient_statuses and result["status"] != 0:
+                    return result
+                if attempt < 2:
+                    time.sleep(0.25 * (2**attempt))
+            return result
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+            results = list(pool.map(probe, paths))
         bad_status = [item for item in results if item["status"] != 200]
         bad_types = [
             item
@@ -941,7 +961,7 @@ class Verification:
                 self.check_logs(page, log, label)
                 return
             if check_all_assets:
-                self.check_asset_heads(page, snapshot, label)
+                self.check_asset_heads(snapshot, label)
                 self.check_transport(context, label)
             samples = self.run_journey(page, log, label)
             self.check_language(page, label)
