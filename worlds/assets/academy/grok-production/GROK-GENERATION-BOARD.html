@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>The Academy of Proven Spells · Grok R2 Regeneration Board</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f1edf8;
+      --muted: #a9a2b6;
+      --line: rgba(126, 210, 255, .28);
+      --blue: #7ed2ff;
+      --violet: #b893ff;
+      --panel: rgba(12, 12, 17, .95);
+      --page: #060609;
+      --green: #a8e4c5;
+      --red: #e09a9a;
+      --amber: #ffc56f;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(34, 74, 104, .64), transparent 36rem),
+        radial-gradient(circle at 88% 8%, rgba(101, 53, 145, .24), transparent 32rem),
+        linear-gradient(180deg, #080912, var(--page));
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, a { font: inherit; }
+    button:focus-visible, a:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+    .shell { width: min(1440px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 80px; }
+
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(28px, 5vw, 68px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(17, 35, 51, .98), rgba(13, 8, 20, .98));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, .46);
+    }
+
+    .masthead::before, .masthead::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(126, 210, 255, .2);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .masthead::before { inset: -82% 58% auto -18%; height: 148%; }
+    .masthead::after { inset: auto -12% -84% 44%; height: 184%; border-color: rgba(184, 147, 255, .2); }
+
+    .topline { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .eyebrow { margin: 0; color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; }
+    .board-link { min-height: 40px; display: inline-flex; align-items: center; padding: 0 15px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); text-decoration: none; background: rgba(126, 210, 255, .08); }
+    .board-link:hover { background: rgba(126, 210, 255, .16); }
+
+    h1 { position: relative; z-index: 1; max-width: 1000px; margin: 24px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(38px, 7vw, 92px); font-weight: 400; letter-spacing: -.045em; line-height: .94; }
+    .summary { position: relative; z-index: 1; max-width: 850px; margin: 22px 0 0; color: var(--muted); font-size: clamp(14px, 1.5vw, 17px); line-height: 1.65; }
+    .summary strong { color: var(--ink); }
+
+    .settings { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; margin-top: 34px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--line); }
+    .setting { min-height: 72px; padding: 14px 16px; background: rgba(7, 8, 13, .96); }
+    .setting span, .frame-label, .prompt-label, .status-label { display: block; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .setting strong { display: block; margin-top: 6px; color: var(--ink); font-size: 14px; }
+
+    .route-note { position: relative; z-index: 1; margin: 18px 0 0; padding: 15px 17px; border-left: 2px solid var(--blue); color: var(--muted); background: rgba(0, 0, 0, .2); font-size: 13px; line-height: 1.6; }
+    .route-note strong { color: var(--ink); }
+    .route-note code { color: var(--blue); overflow-wrap: anywhere; }
+
+    .progress { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: 28px 2px 12px; color: var(--muted); font-size: 13px; }
+    .progress strong { color: var(--ink); }
+    .bar { flex: 1; height: 4px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, .08); }
+    .bar > i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--blue), var(--violet)); transition: width .25s ease; }
+
+    .toolbar { position: sticky; z-index: 20; top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 0 20px; padding: 12px; border: 1px solid rgba(126, 210, 255, .2); border-radius: 18px; background: rgba(6, 6, 9, .92); box-shadow: 0 14px 36px rgba(0, 0, 0, .38); backdrop-filter: blur(14px); }
+    .filters, .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    button { min-height: 40px; padding: 0 15px; border: 1px solid rgba(126, 210, 255, .38); border-radius: 999px; color: var(--ink); background: rgba(126, 210, 255, .07); cursor: pointer; }
+    button:hover { background: rgba(126, 210, 255, .16); }
+    button[aria-pressed="true"] { color: #080b12; background: var(--blue); }
+    button.done[aria-pressed="true"] { color: var(--green); border-color: rgba(110, 221, 163, .45); background: rgba(110, 221, 163, .12); }
+    button.copy.ok { color: var(--green); border-color: rgba(110, 221, 163, .45); }
+    button.reset { color: var(--red); border-color: rgba(224, 154, 154, .36); }
+    .visible-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+    .cards { display: grid; gap: 24px; }
+    .card { scroll-margin-top: 96px; padding: clamp(18px, 3vw, 34px); border: 1px solid rgba(126, 210, 255, .2); border-radius: 24px; background: var(--panel); box-shadow: 0 18px 55px rgba(0, 0, 0, .3); }
+    .card.is-done { border-color: rgba(110, 221, 163, .38); }
+    .card.needs-recompose { border-color: rgba(255, 197, 111, .68); box-shadow: 0 18px 58px rgba(255, 156, 61, .09); }
+    .card[hidden] { display: none; }
+    .card-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    .card-flags { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .shot-no { color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .orientation-badge { display: inline-flex; align-items: center; min-height: 26px; padding: 0 10px; border: 1px solid rgba(255, 197, 111, .58); border-radius: 999px; color: #231608; background: var(--amber); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    h2 { margin: 5px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(25px, 4vw, 44px); font-weight: 400; line-height: 1; }
+    .output { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; text-align: right; }
+    .output code { display: block; margin-top: 5px; color: var(--blue); font-size: 15px; }
+
+    .pair { display: grid; grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr); align-items: center; gap: 14px; }
+    figure { margin: 0; min-width: 0; }
+    .frame-link { position: relative; display: block; overflow: hidden; margin-top: 8px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; background: #000; aspect-ratio: 30 / 17; }
+    .frame-link img { display: block; width: 100%; height: 100%; object-fit: contain; transition: transform .35s ease; }
+    .frame-link:hover img { transform: scale(1.012); }
+    .frame-link.rejected::after { content: "DO NOT ATTACH · RECOMPOSE FIRST"; position: absolute; inset: auto 10px 10px; padding: 9px 12px; border: 1px solid rgba(255, 197, 111, .72); border-radius: 999px; color: #241607; background: var(--amber); font-size: 10px; font-weight: 900; letter-spacing: .08em; text-align: center; }
+    figcaption { overflow: hidden; margin-top: 7px; color: var(--muted); font: 500 10px ui-monospace, SFMono-Regular, Consolas, monospace; text-overflow: ellipsis; white-space: nowrap; }
+    .arrow { color: var(--violet); font-family: Georgia, serif; font-size: 34px; text-align: center; }
+
+    .prompt-box { margin-top: 22px; padding: 18px; border: 1px solid rgba(255, 255, 255, .08); border-radius: 16px; background: rgba(0, 0, 0, .25); }
+    .recompose-note { margin: 18px 0 0; padding: 13px 15px; border-left: 3px solid var(--amber); color: #ead8bd; background: rgba(255, 197, 111, .08); font-size: 13px; line-height: 1.55; }
+    .recompose-note strong { color: var(--amber); }
+    .prompt-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+    .prompt { margin: 0; color: #e8e3ef; font-size: 14px; line-height: 1.65; white-space: pre-wrap; }
+    .empty { padding: 48px 20px; border: 1px dashed var(--line); border-radius: 20px; color: var(--muted); text-align: center; }
+    .footer-note { margin: 30px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; text-align: center; }
+
+    @media (max-width: 1000px) {
+      .settings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .toolbar { position: static; align-items: flex-start; flex-direction: column; }
+      .pair { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); line-height: .7; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(calc(100% - 18px), 1440px); padding-top: 9px; }
+      .masthead, .card { border-radius: 18px; }
+      .topline, .card-head, .prompt-top { align-items: flex-start; flex-direction: column; }
+      .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .output { text-align: left; }
+      .actions { width: 100%; }
+      .actions button { flex: 1; }
+      .filters button { min-width: 56px; }
+      .visible-count { white-space: normal; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <div class="topline">
+        <p class="eyebrow">The Academy · Grok Imagine · R2 regeneration only · 2 jobs</p>
+        <a class="board-link" href="../wan-production/WAN-GENERATION-BOARD.html">Open WAN 5s board</a>
+      </div>
+      <h1>Fix the composition. Then regenerate.</h1>
+      <p class="summary">Only the two failed returns are shown: <strong>ACA-GROK-001 and ACA-GROK-002</strong>. Job 003 is approved, job 004 is a trim salvage, and ungenerated jobs 005–016 are intentionally hidden from this R2 checkpoint.</p>
+      <section class="settings" aria-label="Grok settings">
+        <div class="setting"><span>Platform</span><strong>Grok Imagine</strong></div>
+        <div class="setting"><span>Mode</span><strong>Video + single image</strong></div>
+        <div class="setting"><span>Duration</span><strong data-setting="duration">15 seconds</strong></div>
+        <div class="setting"><span>Aspect</span><strong data-setting="aspect">16:9</strong></div>
+        <div class="setting"><span>Audio</span><strong>Off</strong></div>
+        <div class="setting"><span>Measured return</span><strong>1280×720 · 24 fps</strong></div>
+      </section>
+      <p class="route-note"><strong>How to run each card:</strong> first make the exact R2 start composition described on the card. <strong>Do not attach the displayed rejected start.</strong> Then attach the new start only, paste the exact R2 prompt, select <strong>15s · 16:9 · audio off</strong>, and download with the R2 filename shown. Returns measure 1280×720 or 1264×720 at 24 fps regardless of the UI resolution label.</p>
+      <p class="route-note"><strong>HARD CHECKPOINT:</strong> both prompts assume their corrected R2 composition. Prompt text cannot force away-travel from a frontal owl or make gate motion dominant while a foreground owl occupies the center.</p>
+    </header>
+
+    <div class="progress">
+      <span><strong id="done-count">0</strong> / <strong id="job-count">2</strong> regenerated</span>
+      <div class="bar" aria-hidden="true"><i id="bar-fill"></i></div>
+    </div>
+
+    <nav class="toolbar" aria-label="Board filters">
+      <div class="filters" id="act-filters" aria-label="Filter by act"></div>
+      <div class="filters" aria-label="Filter by status">
+        <button type="button" data-state-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-state-filter="pending" aria-pressed="false">Pending</button>
+        <button type="button" data-state-filter="done" aria-pressed="false">Done</button>
+        <button type="button" id="continue">First pending</button>
+        <button type="button" class="reset" id="reset">Reset tracking</button>
+      </div>
+      <span class="visible-count" id="visible-count">2 regeneration jobs visible</span>
+    </nav>
+
+    <section class="cards" id="cards" aria-label="Grok generation jobs"></section>
+    <p class="empty" id="empty" hidden>No jobs match this filter.</p>
+    <p class="footer-note">Per card: Step 1 — copy the IMAGE prompt into GPT Sol 5.6 Pro with the style anchor (ACA-KF00) attached first and the rejected still second; save the returned still under the named R2 filename in keyframes/. Step 2 — in Grok, attach ONLY that new R2 still and paste the video prompt (15s · 16:9 · audio off). Never attach the rejected still or the destination frame. “Done” means regenerated/downloaded; every return still passes the decoded acceptance gate.</p>
+  </main>
+
+  <script src="grok-jobs.js"></script>
+  <script>
+    const allJobs = Array.isArray(window.ACADEMY_GROK_JOBS) ? window.ACADEMY_GROK_JOBS : [];
+    const jobs = allJobs.filter(job => job.regenerate === true);
+    const cards = document.querySelector('#cards');
+    const empty = document.querySelector('#empty');
+    const stateKey = 'academy-proven-spells-grok-regen-done-v2';
+    let actFilter = 'all';
+    let stateFilter = 'all';
+    let stored = [];
+    try {
+      const parsed = JSON.parse(localStorage.getItem(stateKey) || '[]');
+      stored = Array.isArray(parsed) ? parsed : [];
+    } catch (_) { stored = []; }
+    const validIds = new Set(jobs.map(job => job.id));
+    const done = new Set(stored.filter(id => validIds.has(id)));
+
+    function saveState() {
+      try { localStorage.setItem(stateKey, JSON.stringify([...done])); } catch (_) {}
+    }
+
+    function updateCardState(card) {
+      const active = done.has(card.dataset.id);
+      const button = card.querySelector('.done');
+      button.setAttribute('aria-pressed', String(active));
+      button.textContent = active ? 'Done ✓' : 'Mark done';
+      card.classList.toggle('is-done', active);
+    }
+
+    function updateProgress() {
+      document.querySelector('#done-count').textContent = done.size;
+      document.querySelector('#job-count').textContent = jobs.length;
+      document.querySelector('#bar-fill').style.width = `${jobs.length ? (done.size / jobs.length) * 100 : 0}%`;
+      document.querySelectorAll('.card').forEach(updateCardState);
+      saveState();
+      applyFilters();
+    }
+
+    async function copyPrompt(button, prompt) {
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(prompt);
+        copied = true;
+      } catch (_) {
+        const box = document.createElement('textarea');
+        box.value = prompt;
+        document.body.appendChild(box);
+        box.select();
+        try { copied = document.execCommand('copy'); } catch (_) { copied = false; }
+        finally { box.remove(); }
+      }
+      button.textContent = copied ? 'Copied exact prompt' : 'Copy failed';
+      button.classList.toggle('ok', copied);
+      window.setTimeout(() => { button.textContent = 'Copy exact prompt'; button.classList.remove('ok'); }, 1600);
+    }
+
+    function applyFilters() {
+      let visible = 0;
+      document.querySelectorAll('.card').forEach(card => {
+        const actMatch = actFilter === 'all' || card.dataset.act === actFilter;
+        const completed = done.has(card.dataset.id);
+        const stateMatch = stateFilter === 'all' || (stateFilter === 'done' ? completed : !completed);
+        card.hidden = !(actMatch && stateMatch);
+        if (!card.hidden) visible += 1;
+      });
+      document.querySelector('#visible-count').textContent = `${visible} ${visible === 1 ? 'job' : 'jobs'} visible`;
+      empty.hidden = visible !== 0;
+    }
+
+    function selectFilter(selector, button, value) {
+      document.querySelectorAll(selector).forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      return value;
+    }
+
+    const acts = [...new Map(jobs.map(job => [job.act, job.actTitle])).entries()];
+    const actFilters = document.querySelector('#act-filters');
+    [['all', 'All acts'], ...acts].forEach(([act, label]) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.dataset.actFilter = act;
+      button.setAttribute('aria-pressed', String(act === 'all'));
+      button.textContent = act === 'all' ? label : `Act ${act}`;
+      button.title = act === 'all' ? label : label;
+      button.addEventListener('click', () => {
+        actFilter = selectFilter('[data-act-filter]', button, act);
+        applyFilters();
+      });
+      actFilters.appendChild(button);
+    });
+
+    document.querySelectorAll('[data-state-filter]').forEach(button => {
+      button.addEventListener('click', () => {
+        stateFilter = selectFilter('[data-state-filter]', button, button.dataset.stateFilter);
+        applyFilters();
+      });
+    });
+
+    jobs.forEach((job, index) => {
+      const card = document.createElement('article');
+      const needsRecompose = job.orientation === 'needs-recompose';
+      card.className = needsRecompose ? 'card needs-recompose' : 'card';
+      card.id = job.id;
+      card.dataset.id = job.id;
+      card.dataset.act = job.act;
+      card.innerHTML = `
+        <header class="card-head">
+          <div>
+            <div class="card-flags">
+              <div class="shot-no">Original job ${String(job.position).padStart(2, '0')} / 16 · ${job.id} · Act ${job.act} · ${job.actTitle}</div>
+              ${needsRecompose ? '<span class="orientation-badge">Needs-recompose</span>' : ''}
+            </div>
+            <h2>${job.title}</h2>
+          </div>
+          <div class="output"><span class="status-label">Output filename</span><code>${job.output}</code></div>
+        </header>
+        <div class="pair">
+          <figure>
+            <span class="frame-label">Rejected start · reference only, do not attach</span>
+            <a class="frame-link rejected" href="${job.first}" target="_blank" rel="noopener"><img src="${job.first}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} rejected start image"></a>
+            <figcaption>${job.firstName}</figcaption>
+          </figure>
+          <div class="arrow" aria-hidden="true">→</div>
+          <figure>
+            <span class="frame-label">Destination — reference only, do not attach</span>
+            <a class="frame-link" href="${job.last}" target="_blank" rel="noopener"><img src="${job.last}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} destination image"></a>
+            <figcaption>${job.lastName}</figcaption>
+          </figure>
+        </div>
+        ${needsRecompose ? `<p class="recompose-note"><strong>Human checkpoint:</strong> ${job.recompose}</p>` : ''}
+        ${needsRecompose && job.recomposePrompt ? `<div class="prompt-box">
+          <div class="prompt-top">
+            <span class="prompt-label">Step 1 — image prompt · paste into GPT Sol 5.6 Pro with the STYLE ANCHOR (ACA-KF00) attached as Image 1 and the rejected still as Image 2 · save the result as ${job.recomposeOutput} in keyframes/</span>
+            <div class="actions">
+              <button class="copy-image" type="button">Copy image prompt</button>
+            </div>
+          </div>
+          <p class="image-prompt"></p>
+        </div>` : ''}
+        <div class="prompt-box">
+          <div class="prompt-top">
+            <span class="prompt-label">${needsRecompose ? `Step 2 — video prompt · attach ONLY the new ${job.recomposeOutput ?? 'R2 start still'}` : 'Exact Grok prompt'} · 15s · 16:9 · audio off</span>
+            <div class="actions">
+              <button class="copy" type="button">Copy exact prompt</button>
+              <button class="done" type="button" aria-pressed="false">Mark done</button>
+            </div>
+          </div>
+          <p class="prompt"></p>
+        </div>`;
+      card.querySelector('.prompt').textContent = job.prompt;
+      if (needsRecompose && job.recomposePrompt) {
+        card.querySelector('.image-prompt').textContent = job.recomposePrompt;
+        card.querySelector('.copy-image').addEventListener('click', event => copyPrompt(event.currentTarget, job.recomposePrompt));
+      }
+      card.querySelector('.copy').addEventListener('click', event => copyPrompt(event.currentTarget, job.prompt));
+      card.querySelector('.done').addEventListener('click', () => {
+        if (done.has(job.id)) done.delete(job.id); else done.add(job.id);
+        updateProgress();
+      });
+      cards.appendChild(card);
+    });
+
+    document.querySelector('#continue').addEventListener('click', () => {
+      const pending = jobs.find(job => !done.has(job.id));
+      if (pending) document.getElementById(pending.id)?.scrollIntoView({ block: 'start' });
+    });
+    document.querySelector('#reset').addEventListener('click', () => {
+      if (!done.size || window.confirm('Clear all Grok done tracking in this browser?')) {
+        done.clear();
+        updateProgress();
+      }
+    });
+    if (!jobs.length) {
+      empty.hidden = false;
+      empty.textContent = 'No regeneration jobs are flagged in grok-jobs.js.';
+    }
+    updateProgress();
+  </script>
+</body>
+</html>
