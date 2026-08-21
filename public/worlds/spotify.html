@@ -1506,12 +1506,13 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
    The cut is authored in the HTML: each .legcap carries its own clip and
    poster. This script never names a file.
 
-   Three modes:
-     scrub  desktop — scroll drives currentTime
-     chain  coarse pointer — clips play through in sequence (disney's
-            precedent: scrubbing twelve 1600-wide clips over touch is janky
-            and expensive, and a phone would download all of them)
+   Two modes:
+     scrub  every motion-capable viewport — scroll drives currentTime
      still  prefers-reduced-motion — posters only, no video, no scrub
+
+   Phone follows the same contract as desktop: a still finger means a still
+   frame, and reversing the gesture reverses the footage. No branch calls
+   play(); the host's byte ranges make every currentTime write seekable.
    ════════════════════════════════════════════════════════════════════ */
 (() => {
   'use strict';
@@ -1527,12 +1528,9 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
   const LEGS = caps.map(c => ({ clip: c.dataset.clip, poster: c.dataset.poster }));
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const coarse = matchMedia('(hover: none) and (pointer: coarse)').matches || innerWidth < 760;
   const solo = new URLSearchParams(location.search).has('solo');
-  const MODE = reduced ? 'still' : coarse ? 'chain' : 'scrub';
+  const MODE = reduced ? 'still' : 'scrub';
   scene.classList.add('mode-' + MODE);
-  /* a play-through does not need a 1180vh runway to scroll past */
-  if (MODE === 'chain') scene.style.setProperty('--h', '520vh');
 
   const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
   const slots = vids.map(v => ({ v, leg: -1, ready: false, seeking: false, want: -1 }));
@@ -1601,26 +1599,6 @@ canvas.film{position:absolute;inset:0;width:100%;height:100%;display:block}
       const other = slots[1 - slots.indexOf(s)];
       if (other.leg !== nb) arm(other, nb);
     }
-  }
-
-  if (MODE === 'chain') {
-    let idx = 0, live = false, cur = slots[0];
-    const playIdx = () => {
-      arm(cur, idx); show(cur); setLeg(idx);
-      const go = cur.v.play();
-      if (go) go.catch(() => scene.classList.add('needs-tap'));
-      const other = cur === slots[0] ? slots[1] : slots[0];
-      if (idx + 1 < N) arm(other, idx + 1);
-    };
-    slots.forEach(s => s.v.addEventListener('ended', () => {
-      if (!live || s !== cur || idx + 1 >= N) return;   /* hold the last frame */
-      idx += 1; cur = cur === slots[0] ? slots[1] : slots[0]; playIdx();
-    }));
-    scene.addEventListener('scene:live', () => { live = true; playIdx(); });
-    scene.addEventListener('scene:idle', () => { live = false; slots.forEach(s => s.v.pause()); });
-    scene.addEventListener('click', () => { scene.classList.remove('needs-tap'); live = true; playIdx(); });
-    setLeg(0);
-    return;
   }
 
   let tick = false, fallback = 0;

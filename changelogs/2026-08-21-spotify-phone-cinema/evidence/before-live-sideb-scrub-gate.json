@@ -1,0 +1,422 @@
+{
+  "status": "RED",
+  "contract": "phone Side B is paused, never calls play(), and maps --p to leg/currentTime in both directions",
+  "reasons": [
+    "phone mode is mode-chain, expected mode-scrub",
+    "Side B called play() 1 time(s)",
+    "2/5 forward-reverse samples missed scroll mapping"
+  ],
+  "stationaryDeltaSeconds": 0.0,
+  "stationaryFingerDeltaSeconds": 0.0,
+  "mappingErrors": [
+    {
+      "requestedProgress": 0.72,
+      "expectedLeg": 9,
+      "actualSrc": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+      "timeError": 2.800000000000003
+    },
+    {
+      "requestedProgress": 0.08,
+      "expectedLeg": 1,
+      "actualSrc": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+      "timeError": 4.3999999999999995
+    }
+  ],
+  "stationaryBefore": {
+    "className": "scene flight mode-chain is-live needs-tap",
+    "mode": "mode-chain",
+    "progress": 0.0999,
+    "legText": "02",
+    "scrollY": 84467,
+    "active": {
+      "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+      "currentTime": 0.994,
+      "duration": 5,
+      "paused": true,
+      "readyState": 4
+    },
+    "videos": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+        "currentTime": 0,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": false
+      },
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+        "currentTime": 0.994,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": true
+      }
+    ],
+    "playCalls": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+        "at": 2394.89999999851
+      }
+    ]
+  },
+  "stationaryAfter": {
+    "className": "scene flight mode-chain is-live needs-tap",
+    "mode": "mode-chain",
+    "progress": 0.0999,
+    "legText": "02",
+    "scrollY": 84467,
+    "active": {
+      "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+      "currentTime": 0.994,
+      "duration": 5,
+      "paused": true,
+      "readyState": 4
+    },
+    "videos": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+        "currentTime": 0,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": false
+      },
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+        "currentTime": 0.994,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": true
+      }
+    ],
+    "playCalls": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+        "at": 2394.89999999851
+      }
+    ]
+  },
+  "touchBefore": {
+    "className": "scene flight mode-chain is-live needs-tap",
+    "mode": "mode-chain",
+    "progress": 0.0999,
+    "legText": "02",
+    "scrollY": 84467,
+    "active": {
+      "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+      "currentTime": 0.994,
+      "duration": 5,
+      "paused": true,
+      "readyState": 4
+    },
+    "videos": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+        "currentTime": 0,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": false
+      },
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+        "currentTime": 0.994,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": true
+      }
+    ],
+    "playCalls": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+        "at": 2394.89999999851
+      }
+    ]
+  },
+  "touchAfter": {
+    "className": "scene flight mode-chain is-live needs-tap",
+    "mode": "mode-chain",
+    "progress": 0.0999,
+    "legText": "02",
+    "scrollY": 84467,
+    "active": {
+      "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+      "currentTime": 0.994,
+      "duration": 5,
+      "paused": true,
+      "readyState": 4
+    },
+    "videos": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+        "currentTime": 0,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": false
+      },
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+        "currentTime": 0.994,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4,
+        "on": true
+      }
+    ],
+    "playCalls": [
+      {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+        "at": 2394.89999999851
+      }
+    ]
+  },
+  "mapping": [
+    {
+      "className": "scene flight mode-chain is-live",
+      "mode": "mode-chain",
+      "progress": 0.0801,
+      "legText": "01",
+      "scrollY": 84397,
+      "active": {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+        "currentTime": 4.881814,
+        "duration": 5,
+        "paused": false,
+        "readyState": 4
+      },
+      "videos": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+          "currentTime": 4.881814,
+          "duration": 5,
+          "paused": false,
+          "readyState": 4,
+          "on": true
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+          "currentTime": 0.994,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": false
+        }
+      ],
+      "playCalls": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+          "at": 2394.89999999851
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+          "at": 5279.30000000447
+        }
+      ],
+      "requestedProgress": 0.08,
+      "expectedLeg": 1,
+      "expectedTime": 4.8
+    },
+    {
+      "className": "scene flight mode-chain is-live",
+      "mode": "mode-chain",
+      "progress": 0.34,
+      "legText": "05",
+      "scrollY": 85318,
+      "active": {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+        "currentTime": 0.4,
+        "duration": 5,
+        "paused": true,
+        "readyState": 1
+      },
+      "videos": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+          "currentTime": 0.4,
+          "duration": 5,
+          "paused": true,
+          "readyState": 1,
+          "on": true
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j06-vinyl.mp4",
+          "currentTime": 0,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": false
+        }
+      ],
+      "playCalls": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+          "at": 2394.89999999851
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+          "at": 5279.30000000447
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+          "at": 6138.60000000149
+        }
+      ],
+      "requestedProgress": 0.34,
+      "expectedLeg": 5,
+      "expectedTime": 0.40000000000000036
+    },
+    {
+      "className": "scene flight mode-chain is-live",
+      "mode": "mode-chain",
+      "progress": 0.7199,
+      "legText": "05",
+      "scrollY": 86665,
+      "active": {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+        "currentTime": 0.4,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4
+      },
+      "videos": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+          "currentTime": 0.4,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": true
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j06-vinyl.mp4",
+          "currentTime": 0,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": false
+        }
+      ],
+      "playCalls": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+          "at": 2394.89999999851
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+          "at": 5279.30000000447
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+          "at": 6138.60000000149
+        }
+      ],
+      "requestedProgress": 0.72,
+      "expectedLeg": 9,
+      "expectedTime": 3.200000000000003
+    },
+    {
+      "className": "scene flight mode-chain is-live",
+      "mode": "mode-chain",
+      "progress": 0.34,
+      "legText": "05",
+      "scrollY": 85318,
+      "active": {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+        "currentTime": 0.4,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4
+      },
+      "videos": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+          "currentTime": 0.4,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": true
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j06-vinyl.mp4",
+          "currentTime": 0,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": false
+        }
+      ],
+      "playCalls": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+          "at": 2394.89999999851
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+          "at": 5279.30000000447
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+          "at": 6138.60000000149
+        }
+      ],
+      "requestedProgress": 0.34,
+      "expectedLeg": 5,
+      "expectedTime": 0.40000000000000036
+    },
+    {
+      "className": "scene flight mode-chain is-live",
+      "mode": "mode-chain",
+      "progress": 0.0801,
+      "legText": "05",
+      "scrollY": 84397,
+      "active": {
+        "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+        "currentTime": 0.4,
+        "duration": 5,
+        "paused": true,
+        "readyState": 4
+      },
+      "videos": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j05-parallax.mp4",
+          "currentTime": 0.4,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": true
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j06-vinyl.mp4",
+          "currentTime": 0,
+          "duration": 5,
+          "paused": true,
+          "readyState": 4,
+          "on": false
+        }
+      ],
+      "playCalls": [
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4",
+          "at": 2394.89999999851
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j03-playlist.mp4",
+          "at": 5279.30000000447
+        },
+        {
+          "src": "https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4",
+          "at": 6138.60000000149
+        }
+      ],
+      "requestedProgress": 0.08,
+      "expectedLeg": 1,
+      "expectedTime": 4.8
+    }
+  ],
+  "screenshot": "C:\\Users\\GAMING\\Documents\\Codex\\2026-08-21\\spotify-phone-cinema\\evidence\\live-before\\sideb\\phone-stationary.png",
+  "browserErrors": []
+}
