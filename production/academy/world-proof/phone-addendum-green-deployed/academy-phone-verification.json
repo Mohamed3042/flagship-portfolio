@@ -1,0 +1,3143 @@
+{
+  "url": "https://mohamed3042.github.io/flagship-portfolio/worlds/academy.html",
+  "verifiedAtUtc": "2026-08-21T20:50:58.745082+00:00",
+  "profiles": {
+    "portrait": [
+      390,
+      844
+    ],
+    "landscape": [
+      844,
+      390
+    ]
+  },
+  "checks": [
+    {
+      "label": "portrait Academy director exposes phone contract",
+      "passed": true,
+      "detail": "2.0.0"
+    },
+    {
+      "label": "portrait stage equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "frame": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          664.078125,
+          390,
+          844,
+          390,
+          179.921875
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "portrait film frame equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "frame": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          664.078125,
+          390,
+          844,
+          390,
+          179.921875
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "portrait picture uses cover",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "frame": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          664.078125,
+          390,
+          844,
+          390,
+          179.921875
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "portrait zero letterbox mattes",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "frame": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          664.078125,
+          390,
+          844,
+          390,
+          179.921875
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "portrait caption readable inside viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "frame": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          664.078125,
+          390,
+          844,
+          390,
+          179.921875
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "portrait zero horizontal overflow",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "label": "portrait forward shot 01 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 1,
+        "source": "ACA-001",
+        "mediaState": "painted",
+        "currentTime": 2.600888,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.121% 46.037%",
+        "pan": 0.37121,
+        "journey": 0.0399
+      }
+    },
+    {
+      "label": "portrait forward shot 01 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 1,
+        "source": "ACA-001",
+        "mediaState": "painted",
+        "currentTime": 2.600888,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.121% 46.037%",
+        "pan": 0.37121,
+        "journey": 0.0399
+      }
+    },
+    {
+      "label": "portrait forward shot 02 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 2,
+        "source": "ACA-003",
+        "mediaState": "painted",
+        "currentTime": 2.562914,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.834% 46.256%",
+        "pan": 0.37834,
+        "journey": 0.10728
+      }
+    },
+    {
+      "label": "portrait forward shot 02 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 2,
+        "source": "ACA-003",
+        "mediaState": "painted",
+        "currentTime": 2.562914,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.834% 46.256%",
+        "pan": 0.37834,
+        "journey": 0.10728
+      }
+    },
+    {
+      "label": "portrait forward shot 03 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 3,
+        "source": "ACA-004",
+        "mediaState": "painted",
+        "currentTime": 2.556862,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "38.995% 46.614%",
+        "pan": 0.38995,
+        "journey": 0.16984
+      }
+    },
+    {
+      "label": "portrait forward shot 03 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 3,
+        "source": "ACA-004",
+        "mediaState": "painted",
+        "currentTime": 2.556862,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "38.995% 46.614%",
+        "pan": 0.38995,
+        "journey": 0.16984
+      }
+    },
+    {
+      "label": "portrait forward shot 04 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 4,
+        "source": "ACA-005",
+        "mediaState": "painted",
+        "currentTime": 2.543811,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "40.434% 47.057%",
+        "pan": 0.40434,
+        "journey": 0.22784
+      }
+    },
+    {
+      "label": "portrait forward shot 04 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 4,
+        "source": "ACA-005",
+        "mediaState": "painted",
+        "currentTime": 2.543811,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "40.434% 47.057%",
+        "pan": 0.40434,
+        "journey": 0.22784
+      }
+    },
+    {
+      "label": "portrait forward shot 05 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 5,
+        "source": "ACA-006",
+        "mediaState": "painted",
+        "currentTime": 2.556311,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "42.034% 47.549%",
+        "pan": 0.42034,
+        "journey": 0.28192
+      }
+    },
+    {
+      "label": "portrait forward shot 05 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 5,
+        "source": "ACA-006",
+        "mediaState": "painted",
+        "currentTime": 2.556311,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "42.034% 47.549%",
+        "pan": 0.42034,
+        "journey": 0.28192
+      }
+    },
+    {
+      "label": "portrait forward shot 06 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 6,
+        "source": "ACA-007",
+        "mediaState": "painted",
+        "currentTime": 2.56329,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "44.034% 48.164%",
+        "pan": 0.44034,
+        "journey": 0.34173
+      }
+    },
+    {
+      "label": "portrait forward shot 06 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 6,
+        "source": "ACA-007",
+        "mediaState": "painted",
+        "currentTime": 2.56329,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "44.034% 48.164%",
+        "pan": 0.44034,
+        "journey": 0.34173
+      }
+    },
+    {
+      "label": "portrait forward shot 07 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 7,
+        "source": "ACA-008",
+        "mediaState": "painted",
+        "currentTime": 2.599999,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "46.717% 48.99%",
+        "pan": 0.46717,
+        "journey": 0.415
+      }
+    },
+    {
+      "label": "portrait forward shot 07 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 7,
+        "source": "ACA-008",
+        "mediaState": "painted",
+        "currentTime": 2.599999,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "46.717% 48.99%",
+        "pan": 0.46717,
+        "journey": 0.415
+      }
+    },
+    {
+      "label": "portrait forward shot 08 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.574408,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.169% 50.052%",
+        "pan": 0.50169,
+        "journey": 0.50434
+      }
+    },
+    {
+      "label": "portrait forward shot 08 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.574408,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.169% 50.052%",
+        "pan": 0.50169,
+        "journey": 0.50434
+      }
+    },
+    {
+      "label": "portrait forward shot 09 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 9,
+        "source": "ACA-010",
+        "mediaState": "painted",
+        "currentTime": 2.573358,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "53.606% 51.11%",
+        "pan": 0.53606,
+        "journey": 0.59355
+      }
+    },
+    {
+      "label": "portrait forward shot 09 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 9,
+        "source": "ACA-010",
+        "mediaState": "painted",
+        "currentTime": 2.573358,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "53.606% 51.11%",
+        "pan": 0.53606,
+        "journey": 0.59355
+      }
+    },
+    {
+      "label": "portrait forward shot 10 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 10,
+        "source": "ACA-011",
+        "mediaState": "painted",
+        "currentTime": 2.559391,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "56.173% 51.899%",
+        "pan": 0.56173,
+        "journey": 0.66418
+      }
+    },
+    {
+      "label": "portrait forward shot 10 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 10,
+        "source": "ACA-011",
+        "mediaState": "painted",
+        "currentTime": 2.559391,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "56.173% 51.899%",
+        "pan": 0.56173,
+        "journey": 0.66418
+      }
+    },
+    {
+      "label": "portrait forward shot 11 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 11,
+        "source": "ACA-012",
+        "mediaState": "painted",
+        "currentTime": 2.56315,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "58.237% 52.535%",
+        "pan": 0.58237,
+        "journey": 0.72676
+      }
+    },
+    {
+      "label": "portrait forward shot 11 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 11,
+        "source": "ACA-012",
+        "mediaState": "painted",
+        "currentTime": 2.56315,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "58.237% 52.535%",
+        "pan": 0.58237,
+        "journey": 0.72676
+      }
+    },
+    {
+      "label": "portrait forward shot 12 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 12,
+        "source": "ACA-013",
+        "mediaState": "painted",
+        "currentTime": 2.559502,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "60.093% 53.106%",
+        "pan": 0.60093,
+        "journey": 0.792
+      }
+    },
+    {
+      "label": "portrait forward shot 12 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 12,
+        "source": "ACA-013",
+        "mediaState": "painted",
+        "currentTime": 2.559502,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "60.093% 53.106%",
+        "pan": 0.60093,
+        "journey": 0.792
+      }
+    },
+    {
+      "label": "portrait forward shot 13 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 13,
+        "source": "ACA-014",
+        "mediaState": "painted",
+        "currentTime": 2.572623,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "61.729% 53.609%",
+        "pan": 0.61729,
+        "journey": 0.86625
+      }
+    },
+    {
+      "label": "portrait forward shot 13 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 13,
+        "source": "ACA-014",
+        "mediaState": "painted",
+        "currentTime": 2.572623,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "61.729% 53.609%",
+        "pan": 0.61729,
+        "journey": 0.86625
+      }
+    },
+    {
+      "label": "portrait forward shot 14 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 14,
+        "source": "ACA-015",
+        "mediaState": "painted",
+        "currentTime": 2.575626,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "62.844% 53.952%",
+        "pan": 0.62844,
+        "journey": 0.95456
+      }
+    },
+    {
+      "label": "portrait forward shot 14 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 14,
+        "source": "ACA-015",
+        "mediaState": "painted",
+        "currentTime": 2.575626,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "62.844% 53.952%",
+        "pan": 0.62844,
+        "journey": 0.95456
+      }
+    },
+    {
+      "label": "portrait reverse shot 14 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 14,
+        "source": "ACA-015",
+        "mediaState": "painted",
+        "currentTime": 2.428381,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "62.824% 53.946%",
+        "pan": 0.62824,
+        "journey": 0.95169
+      }
+    },
+    {
+      "label": "portrait reverse shot 13 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 13,
+        "source": "ACA-014",
+        "mediaState": "painted",
+        "currentTime": 2.436638,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "61.686% 53.596%",
+        "pan": 0.61686,
+        "journey": 0.86387
+      }
+    },
+    {
+      "label": "portrait reverse shot 12 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 12,
+        "source": "ACA-013",
+        "mediaState": "painted",
+        "currentTime": 2.43804,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "60.051% 53.093%",
+        "pan": 0.60051,
+        "journey": 0.79037
+      }
+    },
+    {
+      "label": "portrait reverse shot 11 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 11,
+        "source": "ACA-012",
+        "mediaState": "painted",
+        "currentTime": 2.442248,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "58.182% 52.517%",
+        "pan": 0.58182,
+        "journey": 0.72497
+      }
+    },
+    {
+      "label": "portrait reverse shot 10 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 10,
+        "source": "ACA-011",
+        "mediaState": "painted",
+        "currentTime": 2.443348,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "56.12% 51.883%",
+        "pan": 0.5612,
+        "journey": 0.66266
+      }
+    },
+    {
+      "label": "portrait reverse shot 09 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 9,
+        "source": "ACA-010",
+        "mediaState": "painted",
+        "currentTime": 2.433266,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "53.516% 51.082%",
+        "pan": 0.53516,
+        "journey": 0.59117
+      }
+    },
+    {
+      "label": "portrait reverse shot 08 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.43194,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.053% 50.016%",
+        "pan": 0.50053,
+        "journey": 0.50137
+      }
+    },
+    {
+      "label": "portrait reverse shot 07 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 7,
+        "source": "ACA-008",
+        "mediaState": "painted",
+        "currentTime": 2.439802,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "46.611% 48.957%",
+        "pan": 0.46611,
+        "journey": 0.41219
+      }
+    },
+    {
+      "label": "portrait reverse shot 06 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 6,
+        "source": "ACA-007",
+        "mediaState": "painted",
+        "currentTime": 2.438039,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "43.976% 48.146%",
+        "pan": 0.43976,
+        "journey": 0.34009
+      }
+    },
+    {
+      "label": "portrait reverse shot 05 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 5,
+        "source": "ACA-006",
+        "mediaState": "painted",
+        "currentTime": 2.448147,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "41.992% 47.536%",
+        "pan": 0.41992,
+        "journey": 0.28058
+      }
+    },
+    {
+      "label": "portrait reverse shot 04 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 4,
+        "source": "ACA-005",
+        "mediaState": "painted",
+        "currentTime": 2.444744,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "40.403% 47.047%",
+        "pan": 0.40403,
+        "journey": 0.22671
+      }
+    },
+    {
+      "label": "portrait reverse shot 03 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 3,
+        "source": "ACA-004",
+        "mediaState": "painted",
+        "currentTime": 2.448922,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "38.96% 46.603%",
+        "pan": 0.3896,
+        "journey": 0.16823
+      }
+    },
+    {
+      "label": "portrait reverse shot 02 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 2,
+        "source": "ACA-003",
+        "mediaState": "painted",
+        "currentTime": 2.449944,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.812% 46.25%",
+        "pan": 0.37812,
+        "journey": 0.10585
+      }
+    },
+    {
+      "label": "portrait reverse shot 01 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 1,
+        "source": "ACA-001",
+        "mediaState": "painted",
+        "currentTime": 2.443431,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.106% 46.033%",
+        "pan": 0.37106,
+        "journey": 0.03731
+      }
+    },
+    {
+      "label": "portrait full forward source order",
+      "passed": true,
+      "detail": [
+        "ACA-001",
+        "ACA-003",
+        "ACA-004",
+        "ACA-005",
+        "ACA-006",
+        "ACA-007",
+        "ACA-008",
+        "ACA-009",
+        "ACA-010",
+        "ACA-011",
+        "ACA-012",
+        "ACA-013",
+        "ACA-014",
+        "ACA-015"
+      ]
+    },
+    {
+      "label": "portrait full reverse source order",
+      "passed": true,
+      "detail": [
+        "ACA-015",
+        "ACA-014",
+        "ACA-013",
+        "ACA-012",
+        "ACA-011",
+        "ACA-010",
+        "ACA-009",
+        "ACA-008",
+        "ACA-007",
+        "ACA-006",
+        "ACA-005",
+        "ACA-004",
+        "ACA-003",
+        "ACA-001"
+      ]
+    },
+    {
+      "label": "portrait no separate mobile media chain",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "label": "portrait camera pan monotonic forward",
+      "passed": true,
+      "detail": [
+        0.37109,
+        0.37816,
+        0.38967,
+        0.40406,
+        0.41998,
+        0.43988,
+        0.46637,
+        0.50091,
+        0.53541,
+        0.56127,
+        0.58194,
+        0.60061,
+        0.61699,
+        0.62831
+      ]
+    },
+    {
+      "label": "portrait camera pan monotonic reverse",
+      "passed": true,
+      "detail": [
+        0.62832,
+        0.61716,
+        0.60085,
+        0.58224,
+        0.56161,
+        0.53576,
+        0.5013,
+        0.46672,
+        0.44021,
+        0.42027,
+        0.40431,
+        0.38987,
+        0.3783,
+        0.37114
+      ]
+    },
+    {
+      "label": "portrait camera track reaches cover renderer",
+      "passed": true,
+      "detail": [
+        "37.109% 46.034%",
+        "37.816% 46.251%",
+        "38.967% 46.605%",
+        "40.406% 47.048%",
+        "41.998% 47.538%",
+        "43.988% 48.15%",
+        "46.637% 48.965%",
+        "50.091% 50.028%",
+        "53.541% 51.09%",
+        "56.127% 51.885%",
+        "58.194% 52.521%",
+        "60.061% 53.096%",
+        "61.699% 53.6%",
+        "62.831% 53.948%"
+      ]
+    },
+    {
+      "label": "portrait adjacent scenes preserve camera direction",
+      "passed": true,
+      "detail": [
+        {
+          "join": "2->3",
+          "before": 0.38293,
+          "after": 0.38332,
+          "delta": 0.00039000000000000146
+        },
+        {
+          "join": "6->7",
+          "before": 0.45088,
+          "after": 0.45158,
+          "delta": 0.0006999999999999784
+        },
+        {
+          "join": "9->10",
+          "before": 0.55039,
+          "after": 0.55109,
+          "delta": 0.0006999999999999229
+        },
+        {
+          "join": "12->13",
+          "before": 0.60842,
+          "after": 0.60886,
+          "delta": 0.00043999999999999595
+        }
+      ]
+    },
+    {
+      "label": "portrait eased camera spreads a scrub step",
+      "passed": true,
+      "detail": {
+        "panFrames": 133,
+        "journeyFrames": 155
+      }
+    },
+    {
+      "label": "portrait eased camera step never reverses",
+      "passed": true,
+      "detail": {
+        "first": [
+          {
+            "ms": 0,
+            "pan": 0.49131,
+            "journey": 0.4777
+          },
+          {
+            "ms": -2.899999998509884,
+            "pan": 0.49131,
+            "journey": 0.4777
+          },
+          {
+            "ms": 1.3000000014872057,
+            "pan": 0.4935,
+            "journey": 0.48333
+          },
+          {
+            "ms": 5.4000000014930265,
+            "pan": 0.49402,
+            "journey": 0.48465
+          }
+        ],
+        "last": [
+          {
+            "ms": 668.0000000014916,
+            "pan": 0.51072,
+            "journey": 0.52752
+          },
+          {
+            "ms": 672.2000000014887,
+            "pan": 0.51073,
+            "journey": 0.52753
+          },
+          {
+            "ms": 676.3000000014872,
+            "pan": 0.51073,
+            "journey": 0.52754
+          },
+          {
+            "ms": 680.400000001493,
+            "pan": 0.51073,
+            "journey": 0.52755
+          }
+        ]
+      }
+    },
+    {
+      "label": "portrait screenshot opening",
+      "passed": true,
+      "detail": 261404
+    },
+    {
+      "label": "portrait screenshot act-bridge-archive",
+      "passed": true,
+      "detail": 349448
+    },
+    {
+      "label": "portrait screenshot act-bridge-failure",
+      "passed": true,
+      "detail": 385054
+    },
+    {
+      "label": "portrait screenshot act-bridge-record",
+      "passed": true,
+      "detail": 311675
+    },
+    {
+      "label": "portrait screenshot act-bridge-loop",
+      "passed": true,
+      "detail": 331449
+    },
+    {
+      "label": "portrait ending stage equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "copy": [
+          23.40625,
+          227.72499084472656,
+          366.59375,
+          599.7406158447266
+        ],
+        "titleVisible": true,
+        "linksVisible": true,
+        "text": "THE RESULT BECOMES THE NEXT INPUT\n\nThe seal returns.\nThe method remains.\n\nFourteen accepted returns form this cut. Two failed takes stay preserved outside the reel—not hidden, not shipped as proof.\n\nPRODUCTION BOARD\nRETURN TO WORLDS"
+      }
+    },
+    {
+      "label": "portrait ending composition intact",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "copy": [
+          23.40625,
+          227.72499084472656,
+          366.59375,
+          599.7406158447266
+        ],
+        "titleVisible": true,
+        "linksVisible": true,
+        "text": "THE RESULT BECOMES THE NEXT INPUT\n\nThe seal returns.\nThe method remains.\n\nFourteen accepted returns form this cut. Two failed takes stay preserved outside the reel—not hidden, not shipped as proof.\n\nPRODUCTION BOARD\nRETURN TO WORLDS"
+      }
+    },
+    {
+      "label": "portrait screenshot ending",
+      "passed": true,
+      "detail": 247863
+    },
+    {
+      "label": "landscape Academy director exposes phone contract",
+      "passed": true,
+      "detail": "2.0.0"
+    },
+    {
+      "label": "landscape stage equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "landscape film frame equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "landscape picture uses cover",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "landscape zero letterbox mattes",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "landscape caption readable inside viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "landscape zero horizontal overflow",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "label": "landscape forward shot 01 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 1,
+        "source": "ACA-001",
+        "mediaState": "painted",
+        "currentTime": 2.59437,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.12% 46.037%",
+        "pan": 0.3712,
+        "journey": 0.0398
+      }
+    },
+    {
+      "label": "landscape forward shot 01 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 1,
+        "source": "ACA-001",
+        "mediaState": "painted",
+        "currentTime": 2.59437,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.12% 46.037%",
+        "pan": 0.3712,
+        "journey": 0.0398
+      }
+    },
+    {
+      "label": "landscape forward shot 02 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 2,
+        "source": "ACA-003",
+        "mediaState": "painted",
+        "currentTime": 2.554502,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.833% 46.256%",
+        "pan": 0.37833,
+        "journey": 0.10723
+      }
+    },
+    {
+      "label": "landscape forward shot 02 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 2,
+        "source": "ACA-003",
+        "mediaState": "painted",
+        "currentTime": 2.554502,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.833% 46.256%",
+        "pan": 0.37833,
+        "journey": 0.10723
+      }
+    },
+    {
+      "label": "landscape forward shot 03 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 3,
+        "source": "ACA-004",
+        "mediaState": "painted",
+        "currentTime": 2.551784,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "38.995% 46.614%",
+        "pan": 0.38995,
+        "journey": 0.16982
+      }
+    },
+    {
+      "label": "landscape forward shot 03 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 3,
+        "source": "ACA-004",
+        "mediaState": "painted",
+        "currentTime": 2.551784,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "38.995% 46.614%",
+        "pan": 0.38995,
+        "journey": 0.16982
+      }
+    },
+    {
+      "label": "landscape forward shot 04 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 4,
+        "source": "ACA-005",
+        "mediaState": "painted",
+        "currentTime": 2.553451,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "40.436% 47.057%",
+        "pan": 0.40436,
+        "journey": 0.22791
+      }
+    },
+    {
+      "label": "landscape forward shot 04 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 4,
+        "source": "ACA-005",
+        "mediaState": "painted",
+        "currentTime": 2.553451,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "40.436% 47.057%",
+        "pan": 0.40436,
+        "journey": 0.22791
+      }
+    },
+    {
+      "label": "landscape forward shot 05 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 5,
+        "source": "ACA-006",
+        "mediaState": "painted",
+        "currentTime": 2.556445,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "42.036% 47.549%",
+        "pan": 0.42036,
+        "journey": 0.28196
+      }
+    },
+    {
+      "label": "landscape forward shot 05 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 5,
+        "source": "ACA-006",
+        "mediaState": "painted",
+        "currentTime": 2.556445,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "42.036% 47.549%",
+        "pan": 0.42036,
+        "journey": 0.28196
+      }
+    },
+    {
+      "label": "landscape forward shot 06 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 6,
+        "source": "ACA-007",
+        "mediaState": "painted",
+        "currentTime": 2.55686,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "44.034% 48.164%",
+        "pan": 0.44034,
+        "journey": 0.34173
+      }
+    },
+    {
+      "label": "landscape forward shot 06 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 6,
+        "source": "ACA-007",
+        "mediaState": "painted",
+        "currentTime": 2.55686,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "44.034% 48.164%",
+        "pan": 0.44034,
+        "journey": 0.34173
+      }
+    },
+    {
+      "label": "landscape forward shot 07 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 7,
+        "source": "ACA-008",
+        "mediaState": "painted",
+        "currentTime": 2.571793,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "46.701% 48.985%",
+        "pan": 0.46701,
+        "journey": 0.41457
+      }
+    },
+    {
+      "label": "landscape forward shot 07 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 7,
+        "source": "ACA-008",
+        "mediaState": "painted",
+        "currentTime": 2.571793,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "46.701% 48.985%",
+        "pan": 0.46701,
+        "journey": 0.41457
+      }
+    },
+    {
+      "label": "landscape forward shot 08 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.574317,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.172% 50.053%",
+        "pan": 0.50172,
+        "journey": 0.5044
+      }
+    },
+    {
+      "label": "landscape forward shot 08 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.574317,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.172% 50.053%",
+        "pan": 0.50172,
+        "journey": 0.5044
+      }
+    },
+    {
+      "label": "landscape forward shot 09 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 9,
+        "source": "ACA-010",
+        "mediaState": "painted",
+        "currentTime": 2.573359,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "53.606% 51.11%",
+        "pan": 0.53606,
+        "journey": 0.59357
+      }
+    },
+    {
+      "label": "landscape forward shot 09 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 9,
+        "source": "ACA-010",
+        "mediaState": "painted",
+        "currentTime": 2.573359,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "53.606% 51.11%",
+        "pan": 0.53606,
+        "journey": 0.59357
+      }
+    },
+    {
+      "label": "landscape forward shot 10 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 10,
+        "source": "ACA-011",
+        "mediaState": "painted",
+        "currentTime": 2.564507,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "56.174% 51.9%",
+        "pan": 0.56174,
+        "journey": 0.6642
+      }
+    },
+    {
+      "label": "landscape forward shot 10 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 10,
+        "source": "ACA-011",
+        "mediaState": "painted",
+        "currentTime": 2.564507,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "56.174% 51.9%",
+        "pan": 0.56174,
+        "journey": 0.6642
+      }
+    },
+    {
+      "label": "landscape forward shot 11 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 11,
+        "source": "ACA-012",
+        "mediaState": "painted",
+        "currentTime": 2.563155,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "58.238% 52.535%",
+        "pan": 0.58238,
+        "journey": 0.72678
+      }
+    },
+    {
+      "label": "landscape forward shot 11 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 11,
+        "source": "ACA-012",
+        "mediaState": "painted",
+        "currentTime": 2.563155,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "58.238% 52.535%",
+        "pan": 0.58238,
+        "journey": 0.72678
+      }
+    },
+    {
+      "label": "landscape forward shot 12 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 12,
+        "source": "ACA-013",
+        "mediaState": "painted",
+        "currentTime": 2.564074,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "60.096% 53.106%",
+        "pan": 0.60096,
+        "journey": 0.79211
+      }
+    },
+    {
+      "label": "landscape forward shot 12 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 12,
+        "source": "ACA-013",
+        "mediaState": "painted",
+        "currentTime": 2.564074,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "60.096% 53.106%",
+        "pan": 0.60096,
+        "journey": 0.79211
+      }
+    },
+    {
+      "label": "landscape forward shot 13 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 13,
+        "source": "ACA-014",
+        "mediaState": "painted",
+        "currentTime": 2.568619,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "61.729% 53.609%",
+        "pan": 0.61729,
+        "journey": 0.86623
+      }
+    },
+    {
+      "label": "landscape forward shot 13 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 13,
+        "source": "ACA-014",
+        "mediaState": "painted",
+        "currentTime": 2.568619,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "61.729% 53.609%",
+        "pan": 0.61729,
+        "journey": 0.86623
+      }
+    },
+    {
+      "label": "landscape forward shot 14 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 14,
+        "source": "ACA-015",
+        "mediaState": "painted",
+        "currentTime": 2.575621,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "62.844% 53.952%",
+        "pan": 0.62844,
+        "journey": 0.95454
+      }
+    },
+    {
+      "label": "landscape forward shot 14 same landscape clip",
+      "passed": true,
+      "detail": {
+        "ordinal": 14,
+        "source": "ACA-015",
+        "mediaState": "painted",
+        "currentTime": 2.575621,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "62.844% 53.952%",
+        "pan": 0.62844,
+        "journey": 0.95454
+      }
+    },
+    {
+      "label": "landscape reverse shot 14 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 14,
+        "source": "ACA-015",
+        "mediaState": "painted",
+        "currentTime": 2.431058,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "62.824% 53.946%",
+        "pan": 0.62824,
+        "journey": 0.95173
+      }
+    },
+    {
+      "label": "landscape reverse shot 13 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 13,
+        "source": "ACA-014",
+        "mediaState": "painted",
+        "currentTime": 2.427914,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "61.686% 53.596%",
+        "pan": 0.61686,
+        "journey": 0.86387
+      }
+    },
+    {
+      "label": "landscape reverse shot 12 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 12,
+        "source": "ACA-013",
+        "mediaState": "painted",
+        "currentTime": 2.443967,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "60.051% 53.093%",
+        "pan": 0.60051,
+        "journey": 0.79037
+      }
+    },
+    {
+      "label": "landscape reverse shot 11 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 11,
+        "source": "ACA-012",
+        "mediaState": "painted",
+        "currentTime": 2.447212,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "58.184% 52.518%",
+        "pan": 0.58184,
+        "journey": 0.72506
+      }
+    },
+    {
+      "label": "landscape reverse shot 10 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 10,
+        "source": "ACA-011",
+        "mediaState": "painted",
+        "currentTime": 2.443375,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "56.12% 51.883%",
+        "pan": 0.5612,
+        "journey": 0.66266
+      }
+    },
+    {
+      "label": "landscape reverse shot 09 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 9,
+        "source": "ACA-010",
+        "mediaState": "painted",
+        "currentTime": 2.427242,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "53.514% 51.081%",
+        "pan": 0.53514,
+        "journey": 0.59112
+      }
+    },
+    {
+      "label": "landscape reverse shot 08 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.427447,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.053% 50.016%",
+        "pan": 0.50053,
+        "journey": 0.50136
+      }
+    },
+    {
+      "label": "landscape reverse shot 07 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 7,
+        "source": "ACA-008",
+        "mediaState": "painted",
+        "currentTime": 2.426229,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "46.607% 48.956%",
+        "pan": 0.46607,
+        "journey": 0.41211
+      }
+    },
+    {
+      "label": "landscape reverse shot 06 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 6,
+        "source": "ACA-007",
+        "mediaState": "painted",
+        "currentTime": 2.448503,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "43.978% 48.147%",
+        "pan": 0.43978,
+        "journey": 0.34013
+      }
+    },
+    {
+      "label": "landscape reverse shot 05 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 5,
+        "source": "ACA-006",
+        "mediaState": "painted",
+        "currentTime": 2.454032,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "41.994% 47.537%",
+        "pan": 0.41994,
+        "journey": 0.28064
+      }
+    },
+    {
+      "label": "landscape reverse shot 04 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 4,
+        "source": "ACA-005",
+        "mediaState": "painted",
+        "currentTime": 2.45759,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "40.404% 47.047%",
+        "pan": 0.40404,
+        "journey": 0.22675
+      }
+    },
+    {
+      "label": "landscape reverse shot 03 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 3,
+        "source": "ACA-004",
+        "mediaState": "painted",
+        "currentTime": 2.442702,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "38.959% 46.603%",
+        "pan": 0.38959,
+        "journey": 0.16818
+      }
+    },
+    {
+      "label": "landscape reverse shot 02 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 2,
+        "source": "ACA-003",
+        "mediaState": "painted",
+        "currentTime": 2.448814,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.811% 46.25%",
+        "pan": 0.37811,
+        "journey": 0.10579
+      }
+    },
+    {
+      "label": "landscape reverse shot 01 painted",
+      "passed": true,
+      "detail": {
+        "ordinal": 1,
+        "source": "ACA-001",
+        "mediaState": "painted",
+        "currentTime": 2.442105,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "37.106% 46.033%",
+        "pan": 0.37106,
+        "journey": 0.03731
+      }
+    },
+    {
+      "label": "landscape full forward source order",
+      "passed": true,
+      "detail": [
+        "ACA-001",
+        "ACA-003",
+        "ACA-004",
+        "ACA-005",
+        "ACA-006",
+        "ACA-007",
+        "ACA-008",
+        "ACA-009",
+        "ACA-010",
+        "ACA-011",
+        "ACA-012",
+        "ACA-013",
+        "ACA-014",
+        "ACA-015"
+      ]
+    },
+    {
+      "label": "landscape full reverse source order",
+      "passed": true,
+      "detail": [
+        "ACA-015",
+        "ACA-014",
+        "ACA-013",
+        "ACA-012",
+        "ACA-011",
+        "ACA-010",
+        "ACA-009",
+        "ACA-008",
+        "ACA-007",
+        "ACA-006",
+        "ACA-005",
+        "ACA-004",
+        "ACA-003",
+        "ACA-001"
+      ]
+    },
+    {
+      "label": "landscape no separate mobile media chain",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "label": "landscape camera pan monotonic forward",
+      "passed": true,
+      "detail": [
+        0.37109,
+        0.37815,
+        0.38968,
+        0.40407,
+        0.41998,
+        0.43988,
+        0.46636,
+        0.50093,
+        0.53542,
+        0.56128,
+        0.58194,
+        0.60059,
+        0.61699,
+        0.62831
+      ]
+    },
+    {
+      "label": "landscape camera pan monotonic reverse",
+      "passed": true,
+      "detail": [
+        0.62833,
+        0.61716,
+        0.60084,
+        0.58222,
+        0.56162,
+        0.53576,
+        0.50131,
+        0.46672,
+        0.44021,
+        0.42028,
+        0.40434,
+        0.38988,
+        0.37829,
+        0.37114
+      ]
+    },
+    {
+      "label": "landscape camera track reaches cover renderer",
+      "passed": true,
+      "detail": [
+        "37.109% 46.033%",
+        "37.815% 46.251%",
+        "38.968% 46.605%",
+        "40.407% 47.048%",
+        "41.998% 47.538%",
+        "43.988% 48.15%",
+        "46.636% 48.965%",
+        "50.093% 50.029%",
+        "53.542% 51.09%",
+        "56.128% 51.886%",
+        "58.194% 52.521%",
+        "60.059% 53.095%",
+        "61.699% 53.6%",
+        "62.831% 53.948%"
+      ]
+    },
+    {
+      "label": "landscape adjacent scenes preserve camera direction",
+      "passed": true,
+      "detail": [
+        {
+          "join": "2->3",
+          "before": 0.38293,
+          "after": 0.38332,
+          "delta": 0.00039000000000000146
+        },
+        {
+          "join": "6->7",
+          "before": 0.45092,
+          "after": 0.45155,
+          "delta": 0.0006300000000000194
+        },
+        {
+          "join": "9->10",
+          "before": 0.55039,
+          "after": 0.55108,
+          "delta": 0.0006899999999999684
+        },
+        {
+          "join": "12->13",
+          "before": 0.60842,
+          "after": 0.60886,
+          "delta": 0.00043999999999999595
+        }
+      ]
+    },
+    {
+      "label": "landscape eased camera spreads a scrub step",
+      "passed": true,
+      "detail": {
+        "panFrames": 135,
+        "journeyFrames": 157
+      }
+    },
+    {
+      "label": "landscape eased camera step never reverses",
+      "passed": true,
+      "detail": {
+        "first": [
+          {
+            "ms": 0,
+            "pan": 0.49135,
+            "journey": 0.4778
+          },
+          {
+            "ms": -3.799999998511339,
+            "pan": 0.49135,
+            "journey": 0.4778
+          },
+          {
+            "ms": 0.4000000014930265,
+            "pan": 0.49354,
+            "journey": 0.48343
+          },
+          {
+            "ms": 4.4000000014930265,
+            "pan": 0.49405,
+            "journey": 0.48475
+          }
+        ],
+        "last": [
+          {
+            "ms": 671.1000000014901,
+            "pan": 0.51076,
+            "journey": 0.52763
+          },
+          {
+            "ms": 675.3000000014872,
+            "pan": 0.51077,
+            "journey": 0.52764
+          },
+          {
+            "ms": 679.5000000014916,
+            "pan": 0.51077,
+            "journey": 0.52765
+          },
+          {
+            "ms": 683.7000000014887,
+            "pan": 0.51078,
+            "journey": 0.52766
+          }
+        ]
+      }
+    },
+    {
+      "label": "landscape screenshot opening",
+      "passed": true,
+      "detail": 260920
+    },
+    {
+      "label": "landscape screenshot act-bridge-archive",
+      "passed": true,
+      "detail": 338384
+    },
+    {
+      "label": "landscape screenshot act-bridge-failure",
+      "passed": true,
+      "detail": 394499
+    },
+    {
+      "label": "landscape screenshot act-bridge-record",
+      "passed": true,
+      "detail": 245714
+    },
+    {
+      "label": "landscape screenshot act-bridge-loop",
+      "passed": true,
+      "detail": 423492
+    },
+    {
+      "label": "landscape ending stage equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "copy": [
+          62,
+          101.47722625732422,
+          782,
+          285.2584762573242
+        ],
+        "titleVisible": true,
+        "linksVisible": true,
+        "text": "THE RESULT BECOMES THE NEXT INPUT\n\nThe seal returns.\nThe method remains.\n\nFourteen accepted returns form this cut. Two failed takes stay preserved outside the reel—not hidden, not shipped as proof.\n\nPRODUCTION BOARD\nRETURN TO WORLDS"
+      }
+    },
+    {
+      "label": "landscape ending composition intact",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "copy": [
+          62,
+          101.47722625732422,
+          782,
+          285.2584762573242
+        ],
+        "titleVisible": true,
+        "linksVisible": true,
+        "text": "THE RESULT BECOMES THE NEXT INPUT\n\nThe seal returns.\nThe method remains.\n\nFourteen accepted returns form this cut. Two failed takes stay preserved outside the reel—not hidden, not shipped as proof.\n\nPRODUCTION BOARD\nRETURN TO WORLDS"
+      }
+    },
+    {
+      "label": "landscape screenshot ending",
+      "passed": true,
+      "detail": 243915
+    },
+    {
+      "label": "orientation resize preserves scrub position",
+      "passed": true,
+      "detail": {
+        "before": {
+          "ordinal": 8,
+          "source": "ACA-009",
+          "mediaState": "painted",
+          "currentTime": 3.150117,
+          "duration": 5,
+          "videoWidth": 1280,
+          "videoHeight": 720,
+          "fit": "cover",
+          "display": "block",
+          "opacity": 1,
+          "objectPosition": "50.6% 50.185%",
+          "pan": 0.506,
+          "journey": 0.5154
+        },
+        "after": {
+          "source": "ACA-009",
+          "mediaState": "painted",
+          "journey": 0.5154,
+          "timeRatio": 0.6300234,
+          "revision": "1:844x390"
+        },
+        "wantedJourney": 0.5153977272727274
+      }
+    },
+    {
+      "label": "orientation resize records a repaint",
+      "passed": true,
+      "detail": {
+        "before": "0:390x844",
+        "after": "1:844x390"
+      }
+    },
+    {
+      "label": "orientation-landscape stage equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "orientation-landscape film frame equals viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "orientation-landscape picture uses cover",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "orientation-landscape zero letterbox mattes",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "orientation-landscape caption readable inside viewport",
+      "passed": true,
+      "detail": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      }
+    },
+    {
+      "label": "orientation-landscape zero horizontal overflow",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "label": "orientation return preserves scrub position",
+      "passed": true,
+      "detail": {
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "journey": 0.5154
+      }
+    },
+    {
+      "label": "console clean",
+      "passed": true,
+      "detail": "0 errors"
+    },
+    {
+      "label": "page exceptions",
+      "passed": true,
+      "detail": "0 exceptions"
+    },
+    {
+      "label": "request failures clean",
+      "passed": true,
+      "detail": "0 failures"
+    },
+    {
+      "label": "HTTP responses clean",
+      "passed": true,
+      "detail": "0 HTTP errors"
+    }
+  ],
+  "failures": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "requestErrors": [],
+  "httpErrors": [],
+  "observations": {
+    "portrait": {
+      "viewport": [
+        390,
+        844
+      ],
+      "first": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.803294,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.339% 50.104%",
+        "pan": 0.50339,
+        "journey": 0.5087
+      },
+      "geometry": {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "frame": [
+          0,
+          0,
+          390,
+          844
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          664.078125,
+          390,
+          844,
+          390,
+          179.921875
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      },
+      "traversal": {
+        "forward": [
+          "ACA-001",
+          "ACA-003",
+          "ACA-004",
+          "ACA-005",
+          "ACA-006",
+          "ACA-007",
+          "ACA-008",
+          "ACA-009",
+          "ACA-010",
+          "ACA-011",
+          "ACA-012",
+          "ACA-013",
+          "ACA-014",
+          "ACA-015"
+        ],
+        "reverse": [
+          "ACA-015",
+          "ACA-014",
+          "ACA-013",
+          "ACA-012",
+          "ACA-011",
+          "ACA-010",
+          "ACA-009",
+          "ACA-008",
+          "ACA-007",
+          "ACA-006",
+          "ACA-005",
+          "ACA-004",
+          "ACA-003",
+          "ACA-001"
+        ]
+      },
+      "camera": {
+        "forwardPan": [
+          0.37109,
+          0.37816,
+          0.38967,
+          0.40406,
+          0.41998,
+          0.43988,
+          0.46637,
+          0.50091,
+          0.53541,
+          0.56127,
+          0.58194,
+          0.60061,
+          0.61699,
+          0.62831
+        ],
+        "reversePan": [
+          0.62832,
+          0.61716,
+          0.60085,
+          0.58224,
+          0.56161,
+          0.53576,
+          0.5013,
+          0.46672,
+          0.44021,
+          0.42027,
+          0.40431,
+          0.38987,
+          0.3783,
+          0.37114
+        ],
+        "renderedPositions": [
+          "37.109% 46.034%",
+          "37.816% 46.251%",
+          "38.967% 46.605%",
+          "40.406% 47.048%",
+          "41.998% 47.538%",
+          "43.988% 48.15%",
+          "46.637% 48.965%",
+          "50.091% 50.028%",
+          "53.541% 51.09%",
+          "56.127% 51.885%",
+          "58.194% 52.521%",
+          "60.061% 53.096%",
+          "61.699% 53.6%",
+          "62.831% 53.948%"
+        ],
+        "joins": [
+          {
+            "join": "2->3",
+            "before": 0.38293,
+            "after": 0.38332,
+            "delta": 0.00039000000000000146
+          },
+          {
+            "join": "6->7",
+            "before": 0.45088,
+            "after": 0.45158,
+            "delta": 0.0006999999999999784
+          },
+          {
+            "join": "9->10",
+            "before": 0.55039,
+            "after": 0.55109,
+            "delta": 0.0006999999999999229
+          },
+          {
+            "join": "12->13",
+            "before": 0.60842,
+            "after": 0.60886,
+            "delta": 0.00043999999999999595
+          }
+        ],
+        "stepPanFrames": 133,
+        "stepJourneyFrames": 155
+      }
+    },
+    "landscape": {
+      "viewport": [
+        844,
+        390
+      ],
+      "first": {
+        "ordinal": 8,
+        "source": "ACA-009",
+        "mediaState": "painted",
+        "currentTime": 2.803294,
+        "duration": 5,
+        "videoWidth": 1280,
+        "videoHeight": 720,
+        "fit": "cover",
+        "display": "block",
+        "opacity": 1,
+        "objectPosition": "50.339% 50.104%",
+        "pan": 0.50339,
+        "journey": 0.5087
+      },
+      "geometry": {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "frame": [
+          0,
+          0,
+          844,
+          390
+        ],
+        "videoFit": "cover",
+        "floorFit": "cover",
+        "cue": [
+          0,
+          301.421875,
+          844,
+          390,
+          844,
+          88.578125
+        ],
+        "cueOpacity": 1,
+        "cueText": "08 / 14\nPROOF BY FAILURE\nThe Proven Cast\n\nThe second cast lifts the same miniature and closes the ring green-gold.\n\n01\n02\n03\n04\n05",
+        "mattes": [],
+        "bodyLetterbox": false,
+        "overflow": 0
+      },
+      "traversal": {
+        "forward": [
+          "ACA-001",
+          "ACA-003",
+          "ACA-004",
+          "ACA-005",
+          "ACA-006",
+          "ACA-007",
+          "ACA-008",
+          "ACA-009",
+          "ACA-010",
+          "ACA-011",
+          "ACA-012",
+          "ACA-013",
+          "ACA-014",
+          "ACA-015"
+        ],
+        "reverse": [
+          "ACA-015",
+          "ACA-014",
+          "ACA-013",
+          "ACA-012",
+          "ACA-011",
+          "ACA-010",
+          "ACA-009",
+          "ACA-008",
+          "ACA-007",
+          "ACA-006",
+          "ACA-005",
+          "ACA-004",
+          "ACA-003",
+          "ACA-001"
+        ]
+      },
+      "camera": {
+        "forwardPan": [
+          0.37109,
+          0.37815,
+          0.38968,
+          0.40407,
+          0.41998,
+          0.43988,
+          0.46636,
+          0.50093,
+          0.53542,
+          0.56128,
+          0.58194,
+          0.60059,
+          0.61699,
+          0.62831
+        ],
+        "reversePan": [
+          0.62833,
+          0.61716,
+          0.60084,
+          0.58222,
+          0.56162,
+          0.53576,
+          0.50131,
+          0.46672,
+          0.44021,
+          0.42028,
+          0.40434,
+          0.38988,
+          0.37829,
+          0.37114
+        ],
+        "renderedPositions": [
+          "37.109% 46.033%",
+          "37.815% 46.251%",
+          "38.968% 46.605%",
+          "40.407% 47.048%",
+          "41.998% 47.538%",
+          "43.988% 48.15%",
+          "46.636% 48.965%",
+          "50.093% 50.029%",
+          "53.542% 51.09%",
+          "56.128% 51.886%",
+          "58.194% 52.521%",
+          "60.059% 53.095%",
+          "61.699% 53.6%",
+          "62.831% 53.948%"
+        ],
+        "joins": [
+          {
+            "join": "2->3",
+            "before": 0.38293,
+            "after": 0.38332,
+            "delta": 0.00039000000000000146
+          },
+          {
+            "join": "6->7",
+            "before": 0.45092,
+            "after": 0.45155,
+            "delta": 0.0006300000000000194
+          },
+          {
+            "join": "9->10",
+            "before": 0.55039,
+            "after": 0.55108,
+            "delta": 0.0006899999999999684
+          },
+          {
+            "join": "12->13",
+            "before": 0.60842,
+            "after": 0.60886,
+            "delta": 0.00043999999999999595
+          }
+        ],
+        "stepPanFrames": 135,
+        "stepJourneyFrames": 157
+      }
+    }
+  }
+}

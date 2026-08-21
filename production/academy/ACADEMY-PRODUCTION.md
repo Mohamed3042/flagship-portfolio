@@ -188,3 +188,17 @@ View through the centered circular brass telescope lens. Inside it is the exact 
 - Rendered gate: `ACADEMY_BROWSER_GATE_GREEN — desktop video painted, mobile overflow 0 px, proof state proven, Arabic RTL, reduced-motion poster verified`.
 - Production build: Astro generated 56 pages successfully. This delivery is local only; no deploy or push was performed.
 - Proof: `production/academy/world-proof/`.
+
+## Deployed phone full-bleed addendum — 2026-08-21
+
+- `VERIFIED`: the fail-first gate against the previous public v1 cut was RED with `24` failures across `143` checks. It measured a 390×219.375 portrait film frame and a 376.875×211.984 landscape film frame, `object-fit: contain`, and visible matte bars.
+- `VERIFIED`: v2 makes every Academy stage and film frame exactly `100dvw × 100dvh`; the foreground clips and poster floor use `object-fit: cover` in portrait and landscape with no fixed-height or aspect-ratio letterbox path.
+- `VERIFIED`: one eased global journey drives continuous `object-position` travel on both axes. The forward samples are monotonic, the reverse samples return in the opposite order, and all four measured act joins remain continuous without a direction reversal.
+- `VERIFIED`: orientation and visual-viewport resize remeasure the scene, restore the same normalized scroll position, repaint the current frame, and increment the runtime viewport revision.
+- `VERIFIED`: the deployed gate passed `145/145` checks at 390×844 portrait and 844×390 landscape. It traversed all fourteen accepted clips forward and reverse in both orientations, found zero letterbox mattes, zero overflow, zero console/page/request/HTTP errors, and captured opening, four act bridges, and ending screenshots in both orientations.
+- `VERIFIED`: every live stage and film-frame bound equals its viewport bound exactly in both profiles. Captions remain inside the viewport, and the coda remains intact in both orientations.
+- `VERIFIED`: all fourteen public clips still decode as the same 1280×720 landscape assets; no mobile-specific chain or additional WAN generation was introduced. All fourteen live range probes returned HTTP `206` with the requested 32 bytes.
+- `VERIFIED`: the live HTML, CSS, and JavaScript SHA-256 hashes match the exact `eb12233` Pages commit bytes.
+- Source commit: `09363fb`. Selective Pages commit: `eb12233`.
+- Live URL: <https://mohamed3042.github.io/flagship-portfolio/worlds/academy.html>
+- Evidence: `production/academy/world-proof/phone-addendum-red-before/` and `production/academy/world-proof/phone-addendum-green-deployed/`.
