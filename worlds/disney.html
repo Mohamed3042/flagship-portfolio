@@ -55,8 +55,8 @@
      Owner contract: full-bleed on every screen, nothing over the picture.
      The frames are wider than the viewport, so the scroll is projector and
      rostrum camera at once — inside each chapter the same hand that runs
-     the clock PANS across the frame's hidden width (--pan 0..1, serpentine:
-     odd chapters sweep back, so the camera never jumps at a join). One rule
+     the clock PANS across the frame's hidden width (--pan 0..1, serpentine
+     only at story-block cuts, with continuous position and velocity). One rule
      for phone and desktop; the only words on the picture are the cue. ————— */
   .film{ height:9100vh; --depth:-.5; --journey:0; --pan:.5; }
   .film .stage{ background:#070503; isolation:isolate; }
@@ -667,11 +667,38 @@
     scene.classList.add('mode-scrub');
 
     const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-    const smoothstep = v => v * v * (3 - 2 * v);
+    const smootherstep = v => v * v * v * (v * (v * 6 - 15) + 10);
     const TAU = 140;
     const SNAP_LEGS = 1.5;
     const IDLE_EPS = 1e-4;
     const IDLE_FRAMES = 3;
+    /* One continuous rostrum track across the 100-shot story. Each span is
+       monotonic; direction returns only at authored story-block cuts. The
+       fifth-order ease has zero velocity at every return, while ordinary
+       shot joins inherit the same curve and therefore the same velocity. */
+    const CAMERA_TRACK = [
+      [0,   .18],  /* Act I — the sealed book wakes */
+      [4,   .82],  /* Act II — ink answers */
+      [9,   .24],  /* Act III — the true fibre */
+      [16,  .80],  /* Acts IV–VI — handoff, gate, ember */
+      [20,  .32],  /* Act VII — the second journey */
+      [30,  .78],  /* Act VIII — the torn route */
+      [40,  .22],  /* Act IX — storm and relay */
+      [50,  .80],  /* Act X — the archive descends */
+      [60,  .20],  /* Act XI — the deep supports */
+      [70,  .76],  /* Act XII — the observatory */
+      [80,  .24],  /* Act XIII — the other volumes */
+      [90,  .78],  /* Act XIV — the open horizon */
+      [100, .50],  /* Open Circle — centered handoff */
+    ];
+    const cameraPan = g => {
+      let k = 1;
+      while (k < CAMERA_TRACK.length - 1 && g > CAMERA_TRACK[k][0]) k += 1;
+      const a = CAMERA_TRACK[k - 1], b = CAMERA_TRACK[k];
+      const t = clamp01((g - a[0]) / (b[0] - a[0]));
+      return a[1] + (b[1] - a[1]) * smootherstep(t);
+    };
+    scene.dataset.cameraTrack = 'story-blocks-v1';
     const readRaw = () => clamp01(parseFloat(scene.style.getPropertyValue('--p') || '0'));
     const slots = vids.map(v => ({
       v, leg: -1, ready: false, seeking: false, want: -1,
@@ -780,10 +807,7 @@
       const i = Math.floor(g), f = g - i;
       scene.style.setProperty('--depth', (f - .5).toFixed(4));
       scene.style.setProperty('--journey', p.toFixed(5));
-      /* ARRIVE 0-.12: hold the entry composition. CROSS .12-.88: pan with
-         zero velocity at both ends. SETTLE .88-1: hold into the join. */
-      const cross = smoothstep(clamp01((f - .12) / .76));
-      scene.style.setProperty('--pan', (i % 2 === 0 ? cross : 1 - cross).toFixed(4));
+      scene.style.setProperty('--pan', cameraPan(g).toFixed(4));
       setLeg(i);
       const s = slotFor(i);
       show(s);
