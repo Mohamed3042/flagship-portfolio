@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>The Long Signal · WAN Owner Generation Board</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #060706;
+      --panel: rgba(16, 17, 15, .94);
+      --panel-2: rgba(25, 25, 21, .92);
+      --ink: #eee8dc;
+      --muted: #aaa391;
+      --amber: #d7a45b;
+      --amber-soft: #f0c77d;
+      --line: rgba(215, 164, 91, .28);
+      --green: #9bd4b3;
+      --red: #ef9a8f;
+      --blue-grey: #55646a;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(76, 88, 89, .32), transparent 34rem),
+        radial-gradient(circle at 92% 7%, rgba(130, 83, 34, .2), transparent 30rem),
+        var(--page);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, select, textarea { font: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--amber-soft);
+      outline-offset: 3px;
+    }
+    button { cursor: pointer; }
+    .shell { width: min(1480px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 88px; }
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(28px, 5vw, 68px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(38, 44, 44, .96), rgba(10, 10, 8, .98));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, .42);
+    }
+    .masthead::after {
+      content: "";
+      position: absolute;
+      right: -18%;
+      bottom: -62%;
+      width: 76%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(215, 164, 91, .2);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .eyebrow, .frame-label, .prompt-label, .meta-label {
+      color: var(--amber-soft);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .eyebrow { margin: 0 0 14px; font-size: 12px; letter-spacing: .2em; }
+    h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 7vw, 92px);
+      font-weight: 400;
+      letter-spacing: -.045em;
+      line-height: .94;
+    }
+    .summary { position: relative; z-index: 1; max-width: 820px; margin: 22px 0 0; color: var(--muted); line-height: 1.65; }
+    .version { color: var(--amber-soft); font-weight: 800; }
+    .settings {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 32px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--line);
+    }
+    .setting { min-height: 72px; padding: 13px 14px; background: rgba(7, 8, 7, .95); }
+    .setting span { display: block; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .setting strong { display: block; margin-top: 6px; font-size: 13px; }
+    .progress-row { display: grid; grid-template-columns: auto minmax(100px, 1fr) auto auto; align-items: center; gap: 16px; margin: 28px 2px 12px; color: var(--muted); font-size: 13px; }
+    .progress-row strong { color: var(--ink); }
+    .bar { height: 5px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, .08); }
+    .bar > i { display: block; width: 0; height: 100%; background: var(--amber); transition: width .25s ease; }
+    .spend-alert { color: var(--red); font-weight: 800; }
+    .toolbar {
+      position: sticky;
+      z-index: 20;
+      top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 20px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(7, 8, 7, .92);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .36);
+      backdrop-filter: blur(14px);
+    }
+    .filters, .toolbar-actions, .actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    button {
+      min-height: 39px;
+      padding: 0 14px;
+      border: 1px solid rgba(215, 164, 91, .42);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(215, 164, 91, .08);
+    }
+    button:hover { background: rgba(215, 164, 91, .18); }
+    button[aria-pressed="true"] { color: #1d1409; background: var(--amber-soft); }
+    button.copy.ok { color: var(--green); border-color: rgba(91, 188, 148, .5); }
+    .cards { display: grid; gap: 24px; }
+    .card {
+      scroll-margin-top: 98px;
+      padding: clamp(18px, 3vw, 34px);
+      border: 1px solid rgba(215, 164, 91, .2);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .28);
+    }
+    .card[data-status="done"] { border-color: rgba(91, 188, 148, .45); }
+    .card[data-status="rejected"] { border-color: rgba(239, 154, 143, .45); }
+    .card[hidden] { display: none; }
+    .card-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    .shot-no { color: var(--amber-soft); font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    h2 { margin: 5px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 4vw, 42px); font-weight: 400; line-height: 1.04; }
+    .output { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; text-align: right; }
+    .anchor { display: inline-block; margin-top: 8px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--amber-soft); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+    .pair { display: grid; grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr); align-items: center; gap: 14px; }
+    figure { margin: 0; min-width: 0; }
+    .frame-link { display: block; overflow: hidden; margin-top: 8px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; background: #000; aspect-ratio: 30 / 17; }
+    .frame-link img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    figcaption { overflow: hidden; margin-top: 7px; color: var(--muted); font: 500 10px ui-monospace, SFMono-Regular, Consolas, monospace; text-overflow: ellipsis; white-space: nowrap; }
+    .arrow { color: var(--amber); font-family: Georgia, serif; font-size: 34px; text-align: center; }
+    .job-meta { display: grid; grid-template-columns: 1fr 1.3fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .field { min-width: 0; }
+    .field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .field input, .field select, .field textarea {
+      width: 100%; min-height: 42px; border: 1px solid rgba(255, 255, 255, .11); border-radius: 10px; color: var(--ink); background: rgba(0, 0, 0, .25); padding: 9px 11px;
+    }
+    .field textarea { min-height: 42px; resize: vertical; }
+    .prompt-box { margin-top: 20px; padding: 18px; border: 1px solid rgba(255, 255, 255, .08); border-radius: 16px; background: var(--panel-2); }
+    .prompt-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .prompt { margin: 0; color: #e7e1d6; font-size: 14px; line-height: 1.65; white-space: pre-wrap; }
+    .negative { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .08); color: #c7bfb0; font-size: 12px; line-height: 1.55; }
+    .visible-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .noscript { margin: 24px 0; padding: 18px; border: 1px solid var(--red); color: var(--red); }
+    @media (max-width: 1050px) { .settings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .job-meta { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 18px, 1480px); padding-top: 9px; }
+      .masthead, .card { border-radius: 18px; }
+      .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .progress-row { grid-template-columns: 1fr auto; }
+      .progress-row .bar { grid-column: 1 / -1; grid-row: 2; }
+      .toolbar, .card-head, .prompt-top { align-items: flex-start; flex-direction: column; }
+      .toolbar-actions { width: 100%; }
+      .pair { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); }
+      .job-meta { grid-template-columns: 1fr; }
+      .output { text-align: left; }
+      button { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <p class="eyebrow">Owner generation surface · zero automatic submissions</p>
+      <h1>First frame → last frame. One exact prompt.</h1>
+      <p class="summary">Generate <strong>SIG-001 through SIG-040 in order</strong>. Upload the two approved stills shown on each card, paste the exact positive and negative prompts, use the recommended fixed seed, and download immediately. This offline board stores progress only in this browser. It cannot call WAN or spend credits. <span class="version">Board v1.0.0</span></p>
+      <section class="settings" aria-label="Locked WAN settings">
+        <div class="setting"><span>Model</span><strong>WAN 2.7</strong></div>
+        <div class="setting"><span>Mode</span><strong>First + Last</strong></div>
+        <div class="setting"><span>Resolution</span><strong>720P</strong></div>
+        <div class="setting"><span>Duration</span><strong>5 seconds</strong></div>
+        <div class="setting"><span>Outputs</span><strong>1</strong></div>
+        <div class="setting"><span>Prompt extend</span><strong>OFF</strong></div>
+        <div class="setting"><span>Audio</span><strong>OFF</strong></div>
+        <div class="setting"><span>Credits</span><strong>10 / clip</strong></div>
+      </section>
+    </header>
+
+    <section class="progress-row" aria-label="Generation progress">
+      <span><strong id="done-count">0</strong> / <strong id="job-count">40</strong> done</span>
+      <div class="bar" aria-hidden="true"><i id="bar-fill"></i></div>
+      <span><strong id="credits-spent">0</strong> credits entered</span>
+      <span id="projection"><strong>400</strong> projected</span>
+    </section>
+
+    <nav class="toolbar" aria-label="Board filters and actions">
+      <div class="filters">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="pending" aria-pressed="false">Pending</button>
+        <button type="button" data-filter="done" aria-pressed="false">Done</button>
+        <button type="button" data-filter="rejected" aria-pressed="false">Rejected</button>
+      </div>
+      <div class="toolbar-actions">
+        <button type="button" id="first-pending">First pending</button>
+        <button type="button" id="copy-manifest">Copy manifest CSV</button>
+        <span class="visible-count"><strong id="visible-count">40</strong> visible</span>
+      </div>
+    </nav>
+
+    <section class="cards" id="cards" aria-label="WAN generation jobs"></section>
+    <noscript><p class="noscript">JavaScript is required to render the offline board and persistent local progress.</p></noscript>
+  </main>
+
+  <script type="application/json" id="job-data">{
+  "schema": "the-long-signal-wan-board/v1",
+  "version": "1.0.0",
+  "project": "THE LONG SIGNAL",
+  "settings": {
+    "model": "WAN 2.7",
+    "mode": "First + Last Frame",
+    "resolution": "720P",
+    "durationSeconds": 5,
+    "outputs": 1,
+    "promptExtend": false,
+    "audio": false,
+    "creditsPerClip": 10,
+    "zeroRetakeCredits": 400,
+    "plannedCredits": 600,
+    "stopReportCredits": 660
+  },
+  "styleLock": "photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain",
+  "sharedNegative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars",
+  "jobs": [
+    {
+      "id": "SIG-001",
+      "position": 1,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Dust Front → The Bench",
+      "output": "SIG-001.mp4",
+      "firstId": "KF01",
+      "lastId": "KF02",
+      "firstName": "SIG-KF01-dust-front.png",
+      "lastName": "SIG-KF02-bench.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF01-dust-front.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF02-bench.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF01 FIRST frame and KF02 LAST frame as immutable exact endpoints. The grey dust front advances steadily toward the lone workshop and its airflow carries one coherent ribbon of fine dust through the warm open window, where that same dust settles onto the glass plate as one clean standing waveform beneath the horn speaker. Make one slow straight 35 mm push forward eight metres through the window and down toward the plate, using the window frame as natural occlusion, never a cut. Preserve the exact barn, mast, warm window, workbench geometry, earth-tone palette, and centered action. Complete the dominant action by 4.5 seconds, match the supplied KF02 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-002",
+      "position": 2,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Bench → The Relic Shelf",
+      "output": "SIG-002.mp4",
+      "firstId": "KF02",
+      "lastId": "KF03",
+      "firstName": "SIG-KF02-bench.png",
+      "lastName": "SIG-KF03-relic-shelf.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF02-bench.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF03-relic-shelf.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF02 FIRST frame and KF03 LAST frame as immutable exact endpoints. The clean dust waveform gives one patient pulse and its moving shadow travels across the exact workshop wall until one shadow-star on the relic projection brightens. Make one slow 50 mm lateral truck right by 1.5 metres from the glass plate to the existing relic shelf, keeping the workbench physically continuous in foreground parallax. Preserve every cartridge, reel, board, dust sheet, and unlabeled projection; add no readable marks or people. Complete the dominant action by 4.5 seconds, match the supplied KF03 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-003",
+      "position": 3,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Relic Shelf → The Decode",
+      "output": "SIG-003.mp4",
+      "firstId": "KF03",
+      "lastId": "KF04",
+      "firstName": "SIG-KF03-relic-shelf.png",
+      "lastName": "SIG-KF04-decode.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF03-relic-shelf.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF04-decode.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF03 FIRST frame and KF04 LAST frame as immutable exact endpoints. The single bright shadow-star sends one narrow mechanical cue across the existing bench and the pen plotter draws one elegant course curve on blank paper, advancing only when the real mast blinks through the window. Make one patient 45 mm lateral track left by 1.2 metres from the relic shelf to the plotter while keeping shelf, bench, and window in one continuous room. Preserve all relic counts and blank surfaces; the curve remains abstract geometry with no text, coordinates, ticks, or numerals. Complete the dominant action by 4.5 seconds, match the supplied KF04 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-004",
+      "position": 4,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Decode → The Tarp",
+      "output": "SIG-004.mp4",
+      "firstId": "KF04",
+      "lastId": "KF05",
+      "firstName": "SIG-KF04-decode.png",
+      "lastName": "SIG-KF05-tarp.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF04-decode.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF05-tarp.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF04 FIRST frame and KF05 LAST frame as immutable exact endpoints. As the plotter completes its single course curve, one pair of stable gloved hands pulls the existing grey tarp upward and backward from the compact matte-white spacecraft, exposing the unchanged blank-marked hull while a restrained sheet of dust cascades in the plotted curve. Make one slow 40 mm crane back and upward by two metres from the plotter to the craft, with the bench crossing foreground as natural occlusion. Preserve workshop geometry, craft scale, blank hull, one pair of hands, and realistic cloth and dust physics. Complete the dominant action by 4.5 seconds, match the supplied KF05 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-005",
+      "position": 5,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Tarp → The Suit",
+      "output": "SIG-005.mp4",
+      "firstId": "KF05",
+      "lastId": "KF06",
+      "firstName": "SIG-KF05-tarp.png",
+      "lastName": "SIG-KF06-suit-cabin-master.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF05-tarp.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF06-suit-cabin-master.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF05 FIRST frame and KF06 LAST frame as immutable exact endpoints. The exposed craft remains fixed while the same faceless pilot enters the already open cockpit and performs one deliberate preparation sweep: both correct gloved hands seal one cuff and continue across the worn toggle row so amber instruments wake bank by bank. Make one slow 70 mm push forward 2.5 metres through the open cockpit rim to the supplied over-shoulder cabin framing; the rim creates the only natural occlusion. Preserve the exact hull, narrow cold-grey cabin, charcoal suit, dark blank visor, and workshop reflection; never reveal a face. Complete the dominant action by 4.5 seconds, match the supplied KF06 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-006",
+      "position": 6,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Suit → The Launch",
+      "output": "SIG-006.mp4",
+      "firstId": "KF06",
+      "lastId": "KF07",
+      "firstName": "SIG-KF06-suit-cabin-master.png",
+      "lastName": "SIG-KF07-launch.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF06-suit-cabin-master.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF07-launch.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF06 FIRST frame and KF07 LAST frame as immutable exact endpoints. The last amber instrument bank reaches full steady light and the same craft performs one vertical launch, accelerating upward through the brown dust front until brown boil yields to a thin blue band and then still black space. Keep one rigid hull-mounted camera with zero operator movement; the craft travels straight upward roughly two kilometres, fast at first and easing as atmosphere falls away. Preserve the sharp centered hull edge, blank utilitarian materials, pilot identity, and one craft only; nothing flutters in vacuum. Complete the dominant action by 4.5 seconds, match the supplied KF07 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-007",
+      "position": 7,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Launch → The Marble",
+      "output": "SIG-007.mp4",
+      "firstId": "KF07",
+      "lastId": "KF08",
+      "firstName": "SIG-KF07-launch.png",
+      "lastName": "SIG-KF08-marble.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF07-launch.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF08-marble.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF07 FIRST frame and KF08 LAST frame as immutable exact endpoints. The same ascent continues as the dust and blue atmosphere recede beneath the hull until the home world resolves into one restrained dust-marbled sphere, its night-side beacon blinking and its terminator clouds forming the bench waveform. Keep one hull-mounted backward-looking camera and let the craft move away from the planet at a steady physical speed, with no free-camera drift; the visible hull edge shifts only ten percent toward the frame edge. Preserve one planet, one beacon, pin-sharp stars, and the distant plain ring station. Complete the dominant action by 4.5 seconds, match the supplied KF08 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-008",
+      "position": 8,
+      "act": "I",
+      "actTitle": "THE DUST",
+      "title": "The Marble → The Relay Ring",
+      "output": "SIG-008.mp4",
+      "firstId": "KF08",
+      "lastId": "KF09",
+      "firstName": "SIG-KF08-marble.png",
+      "lastName": "SIG-KF09-relay-ring.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF08-marble.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF09-relay-ring.png",
+      "seedFamily": "DUST",
+      "seed": 101101,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF08 FIRST frame and KF09 LAST frame as immutable exact endpoints. The same tiny craft approaches the distant utilitarian relay ring and performs one slow clockwise roll of about thirty degrees until its orientation matches the station rotation; as alignment completes, the station and craft appear still while the starfield wheels behind them. Make one slow 40 mm track forward along the craft flank by thirty metres toward the ring. Preserve the dust-marbled home world receding behind, one craft, one ring station, practical grey truss geometry, blank surfaces, and vacuum black. Complete the dominant action by 4.5 seconds, match the supplied KF09 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-009",
+      "position": 9,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The Relay Ring → The Capture",
+      "output": "SIG-009.mp4",
+      "firstId": "KF09",
+      "lastId": "KF10",
+      "firstName": "SIG-KF09-relay-ring.png",
+      "lastName": "SIG-KF10-capture.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF09-relay-ring.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF10-capture.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF09 FIRST frame and KF10 LAST frame as immutable exact endpoints. The aligned craft performs one controlled docking drift straight into the relay port until the mechanical latch petals close around the matching collar and one small frost cloud jumps outward. Make one slow 85 mm push forward twenty metres along the craft flank into the latch macro, reducing speed continuously as contact nears. Preserve station rotation, rigid hull geometry, one amber port light, exact latch count, pin stars, and vacuum behavior; no atmosphere, collision, or camera shake. Complete the dominant action by 4.5 seconds, match the supplied KF10 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-010",
+      "position": 10,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The Capture → The Message Corridor",
+      "output": "SIG-010.mp4",
+      "firstId": "KF10",
+      "lastId": "KF11",
+      "firstName": "SIG-KF10-capture.png",
+      "lastName": "SIG-KF11-message-corridor.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF10-capture.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF11-message-corridor.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF10 FIRST frame and KF11 LAST frame as immutable exact endpoints. The closed docking petals complete one firm locking action; the released frost particles briefly organize into a perfect ring, scatter, and reveal the open relay passage beyond. Make one patient 45 mm dolly forward eight metres through the now-open pressure passage and into the humane archive corridor, using the circular port as natural occlusion without any cut. Preserve the hard dock, one amber light, blank slates, warm hand-shaped light shadows, open shelves, wire globe at the far end, and library calm. Complete the dominant action by 4.5 seconds, match the supplied KF11 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-011",
+      "position": 11,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The Message Corridor → The Thread Globe",
+      "output": "SIG-011.mp4",
+      "firstId": "KF11",
+      "lastId": "KF12",
+      "firstName": "SIG-KF11-message-corridor.png",
+      "lastName": "SIG-KF12-thread-globe.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF11-message-corridor.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF12-thread-globe.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF11 FIRST frame and KF12 LAST frame as immutable exact endpoints. As the camera passes the blank physical slates, their existing amber light-shadows write in sequence and the many real threads connected to the distant wire globe tighten into one strong tactile braid aimed through the viewport. Make one patient centered 45 mm dolly forward twelve metres down the corridor, ending in the supplied 55 mm globe framing without an orbit. Preserve all shelf geometry, abstract seal lights, blank surfaces, warm humane tone, and one open wire globe; create no bodies, text, labels, or magic glow. Complete the dominant action by 4.5 seconds, match the supplied KF12 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-012",
+      "position": 12,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The Thread Globe → The Departure Burn",
+      "output": "SIG-012.mp4",
+      "firstId": "KF12",
+      "lastId": "KF13",
+      "firstName": "SIG-KF12-thread-globe.png",
+      "lastName": "SIG-KF13-departure-burn.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF12-thread-globe.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF13-departure-burn.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF12 FIRST frame and KF13 LAST frame as immutable exact endpoints. The single tightened braid points through the viewport and the same docked craft performs one clean departure burn away from the relay ring toward that glint, twin recessed thrusters producing restrained pale exhaust. Make one slow 55 mm quarter-orbit of ninety degrees around the wire globe until the viewport fills the frame and the exterior pursuit composition is reached through the glass, never by a cut. Preserve the globe, braid, one ring, one craft, blank hull, pin stars, and vacuum black; the craft stays needle-sharp. Complete the dominant action by 4.5 seconds, match the supplied KF13 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-013",
+      "position": 13,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The Departure Burn → The Sphere",
+      "output": "SIG-013.mp4",
+      "firstId": "KF13",
+      "lastId": "KF14",
+      "firstName": "SIG-KF13-departure-burn.png",
+      "lastName": "SIG-KF14-sphere.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF13-departure-burn.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF14-sphere.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF13 FIRST frame and KF14 LAST frame as immutable exact endpoints. The same craft continues one long straight burn toward the glint until it resolves physically into a perfect transparent sphere of lensed starlight; surrounding star streaks bend around the craft while its matte hull stays needle-sharp. Make one locked 35 mm pursuit move that advances fifty metres behind the craft at constant speed, with the relay ring shrinking on axis. Preserve one craft, twin pale exhausts, the exact surrounding starfield mirrored continuously inside the sphere, vacuum black, and zero nebula color. Complete the dominant action by 4.5 seconds, match the supplied KF14 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-014",
+      "position": 14,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The Sphere → The Crossing",
+      "output": "SIG-014.mp4",
+      "firstId": "KF14",
+      "lastId": "KF15",
+      "firstName": "SIG-KF14-sphere.png",
+      "lastName": "SIG-KF15-crossing.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF14-sphere.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF15-crossing.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF14 FIRST frame and KF15 LAST frame as immutable exact endpoints. The same craft performs one steady forward ingress through the transparent lensed sphere; the unchanged surrounding stars wrap continuously across the rim and the matte hull reflections stretch into physical ribbons as the hull edge begins to elongate. Keep one locked hull-mounted 40 mm camera moving forward roughly two hundred metres with no roll or free-camera motion. Preserve the one gravitational lens, rigid utilitarian hull, real starfield continuity, restrained amber instruments, and black vacuum; never form a portal, tunnel, or colorful energy. Complete the dominant action by 4.5 seconds, match the supplied KF15 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-015",
+      "position": 15,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The Crossing → The New Sky",
+      "output": "SIG-015.mp4",
+      "firstId": "KF15",
+      "lastId": "KF16",
+      "firstName": "SIG-KF15-crossing.png",
+      "lastName": "SIG-KF16-new-sky.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF15-crossing.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF16-new-sky.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF15 FIRST frame and KF16 LAST frame as immutable exact endpoints. The same craft completes one continuous transit through the lensed field: wrapped hull reflections pull taut, a restrained amber instrument reflection briefly doubles the cabin, then the stretch releases into a clean new sky containing exactly five distinct worlds on one natural bright arc and one distant dark mass with a thin amber ring. Keep one rigid hull-mounted camera advancing straight ahead roughly three hundred metres at constant speed. Preserve the craft and reflections with no free camera, tunnel, extra planets, moons, nebulae, or fantasy color. Complete the dominant action by 4.5 seconds, match the supplied KF16 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-016",
+      "position": 16,
+      "act": "II",
+      "actTitle": "THE CROSSING",
+      "title": "The New Sky → The Floating Sea",
+      "output": "SIG-016.mp4",
+      "firstId": "KF16",
+      "lastId": "KF17",
+      "firstName": "SIG-KF16-new-sky.png",
+      "lastName": "SIG-KF17-floating-sea.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF16-new-sky.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF17-floating-sea.png",
+      "seedFamily": "CROSSING",
+      "seed": 202202,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF16 FIRST frame and KF17 LAST frame as immutable exact endpoints. The same craft performs one slow measured descent toward the first of exactly five worlds, entering its thin cloud deck until steel-blue ocean and enormous weathered floating stone islands appear below, each with one matching shadow directly on the sea. Keep one hull-mounted 30 mm camera and pitch it downward fifteen degrees slowly while the craft descends about one kilometre; the other four worlds leave frame only through the cloud occlusion. Preserve one craft, exactly five initial worlds, no moons, natural atmosphere, centered hull edge, and landing skids approaching one island. Complete the dominant action by 4.5 seconds, match the supplied KF17 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-017",
+      "position": 17,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Floating Sea → The Arena Bones",
+      "output": "SIG-017.mp4",
+      "firstId": "KF17",
+      "lastId": "KF18",
+      "firstName": "SIG-KF17-floating-sea.png",
+      "lastName": "SIG-KF18-arena-bones.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF17-floating-sea.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF18-arena-bones.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF17 FIRST frame and KF18 LAST frame as immutable exact endpoints. The same craft completes one landing approach onto a floating stone island and the same faceless pilot advances from the already open hatch to plant one plain survey pylon beside the half-buried circular arena, its amber lamp waking as its shadow climbs onto the island above. Keep one hull-height 45 mm camera moving forward six metres behind the pilot at a steady walking speed, using the hatch rim as natural occlusion. Preserve the steel-blue sea, floating-island shadows, one pilot, one pylon, exact suit, and calm natural wind. Complete the dominant action by 4.5 seconds, match the supplied KF18 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-018",
+      "position": 18,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Arena Bones → The Green Lagoons",
+      "output": "SIG-018.mp4",
+      "firstId": "KF18",
+      "lastId": "KF19",
+      "firstName": "SIG-KF18-arena-bones.png",
+      "lastName": "SIG-KF19-green-lagoons.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF18-arena-bones.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF19-green-lagoons.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF18 FIRST frame and KF19 LAST frame as immutable exact endpoints. The planted pylon emits one narrow steady survey pulse and the same craft follows that direction into a low flight over the next wet-green world, where a chain of dark lagoons and monumental moss-covered king masks fills the route ahead. Make one continuous 35 mm forward flight of roughly three hundred metres, rising through a low cloud band that naturally occludes the island before descending over the jungle; never cut or dissolve. Preserve one pylon at departure, one craft viewpoint, natural humid daylight, moving water with perfectly still reflections, and no readable symbols. Complete the dominant action by 4.5 seconds, match the supplied KF19 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-019",
+      "position": 19,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Green Lagoons → The Mask Survey",
+      "output": "SIG-019.mp4",
+      "firstId": "KF19",
+      "lastId": "KF20",
+      "firstName": "SIG-KF19-green-lagoons.png",
+      "lastName": "SIG-KF20-mask-survey.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF19-green-lagoons.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF20-mask-survey.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF19 FIRST frame and KF20 LAST frame as immutable exact endpoints. The same pilot performs one slow deliberate wipe across the nearest carved king mask, removing a single strip of moss so natural mineral inlays emerge while the lagoon reflection below remains a flat two-dimensional painted version of the fully three-dimensional stone. Make one 70 mm push forward by seventy centimetres from the low flyover framing to the stable hand macro, with foliage crossing the lens as natural occlusion. Preserve one anatomically correct gloved hand, one mask, one amber pylon in soft background, exact water behavior, and no face. Complete the dominant action by 4.5 seconds, match the supplied KF20 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-020",
+      "position": 20,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Mask Survey → The Glass Arcs",
+      "output": "SIG-020.mp4",
+      "firstId": "KF20",
+      "lastId": "KF21",
+      "firstName": "SIG-KF20-mask-survey.png",
+      "lastName": "SIG-KF21-glass-arcs.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF20-mask-survey.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF21-glass-arcs.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF20 FIRST frame and KF21 LAST frame as immutable exact endpoints. Sunlight travels once along the newly exposed mineral inlay and continues as a restrained warm line across the terrain toward the next dusk-ochre ridge, revealing large dead fossil-glass arcs overhead with one faint frozen tracer inside each. Make one patient 40 mm lateral track right by ten metres, passing behind the stone mask and a dark rock face as natural occlusions before settling behind the same walking pilot and one pylon. Preserve natural mineral color, rigid glass, one pilot, no weapons, no combat, and no readable symbols. Complete the dominant action by 4.5 seconds, match the supplied KF21 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-021",
+      "position": 21,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Glass Arcs → The Re-Ignition",
+      "output": "SIG-021.mp4",
+      "firstId": "KF21",
+      "lastId": "KF22",
+      "firstName": "SIG-KF21-glass-arcs.png",
+      "lastName": "SIG-KF22-re-ignition.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF21-glass-arcs.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF22-re-ignition.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF21 FIRST frame and KF22 LAST frame as immutable exact endpoints. The same pilot plants the single survey pylon and its amber lamp triggers one clear sequential re-ignition: the existing fossil-glass arcs light end-to-end in a readable firing order across the whole dusk-ochre sky, then hold as one vast constellation diagram. Make one slow 40 mm crane upward six metres from the pilot's boots to the full sky, keeping the tiny faceless pilot centered at the bottom for scale. Preserve every arc position, one pylon, natural ochre atmosphere, and recovered-system awe; no battle, explosion, extra lights, or fantasy color. Complete the dominant action by 4.5 seconds, match the supplied KF22 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-022",
+      "position": 22,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Re-Ignition → The Ice Gallery",
+      "output": "SIG-022.mp4",
+      "firstId": "KF22",
+      "lastId": "KF23",
+      "firstName": "SIG-KF22-re-ignition.png",
+      "lastName": "SIG-KF23-ice-gallery.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF22-re-ignition.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF23-ice-gallery.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF22 FIRST frame and KF23 LAST frame as immutable exact endpoints. The ordered glass arcs complete their single light sequence and their pale reflection travels across a natural cloud veil that clears onto the next glacier-white world, revealing exactly three mannequin-like clothed figures preserved mid-stride inside one broad blue-ice wall. Make one slow 50 mm lateral track right by eight metres, letting the bright cloud and ice ridge create continuous natural occlusion rather than a cut. Preserve the same pilot's approaching glove, exactly three featureless figures, calm gallery presentation, dark face planes, and a hairline of melt only around their silhouettes. Complete the dominant action by 4.5 seconds, match the supplied KF23 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-023",
+      "position": 23,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Ice Gallery → The Thaw",
+      "output": "SIG-023.mp4",
+      "firstId": "KF23",
+      "lastId": "KF24",
+      "firstName": "SIG-KF23-ice-gallery.png",
+      "lastName": "SIG-KF24-thaw.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF23-ice-gallery.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF24-thaw.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF23 FIRST frame and KF24 LAST frame as immutable exact endpoints. Exactly one featureless mannequin-like clothed shell performs one measured step forward out of the blue ice while a fine curtain of frost dust rises around it in backlight; the other preserved figures remain still and safe behind. Keep one locked 55 mm camera with no operator motion, allowing only a subtle five-centimetre focus settle toward the emerging shell. Preserve exactly three initial figures, empty dark face planes, elegant cloth physics, one approaching glove, calm gallery geometry, and one amber pylon waking softly; no living face or peril. Complete the dominant action by 4.5 seconds, match the supplied KF24 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-024",
+      "position": 24,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Thaw → The Greenhouse Moon",
+      "output": "SIG-024.mp4",
+      "firstId": "KF24",
+      "lastId": "KF25",
+      "firstName": "SIG-KF24-thaw.png",
+      "lastName": "SIG-KF25-greenhouse-moon.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF24-thaw.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF25-greenhouse-moon.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF24 FIRST frame and KF25 LAST frame as immutable exact endpoints. The single empty shell's lifted frost curtain continues upward into a pale steam veil that clears inside the next practical greenhouse dome, where blank edible sheets settle one by one onto pale geometric confections on a slow carousel. Make one controlled 60 mm lateral track right by six metres through the steam and along the carousel, with the veil providing physical occlusion and no cut. Preserve the empty shell receding behind, clean ration lab, one dome, blank sheets, warm humane work light, black sky, and no readable image or text. Complete the dominant action by 4.5 seconds, match the supplied KF25 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-025",
+      "position": 25,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Greenhouse Moon → The Five Beams",
+      "output": "SIG-025.mp4",
+      "firstId": "KF25",
+      "lastId": "KF26",
+      "firstName": "SIG-KF25-greenhouse-moon.png",
+      "lastName": "SIG-KF26-five-beams.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF25-greenhouse-moon.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF26-five-beams.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF25 FIRST frame and KF26 LAST frame as immutable exact endpoints. The final blank edible sheet performs one gentle settling action onto its confection as its last pigment disappears with the steam; the camera continues outward until the greenhouse moon joins exactly four other distinct worlds, each emitting exactly one separate narrow amber survey beam toward one blinking convergence point. Make one slow centered 30 mm pullback of roughly one thousand kilometres, keeping all five worlds and all five beams countable. Preserve exactly five worlds, exactly five beams, no moons or extras, one turning craft, no additional rays, lens flares, or star streaks. Complete the dominant action by 4.5 seconds, match the supplied KF26 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-026",
+      "position": 26,
+      "act": "III",
+      "actTitle": "THE WORLDS",
+      "title": "The Five Beams → The Ring",
+      "output": "SIG-026.mp4",
+      "firstId": "KF26",
+      "lastId": "KF27",
+      "firstName": "SIG-KF26-five-beams.png",
+      "lastName": "SIG-KF27-ring.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF26-five-beams.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF27-ring.png",
+      "seedFamily": "WORLDS",
+      "seed": 303303,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF26 FIRST frame and KF27 LAST frame as immutable exact endpoints. The same craft performs one slow turn toward the single blinking convergence point and follows it until the distant dark massive object and its thin warm amber accretion disc fill the cabin viewport, casting sunset-like amber light across the worn mechanical switches. Make one patient 45 mm push forward one metre from the orbit tableau into the exact cold-grey cabin, using the craft hull and viewport rim as continuous natural occlusion. Preserve exactly five departing beams before occlusion, one craft, one faceless pilot from behind, one dark mass, one thin ring, and scientific restraint. Complete the dominant action by 4.5 seconds, match the supplied KF27 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-027",
+      "position": 27,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Ring → The Slip",
+      "output": "SIG-027.mp4",
+      "firstId": "KF27",
+      "lastId": "KF28",
+      "firstName": "SIG-KF27-ring.png",
+      "lastName": "SIG-KF28-slip.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF27-ring.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF28-slip.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF27 FIRST frame and KF28 LAST frame as immutable exact endpoints. The same craft performs one steady pass across the warm amber rim; physically lensed starlight wraps around the rigid matte hull and reflections draw into long restrained ribbons while the cabin light bends like the workshop window. Keep one locked hull-mounted 45 mm camera moving forward about three hundred metres at constant speed, with the viewport rim naturally leaving frame. Preserve the one thin accretion disc, exact craft, rigid hull edge, pin stars, and scientific lensing; no tunnel, portal, horror, colorful glow, or free camera. Complete the dominant action by 4.5 seconds, match the supplied KF28 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-028",
+      "position": 28,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Slip → The Lattice",
+      "output": "SIG-028.mp4",
+      "firstId": "KF28",
+      "lastId": "KF29",
+      "firstName": "SIG-KF28-slip.png",
+      "lastName": "SIG-KF29-lattice.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF28-slip.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF29-lattice.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF28 FIRST frame and KF29 LAST frame as immutable exact endpoints. The wrapped starlight performs one controlled release into perfect stillness; its orthogonal ribbons resolve physically into an infinite grid of open lamplit archive cells, each containing the exact same workshop workbench at a different calm moment. Make one slow weightless 35 mm drift forward ten metres along a single honest corridor, preserving continuous perspective as the hull edge passes behind a dark lattice beam for natural occlusion. Preserve warm amber lamps, vacuum black, sparse dust motes, repeated exact bench geometry, and a welcoming library mood; no prison, crypt, hospital, or horror. Complete the dominant action by 4.5 seconds, match the supplied KF29 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-029",
+      "position": 29,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Lattice → The Shelf Of Years",
+      "output": "SIG-029.mp4",
+      "firstId": "KF29",
+      "lastId": "KF30",
+      "firstName": "SIG-KF29-lattice.png",
+      "lastName": "SIG-KF30-shelf-of-years.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF29-lattice.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF30-shelf-of-years.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF29 FIRST frame and KF30 LAST frame as immutable exact endpoints. The nearest archive cell performs one gentle approach until its open shelves of blank physical slates become legible in depth, with one identical plain slate repeated at near, middle, and far distances and one centered bare cell softly unlit. Make one patient 50 mm dolly forward eight metres that continuously slows but never reaches the repeated slate. Preserve the infinite orthogonal lattice, exact workshop benches in neighboring cells, honest perspective, warm lamps, blank surfaces, and humane library tone; no writing, bars, or sinister shadows. Complete the dominant action by 4.5 seconds, match the supplied KF30 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-030",
+      "position": 30,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Shelf Of Years → The Touch-Back",
+      "output": "SIG-030.mp4",
+      "firstId": "KF30",
+      "lastId": "KF31",
+      "firstName": "SIG-KF30-shelf-of-years.png",
+      "lastName": "SIG-KF31-touch-back.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF30-shelf-of-years.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF31-touch-back.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF30 FIRST frame and KF31 LAST frame as immutable exact endpoints. One bare lattice cell performs a single soft illumination reveal, exposing the exact workshop glass dust plate beneath the horn speaker as the same pilot's one anatomically correct gloved index finger reaches into center and touches the dust. Make one slow 85 mm push forward by 1.5 metres through the open cell toward the plate and glove, keeping the full hand and dust inside the phone-safe center. Preserve blank slates at near, middle, and far distance, exact bench geometry, warm humane light, and no text or face. Complete the dominant action by 4.5 seconds, match the supplied KF31 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-031",
+      "position": 31,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Touch-Back → The Slate Set Forward",
+      "output": "SIG-031.mp4",
+      "firstId": "KF31",
+      "lastId": "KF32",
+      "firstName": "SIG-KF31-touch-back.png",
+      "lastName": "SIG-KF32-slate-forward.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF31-touch-back.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF32-slate-forward.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF31 FIRST frame and KF32 LAST frame as immutable exact endpoints. The same pilot performs one causal handoff: after the index finger's single gentle nudge completes the clean standing waveform, both correct gloved hands lift one new blank physical slate and rack it into the adjacent bare cell facing outward, where its small abstract seal-shaped lamp wakes amber. Make one slow centered 55 mm lateral settle left by one metre from the dust plate to the slate rack. Preserve the waveform, exact workbench repeated behind, one new slate, blank surfaces, correct hand anatomy, and neighboring lamp direction; no symbols or face. Complete the dominant action by 4.5 seconds, match the supplied KF32 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-032",
+      "position": 32,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Slate Set Forward → The Release",
+      "output": "SIG-032.mp4",
+      "firstId": "KF32",
+      "lastId": "KF33",
+      "firstName": "SIG-KF32-slate-forward.png",
+      "lastName": "SIG-KF33-release.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF32-slate-forward.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF33-release.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF32 FIRST frame and KF33 LAST frame as immutable exact endpoints. The same two gloved hands perform one clean release of the newly racked slate; as the fingers open and withdraw, neighboring cell lamps lean their existing amber light toward it and the surrounding lattice begins a restrained backward slide while the new slate remains centered and sharp. Keep one locked 40 mm camera with no orbit, allowing the environment to accelerate gently away by about five metres. Preserve one blank slate, exact cell and workbench geometry, correct gloves, warm humane light, and no body, face, symbols, or new objects. Complete the dominant action by 4.5 seconds, match the supplied KF33 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-033",
+      "position": 33,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Release → The Ejection",
+      "output": "SIG-033.mp4",
+      "firstId": "KF33",
+      "lastId": "KF34",
+      "firstName": "SIG-KF33-release.png",
+      "lastName": "SIG-KF34-ejection.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF33-release.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF34-ejection.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF33 FIRST frame and KF34 LAST frame as immutable exact endpoints. The sliding lattice performs one continuous acceleration until its warm cell lamps stretch into restrained star streaks and then thin into open vacuum, ejecting the same small craft with the amber ring far behind and one small warm blink traveling ahead toward home. Keep one locked 35 mm stern camera aligned with the craft and move straight backward twenty metres as the lattice recedes. Preserve the central new slate only until natural occlusion, one craft, one thin ring, one blink, pin stars, and no beam, nebula, or extra craft. Complete the dominant action by 4.5 seconds, match the supplied KF34 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-034",
+      "position": 34,
+      "act": "IV",
+      "actTitle": "THE LATTICE",
+      "title": "The Ejection → The Many Lights",
+      "output": "SIG-034.mp4",
+      "firstId": "KF34",
+      "lastId": "KF35",
+      "firstName": "SIG-KF34-ejection.png",
+      "lastName": "SIG-KF35-many-lights.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF34-ejection.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF35-many-lights.png",
+      "seedFamily": "LATTICE",
+      "seed": 404404,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF34 FIRST frame and KF35 LAST frame as immutable exact endpoints. The same craft performs one steady homeward approach following the single warm blink until the dust-marbled planet's night side fills the frame and many small warm beacons appear widely scattered, pulsing in one phase-shifted wave without forming text or a map. Make one slow center-safe 50 mm orbital drift right by twenty degrees while closing roughly one thousand kilometres. Preserve one craft, natural earth-tone sphere, many separate pinpricks, pin stars, and no labels, lines, lens flares, or nebulae. Complete the dominant action by 4.5 seconds, match the supplied KF35 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-035",
+      "position": 35,
+      "act": "V",
+      "actTitle": "THE RETURN",
+      "title": "The Many Lights → The Landing",
+      "output": "SIG-035.mp4",
+      "firstId": "KF35",
+      "lastId": "KF36",
+      "firstName": "SIG-KF35-many-lights.png",
+      "lastName": "SIG-KF36-landing.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF35-many-lights.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF36-landing.png",
+      "seedFamily": "RETURN",
+      "seed": 505505,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF35 FIRST frame and KF36 LAST frame as immutable exact endpoints. The same craft performs one controlled descent from the night side into the exact farm's grey-brown dust front, where the dust parts around the hull in the exact reverse geometry of launch and falls outward as the skids near the ground. Keep one rigid hull-mounted 50 mm camera pitching downward only ten degrees while the craft descends about one kilometre at decreasing speed. Preserve the natural planet, scattered beacons before cloud occlusion, exact barn, one warm window, centered hull edge, one craft, and no people. Complete the dominant action by 4.5 seconds, match the supplied KF36 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-036",
+      "position": 36,
+      "act": "V",
+      "actTitle": "THE RETURN",
+      "title": "The Landing → The Workshop Now",
+      "output": "SIG-036.mp4",
+      "firstId": "KF36",
+      "lastId": "KF37",
+      "firstName": "SIG-KF36-landing.png",
+      "lastName": "SIG-KF37-workshop-now.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF36-landing.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF37-workshop-now.png",
+      "seedFamily": "RETURN",
+      "seed": 505505,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF36 FIRST frame and KF37 LAST frame as immutable exact endpoints. The same craft completes one gentle touchdown beside the exact workshop and the settling dust flows through the open doorway, revealing clean benches, uncovered machines quietly running, the glass dust plate framed on the wall, and open slate racks by the door. Make one patient 45 mm dolly forward eight metres from the hull past the doorway into the room, using the door frame as natural occlusion without a cut. Preserve the exact barn, skids, warm window, workbench geometry, framed plate, blank racks, machine shadows in waveform rhythm, and no people or text. Complete the dominant action by 4.5 seconds, match the supplied KF37 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-037",
+      "position": 37,
+      "act": "V",
+      "actTitle": "THE RETURN",
+      "title": "The Workshop Now → The Five Suits",
+      "output": "SIG-037.mp4",
+      "firstId": "KF37",
+      "lastId": "KF38",
+      "firstName": "SIG-KF37-workshop-now.png",
+      "lastName": "SIG-KF38-five-suits.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF37-workshop-now.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF38-five-suits.png",
+      "seedFamily": "RETURN",
+      "seed": 505505,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF37 FIRST frame and KF38 LAST frame as immutable exact endpoints. The running machines perform one synchronized shadow cycle in the exact standing-wave rhythm and their moving shadows lead toward the door-side rail holding exactly five complete empty pressure suits, each visor dark and reflecting a different surveyed world. Make one slow symmetric 50 mm lateral truck right by four metres from the framed plate to the suit rail. Preserve exactly five suits and no sixth, all five complete bodies and helmets inside the center-safe band, visibly unoccupied visors, distinct utilitarian builds, clean benches, blank slate racks, and no person. Complete the dominant action by 4.5 seconds, match the supplied KF38 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-038",
+      "position": 38,
+      "act": "V",
+      "actTitle": "THE RETURN",
+      "title": "The Five Suits → The Two Masts",
+      "output": "SIG-038.mp4",
+      "firstId": "KF38",
+      "lastId": "KF39",
+      "firstName": "SIG-KF38-five-suits.png",
+      "lastName": "SIG-KF39-two-masts.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF38-five-suits.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF39-two-masts.png",
+      "seedFamily": "RETURN",
+      "seed": 505505,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF38 FIRST frame and KF39 LAST frame as immutable exact endpoints. A warm reflection performs one sequential travel across exactly five dark visors, ending on the fifth as the workshop door opens onto dusk and reveals the exact near radio mast plus one distant answering mast on the horizon. Make one slow 40 mm lateral track right by five metres along the suit rail and through the open doorway, using the fifth helmet edge as natural occlusion. Preserve exactly five empty suits until they leave frame, all five different world reflections, one workshop, exactly two masts, one warm window, earth-tone dusk, and no people. Complete the dominant action by 4.5 seconds, match the supplied KF39 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-039",
+      "position": 39,
+      "act": "V",
+      "actTitle": "THE RETURN",
+      "title": "The Two Masts → The Long Signal",
+      "output": "SIG-039.mp4",
+      "firstId": "KF39",
+      "lastId": "KF40",
+      "firstName": "SIG-KF39-two-masts.png",
+      "lastName": "SIG-KF40-long-signal.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF39-two-masts.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF40-long-signal.png",
+      "seedFamily": "RETURN",
+      "seed": 505505,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF39 FIRST frame and KF40 LAST frame as immutable exact endpoints. The two real masts perform one patient interleaved blink sequence until their rhythms lock into a single abstract waveform in the underlit grey clouds and the workshop window begins blinking in exact time with the near mast. Make one slow 40 mm crane upward four metres from the near mast to the horizon, then settle naturally into the held 35 mm farm framing without a cut. Preserve exactly two masts, the lone workshop, one warm window, flat farmland, rolling grey dust front, abstract non-text waveform, and restrained dusk. Complete the dominant action by 4.5 seconds, match the supplied KF40 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    },
+    {
+      "id": "SIG-040",
+      "position": 40,
+      "act": "V",
+      "actTitle": "THE RETURN",
+      "title": "The Long Signal → Loop",
+      "output": "SIG-040.mp4",
+      "firstId": "KF40",
+      "lastId": "KF01",
+      "firstName": "SIG-KF40-long-signal.png",
+      "lastName": "SIG-KF01-dust-front.png",
+      "first": "../../../public/worlds/assets/signal/keyframes/SIG-KF40-long-signal.png",
+      "last": "../../../public/worlds/assets/signal/keyframes/SIG-KF01-dust-front.png",
+      "seedFamily": "RETURN",
+      "seed": 505505,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied KF40 FIRST frame and KF01 LAST frame as immutable exact endpoints. The workshop window and near mast perform one final synchronized blink cycle while the rolling grey dust front advances only a few metres, returning the landscape to the exact opening KF01 composition and horizon so the loop closes cleanly. Keep one held 35 mm camera with zero translation, zero orbit, and only a slow one-percent physical focus settle toward the warm window. Preserve the lone workshop, one mast, one window, flat farmland, dust-front shape, earth-tone dusk, and exact opening geometry; add no people, craft, second mast, text, or new light. Complete the dominant action by 4.5 seconds, match the supplied KF01 LAST frame exactly, and hold motionless through 5.0 seconds. photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, nebula candy, fantasy color, horror, generated letterbox bars"
+    }
+  ]
+}</script>
+  <script>
+    (() => {
+      "use strict";
+      const payload = JSON.parse(document.getElementById("job-data").textContent);
+      const jobs = payload.jobs;
+      const stateKey = "the-long-signal-wan-owner-board-v1";
+      const emptyState = () => ({ status: "pending", taskId: "", seedUsed: "", attempts: 0, notes: "" });
+      let stored = {};
+      try { stored = JSON.parse(localStorage.getItem(stateKey) || "{}"); } catch (_) { stored = {}; }
+      const state = Object.fromEntries(jobs.map((job) => [job.id, { ...emptyState(), ...(stored[job.id] || {}) }]));
+      let activeFilter = "all";
+
+      const persist = () => {
+        try { localStorage.setItem(stateKey, JSON.stringify(state)); } catch (_) {}
+      };
+      const safeText = (value) => String(value ?? "");
+      const fileName = (value) => safeText(value).split("/").pop();
+      const cards = document.getElementById("cards");
+
+      async function copyText(button, value, normalLabel) {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch (_) {
+          const box = document.createElement("textarea");
+          box.value = value;
+          box.style.position = "fixed";
+          box.style.opacity = "0";
+          document.body.appendChild(box);
+          box.select();
+          document.execCommand("copy");
+          box.remove();
+        }
+        button.classList.add("ok");
+        button.textContent = "Copied ✓";
+        setTimeout(() => { button.classList.remove("ok"); button.textContent = normalLabel; }, 1000);
+      }
+
+      const csvQuote = (value) => `"${safeText(value).replaceAll('"', '""')}"`;
+      const manifestCsv = () => {
+        const header = ["clip", "act", "first", "last", "seed_family", "recommended_seed", "seed_used", "task_id", "status", "attempts", "credits", "file", "prompt", "notes"];
+        const rows = jobs.map((job) => {
+          const item = state[job.id];
+          return [job.id, `ACT ${job.act} - ${job.actTitle}`, job.firstId, job.lastId, job.seedFamily, job.seed, item.seedUsed, item.taskId, item.status, item.attempts, Number(item.attempts || 0) * 10, job.output, job.prompt, item.notes].map(csvQuote).join(",");
+        });
+        return `${header.map(csvQuote).join(",")}\n${rows.join("\n")}\n`;
+      };
+
+      function updateSummary() {
+        const done = jobs.filter((job) => state[job.id].status === "done").length;
+        const attempts = jobs.reduce((sum, job) => sum + Math.max(0, Number(state[job.id].attempts) || 0), 0);
+        const credits = attempts * payload.settings.creditsPerClip;
+        const projection = done > 0 ? Math.ceil((attempts / done) * jobs.length * payload.settings.creditsPerClip) : payload.settings.zeroRetakeCredits;
+        document.getElementById("done-count").textContent = done;
+        document.getElementById("bar-fill").style.width = `${done / jobs.length * 100}%`;
+        document.getElementById("credits-spent").textContent = credits;
+        const projectionNode = document.getElementById("projection");
+        projectionNode.innerHTML = `<strong>${projection}</strong> projected`;
+        projectionNode.classList.toggle("spend-alert", projection > payload.settings.stopReportCredits);
+      }
+
+      function applyFilter() {
+        let visible = 0;
+        document.querySelectorAll(".card").forEach((card) => {
+          const show = activeFilter === "all" || card.dataset.status === activeFilter;
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+        document.getElementById("visible-count").textContent = visible;
+      }
+
+      function bindField(card, job, selector, property, parse = (value) => value) {
+        const field = card.querySelector(selector);
+        field.addEventListener("input", () => {
+          state[job.id][property] = parse(field.value);
+          if (property === "status") card.dataset.status = state[job.id].status;
+          persist();
+          updateSummary();
+          applyFilter();
+        });
+      }
+
+      jobs.forEach((job, index) => {
+        const item = state[job.id];
+        const card = document.createElement("article");
+        card.className = "card";
+        card.id = job.id;
+        card.dataset.id = job.id;
+        card.dataset.status = item.status;
+        card.innerHTML = `
+          <header class="card-head">
+            <div>
+              <div class="shot-no">${String(index + 1).padStart(2, "0")} / 40 · Act ${job.act} · ${job.actTitle}</div>
+              <h2>${job.title}</h2>
+              ${job.hardAnchor ? '<span class="anchor">HARD FLF ANCHOR</span>' : ''}
+            </div>
+            <div class="output">Save as ${job.output}<br>Seed ${job.seedFamily} · ${job.seed}</div>
+          </header>
+          <div class="pair">
+            <figure>
+              <span class="frame-label">FIRST frame · upload as Image 1</span>
+              <a class="frame-link" href="${job.first}" target="_blank" rel="noopener"><img src="${job.first}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} approved first frame"></a>
+              <figcaption>${job.firstId} · ${fileName(job.firstName)}</figcaption>
+            </figure>
+            <div class="arrow" aria-hidden="true">→</div>
+            <figure>
+              <span class="frame-label">LAST frame · upload as Image 2</span>
+              <a class="frame-link" href="${job.last}" target="_blank" rel="noopener"><img src="${job.last}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} approved last frame"></a>
+              <figcaption>${job.lastId} · ${fileName(job.lastName)}</figcaption>
+            </figure>
+          </div>
+          <div class="job-meta">
+            <div class="field"><label for="${job.id}-status">Status</label><select id="${job.id}-status" class="status"><option value="pending">Pending</option><option value="done">Done / downloaded</option><option value="rejected">Rejected / retry</option></select></div>
+            <div class="field"><label for="${job.id}-task">WAN task ID</label><input id="${job.id}-task" class="task-id" value="" autocomplete="off" placeholder="Paste after generation"></div>
+            <div class="field"><label for="${job.id}-seed">Seed used</label><input id="${job.id}-seed" class="seed-used" value="" inputmode="numeric" placeholder="${job.seed}"></div>
+            <div class="field"><label for="${job.id}-attempts">Attempts × 10 credits</label><input id="${job.id}-attempts" class="attempts" type="number" min="0" step="1" value="0"></div>
+          </div>
+          <div class="field" style="margin-top:10px"><label for="${job.id}-notes">Notes</label><textarea id="${job.id}-notes" class="notes" placeholder="Reason rejected, visible issue, or return note"></textarea></div>
+          <section class="prompt-box">
+            <div class="prompt-top"><span class="prompt-label">Exact positive prompt · prompt_extend OFF</span><div class="actions"><button class="copy copy-output" type="button">Copy filename</button><button class="copy copy-prompt" type="button">Copy prompt</button></div></div>
+            <p class="prompt"></p>
+            <div class="negative"><div class="prompt-top"><span class="prompt-label">Shared negative prompt</span><button class="copy copy-negative" type="button">Copy negative</button></div><p class="negative-text"></p></div>
+          </section>`;
+        card.querySelector(".prompt").textContent = job.prompt;
+        card.querySelector(".negative-text").textContent = job.negative;
+        card.querySelector(".status").value = item.status;
+        card.querySelector(".task-id").value = item.taskId;
+        card.querySelector(".seed-used").value = item.seedUsed;
+        card.querySelector(".attempts").value = item.attempts;
+        card.querySelector(".notes").value = item.notes;
+        card.querySelector(".copy-output").addEventListener("click", (event) => copyText(event.currentTarget, job.output, "Copy filename"));
+        card.querySelector(".copy-prompt").addEventListener("click", (event) => copyText(event.currentTarget, job.prompt, "Copy prompt"));
+        card.querySelector(".copy-negative").addEventListener("click", (event) => copyText(event.currentTarget, job.negative, "Copy negative"));
+        bindField(card, job, ".status", "status");
+        bindField(card, job, ".task-id", "taskId");
+        bindField(card, job, ".seed-used", "seedUsed");
+        bindField(card, job, ".attempts", "attempts", (value) => Math.max(0, Number(value) || 0));
+        bindField(card, job, ".notes", "notes");
+        cards.appendChild(card);
+      });
+
+      document.querySelectorAll("[data-filter]").forEach((button) => button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll("[data-filter]").forEach((node) => node.setAttribute("aria-pressed", String(node === button)));
+        applyFilter();
+      }));
+      document.getElementById("first-pending").addEventListener("click", () => {
+        const pending = jobs.find((job) => state[job.id].status === "pending");
+        if (pending) document.getElementById(pending.id)?.scrollIntoView({ block: "start" });
+      });
+      document.getElementById("copy-manifest").addEventListener("click", (event) => copyText(event.currentTarget, manifestCsv(), "Copy manifest CSV"));
+
+      persist();
+      updateSummary();
+      applyFilter();
+    })();
+  </script>
+</body>
+</html>

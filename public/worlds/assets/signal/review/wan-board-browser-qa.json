@@ -1,0 +1,14 @@
+{
+  "schema": "the-long-signal-wan-board-browser-qa/v1",
+  "status": "GREEN",
+  "desktopViewport": "1440x1100@1",
+  "mobileViewport": "390x844@3",
+  "renderedCards": 40,
+  "decodedEndpointImages": 80,
+  "persistenceTest": true,
+  "copyTest": true,
+  "externalRequests": [],
+  "consoleErrors": [],
+  "failures": [],
+  "wanCreditsSpent": 0
+}

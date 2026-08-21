@@ -1,7 +1,10 @@
 {
   "schema": "the-long-signal-phase1-approval-gate/v1",
-  "status": "AWAITING_APPROVE_STILLS",
+  "status": "APPROVED_STILLS",
   "approvalPhrase": "APPROVE STILLS",
+  "approvalReceived": "approve stills",
+  "approvedBy": "owner",
+  "approvedOn": "2026-08-21",
   "generatedStillCount": 41,
   "expectedStillCount": 41,
   "landscapeReview": {
@@ -26,7 +29,23 @@
     "report": "keyframe-qa.json"
   },
   "wanCreditsSpent": 0,
-  "ownerGenerationBoardBuilt": false,
+  "ownerGenerationBoardBuilt": true,
+  "wanPhaseStatus": "AWAITING_OWNER_WAN_RETURNS",
+  "ownerGenerationBoard": {
+    "path": "production/the-long-signal/wan-production/WAN-GENERATION-BOARD.html",
+    "version": "1.0.0",
+    "sha256": "126c8343279fc7ac48a22dfe5b7cc2f7c32b44ef7e6b9c62ed8866828fc0970d",
+    "jobs": 40,
+    "endpointImageChecks": 80,
+    "hardAnchors": 7,
+    "forbiddenNetworkPrimitives": 0,
+    "browserExternalRequests": 0,
+    "desktopProof": "SIG-WAN-board-desktop.png",
+    "cardProof": "SIG-WAN-board-card-001.png",
+    "mobileProof": "SIG-WAN-board-mobile.png",
+    "staticReport": "wan-board-qa.json",
+    "browserReport": "wan-board-browser-qa.json"
+  },
   "wanClipsGenerated": 0,
   "pageBuilt": false,
   "filmIntegrated": false,

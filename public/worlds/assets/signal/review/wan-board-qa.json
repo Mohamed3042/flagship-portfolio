@@ -1,0 +1,22 @@
+{
+  "schema": "the-long-signal-wan-board-qa/v1",
+  "status": "GREEN",
+  "jobCount": 40,
+  "hardAnchorCount": 7,
+  "endpointImageChecks": 80,
+  "uniqueEndpointDimensions": [
+    "1920x1088xRGB8"
+  ],
+  "seedFamilies": {
+    "DUST": 101101,
+    "CROSSING": 202202,
+    "WORLDS": 303303,
+    "LATTICE": 404404,
+    "RETURN": 505505
+  },
+  "promptPrefix": "Generate single shot.",
+  "promptExtend": false,
+  "forbiddenNetworkPrimitives": 0,
+  "wanCreditsSpent": 0,
+  "errors": []
+}
