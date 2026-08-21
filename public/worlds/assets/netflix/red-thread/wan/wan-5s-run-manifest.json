@@ -76,7 +76,7 @@
         "action1to4_5": "A macro push and slight tilt reveal the lower line as reflection.",
         "hold4_5to5": "Filament and reflection hold as one vertical axis."
       },
-      "prompt": "Generate single shot. The centered signal-red filament trembles by only two pixels and brightens as the camera pushes forward 0.25 meters slowly, then tilts upward eight degrees to reveal the lower line is its black-glass reflection. Filament and reflection settle as one unbroken vertical axis by 4.5 seconds; the final half second holds perfectly still. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, text, logos, extra lines, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable void geometry and art-direction. Camera pushes forward 0.25 meter very slowly. The vertical red filament brightens gently and its glow blooms in the surrounding haze; the dim line below brightens in step as its reflection in the black glass floor. Both hold one straight vertical axis. Motion settles by 4.5 seconds, matching the supplied last frame. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     },
     {
       "id": "N02",
@@ -91,7 +91,7 @@
         "action1to4_5": "A matched right track reveals the hall only behind the sweep.",
         "hold4_5to5": "The completed hall holds on its centered red aisle."
       },
-      "prompt": "Generate single shot. Preserve input geometry. A bright activation head travels once from extreme left to extreme right along the existing razor-thin signal-red horizontal line. Light reveals seats, walls, aisle, and booth only behind the head; space ahead stays black. Camera trucks right 0.5 meter only: no dolly, zoom, tilt, roll, or vertical drift. The line stays perfectly straight on its starting pixel row. Finish by 4.5 seconds; hold final half-second frozen. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, text, logos, morphing, flicker, camera shake, global fade-in, beam drift, or cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable auditorium geometry and art-direction. Camera trucks right 0.5 meter slowly. One brighter pulse of red travels once along the existing horizontal red line from left to right; as it passes, the red sheen on the already-visible seat rows below deepens briefly, then eases back. The room stays lit only by red; no other light source wakes. The line stays straight; motion settles by 4.5 seconds, matching the supplied last frame. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     },
     {
       "id": "N03",
@@ -103,10 +103,10 @@
       "flf": false,
       "timeline": {
         "setup0to1": "The symmetric archive holds its centered vanishing point.",
-        "action1to4_5": "A forward dolly exposes one impossible forced-perspective case.",
+        "action1to4_5": "A forward dolly approaches; the end case slides 20 centimeters toward camera.",
         "hold4_5to5": "The central case stops twenty centimeters out."
       },
-      "prompt": "Generate single shot. The camera dollies forward one meter slowly through the symmetrical unlabeled archive while signal-red shelf edges hold steady. Parallax reveals that the case ending the aisle and the nearest central case are one impossible forced-perspective object; that case slides straight out 20 centimeters. Finish by 4.5 seconds and hold still. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, hands, labels, text, logos, duplicated cases, bending shelves, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable archive geometry and art-direction. Camera dollies forward 1 meter slowly down the aisle between the red-edged shelves. The single case at the aisle's end slides straight toward the camera 20 centimeters, its red edge-light steady; every shelf stays rigid. Motion settles by 4.5 seconds, matching the supplied last frame. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     },
     {
       "id": "N04",
@@ -123,7 +123,7 @@
         "action1to4_5": "A right track fuses four light pools only at midpoint.",
         "hold4_5to5": "The camera holds squarely on the noir portal."
       },
-      "prompt": "Generate single shot. Track the camera right 1.5 meters slowly past exactly four complete portals in fixed order: white noir slats, teal cone, warm tungsten, blue-white grid. Their four distinct pools fuse into one continuous band only at the exact optical midpoint, then the camera settles facing the noir door by 4.5 seconds and holds. Match the supplied destination anchor exactly. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, text, logos, extra or missing doors, warped frames, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable portal-row geometry and art-direction. Camera tracks right 1.5 meters slowly past the four lit portals - white slats, teal cone, warm tungsten, blue-white grid - each portal's pool of light sliding across the black floor in turn as the camera passes. The horizontal red line holds straight through all four. Camera settles facing the white-slat door by 4.5 seconds, matching the supplied last frame. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     },
     {
       "id": "N05",
@@ -138,7 +138,7 @@
         "action1to4_5": "Slats tighten into the centered teal fog cone.",
         "hold4_5to5": "The camera holds inside the cone with a faint grid ahead."
       },
-      "prompt": "Generate single shot. Push the camera forward one meter slowly through the white-slatted noir threshold. The venetian stripes pass over an ordinary empty matte-black editing desk and a clean smoke ribbon, then rotate and tighten into the centered teal fog cone without a cut. Settle inside the cone with a faint grid ahead by 4.5 seconds; hold. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, text, logos, threatening props, horror, organic smoke, warped furniture, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable threshold geometry and art-direction. Camera pushes forward 1 meter slowly through the white-slatted doorway; the slat stripes sweep steadily across the floor and the thin haze as it passes, and the teal glow ahead widens to fill the frame. Camera settles inside the teal haze by 4.5 seconds, matching the supplied last frame. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     },
     {
       "id": "N06",
@@ -153,7 +153,7 @@
         "action1to4_5": "Only a clockwise camera orbit creates parallax; cursor pulses once.",
         "hold4_5to5": "Camera and every world-space element remain still."
       },
-      "prompt": "Generate single shot. Orbit the camera clockwise exactly 25 degrees around the frozen instant. The suspended cylindrical lamp, cable, clean red fog ribbon, and every dust particle remain absolutely frozen in world space; only camera parallax moves. At 4.0 seconds the horizontal signal-red cursor pulses once, returns to baseline, and the camera stops by 4.5 seconds; hold. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, creatures, organic smoke, horror, text, logos, morphing, drift, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable frozen-instant geometry and art-direction. Camera glides in a slow short clockwise arc around the centered scene; the red fog ribbon and the drifting dust hold perfectly frozen in place while only the camera's parallax changes. Nothing else moves or lights. Motion settles by 4.5 seconds, matching the supplied last frame. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     },
     {
       "id": "N07",
@@ -168,7 +168,7 @@
         "action1to4_5": "Dust forms blank apertures while the screen spectrum collapses.",
         "hold4_5to5": "One central signal-red line holds on the blank screen."
       },
-      "prompt": "Generate single shot. Push the camera forward one meter slowly down the empty center aisle. Dust in the projector beam forms one short rail of identical blank frame apertures, then disperses as a restrained optical spectrum on the blank screen collapses inward to one signal-red vertical line. Finish by 4.5 seconds and hold the final half second. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, readable imagery, text, captions, logos, posters, warped seats, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable auditorium geometry and art-direction. Camera pushes forward 1 meter slowly down the center aisle toward the glowing white screen. Dust drifts through the projector beam; the screen's white glow narrows steadily inward until only the vertical red line stays bright at its center. Motion settles by 4.5 seconds, matching the supplied last frame. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     },
     {
       "id": "N08",
@@ -181,11 +181,11 @@
       "firstFrame": "inputs/NRT-WAN-N08-keyframe-1280x720.png",
       "lastFrame": "inputs/NRT-WAN-N01-keyframe-1280x720.png",
       "timeline": {
-        "setup0to1": "The line detaches as the residual screen contour vanishes.",
+        "setup0to1": "The line brightens while the room's edges sink away into black.",
         "action1to4_5": "Its reflection lengthens into the exact N01 geometry.",
         "hold4_5to5": "The supplied N01 last frame closes the loop exactly."
       },
-      "prompt": "Generate single shot. The signal-red line detaches from the vanished screen, drifts forward into the absolute black void, and its black-glass reflection lengthens until both become the exact N01 filament geometry. Settle by 4.5 seconds and hold the supplied N01 last frame perfectly still for the final half second, closing the loop. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, text, logos, screens, extra lines, duplicated reflections, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. @Image1 is the immutable void geometry and art-direction. Camera pulls back 0.5 meter slowly. The vertical red line brightens while the room's edges sink away into black, until only the line and its floor reflection remain. Motion settles by 4.5 seconds, matching the supplied loop-closing last frame; hold the final half second still. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No text, no logos, no flicker. No dialogue. No background music."
     }
   ]
 }
