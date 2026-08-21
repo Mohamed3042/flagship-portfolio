@@ -1,9 +1,10 @@
 # CUT THE STRINGS — Phase 1 Keyframe Review
 
-Status: **AWAITING OWNER APPROVAL**
+Status: **APPROVED BY OWNER — PHASE 2 BOARD UNLOCKED**
 Approval phrase: `APPROVE STILLS`
+Approval received: **2026-08-21**
 
-This is the mandatory still-review hard stop. No WAN video generation, page integration, film edit, deployment, or production board has begun.
+The mandatory still-review hard stop passed. The offline owner generation board is unlocked. No WAN video generation, page integration, film edit, or deployment has begun.
 
 ## Measured gate
 
@@ -41,6 +42,8 @@ This is the mandatory still-review hard stop. No WAN video generation, page inte
 
 ## Approval boundary
 
-Do not spend WAN credits or start page/code/deploy work until Mohamed replies exactly:
+Mohamed replied exactly:
 
 `APPROVE STILLS`
+
+The required owner board is now available at `../wan-production/WAN-GENERATION-BOARD.html`. It contains 40 approved first+last-frame pairs and never submits WAN jobs. At this checkpoint: **0 jobs submitted, 0 credits spent, 0 returned videos**. Page integration remains locked until owner-returned clips pass decoded endpoint and mid-clip acceptance review.

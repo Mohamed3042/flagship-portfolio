@@ -1,0 +1,21 @@
+{
+  "schema": "cut-the-strings-wan-board-browser-qa/v1",
+  "result": "RED",
+  "checks": 36,
+  "passed": 33,
+  "failures": [
+    "Expected 40 rendered cards, found 39",
+    "Expected 80 rendered endpoint images, found 78",
+    "All 40 cards must be visible initially"
+  ],
+  "sabotage": true,
+  "viewportDesktop": "1440x1100",
+  "viewportPhone": "390x844",
+  "offlineFileProtocol": true,
+  "renderedCardsExpected": 40,
+  "renderedEndpointImagesExpected": 80,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "requestFailures": [],
+  "screenshots": []
+}
