@@ -91,10 +91,10 @@ check('retired appendix stays inert', count(/<template data-retired-(?:coda|cred
 
 check('v1.7 contained stage CSS', /\.bookend-aperture[\s\S]*?aspect-ratio:\s*16\s*\/\s*9/.test(css));
 check('bookend media uses contain', /\.bookend-(?:poster|canvas)[^{]*\{[^}]*object-fit:\s*contain/s.test(css));
-check('bookend cover crop removed', !/\.bookend-(?:poster|canvas|frame)[^{]*\{[^}]*object-fit:\s*cover/s.test(css));
+check('phone full-bleed cover is coarse-pointer scoped', /@media\s*\(max-width:\s*700px\),\s*\(pointer:\s*coarse\)[\s\S]*?\.bookend-aperture\s*\{[^}]*width:\s*100dvw[^}]*height:\s*100dvh[^}]*aspect-ratio:\s*auto[\s\S]*?\.bookend-poster,[\s\S]*?object-fit:\s*cover/s.test(css));
 check('opening earns ten-shot scroll span', /\.bookend-intro\s*\{[^}]*height:\s*8[0-9]{2}vh/s.test(css));
 check('ending earns five-shot scroll span', /\.bookend-outro\s*\{[^}]*height:\s*4[0-9]{2}vh/s.test(css));
-check('phone aperture stays uncropped', /@media\s*\(max-width:\s*700px\)[\s\S]*?\.bookend-aperture[\s\S]*?width:\s*100vw/s.test(css));
+check('coarse landscape receives phone aperture', /@media\s*\(max-width:\s*700px\),\s*\(pointer:\s*coarse\)/.test(css));
 check('reduced-motion CSS path', /prefers-reduced-motion:\s*reduce[\s\S]*?\.bookend-copy/s.test(css));
 check('phone scrub and terminal surfaces are layered without transitions', /\.bookend-phone-scrub-atlas\s*\{[^}]*z-index:\s*3[^}]*opacity:\s*0/s.test(css)
   && /\.bookend-phone-terminal-landing\s*\{[^}]*z-index:\s*4[^}]*opacity:\s*0/s.test(css)

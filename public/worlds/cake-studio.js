@@ -426,6 +426,138 @@
   if (live && !solo) start();
 })();
 
+/* v1.7.2 orientation patch: preserve the active pinned scene's normalized
+   playhead while dynamic viewport units reflow, then force every scroll-
+   driven painter to sample the remeasured geometry. */
+(() => {
+  'use strict';
+
+  const root = document.documentElement;
+  const scenes = [
+    document.querySelector('.bookend-intro'),
+    document.getElementById('cake-reel'),
+    document.querySelector('.bookend-outro'),
+  ].filter(Boolean);
+  if (!scenes.length || new URLSearchParams(location.search).has('solo')) return;
+
+  const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
+  const viewport = () => ({
+    width: innerWidth,
+    height: innerHeight,
+    landscape: innerWidth > innerHeight,
+  });
+  const progressOf = (scene) => {
+    const bounds = scene.getBoundingClientRect();
+    const travel = Math.max(1, bounds.height - innerHeight);
+    return clamp(-bounds.top / travel);
+  };
+  const activeScene = () => {
+    const middle = innerHeight * .5;
+    return scenes.find((scene) => {
+      const bounds = scene.getBoundingClientRect();
+      return bounds.top <= middle && bounds.bottom >= middle;
+    }) || null;
+  };
+  const stageName = (scene) => scene.id
+    || scene.dataset.bookend
+    || scene.dataset.cakeBookend
+    || 'cake-stage';
+
+  let measuredViewport = viewport();
+  let snapshot = null;
+  let captureFrame = 0;
+  let restoreFrame = 0;
+  let restoring = false;
+  let pendingViewport = null;
+
+  const capture = () => {
+    captureFrame = 0;
+    if (restoring) return;
+    const currentViewport = viewport();
+    if (currentViewport.width !== measuredViewport.width
+      || currentViewport.height !== measuredViewport.height) return;
+    const scene = activeScene();
+    if (!scene) return;
+    snapshot = {
+      scene,
+      progress: progressOf(scene),
+      viewport: currentViewport,
+    };
+  };
+
+  const scheduleCapture = () => {
+    if (captureFrame || restoring) return;
+    captureFrame = requestAnimationFrame(capture);
+  };
+
+  const finishRestore = (preserved) => {
+    const after = progressOf(preserved.scene);
+    const count = Number(root.dataset.cakeOrientationRestoreCount || 0) + 1;
+    root.dataset.cakeOrientationRestoreCount = String(count);
+    root.dataset.cakeOrientationState = 'restored';
+    root.dataset.cakeOrientationStage = stageName(preserved.scene);
+    root.dataset.cakeOrientationProgressBefore = preserved.progress.toFixed(6);
+    root.dataset.cakeOrientationProgressAfter = after.toFixed(6);
+    preserved.scene.dispatchEvent(new CustomEvent('cake:orientation-restored', {
+      detail: { before: preserved.progress, after },
+    }));
+    measuredViewport = pendingViewport || viewport();
+    pendingViewport = null;
+    restoring = false;
+    capture();
+  };
+
+  const restore = (preserved) => {
+    restoreFrame = 0;
+    const travel = Math.max(1, preserved.scene.offsetHeight - innerHeight);
+    const maximum = Math.max(0, root.scrollHeight - innerHeight);
+    const target = Math.min(
+      maximum,
+      Math.max(0, preserved.scene.offsetTop + travel * preserved.progress),
+    );
+    scrollTo({ top: target, behavior: 'instant' });
+    // scrollTo can be a no-op at a rounded pixel. Dispatching the real bus
+    // still makes cinema.js, the 50-shot director and both bookends repaint.
+    dispatchEvent(new Event('scroll'));
+    requestAnimationFrame(() => requestAnimationFrame(() => finishRestore(preserved)));
+  };
+
+  const remeasure = () => {
+    const nextViewport = viewport();
+    const changed = nextViewport.width !== measuredViewport.width
+      || nextViewport.height !== measuredViewport.height;
+    if (!changed || restoring || !snapshot) return;
+    const rotates = nextViewport.landscape !== measuredViewport.landscape;
+    const widthChanged = nextViewport.width !== measuredViewport.width;
+    if (!rotates && !widthChanged) {
+      // Browser chrome can change only the dynamic height. The existing
+      // resize painters handle that without moving the visitor's hand.
+      measuredViewport = nextViewport;
+      scheduleCapture();
+      return;
+    }
+    restoring = true;
+    pendingViewport = nextViewport;
+    root.dataset.cakeOrientationState = 'remeasuring';
+    const preserved = snapshot;
+    if (restoreFrame) cancelAnimationFrame(restoreFrame);
+    restoreFrame = requestAnimationFrame(() => {
+      restoreFrame = requestAnimationFrame(() => restore(preserved));
+    });
+  };
+
+  addEventListener('scroll', scheduleCapture, { passive: true });
+  addEventListener('resize', remeasure, { passive: true });
+  addEventListener('orientationchange', remeasure, { passive: true });
+  window.visualViewport?.addEventListener('resize', remeasure, { passive: true });
+  root.dataset.cakeOrientationState = 'ready';
+  window.__cakeStudioOrientation = Object.freeze({
+    version: '1.7.2-orientation',
+    capture: scheduleCapture,
+  });
+  scheduleCapture();
+})();
+
 /* v1.7 bookend director: two page-local, manifest-driven micro-films. */
 (() => {
   'use strict';
