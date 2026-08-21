@@ -40,4 +40,3 @@ const rows = jobs.map((job) => [
 fs.writeFileSync(manifestPath, `${header.map(quoteCsv).join(",")}\n${rows.join("\n")}\n`);
 
 console.log(`GREEN_BUILD WAN board ${jobs.length}/40 cards; manifest ${rows.length}/40 rows`);
-
