@@ -99,3 +99,33 @@ Evidence:
 - [Phone portrait leg 12 ending](evidence/after-local-phone-portrait-ending.png)
 - [Phone landscape leg 12 ending](evidence/after-local-phone-landscape-ending.png)
 - [Phone portrait final page ending](evidence/after-local-phone-portrait-page-end.png)
+
+## Deployed release gates
+
+**VERIFIED:** Source fix PR #13 merged to `main` as `760d451`. The selective
+Pages deployment is `bfd5010`; its only changed path is
+`worlds/spotify.html`. The deployed HTML SHA-256 is
+`0E2AC875D3DBB8241962A19BC698F8DA6DBD074EC88520A2B5A3AA51166FF273`,
+an exact match for the audited source/build bytes.
+
+**VERIFIED:** Before deployed scrub grading, all 12 public Side B MP4 URLs
+returned HTTP 206, `Accept-Ranges: bytes`, and the requested two-byte range.
+The focused deployed phone gate is GREEN: `mode-scrub`, zero `play()` calls,
+zero stationary drift, zero stationary-finger drift, and zero mapping errors.
+
+**VERIFIED:** The exhaustive deployed matrix is GREEN on desktop, phone
+portrait, and phone landscape. Each viewport reached the exact page bottom,
+returned to scroll position 0, mapped all 12 legs forward and reverse, painted
+decoded pixels at every checkpoint, reproduced the same pixels in reverse,
+and recorded zero browser errors. The deployed portrait/landscape leg 12 and
+portrait final credits were visually inspected and are intact.
+
+Evidence:
+
+- [Deployed focused phone scrub gate JSON](evidence/after-deployed-sideb-scrub-gate.json)
+- [Deployed stationary phone frame](evidence/after-deployed-sideb-phone-stationary.png)
+- [Complete deployed rendered scroll matrix JSON](evidence/after-deployed-scroll-matrix.json)
+- [Deployed desktop middle peak](evidence/after-deployed-desktop-mid-peak.png)
+- [Deployed phone portrait leg 12 ending](evidence/after-deployed-phone-portrait-ending.png)
+- [Deployed phone landscape leg 12 ending](evidence/after-deployed-phone-landscape-ending.png)
+- [Deployed phone portrait final page ending](evidence/after-deployed-phone-portrait-page-end.png)
