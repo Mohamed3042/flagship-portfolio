@@ -1,0 +1,294 @@
+[
+ {
+  "p": "0.0083",
+  "frac": "0.0996",
+  "legno": "01",
+  "caption": "The wall opens",
+  "clip": "j01-portal.mp4",
+  "t": 0.498,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 0,
+  "activeCapOpacity": 1,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 647,
+  "noTop": 77,
+  "label": "leg01-portal-early",
+  "settleMs": 100
+ },
+ {
+  "p": "0.0709",
+  "frac": "0.8508",
+  "legno": "01",
+  "caption": "The wall opens",
+  "clip": "j01-portal.mp4",
+  "t": 4.254,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 0,
+  "activeCapOpacity": 1,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 649,
+  "noTop": 118,
+  "label": "leg01-portal-late",
+  "settleMs": 100
+ },
+ {
+  "p": "0.2083",
+  "frac": "0.4996",
+  "legno": "03",
+  "caption": "Every playlist ever made",
+  "clip": "j03-playlist.mp4",
+  "t": 2.498,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 2,
+  "activeCapOpacity": 0.993981,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 608,
+  "noTop": 99,
+  "label": "leg03-playlist",
+  "settleMs": 400
+ },
+ {
+  "p": "0.3750",
+  "frac": "0.5000",
+  "legno": "05",
+  "caption": "The avenue folds",
+  "clip": "j05-parallax.mp4",
+  "t": 2.5,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 4,
+  "activeCapOpacity": 0.998763,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 658,
+  "noTop": 99,
+  "label": "leg05-parallax",
+  "settleMs": 400
+ },
+ {
+  "p": "0.5292",
+  "frac": "0.3504",
+  "legno": "07",
+  "caption": "The groove is a road",
+  "clip": "j07-highway.mp4",
+  "t": 1.752,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 6,
+  "activeCapOpacity": 0.99555,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 578,
+  "noTop": 91,
+  "label": "leg07-highway-THE-DROP",
+  "settleMs": 400
+ },
+ {
+  "p": "0.6500",
+  "frac": "0.8000",
+  "legno": "08",
+  "caption": "Eight centimetres from an ear",
+  "clip": "j08-listener.mp4",
+  "t": 4,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 7,
+  "activeCapOpacity": 0.996861,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 615,
+  "noTop": 115,
+  "label": "leg08-listener",
+  "settleMs": 400
+ },
+ {
+  "p": "0.7917",
+  "frac": "0.5004",
+  "legno": "10",
+  "caption": "The sky was a turntable",
+  "clip": "j10-pullback.mp4",
+  "t": 2.502,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 9,
+  "activeCapOpacity": 0.996853,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 608,
+  "noTop": 99,
+  "label": "leg10-pullback",
+  "settleMs": 400
+ },
+ {
+  "p": "0.9917",
+  "frac": "0.9004",
+  "legno": "12",
+  "caption": "Back to one line",
+  "clip": "j12-line.mp4",
+  "t": 4.502,
+  "readyState": 4,
+  "dims": "1600x670",
+  "pip": 11,
+  "activeCapOpacity": 0.998784,
+  "otherCapOpacity": 0,
+  "activeVidOpacity": 1,
+  "otherVidOpacity": 0,
+  "capTop": 640,
+  "noTop": 121,
+  "label": "leg12-line",
+  "settleMs": 400
+ },
+ {
+  "viewport": "desktop",
+  "shot": "A01",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "desktop",
+  "shot": "A02",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "desktop",
+  "shot": "A03",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "desktop",
+  "shot": "A04",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "desktop",
+  "shot": "A05",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "desktop",
+  "shot": "A06",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "desktop",
+  "shot": "A07",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "phone-390x844-dpr3",
+  "shot": "A01",
+  "times": [
+   0,
+   2.5,
+   4.899
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "phone-390x844-dpr3",
+  "shot": "A02",
+  "times": [
+   0,
+   2.5,
+   4.9
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "phone-390x844-dpr3",
+  "shot": "A03",
+  "times": [
+   0,
+   2.501,
+   4.901
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "phone-390x844-dpr3",
+  "shot": "A04",
+  "times": [
+   0,
+   2.499,
+   4.899
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "phone-390x844-dpr3",
+  "shot": "A05",
+  "times": [
+   0,
+   2.501,
+   4.901
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "phone-390x844-dpr3",
+  "shot": "A06",
+  "times": [
+   0,
+   2.499,
+   4.901
+  ],
+  "dims": "1280x660"
+ },
+ {
+  "viewport": "phone-390x844-dpr3",
+  "shot": "A07",
+  "times": [
+   0,
+   2.501,
+   4.901
+  ],
+  "dims": "1280x660"
+ }
+]
