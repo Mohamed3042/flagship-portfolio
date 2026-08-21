@@ -34,6 +34,7 @@
     "verify:cake-studio:v17-browser-ready": "python scripts/verify-cake-studio-v17-browser-ready.py",
     "build:academy:media": "node scripts/build-academy-media.mjs",
     "verify:academy": "node scripts/verify-academy-world.mjs",
+    "verify:academy:phone": "python scripts/verify-academy-phone.py",
     "astro": "astro"
   },
   "dependencies": {

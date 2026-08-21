@@ -12,7 +12,12 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const solo = new URLSearchParams(location.search).has('solo');
   const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
+  const smoothstep = (value) => value * value * (3 - 2 * value);
   const readProgress = (element) => clamp(Number.parseFloat(element.style.getPropertyValue('--p') || '0'));
+  const TAU = 140;
+  const SNAP_SHOTS = 1.5;
+  const IDLE_EPS = 1e-4;
+  const IDLE_FRAMES = 3;
 
   const floor = scene.querySelector('.floor');
   const backdrop = scene.querySelector('.backdrop');
@@ -69,7 +74,14 @@
   let currentShot = -1;
   let activeSlot = -1;
   let filmLive = solo || scene.classList.contains('is-live');
-  let filmFrame = 0;
+  let cameraFrame = 0;
+  let lastCameraTime = 0;
+  let lastFrameWall = performance.now();
+  let settledFrames = 0;
+  let rawTarget = readProgress(scene);
+  let smoothProgress = rawTarget;
+  let travelDirection = 1;
+  let cameraFallback = 0;
 
   const slots = videos.map((video) => {
     video.muted = true;
@@ -143,7 +155,7 @@
     const ready = () => {
       if (slot.token !== token) return;
       slot.ready = true;
-      if (slot.shot === currentShot) render(readProgress(scene));
+      if (slot.shot === currentShot) render(smoothProgress, rawTarget);
     };
     slot.video.addEventListener('loadeddata', ready, { once: true });
     slot.video.addEventListener('seeked', () => {
@@ -207,10 +219,16 @@
     cue.classList.add('swap');
   };
 
-  function render(progress) {
-    const beat = locate(progress);
+  function render(progress, raw = progress) {
+    const paintedProgress = clamp(progress);
+    const beat = locate(paintedProgress);
+    const easedJourney = smoothstep(paintedProgress);
+    const pan = .37 + easedJourney * .26;
+    const tilt = .46 + easedJourney * .08;
     scene.style.setProperty('--f', beat.fraction.toFixed(4));
-    scene.style.setProperty('--journey', progress.toFixed(5));
+    scene.style.setProperty('--journey', paintedProgress.toFixed(5));
+    scene.style.setProperty('--pan', pan.toFixed(5));
+    scene.style.setProperty('--tilt', tilt.toFixed(5));
     setShot(beat.index);
     if (reduced || (!filmLive && !solo)) return;
 
@@ -221,26 +239,111 @@
       seek(slot, Math.min(duration - .045, Math.max(.001, beat.fraction * duration)));
     }
 
-    // Halfway through a beat, use the hidden decoder for the next accepted shot.
-    if (beat.fraction > .5 && beat.index < shots.length - 1) {
-      const hidden = activeSlot === 0 ? slots[1] : slots[0];
-      if (hidden.shot !== beat.index + 1) load(hidden, beat.index + 1);
+    const hand = raw - paintedProgress;
+    if (hand > IDLE_EPS) travelDirection = 1;
+    else if (hand < -IDLE_EPS) travelDirection = -1;
+    const neighbour = beat.index + travelDirection;
+    if (neighbour >= 0 && neighbour < shots.length) {
+      const hidden = slots.find((candidate) => candidate !== slot);
+      if (hidden && hidden.shot !== neighbour) load(hidden, neighbour);
     }
   }
 
-  const filmLoop = () => {
-    if (!filmLive && !solo) {
-      filmFrame = 0;
+  const parkCamera = () => {
+    if (cameraFrame) cancelAnimationFrame(cameraFrame);
+    cameraFrame = 0;
+    lastCameraTime = 0;
+    settledFrames = 0;
+    scene.dataset.cameraState = 'idle';
+  };
+
+  const cameraTick = (time) => {
+    cameraFrame = 0;
+    lastFrameWall = performance.now();
+    rawTarget = readProgress(scene);
+    const gap = rawTarget - smoothProgress;
+    if (solo || Math.abs(gap) * shots.length > SNAP_SHOTS) {
+      smoothProgress = rawTarget;
+    } else if (Math.abs(gap) < IDLE_EPS) {
+      smoothProgress = rawTarget;
+    } else {
+      const delta = lastCameraTime ? Math.min(64, time - lastCameraTime) : 1000 / 60;
+      smoothProgress += gap * (1 - Math.exp(-delta / TAU));
+    }
+    lastCameraTime = time;
+    render(smoothProgress, rawTarget);
+    if (Math.abs(rawTarget - smoothProgress) < IDLE_EPS) settledFrames += 1;
+    else settledFrames = 0;
+    if ((!filmLive && !solo) || settledFrames >= IDLE_FRAMES) {
+      parkCamera();
       return;
     }
-    render(readProgress(scene));
-    filmFrame = requestAnimationFrame(filmLoop);
+    cameraFrame = requestAnimationFrame(cameraTick);
   };
-  const startFilmLoop = () => {
-    if (!filmFrame) filmFrame = requestAnimationFrame(filmLoop);
+
+  const startCamera = () => {
+    scene.dataset.cameraState = 'running';
+    settledFrames = 0;
+    if (cameraFrame) return;
+    lastCameraTime = 0;
+    cameraFrame = requestAnimationFrame(cameraTick);
   };
-  scene.addEventListener('scene:live', () => { filmLive = true; startFilmLoop(); });
-  scene.addEventListener('scene:idle', () => { filmLive = false; });
+
+  const onFilmScroll = () => {
+    rawTarget = readProgress(scene);
+    filmLive = solo || scene.classList.contains('is-live');
+    if (filmLive) startCamera();
+    clearTimeout(cameraFallback);
+    cameraFallback = setTimeout(() => {
+      if (cameraFrame && performance.now() - lastFrameWall > 120) {
+        smoothProgress = rawTarget;
+        render(smoothProgress, rawTarget);
+        parkCamera();
+      }
+    }, 150);
+  };
+
+  addEventListener('scroll', onFilmScroll, { passive: true });
+  scene.addEventListener('scene:live', () => { filmLive = true; startCamera(); });
+  scene.addEventListener('scene:idle', () => { filmLive = false; parkCamera(); });
+
+  /* A rotation changes both the sticky viewport and every vh runway before
+     the browser can preserve a normalized position. Keep the logical film
+     progress, recompute its document Y after layout, then repaint that frame. */
+  let viewportSnapshot = null;
+  let viewportToken = 0;
+  let viewportRevision = 0;
+  const scheduleViewportRestore = () => {
+    if (!viewportSnapshot) {
+      viewportSnapshot = {
+        progress: rawTarget,
+        active: solo || filmLive || (rawTarget > .0001 && rawTarget < .9999),
+      };
+    }
+    const token = ++viewportToken;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (token !== viewportToken) return;
+      const snapshot = viewportSnapshot;
+      viewportSnapshot = null;
+      if (snapshot?.active) {
+        const top = scrollY + scene.getBoundingClientRect().top;
+        const span = Math.max(1, scene.offsetHeight - innerHeight);
+        scrollTo({ top: top + snapshot.progress * span, behavior: 'auto' });
+        scene.style.setProperty('--p', snapshot.progress.toFixed(4));
+        rawTarget = snapshot.progress;
+        smoothProgress = snapshot.progress;
+        filmLive = true;
+        render(smoothProgress, rawTarget);
+        if (activeSlot >= 0) markPainted(slots[activeSlot]);
+      }
+      scene.dataset.viewportRevision = `${++viewportRevision}:${innerWidth}x${innerHeight}`;
+      scene.dataset.viewportOrientation = innerWidth > innerHeight ? 'landscape' : 'portrait';
+      if (filmLive && !solo) startCamera();
+    }));
+  };
+  addEventListener('resize', scheduleViewportRestore, { passive: true });
+  addEventListener('orientationchange', scheduleViewportRestore, { passive: true });
+  window.visualViewport?.addEventListener('resize', scheduleViewportRestore, { passive: true });
 
   chapterButtons.forEach((button) => button.addEventListener('click', () => {
     const index = Number(button.dataset.shot);
@@ -297,17 +400,26 @@
   proof.addEventListener('scene:live', scheduleProof);
 
   window.__academyDirector = Object.freeze({
-    version: '1.0.0',
+    version: '2.0.0',
+    cameraMode: 'weighted-monotonic-full-bleed',
     acceptedSourceIds: shots.map((shot) => shot.id),
     heldSourceIds: ['ACA-002', 'ACA-016'],
     weights,
+    panRange: [.37, .63],
+    tiltRange: [.46, .54],
+    panForProgress: (progress) => .37 + smoothstep(clamp(Number(progress))) * .26,
     progressForShot: (shot, fraction = .5) => progressForIndex(
       Math.max(0, Math.min(shots.length - 1, Number(shot) - 1)),
       fraction,
     ),
   });
 
-  render(readProgress(scene));
+  scene.dataset.viewportRevision = `0:${innerWidth}x${innerHeight}`;
+  scene.dataset.viewportOrientation = innerWidth > innerHeight ? 'landscape' : 'portrait';
+  rawTarget = readProgress(scene);
+  smoothProgress = rawTarget;
+  render(smoothProgress, rawTarget);
   paintProof();
-  if (filmLive) startFilmLoop();
+  parkCamera();
+  if (filmLive) startCamera();
 })();

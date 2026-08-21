@@ -120,6 +120,24 @@ if (existsSync(required.page)) {
   check((html.match(/class="L ar"/g) ?? []).length >= 20, 'Arabic live-DOM copy is incomplete');
   check(!/1080p/i.test(html), 'page contains a false 1080p claim');
   check(/data-proof-instrument/.test(html), 'signature proof instrument is missing');
+  check(/data-version="2\.0\.0"/.test(html), 'Academy phone contract version is not 2.0.0');
+  check(!/data-letterbox/.test(html), 'Academy still opts into projector letterbox mattes');
+  check(!/(?:clip-mobile|-m\.mp4|mobile\.mp4)/i.test(html), 'a separate mobile media chain leaked into Academy');
+}
+
+if (existsSync(required.css)) {
+  const css = readFileSync(required.css, 'utf8');
+  check(/width:\s*100dvw/.test(css) && /height:\s*100dvh/.test(css), 'live dvw/dvh stage contract is missing');
+  check(/object-fit:\s*cover/.test(css), 'Academy film does not declare cover rendering');
+  check(!/object-fit:\s*contain/.test(css), 'contained film rendering survived the full-bleed revision');
+  check(!/100svh\s*-\s*178px|aspect-ratio:\s*16\s*\/\s*9/.test(css), 'fixed 16:9 letterbox geometry survived');
+}
+
+if (existsSync(required.js)) {
+  const js = readFileSync(required.js, 'utf8');
+  check(/version:\s*'2\.0\.0'/.test(js), 'Academy director runtime version is not 2.0.0');
+  check(/weighted-monotonic-full-bleed/.test(js), 'monotonic camera mode is missing');
+  check(/orientationchange/.test(js) && /viewportRevision/.test(js), 'orientation repaint/preservation path is missing');
 }
 
 if (existsSync(required.lobby)) {
