@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>The Academy of Proven Spells · Grok 15s Comparison Board</title>
+  <title>The Academy of Proven Spells · Grok R2 Regeneration Board</title>
   <link rel="icon" href="data:,">
   <style>
     :root {
@@ -108,6 +108,7 @@
     .frame-link { position: relative; display: block; overflow: hidden; margin-top: 8px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; background: #000; aspect-ratio: 30 / 17; }
     .frame-link img { display: block; width: 100%; height: 100%; object-fit: contain; transition: transform .35s ease; }
     .frame-link:hover img { transform: scale(1.012); }
+    .frame-link.rejected::after { content: "DO NOT ATTACH · RECOMPOSE FIRST"; position: absolute; inset: auto 10px 10px; padding: 9px 12px; border: 1px solid rgba(255, 197, 111, .72); border-radius: 999px; color: #241607; background: var(--amber); font-size: 10px; font-weight: 900; letter-spacing: .08em; text-align: center; }
     figcaption { overflow: hidden; margin-top: 7px; color: var(--muted); font: 500 10px ui-monospace, SFMono-Regular, Consolas, monospace; text-overflow: ellipsis; white-space: nowrap; }
     .arrow { color: var(--violet); font-family: Georgia, serif; font-size: 34px; text-align: center; }
 
@@ -143,11 +144,11 @@
   <main class="shell">
     <header class="masthead">
       <div class="topline">
-        <p class="eyebrow">The Academy · Grok Imagine comparison pack · 16 jobs</p>
+        <p class="eyebrow">The Academy · Grok Imagine · R2 regeneration only · 2 jobs</p>
         <a class="board-link" href="../wan-production/WAN-GENERATION-BOARD.html">Open WAN 5s board</a>
       </div>
-      <h1>One image. One motion. One destination.</h1>
-      <p class="summary">This corrected board uses Grok's single-image grammar for <strong>ACA-GROK-001 through ACA-GROK-016</strong>. Outputs remain separate so the accepted WAN and Grok returns can be compared later.</p>
+      <h1>Fix the composition. Then regenerate.</h1>
+      <p class="summary">Only the two failed returns are shown: <strong>ACA-GROK-001 and ACA-GROK-002</strong>. Job 003 is approved, job 004 is a trim salvage, and ungenerated jobs 005–016 are intentionally hidden from this R2 checkpoint.</p>
       <section class="settings" aria-label="Grok settings">
         <div class="setting"><span>Platform</span><strong>Grok Imagine</strong></div>
         <div class="setting"><span>Mode</span><strong>Video + single image</strong></div>
@@ -156,12 +157,12 @@
         <div class="setting"><span>Audio</span><strong>Off</strong></div>
         <div class="setting"><span>Measured return</span><strong>1280×720 · 24 fps</strong></div>
       </section>
-      <p class="route-note"><strong>How to run each card:</strong> attach the <strong>LEFT image only</strong>. The right image is a destination reference only—do not attach it. Paste the exact prompt, select <strong>15s · 16:9 · audio off</strong>, then download with the filename shown. Three measured returns are 1280×720 at 24 fps regardless of the UI resolution label. Return originals to <code>production/academy/grok-returns/</code>.</p>
-      <p class="route-note"><strong>HUMAN CHECKPOINT:</strong> review the two <strong>NEEDS-RECOMPOSE</strong> cards before generating anything. Approved keyframes remain untouched; the badges identify start compositions that contradict the required travel direction.</p>
+      <p class="route-note"><strong>How to run each card:</strong> first make the exact R2 start composition described on the card. <strong>Do not attach the displayed rejected start.</strong> Then attach the new start only, paste the exact R2 prompt, select <strong>15s · 16:9 · audio off</strong>, and download with the R2 filename shown. Returns measure 1280×720 or 1264×720 at 24 fps regardless of the UI resolution label.</p>
+      <p class="route-note"><strong>HARD CHECKPOINT:</strong> both prompts assume their corrected R2 composition. Prompt text cannot force away-travel from a frontal owl or make gate motion dominant while a foreground owl occupies the center.</p>
     </header>
 
     <div class="progress">
-      <span><strong id="done-count">0</strong> / <strong id="job-count">16</strong> done</span>
+      <span><strong id="done-count">0</strong> / <strong id="job-count">2</strong> regenerated</span>
       <div class="bar" aria-hidden="true"><i id="bar-fill"></i></div>
     </div>
 
@@ -174,20 +175,21 @@
         <button type="button" id="continue">First pending</button>
         <button type="button" class="reset" id="reset">Reset tracking</button>
       </div>
-      <span class="visible-count" id="visible-count">16 jobs visible</span>
+      <span class="visible-count" id="visible-count">2 regeneration jobs visible</span>
     </nav>
 
     <section class="cards" id="cards" aria-label="Grok generation jobs"></section>
     <p class="empty" id="empty" hidden>No jobs match this filter.</p>
-    <p class="footer-note">Attach the left frame only. The right frame is destination reference only—do not attach. “Done” means generated/downloaded only; every return still passes the decoded acceptance gate.</p>
+    <p class="footer-note">Attach the new R2 start only—not the displayed rejected still. The right frame remains destination reference only. “Done” means regenerated/downloaded; every return still passes the decoded acceptance gate.</p>
   </main>
 
   <script src="grok-jobs.js"></script>
   <script>
-    const jobs = Array.isArray(window.ACADEMY_GROK_JOBS) ? window.ACADEMY_GROK_JOBS : [];
+    const allJobs = Array.isArray(window.ACADEMY_GROK_JOBS) ? window.ACADEMY_GROK_JOBS : [];
+    const jobs = allJobs.filter(job => job.regenerate === true);
     const cards = document.querySelector('#cards');
     const empty = document.querySelector('#empty');
-    const stateKey = 'academy-proven-spells-grok-done-v1';
+    const stateKey = 'academy-proven-spells-grok-regen-done-v2';
     let actFilter = 'all';
     let stateFilter = 'all';
     let stored = [];
@@ -289,7 +291,7 @@
         <header class="card-head">
           <div>
             <div class="card-flags">
-              <div class="shot-no">Job ${String(job.position).padStart(2, '0')} / 16 · ${job.id} · Act ${job.act} · ${job.actTitle}</div>
+              <div class="shot-no">Original job ${String(job.position).padStart(2, '0')} / 16 · ${job.id} · Act ${job.act} · ${job.actTitle}</div>
               ${needsRecompose ? '<span class="orientation-badge">Needs-recompose</span>' : ''}
             </div>
             <h2>${job.title}</h2>
@@ -298,8 +300,8 @@
         </header>
         <div class="pair">
           <figure>
-            <span class="frame-label">Start image · attach this only</span>
-            <a class="frame-link" href="${job.first}" target="_blank" rel="noopener"><img src="${job.first}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} first image"></a>
+            <span class="frame-label">Rejected start · reference only, do not attach</span>
+            <a class="frame-link rejected" href="${job.first}" target="_blank" rel="noopener"><img src="${job.first}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} rejected start image"></a>
             <figcaption>${job.firstName}</figcaption>
           </figure>
           <div class="arrow" aria-hidden="true">→</div>
@@ -312,7 +314,7 @@
         ${needsRecompose ? `<p class="recompose-note"><strong>Human checkpoint:</strong> ${job.recompose}</p>` : ''}
         <div class="prompt-box">
           <div class="prompt-top">
-            <span class="prompt-label">Exact Grok prompt · 15s · 16:9 · audio off</span>
+            <span class="prompt-label">Exact R2 Grok prompt · 15s · 16:9 · audio off</span>
             <div class="actions">
               <button class="copy" type="button">Copy exact prompt</button>
               <button class="done" type="button" aria-pressed="false">Mark done</button>
@@ -341,7 +343,7 @@
     });
     if (!jobs.length) {
       empty.hidden = false;
-      empty.textContent = 'Grok board data is missing. Restore grok-jobs.js.';
+      empty.textContent = 'No regeneration jobs are flagged in grok-jobs.js.';
     }
     updateProgress();
   </script>

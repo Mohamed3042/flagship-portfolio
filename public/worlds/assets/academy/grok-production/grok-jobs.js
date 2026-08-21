@@ -3,20 +3,21 @@
 window.ACADEMY_GROK_JOBS = [
   {
     id: "ACA-GROK-001", position: 1, act: "I", actTitle: "The Invitation", title: "The Owl Descends",
-    output: "ACA-GROK-001.mp4",
+    output: "ACA-GROK-001-R2.mp4", regenerate: true,
     firstName: "ACA-KF01-owl-letter.png", lastName: "ACA-KF02-gates-admit.png",
     first: "../keyframes/ACA-KF01-owl-letter.png", last: "../keyframes/ACA-KF02-gates-admit.png",
     shotClass: "subject shot", facing: "frontal toward camera", orientation: "needs-recompose",
-    recompose: "ACA-KF01: owl is frontal but motion travels away; recompose as rear or three-quarter-rear, still carrying the sealed letter in its beak.",
-    prompt: "Dives away toward the iron gate, the same barn owl carrying the sealed letter in its beak. Camera slowly follows behind. Candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. Ends framed on the open gate, warm stair-hall glowing beyond."
+    recompose: "ACA-KF01-R2: show the same barn owl from rear or three-quarter-rear, already aimed at the gate, with the sealed letter fixed in its beak. Keep the owl and gate on one clear travel axis.",
+    prompt: "Flies straight away toward the open iron gate, the same barn owl seen from a rear three-quarter view, sealed letter fixed in its beak. Camera slowly follows directly behind. Moonlit academy, warm candle-gold gate, deep slate shadow, soft film grain. Ends inside the open gate, stair-hall glowing ahead."
   },
   {
     id: "ACA-GROK-002", position: 2, act: "I", actTitle: "The Invitation", title: "The Gates Admit",
-    output: "ACA-GROK-002.mp4",
+    output: "ACA-GROK-002-R2.mp4", regenerate: true,
     firstName: "ACA-KF02-gates-admit.png", lastName: "ACA-KF03-moving-staircases.png",
     first: "../keyframes/ACA-KF02-gates-admit.png", last: "../keyframes/ACA-KF03-moving-staircases.png",
-    shotClass: "camera-only", facing: "frontal owl is incidental; no subject travel", orientation: "ok",
-    prompt: "Swings outward, both iron gate leaves opening wider around the same barn owl. Camera slowly cranes upward through the gateway. Candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. Ends framed on the staircase shaft and centered upper library door."
+    shotClass: "camera-only", facing: "foreground owl dominates the gate motion", orientation: "needs-recompose",
+    recompose: "ACA-KF02-R2: remove the foreground owl or reduce it to a tiny rear-facing silhouette beyond the partly open gate. Keep both iron leaves dominant and fully visible.",
+    prompt: "Swings outward, both wrought-iron gate leaves opening wider while the owl stays small and motionless beyond them. Camera slowly cranes upward through the gateway. Candlelit stair-hall, warm candle-gold, deep slate shadow, soft film grain. Ends framed on the aligned upper staircase and closed library doors."
   },
   {
     id: "ACA-GROK-003", position: 3, act: "I", actTitle: "The Invitation", title: "The Highest Landing",
