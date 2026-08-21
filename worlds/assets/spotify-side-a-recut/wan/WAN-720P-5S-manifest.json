@@ -1,0 +1,94 @@
+{
+  "schema": "spotify-side-a-wan-board/v1",
+  "model": "WAN 2.7",
+  "mode": "first-and-last-frame image-to-video",
+  "resolution": "720p",
+  "durationSeconds": 5,
+  "aspectRatio": "16:9",
+  "promptExtend": false,
+  "userApproved": "2026-08-21",
+  "videoGenerated": true,
+  "shots": [
+    {
+      "shot": "W01",
+      "title": "First Light",
+      "first": "input/W01-first.png",
+      "last": "input/W01-last.png",
+      "firstSource": "../keyframes/final/KF01.png",
+      "lastSource": "../keyframes/final/KF02.png",
+      "timing": "point 0-3.2 | LED 3.2 | settle 4.5-5",
+      "firstSha256": "24caa75d7d197abd3532f13c42c1bdef4c97a0ee47d8fab488bd3363a763451e",
+      "lastSha256": "e8bc2b12b77c58f60233764c99913bdae5022947a5340d780c2cd6a880534ae7"
+    },
+    {
+      "shot": "W02",
+      "title": "Contact",
+      "first": "input/W02-first.png",
+      "last": "input/W02-last.png",
+      "firstSource": "../keyframes/final/KF02.png",
+      "lastSource": "../keyframes/final/KF03.png",
+      "timing": "crane 0-3.4 | contact 3.4 | settle 4.5-5",
+      "firstSha256": "e8bc2b12b77c58f60233764c99913bdae5022947a5340d780c2cd6a880534ae7",
+      "lastSha256": "98f831a65cd8e08f2144905d60d7c654ab38df17cea7aaff502a11fbe01e8c2c"
+    },
+    {
+      "shot": "W03",
+      "title": "The Sundial",
+      "first": "input/W03-first.png",
+      "last": "input/W03-last.png",
+      "firstSource": "../keyframes/final/STYLE.png",
+      "lastSource": "../keyframes/final/KF04.png",
+      "timing": "climb/rotate 0-4.2 | settle 4.2-5",
+      "firstSha256": "6bcd43c426beaa0963dc478322a81e8111511dd8af6f3d22ae218be378f0554b",
+      "lastSha256": "87c6bf43f6b7009c0051caa4a63cd97659c4c1f7e4f27532c015e3f2e7a56a14"
+    },
+    {
+      "shot": "W04",
+      "title": "The Aligned Desk",
+      "first": "input/W04-first.png",
+      "last": "input/W04-last.png",
+      "firstSource": "../keyframes/final/KF05.png",
+      "lastSource": "../keyframes/final/KF05.png",
+      "timing": "track 0-4 | align mid-shot | settle 4.5-5",
+      "firstSha256": "252894d3176682f5e801c2b34ce76e07bc78d99a4ee03aaa3340601843e41507",
+      "lastSha256": "252894d3176682f5e801c2b34ce76e07bc78d99a4ee03aaa3340601843e41507"
+    },
+    {
+      "shot": "W05",
+      "title": "The Passing Car",
+      "first": "input/W05-first.png",
+      "last": "input/W05-last.png",
+      "firstSource": "../keyframes/final/KF06.png",
+      "lastSource": "../keyframes/final/KF06.png",
+      "timing": "sweep 0-4.2 | swell mid-shot | settle 4.5-5",
+      "firstSha256": "c5fc2686586985602b7a24e52e2d121dfc9a85c8f56195319fff26d622c285ab",
+      "lastSha256": "c5fc2686586985602b7a24e52e2d121dfc9a85c8f56195319fff26d622c285ab"
+    },
+    {
+      "shot": "W06",
+      "title": "The Synchronized Room",
+      "first": "input/W06-first.png",
+      "last": "input/W06-last.png",
+      "firstSource": "../keyframes/final/KF05.png",
+      "lastSource": "../keyframes/final/KF07.png",
+      "timing": "open-out 0-3.8 | pulse/dim 2.3-4.3 | hold 4.5-5",
+      "firstSha256": "252894d3176682f5e801c2b34ce76e07bc78d99a4ee03aaa3340601843e41507",
+      "lastSha256": "e5a9d03a602142355b522ae6416cd9abfbdcaf8be61e51fb3eacb843555748b0"
+    },
+    {
+      "shot": "W07",
+      "title": "Needle Up",
+      "first": "input/W07-first.png",
+      "last": "input/W07-last.png",
+      "firstSource": "../keyframes/final/KF03.png",
+      "lastSource": "../keyframes/final/KF01.png",
+      "timing": "lift 0-2.8 | tilt 2.8-4.2 | loop hold 4.5-5",
+      "firstSha256": "98f831a65cd8e08f2144905d60d7c654ab38df17cea7aaff502a11fbe01e8c2c",
+      "lastSha256": "24caa75d7d197abd3532f13c42c1bdef4c97a0ee47d8fab488bd3363a763451e"
+    }
+  ],
+  "rawReturnsObserved": 8,
+  "acceptedReturns": 7,
+  "selectedA04RawIndex": 7,
+  "runManifest": "../../../spotify-side-a-recut/WAN-RECUT-RUN-MANIFEST.json"
+}
