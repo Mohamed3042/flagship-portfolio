@@ -1,0 +1,148 @@
+{
+  "schema": "spotify-side-a-keyframe-qa/v1",
+  "target": {
+    "width": 1920,
+    "height": 1088,
+    "mode": "RGB"
+  },
+  "expected": [
+    "STYLE.png",
+    "KF01.png",
+    "KF02.png",
+    "KF03.png",
+    "KF04.png",
+    "KF05.png",
+    "KF06.png",
+    "KF07.png"
+  ],
+  "actual": [
+    "KF01.png",
+    "KF02.png",
+    "KF03.png",
+    "KF04.png",
+    "KF05.png",
+    "KF06.png",
+    "KF07.png",
+    "STYLE.png"
+  ],
+  "profiles": {
+    "minimumCenterLumaP95": {
+      "STYLE.png": 35,
+      "KF01.png": 18,
+      "KF02.png": 18,
+      "KF03.png": 35,
+      "KF04.png": 35,
+      "KF05.png": 25,
+      "KF06.png": 55,
+      "KF07.png": 30
+    },
+    "minimumEdgeStdDev": 8
+  },
+  "errors": [],
+  "frames": [
+    {
+      "file": "STYLE.png",
+      "sha256": "7a3a165c1eed8fb18df009415908627744bd8ab338b0e7a1fcdac0f0cf88292e",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 10.57,
+      "lumaStdDev": 20.65,
+      "edgeStdDev": 25.18,
+      "centerLumaP95": 44,
+      "centerGreenPeak": 70,
+      "outerGreenPeak": 94
+    },
+    {
+      "file": "KF01.png",
+      "sha256": "e285c6038f180bf6e15d5401ec170c27aa1cfb9e587f0fd190b5dad93d53b1cb",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 4.22,
+      "lumaStdDev": 8.33,
+      "edgeStdDev": 11.54,
+      "centerLumaP95": 22,
+      "centerGreenPeak": 33,
+      "outerGreenPeak": 1
+    },
+    {
+      "file": "KF02.png",
+      "sha256": "b5842a737944b89596caf81783596c9c6c4c9a46252bf10c612b7918e6dc5deb",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 3.74,
+      "lumaStdDev": 7.98,
+      "edgeStdDev": 10.19,
+      "centerLumaP95": 21,
+      "centerGreenPeak": 37,
+      "outerGreenPeak": 1
+    },
+    {
+      "file": "KF03.png",
+      "sha256": "1bf87cc634055d35f5dfa1bbb773b3a3bff872636ad3b95a340387ee908c7dbe",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 10.54,
+      "lumaStdDev": 21.57,
+      "edgeStdDev": 9.76,
+      "centerLumaP95": 47,
+      "centerGreenPeak": 102,
+      "outerGreenPeak": 91
+    },
+    {
+      "file": "KF04.png",
+      "sha256": "cd77ea927d3b96a2d7fbef8d220e6fdeac8c597970e7d01a808366c63ca89824",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 8.99,
+      "lumaStdDev": 20.3,
+      "edgeStdDev": 23.68,
+      "centerLumaP95": 41,
+      "centerGreenPeak": 70,
+      "outerGreenPeak": 94
+    },
+    {
+      "file": "KF05.png",
+      "sha256": "a31ac4b86325553584df8027bc89e59981cda9a417da5c076af3bbdf44b79ded",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 6.79,
+      "lumaStdDev": 16.77,
+      "edgeStdDev": 21.24,
+      "centerLumaP95": 32,
+      "centerGreenPeak": 85,
+      "outerGreenPeak": 47
+    },
+    {
+      "file": "KF06.png",
+      "sha256": "fc2d8321341540f4ab35bd54beb3fb7fd1856f32e743064c05445a1fc8cd1592",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 11.28,
+      "lumaStdDev": 23.94,
+      "edgeStdDev": 22.9,
+      "centerLumaP95": 70,
+      "centerGreenPeak": 108,
+      "outerGreenPeak": 91
+    },
+    {
+      "file": "KF07.png",
+      "sha256": "1ad3960382f895603cd6a6da426901cb050f87f55b255a32df702be8ee083339",
+      "width": 1920,
+      "height": 1088,
+      "mode": "RGB",
+      "meanLuma": 7.74,
+      "lumaStdDev": 16.65,
+      "edgeStdDev": 22.44,
+      "centerLumaP95": 37,
+      "centerGreenPeak": 32,
+      "outerGreenPeak": 2
+    }
+  ]
+}

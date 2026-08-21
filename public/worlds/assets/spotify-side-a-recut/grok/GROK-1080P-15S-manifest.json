@@ -1,0 +1,88 @@
+{
+  "schema": "spotify-side-a-grok-board/v1",
+  "model": "grok-imagine-video-1.5",
+  "mode": "image-to-video",
+  "resolution": "1080p",
+  "durationSeconds": 15,
+  "aspectRatio": "16:9",
+  "videoGenerated": false,
+  "shots": [
+    {
+      "shot": "G01",
+      "title": "First Light",
+      "input": "input/G01-start.png",
+      "source": "../keyframes/final/KF01.png",
+      "editorialTarget": "../keyframes/final/KF02.png",
+      "timing": "hold 0-2 | reveal 2-8 | LED 8-10.5 | settle 11-15",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "5b1845c934043192b725b1644f22c54e979860e5272e6a575540a6882346346f"
+    },
+    {
+      "shot": "G02",
+      "title": "Contact",
+      "input": "input/G02-start.png",
+      "source": "../keyframes/final/KF02.png",
+      "editorialTarget": "../keyframes/final/KF03.png",
+      "timing": "wide 0-1.5 | crane/contact 1.5-9.5 | hold 11.5-15",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "fc43b23d6303d42c4976c2011f7fbe00f4f8373cba1927678d5849793f4b2fa6"
+    },
+    {
+      "shot": "G03",
+      "title": "The Sundial",
+      "input": "input/G03-start.png",
+      "source": "../keyframes/final/STYLE.png",
+      "editorialTarget": "../keyframes/final/KF04.png",
+      "timing": "hold 0-2 | climb/rotate 2-10.5 | hold 11.5-15",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "d250c52eee34a332f506781d2e1f9f0965319cb0d21e87b0a125425aa57375d1"
+    },
+    {
+      "shot": "G04",
+      "title": "The Aligned Desk",
+      "input": "input/G04-start.png",
+      "source": "../keyframes/final/KF05.png",
+      "editorialTarget": "../keyframes/final/KF05.png",
+      "timing": "random 0-4 | align 4-8.5 | ghost/hold 8.5-15",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "fa12a71fe333dbd61a98f87107ba392680e94f58de2e1482ae54f37e1c89dbbf"
+    },
+    {
+      "shot": "G05",
+      "title": "The Passing Car",
+      "input": "input/G05-start.png",
+      "source": "../keyframes/final/KF06.png",
+      "editorialTarget": "../keyframes/final/KF06.png",
+      "timing": "still 0-3 | sweep 3-10.5 | settle 11.5-15",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "acdb45806adfdd887bbfdb303707dfe3efa679570695e271bde745e733355310"
+    },
+    {
+      "shot": "G06",
+      "title": "The Synchronized Room",
+      "input": "input/G06-start.png",
+      "source": "../keyframes/final/KF05.png",
+      "editorialTarget": "../keyframes/final/KF07.png",
+      "timing": "desk 0-2 | open-out 2-10 | dim/hold 9-15",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "fa12a71fe333dbd61a98f87107ba392680e94f58de2e1482ae54f37e1c89dbbf"
+    },
+    {
+      "shot": "G07",
+      "title": "Needle Up",
+      "input": "input/G07-start.png",
+      "source": "../keyframes/final/KF03.png",
+      "editorialTarget": "../keyframes/final/KF01.png",
+      "timing": "macro 0-2 | lift/dust 2-8 | loop hold 11.5-15",
+      "width": 1920,
+      "height": 1080,
+      "sha256": "57b12e3735cf66f1c6494484c500893ddba82bf4bde7eeea6b73d5783aeb106d"
+    }
+  ]
+}
