@@ -5,13 +5,21 @@
 - **VERIFIED — fail-first:** the deployed v4.0 mapping was RED across all 100 scenes: 88 unmotivated ping-pong joins, 88 join-velocity failures, and 12 scenes classified “OK — minor easing” (the opening plus 11 story-motivated returns).
 - **VERIFIED — built source:** GREEN across all 100 scenes: 0 ping-pong joins, 0 internal monotonicity failures, and 0 join failures.
 - **VERIFIED — local rendered runtime:** desktop 1440×900 and phone 390×844 each visited scenes 1→100 and 100→1, with zero horizontal overflow, zero autoplay calls, 12/12 decoded peak frames, and a clean phone ending.
-- **Deployment:** pending the audited main merge and selective `gh-pages` sync; the live receipts below will be filled from the deployed URL.
+- **VERIFIED — deployed runtime:** the same desktop and phone bidirectional sweeps passed on the live URL; all 12 peak clips reached `readyState=4`, scene 100 finished at pan `0.5`, and the phone page ending remained visible with zero overflow.
 
 ## Scope boundary
 
 The live Disney Folktale was v4.0 with 100 scenes while `origin/main` still held the earlier 20-scene v3.3 page. The exact shipped v4.0 page (`e577599:public/worlds/disney.html`) was therefore restored into this branch before the surgical mapping edit.
 
 **VERIFIED:** relative to that shipped v4.0 page, the product diff is limited to the camera mapping: 31 insertions and 7 deletions in `public/worlds/disney.html`. The 100 footage URLs, copy, timing, `cinema.js`, and `cinema.css` are unchanged.
+
+## Deployment receipt
+
+- Source PR: [#12](https://github.com/Mohamed3042/flagship-portfolio/pull/12), merged to `main` as `beda54a5b001e032fb0c5b43a1ba5d093cfc133e`.
+- Main-source build: `npm run build:ghpages` → `56 page(s) built`.
+- Source/build/page Git blob: `6f7ede2fbaf8cca6ba784671cfe6f5dd2417641f`.
+- Selective Pages commit: `e6113688aa8d71ec1264d8cb7824ef28f2bfd45b`; only `worlds/disney.html` changed (31 insertions, 7 deletions). No Actions workflow was used.
+- Pages build status: `built`; served HTML is byte-equal to the LF-normalized build output (`78,492` bytes, SHA-256 `737B0EBB861030012693A89729C071AA95D9E3B500F710358056C2799F483517`).
 
 ## Reproduction and classification
 
@@ -45,9 +53,11 @@ Each scene inherits its segment from the global curve. Non-story joins retain di
 
 ## Rendered proof
 
-![Local built page — all 12 fixed-section peaks](assets/disney-camera-tracking/runtime-local/fixed-section-peaks-contact-sheet.jpg)
+![Deployed page — all 12 fixed-section peaks](assets/disney-camera-tracking/runtime-live/fixed-section-peaks-contact-sheet.jpg)
 
-![Local built page — phone film ending, 390×844](assets/disney-camera-tracking/runtime-local/phone-film-ending-390x844.png)
+![Deployed page — phone film ending, 390×844](assets/disney-camera-tracking/runtime-live/phone-film-ending-390x844.png)
+
+![Deployed page — phone page ending, 390×844](assets/disney-camera-tracking/runtime-live/phone-page-ending-390x844.png)
 
 Evidence:
 
@@ -56,6 +66,11 @@ Evidence:
 - [Built-after per-scene measurements](assets/disney-camera-tracking/after-built/camera-scenes.csv)
 - [Built-after join table](assets/disney-camera-tracking/after-built/camera-joins.csv)
 - [Local browser runtime report](assets/disney-camera-tracking/runtime-local/runtime-browser-verification.json)
+- [Deployed per-scene measurements](assets/disney-camera-tracking/after-live/camera-scenes.csv)
+- [Deployed join table](assets/disney-camera-tracking/after-live/camera-joins.csv)
+- [Deployed browser runtime report](assets/disney-camera-tracking/runtime-live/runtime-browser-verification.json)
+
+**VERIFIED boundary:** the first live proof attempt reused a context whose sweep intentionally aborted MP4 requests, so decoded-frame capture timed out. The verifier now isolates decoded media in fresh contexts. A subsequent cold scene-100 request also sat near the page's pre-existing 8 s fetch deadline (direct transfer `7.60 s`; repeat `2.28 s`). The untouched loader's final deployed rerun passed, but this release does not claim a change to cold-CDN media robustness.
 
 ## Gate receipts
 
@@ -66,8 +81,8 @@ Evidence:
 | `npm run build:ghpages` | `56 page(s) built` |
 | Built HTML mapping | `CAMERA_GATE_GREEN scenes=100 ping_pong=0 small_easing=0 internal_failures=0 join_failures=0` |
 | Local browser runtime | `DISNEY_CAMERA_RUNTIME_GREEN desktop_forward=100/100 desktop_reverse=100/100 phone_forward=100/100 phone_reverse=100/100 peaks=12/12 phone_ending=GREEN` |
-| Deployed mapping | pending |
-| Deployed browser runtime | pending |
+| Deployed mapping | `CAMERA_GATE_GREEN scenes=100 ping_pong=0 small_easing=0 internal_failures=0 join_failures=0` |
+| Deployed browser runtime | `DISNEY_CAMERA_RUNTIME_GREEN desktop_forward=100/100 desktop_reverse=100/100 phone_forward=100/100 phone_reverse=100/100 peaks=12/12 phone_ending=GREEN` |
 
 ## Per-scene before/after curve table
 
