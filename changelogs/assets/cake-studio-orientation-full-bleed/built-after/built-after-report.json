@@ -1,0 +1,2011 @@
+{
+  "gate": "cake-studio-orientation-full-bleed/v1",
+  "url": "http://127.0.0.1:41880/worlds/cake-studio.html",
+  "label": "built-after",
+  "expected": "GREEN",
+  "allowLocalCancelErrors": true,
+  "rangeProbe": {
+    "status": 206,
+    "acceptRanges": "bytes",
+    "contentRange": "bytes 0-1/51434",
+    "contentLength": "2",
+    "pass": true
+  },
+  "profiles": [
+    {
+      "profile": "portrait",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 3,
+        "touch": true
+      },
+      "sameSceneProgress": 0.46,
+      "midSeamProgress": 0.43871972318339103,
+      "checkpoints": [
+        {
+          "checkpoint": "opening",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "visualViewport": {
+            "width": 390,
+            "height": 844,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "portrait-primary",
+            "angle": 0
+          },
+          "progress": 0.015,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "media": {
+            "className": "bookend-phone-video",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844,
+              "width": 390,
+              "height": 844
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 640,
+              "height": 360
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "1",
+            "sequenceClip": "I01",
+            "sequenceFraction": "0.15000",
+            "sequenceTargetTime": "0.6870",
+            "sequenceVelocity": "13.740",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "exact-video",
+            "sequenceTime": "0.6870",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "1",
+            "sequenceLanding": "exact-video"
+          },
+          "activeMediaTime": 0.687,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-portrait-opening.png"
+        },
+        {
+          "checkpoint": "same-scene",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "visualViewport": {
+            "width": 390,
+            "height": 844,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "portrait-primary",
+            "angle": 0
+          },
+          "progress": 0.4599,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "media": {
+            "className": "bookend-phone-video",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844,
+              "width": 390,
+              "height": 844
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 640,
+              "height": 360
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "5",
+            "sequenceClip": "I05",
+            "sequenceFraction": "0.59900",
+            "sequenceTargetTime": "21.0634",
+            "sequenceVelocity": "407.528",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "exact-video",
+            "sequenceTime": "21.0634",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5",
+            "sequenceLanding": "exact-video"
+          },
+          "activeMediaTime": 21.063419,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-portrait-same-scene.png"
+        },
+        {
+          "checkpoint": "mid-seam",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "visualViewport": {
+            "width": 390,
+            "height": 844,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "portrait-primary",
+            "angle": 0
+          },
+          "progress": 0.4387,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "media": {
+            "className": "on",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844,
+              "width": 390,
+              "height": 844
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "The 50-shot reel",
+            "directorVersion": "1.6.0",
+            "currentShot": "26",
+            "currentClip": "cake-studio/clips/CST-026.mp4",
+            "chapterKey": "protect-colour",
+            "rhythm": "protect",
+            "shotWeight": "1.45",
+            "cameraState": "idle",
+            "mediaState": "ready"
+          },
+          "activeMediaTime": 0.196068,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-portrait-mid-seam.png"
+        },
+        {
+          "checkpoint": "ending",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "visualViewport": {
+            "width": 390,
+            "height": 844,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "portrait-primary",
+            "angle": 0
+          },
+          "progress": 0.9951,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "media": {
+            "className": "bookend-phone-scrub-atlas",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 390,
+              "bottom": 844,
+              "width": 390,
+              "height": 844
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 384,
+              "height": 216
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "Cinematic epilogue",
+            "bookend": "outro",
+            "cakeBookend": "outro",
+            "bookendTrack": "outro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "5",
+            "sequenceIndex": "5",
+            "sequenceClip": "O05",
+            "sequenceFraction": "0.97550",
+            "sequenceTargetTime": "23.0000",
+            "sequenceVelocity": "23000.000",
+            "sequencePreviewMode": "sprite-atlas",
+            "sequenceAtlas": "visible",
+            "sequenceLanding": "ready",
+            "sequenceWarm": "ready",
+            "sequenceWarmBytes": "2479879",
+            "sequenceTime": "23.0000",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5"
+          },
+          "activeMediaTime": 22.999999,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-portrait-ending.png"
+        }
+      ],
+      "reversePoints": [
+        {
+          "label": "mid-seam",
+          "scrollY": 19107,
+          "maxScroll": 38643,
+          "intro": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "5",
+            "sequenceClip": "I05",
+            "sequenceFraction": "0.59900",
+            "sequenceTargetTime": "21.0634",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "released",
+            "sequenceTime": "21.0634",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5",
+            "sequenceLanding": "exact-video"
+          },
+          "film": {
+            "scene": "pin",
+            "slate": "The 50-shot reel",
+            "directorVersion": "1.6.0",
+            "currentShot": "26",
+            "currentClip": "cake-studio/clips/CST-026.mp4",
+            "chapterKey": "protect-colour",
+            "rhythm": "protect",
+            "shotWeight": "1.45",
+            "cameraState": "idle",
+            "mediaState": "ready"
+          },
+          "outro": {
+            "scene": "pin",
+            "slate": "Cinematic epilogue",
+            "bookend": "outro",
+            "cakeBookend": "outro",
+            "bookendTrack": "outro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "5",
+            "sequenceIndex": "5",
+            "sequenceClip": "O05",
+            "sequenceFraction": "0.97550",
+            "sequenceTargetTime": "23.0000",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "held",
+            "sequenceLanding": "ready",
+            "sequenceWarm": "ready",
+            "sequenceWarmBytes": "2479879",
+            "sequenceTime": "23.0000",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5"
+          }
+        },
+        {
+          "label": "opening",
+          "scrollY": 96,
+          "maxScroll": 38643,
+          "intro": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "1",
+            "sequenceClip": "I01",
+            "sequenceFraction": "0.15000",
+            "sequenceTargetTime": "0.6870",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "exact-video",
+            "sequenceTime": "0.6870",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "1",
+            "sequenceLanding": "exact-video"
+          },
+          "film": {
+            "scene": "pin",
+            "slate": "The 50-shot reel",
+            "directorVersion": "1.6.0",
+            "currentShot": "26",
+            "currentClip": "cake-studio/clips/CST-026.mp4",
+            "chapterKey": "protect-colour",
+            "rhythm": "protect",
+            "shotWeight": "1.45",
+            "cameraState": "idle",
+            "mediaState": "ready"
+          },
+          "outro": {
+            "scene": "pin",
+            "slate": "Cinematic epilogue",
+            "bookend": "outro",
+            "cakeBookend": "outro",
+            "bookendTrack": "outro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "5",
+            "sequenceIndex": "5",
+            "sequenceClip": "O05",
+            "sequenceFraction": "0.97550",
+            "sequenceTargetTime": "23.0000",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "held",
+            "sequenceLanding": "ready",
+            "sequenceWarm": "ready",
+            "sequenceWarmBytes": "2479879",
+            "sequenceTime": "23.0000",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5"
+          }
+        }
+      ],
+      "traversal": [
+        {
+          "direction": "forward",
+          "steps": 72,
+          "maximum": 38643,
+          "finalScrollY": 38643,
+          "seconds": 14.38
+        },
+        {
+          "direction": "reverse",
+          "steps": 72,
+          "maximum": 38643,
+          "finalScrollY": 0,
+          "seconds": 14.28
+        }
+      ],
+      "network": {
+        "consoleErrors": [
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_CONTENT_LENGTH_MISMATCH",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_CONTENT_LENGTH_MISMATCH",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE"
+        ],
+        "pageErrors": [],
+        "badResponses": [],
+        "failedRequests": [
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-003.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-003.mp4"
+          },
+          {
+            "failure": "net::ERR_CONTENT_LENGTH_MISMATCH",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-019.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-021.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-021.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-031.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-040.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-048.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-024.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-019.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-010.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-010.mp4"
+          },
+          {
+            "failure": "net::ERR_CONTENT_LENGTH_MISMATCH",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-008.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-001.mp4"
+          }
+        ],
+        "media206": [
+          {
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
+            "status": 206,
+            "acceptRanges": "bytes",
+            "contentRange": "bytes 0-5091535/5091536"
+          }
+        ],
+        "v17Mp4Requests": [
+          "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
+          "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4"
+        ]
+      }
+    },
+    {
+      "profile": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390,
+        "dpr": 3,
+        "touch": true
+      },
+      "sameSceneProgress": 0.46,
+      "midSeamProgress": 0.43871972318339103,
+      "checkpoints": [
+        {
+          "checkpoint": "opening",
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "visualViewport": {
+            "width": 844,
+            "height": 390,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "landscape-primary",
+            "angle": 90
+          },
+          "progress": 0.015,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "media": {
+            "className": "bookend-phone-video",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 844,
+              "bottom": 390,
+              "width": 844,
+              "height": 390
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 640,
+              "height": 360
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "1",
+            "sequenceClip": "I01",
+            "sequenceFraction": "0.15000",
+            "sequenceTargetTime": "0.6870",
+            "sequenceVelocity": "13.740",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "exact-video",
+            "sequenceTime": "0.6870",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "1",
+            "sequenceLanding": "exact-video"
+          },
+          "activeMediaTime": 0.687,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-landscape-opening.png"
+        },
+        {
+          "checkpoint": "same-scene",
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "visualViewport": {
+            "width": 844,
+            "height": 390,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "landscape-primary",
+            "angle": 90
+          },
+          "progress": 0.4601,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "media": {
+            "className": "bookend-phone-video",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 844,
+              "bottom": 390,
+              "width": 844,
+              "height": 390
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 640,
+              "height": 360
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "5",
+            "sequenceClip": "I05",
+            "sequenceFraction": "0.60100",
+            "sequenceTargetTime": "21.0726",
+            "sequenceVelocity": "407.712",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "exact-video",
+            "sequenceTime": "21.0726",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5",
+            "sequenceLanding": "exact-video"
+          },
+          "activeMediaTime": 21.07258,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-landscape-same-scene.png"
+        },
+        {
+          "checkpoint": "mid-seam",
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "visualViewport": {
+            "width": 844,
+            "height": 390,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "landscape-primary",
+            "angle": 90
+          },
+          "progress": 0.4387,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "media": {
+            "className": "on",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 844,
+              "bottom": 390,
+              "width": 844,
+              "height": 390
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 1280,
+              "height": 720
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "The 50-shot reel",
+            "directorVersion": "1.6.0",
+            "currentShot": "26",
+            "currentClip": "cake-studio/clips/CST-026.mp4",
+            "chapterKey": "protect-colour",
+            "rhythm": "protect",
+            "shotWeight": "1.45",
+            "cameraState": "idle",
+            "mediaState": "ready"
+          },
+          "activeMediaTime": 0.196068,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-landscape-mid-seam.png"
+        },
+        {
+          "checkpoint": "ending",
+          "viewport": {
+            "width": 844,
+            "height": 390
+          },
+          "visualViewport": {
+            "width": 844,
+            "height": 390,
+            "scale": 1
+          },
+          "dpr": 3,
+          "touchPoints": 1,
+          "coarsePointer": true,
+          "orientation": {
+            "type": "landscape-primary",
+            "angle": 90
+          },
+          "progress": 0.9951,
+          "stage": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "surface": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "media": {
+            "className": "bookend-phone-scrub-atlas",
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "right": 844,
+              "bottom": 390,
+              "width": 844,
+              "height": 390
+            },
+            "objectFit": "cover",
+            "objectPosition": "50% 50%",
+            "opacity": "1",
+            "sourceSize": {
+              "width": 384,
+              "height": 216
+            }
+          },
+          "bars": {
+            "left": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0
+          },
+          "sceneData": {
+            "scene": "pin",
+            "slate": "Cinematic epilogue",
+            "bookend": "outro",
+            "cakeBookend": "outro",
+            "bookendTrack": "outro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "5",
+            "sequenceIndex": "5",
+            "sequenceClip": "O05",
+            "sequenceFraction": "0.97550",
+            "sequenceTargetTime": "23.0000",
+            "sequenceVelocity": "20909.091",
+            "sequencePreviewMode": "sprite-atlas",
+            "sequenceAtlas": "visible",
+            "sequenceLanding": "ready",
+            "sequenceWarm": "ready",
+            "sequenceWarmBytes": "2479879",
+            "sequenceTime": "23.0000",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5"
+          },
+          "activeMediaTime": 22.999999,
+          "activeMediaReadyState": 4,
+          "assertions": {
+            "stageBounds": true,
+            "surfaceBounds": true,
+            "mediaCovers": true,
+            "noLetterbox": true,
+            "centerAnchored": true
+          },
+          "fullBleed": true,
+          "screenshot": "built-after-landscape-ending.png"
+        }
+      ],
+      "reversePoints": [
+        {
+          "label": "mid-seam",
+          "scrollY": 8673,
+          "maxScroll": 17614,
+          "intro": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "5",
+            "sequenceClip": "I05",
+            "sequenceFraction": "0.60100",
+            "sequenceTargetTime": "21.0726",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "released",
+            "sequenceTime": "21.0726",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5",
+            "sequenceLanding": "exact-video"
+          },
+          "film": {
+            "scene": "pin",
+            "slate": "The 50-shot reel",
+            "directorVersion": "1.6.0",
+            "currentShot": "26",
+            "currentClip": "cake-studio/clips/CST-026.mp4",
+            "chapterKey": "protect-colour",
+            "rhythm": "protect",
+            "shotWeight": "1.45",
+            "cameraState": "idle",
+            "mediaState": "ready"
+          },
+          "outro": {
+            "scene": "pin",
+            "slate": "Cinematic epilogue",
+            "bookend": "outro",
+            "cakeBookend": "outro",
+            "bookendTrack": "outro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "5",
+            "sequenceIndex": "5",
+            "sequenceClip": "O05",
+            "sequenceFraction": "0.97550",
+            "sequenceTargetTime": "23.0000",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "held",
+            "sequenceLanding": "ready",
+            "sequenceWarm": "ready",
+            "sequenceWarmBytes": "2479879",
+            "sequenceTime": "23.0000",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5"
+          }
+        },
+        {
+          "label": "opening",
+          "scrollY": 42,
+          "maxScroll": 17614,
+          "intro": {
+            "scene": "pin",
+            "slate": "Cinematic prologue",
+            "bookend": "intro",
+            "cakeBookend": "intro",
+            "bookendTrack": "intro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "10",
+            "sequenceIndex": "1",
+            "sequenceClip": "I01",
+            "sequenceFraction": "0.15000",
+            "sequenceTargetTime": "0.6870",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "exact-video",
+            "sequenceTime": "0.6870",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "1",
+            "sequenceLanding": "exact-video"
+          },
+          "film": {
+            "scene": "pin",
+            "slate": "The 50-shot reel",
+            "directorVersion": "1.6.0",
+            "currentShot": "26",
+            "currentClip": "cake-studio/clips/CST-026.mp4",
+            "chapterKey": "protect-colour",
+            "rhythm": "protect",
+            "shotWeight": "1.45",
+            "cameraState": "idle",
+            "mediaState": "ready"
+          },
+          "outro": {
+            "scene": "pin",
+            "slate": "Cinematic epilogue",
+            "bookend": "outro",
+            "cakeBookend": "outro",
+            "bookendTrack": "outro",
+            "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+            "sequenceMode": "motion",
+            "sequenceTransport": "phone-master",
+            "sequenceState": "ready",
+            "sequenceCount": "5",
+            "sequenceIndex": "5",
+            "sequenceClip": "O05",
+            "sequenceFraction": "0.97550",
+            "sequenceTargetTime": "23.0000",
+            "sequenceVelocity": "0.000",
+            "sequencePreviewMode": "exact-follow",
+            "sequenceAtlas": "held",
+            "sequenceLanding": "ready",
+            "sequenceWarm": "ready",
+            "sequenceWarmBytes": "2479879",
+            "sequenceTime": "23.0000",
+            "sequenceLag": "0.0000",
+            "sequencePresentedIndex": "5"
+          }
+        }
+      ],
+      "traversal": [
+        {
+          "direction": "forward",
+          "steps": 72,
+          "maximum": 17614,
+          "finalScrollY": 17614,
+          "seconds": 14.347
+        },
+        {
+          "direction": "reverse",
+          "steps": 72,
+          "maximum": 17614,
+          "finalScrollY": 0,
+          "seconds": 14.308
+        }
+      ],
+      "network": {
+        "consoleErrors": [
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_CONTENT_LENGTH_MISMATCH",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE",
+          "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE"
+        ],
+        "pageErrors": [],
+        "badResponses": [],
+        "failedRequests": [
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-002.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-004.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-005.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-008.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-011.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-016.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-030.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-038.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-049.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-049.mp4"
+          },
+          {
+            "failure": "net::ERR_CONTENT_LENGTH_MISMATCH",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-018.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-007.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-006.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-006.mp4"
+          },
+          {
+            "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/clips/CST-006.mp4"
+          }
+        ],
+        "media206": [
+          {
+            "url": "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
+            "status": 206,
+            "acceptRanges": "bytes",
+            "contentRange": "bytes 0-5091535/5091536"
+          }
+        ],
+        "v17Mp4Requests": [
+          "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
+          "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4"
+        ]
+      }
+    }
+  ],
+  "rotation": {
+    "targetProgress": 0.44649653979238757,
+    "before": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "progress": 0.4465,
+      "currentShot": "26",
+      "currentClip": "cake-studio/clips/CST-026.mp4",
+      "currentTime": 1.750689,
+      "readyState": 4,
+      "restoreCount": 0,
+      "restoreState": "ready",
+      "restoreStage": null,
+      "restoreBefore": NaN,
+      "restoreAfter": NaN
+    },
+    "landscape": {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "progress": 0.4465,
+      "currentShot": "26",
+      "currentClip": "cake-studio/clips/CST-026.mp4",
+      "currentTime": 1.750689,
+      "readyState": 4,
+      "restoreCount": 1,
+      "restoreState": "restored",
+      "restoreStage": "cake-reel",
+      "restoreBefore": 0.446483,
+      "restoreAfter": 0.446474
+    },
+    "portraitReturn": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "progress": 0.4464,
+      "currentShot": "26",
+      "currentClip": "cake-studio/clips/CST-026.mp4",
+      "currentTime": 1.730758,
+      "readyState": 4,
+      "restoreCount": 2,
+      "restoreState": "restored",
+      "restoreStage": "cake-reel",
+      "restoreBefore": 0.446474,
+      "restoreAfter": 0.446446
+    },
+    "landscapeSurface": {
+      "checkpoint": "mid-seam",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "visualViewport": {
+        "width": 844,
+        "height": 390,
+        "scale": 1
+      },
+      "dpr": 3,
+      "touchPoints": 1,
+      "coarsePointer": true,
+      "orientation": {
+        "type": "landscape-primary",
+        "angle": 90
+      },
+      "progress": 0.4465,
+      "stage": {
+        "left": 0,
+        "top": 0,
+        "right": 844,
+        "bottom": 390,
+        "width": 844,
+        "height": 390
+      },
+      "surface": {
+        "left": 0,
+        "top": 0,
+        "right": 844,
+        "bottom": 390,
+        "width": 844,
+        "height": 390
+      },
+      "media": {
+        "className": "on",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 844,
+          "bottom": 390,
+          "width": 844,
+          "height": 390
+        },
+        "objectFit": "cover",
+        "objectPosition": "50% 50%",
+        "opacity": "1",
+        "sourceSize": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "bars": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "sceneData": {
+        "scene": "pin",
+        "slate": "The 50-shot reel",
+        "directorVersion": "1.6.0",
+        "currentShot": "26",
+        "currentClip": "cake-studio/clips/CST-026.mp4",
+        "chapterKey": "protect-colour",
+        "rhythm": "protect",
+        "shotWeight": "1.45",
+        "cameraState": "idle",
+        "mediaState": "ready"
+      },
+      "activeMediaTime": 1.750689,
+      "activeMediaReadyState": 4,
+      "assertions": {
+        "stageBounds": true,
+        "surfaceBounds": true,
+        "mediaCovers": true,
+        "noLetterbox": true,
+        "centerAnchored": true
+      },
+      "fullBleed": true
+    },
+    "portraitSurface": {
+      "checkpoint": "mid-seam",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "dpr": 3,
+      "touchPoints": 1,
+      "coarsePointer": true,
+      "orientation": {
+        "type": "portrait-primary",
+        "angle": 0
+      },
+      "progress": 0.4464,
+      "stage": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844
+      },
+      "surface": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844
+      },
+      "media": {
+        "className": "on",
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "right": 390,
+          "bottom": 844,
+          "width": 390,
+          "height": 844
+        },
+        "objectFit": "cover",
+        "objectPosition": "50% 50%",
+        "opacity": "1",
+        "sourceSize": {
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "bars": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "sceneData": {
+        "scene": "pin",
+        "slate": "The 50-shot reel",
+        "directorVersion": "1.6.0",
+        "currentShot": "26",
+        "currentClip": "cake-studio/clips/CST-026.mp4",
+        "chapterKey": "protect-colour",
+        "rhythm": "protect",
+        "shotWeight": "1.45",
+        "cameraState": "idle",
+        "mediaState": "ready"
+      },
+      "activeMediaTime": 1.730758,
+      "activeMediaReadyState": 4,
+      "assertions": {
+        "stageBounds": true,
+        "surfaceBounds": true,
+        "mediaCovers": true,
+        "noLetterbox": true,
+        "centerAnchored": true
+      },
+      "fullBleed": true
+    },
+    "landscapeProgressDelta": 0.0,
+    "portraitProgressDelta": 9.999999999998899e-05,
+    "assertions": {
+      "restoreInstrumented": true,
+      "landscapeProgressPreserved": true,
+      "portraitProgressPreserved": true,
+      "shotPreserved": true,
+      "clipPreserved": true,
+      "landscapeFullBleed": true,
+      "portraitFullBleed": true
+    },
+    "network": {
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_INVALID_HTTP_RESPONSE"
+      ],
+      "pageErrors": [],
+      "badResponses": [],
+      "failedRequests": [
+        {
+          "failure": "net::ERR_INVALID_HTTP_RESPONSE",
+          "url": "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4"
+        }
+      ],
+      "media206": [
+        {
+          "url": "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
+          "status": 206,
+          "acceptRanges": "bytes",
+          "contentRange": "bytes 0-5091535/5091536"
+        },
+        {
+          "url": "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4",
+          "status": 206,
+          "acceptRanges": "bytes",
+          "contentRange": "bytes 0-2479878/2479879"
+        },
+        {
+          "url": "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4",
+          "status": 206,
+          "acceptRanges": "bytes",
+          "contentRange": "bytes 2129920-2479878/2479879"
+        },
+        {
+          "url": "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4",
+          "status": 206,
+          "acceptRanges": "bytes",
+          "contentRange": "bytes 2457600-2479878/2479879"
+        }
+      ],
+      "v17Mp4Requests": [
+        "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
+        "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4",
+        "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4",
+        "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4",
+        "http://127.0.0.1:41880/worlds/cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4"
+      ]
+    }
+  },
+  "reducedMotion": [
+    {
+      "profile": "portrait",
+      "opening": {
+        "checkpoint": "opening",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "visualViewport": {
+          "width": 390,
+          "height": 844,
+          "scale": 1
+        },
+        "dpr": 3,
+        "touchPoints": 1,
+        "coarsePointer": true,
+        "orientation": {
+          "type": "portrait-primary",
+          "angle": 0
+        },
+        "progress": 0,
+        "stage": {
+          "left": 0,
+          "top": 0,
+          "right": 390,
+          "bottom": 844,
+          "width": 390,
+          "height": 844
+        },
+        "surface": {
+          "left": 0,
+          "top": 0,
+          "right": 390,
+          "bottom": 844,
+          "width": 390,
+          "height": 844
+        },
+        "media": {
+          "className": "bookend-poster",
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 390,
+            "bottom": 844,
+            "width": 390,
+            "height": 844
+          },
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "opacity": "1",
+          "sourceSize": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "bars": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        },
+        "sceneData": {
+          "scene": "pin",
+          "slate": "Cinematic prologue",
+          "bookend": "intro",
+          "cakeBookend": "intro",
+          "bookendTrack": "intro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "10",
+          "sequenceIndex": "1",
+          "sequenceClip": "I01",
+          "sequenceFraction": "0.00000",
+          "sequenceTargetTime": "0.0000"
+        },
+        "activeMediaTime": 0,
+        "activeMediaReadyState": 0,
+        "assertions": {
+          "stageBounds": true,
+          "surfaceBounds": true,
+          "mediaCovers": true,
+          "noLetterbox": true,
+          "centerAnchored": true
+        },
+        "fullBleed": true
+      },
+      "ending": {
+        "checkpoint": "ending",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "visualViewport": {
+          "width": 390,
+          "height": 844,
+          "scale": 1
+        },
+        "dpr": 3,
+        "touchPoints": 1,
+        "coarsePointer": true,
+        "orientation": {
+          "type": "portrait-primary",
+          "angle": 0
+        },
+        "progress": 1,
+        "stage": {
+          "left": 0,
+          "top": -0.015625,
+          "right": 390,
+          "bottom": 843.984375,
+          "width": 390,
+          "height": 844
+        },
+        "surface": {
+          "left": 0,
+          "top": -0.015625,
+          "right": 390,
+          "bottom": 843.984375,
+          "width": 390,
+          "height": 844
+        },
+        "media": {
+          "className": "bookend-poster",
+          "rect": {
+            "left": 0,
+            "top": -0.015625,
+            "right": 390,
+            "bottom": 843.984375,
+            "width": 390,
+            "height": 844
+          },
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "opacity": "1",
+          "sourceSize": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "bars": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0.015625
+        },
+        "sceneData": {
+          "scene": "pin",
+          "slate": "Cinematic epilogue",
+          "bookend": "outro",
+          "cakeBookend": "outro",
+          "bookendTrack": "outro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "5",
+          "sequenceIndex": "5",
+          "sequenceClip": "O05",
+          "sequenceFraction": "1.00000",
+          "sequenceTargetTime": "4.9667"
+        },
+        "activeMediaTime": 0,
+        "activeMediaReadyState": 0,
+        "assertions": {
+          "stageBounds": true,
+          "surfaceBounds": true,
+          "mediaCovers": true,
+          "noLetterbox": true,
+          "centerAnchored": true
+        },
+        "fullBleed": true
+      },
+      "state": {
+        "label": "reduced-endpoints",
+        "scrollY": 38402,
+        "maxScroll": 38643,
+        "intro": {
+          "scene": "pin",
+          "slate": "Cinematic prologue",
+          "bookend": "intro",
+          "cakeBookend": "intro",
+          "bookendTrack": "intro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "10",
+          "sequenceIndex": "1",
+          "sequenceClip": "I01",
+          "sequenceFraction": "0.00000",
+          "sequenceTargetTime": "0.0000",
+          "sequenceAtlas": "released"
+        },
+        "film": {
+          "scene": "pin",
+          "slate": "The 50-shot reel",
+          "directorVersion": "1.6.0",
+          "currentShot": "1",
+          "currentClip": "cake-studio/clips/CST-001.mp4",
+          "chapterKey": "brief",
+          "rhythm": "question",
+          "shotWeight": "1.45",
+          "cameraState": "idle"
+        },
+        "outro": {
+          "scene": "pin",
+          "slate": "Cinematic epilogue",
+          "bookend": "outro",
+          "cakeBookend": "outro",
+          "bookendTrack": "outro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "5",
+          "sequenceIndex": "5",
+          "sequenceClip": "O05",
+          "sequenceFraction": "1.00000",
+          "sequenceTargetTime": "4.9667"
+        }
+      },
+      "network": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "badResponses": [],
+        "failedRequests": [],
+        "media206": [],
+        "v17Mp4Requests": []
+      },
+      "assertions": {
+        "openingPoster": true,
+        "endingPoster": true,
+        "openingFullBleed": true,
+        "endingFullBleed": true,
+        "zeroV17Mp4Requests": true
+      }
+    },
+    {
+      "profile": "landscape",
+      "opening": {
+        "checkpoint": "opening",
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "visualViewport": {
+          "width": 844,
+          "height": 390,
+          "scale": 1
+        },
+        "dpr": 3,
+        "touchPoints": 1,
+        "coarsePointer": true,
+        "orientation": {
+          "type": "landscape-primary",
+          "angle": 90
+        },
+        "progress": 0,
+        "stage": {
+          "left": 0,
+          "top": 0,
+          "right": 844,
+          "bottom": 390,
+          "width": 844,
+          "height": 390
+        },
+        "surface": {
+          "left": 0,
+          "top": 0,
+          "right": 844,
+          "bottom": 390,
+          "width": 844,
+          "height": 390
+        },
+        "media": {
+          "className": "bookend-poster",
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "opacity": "1",
+          "sourceSize": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "bars": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        },
+        "sceneData": {
+          "scene": "pin",
+          "slate": "Cinematic prologue",
+          "bookend": "intro",
+          "cakeBookend": "intro",
+          "bookendTrack": "intro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "10",
+          "sequenceIndex": "1",
+          "sequenceClip": "I01",
+          "sequenceFraction": "0.00000",
+          "sequenceTargetTime": "0.0000"
+        },
+        "activeMediaTime": 0,
+        "activeMediaReadyState": 0,
+        "assertions": {
+          "stageBounds": true,
+          "surfaceBounds": true,
+          "mediaCovers": true,
+          "noLetterbox": true,
+          "centerAnchored": true
+        },
+        "fullBleed": true
+      },
+      "ending": {
+        "checkpoint": "ending",
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "visualViewport": {
+          "width": 844,
+          "height": 390,
+          "scale": 1
+        },
+        "dpr": 3,
+        "touchPoints": 1,
+        "coarsePointer": true,
+        "orientation": {
+          "type": "landscape-primary",
+          "angle": 90
+        },
+        "progress": 1,
+        "stage": {
+          "left": 0,
+          "top": 0,
+          "right": 844,
+          "bottom": 390,
+          "width": 844,
+          "height": 390
+        },
+        "surface": {
+          "left": 0,
+          "top": 0,
+          "right": 844,
+          "bottom": 390,
+          "width": 844,
+          "height": 390
+        },
+        "media": {
+          "className": "bookend-poster",
+          "rect": {
+            "left": 0,
+            "top": 0,
+            "right": 844,
+            "bottom": 390,
+            "width": 844,
+            "height": 390
+          },
+          "objectFit": "cover",
+          "objectPosition": "50% 50%",
+          "opacity": "1",
+          "sourceSize": {
+            "width": 1280,
+            "height": 720
+          }
+        },
+        "bars": {
+          "left": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0
+        },
+        "sceneData": {
+          "scene": "pin",
+          "slate": "Cinematic epilogue",
+          "bookend": "outro",
+          "cakeBookend": "outro",
+          "bookendTrack": "outro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "5",
+          "sequenceIndex": "5",
+          "sequenceClip": "O05",
+          "sequenceFraction": "1.00000",
+          "sequenceTargetTime": "4.9667"
+        },
+        "activeMediaTime": 0,
+        "activeMediaReadyState": 0,
+        "assertions": {
+          "stageBounds": true,
+          "surfaceBounds": true,
+          "mediaCovers": true,
+          "noLetterbox": true,
+          "centerAnchored": true
+        },
+        "fullBleed": true
+      },
+      "state": {
+        "label": "reduced-endpoints",
+        "scrollY": 17511,
+        "maxScroll": 17614,
+        "intro": {
+          "scene": "pin",
+          "slate": "Cinematic prologue",
+          "bookend": "intro",
+          "cakeBookend": "intro",
+          "bookendTrack": "intro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "10",
+          "sequenceIndex": "1",
+          "sequenceClip": "I01",
+          "sequenceFraction": "0.00000",
+          "sequenceTargetTime": "0.0000",
+          "sequenceAtlas": "released"
+        },
+        "film": {
+          "scene": "pin",
+          "slate": "The 50-shot reel",
+          "directorVersion": "1.6.0",
+          "currentShot": "1",
+          "currentClip": "cake-studio/clips/CST-001.mp4",
+          "chapterKey": "brief",
+          "rhythm": "question",
+          "shotWeight": "1.45",
+          "cameraState": "idle"
+        },
+        "outro": {
+          "scene": "pin",
+          "slate": "Cinematic epilogue",
+          "bookend": "outro",
+          "cakeBookend": "outro",
+          "bookendTrack": "outro",
+          "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.2-phone-final",
+          "sequenceMode": "still",
+          "sequenceTransport": "poster",
+          "sequenceState": "reduced-motion",
+          "sequenceCount": "5",
+          "sequenceIndex": "5",
+          "sequenceClip": "O05",
+          "sequenceFraction": "1.00000",
+          "sequenceTargetTime": "4.9667"
+        }
+      },
+      "network": {
+        "consoleErrors": [],
+        "pageErrors": [],
+        "badResponses": [],
+        "failedRequests": [],
+        "media206": [],
+        "v17Mp4Requests": []
+      },
+      "assertions": {
+        "openingPoster": true,
+        "endingPoster": true,
+        "openingFullBleed": true,
+        "endingFullBleed": true,
+        "zeroV17Mp4Requests": true
+      }
+    }
+  ],
+  "failures": [],
+  "actual": "GREEN"
+}

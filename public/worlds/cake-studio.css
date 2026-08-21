@@ -1297,3 +1297,63 @@ button:focus-visible {
   .chapter-nav button,
   .chapter-nav button.on { width: 100%; height: 44px; }
 }
+
+/* Phone orientation contract: coarse-pointer landscape must not fall back to
+   the desktop 16:9 aperture merely because its CSS width exceeds 700px. */
+@media (max-width: 700px), (pointer: coarse) {
+  .bookend .stage,
+  .film .stage {
+    width: 100dvw;
+    height: 100dvh;
+  }
+
+  .bookend-aperture {
+    position: absolute;
+    inset: 0;
+    width: 100dvw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: auto;
+    box-shadow: none;
+  }
+  .bookend-aperture::before,
+  .bookend-aperture::after { opacity: 0; }
+  .bookend-poster,
+  .bookend-canvas,
+  .bookend-phone-video,
+  .bookend-phone-scrub-atlas,
+  .bookend-phone-terminal-landing {
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  .film .stage { display: block; }
+  .film .picture-zone {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding: 0;
+  }
+  .film-frame {
+    position: absolute;
+    inset: 0;
+    width: 100dvw;
+    height: 100dvh;
+    max-height: none;
+    aspect-ratio: auto;
+    border: 0;
+    box-shadow: none;
+  }
+  .film-frame .floor,
+  .film-frame video {
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+  .cue {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    width: 100%;
+  }
+}
