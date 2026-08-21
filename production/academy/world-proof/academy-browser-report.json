@@ -1,0 +1,95 @@
+{
+  "verdict": "GREEN",
+  "base": "http://127.0.0.1:4629",
+  "observations": {
+    "opening": {
+      "title": "The Academy of Proven Spells · Mohamed Mahmoud",
+      "lang": "en",
+      "dir": "ltr",
+      "accepted": [
+        "ACA-001",
+        "ACA-003",
+        "ACA-004",
+        "ACA-005",
+        "ACA-006",
+        "ACA-007",
+        "ACA-008",
+        "ACA-009",
+        "ACA-010",
+        "ACA-011",
+        "ACA-012",
+        "ACA-013",
+        "ACA-014",
+        "ACA-015"
+      ],
+      "held": [
+        "ACA-002",
+        "ACA-016"
+      ],
+      "widthDelta": 0
+    },
+    "desktopFilm": {
+      "ready": true,
+      "currentTime": 2.793,
+      "duration": 5,
+      "readyState": 4,
+      "width": 1280,
+      "height": 720,
+      "mean": 24.44,
+      "variance": 821.66,
+      "paintedRatio": 0.692,
+      "sourceId": "ACA-009",
+      "sceneState": "painted",
+      "sceneFrameTime": "2.793"
+    },
+    "arabic": {
+      "dir": "rtl",
+      "lang": "ar",
+      "arabicDisplay": "inline",
+      "englishDisplay": "none"
+    },
+    "proof": {
+      "state": "proven",
+      "progress": "1.0000",
+      "label": "Proven",
+      "widthDelta": 0
+    },
+    "lobby": {
+      "title": "The Academy of Proven Spells",
+      "imageLoaded": true,
+      "width": 1092
+    },
+    "mobileFilm": {
+      "ready": true,
+      "currentTime": 2.399,
+      "duration": 5,
+      "readyState": 4,
+      "width": 1280,
+      "height": 720,
+      "mean": 25.48,
+      "variance": 901.95,
+      "paintedRatio": 0.709,
+      "sourceId": "ACA-006",
+      "sceneState": "painted",
+      "sceneFrameTime": "2.399"
+    },
+    "mobileLayout": {
+      "widthDelta": 0,
+      "cueHeight": 218,
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    "reducedMotion": {
+      "source": "ACA-008",
+      "mediaState": "poster",
+      "videoDisplays": [
+        "none",
+        "none"
+      ],
+      "floorVisible": true
+    }
+  },
+  "failures": []
+}

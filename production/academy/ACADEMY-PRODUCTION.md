@@ -1,14 +1,14 @@
 # The Academy of Proven Spells — production ledger
 
-Status: `PHASE_2_PARALLEL_OWNER_GENERATION_READY`
+Status: `PHASE_3_WORLD_BUILT_LOCAL`
 
 ## Fixed delivery contract
 
 - Page: `public/worlds/academy.html`
 - Images: one style anchor plus sixteen chained keyframes, normalized to 1920×1088 RGB PNG.
-- Video: sixteen WAN 2.7 I2V clips, 720P, five seconds, 30 fps, planned 160 credits / 240 credits with retake headroom.
+- Video: sixteen untouched WAN 2.7 returns are preserved; fourteen accepted five-second clips drive the local world and two remain on HOLD outside the public reel.
 - Comparison route: sixteen Grok Imagine clips using the identical keyframe chain at 1080p, 15 seconds, 16:9; Grok outputs remain separate from WAN until the acceptance and comparison gates.
-- Hard gate: no WAN generation until Mohamed approves the complete still contact sheet.
+- Hard gate: Mohamed approved the still chain and supplied all sixteen owner-generated returns; approved keyframes remain read-only.
 - Mobile: the same center-safe landscape chain; no separate paid mobile chain.
 - Claims: only live GitHub repository facts and measured run-manifest facts.
 
@@ -143,7 +143,7 @@ View through the centered circular brass telescope lens. Inside it is the exact 
 - Tracking: browser-local pending/done state under `academy-proven-spells-wan-done-v1`; “done” means owner-generated/downloaded, not accepted.
 - Return intake: `production/academy/wan-returns/`; original downloads stay untrimmed and use the exact output filenames.
 - `VERIFIED`: rendered board has 16 cards, 32 decoded 1920×1088 frame images, 16 unique exact prompts, 16 copy buttons, 16 done controls, persisted tracking, working pending/done filters, zero horizontal overflow at 1440×1100 and 390×844 DPR 3, and no console/request errors.
-- Acceptance status: `PENDING_OWNER_RETURNS`; no WAN clips have been accepted, normalized, or integrated.
+- Acceptance status: `COMPLETE_14_ACCEPTED_2_HOLD`; accepted clips are normalized and integrated, while `ACA-002` and `ACA-016` remain preserved but excluded.
 
 ## WAN board proof
 
@@ -176,3 +176,15 @@ View through the centered circular brass telescope lens. Inside it is the exact 
 - `production/academy/grok-board-proof/academy-grok-board-phone-frame-pair.png`
 - `production/academy/grok-board-proof/academy-grok-board-verification.json`
 - Decisive gate: `ACADEMY_GROK_BOARD_OK cards=16 frames=32 1080p=locked duration=15s aspect=16:9 copy=exact tracking=persisted`
+
+## Local world delivery — 2026-08-21
+
+- `VERIFIED`: `public/worlds/academy.html` is a bilingual scroll-controlled world with fourteen accepted shots, five chapters, a live-DOM proof instrument, reduced-motion poster behavior, and a lobby entry in `public/worlds/index.html`.
+- `VERIFIED`: all sixteen untouched returns remain in `production/academy/wan-returns/`; the public reel excludes `ACA-002` and `ACA-016` according to `wan-acceptance.json`.
+- `VERIFIED`: public encodes are H.264 1280×720 at 30 fps, five seconds, silent, `yuv420p`, ten keyframes per clip, and fast-started. The fixed provider mark region is removed only from public derivatives.
+- `[INFERRED]`: `ACA-001 → ACA-003` is the clean editorial bridge around held `ACA-002`; `ACA-015 → ACA-001` closes on the shared lens/letter motif.
+- Fail-first provider gate: untouched sources remain RED with 174 common-bright pixels; shipped derivatives are GREEN with zero.
+- Structural gate: `ACADEMY_WORLD_GATE_GREEN — 16 preserved returns · 14 accepted web clips · 2 held outside the reel`.
+- Rendered gate: `ACADEMY_BROWSER_GATE_GREEN — desktop video painted, mobile overflow 0 px, proof state proven, Arabic RTL, reduced-motion poster verified`.
+- Production build: Astro generated 56 pages successfully. This delivery is local only; no deploy or push was performed.
+- Proof: `production/academy/world-proof/`.

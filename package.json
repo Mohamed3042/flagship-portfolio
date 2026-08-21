@@ -32,6 +32,8 @@
     "verify:cake-studio:v17": "npm run verify:cake-studio:v17-shell && npm run verify:cake-studio:v17-media",
     "verify:cake-studio:v17-browser-pending": "python scripts/verify-cake-studio-v17-browser.py",
     "verify:cake-studio:v17-browser-ready": "python scripts/verify-cake-studio-v17-browser-ready.py",
+    "build:academy:media": "node scripts/build-academy-media.mjs",
+    "verify:academy": "node scripts/verify-academy-world.mjs",
     "astro": "astro"
   },
   "dependencies": {
