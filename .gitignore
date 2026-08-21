@@ -38,3 +38,8 @@ public/worlds/assets/cake-studio/review/HOLD-BEFORE-*.png
 public/worlds/assets/cake-studio/review/HOLD-AFTER-*.png
 public/worlds/assets/cake-studio/review/CST-contact-sheet-[0-9][0-9].png
 public/worlds/assets/cake-studio/review/CST-contact-sheet-portrait-[0-9][0-9].png
+
+# Arcane World Phase-1 generation intermediates. Final selected keyframes,
+# review sheets, prompts, manifests, and verdicts remain versioned.
+public/worlds/assets/arcane/raw/
+public/worlds/assets/arcane/review/rejected-*/
