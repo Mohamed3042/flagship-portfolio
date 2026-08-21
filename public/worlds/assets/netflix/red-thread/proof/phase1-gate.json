@@ -1,0 +1,93 @@
+{
+  "schema": "netflix-red-thread-phase1-gate/v1",
+  "status": "GREEN",
+  "errors": [],
+  "frames": [
+    {
+      "id": "STYLE",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N01",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N02",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N03",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N04",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N05",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N06",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N07",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    },
+    {
+      "id": "N08",
+      "masterExists": true,
+      "cropExists": true,
+      "hashMatches": true
+    }
+  ],
+  "contactSheets": [
+    {
+      "file": "review/contact-sheets/NRT-contact-sheet-desktop-3x3.png",
+      "exists": true,
+      "hashMatches": true,
+      "dimensions": [
+        1920,
+        1233
+      ]
+    },
+    {
+      "file": "review/contact-sheets/NRT-contact-sheet-portrait-9x16-3x3.png",
+      "exists": true,
+      "hashMatches": true,
+      "dimensions": [
+        918,
+        1776
+      ]
+    },
+    {
+      "file": "review/contact-sheets/NRT-contact-sheet-rejected-hostile-review.png",
+      "exists": true,
+      "hashMatches": true,
+      "dimensions": [
+        1280,
+        860
+      ]
+    }
+  ],
+  "wanCalls": 0,
+  "wanCreditsSpent": 0,
+  "userApprovalReceived": false
+}

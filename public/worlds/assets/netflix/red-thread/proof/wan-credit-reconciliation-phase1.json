@@ -1,0 +1,12 @@
+{
+  "schema": "wan-credit-reconciliation/v1",
+  "phase": 1,
+  "status": "VERIFIED",
+  "wanProviderInvoked": false,
+  "wanCalls": 0,
+  "clipsGenerated": 0,
+  "creditsSpent": 0,
+  "zeroRetakePlanCredits": 80,
+  "plannedCredits": 120,
+  "reason": "Hard stop pending explicit approval of the Phase 1 contact sheet"
+}

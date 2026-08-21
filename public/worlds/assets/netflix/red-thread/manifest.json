@@ -1,0 +1,157 @@
+{
+  "schema": "netflix-red-thread-run-manifest/v1",
+  "version": "red-thread-cut.phase1.1",
+  "project": "THE ANTHOLOGY - Red Thread Cut",
+  "branch": "feature/netflix-red-thread",
+  "phase": 1,
+  "status": "awaiting_user_still_approval",
+  "updatedAt": "2026-08-21",
+  "styleLock": "absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain",
+  "generation": {
+    "method": "OpenAI ChatGPT image-generation tool",
+    "underlyingModel": "[INFERRED] GPT Image 2 per the production contract; the tool response did not expose a model identifier",
+    "acceptedStillCount": 9,
+    "totalStillGenerationCount": 13,
+    "rejectedStillCount": 4,
+    "taskIds": "[LOST] not exposed by the image-generation tool",
+    "seeds": "[LOST] not exposed by the image-generation tool"
+  },
+  "deliveryContract": {
+    "masterWidth": 1920,
+    "masterHeight": 1088,
+    "portraitCrop": {
+      "left": 654,
+      "top": 0,
+      "width": 612,
+      "height": 1088,
+      "ratio": "9:16"
+    },
+    "normalization": "FFmpeg Lanczos center-crop and scale",
+    "peopleOrFacesAllowed": false,
+    "pixelTextOrLogosAllowed": false
+  },
+  "video": {
+    "providerContract": "WAN 2.7 image-to-video at 720P, 5 seconds, 10 credits per clip",
+    "callsMade": 0,
+    "clipsGenerated": 0,
+    "creditsSpent": 0,
+    "zeroRetakeCredits": 80,
+    "plannedCredits": 120,
+    "blockedUntil": "explicit user approval of the Phase 1 contact sheet"
+  },
+  "anchors": {
+    "N04": "hard FLF act-bridge anchor",
+    "N08": "hard FLF loop-closure anchor; Phase 2 must use NRT-KF01-filament-reflection.png as its exact last_frame"
+  },
+  "frames": [
+    {
+      "id": "STYLE",
+      "file": "keyframes/NRT-KF00-style-anchor.png",
+      "source": "review/raw/NRT-KF00-style-anchor-source.png",
+      "toolArtifact": "exec-b28fb74b-72e3-493f-974b-b0f16dc5c2a1.png",
+      "sha256": "6927178930687c82f3ec004e86ad00d47a6e5a1ca5ad0c6e666376e95b8cc7ca",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N01",
+      "file": "keyframes/NRT-KF01-filament-reflection.png",
+      "source": "review/raw/NRT-KF01-filament-reflection-source.png",
+      "toolArtifact": "exec-2a79d89d-ce5f-4754-baa9-5bda389a489b.png",
+      "sha256": "18381b65b3a092bc564ddb3d4d52115cf15bd8f067a8f0b7f5e7489e2182f8e9",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N02",
+      "file": "keyframes/NRT-KF02-beam-carves-hall.png",
+      "source": "review/raw/NRT-KF02-beam-carves-hall-source.png",
+      "toolArtifact": "exec-5e1378d2-3575-4551-a9f0-63707e324e21.png",
+      "sha256": "d52b7e8780276b09deb685c224278af178ce042d1de5f00d559acae8e0033a77",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N03",
+      "file": "keyframes/NRT-KF03-archive.png",
+      "source": "review/raw/NRT-KF03-archive-source.png",
+      "toolArtifact": "exec-03b38a03-8c6f-42d2-ab9e-f790cefe2573.png",
+      "sha256": "179937aa16212ab52c5150409864f2ea5cf46d36ec669f846c2d797c306d0fae",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N04",
+      "file": "keyframes/NRT-KF04-four-doors.png",
+      "source": "review/raw/NRT-KF04-four-doors-source.png",
+      "toolArtifact": "exec-4646fd53-8dc8-4075-bf99-731bff55d2ff.png",
+      "sha256": "9a533efb880655111ee3ce321b106d7bc1f78f96d623126ee29fa1b35fc4cc74",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N05",
+      "file": "keyframes/NRT-KF05-noir-into-fog.png",
+      "source": "review/raw/NRT-KF05-noir-into-fog-source.png",
+      "toolArtifact": "exec-50cf66b2-eef9-4912-8b21-472b128adee5.png",
+      "sha256": "a607cc714f894196857b5c3d4cd96ce55b202e3cded416bc0cffcae93d35336b",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N06",
+      "file": "keyframes/NRT-KF06-gate-freeze.png",
+      "source": "review/raw/NRT-KF06-gate-freeze-source.png",
+      "toolArtifact": "exec-ce11128b-5be1-42d4-a1e8-2a1373f0f6e9.png",
+      "sha256": "1f5ebc388c067f47a90c2454176e85a7d27efb9be8f2ad998b9bc990b673e2f6",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N07",
+      "file": "keyframes/NRT-KF07-evidence-theater.png",
+      "source": "review/raw/NRT-KF07-evidence-theater-source.png",
+      "toolArtifact": "exec-d03c0bdc-a851-43b1-8020-fb98f24e1611.png",
+      "sha256": "fe7c7122b66a2220627e44e848365203ff8f5d55daff64cc150b0954684b493f",
+      "status": "accepted_for_contact_sheet"
+    },
+    {
+      "id": "N08",
+      "file": "keyframes/NRT-KF08-return-loop.png",
+      "source": "review/raw/NRT-KF08-return-loop-source.png",
+      "toolArtifact": "exec-a44bf42c-3d4b-4431-9ab4-264a5c444667.png",
+      "sha256": "b22fee6b6ca50f0bb3d2e6ecdac2e8e0948d029429e0a3d86f781c9adc76225a",
+      "status": "accepted_for_contact_sheet"
+    }
+  ],
+  "rejections": [
+    {
+      "frame": "N04-v1",
+      "artifact": "review/rejected/NRT-KF04-v1-portrait-crop-failed-source.png",
+      "reason": "strict centered 9:16 crop clipped both outer doors"
+    },
+    {
+      "frame": "N06-v1",
+      "artifact": "review/rejected/NRT-KF06-v1-organic-smoke-rejected.png",
+      "reason": "smoke silhouette read as organic and introduced an unintended horror undertone"
+    },
+    {
+      "frame": "N06-v2",
+      "artifact": "review/rejected/NRT-KF06-v2-portrait-crop-failed-source.png",
+      "reason": "strict centered 9:16 crop amputated the practical lamp"
+    },
+    {
+      "frame": "N07-v1",
+      "artifact": "review/rejected/NRT-KF07-v1-missing-dust-rail-rejected.png",
+      "reason": "required rail of blank dust frames was absent"
+    }
+  ],
+  "proof": {
+    "qa": "proof/phase1-keyframe-qa.json",
+    "failFirst": "proof/fail-first-source-dimensions.json",
+    "desktopContactSheet": "review/contact-sheets/NRT-contact-sheet-desktop-3x3.png",
+    "desktopContactSheetSha256": "ae6091af7fe3a9b56c3e06451db60c601c6a3f66af303a06c6ec046dc6ed8173",
+    "portraitContactSheet": "review/contact-sheets/NRT-contact-sheet-portrait-9x16-3x3.png",
+    "portraitContactSheetSha256": "a600d620979283a9119d343090c3152298c57672b972279fa25baff5516f072e",
+    "rejectedContactSheet": "review/contact-sheets/NRT-contact-sheet-rejected-hostile-review.png",
+    "rejectedContactSheetSha256": "600fe7a5a58c5377d37ff575045ab4d6a7bfb8527e64dfa1329d6890974b16a4"
+  },
+  "approval": {
+    "required": true,
+    "received": false,
+    "unlockPhrase": "APPROVE STILLS"
+  }
+}
