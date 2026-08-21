@@ -1,5 +1,17 @@
 # Cake Studio phone-orientation full bleed
 
+**What:** Cake Studio now stays full-bleed when a phone rotates between portrait and landscape without losing its scroll-scrub position.
+
+**Proof:** The live gate returned `CAKE_ORIENTATION_GREEN failures=0`; 72-step forward and reverse traversals passed at 390×844 and 844×390 with zero measured bars or browser/network errors.
+
+**Boundary:** Verified in Chrome DPR3/touch/coarse emulation at the owner-named viewports, not on a physical handset.
+
+**Shots:** `01-live-landscape-before-after.png` — the same deployed I05 frame shows ~75.33 px side bars before and exact 844×390 media/viewport bounds after.
+
+**LinkedIn paste:** I shipped a measured phone-orientation repair for the Cake Studio scroll film: full-bleed portrait and landscape, preserved mid-scroll rotation state, 15 decoded joins, and byte-range delivery verified on the public site.
+
+**Surfaces:** [ ] showcase-pdf [ ] resume [x] website [ ] linkedin [ ] none-needed
+
 Date: 2026-08-21
 
 World: `worlds/cake-studio.html`
