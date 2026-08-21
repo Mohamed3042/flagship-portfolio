@@ -1,0 +1,464 @@
+{
+  "schema": "spotify-side-a-recut-wan-run/v1",
+  "generatedAt": "2026-08-21T18:31:02.761968+00:00",
+  "status": "NORMALIZED_READY_FOR_RUNTIME_REVIEW",
+  "provider": "WAN 2.7 First & Last Frame",
+  "rawReturnCount": 8,
+  "acceptedClipCount": 7,
+  "rejectedReturnCount": 1,
+  "selection": {
+    "A04": {
+      "acceptedRawIndex": 7,
+      "rejectedRawIndex": 3,
+      "reason": "Retake keeps the generated waveform inside the monitor plane; the earlier return lets the effect detach into the room."
+    }
+  },
+  "creditReconciliation": {
+    "zeroRetakePlan": 70,
+    "plannedAtOnePointFive": 105,
+    "observedOutputs": 8,
+    "creditsPerOutputFromLockedContract": 10,
+    "actualCredits": 80,
+    "claimStatus": "INFERRED_FROM_8_OBSERVED_OUTPUT_FILES_AT_THE_LOCKED_10_CREDIT_RATE"
+  },
+  "rawGate": {
+    "status": "RED_BEFORE_NORMALIZATION",
+    "reasons": [
+      "0: raw audio present (aac)",
+      "0: raw timing frames=150 duration=5.062",
+      "1: raw audio present (aac)",
+      "1: raw timing frames=150 duration=5.062",
+      "2: raw audio present (aac)",
+      "2: raw timing frames=150 duration=5.062",
+      "3: raw audio present (aac)",
+      "3: raw timing frames=150 duration=5.062",
+      "4: raw audio present (aac)",
+      "4: raw timing frames=150 duration=5.062",
+      "5: raw audio present (aac)",
+      "5: raw timing frames=150 duration=5.062",
+      "6: raw audio present (aac)",
+      "6: raw timing frames=150 duration=5.062",
+      "7: raw audio present (aac)",
+      "7: raw timing frames=150 duration=5.062",
+      "common WAN mark occupies bottom band (60px)"
+    ]
+  },
+  "watermarkTreatment": {
+    "threshold": 160,
+    "commonBrightPixels": 622,
+    "box": {
+      "left": 1156,
+      "top": 669,
+      "right": 1247,
+      "bottom": 702
+    },
+    "cropBottomPixels": 60,
+    "outputHeight": 660,
+    "method": "Bright-pixel intersection across seven selected returns at t=3.8s, followed by one identical top-anchored crop; no scaling or delogo."
+  },
+  "normalization": {
+    "codec": "H.264",
+    "pixelFormat": "yuv420p",
+    "frameRate": 30,
+    "frames": 150,
+    "durationSeconds": 5.0,
+    "silent": true,
+    "faststart": true,
+    "gopFrames": 12,
+    "endpointConditioning": "frame 0 exact; 9-frame opening blend; 9-frame landing blend; final 15 frames exact destination hold"
+  },
+  "rawCustody": [
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening.mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A01-WAN-RAW.mp4",
+      "sha256": "96d2a32aebed6ce0b4e33a99aa0e9b9661dbba10a97a306ce0214fea54085c8c",
+      "bytes": 522750
+    },
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (1).mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A02-WAN-RAW.mp4",
+      "sha256": "eb2e918ba23964754e14999a5c9dd72a2c14284cdc61f7d4d5659a1078204686",
+      "bytes": 889984
+    },
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (2).mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A03-WAN-RAW.mp4",
+      "sha256": "500f054db7182aac7aa025a98f2f2642fb41f5ff88d033134ca907b37c90d4a2",
+      "bytes": 866975
+    },
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (3).mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A04-WAN-REJECTED-DETACHED-EFFECT.mp4",
+      "sha256": "df39c9c36c28dad3dae4b80557400dd362d9bc32111b444f0ed81aa2d045b33e",
+      "bytes": 503872
+    },
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (4).mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A05-WAN-RAW.mp4",
+      "sha256": "86668be2c72138cbb62c0f577e544ffe762b5440a622f4ed795a7ecf1f68dbdd",
+      "bytes": 688953
+    },
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (5).mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A06-WAN-RAW.mp4",
+      "sha256": "aac36b3145de68638a027eb21d1a09cc6ce96e9ec58f67cfe0ec3abd9d3c8067",
+      "bytes": 1375439
+    },
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (6).mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A07-WAN-RAW.mp4",
+      "sha256": "230eca09ff6981e7b0dea115fc8aed1cf0860d551b9f196597a4430f56239405",
+      "bytes": 775688
+    },
+    {
+      "downloadFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (7).mp4",
+      "custodyPath": "production/spotify-side-a-recut/wan-returns/raw/SPT-A04-WAN-RAW-RETAKE.mp4",
+      "sha256": "cef1a287c25a7ac8c9348d1257cefcffad11989093c07a8211cb092d7a4c0e87",
+      "bytes": 489791
+    }
+  ],
+  "legacyArchive": [
+    {
+      "original": "public/worlds/spotify/live/room01-silence.mp4",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room01-silence.mp4",
+      "sha256": "8b22c2fa00cd7141df5b9852e862f13ee54e51e49db79aced50fab71a83a2aad",
+      "bytes": 1450094
+    },
+    {
+      "original": "public/worlds/spotify/live/room01-silence.jpg",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room01-silence.jpg",
+      "sha256": "111cb0dd932e914169678f0fd987c0388adbc66e5117f976844a43831839b328",
+      "bytes": 32919
+    },
+    {
+      "original": "public/worlds/spotify/live/room02-contact.mp4",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room02-contact.mp4",
+      "sha256": "a6de58f1d951fc24aa84c2754fd556604acc705499ab5f31d33dc44126609de4",
+      "bytes": 1100642
+    },
+    {
+      "original": "public/worlds/spotify/live/room02-contact.jpg",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room02-contact.jpg",
+      "sha256": "696c9200dc5c4874fd46ecb407df18106a013c545474b799fb7050c57ac053a0",
+      "bytes": 71223
+    },
+    {
+      "original": "public/worlds/spotify/live/room03-runway.mp4",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room03-runway.mp4",
+      "sha256": "efa067d2af6cf1504dd1442625527ece7d9a5eb6cbee7e4e68671e14cac601aa",
+      "bytes": 1571204
+    },
+    {
+      "original": "public/worlds/spotify/live/room03-runway.jpg",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room03-runway.jpg",
+      "sha256": "dc57b21e80015264bd1a2a5e1959407aca61a744e837062671d7bb3a0bfad3ad",
+      "bytes": 76102
+    },
+    {
+      "original": "public/worlds/spotify/live/room04-build.mp4",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room04-build.mp4",
+      "sha256": "67918856c783bf4b282eefe7df30837fe02124a04a4dce27bc4907195e3a8833",
+      "bytes": 1722609
+    },
+    {
+      "original": "public/worlds/spotify/live/room04-build.jpg",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room04-build.jpg",
+      "sha256": "71b31f2b36d36100622df293a7671680c2c373f679e3d07d624d589516dcf647",
+      "bytes": 73513
+    },
+    {
+      "original": "public/worlds/spotify/live/room05-lounge.mp4",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room05-lounge.mp4",
+      "sha256": "95faa5510761b7cc68e9b70c64801957776098b81142f99164b8b188607462e7",
+      "bytes": 1297263
+    },
+    {
+      "original": "public/worlds/spotify/live/room05-lounge.jpg",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room05-lounge.jpg",
+      "sha256": "bf2d4491b7536ecb036283ed060ed2e987973cd8981b27066917069cf5efd8cd",
+      "bytes": 74386
+    },
+    {
+      "original": "public/worlds/spotify/live/room06-chorus.mp4",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room06-chorus.mp4",
+      "sha256": "882d909b17ecf957304269dd848856abfdd1242534a046794952355752454ddb",
+      "bytes": 1799138
+    },
+    {
+      "original": "public/worlds/spotify/live/room06-chorus.jpg",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/live/room06-chorus.jpg",
+      "sha256": "a5a06503cbb04bb1daa33da2d48e007416d7a50d88d4b6a4534b132ef01def87",
+      "bytes": 75487
+    },
+    {
+      "original": "public/worlds/spotify/shots/s15-outro.mp4",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/shots/s15-outro.mp4",
+      "sha256": "19c0d2f439685d783c55d4b5bcca8da78fa54242cabae3c104f92f1998dfbf04",
+      "bytes": 1002004
+    },
+    {
+      "original": "public/worlds/spotify/shots/s15-outro.jpg",
+      "archive": "public/worlds/spotify/archive/side-a-pre-recut-20260821/shots/s15-outro.jpg",
+      "sha256": "ade5377173e9b28f578403718b7b58704bacd27be2782d70092a2e97f09c5b66",
+      "bytes": 33675
+    }
+  ],
+  "clips": [
+    {
+      "id": "A01",
+      "title": "First Light",
+      "selectedRawIndex": 0,
+      "sourceFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening.mp4",
+      "sourceSha256": "96d2a32aebed6ce0b4e33a99aa0e9b9661dbba10a97a306ce0214fea54085c8c",
+      "firstAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W01-first.png",
+      "lastAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W01-last.png",
+      "video": "public/worlds/spotify/live/room01-silence-recut.mp4",
+      "poster": "public/worlds/spotify/live/room01-silence-recut.jpg",
+      "sha256": "830faacb3739c9be949467fca964f661f82880c93aac7dc5493045b19369ff54",
+      "posterSha256": "e853e291fc78b61150e7f50d2a95734db960637cc90fefb128c79ee3cfc79005",
+      "metadata": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 660,
+        "frameRate": "30/1",
+        "pixelFormat": "yuv420p",
+        "frames": 150,
+        "duration": 5.0,
+        "bytes": 1807546,
+        "audioCodec": null,
+        "keyframes": 13,
+        "faststart": true
+      },
+      "endpointEvidence": {
+        "first": {
+          "rawMeanAbsDiff": 0.523,
+          "edgeMeanAbsDiff": 1.181
+        },
+        "last": {
+          "rawMeanAbsDiff": 0.488,
+          "edgeMeanAbsDiff": 1.113
+        }
+      }
+    },
+    {
+      "id": "A02",
+      "title": "Contact",
+      "selectedRawIndex": 1,
+      "sourceFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (1).mp4",
+      "sourceSha256": "eb2e918ba23964754e14999a5c9dd72a2c14284cdc61f7d4d5659a1078204686",
+      "firstAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W02-first.png",
+      "lastAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W02-last.png",
+      "video": "public/worlds/spotify/live/room02-contact-recut.mp4",
+      "poster": "public/worlds/spotify/live/room02-contact-recut.jpg",
+      "sha256": "f32721310195bfac876d2625e25b6578e2a0d9a48a2d83c1a5c3df0b41090a4e",
+      "posterSha256": "fad97277a4e2cb0175a0570355f2cdf88b9813f545cba8ffa1c5c784e9aae40c",
+      "metadata": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 660,
+        "frameRate": "30/1",
+        "pixelFormat": "yuv420p",
+        "frames": 150,
+        "duration": 5.0,
+        "bytes": 2407603,
+        "audioCodec": null,
+        "keyframes": 13,
+        "faststart": true
+      },
+      "endpointEvidence": {
+        "first": {
+          "rawMeanAbsDiff": 0.489,
+          "edgeMeanAbsDiff": 1.099
+        },
+        "last": {
+          "rawMeanAbsDiff": 0.692,
+          "edgeMeanAbsDiff": 1.15
+        }
+      }
+    },
+    {
+      "id": "A03",
+      "title": "The Sundial",
+      "selectedRawIndex": 2,
+      "sourceFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (2).mp4",
+      "sourceSha256": "500f054db7182aac7aa025a98f2f2642fb41f5ff88d033134ca907b37c90d4a2",
+      "firstAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W03-first.png",
+      "lastAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W03-last.png",
+      "video": "public/worlds/spotify/live/room03-runway-recut.mp4",
+      "poster": "public/worlds/spotify/live/room03-runway-recut.jpg",
+      "sha256": "f26d7a36f52961d3d25d6c93fe93425a69677d303bb15d8205a166f31ec15214",
+      "posterSha256": "31d43cf4740666c42c05463794e7fa7d328e9de2732fc89a92fd17055ac24cc5",
+      "metadata": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 660,
+        "frameRate": "30/1",
+        "pixelFormat": "yuv420p",
+        "frames": 150,
+        "duration": 5.0,
+        "bytes": 2994470,
+        "audioCodec": null,
+        "keyframes": 13,
+        "faststart": true
+      },
+      "endpointEvidence": {
+        "first": {
+          "rawMeanAbsDiff": 0.78,
+          "edgeMeanAbsDiff": 1.232
+        },
+        "last": {
+          "rawMeanAbsDiff": 0.686,
+          "edgeMeanAbsDiff": 1.192
+        }
+      }
+    },
+    {
+      "id": "A04",
+      "title": "The Aligned Desk",
+      "selectedRawIndex": 7,
+      "sourceFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (7).mp4",
+      "sourceSha256": "cef1a287c25a7ac8c9348d1257cefcffad11989093c07a8211cb092d7a4c0e87",
+      "firstAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W04-first.png",
+      "lastAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W04-last.png",
+      "video": "public/worlds/spotify/live/room04-build-recut.mp4",
+      "poster": "public/worlds/spotify/live/room04-build-recut.jpg",
+      "sha256": "d1cae2d89f467ba109869028de3910eff424bc45d341bfdc9d67361c850fb3a6",
+      "posterSha256": "4e4cb476cc612e622eaf65f7d0ab83e9c051371a721054b39cb20734629eaff3",
+      "metadata": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 660,
+        "frameRate": "30/1",
+        "pixelFormat": "yuv420p",
+        "frames": 150,
+        "duration": 5.0,
+        "bytes": 2111045,
+        "audioCodec": null,
+        "keyframes": 13,
+        "faststart": true
+      },
+      "endpointEvidence": {
+        "first": {
+          "rawMeanAbsDiff": 0.577,
+          "edgeMeanAbsDiff": 1.076
+        },
+        "last": {
+          "rawMeanAbsDiff": 0.575,
+          "edgeMeanAbsDiff": 1.077
+        }
+      }
+    },
+    {
+      "id": "A05",
+      "title": "The Passing Car",
+      "selectedRawIndex": 4,
+      "sourceFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (4).mp4",
+      "sourceSha256": "86668be2c72138cbb62c0f577e544ffe762b5440a622f4ed795a7ecf1f68dbdd",
+      "firstAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W05-first.png",
+      "lastAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W05-last.png",
+      "video": "public/worlds/spotify/live/room05-lounge-recut.mp4",
+      "poster": "public/worlds/spotify/live/room05-lounge-recut.jpg",
+      "sha256": "81145131b3997425ccf4b0cc02a5c789d8be4b0edd1f9aa11efe827639ce02ae",
+      "posterSha256": "e9abec6832a1a2c2706b948d5f0fa8742a94820fc9b37ceb13d81505ff19b2c0",
+      "metadata": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 660,
+        "frameRate": "30/1",
+        "pixelFormat": "yuv420p",
+        "frames": 150,
+        "duration": 5.0,
+        "bytes": 2672594,
+        "audioCodec": null,
+        "keyframes": 13,
+        "faststart": true
+      },
+      "endpointEvidence": {
+        "first": {
+          "rawMeanAbsDiff": 0.731,
+          "edgeMeanAbsDiff": 1.125
+        },
+        "last": {
+          "rawMeanAbsDiff": 0.728,
+          "edgeMeanAbsDiff": 1.139
+        }
+      }
+    },
+    {
+      "id": "A06",
+      "title": "The Synchronized Room",
+      "selectedRawIndex": 5,
+      "sourceFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (5).mp4",
+      "sourceSha256": "aac36b3145de68638a027eb21d1a09cc6ce96e9ec58f67cfe0ec3abd9d3c8067",
+      "firstAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W06-first.png",
+      "lastAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W06-last.png",
+      "video": "public/worlds/spotify/live/room06-chorus-recut.mp4",
+      "poster": "public/worlds/spotify/live/room06-chorus-recut.jpg",
+      "sha256": "090b2e3c39af9664540fde2fb3894c2f4ad7d57e08e826ffe20b460250cb8bb5",
+      "posterSha256": "c718c1ba06bd05434d4de3e787183e0c175d45998def6755589f4bfcfcb0f94d",
+      "metadata": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 660,
+        "frameRate": "30/1",
+        "pixelFormat": "yuv420p",
+        "frames": 150,
+        "duration": 5.0,
+        "bytes": 3463332,
+        "audioCodec": null,
+        "keyframes": 13,
+        "faststart": true
+      },
+      "endpointEvidence": {
+        "first": {
+          "rawMeanAbsDiff": 0.577,
+          "edgeMeanAbsDiff": 1.078
+        },
+        "last": {
+          "rawMeanAbsDiff": 0.581,
+          "edgeMeanAbsDiff": 1.107
+        }
+      }
+    },
+    {
+      "id": "A07",
+      "title": "Needle Up",
+      "selectedRawIndex": 6,
+      "sourceFilename": "Wan_First&LastFrame_Generate single shot. @Image1 is the immutable listening (6).mp4",
+      "sourceSha256": "230eca09ff6981e7b0dea115fc8aed1cf0860d551b9f196597a4430f56239405",
+      "firstAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W07-first.png",
+      "lastAnchor": "public/worlds/assets/spotify-side-a-recut/wan/input/W07-last.png",
+      "video": "public/worlds/spotify/live/room07-needle-up-recut.mp4",
+      "poster": "public/worlds/spotify/live/room07-needle-up-recut.jpg",
+      "sha256": "398702f2443f242bfb9629af2dbd2c7bbc8578f40a6fc309139e593c7d82e323",
+      "posterSha256": "c87d13a6d9c730a922e5e84cc9056566869c9a1bc8d185043b9d412c3993ebd2",
+      "metadata": {
+        "codec": "h264",
+        "width": 1280,
+        "height": 660,
+        "frameRate": "30/1",
+        "pixelFormat": "yuv420p",
+        "frames": 150,
+        "duration": 5.0,
+        "bytes": 2198845,
+        "audioCodec": null,
+        "keyframes": 13,
+        "faststart": true
+      },
+      "endpointEvidence": {
+        "first": {
+          "rawMeanAbsDiff": 0.692,
+          "edgeMeanAbsDiff": 1.151
+        },
+        "last": {
+          "rawMeanAbsDiff": 0.522,
+          "edgeMeanAbsDiff": 1.185
+        }
+      }
+    }
+  ],
+  "reviewSheets": [
+    "production/spotify-side-a-recut/review/WAN-RAW-MIDDLES.jpg",
+    "production/spotify-side-a-recut/review/WAN-NORMALIZED-MIDDLES.jpg"
+  ]
+}

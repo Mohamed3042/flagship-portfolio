@@ -10,10 +10,11 @@ currentTime printed beside each shot.
 Checks, in order:
   1. Side B flight — 8 scroll positions across the 12 legs (two of them inside
      the same leg, which is what separates "scrubbing" from "cutting").
-  2. Side A — the six photographed room plates, two positions each.
+  2. Side A — the seven recut room plates, three positions each.
   3. Arabic — flip the language and re-shoot two positions.
   4. ?solo=N per new scene.
-  5. Console: any error or pageerror fails the run.
+  5. Phone — the same seven plates, full down/up traversal, and the ending.
+  6. Console: any error or pageerror fails the run.
 """
 import argparse
 import json
@@ -34,6 +35,16 @@ FLIGHT_SAMPLES = [        # (leg, fraction-through-leg, label)
     (7, 0.80, 'leg08-listener'),
     (9, 0.50, 'leg10-pullback'),
     (11, 0.90, 'leg12-line'),
+]
+
+RECUT_PLATES = [
+    ('A01', 'room01-silence-recut'),
+    ('A02', 'room02-contact-recut'),
+    ('A03', 'room03-runway-recut'),
+    ('A04', 'room04-build-recut'),
+    ('A05', 'room05-lounge-recut'),
+    ('A06', 'room06-chorus-recut'),
+    ('A07', 'room07-needle-up-recut'),
 ]
 
 FLIGHT_JS = """
@@ -189,8 +200,18 @@ def main():
         env = page.evaluate("""async () => {
             const r = await fetch('spotify/live/j01-portal.mp4', {method:'HEAD'});
             const v = document.querySelector('.plate video');
+            const paths = [...document.querySelectorAll('[data-plate*="-recut.mp4"]')]
+                            .map(s => s.dataset.plate);
+            const recutRanges = await Promise.all(paths.map(async path => {
+              const rr = await fetch(path, {headers: {Range: 'bytes=0-1'}});
+              const bytes = new Uint8Array(await rr.arrayBuffer()).length;
+              return {path, status: rr.status,
+                      acceptRanges: rr.headers.get('accept-ranges'),
+                      contentRange: rr.headers.get('content-range'), bytes};
+            }));
             return { acceptRanges: r.headers.get('accept-ranges'),
-                     seekable: v ? v.seekable.length : -1 };
+                     seekable: v ? v.seekable.length : -1,
+                     recutRanges };
         }""")
         print(f"server Accept-Ranges: {env['acceptRanges']}   "
               f"video.seekable ranges: {env['seekable']}")
@@ -198,6 +219,13 @@ def main():
             print('FAIL: this server cannot serve ranges — nothing below is about the page')
             br.close()
             return 1
+        for rr in env['recutRanges']:
+            good = (rr['status'] == 206 and rr['acceptRanges'] == 'bytes'
+                    and rr['bytes'] == 2 and (rr['contentRange'] or '').startswith('bytes 0-1/'))
+            print(f"  {'GREEN' if good else 'FAIL'} range {rr['path']} "
+                  f"status={rr['status']} bytes={rr['bytes']}")
+            if not good:
+                fail = 1
 
         mode = page.evaluate("() => document.getElementById('flight').className")
         print(f'flight mode: {mode}')
@@ -248,27 +276,36 @@ def main():
             print('  FAIL: caption and numeral did not drift between fractions'); fail = 1
 
         # ---- 2. Side A room plates ----
-        print('\n== Side A · the six photographed rooms ==')
-        sels = page.evaluate(
-            "() => [...document.querySelectorAll('.rplate.live')].map((s,i)=>'.rplate.live:nth-of-type(1)')")
-        n_live = page.evaluate("() => document.querySelectorAll('.rplate.live').length")
-        if n_live != 6:
-            print(f'  FAIL: expected 6 live room plates, found {n_live}'); fail = 1
-        for i in range(n_live):
-            sel = f"[data-plate='spotify/live/{['room01-silence','room02-contact','room03-runway','room04-build','room05-lounge','room06-chorus'][i]}.mp4']"
+        print('\n== Side A · the seven WAN recut plates ==')
+        bound = page.evaluate(
+            "() => [...document.querySelectorAll('[data-plate*=\"-recut.mp4\"]')].map(s => s.dataset.plate)")
+        expected = [f'spotify/live/{name}.mp4' for _, name in RECUT_PLATES]
+        if bound != expected:
+            print(f'  FAIL: runtime binding mismatch: {bound!r}'); fail = 1
+        for shot, name in RECUT_PLATES:
+            sel = f"[data-plate='spotify/live/{name}.mp4']"
             times = []
-            for p in (0.15, 0.80):
+            states = []
+            for p in (0.001, 0.50, 0.98):
                 scroll_scene(page, sel, p)
-                st, _ = settle(page, f'() => ({PLATE_JS})({sel!r})', want=p * 5.0)
+                st, waited = settle(page, f'() => ({PLATE_JS})({sel!r})', want=p * 5.0)
                 times.append(st['t'])
-                if p == 0.80:
-                    page.screenshot(path=str(out / f'sideA-{st["plate"].replace(".mp4","")}.png'))
-                    print(f"  {st['plate']:22} t={times[0]} -> {times[1]}  dims={st['dims']} "
-                          f"ready={st['ready']} missing={st['missing']}")
-                    if st['missing'] or not st['ready']:
-                        print('    FAIL: plate did not arm'); fail = 1
-                    if times[1] is None or times[0] is None or abs(times[1] - times[0]) < 2.0:
-                        print('    FAIL: this plate did not scrub'); fail = 1
+                states.append(st)
+                page.screenshot(path=str(out / f'desktop-{shot}-p{int(p * 1000):03d}.png'))
+                if st['readyState'] is None or st['readyState'] < 2:
+                    print(f'    FAIL: {shot} has no decoded frame at p={p}'); fail = 1
+                if st['dims'] != '1280x660':
+                    print(f"    FAIL: {shot} unexpected dimensions {st['dims']}"); fail = 1
+                if st['missing'] or not st['ready']:
+                    print(f'    FAIL: {shot} plate did not arm'); fail = 1
+                if st['t'] is None or abs(st['t'] - p * 5.0) >= 0.12:
+                    print(f"    FAIL: {shot} missed p={p}: t={st['t']}"); fail = 1
+            report.append({'viewport': 'desktop', 'shot': shot, 'times': times,
+                           'dims': states[-1]['dims']})
+            print(f"  {shot} {name:28} t={times[0]} -> {times[1]} -> {times[2]}  "
+                  f"dims={states[-1]['dims']}")
+            if any(t is None for t in times) or times[-1] - times[0] < 4.6:
+                print(f'    FAIL: {shot} did not scrub end to end'); fail = 1
 
         # ---- 3. Arabic ----
         print('\n== Arabic ==')
@@ -293,9 +330,11 @@ def main():
         print('\n== ?solo harness ==')
         idx = page.evaluate("""() => {
             const scenes=[...document.querySelectorAll('[data-scene]')];
-            const want=[...document.querySelectorAll('.rplate.live'), document.getElementById('flight')];
+            const want=[...document.querySelectorAll('[data-plate*="-recut.mp4"]'), document.getElementById('flight')];
             return want.map(w=>scenes.indexOf(w));
         }""")
+        if len(idx) != 8 or any(i < 0 for i in idx):
+            print(f'  FAIL: expected seven recut scenes plus Side B, got {idx!r}'); fail = 1
         for k, i in enumerate(idx):
             page.goto(f'{url}?solo={i}&p=0.55', wait_until='load')
             page.wait_for_timeout(1600)
@@ -308,6 +347,91 @@ def main():
             print(f"  solo={i:<3} {st['slate']:28} t={st['t']} readyState={st['rs']}")
             if st['rs'] is None or st['rs'] < 2 or st['t'] in (None, 0):
                 print('    FAIL: soloed scene did not hold a frame'); fail = 1
+
+        # ---- 5. Phone parity + complete ending path ----
+        print('\n== Phone 390x844 @ DPR 3 ==')
+        phone_context = br.new_context(
+            viewport={'width': 390, 'height': 844},
+            device_scale_factor=3,
+            is_mobile=True,
+            has_touch=True,
+            reduced_motion='no-preference',
+        )
+        phone = phone_context.new_page()
+        phone.on('console', lambda m: errors.append(f'phone console.{m.type}: {m.text}')
+                 if m.type in ('error', 'warning') else None)
+        phone.on('pageerror', lambda e: errors.append(f'phone pageerror: {e}'))
+        phone.on('requestfailed', lambda r: errors.append(
+            f'phone requestfailed: {r.url} {r.failure}'))
+        phone.goto(url, wait_until='load')
+        phone.wait_for_timeout(1200)
+        phone_state = phone.evaluate("""() => ({
+            width: innerWidth,
+            dpr: devicePixelRatio,
+            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            flightMode: document.getElementById('flight').className,
+            hasFinale: Boolean(document.querySelector('.sc-fin')),
+            hasFlip: Boolean(document.querySelector('.flip')),
+            hasCredits: Boolean(document.querySelector('.credits')),
+        })""")
+        print(f"  width={phone_state['width']} dpr={phone_state['dpr']} "
+              f"overflow={phone_state['overflow']} flight={phone_state['flightMode']}")
+        if phone_state['width'] != 390 or phone_state['dpr'] != 3:
+            print('  FAIL: phone viewport contract not active'); fail = 1
+        if phone_state['overflow'] > 1:
+            print(f"  FAIL: horizontal overflow {phone_state['overflow']} px"); fail = 1
+        if 'mode-chain' not in phone_state['flightMode']:
+            print('  FAIL: phone did not choose its touch-safe Side B chain mode'); fail = 1
+        if not all(phone_state[k] for k in ('hasFinale', 'hasFlip', 'hasCredits')):
+            print('  FAIL: phone ending structure is incomplete'); fail = 1
+
+        for shot, name in RECUT_PLATES:
+            sel = f"[data-plate='spotify/live/{name}.mp4']"
+            times = []
+            last = None
+            for p in (0.001, 0.50, 0.98):
+                scroll_scene(phone, sel, p)
+                last, _ = settle(phone, f'() => ({PLATE_JS})({sel!r})', want=p * 5.0,
+                                 budget_ms=8000)
+                times.append(last['t'])
+                if p == 0.50:
+                    phone.screenshot(path=str(out / f'phone-{shot}-peak.png'))
+            report.append({'viewport': 'phone-390x844-dpr3', 'shot': shot,
+                           'times': times, 'dims': last['dims'] if last else None})
+            print(f"  {shot} t={times[0]} -> {times[1]} -> {times[2]}  "
+                  f"dims={last['dims'] if last else None}")
+            if (last is None or last['missing'] or not last['ready']
+                    or last['dims'] != '1280x660'
+                    or any(t is None for t in times)
+                    or times[-1] - times[0] < 4.6):
+                print(f'    FAIL: {shot} phone scrub/decode gate'); fail = 1
+
+        # Exercise the actual long page in both directions; jumping straight to
+        # credits cannot detect the historical phone ending failure.
+        travel = phone.evaluate('() => document.documentElement.scrollHeight - innerHeight')
+        for step_i in range(61):
+            phone.evaluate('(y) => scrollTo({top:y, behavior:"instant"})',
+                           round(travel * step_i / 60))
+            phone.wait_for_timeout(20)
+        bottom = phone.evaluate("""() => ({
+            y: scrollY,
+            max: document.documentElement.scrollHeight - innerHeight,
+            overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            creditsBottom: document.querySelector('.credits').getBoundingClientRect().bottom,
+        })""")
+        phone.screenshot(path=str(out / 'phone-ending.png'))
+        if abs(bottom['max'] - bottom['y']) > 2 or bottom['overflow'] > 1:
+            print(f'  FAIL: phone did not reach a clean ending: {bottom!r}'); fail = 1
+        for step_i in range(60, -1, -1):
+            phone.evaluate('(y) => scrollTo({top:y, behavior:"instant"})',
+                           round(travel * step_i / 60))
+            phone.wait_for_timeout(20)
+        back_at_top = phone.evaluate('() => scrollY')
+        if back_at_top > 2:
+            print(f'  FAIL: reverse traversal stopped at y={back_at_top}'); fail = 1
+        else:
+            print(f"  full down/up traversal GREEN; bottom y={bottom['y']} / {bottom['max']}")
+        phone_context.close()
 
         br.close()
 
@@ -332,6 +456,9 @@ def main():
     rig += [e for e in errors
             if local and e == 'console.error: Failed to load resource: '
                               'net::ERR_INVALID_HTTP_RESPONSE']
+    rig += [e for e in errors
+            if local and e.startswith('phone console.error:')
+            and e.endswith('net::ERR_INVALID_HTTP_RESPONSE')]
     real = [e for e in errors
             if 'favicon' not in e.lower() and e not in aborted_media and e not in rig]
     print(f'  {len(aborted_media)} aborted .mp4 fetches — expected, that is how a '
