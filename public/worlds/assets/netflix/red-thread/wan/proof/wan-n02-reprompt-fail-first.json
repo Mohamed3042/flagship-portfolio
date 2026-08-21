@@ -1,7 +1,14 @@
 {
   "schema": "netflix-red-thread-wan-board-qa/v1",
-  "status": "GREEN",
-  "errors": [],
+  "status": "RED",
+  "errors": [
+    "N02: retry lock missing: bright activation head",
+    "N02: retry lock missing: Camera trucks right 0.5 meter only",
+    "N02: retry lock missing: no dolly, zoom, tilt, roll, or vertical drift",
+    "N02: retry lock missing: starting pixel row",
+    "N02: retry lock missing: global fade-in",
+    "N02: retry lock missing: freeze the final half second"
+  ],
   "product": "WAN 2.7",
   "durationSeconds": 5,
   "resolution": "720p",
@@ -24,7 +31,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "bd0e3f857a35cf3dd561fe057712ea1293809f8a3e366d75a0ff97c806a5c4a4",
       "promptFileMatches": true,
-      "promptWords": 108,
+      "promptWords": 99,
       "flf": false
     },
     {

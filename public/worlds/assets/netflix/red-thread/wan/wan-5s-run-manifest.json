@@ -91,7 +91,7 @@
         "action1to4_5": "A matched right track reveals the hall only behind the sweep.",
         "hold4_5to5": "The completed hall holds on its centered red aisle."
       },
-      "prompt": "Generate single shot. A razor-thin signal-red filament sweeps left to right once while the camera tracks right one meter at matching slow speed. Black screening-hall seats, walls, aisle, and booth exist only where the beam has passed and remain solid behind it; untouched space stays void. Settle on the completed hall and centered red aisle by 4.5 seconds; hold the final half second. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, text, logos, extra objects, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+      "prompt": "Generate single shot. Preserve input geometry. A bright activation head travels once from extreme left to extreme right along the existing razor-thin signal-red horizontal line. Light reveals seats, walls, aisle, and booth only behind the head; space ahead stays black. Camera trucks right 0.5 meter only: no dolly, zoom, tilt, roll, or vertical drift. The line stays perfectly straight on its starting pixel row. Finish by 4.5 seconds; hold final half-second frozen. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, text, logos, morphing, flicker, camera shake, global fade-in, beam drift, or cut. No dialogue. No background music."
     },
     {
       "id": "N03",

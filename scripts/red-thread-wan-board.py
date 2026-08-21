@@ -24,6 +24,14 @@ STYLE_LOCK = "absolute black void, single signal-red light, cinematic haze, blac
 AUDIO_LOCK = "No dialogue. No background music."
 PROMPT_PREFIX = "Generate single shot."
 MAX_PROMPT_WORDS = 110
+N02_RETRY_LOCKS = (
+    "bright activation head",
+    "Camera trucks right 0.5 meter only",
+    "no dolly, zoom, tilt, roll, or vertical drift",
+    "starting pixel row",
+    "global fade-in",
+    "hold final half-second frozen",
+)
 
 
 def font(size: int, *, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
@@ -211,6 +219,10 @@ def verify(report_path: Path | None) -> int:
             errors.append(f"{shot['id']}: 4.5-second settle/final hold missing")
         if word_count > MAX_PROMPT_WORDS:
             errors.append(f"{shot['id']}: prompt has {word_count} words > {MAX_PROMPT_WORDS}")
+        if shot["id"] == "N02":
+            for lock in N02_RETRY_LOCKS:
+                if lock not in prompt:
+                    errors.append(f"N02: retry lock missing: {lock}")
         prompt_file_matches = prompt_path.is_file() and prompt_path.read_text(encoding="utf-8").strip() == prompt.strip()
         if not prompt_file_matches:
             errors.append(f"{shot['id']}: prompt file missing or does not match manifest")
