@@ -1,0 +1,34 @@
+{
+  "schema": "the-long-signal-phase1-approval-gate/v1",
+  "status": "AWAITING_APPROVE_STILLS",
+  "approvalPhrase": "APPROVE STILLS",
+  "generatedStillCount": 41,
+  "expectedStillCount": 41,
+  "landscapeReview": {
+    "passed": 41,
+    "failed": 0,
+    "contactSheet": "SIG-contact-sheet-master.png",
+    "sha256": "d0c57d1ba6bc11e239f8bd147ce44470d3f83505972508a490c97ced09be2fe8"
+  },
+  "portraitReview": {
+    "passed": 41,
+    "failed": 0,
+    "contactSheet": "SIG-contact-sheet-portrait-master.png",
+    "sha256": "b8b07bb3bb5e62d8ee74e276a612f425f11ca7ce425204bfed66c966a54d0dea"
+  },
+  "fileGate": {
+    "passed": true,
+    "width": 1920,
+    "height": 1088,
+    "mode": "RGB",
+    "uniqueHashes": 41,
+    "errors": 0,
+    "report": "keyframe-qa.json"
+  },
+  "wanCreditsSpent": 0,
+  "ownerGenerationBoardBuilt": false,
+  "wanClipsGenerated": 0,
+  "pageBuilt": false,
+  "filmIntegrated": false,
+  "deployed": false
+}

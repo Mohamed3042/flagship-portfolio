@@ -1,0 +1,351 @@
+{
+  "schema": "the-long-signal-keyframe-plan/v1",
+  "title": "THE LONG SIGNAL",
+  "target": { "width": 1920, "height": 1088 },
+  "styleLock": "photoreal IMAX space realism, practical-model hulls, hull-mounted camera, vacuum blacks, warm amber accretion glow, dust-earth naturals, film grain",
+  "preserveLock": "Use the same style from Image 1: same desaturated natural palette, same physically motivated cold light and amber knowledge light, same subtle grain and anamorphic edge falloff, same practical-model material realism.",
+  "antiRules": "No text, letters, numerals, captions, logos, insignia, agency marks, actor likenesses, faces, children, franchise spacecraft, famous scenes, fantasy glow, colorful nebulae, lens flares, horror, gore, extra people, melted geometry, or malformed hands.",
+  "compositionLock": "Photorealistic 16:9 production still. Keep every story-critical subject and countable object fully readable inside the center 50 percent of frame width for a strict centered 9:16 cover crop.",
+  "continuity": {
+    "farmWorkshop": "Same weathered corrugated workshop-barn on flat dust-bowl farmland; one long steel workbench, glass dust plate under a horn speaker, shelf of blank cartridges/reels/boards, rear sliding door, one warm window, radio mast outside.",
+    "craft": "Same compact matte-white and cold-grey utilitarian spacecraft: blunt wedge nose, two short rectangular wings, twin recessed circular stern thrusters, practical panel seams, worn decals sanded completely blank.",
+    "pilot": "Same single adult faceless pilot-engineer: charcoal canvas pressure suit, matte off-white helmet, dark opaque visor, restrained amber seam piping; face never visible. No other people.",
+    "cabin": "Same narrow cold-grey cockpit with rows of worn mechanical toggle switches, analog needles without labels, amber indicator banks, no readable screens.",
+    "lattice": "The lattice reuses the exact farm-workshop bench and props in every cell; warm lamplit library of work across time, never a prison, crypt, hospital, or horror space."
+  },
+  "frames": [
+    {
+      "id": "KF00",
+      "file": "SIG-KF00-style-anchor.png",
+      "act": "style-anchor",
+      "flf": false,
+      "master": "farm-workshop",
+      "scene": "World master at blue-grey dusk, viewed from inside the same workshop-barn toward its open door: the long steel workbench and glass dust plate sit in warm amber practical light, the compact blank-marked spacecraft rests under a partly folded grey tarp in the center, flat farmland and a rolling grey dust front beyond, one radio mast silhouetted outside. No person. This image establishes palette, materials, lens, grain, restraint, workshop geometry, and craft silhouette."
+    },
+    {
+      "id": "KF01",
+      "file": "SIG-KF01-dust-front.png",
+      "act": "dust",
+      "flf": true,
+      "refs": ["KF00"],
+      "scene": "A broad grey dust front rolls over flat brown farmland toward one small weathered workshop-barn. One warm lit window and one plain radio mast are centered; the front's upper edge briefly resembles a clean rising trajectory. Slow 35 mm exterior push composition, vast restrained sky, no person."
+    },
+    {
+      "id": "KF02",
+      "file": "SIG-KF02-bench.png",
+      "act": "dust",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "Inside the exact workshop master, machines sleep beneath dust sheets and one warm workbench is lit. A glass plate lies flat beneath a metal horn speaker; dust on the plate has arranged into one clean standing waveform. Centered 60 mm macro-settle composition, drawer barely open, no person."
+    },
+    {
+      "id": "KF03",
+      "file": "SIG-KF03-relic-shelf.png",
+      "act": "dust",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "The exact workshop shelf holds old blank cartridges, reels, and circuit boards as physical relics. A soft unlabeled star map is projected on the wall behind; each relic casts one crisp shadow that lands exactly on a different star, with one shadow-star brighter. Centered 50 mm lateral composition, no readable marks."
+    },
+    {
+      "id": "KF04",
+      "file": "SIG-KF04-decode.png",
+      "act": "dust",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "On the exact workbench, a mechanical pen plotter has completed one elegant course curve on blank paper while the radio mast blinks through the window in the same frame. Locked 45 mm two-plane composition; the curve is abstract geometry with no text, coordinates, ticks, or numerals."
+    },
+    {
+      "id": "KF05",
+      "file": "SIG-KF05-tarp.png",
+      "act": "dust",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "Inside the exact barn, a grey tarp rises from the same compact matte-white and grey spacecraft, exposing the whole blank-marked craft. Dust cascades from the tarp and hangs for one beat in the clean curve of the launch trajectory. One pair of gloved hands may hold the tarp edge; no face or extra body. Centered 40 mm low-rise composition."
+    },
+    {
+      "id": "KF06",
+      "file": "SIG-KF06-suit-cabin-master.png",
+      "act": "dust",
+      "flf": false,
+      "master": "craft-cabin",
+      "refs": ["KF00"],
+      "scene": "Craft-cabin master: the same adult faceless pilot sits in the exact narrow cold-grey cockpit, seen from behind and slightly over one shoulder. Both anatomically correct gloved hands seal a cuff and flip worn mechanical toggles; amber indicator banks wake in rows. The dark visor reflects the exact workshop bench, never a face. Centered 70 mm practical macro composition."
+    },
+    {
+      "id": "KF07",
+      "file": "SIG-KF07-launch.png",
+      "act": "dust",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "scene": "Locked hull-mounted view from the same craft as it punches upward through the brown dust front. The rigid hull edge stays centered and sharp; turbulent brown dust gives way to a narrow band of blue and then still black space. No exterior flutter, no free camera, no other craft."
+    },
+    {
+      "id": "KF08",
+      "file": "SIG-KF08-marble.png",
+      "act": "dust",
+      "flf": true,
+      "refs": ["KF00", "KF06"],
+      "scene": "Home world from orbit as a restrained dust-marbled earth-tone sphere against pin-sharp vacuum black. On the night side one tiny warm pinprick blinks; clouds along the terminator form the same standing waveform as the bench plate. A small edge of the same craft noses toward a distant plain ring station. Center-safe 50 mm drift composition."
+    },
+    {
+      "id": "KF09",
+      "file": "SIG-KF09-relay-ring.png",
+      "act": "crossing",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "scene": "A large utilitarian grey relay-ring station rotates ahead in vacuum while the same tiny craft rolls into matching alignment. Practical truss and docking geometry, blank surfaces, pin-sharp stars wheeling behind so station and craft appear momentarily still. Centered 40 mm approach past the craft flank."
+    },
+    {
+      "id": "KF10",
+      "file": "SIG-KF10-capture.png",
+      "act": "crossing",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "Locked 85 mm macro on the same craft's docking latch meeting the relay port. Mechanical petals are fully closed; a small cloud of frost dust has jumped into vacuum and briefly forms one perfect ring before scattering. One amber port light, rigid materials, no atmosphere or flutter."
+    },
+    {
+      "id": "KF11",
+      "file": "SIG-KF11-message-corridor.png",
+      "act": "crossing",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "scene": "Inside the relay, a long humane archive corridor holds small blank physical slates on open shelves, each with an abstract seal-shape and waveform made only of light, no readable marks. Their amber light casts distinct hand-shaped writing shadows on the walls though no bodies are present. The corridor ends at a wire globe. Patient centered 45 mm dolly composition, library not horror."
+    },
+    {
+      "id": "KF12",
+      "file": "SIG-KF12-thread-globe.png",
+      "act": "crossing",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "A precise open wire globe floats in the relay archive; many physical threads connect blank slates across its decks and have tightened into one strong braid pointing through a viewport at a distant glint. Quarter-orbit 55 mm composition, tactile museum engineering, warm amber thread highlights, no labels or magic glow."
+    },
+    {
+      "id": "KF13",
+      "file": "SIG-KF13-departure-burn.png",
+      "act": "crossing",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "The same compact craft makes one long departure burn away from the shrinking relay ring toward a distant glint. The craft remains needle-sharp in the center while restrained star streaks bend around it; twin recessed thrusters emit pale physical exhaust. Locked 35 mm pursuit composition, vacuum black, no nebula."
+    },
+    {
+      "id": "KF14",
+      "file": "SIG-KF14-sphere.png",
+      "act": "crossing",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "Ahead of the small same craft is a perfect sphere of lensed starlight, transparent and physically gravitational rather than a portal. Inside its rim the exact surrounding starfield is mirrored, curved, and continuous. Slow 40 mm approach composition; hull edge beginning to stretch, vacuum black, zero fantasy color."
+    },
+    {
+      "id": "KF15",
+      "file": "SIG-KF15-crossing.png",
+      "act": "crossing",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "Locked hull camera during transit through the lensed sphere: reflections stretch and wrap physically along the same matte hull while a restrained amber instrument glow briefly paints a second faint cabin reflection around the real one. Rigid inertial motion, no free camera, no tunnel, no horror, no colorful energy."
+    },
+    {
+      "id": "KF16",
+      "file": "SIG-KF16-new-sky.png",
+      "act": "crossing",
+      "flf": true,
+      "refs": ["KF06"],
+      "countRule": "Exactly five and only five distinct worlds, all fully visible inside the center-safe band.",
+      "scene": "New sky after the crossing: EXACTLY FIVE distinct planets, no moons and no extras, are strung along one bright natural arc and spaced like the five relic shadow-stars. Far beyond them sits one dark massive object with a thin warm amber accretion ring. The tiny same craft burns toward the first world. Symmetric 30 mm panoramic composition with all five countable at a glance."
+    },
+    {
+      "id": "KF17",
+      "file": "SIG-KF17-floating-sea.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "Hull-mounted descent through thin cloud toward an ocean world of steel-blue water where several enormous weathered stone islands float high above the sea. Each island's shadow lies directly on the water beneath it. The same rigid hull edge anchors the center; landing skids approach one island, natural light, no fantasy glow."
+    },
+    {
+      "id": "KF18",
+      "file": "SIG-KF18-arena-bones.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "On a floating island above teal sea sheets, a weathered circular arena skeleton sits half-buried in mineral dust. The same faceless pilot walks in from behind and plants one plain survey pylon; its amber lamp has just awakened. The pylon's shadow climbs upward onto a higher floating island. Centered 45 mm walk-in composition."
+    },
+    {
+      "id": "KF19",
+      "file": "SIG-KF19-green-lagoons.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "Low flyover across a wet-green jungle world: a chain of dark lagoons and monumental carved king masks half-submerged in moss. Water ripples naturally, but each reflection remains perfectly still. One mask fills the centered path ahead; restrained humid daylight, archaeological and calm, no readable symbols."
+    },
+    {
+      "id": "KF20",
+      "file": "SIG-KF20-mask-survey.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "70 mm macro of the same pilot's anatomically correct gloved hand wiping moss from one carved king mask. Mineral inlay colors remain natural and bright; the lagoon below reflects the mask as a flat painted two-dimensional design while the stone above is fully three-dimensional. One small survey pylon glows amber in soft background. No face."
+    },
+    {
+      "id": "KF21",
+      "file": "SIG-KF21-glass-arcs.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "A dusk-ochre ridge beneath large fossilized ballistic arcs of dark glass ribboning the sky. Each dead arc contains one faint frozen tracer like an insect in amber. The same pilot walks from behind with one plain pylon, all subjects center-safe. Patient 40 mm ridge composition, natural sky, no weapons or combat."
+    },
+    {
+      "id": "KF22",
+      "file": "SIG-KF22-re-ignition.png",
+      "act": "worlds",
+      "flf": true,
+      "refs": ["KF06"],
+      "scene": "Killshot poster: the planted pylon glows amber and the fossil glass arcs have re-ignited end-to-end across the entire dusk-ochre sky in a clear sequential firing order, then hold as one vast constellation diagram. The same tiny pilot stands from behind at center-bottom for scale. Awe and recovered systems, no battle, explosion, text, or fantasy color."
+    },
+    {
+      "id": "KF23",
+      "file": "SIG-KF23-ice-gallery.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "Glacier-white world with a clear blue ice gallery. Exactly three mannequin-like clothed figures are frozen mid-stride inside one broad wall, presented as preserved character studies rather than people in peril; each has a dark featureless face plane. A hairline of melt traces only their silhouettes. The pilot's gloved hand approaches the centered ice."
+    },
+    {
+      "id": "KF24",
+      "file": "SIG-KF24-thaw.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "One featureless mannequin-like clothed figure has stepped free from the same blue ice as a fine curtain of frost dust rises in backlight around it; it is an empty character shell, not a living human. The other gallery forms remain calm behind. One pylon wakes amber. Locked 55 mm composition, elegant cloth physics, no face or peril."
+    },
+    {
+      "id": "KF25",
+      "file": "SIG-KF25-greenhouse-moon.png",
+      "act": "worlds",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "A small bright outpost moon under a black sky: one practical greenhouse dome contains a clean ration lab where blank edible sheets settle onto pale geometric confections on a slow carousel. The last image-like pigment dissolves seamlessly into a surface as steam clears, but no readable image or text remains. Centered 60 mm lateral composition, warm humane work light."
+    },
+    {
+      "id": "KF26",
+      "file": "SIG-KF26-five-beams.png",
+      "act": "worlds",
+      "flf": true,
+      "refs": ["KF06"],
+      "countRule": "Exactly five and only five source worlds and exactly five and only five distinct beams.",
+      "scene": "From orbit, EXACTLY FIVE distinct worlds, no moons and no extras, each emit EXACTLY ONE narrow amber survey beam. The EXACTLY FIVE beams remain separate and countable before converging at one blinking point aimed toward the distant amber ring. The same tiny craft turns toward it. Center-safe 30 mm pullback tableau; no additional rays, lens flares, or star streaks."
+    },
+    {
+      "id": "KF27",
+      "file": "SIG-KF27-ring.png",
+      "act": "lattice",
+      "flf": false,
+      "refs": ["KF06"],
+      "scene": "Inside the exact cold-grey cabin, the same faceless pilot is seen from behind as the dark massive object fills the viewport, encircled by a thin physically luminous warm amber accretion disc. That amber sunset light falls across the mechanical switches exactly like the workshop window light. Centered 45 mm interior-to-viewport composition, restrained and scientific."
+    },
+    {
+      "id": "KF28",
+      "file": "SIG-KF28-slip.png",
+      "act": "lattice",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "scene": "Locked hull camera passing the amber rim: lensed starlight wraps around the same rigid matte hull, reflections draw into physical ribbons, then open into perfect stillness. Within the wrapped field, the exact grey farmland dust-front horizon from the workshop master appears for one brief clean visual rhyme. No portal tunnel, no horror, no colorful glow."
+    },
+    {
+      "id": "KF29",
+      "file": "SIG-KF29-lattice.png",
+      "act": "lattice",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "An infinite orthogonal lattice of open lamplit library cells in vacuum black. Every cell contains the exact same workshop workbench from the master at a different calm moment; perspective remains physically honest, and every corridor resolves toward that bench. Warm amber lamps, sparse dust motes, weightless 35 mm drift, welcoming archive not prison, crypt, hospital, or horror."
+    },
+    {
+      "id": "KF30",
+      "file": "SIG-KF30-shelf-of-years.png",
+      "act": "lattice",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "Rows of blank physical slates sit on open shelves across the same warm lattice cells. One identical plain slate is visibly repeated at near, middle, and far distance at once; one centered cell remains bare and gently unlit. Patient 50 mm dolly composition that reads as an endless humane library of signed work, no writing, symbols, bars, or sinister shadows."
+    },
+    {
+      "id": "KF31",
+      "file": "SIG-KF31-touch-back.png",
+      "act": "lattice",
+      "flf": false,
+      "poster": true,
+      "refs": ["KF00", "KF06"],
+      "scene": "Film proof frame and poster: through one warm lattice cell is the exact workshop glass dust plate beneath the horn speaker. The same pilot's single anatomically correct gloved index finger reaches gently into the center and nudges the dust; the standing waveform is visibly forming from that causal touch. Slow 85 mm macro composition, full hand and waveform inside the phone-safe center, no text, no horror."
+    },
+    {
+      "id": "KF32",
+      "file": "SIG-KF32-slate-forward.png",
+      "act": "lattice",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "scene": "The same pilot's two correct gloved hands rack one new blank physical slate into the bare lattice cell, facing outward. Its small abstract seal-shaped lamp wakes amber without symbols; every neighboring cell lamp leans its light toward the new slate. Centered 55 mm settle composition, humane archive, workshop bench repeated exactly behind."
+    },
+    {
+      "id": "KF33",
+      "file": "SIG-KF33-release.png",
+      "act": "lattice",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "scene": "The pilot's gloved hands have just released the new slate; identical warm lattice cells slide past faster and stretch into restrained star streaks while the central new slate and exact workshop bench remain momentarily sharp. Locked 40 mm composition, one causal release, no body or face, no fantasy energy."
+    },
+    {
+      "id": "KF34",
+      "file": "SIG-KF34-ejection.png",
+      "act": "lattice",
+      "flf": true,
+      "refs": ["KF06"],
+      "scene": "Open vacuum after ejection: the thin amber ring sits far behind the same small craft, while one small warm blink travels ahead toward home like a patient signal. The craft points home between ring and blink, needle-sharp against pin stars. Restrained 35 mm stern composition, no beam, no nebula, no other craft."
+    },
+    {
+      "id": "KF35",
+      "file": "SIG-KF35-many-lights.png",
+      "act": "return",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "scene": "Home approach along the dust-marbled planet's night side. Many small warm pinprick beacons are now scattered widely across the natural earth-tone sphere, visibly phase-shifted like one wave passing; none form text or a map label. The same small craft begins descent. Slow center-safe 50 mm orbital drift."
+    },
+    {
+      "id": "KF36",
+      "file": "SIG-KF36-landing.png",
+      "act": "return",
+      "flf": false,
+      "refs": ["KF00", "KF06", "KF07"],
+      "scene": "Locked hull-mounted landing at the exact farm workshop: the same craft settles through the grey-brown dust front, and the dust parts in the exact reversed geometry of launch before falling outward from the skids. Rigid hull edge center, barn and one warm window behind, no free camera or people."
+    },
+    {
+      "id": "KF37",
+      "file": "SIG-KF37-workshop-now.png",
+      "act": "return",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "Inside the exact workshop master after return: benches are clean, dust sheets removed, the same machines quietly running. The exact glass dust plate is framed on the wall and open slate racks stand by the door. Small machine shadows align in the same waveform rhythm; warm window light catches the rack. Patient centered 45 mm dolly composition, no people or text."
+    },
+    {
+      "id": "KF38",
+      "file": "SIG-KF38-five-suits.png",
+      "act": "return",
+      "flf": false,
+      "refs": ["KF00", "KF06"],
+      "countRule": "Exactly five and only five complete empty suits; all five dark visors fully visible and each suit visibly unoccupied.",
+      "scene": "By the exact workshop door, EXACTLY FIVE complete EMPTY pressure suits hang on one simple rail, no sixth suit and no person. The five suits have distinct utilitarian builds but share charcoal canvas and blank matte helmets; every visor is dark and visibly unoccupied. Each of the EXACTLY FIVE visors reflects a different surveyed world. All five heads and bodies fit inside the center-safe band in a symmetric 50 mm lateral tableau."
+    },
+    {
+      "id": "KF39",
+      "file": "SIG-KF39-two-masts.png",
+      "act": "return",
+      "flf": false,
+      "refs": ["KF00"],
+      "scene": "At dust-earth dusk, the exact plain radio mast beside the workshop blinks a richer warm rhythm while one second distant mast answers on the horizon. Their two rhythms interleave into one abstract waveform in underlit grey clouds, never text or numerals. Centered 40 mm rise composition with both masts and workshop window visible."
+    },
+    {
+      "id": "KF40",
+      "file": "SIG-KF40-long-signal.png",
+      "act": "return",
+      "flf": true,
+      "refs": ["KF00", "KF01"],
+      "scene": "Exact loop-closure recreation of KF01: same held 35 mm camera, same flat farmland, same lone workshop, same rolling grey dust front, same radio mast, and same single warm window. The only story change is that the window light now blinks in exact visual rhythm with the mast. Keep composition and horizon matched to KF01 for a clean FLF return."
+    }
+  ]
+}
