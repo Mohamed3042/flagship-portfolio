@@ -1,12 +1,13 @@
 # The Academy of Proven Spells — production ledger
 
-Status: `PHASE_2_OWNER_WAN_GENERATION_READY`
+Status: `PHASE_2_PARALLEL_OWNER_GENERATION_READY`
 
 ## Fixed delivery contract
 
 - Page: `public/worlds/academy.html`
 - Images: one style anchor plus sixteen chained keyframes, normalized to 1920×1088 RGB PNG.
 - Video: sixteen WAN 2.7 I2V clips, 720P, five seconds, 30 fps, planned 160 credits / 240 credits with retake headroom.
+- Comparison route: sixteen Grok Imagine clips using the identical keyframe chain at 1080p, 15 seconds, 16:9; Grok outputs remain separate from WAN until the acceptance and comparison gates.
 - Hard gate: no WAN generation until Mohamed approves the complete still contact sheet.
 - Mobile: the same center-safe landscape chain; no separate paid mobile chain.
 - Claims: only live GitHub repository facts and measured run-manifest facts.
@@ -120,6 +121,7 @@ View through the centered circular brass telescope lens. Inside it is the exact 
 - Rejected first KF13 revisions: hand and lantern fell outside or partly outside the centered 9:16 crop. Corrected final keeps the full event visible.
 - Rejected first KF01/KF16 bookends: moon and wax seal did not share an optical axis and the seal carried an embossed mark. Corrected finals align the moon, owl, letter, and plain seal.
 - WAN board gate before implementation: `ACADEMY_WAN_BOARD_RED: board response was 404`.
+- Grok board gate before implementation: `ACADEMY_GROK_BOARD_RED: board response was 404`.
 - Rejected first phone frame-pair proof: capture raced image decoding and displayed black frame boxes. The verifier now waits for both 1920×1088 images to decode before capture; corrected proof shows both images.
 - WAN video generations used before approval: `0`.
 
@@ -152,3 +154,25 @@ View through the centered circular brass telescope lens. Inside it is the exact 
 - `production/academy/wan-board-proof/academy-wan-board-phone-last-frame.png`
 - `production/academy/wan-board-proof/academy-wan-board-verification.json`
 - Decisive gate: `ACADEMY_WAN_BOARD_OK cards=16 frames=32 copy=exact tracking=persisted phone=390x844@3`
+
+## Owner Grok comparison board
+
+- Board: `public/worlds/assets/academy/grok-production/GROK-GENERATION-BOARD.html`
+- Frozen data: `public/worlds/assets/academy/grok-production/grok-jobs.js`
+- Chain: the same sixteen pairs as WAN, `KF01→KF02` through `KF15→KF16`, then `KF16→KF01` for the loop.
+- Settings: Grok Imagine Video, 1080p, 15 seconds, 16:9; audio off is preferred.
+- Inputs: attach the left first-frame image first. Attach the right destination image second when Grok accepts two images; otherwise use only the first image because every prompt contains the explicit destination composition.
+- Outputs: `ACA-GROK-001.mp4` through `ACA-GROK-016.mp4`, kept distinct from the WAN names.
+- Prompt contract: immutable opening lock; optional immutable attached destination plus textual fallback; one dominant action from 1–12 seconds; one measured camera move; stable landing held from 12–15 seconds; verbatim style and negative locks; 145 words maximum.
+- Tracking: browser-local pending/done state under `academy-proven-spells-grok-done-v1`; “done” means owner-generated/downloaded, not accepted.
+- Return intake: `production/academy/grok-returns/`; original downloads stay untrimmed and use the exact output filenames.
+- `VERIFIED`: rendered board has 16 cards, 32 decoded 1920×1088 frame images, 16 exact prompts, 16 copy buttons, 16 done controls, independently persisted tracking, working pending/done filters, zero horizontal overflow at 1440×1100 and 390×844 DPR 3, and no console/request errors.
+- Acceptance status: `PENDING_OWNER_RETURNS`; no Grok clips have been accepted, normalized, compared, or integrated.
+
+## Grok board proof
+
+- `production/academy/grok-board-proof/academy-grok-board-desktop.png`
+- `production/academy/grok-board-proof/academy-grok-board-phone.png`
+- `production/academy/grok-board-proof/academy-grok-board-phone-frame-pair.png`
+- `production/academy/grok-board-proof/academy-grok-board-verification.json`
+- Decisive gate: `ACADEMY_GROK_BOARD_OK cards=16 frames=32 1080p=locked duration=15s aspect=16:9 copy=exact tracking=persisted`

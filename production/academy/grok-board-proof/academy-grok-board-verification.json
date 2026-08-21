@@ -1,0 +1,17 @@
+{
+  "status": "VERIFIED",
+  "url": "http://127.0.0.1:4616/worlds/assets/academy/grok-production/GROK-GENERATION-BOARD.html",
+  "desktop": {
+    "cards": 16,
+    "images": 32,
+    "clipboard": "exact",
+    "tracking": "persisted",
+    "overflow": 0
+  },
+  "phone": {
+    "cards": 16,
+    "viewport": "390x844@3",
+    "pair": "stacked",
+    "overflow": 0
+  }
+}
