@@ -12,7 +12,7 @@ window.ACADEMY_WAN_JOBS = [
     lastName: "ACA-KF02-gates-admit.png",
     first: "../keyframes/ACA-KF01-owl-letter.png",
     last: "../keyframes/ACA-KF02-gates-admit.png",
-    prompt: "Generate single shot. @Image1 is the immutable moonlit academy geometry and art-direction; @Image2 is the immutable destination frame. The owl dives six metres toward the gate, holding the blank sealed letter steady as moon-cloud parallax reveals the entrance. The camera follows in one slow six-metre 40mm push downward. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
+    prompt: "Generate single shot. @Image1 is the immutable moonlit academy geometry and art-direction; @Image2 is the immutable destination frame. The owl banks away from the camera and dives toward the distant gate, holding the blank sealed letter, growing smaller as it descends. The camera follows behind in one slow six-metre 40mm push downward. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
   },
   {
     id: "ACA-002",
@@ -64,7 +64,7 @@ window.ACADEMY_WAN_JOBS = [
     lastName: "ACA-KF06-sorting-mirror.png",
     first: "../keyframes/ACA-KF05-self-writing-quill.png",
     last: "../keyframes/ACA-KF06-sorting-mirror.png",
-    prompt: "Generate single shot. @Image1 is the immutable blank-grimoire geometry and art-direction; @Image2 is the immutable destination frame. The abstract ink stroke lifts as gold motes toward the mirror; the quill shadow stays half a beat ahead. The camera pushes slowly three metres at 85mm, following the motes to the glass. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
+    prompt: "Generate single shot. @Image1 is the immutable blank-grimoire geometry and art-direction; @Image2 is the immutable destination frame. The abstract ink stroke lifts off the page as gold motes and drifts toward the mirror glass. The camera pushes slowly three metres at 85mm, following the motes to the glass. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
   },
   {
     id: "ACA-006",
@@ -77,7 +77,7 @@ window.ACADEMY_WAN_JOBS = [
     lastName: "ACA-KF07-six-portraits.png",
     first: "../keyframes/ACA-KF06-sorting-mirror.png",
     last: "../keyframes/ACA-KF07-six-portraits.png",
-    prompt: "Generate single shot. @Image1 is the immutable sorting-mirror geometry and art-direction; @Image2 is the immutable destination frame. Gold motes divide once into exactly six threads, then travel past the mirror edge toward six frames; the reflection leads half a beat. The camera pushes slowly five metres at 50mm behind them. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
+    prompt: "Generate single shot. @Image1 is the immutable sorting-mirror geometry and art-direction; @Image2 is the immutable destination frame. Gold motes divide once into exactly six threads, then travel past the mirror edge toward the six frames. The camera pushes slowly five metres at 50mm behind them. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
   },
   {
     id: "ACA-007",
@@ -103,7 +103,7 @@ window.ACADEMY_WAN_JOBS = [
     lastName: "ACA-KF09-failed-cast.png",
     first: "../keyframes/ACA-KF08-potion-lab.png",
     last: "../keyframes/ACA-KF09-failed-cast.png",
-    prompt: "Generate single shot. @Image1 is the immutable potion-lab geometry and art-direction; @Image2 is the immutable destination frame. One proof-crimson wand pulse drops and cracks the miniature while sparks freeze into one broken ring; keep it restrained and nonviolent. The camera orbits clockwise fifteen degrees slowly at 65mm. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
+    prompt: "Generate single shot. @Image1 is the immutable potion-lab geometry and art-direction; @Image2 is the immutable destination frame. One proof-crimson wand pulse drops and cracks the miniature tower; loose sparks settle into one broken red ring hanging above it, restrained and quiet. The camera orbits clockwise fifteen degrees slowly at 65mm. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
   },
   {
     id: "ACA-009",
@@ -142,7 +142,7 @@ window.ACADEMY_WAN_JOBS = [
     lastName: "ACA-KF12-owl-post.png",
     first: "../keyframes/ACA-KF11-standing-lights.png",
     last: "../keyframes/ACA-KF12-owl-post.png",
-    prompt: "Generate single shot. @Image1 is the immutable ten-cluster great-hall geometry and art-direction; @Image2 is the immutable destination frame. One invisible current leans exactly ten candle clusters toward the viewer and opens the owl-post window; no cluster duplicates. The camera pushes slowly ten metres at 35mm into the pre-dawn window. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
+    prompt: "Generate single shot. @Image1 is the immutable ten-cluster great-hall geometry and art-direction; @Image2 is the immutable destination frame. A soft draft leans the candle flames toward the viewer in one slow wave while the owl-post window swings open ahead; the ten clusters hold their places. The camera pushes slowly ten metres at 35mm into the pre-dawn window. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
   },
   {
     id: "ACA-012",
@@ -155,7 +155,7 @@ window.ACADEMY_WAN_JOBS = [
     lastName: "ACA-KF13-restricted-section.png",
     first: "../keyframes/ACA-KF12-owl-post.png",
     last: "../keyframes/ACA-KF13-restricted-section.png",
-    prompt: "Generate single shot. @Image1 is the immutable owl-post geometry and art-direction; @Image2 is the immutable destination frame. The centered owl with a blank sealed scroll banks left through the barred window as its shadow catches up once. The camera rises slowly six metres at 45mm, following it into the restricted alcove. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
+    prompt: "Generate single shot. @Image1 is the immutable owl-post geometry and art-direction; @Image2 is the immutable destination frame. The centered owl with a blank sealed scroll banks left and glides out through the barred window. The camera rises slowly six metres at 45mm, following it into the restricted alcove. The action settles by 4.5 seconds, matching @Image2 exactly. candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. No dialogue. No background music. Negative prompt: blur, watermark, captions, extra limbs, morphing, flicker, unintended cut."
   },
   {
     id: "ACA-013",

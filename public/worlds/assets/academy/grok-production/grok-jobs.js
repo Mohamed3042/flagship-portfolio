@@ -8,6 +8,8 @@ window.ACADEMY_GROK_JOBS = [
     first: "../keyframes/ACA-KF01-owl-letter.png", last: "../keyframes/ACA-KF02-gates-admit.png",
     shotClass: "subject shot", facing: "frontal toward camera", orientation: "needs-recompose",
     recompose: "ACA-KF01-R2: show the same barn owl from rear or three-quarter-rear, already aimed at the gate, with the sealed letter fixed in its beak. Keep the owl and gate on one clear travel axis.",
+    recomposeOutput: "ACA-KF01-R2.png",
+    recomposePrompt: "Recompose an approved keyframe. Image 1 is the style anchor: keep its exact palette, candle-gold against deep slate, soft film grain. Image 2 is the rejected keyframe: keep its moonlit academy castle, moon position, cloud shapes and lit gate exactly. Change ONLY the owl: the same barn owl, now seen from a rear three-quarter view, face not visible, wings mid-beat, banked on a clear diagonal travel axis toward the distant lit gate, the sealed letter gripped in its beak and peeking past its head silhouette. Keep the owl inside the center 50% of frame width. Photoreal storybook realism. 1920x1088. No text, no logos, no watermark.",
     prompt: "Flies straight away toward the open iron gate, the same barn owl seen from a rear three-quarter view, sealed letter fixed in its beak. Camera slowly follows directly behind. Moonlit academy, warm candle-gold gate, deep slate shadow, soft film grain. Ends inside the open gate, stair-hall glowing ahead."
   },
   {
@@ -17,6 +19,8 @@ window.ACADEMY_GROK_JOBS = [
     first: "../keyframes/ACA-KF02-gates-admit.png", last: "../keyframes/ACA-KF03-moving-staircases.png",
     shotClass: "camera-only", facing: "foreground owl dominates the gate motion", orientation: "needs-recompose",
     recompose: "ACA-KF02-R2: remove the foreground owl or reduce it to a tiny rear-facing silhouette beyond the partly open gate. Keep both iron leaves dominant and fully visible.",
+    recomposeOutput: "ACA-KF02-R2.png",
+    recomposePrompt: "Recompose an approved keyframe. Image 1 is the style anchor: keep its exact palette and grain. Image 2 is the rejected keyframe: keep the wrought-iron gates, stone piers, warm stair-hall glow and night sky exactly. Change ONLY the owl: shrink it to a tiny rear-facing silhouette far beyond the gates, high over the stairs, letter barely visible; both gate leaves stay fully dominant and sharp. Nothing else changes. Photoreal storybook realism. 1920x1088. No text, no logos, no watermark.",
     prompt: "Swings outward, both wrought-iron gate leaves opening wider while the owl stays small and motionless beyond them. Camera slowly cranes upward through the gateway. Candlelit stair-hall, warm candle-gold, deep slate shadow, soft film grain. Ends framed on the aligned upper staircase and closed library doors."
   },
   {
@@ -98,6 +102,8 @@ window.ACADEMY_GROK_JOBS = [
     first: "../keyframes/ACA-KF12-owl-post.png", last: "../keyframes/ACA-KF13-restricted-section.png",
     shotClass: "subject shot", facing: "three-quarter-right, traveling outward", orientation: "needs-recompose",
     recompose: "ACA-KF12: owl faces outward/right but motion travels inward/left; recompose facing into the barred window, rear or three-quarter-rear, with the sealed scroll in its beak.",
+    recomposeOutput: "ACA-KF12-R2.png",
+    recomposePrompt: "Recompose an approved keyframe. Image 1 is the style anchor: keep its exact palette and grain. Image 2 is the rejected keyframe: keep the owl-post window, candle, campus below and pre-dawn sky exactly. Change ONLY the owl: the same barn owl now seen from behind at three-quarter-rear, faced INTO the barred window opening, wings ready, sealed scroll in its beak. Keep it inside the center 50% of frame width. Photoreal storybook realism. 1920x1088. No text, no logos, no watermark.",
     prompt: "Banks left through the barred window into the restricted alcove, the same barn owl carrying the sealed scroll in its beak. Camera slowly follows behind. Candlelit wizarding academy storybook, parchment and brass, warm candle-gold against deep slate shadow, soft film grain. Ends framed on chained books, an outside lantern, and pinned shelf shadows."
   },
   {

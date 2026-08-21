@@ -180,7 +180,7 @@
 
     <section class="cards" id="cards" aria-label="Grok generation jobs"></section>
     <p class="empty" id="empty" hidden>No jobs match this filter.</p>
-    <p class="footer-note">Attach the new R2 start only—not the displayed rejected still. The right frame remains destination reference only. “Done” means regenerated/downloaded; every return still passes the decoded acceptance gate.</p>
+    <p class="footer-note">Per card: Step 1 — copy the IMAGE prompt into GPT Sol 5.6 Pro with the style anchor (ACA-KF00) attached first and the rejected still second; save the returned still under the named R2 filename in keyframes/. Step 2 — in Grok, attach ONLY that new R2 still and paste the video prompt (15s · 16:9 · audio off). Never attach the rejected still or the destination frame. “Done” means regenerated/downloaded; every return still passes the decoded acceptance gate.</p>
   </main>
 
   <script src="grok-jobs.js"></script>
@@ -312,9 +312,18 @@
           </figure>
         </div>
         ${needsRecompose ? `<p class="recompose-note"><strong>Human checkpoint:</strong> ${job.recompose}</p>` : ''}
+        ${needsRecompose && job.recomposePrompt ? `<div class="prompt-box">
+          <div class="prompt-top">
+            <span class="prompt-label">Step 1 — image prompt · paste into GPT Sol 5.6 Pro with the STYLE ANCHOR (ACA-KF00) attached as Image 1 and the rejected still as Image 2 · save the result as ${job.recomposeOutput} in keyframes/</span>
+            <div class="actions">
+              <button class="copy-image" type="button">Copy image prompt</button>
+            </div>
+          </div>
+          <p class="image-prompt"></p>
+        </div>` : ''}
         <div class="prompt-box">
           <div class="prompt-top">
-            <span class="prompt-label">Exact R2 Grok prompt · 15s · 16:9 · audio off</span>
+            <span class="prompt-label">${needsRecompose ? `Step 2 — video prompt · attach ONLY the new ${job.recomposeOutput ?? 'R2 start still'}` : 'Exact Grok prompt'} · 15s · 16:9 · audio off</span>
             <div class="actions">
               <button class="copy" type="button">Copy exact prompt</button>
               <button class="done" type="button" aria-pressed="false">Mark done</button>
@@ -323,6 +332,10 @@
           <p class="prompt"></p>
         </div>`;
       card.querySelector('.prompt').textContent = job.prompt;
+      if (needsRecompose && job.recomposePrompt) {
+        card.querySelector('.image-prompt').textContent = job.recomposePrompt;
+        card.querySelector('.copy-image').addEventListener('click', event => copyPrompt(event.currentTarget, job.recomposePrompt));
+      }
       card.querySelector('.copy').addEventListener('click', event => copyPrompt(event.currentTarget, job.prompt));
       card.querySelector('.done').addEventListener('click', () => {
         if (done.has(job.id)) done.delete(job.id); else done.add(job.id);
