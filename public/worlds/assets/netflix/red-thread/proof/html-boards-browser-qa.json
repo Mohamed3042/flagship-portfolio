@@ -1,0 +1,38 @@
+{
+  "schema": "netflix-red-thread-html-boards-browser-qa/v1",
+  "status": "GREEN",
+  "boards": {
+    "wan": {
+      "title": "Red Thread \u00b7 WAN 2.7 Generation Board",
+      "provider": "wan",
+      "cards": 8,
+      "prompts": 8,
+      "images": 9,
+      "visible": 8,
+      "boardErrorHidden": true,
+      "firstPromptStartsCorrectly": true,
+      "crossProviderLink": true,
+      "allImageAssetsLoad": true,
+      "copyButtonWorks": true,
+      "doneTrackingPersists": true,
+      "doneFilterVisibleCards": 1,
+      "actIVVisibleCards": 1
+    },
+    "grok": {
+      "title": "Red Thread \u00b7 Grok Imagine 2.0 Generation Board",
+      "provider": "grok",
+      "cards": 8,
+      "prompts": 8,
+      "images": 8,
+      "visible": 8,
+      "boardErrorHidden": true,
+      "firstPromptStartsCorrectly": true,
+      "crossProviderLink": true,
+      "allImageAssetsLoad": true,
+      "copyButtonWorks": true,
+      "doneTrackingPersists": true,
+      "doneFilterVisibleCards": 1,
+      "actIVVisibleCards": 1
+    }
+  }
+}

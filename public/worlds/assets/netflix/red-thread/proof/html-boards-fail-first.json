@@ -1,0 +1,22 @@
+{
+  "schema": "netflix-red-thread-html-boards-qa/v1",
+  "status": "RED",
+  "errors": [
+    "missing shared asset: public\\worlds\\assets\\netflix\\red-thread\\generation-board.css",
+    "missing shared asset: public\\worlds\\assets\\netflix\\red-thread\\generation-board.js",
+    "wan: missing HTML board: public\\worlds\\assets\\netflix\\red-thread\\wan\\WAN-GENERATION-BOARD.html",
+    "grok: missing HTML board: public\\worlds\\assets\\netflix\\red-thread\\grok\\GROK-IMAGINE-2-GENERATION-BOARD.html"
+  ],
+  "boards": {
+    "wan": {
+      "exists": false,
+      "manifestShots": 8,
+      "runtime": null
+    },
+    "grok": {
+      "exists": false,
+      "manifestShots": 8,
+      "runtime": null
+    }
+  }
+}

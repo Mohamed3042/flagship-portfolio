@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Red Thread · WAN 2.7 Generation Board</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../generation-board.css">
+</head>
+<body data-provider="wan" data-manifest="wan-5s-run-manifest.json" data-state-key="red-thread-wan-generation-done-v1">
+  <main class="shell">
+    <header class="masthead">
+      <div class="hero-top">
+        <p class="eyebrow">The Anthology · Red Thread Cut · owner generation pack</p>
+        <nav class="provider-switch" aria-label="Generation board provider">
+          <a href="WAN-GENERATION-BOARD.html" aria-current="page">WAN 2.7</a>
+          <a href="../grok/GROK-IMAGINE-2-GENERATION-BOARD.html">Grok Imagine 2.0</a>
+        </nav>
+      </div>
+      <h1>Eight shots. Five seconds. One red thread.</h1>
+      <p class="summary">Generate <strong>N01 through N08 in order</strong>. Every card contains the exact approved 720p upload, frozen WAN prompt, fixed family seed, output filename, and local pending/done tracking. N04 and N08 alone are hard first/last-frame anchors.</p>
+      <section class="settings" aria-label="WAN settings">
+        <div class="setting"><span>Model</span><strong>WAN 2.7</strong></div>
+        <div class="setting"><span>Mode</span><strong>I2V · 2 hard FLF</strong></div>
+        <div class="setting"><span>Resolution</span><strong>720P · 16:9</strong></div>
+        <div class="setting"><span>Duration</span><strong>5 seconds</strong></div>
+        <div class="setting"><span>Prompt extend</span><strong>Off · 1 output</strong></div>
+        <div class="setting"><span>Usage now</span><strong>0 calls · 0 credits</strong></div>
+      </section>
+      <p class="return-note"><strong>Run gate:</strong> do not submit until the Phase 1 stills are explicitly approved. Download each result immediately with the exact filename shown. “Done” records generation only; acceptance begins after decoded motion and landing QA.</p>
+    </header>
+
+    <div class="progress">
+      <span><strong id="done-count">0</strong> / <strong id="job-count">8</strong> done</span>
+      <div class="bar" aria-hidden="true"><i id="bar-fill"></i></div>
+    </div>
+
+    <nav class="toolbar" aria-label="Board filters">
+      <div class="filters" id="act-filters" aria-label="Filter by act"></div>
+      <div class="filters" aria-label="Filter by status">
+        <button type="button" data-state-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-state-filter="pending" aria-pressed="false">Pending</button>
+        <button type="button" data-state-filter="done" aria-pressed="false">Done</button>
+        <button type="button" id="continue">First pending</button>
+        <button type="button" class="reset" id="reset">Reset tracking</button>
+      </div>
+      <span class="visible-count" id="visible-count">8 jobs visible</span>
+    </nav>
+
+    <section class="cards" id="cards" aria-label="WAN generation jobs"></section>
+    <p class="empty" id="empty" hidden>No jobs match this filter.</p>
+    <p class="board-error" id="board-error" hidden></p>
+    <p class="footer-note">Click an image to open the exact upload. Keep one dominant action and one camera move. Every shot settles by 4.5 seconds and holds its final half-second; N08 closes on the exact N01 frame.</p>
+  </main>
+  <script src="../generation-board.js"></script>
+</body>
+</html>
