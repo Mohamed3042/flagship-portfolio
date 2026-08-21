@@ -38,3 +38,7 @@ public/worlds/assets/cake-studio/review/HOLD-BEFORE-*.png
 public/worlds/assets/cake-studio/review/HOLD-AFTER-*.png
 public/worlds/assets/cake-studio/review/CST-contact-sheet-[0-9][0-9].png
 public/worlds/assets/cake-studio/review/CST-contact-sheet-portrait-[0-9][0-9].png
+
+# Academy generation attempts remain local; Git receives approved keyframes,
+# review sheets, the WAN owner board, and rendered verification proof only.
+production/academy/raw/
