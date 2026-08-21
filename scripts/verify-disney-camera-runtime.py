@@ -355,15 +355,30 @@ def main() -> int:
             has_touch=True,
         )
         phone.add_init_script(init_script)
+        # The sweep contexts intentionally abort every MP4 request. Keep the
+        # decoded-frame proof in fresh contexts so a force-cache lookup cannot
+        # inherit an intentionally aborted request from the sweep.
+        desktop_media = browser.new_context(viewport={"width": 1440, "height": 900}, device_scale_factor=1)
+        desktop_media.add_init_script(init_script)
+        phone_media = browser.new_context(
+            viewport={"width": 390, "height": 844},
+            screen={"width": 390, "height": 844},
+            device_scale_factor=1,
+            is_mobile=True,
+            has_touch=True,
+        )
+        phone_media.add_init_script(init_script)
         report = {
             "target": args.url,
             "desktopSweep": sweep_profile(desktop, args.url, "desktop", args.media_fallback, args.sweep_ms),
             "phoneSweep": sweep_profile(phone, args.url, "phone-390x844", args.media_fallback, args.sweep_ms),
-            "fixedSectionPeaks": capture_peaks(desktop, args.url, args.out, args.media_fallback),
-            "phoneEnding": capture_phone_end(phone, args.url, args.out, args.media_fallback),
+            "fixedSectionPeaks": capture_peaks(desktop_media, args.url, args.out, args.media_fallback),
+            "phoneEnding": capture_phone_end(phone_media, args.url, args.out, args.media_fallback),
         }
         desktop.close()
         phone.close()
+        desktop_media.close()
+        phone_media.close()
         browser.close()
     (args.out / "runtime-browser-verification.json").write_text(
         json.dumps(report, indent=2, ensure_ascii=False) + "\n",
