@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Build and verify the Red Thread Grok Imagine 2.0 comparison board."""
+"""Build and verify the Red Thread WAN 2.7 comparison board."""
 
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import re
 import textwrap
 from pathlib import Path
 
@@ -13,13 +14,16 @@ from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
 
 REPO = Path(__file__).resolve().parents[1]
-GROK_ROOT = REPO / "public/worlds/assets/netflix/red-thread/grok"
-MANIFEST = GROK_ROOT / "grok-15s-run-manifest.json"
-BOARD = GROK_ROOT / "GROK-15S-COMPARISON-BOARD.png"
+WAN_ROOT = REPO / "public/worlds/assets/netflix/red-thread/wan"
+MANIFEST = WAN_ROOT / "wan-5s-run-manifest.json"
+BOARD = WAN_ROOT / "WAN-5S-COMPARISON-BOARD.png"
 MASTER_SIZE = (1920, 1088)
-INPUT_SIZE = (1920, 1080)
-INPUT_CROP = (0, 4, 1920, 1084)
+INPUT_SIZE = (1280, 720)
+MASTER_CROP = (0, 4, 1920, 1084)
 STYLE_LOCK = "absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain"
+AUDIO_LOCK = "No dialogue. No background music."
+PROMPT_PREFIX = "Generate single shot."
+MAX_PROMPT_WORDS = 110
 
 
 def font(size: int, *, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
@@ -36,34 +40,42 @@ def load_manifest() -> dict:
     return json.loads(MANIFEST.read_text(encoding="utf-8"))
 
 
-def resolve_from_grok(relative: str) -> Path:
-    return (GROK_ROOT / relative).resolve()
+def resolve_from_wan(relative: str) -> Path:
+    return (WAN_ROOT / relative).resolve()
 
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def prompt_word_count(prompt: str) -> int:
+    return len(re.findall(r"\b[\w.-]+\b", prompt))
+
+
+def make_input(source: Image.Image) -> Image.Image:
+    return source.convert("RGB").crop(MASTER_CROP).resize(INPUT_SIZE, Image.Resampling.LANCZOS)
+
+
 def build_inputs(manifest: dict) -> None:
     for shot in manifest["shots"]:
-        source_path = resolve_from_grok(shot["sourceMaster"])
-        target_path = resolve_from_grok(shot["input1080"])
+        source_path = resolve_from_wan(shot["sourceMaster"])
+        target_path = resolve_from_wan(shot["input720"])
         with Image.open(source_path) as source:
             if source.size != MASTER_SIZE:
                 raise SystemExit(f"source must be {MASTER_SIZE}: {source_path} is {source.size}")
-            image = source.convert("RGB").crop(INPUT_CROP)
+            image = make_input(source)
         target_path.parent.mkdir(parents=True, exist_ok=True)
         image.save(target_path, format="PNG", optimize=True)
-        print(f"WROTE_GROK_INPUT {shot['id']} {target_path.name} {image.width}x{image.height}")
+        print(f"WROTE_WAN_INPUT {shot['id']} {target_path.name} {image.width}x{image.height}")
 
 
 def build_prompt_files(manifest: dict) -> None:
-    prompt_dir = GROK_ROOT / "prompts"
+    prompt_dir = WAN_ROOT / "prompts"
     prompt_dir.mkdir(parents=True, exist_ok=True)
     for shot in manifest["shots"]:
-        path = prompt_dir / f"NRT-GROK-{shot['id']}-prompt.txt"
+        path = prompt_dir / f"NRT-WAN-{shot['id']}-prompt.txt"
         path.write_text(shot["prompt"].strip() + "\n", encoding="utf-8")
-        print(f"WROTE_GROK_PROMPT {shot['id']} {path.name}")
+        print(f"WROTE_WAN_PROMPT {shot['id']} {path.name}")
 
 
 def truncate(text: str, width: int = 58) -> str:
@@ -78,10 +90,10 @@ def draw_board(manifest: dict) -> None:
     canvas = Image.new("RGB", (width, height), "#020202")
     draw = ImageDraw.Draw(canvas)
 
-    draw.text((24, 10), "GROK IMAGINE 2.0 - RED THREAD BOARD", fill="#fff2f2", font=font(34, bold=True))
+    draw.text((24, 10), "WAN 2.7 - RED THREAD BOARD", fill="#fff2f2", font=font(34, bold=True))
     draw.text(
         (24, 49),
-        "8 x 15s | 1080p IMAGE-TO-VIDEO | CONSUMER IMAGINE 2.0 | NO RUNS YET | $0 SPENT",
+        "8 x 5s | 720p IMAGE-TO-VIDEO | 2 HARD FLF ANCHORS | NO RUNS YET | 0 CREDITS",
         fill="#dc5252",
         font=font(18, bold=True),
     )
@@ -103,52 +115,49 @@ def draw_board(manifest: dict) -> None:
             fill="#f7dede",
             font=font(23, bold=True),
         )
+        if shot.get("flf"):
+            draw.rounded_rectangle((x0 + 389, y0 + 10, x0 + 459, y0 + 39), radius=5, fill="#8a1010")
+            draw.text((x0 + 405, y0 + 15), "FLF", fill="#ffffff", font=font(15, bold=True))
 
-        input_path = resolve_from_grok(shot["input1080"])
+        input_path = resolve_from_wan(shot["input720"])
         with Image.open(input_path) as source:
             thumbnail = ImageOps.fit(source.convert("RGB"), (440, 248), method=Image.Resampling.LANCZOS)
         canvas.paste(thumbnail, (x0 + 20, y0 + 48))
         draw.rectangle((x0 + 20, y0 + 48, x0 + 459, y0 + 295), outline="#6b1111", width=1)
 
         segments = [
-            ("0-5 SETUP", "#3b0808"),
-            ("5-12 ILLUSION", "#680e0e"),
-            ("12-15 LAND", "#3b0808"),
+            ("0-1 SETUP", "#3b0808", 100),
+            ("1-4.5 ACTION", "#680e0e", 240),
+            ("4.5-5 HOLD", "#3b0808", 100),
         ]
-        segment_widths = (134, 172, 134)
         cursor = x0 + 20
-        for (label, color), segment_width in zip(segments, segment_widths, strict=True):
+        for label, color, segment_width in segments:
             draw.rectangle((cursor, y0 + 309, cursor + segment_width - 1, y0 + 346), fill=color)
-            box = draw.textbbox((0, 0), label, font=font(15, bold=True))
+            box = draw.textbbox((0, 0), label, font=font(14, bold=True))
             text_width = box[2] - box[0]
             draw.text(
-                (cursor + (segment_width - text_width) // 2, y0 + 318),
+                (cursor + (segment_width - text_width) // 2, y0 + 319),
                 label,
                 fill="#fff0f0",
-                font=font(15, bold=True),
+                font=font(14, bold=True),
             )
             cursor += segment_width
 
         summaries = [
-            ("0-5", shot["timeline"]["setup0to5"]),
-            ("5-12", shot["timeline"]["illusion5to12"]),
-            ("12-15", shot["timeline"]["landing12to15"]),
+            ("0-1", shot["timeline"]["setup0to1"]),
+            ("1-4.5", shot["timeline"]["action1to4_5"]),
+            ("4.5-5", shot["timeline"]["hold4_5to5"]),
         ]
         for line_index, (timecode, summary) in enumerate(summaries):
             y = y0 + 361 + line_index * 39
             draw.text((x0 + 20, y), timecode, fill="#ef4d4d", font=font(16, bold=True))
-            draw.text((x0 + 76, y), truncate(summary), fill="#d7caca", font=font(15))
+            draw.text((x0 + 83, y), truncate(summary, 55), fill="#d7caca", font=font(15))
 
-        draw.text(
-            (x0 + 20, y0 + 474),
-            shot["outputName"],
-            fill="#7e6b6b",
-            font=font(13),
-        )
+        draw.text((x0 + 20, y0 + 474), shot["outputName"], fill="#7e6b6b", font=font(13))
 
     BOARD.parent.mkdir(parents=True, exist_ok=True)
     canvas.save(BOARD, format="PNG", optimize=True)
-    print(f"WROTE_GROK_BOARD {BOARD.name} {canvas.width}x{canvas.height}")
+    print(f"WROTE_WAN_BOARD {BOARD.name} {canvas.width}x{canvas.height}")
 
 
 def build() -> None:
@@ -168,62 +177,76 @@ def verify(report_path: Path | None) -> int:
     ids = [shot.get("id") for shot in shots]
     if ids != [f"N{index:02d}" for index in range(1, 9)]:
         errors.append(f"shot sequence mismatch: {ids}")
-    if manifest.get("product") != "Grok Imagine 2.0":
-        errors.append("product must be Grok Imagine 2.0")
+    if manifest.get("product") != "WAN 2.7":
+        errors.append("product must be WAN 2.7")
     settings = manifest.get("settings", {})
-    if settings.get("durationSeconds") != 15 or settings.get("resolution") != "1080p":
-        errors.append("settings must be 15 seconds at 1080p")
+    if settings.get("durationSeconds") != 5 or settings.get("resolution") != "720p":
+        errors.append("settings must be 5 seconds at 720p")
+    if settings.get("promptExtend") is not False:
+        errors.append("promptExtend must be false")
     generation = manifest.get("generation", {})
-    for field in ("callsMade", "clipsGenerated", "generatedSeconds", "apiSpendUsd"):
+    for field in ("callsMade", "clipsGenerated", "generatedSeconds", "creditsSpent"):
         if generation.get(field) != 0:
-            errors.append(f"no-spend board violated: generation.{field}={generation.get(field)}")
+            errors.append(f"zero-use board violated: generation.{field}={generation.get(field)}")
+    flf_ids = [shot.get("id") for shot in shots if shot.get("flf")]
+    if flf_ids != ["N04", "N08"]:
+        errors.append(f"hard FLF anchors must be N04 and N08, got {flf_ids}")
+    if next((shot for shot in shots if shot.get("id") == "N08"), {}).get("lastFrame") != "inputs/NRT-WAN-N01-keyframe-1280x720.png":
+        errors.append("N08 must bind the exact N01 input as lastFrame")
 
     hashes: set[str] = set()
     for shot in shots:
-        source_path = resolve_from_grok(shot["sourceMaster"])
-        target_path = resolve_from_grok(shot["input1080"])
-        prompt_path = GROK_ROOT / "prompts" / f"NRT-GROK-{shot['id']}-prompt.txt"
+        source_path = resolve_from_wan(shot["sourceMaster"])
+        target_path = resolve_from_wan(shot["input720"])
+        prompt_path = WAN_ROOT / "prompts" / f"NRT-WAN-{shot['id']}-prompt.txt"
         prompt = shot.get("prompt", "")
+        word_count = prompt_word_count(prompt)
+        if not prompt.startswith(PROMPT_PREFIX):
+            errors.append(f"{shot['id']}: literal prompt prefix missing")
         if STYLE_LOCK not in prompt:
             errors.append(f"{shot['id']}: exact style lock missing")
-        if "No dialogue. No music." not in prompt:
+        if AUDIO_LOCK not in prompt:
             errors.append(f"{shot['id']}: audio lock missing")
-        if not prompt.startswith("Animate the supplied still as the exact first frame"):
-            errors.append(f"{shot['id']}: first-frame instruction missing")
+        if "4.5 seconds" not in prompt or "hold" not in prompt.lower():
+            errors.append(f"{shot['id']}: 4.5-second settle/final hold missing")
+        if word_count > MAX_PROMPT_WORDS:
+            errors.append(f"{shot['id']}: prompt has {word_count} words > {MAX_PROMPT_WORDS}")
         prompt_file_matches = prompt_path.is_file() and prompt_path.read_text(encoding="utf-8").strip() == prompt.strip()
         if not prompt_file_matches:
             errors.append(f"{shot['id']}: prompt file missing or does not match manifest")
         source_exists = source_path.is_file()
         target_exists = target_path.is_file()
-        pixel_exact_crop = False
+        pixel_exact_derivation = False
         target_hash = ""
         if not source_exists:
             errors.append(f"{shot['id']}: missing source master")
         if not target_exists:
-            errors.append(f"{shot['id']}: missing 1080p input")
+            errors.append(f"{shot['id']}: missing 720p input")
         if source_exists and target_exists:
             with Image.open(source_path) as source, Image.open(target_path) as target:
-                expected = source.convert("RGB").crop(INPUT_CROP)
+                expected = make_input(source)
                 actual = target.convert("RGB")
                 if source.size != MASTER_SIZE:
                     errors.append(f"{shot['id']}: source dimensions {source.size} != {MASTER_SIZE}")
                 if actual.size != INPUT_SIZE:
                     errors.append(f"{shot['id']}: input dimensions {actual.size} != {INPUT_SIZE}")
-                pixel_exact_crop = ImageChops.difference(expected, actual).getbbox() is None
-                if not pixel_exact_crop:
-                    errors.append(f"{shot['id']}: input is not the exact four-pixel top/bottom crop")
+                pixel_exact_derivation = ImageChops.difference(expected, actual).getbbox() is None
+                if not pixel_exact_derivation:
+                    errors.append(f"{shot['id']}: input is not the exact center-crop plus Lanczos derivation")
             target_hash = sha256(target_path)
             if target_hash in hashes:
-                errors.append(f"{shot['id']}: duplicate 1080p input bytes")
+                errors.append(f"{shot['id']}: duplicate 720p input bytes")
             hashes.add(target_hash)
         rows.append(
             {
                 "id": shot["id"],
                 "sourceExists": source_exists,
                 "inputExists": target_exists,
-                "pixelExactCrop": pixel_exact_crop,
+                "pixelExactDerivation": pixel_exact_derivation,
                 "inputSha256": target_hash,
                 "promptFileMatches": prompt_file_matches,
+                "promptWords": word_count,
+                "flf": shot.get("flf", False),
             }
         )
 
@@ -238,27 +261,27 @@ def verify(report_path: Path | None) -> int:
         board_result["sha256"] = sha256(BOARD)
 
     report = {
-        "schema": "netflix-red-thread-grok-board-qa/v1",
+        "schema": "netflix-red-thread-wan-board-qa/v1",
         "status": "RED" if errors else "GREEN",
         "errors": errors,
         "product": manifest.get("product"),
-        "model": manifest.get("model"),
         "durationSeconds": settings.get("durationSeconds"),
         "resolution": settings.get("resolution"),
+        "promptExtend": settings.get("promptExtend"),
         "shots": rows,
         "board": board_result,
         "callsMade": generation.get("callsMade"),
-        "apiSpendUsd": generation.get("apiSpendUsd"),
+        "creditsSpent": generation.get("creditsSpent"),
     }
     if report_path:
         report_path.parent.mkdir(parents=True, exist_ok=True)
         report_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     if errors:
-        print("RED_GROK_BOARD_VERIFY")
+        print("RED_WAN_BOARD_VERIFY")
         for error in errors:
             print(f"  {error}")
         return 1
-    print("GREEN_GROK_BOARD_VERIFY 8/8 exact 1920x1080 inputs + board; calls 0, spend $0")
+    print("GREEN_WAN_BOARD_VERIFY 8/8 exact 1280x720 inputs + board; calls 0, credits 0")
     return 0
 
 

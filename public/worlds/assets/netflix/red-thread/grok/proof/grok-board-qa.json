@@ -2,7 +2,8 @@
   "schema": "netflix-red-thread-grok-board-qa/v1",
   "status": "GREEN",
   "errors": [],
-  "model": "grok-imagine-video-1.5",
+  "product": "Grok Imagine 2.0",
+  "model": "[LOST] the consumer UI does not expose its underlying video model identifier",
   "durationSeconds": 15,
   "resolution": "1080p",
   "shots": [
@@ -77,7 +78,7 @@
       1920,
       1080
     ],
-    "sha256": "f3eb4d18962fb8561a622290c481faca2331d61729b43c9421c51f3d77866da2"
+    "sha256": "2c61d59661acfab6e03d231da4ab3c4b1ab11dcba32272c660a4e5f3379ba2bd"
   },
   "callsMade": 0,
   "apiSpendUsd": 0

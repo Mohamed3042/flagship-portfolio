@@ -1,0 +1,191 @@
+{
+  "schema": "netflix-red-thread-wan-board/v1",
+  "version": "red-thread-wan-2.7-board.1",
+  "status": "ready_after_explicit_still_approval_no_calls_made",
+  "updatedAt": "2026-08-21",
+  "provider": "WAN",
+  "product": "WAN 2.7",
+  "model": "WAN 2.7 image-to-video",
+  "mode": "image-to-video",
+  "settings": {
+    "durationSeconds": 5,
+    "resolution": "720p",
+    "aspectRatio": "16:9",
+    "expectedDimensions": {
+      "width": 1280,
+      "height": 720
+    },
+    "promptExtend": false,
+    "motionRule": "one dominant action plus one camera move; settle by 4.5 seconds; hold final 0.5 seconds",
+    "audioRule": "No dialogue. No background music."
+  },
+  "generation": {
+    "callsMade": 0,
+    "clipsGenerated": 0,
+    "generatedSeconds": 0,
+    "creditsSpent": 0,
+    "plannedClips": 8,
+    "plannedGeneratedSeconds": 40,
+    "creditsPerClip": 10,
+    "zeroRetakeCredits": 80,
+    "plannedCredits": 120
+  },
+  "comparisonProtocol": {
+    "wanRaw": "8 clips * 5 seconds * 720p",
+    "grokRaw": "8 clips * 15 seconds * 1080p",
+    "grokNoCherryPickWindow": "00:05.000-00:10.000",
+    "comparisonResolution": "1280x720",
+    "comparisonAudio": "muted",
+    "retainRawOutputs": true,
+    "score": [
+      "input fidelity",
+      "motion causality",
+      "geometry stability",
+      "signal-red continuity",
+      "centered 9:16 survival",
+      "landing stability",
+      "unintended cuts or flicker"
+    ]
+  },
+  "seedPlan": {
+    "status": "[INFERRED] planned fixed family seeds; none submitted",
+    "families": {
+      "filamentAndBeam": 272701,
+      "archive": 272702,
+      "portals": 272703,
+      "freezeAndTheater": 272704
+    }
+  },
+  "flfAnchors": {
+    "count": 2,
+    "N04": "hard act-bridge anchor; bind the accepted N03 landing as first_frame and the N04 board input as last_frame at execution",
+    "N08": "hard loop-closure anchor; use the N08 board input as first_frame and the exact N01 board input as last_frame"
+  },
+  "styleLock": "absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain",
+  "shots": [
+    {
+      "id": "N01",
+      "title": "The Filament",
+      "sourceMaster": "../keyframes/NRT-KF01-filament-reflection.png",
+      "input720": "inputs/NRT-WAN-N01-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N01-v01-raw.mp4",
+      "seed": 272701,
+      "flf": false,
+      "timeline": {
+        "setup0to1": "The centered filament wakes without breaking its axis.",
+        "action1to4_5": "A macro push and slight tilt reveal the lower line as reflection.",
+        "hold4_5to5": "Filament and reflection hold as one vertical axis."
+      },
+      "prompt": "Generate single shot. The centered signal-red filament trembles by only two pixels and brightens as the camera pushes forward 0.25 meters slowly, then tilts upward eight degrees to reveal the lower line is its black-glass reflection. Filament and reflection settle as one unbroken vertical axis by 4.5 seconds; the final half second holds perfectly still. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, text, logos, extra lines, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    },
+    {
+      "id": "N02",
+      "title": "The Beam Carves",
+      "sourceMaster": "../keyframes/NRT-KF02-beam-carves-hall.png",
+      "input720": "inputs/NRT-WAN-N02-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N02-v01-raw.mp4",
+      "seed": 272701,
+      "flf": false,
+      "timeline": {
+        "setup0to1": "The filament becomes one horizontal carving beam.",
+        "action1to4_5": "A matched right track reveals the hall only behind the sweep.",
+        "hold4_5to5": "The completed hall holds on its centered red aisle."
+      },
+      "prompt": "Generate single shot. A razor-thin signal-red filament sweeps left to right once while the camera tracks right one meter at matching slow speed. Black screening-hall seats, walls, aisle, and booth exist only where the beam has passed and remain solid behind it; untouched space stays void. Settle on the completed hall and centered red aisle by 4.5 seconds; hold the final half second. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, text, logos, extra objects, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    },
+    {
+      "id": "N03",
+      "title": "The Archive",
+      "sourceMaster": "../keyframes/NRT-KF03-archive.png",
+      "input720": "inputs/NRT-WAN-N03-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N03-v01-raw.mp4",
+      "seed": 272702,
+      "flf": false,
+      "timeline": {
+        "setup0to1": "The symmetric archive holds its centered vanishing point.",
+        "action1to4_5": "A forward dolly exposes one impossible forced-perspective case.",
+        "hold4_5to5": "The central case stops twenty centimeters out."
+      },
+      "prompt": "Generate single shot. The camera dollies forward one meter slowly through the symmetrical unlabeled archive while signal-red shelf edges hold steady. Parallax reveals that the case ending the aisle and the nearest central case are one impossible forced-perspective object; that case slides straight out 20 centimeters. Finish by 4.5 seconds and hold still. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, hands, labels, text, logos, duplicated cases, bending shelves, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    },
+    {
+      "id": "N04",
+      "title": "The Four Doors",
+      "sourceMaster": "../keyframes/NRT-KF04-four-doors.png",
+      "input720": "inputs/NRT-WAN-N04-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N04-v01-raw.mp4",
+      "seed": 272703,
+      "flf": true,
+      "firstFrameAtExecution": "[LOST] bind only after an accepted N03 landing exists",
+      "lastFrame": "inputs/NRT-WAN-N04-keyframe-1280x720.png",
+      "timeline": {
+        "setup0to1": "Exactly four complete portals hold in fixed order.",
+        "action1to4_5": "A right track fuses four light pools only at midpoint.",
+        "hold4_5to5": "The camera holds squarely on the noir portal."
+      },
+      "prompt": "Generate single shot. Track the camera right 1.5 meters slowly past exactly four complete portals in fixed order: white noir slats, teal cone, warm tungsten, blue-white grid. Their four distinct pools fuse into one continuous band only at the exact optical midpoint, then the camera settles facing the noir door by 4.5 seconds and holds. Match the supplied destination anchor exactly. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, text, logos, extra or missing doors, warped frames, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    },
+    {
+      "id": "N05",
+      "title": "Noir into Fog",
+      "sourceMaster": "../keyframes/NRT-KF05-noir-into-fog.png",
+      "input720": "inputs/NRT-WAN-N05-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N05-v01-raw.mp4",
+      "seed": 272703,
+      "flf": false,
+      "timeline": {
+        "setup0to1": "The push crosses the white-slatted noir threshold.",
+        "action1to4_5": "Slats tighten into the centered teal fog cone.",
+        "hold4_5to5": "The camera holds inside the cone with a faint grid ahead."
+      },
+      "prompt": "Generate single shot. Push the camera forward one meter slowly through the white-slatted noir threshold. The venetian stripes pass over an ordinary empty matte-black editing desk and a clean smoke ribbon, then rotate and tighten into the centered teal fog cone without a cut. Settle inside the cone with a faint grid ahead by 4.5 seconds; hold. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, text, logos, threatening props, horror, organic smoke, warped furniture, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    },
+    {
+      "id": "N06",
+      "title": "The Gate Freeze",
+      "sourceMaster": "../keyframes/NRT-KF06-gate-freeze.png",
+      "input720": "inputs/NRT-WAN-N06-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N06-v01-raw.mp4",
+      "seed": 272704,
+      "flf": false,
+      "timeline": {
+        "setup0to1": "The lamp, cable, fog ribbon, and dust freeze absolutely.",
+        "action1to4_5": "Only a clockwise camera orbit creates parallax; cursor pulses once.",
+        "hold4_5to5": "Camera and every world-space element remain still."
+      },
+      "prompt": "Generate single shot. Orbit the camera clockwise exactly 25 degrees around the frozen instant. The suspended cylindrical lamp, cable, clean red fog ribbon, and every dust particle remain absolutely frozen in world space; only camera parallax moves. At 4.0 seconds the horizontal signal-red cursor pulses once, returns to baseline, and the camera stops by 4.5 seconds; hold. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, creatures, organic smoke, horror, text, logos, morphing, drift, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    },
+    {
+      "id": "N07",
+      "title": "Evidence Theater",
+      "sourceMaster": "../keyframes/NRT-KF07-evidence-theater.png",
+      "input720": "inputs/NRT-WAN-N07-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N07-v01-raw.mp4",
+      "seed": 272704,
+      "flf": false,
+      "timeline": {
+        "setup0to1": "A centered aisle push enters the projector beam.",
+        "action1to4_5": "Dust forms blank apertures while the screen spectrum collapses.",
+        "hold4_5to5": "One central signal-red line holds on the blank screen."
+      },
+      "prompt": "Generate single shot. Push the camera forward one meter slowly down the empty center aisle. Dust in the projector beam forms one short rail of identical blank frame apertures, then disperses as a restrained optical spectrum on the blank screen collapses inward to one signal-red vertical line. Finish by 4.5 seconds and hold the final half second. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, readable imagery, text, captions, logos, posters, warped seats, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    },
+    {
+      "id": "N08",
+      "title": "The Return",
+      "sourceMaster": "../keyframes/NRT-KF08-return-loop.png",
+      "input720": "inputs/NRT-WAN-N08-keyframe-1280x720.png",
+      "outputName": "NRT-WAN-N08-v01-raw.mp4",
+      "seed": 272701,
+      "flf": true,
+      "firstFrame": "inputs/NRT-WAN-N08-keyframe-1280x720.png",
+      "lastFrame": "inputs/NRT-WAN-N01-keyframe-1280x720.png",
+      "timeline": {
+        "setup0to1": "The line detaches as the residual screen contour vanishes.",
+        "action1to4_5": "Its reflection lengthens into the exact N01 geometry.",
+        "hold4_5to5": "The supplied N01 last frame closes the loop exactly."
+      },
+      "prompt": "Generate single shot. The signal-red line detaches from the vanished screen, drifts forward into the absolute black void, and its black-glass reflection lengthens until both become the exact N01 filament geometry. Settle by 4.5 seconds and hold the supplied N01 last frame perfectly still for the final half second, closing the loop. One continuous take. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, text, logos, screens, extra lines, duplicated reflections, morphing, flicker, camera shake, or unintended cut. No dialogue. No background music."
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema": "netflix-red-thread-wan-board-qa/v1",
+  "status": "GREEN",
+  "errors": [],
+  "product": "WAN 2.7",
+  "durationSeconds": 5,
+  "resolution": "720p",
+  "promptExtend": false,
+  "shots": [
+    {
+      "id": "N01",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "c7d6e3d06921ca736f6eec58e2bb1adacdb68252c0eec4cc90ba857907d1cfe2",
+      "promptFileMatches": true,
+      "promptWords": 91,
+      "flf": false
+    },
+    {
+      "id": "N02",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "bd0e3f857a35cf3dd561fe057712ea1293809f8a3e366d75a0ff97c806a5c4a4",
+      "promptFileMatches": true,
+      "promptWords": 99,
+      "flf": false
+    },
+    {
+      "id": "N03",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "cf7b5868b6b5b876bb0bc81dd8c800dc4643ca35d00db731b77da7397dc002a2",
+      "promptFileMatches": true,
+      "promptWords": 91,
+      "flf": false
+    },
+    {
+      "id": "N04",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "d1f482af8f2cbe626ebaebfd3fd77bf8051228364c2e1f7f280a5ef255d5c25d",
+      "promptFileMatches": true,
+      "promptWords": 99,
+      "flf": true
+    },
+    {
+      "id": "N05",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "f110d3b5ecb2c36ed29a713458a0345b476b436212c0320c8527345a0f66efa8",
+      "promptFileMatches": true,
+      "promptWords": 97,
+      "flf": false
+    },
+    {
+      "id": "N06",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "46183c527fbf268ff3154d946d0d3cb4b63ca76f804fb04902a3daf9509abab9",
+      "promptFileMatches": true,
+      "promptWords": 95,
+      "flf": false
+    },
+    {
+      "id": "N07",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "635ca2b2b70b05572143403ac083802d9a61f90a78331a78b8795ee0ffa3d3cf",
+      "promptFileMatches": true,
+      "promptWords": 96,
+      "flf": false
+    },
+    {
+      "id": "N08",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactDerivation": true,
+      "inputSha256": "ae8bb7c958981a8ebdaeec3aabcaaf2e8a400c658817a15e5677135f75bf3d9d",
+      "promptFileMatches": true,
+      "promptWords": 90,
+      "flf": true
+    }
+  ],
+  "board": {
+    "exists": true,
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "sha256": "8ab236eddaad788f255f68f771df1917ffcd7051623c9dbfb196bfb11d3bd49d"
+  },
+  "callsMade": 0,
+  "creditsSpent": 0
+}

@@ -1,10 +1,12 @@
 {
   "schema": "netflix-red-thread-grok-board/v1",
-  "version": "red-thread-grok-board.1",
+  "version": "red-thread-grok-imagine-2-board.2",
   "status": "ready_for_manual_generation_no_calls_made",
   "updatedAt": "2026-08-21",
   "provider": "xAI",
-  "model": "grok-imagine-video-1.5",
+  "product": "Grok Imagine 2.0",
+  "executionSurface": "grok.com/imagine consumer UI",
+  "model": "[LOST] the consumer UI does not expose its underlying video model identifier",
   "mode": "image-to-video",
   "settings": {
     "durationSeconds": 15,
@@ -27,11 +29,9 @@
   },
   "pricingSnapshot": {
     "date": "2026-08-21",
-    "api1080pOutputUsdPerSecond": 0.25,
-    "apiImageInputUsdEach": 0.01,
-    "calculatedEightClipFirstPassUsd": 30.08,
-    "calculation": "8 * 15 * 0.25 + 8 * 0.01",
-    "consumerSubscriptionCost": "[LOST] account-specific quota and billing were not inspected"
+    "currentSpendUsd": 0,
+    "consumerSubscriptionCost": "[LOST] account-specific quota and billing were not inspected",
+    "apiFallback": "grok-imagine-video-1.5 supports 15-second 1080p image-to-video, but it is not the target of this consumer Imagine 2.0 board"
   },
   "comparisonProtocol": {
     "wanReference": "8 clips * 5 seconds * 720p",
@@ -52,14 +52,14 @@
   },
   "capabilityNotes": {
     "verified": [
-      "grok-imagine-video-1.5 supports 1-15 second generation",
-      "grok-imagine-video-1.5 supports 1080p image-to-video",
-      "image-to-video uses the supplied image as the starting frame",
-      "generated URLs are temporary and outputs must be downloaded promptly"
+      "Mohamed identified his Grok generation surface as Imagine 2.0",
+      "xAI publicly identifies Imagine Image 2.0 as the new consumer Quality Mode",
+      "the requested target for this board is 15-second 1080p image-to-video",
+      "the public xAI API fallback supports 15-second 1080p image-to-video on grok-imagine-video-1.5"
     ],
     "limitations": [
-      "The documented public image-to-video request exposes a starting image but no exact last-frame image control.",
-      "Reference-to-video is capped at 720p, so this board uses one 1080p start image per shot instead of a separate style reference.",
+      "xAI's public documentation does not currently expose a grok-imagine-video-2.0 API model identifier, so the consumer backend is recorded as unexposed.",
+      "The actual returned duration and dimensions must be measured rather than inferred from the selected UI controls.",
       "Grok website/app outputs include a Grok watermark; removal or concealment is prohibited by xAI policy."
     ]
   },

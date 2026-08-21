@@ -1,93 +1,109 @@
 {
-  "schema": "netflix-red-thread-grok-board-qa/v1",
+  "schema": "netflix-red-thread-wan-board-qa/v1",
   "status": "RED",
   "errors": [
     "N01: prompt file missing or does not match manifest",
-    "N01: missing 1080p input",
+    "N01: missing 720p input",
     "N02: prompt file missing or does not match manifest",
-    "N02: missing 1080p input",
+    "N02: missing 720p input",
     "N03: prompt file missing or does not match manifest",
-    "N03: missing 1080p input",
+    "N03: missing 720p input",
     "N04: prompt file missing or does not match manifest",
-    "N04: missing 1080p input",
+    "N04: missing 720p input",
     "N05: prompt file missing or does not match manifest",
-    "N05: missing 1080p input",
+    "N05: missing 720p input",
     "N06: prompt file missing or does not match manifest",
-    "N06: missing 1080p input",
+    "N06: missing 720p input",
     "N07: prompt file missing or does not match manifest",
-    "N07: missing 1080p input",
+    "N07: missing 720p input",
     "N08: prompt file missing or does not match manifest",
-    "N08: missing 1080p input",
+    "N08: missing 720p input",
     "comparison board is missing"
   ],
-  "product": "Grok Imagine 2.0",
-  "model": "[LOST] the consumer UI does not expose its underlying video model identifier",
-  "durationSeconds": 15,
-  "resolution": "1080p",
+  "product": "WAN 2.7",
+  "durationSeconds": 5,
+  "resolution": "720p",
+  "promptExtend": false,
   "shots": [
     {
       "id": "N01",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 91,
+      "flf": false
     },
     {
       "id": "N02",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 99,
+      "flf": false
     },
     {
       "id": "N03",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 91,
+      "flf": false
     },
     {
       "id": "N04",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 99,
+      "flf": true
     },
     {
       "id": "N05",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 97,
+      "flf": false
     },
     {
       "id": "N06",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 95,
+      "flf": false
     },
     {
       "id": "N07",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 96,
+      "flf": false
     },
     {
       "id": "N08",
       "sourceExists": true,
       "inputExists": false,
-      "pixelExactCrop": false,
+      "pixelExactDerivation": false,
       "inputSha256": "",
-      "promptFileMatches": false
+      "promptFileMatches": false,
+      "promptWords": 90,
+      "flf": true
     }
   ],
   "board": {
@@ -99,5 +115,5 @@
     "sha256": ""
   },
   "callsMade": 0,
-  "apiSpendUsd": 0
+  "creditsSpent": 0
 }

@@ -1,4 +1,4 @@
-# THE ANTHOLOGY - Red Thread Cut - Grok 15-second comparison board
+# THE ANTHOLOGY - Red Thread Cut - Grok Imagine 2.0 comparison board
 
 Status: **VERIFIED board only - no Grok or WAN generation has run**
 
@@ -6,7 +6,9 @@ Status: **VERIFIED board only - no Grok or WAN generation has run**
 
 | Field | Value |
 |---|---|
-| Model | `grok-imagine-video-1.5` |
+| Product | Grok Imagine 2.0 |
+| Surface | `grok.com/imagine` consumer UI |
+| Backend model ID | **[LOST]** not exposed by the consumer UI |
 | Mode | Image-to-video |
 | Input | Matching `NRT-GROK-N##-input-1920x1080.png` |
 | Duration | 15 seconds |
@@ -15,12 +17,12 @@ Status: **VERIFIED board only - no Grok or WAN generation has run**
 | Audio prompt | No dialogue. No music. Restrained physical ambience only. |
 | First pass | One raw generation per shot; no retakes before review |
 
-xAI's current generation documentation permits 1-15 second clips and native 1080p image-to-video on `grok-imagine-video-1.5`. Image-to-video accepts a starting image, but the documented public request has no exact destination-image field. Reference-to-video is capped at 720p, so this run uses each Phase 1 review keyframe directly as its single 1080p start image.
+Mohamed confirmed that his generation surface is **Imagine 2.0**. xAI publicly identifies Imagine Image 2.0 as its new consumer Quality Mode, but its public developer catalog does not currently expose a `grok-imagine-video-2.0` identifier. This board therefore uses the truthful consumer product label and records the underlying video backend as **[LOST]**. The requested run target remains 15-second, 1080p image-to-video; returned duration and dimensions must be measured after every generation.
 
 Official references:
 
 - https://docs.x.ai/developers/model-capabilities/video/generation
-- https://docs.x.ai/developers/models/grok-imagine-video-1.5
+- https://x.ai/news/grok-imagine-image-2
 - https://docs.x.ai/grok/faq
 
 ## The board
@@ -40,14 +42,14 @@ Official references:
 
 For each shot:
 
-1. Open Grok Imagine or the xAI Playground and select `grok-imagine-video-1.5` image-to-video.
+1. Open Grok Imagine 2.0 on `grok.com/imagine` and choose image-to-video.
 2. Upload the matching file from `inputs/`.
 3. Set 15 seconds, 1080p, and 16:9.
 4. Paste the matching file from `prompts/` without rewriting it.
 5. Generate exactly once, download the result immediately, and preserve the raw file using the manifest's `outputName`.
 6. Record the request ID, actual dimensions, duration, watermark, and any failure before considering a retake.
 
-Do not use reference-to-video for this 1080p test. Do not remove, cover, or crop away a Grok watermark. The xAI website/app FAQ states that the watermark is required and removing or obscuring it is prohibited.
+Do not remove, cover, or crop away a Grok watermark. The xAI website/app FAQ states that the watermark is required and removing or obscuring it is prohibited.
 
 ## Fair comparison protocol
 
@@ -60,8 +62,7 @@ Do not use reference-to-video for this 1080p test. Do not remove, cover, or crop
 
 ## Cost boundary
 
-- **VERIFIED API list-price calculation:** 8 clips x 15 seconds x $0.25 per 1080p output second + 8 image inputs x $0.01 = **$30.08** for one API first pass.
-- **[LOST]:** Mohamed's consumer subscription quota and account-specific charging were not inspected and may not match API pricing.
+- **[LOST]:** Mohamed's consumer subscription quota and account-specific charging were not inspected.
 - **VERIFIED current spend:** Grok $0; WAN 0 credits.
 
 The exact prompts and audit state are stored in `grok-15s-run-manifest.json`. This board does not approve or trigger the gated WAN run.
