@@ -1,6 +1,6 @@
 {
   "schema": "cake-studio-bookends/v1",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "ready": true,
   "width": 1280,
   "height": 720,
@@ -22,26 +22,66 @@
     "phoneMaster": {
       "codec": "H.264",
       "pixelFormat": "yuv420p",
-      "width": 854,
-      "height": 480,
-      "fps": 30,
-      "beatFrames": 136,
-      "finalTailExtraFrames": 14,
-      "keyframeInterval": 15,
+      "width": 640,
+      "height": 360,
+      "fps": 15,
+      "beatFrames": 68,
+      "finalTailExtraFrames": 7,
+      "terminalFrameOffset": 2,
+      "keyframeInterval": 8,
       "silent": true,
       "faststart": true
+    },
+    "phoneScrubAtlas": {
+      "mimeType": "image/webp",
+      "tileWidth": 384,
+      "tileHeight": 216,
+      "quality": 85
+    },
+    "phoneTerminalStill": {
+      "mimeType": "image/webp",
+      "width": 640,
+      "height": 360,
+      "quality": 100
     }
   },
   "tracks": {
     "intro": {
       "phoneMaster": {
-        "src": "cake-studio/v17/clips/CST17-INTRO-PHONE-v171.mp4",
-        "width": 854,
-        "height": 480,
-        "fps": 30,
-        "beatFrames": 136,
-        "frames": 1374,
-        "duration": 45.8
+        "src": "cake-studio/v17/clips/CST17-INTRO-PHONE-v172.mp4",
+        "width": 640,
+        "height": 360,
+        "fps": 15,
+        "beatFrames": 68,
+        "finalTailExtraFrames": 7,
+        "terminalFrameOffset": 2,
+        "keyframeInterval": 8,
+        "frames": 687,
+        "duration": 45.8,
+        "scrubAtlas": {
+          "src": "cake-studio/v17/clips/CST17-INTRO-PHONE-SCRUB-v172.webp",
+          "bytes": 326692,
+          "sha256": "1e94474cee9abdd7e0af7ea7679d4b004cf5d3313287c06c358f4368e3c1f1c5",
+          "width": 3072,
+          "height": 864,
+          "tileWidth": 384,
+          "tileHeight": 216,
+          "quality": 85,
+          "columns": 8,
+          "rows": 4,
+          "samples": 32,
+          "frames": [0, 22, 44, 66, 88, 110, 133, 155, 177, 199, 221, 243, 265, 287, 309, 331, 354, 376, 398, 420, 442, 464, 486, 508, 530, 552, 575, 597, 619, 641, 663, 685]
+        },
+        "terminalStill": {
+          "src": "cake-studio/v17/clips/CST17-INTRO-PHONE-TERMINAL-v172.webp",
+          "bytes": 106416,
+          "sha256": "513bcc97d522d84cb0ead674be5aa59b8b04d8cbb62527c1e63a4d9afe1fc4ee",
+          "width": 640,
+          "height": 360,
+          "quality": 100,
+          "frame": 685,
+          "time": 45.666667
+        }
       },
       "poster": "cake-studio/v17/stills/CST17-I00-edge-in-darkness.webp",
       "clips": [
@@ -109,13 +149,40 @@
     },
     "outro": {
       "phoneMaster": {
-        "src": "cake-studio/v17/clips/CST17-OUTRO-PHONE-v171.mp4",
-        "width": 854,
-        "height": 480,
-        "fps": 30,
-        "beatFrames": 136,
-        "frames": 694,
-        "duration": 23.133333
+        "src": "cake-studio/v17/clips/CST17-OUTRO-PHONE-v172.mp4",
+        "width": 640,
+        "height": 360,
+        "fps": 15,
+        "beatFrames": 68,
+        "finalTailExtraFrames": 7,
+        "terminalFrameOffset": 2,
+        "keyframeInterval": 8,
+        "frames": 347,
+        "duration": 23.133333,
+        "scrubAtlas": {
+          "src": "cake-studio/v17/clips/CST17-OUTRO-PHONE-SCRUB-v172.webp",
+          "bytes": 179822,
+          "sha256": "5717337b6e0674f08f99a945fc4aa2dee69f2ab09380bdd04c2da6218a0b9c2c",
+          "width": 3072,
+          "height": 432,
+          "tileWidth": 384,
+          "tileHeight": 216,
+          "quality": 85,
+          "columns": 8,
+          "rows": 2,
+          "samples": 16,
+          "frames": [0, 23, 46, 69, 92, 115, 138, 161, 184, 207, 230, 253, 276, 299, 322, 345]
+        },
+        "terminalStill": {
+          "src": "cake-studio/v17/clips/CST17-OUTRO-PHONE-TERMINAL-v172.webp",
+          "bytes": 91242,
+          "sha256": "df40c40bbaf66b867bcdb4ffc95d095f1b7d5a97f7815498f2f122ee380037eb",
+          "width": 640,
+          "height": 360,
+          "quality": 100,
+          "frame": 345,
+          "time": 23.0
+        }
       },
       "poster": "cake-studio/v17/stills/CST17-O00-exact-cst050-frame149.webp",
       "clips": [

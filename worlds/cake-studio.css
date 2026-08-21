@@ -121,7 +121,9 @@ button:focus-visible {
 .bookend-aperture::after { bottom: 0; }
 .bookend-poster,
 .bookend-canvas,
-.bookend-phone-video {
+.bookend-phone-video,
+.bookend-phone-scrub-atlas,
+.bookend-phone-terminal-landing {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -143,11 +145,23 @@ button:focus-visible {
   opacity: 0;
   pointer-events: none;
 }
+.bookend-phone-scrub-atlas {
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+}
+.bookend-phone-terminal-landing {
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+}
 .bookend[data-sequence-mode="motion"].sequence-painted .bookend-canvas { opacity: 1; }
 .bookend[data-sequence-mode="motion"].sequence-painted .bookend-poster { opacity: 0; }
 .bookend[data-sequence-transport="phone-master"] .bookend-canvas { opacity: 0 !important; }
 .bookend[data-sequence-transport="phone-master"].sequence-painted .bookend-phone-video { opacity: 1; }
 .bookend[data-sequence-transport="phone-master"].sequence-painted .bookend-poster { opacity: 0; }
+.bookend[data-sequence-transport="phone-master"].sequence-scrub-preview .bookend-phone-scrub-atlas { opacity: 1; }
+.bookend[data-sequence-transport="phone-master"].sequence-terminal-landing .bookend-phone-terminal-landing { opacity: 1; }
 .bookend-buffer {
   position: absolute;
   width: 1px;
@@ -1236,7 +1250,9 @@ button:focus-visible {
     transition: none;
   }
   .bookend-canvas,
-  .bookend-phone-video { display: none; }
+  .bookend-phone-video,
+  .bookend-phone-scrub-atlas,
+  .bookend-phone-terminal-landing { display: none; }
   .bookend-poster { opacity: 1 !important; }
   .bookend-sequence::before {
     opacity: .35;
@@ -1280,4 +1296,64 @@ button:focus-visible {
   .chapter-nav { grid-template-columns: repeat(8, 1fr); gap: 0; }
   .chapter-nav button,
   .chapter-nav button.on { width: 100%; height: 44px; }
+}
+
+/* Phone orientation contract: coarse-pointer landscape must not fall back to
+   the desktop 16:9 aperture merely because its CSS width exceeds 700px. */
+@media (max-width: 700px), (pointer: coarse) {
+  .bookend .stage,
+  .film .stage {
+    width: 100dvw;
+    height: 100dvh;
+  }
+
+  .bookend-aperture {
+    position: absolute;
+    inset: 0;
+    width: 100dvw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: auto;
+    box-shadow: none;
+  }
+  .bookend-aperture::before,
+  .bookend-aperture::after { opacity: 0; }
+  .bookend-poster,
+  .bookend-canvas,
+  .bookend-phone-video,
+  .bookend-phone-scrub-atlas,
+  .bookend-phone-terminal-landing {
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+
+  .film .stage { display: block; }
+  .film .picture-zone {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding: 0;
+  }
+  .film-frame {
+    position: absolute;
+    inset: 0;
+    width: 100dvw;
+    height: 100dvh;
+    max-height: none;
+    aspect-ratio: auto;
+    border: 0;
+    box-shadow: none;
+  }
+  .film-frame .floor,
+  .film-frame video {
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+  .cue {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    width: 100%;
+  }
 }

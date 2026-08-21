@@ -426,6 +426,138 @@
   if (live && !solo) start();
 })();
 
+/* v1.7.2 orientation patch: preserve the active pinned scene's normalized
+   playhead while dynamic viewport units reflow, then force every scroll-
+   driven painter to sample the remeasured geometry. */
+(() => {
+  'use strict';
+
+  const root = document.documentElement;
+  const scenes = [
+    document.querySelector('.bookend-intro'),
+    document.getElementById('cake-reel'),
+    document.querySelector('.bookend-outro'),
+  ].filter(Boolean);
+  if (!scenes.length || new URLSearchParams(location.search).has('solo')) return;
+
+  const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
+  const viewport = () => ({
+    width: innerWidth,
+    height: innerHeight,
+    landscape: innerWidth > innerHeight,
+  });
+  const progressOf = (scene) => {
+    const bounds = scene.getBoundingClientRect();
+    const travel = Math.max(1, bounds.height - innerHeight);
+    return clamp(-bounds.top / travel);
+  };
+  const activeScene = () => {
+    const middle = innerHeight * .5;
+    return scenes.find((scene) => {
+      const bounds = scene.getBoundingClientRect();
+      return bounds.top <= middle && bounds.bottom >= middle;
+    }) || null;
+  };
+  const stageName = (scene) => scene.id
+    || scene.dataset.bookend
+    || scene.dataset.cakeBookend
+    || 'cake-stage';
+
+  let measuredViewport = viewport();
+  let snapshot = null;
+  let captureFrame = 0;
+  let restoreFrame = 0;
+  let restoring = false;
+  let pendingViewport = null;
+
+  const capture = () => {
+    captureFrame = 0;
+    if (restoring) return;
+    const currentViewport = viewport();
+    if (currentViewport.width !== measuredViewport.width
+      || currentViewport.height !== measuredViewport.height) return;
+    const scene = activeScene();
+    if (!scene) return;
+    snapshot = {
+      scene,
+      progress: progressOf(scene),
+      viewport: currentViewport,
+    };
+  };
+
+  const scheduleCapture = () => {
+    if (captureFrame || restoring) return;
+    captureFrame = requestAnimationFrame(capture);
+  };
+
+  const finishRestore = (preserved) => {
+    const after = progressOf(preserved.scene);
+    const count = Number(root.dataset.cakeOrientationRestoreCount || 0) + 1;
+    root.dataset.cakeOrientationRestoreCount = String(count);
+    root.dataset.cakeOrientationState = 'restored';
+    root.dataset.cakeOrientationStage = stageName(preserved.scene);
+    root.dataset.cakeOrientationProgressBefore = preserved.progress.toFixed(6);
+    root.dataset.cakeOrientationProgressAfter = after.toFixed(6);
+    preserved.scene.dispatchEvent(new CustomEvent('cake:orientation-restored', {
+      detail: { before: preserved.progress, after },
+    }));
+    measuredViewport = pendingViewport || viewport();
+    pendingViewport = null;
+    restoring = false;
+    capture();
+  };
+
+  const restore = (preserved) => {
+    restoreFrame = 0;
+    const travel = Math.max(1, preserved.scene.offsetHeight - innerHeight);
+    const maximum = Math.max(0, root.scrollHeight - innerHeight);
+    const target = Math.min(
+      maximum,
+      Math.max(0, preserved.scene.offsetTop + travel * preserved.progress),
+    );
+    scrollTo({ top: target, behavior: 'instant' });
+    // scrollTo can be a no-op at a rounded pixel. Dispatching the real bus
+    // still makes cinema.js, the 50-shot director and both bookends repaint.
+    dispatchEvent(new Event('scroll'));
+    requestAnimationFrame(() => requestAnimationFrame(() => finishRestore(preserved)));
+  };
+
+  const remeasure = () => {
+    const nextViewport = viewport();
+    const changed = nextViewport.width !== measuredViewport.width
+      || nextViewport.height !== measuredViewport.height;
+    if (!changed || restoring || !snapshot) return;
+    const rotates = nextViewport.landscape !== measuredViewport.landscape;
+    const widthChanged = nextViewport.width !== measuredViewport.width;
+    if (!rotates && !widthChanged) {
+      // Browser chrome can change only the dynamic height. The existing
+      // resize painters handle that without moving the visitor's hand.
+      measuredViewport = nextViewport;
+      scheduleCapture();
+      return;
+    }
+    restoring = true;
+    pendingViewport = nextViewport;
+    root.dataset.cakeOrientationState = 'remeasuring';
+    const preserved = snapshot;
+    if (restoreFrame) cancelAnimationFrame(restoreFrame);
+    restoreFrame = requestAnimationFrame(() => {
+      restoreFrame = requestAnimationFrame(() => restore(preserved));
+    });
+  };
+
+  addEventListener('scroll', scheduleCapture, { passive: true });
+  addEventListener('resize', remeasure, { passive: true });
+  addEventListener('orientationchange', remeasure, { passive: true });
+  window.visualViewport?.addEventListener('resize', remeasure, { passive: true });
+  root.dataset.cakeOrientationState = 'ready';
+  window.__cakeStudioOrientation = Object.freeze({
+    version: '1.7.2-orientation',
+    capture: scheduleCapture,
+  });
+  scheduleCapture();
+})();
+
 /* v1.7 bookend director: two page-local, manifest-driven micro-films. */
 (() => {
   'use strict';
@@ -440,8 +572,11 @@
   const phoneMedia = matchMedia('(max-width: 700px), (pointer: coarse)');
   const usePhoneMaster = phoneMedia.matches && !query.has('bookendDesktop');
   const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
+  const phoneVelocityThreshold = 10;
+  const phoneVelocityHoldMs = 180;
+  const phoneSettleMs = 180;
   const runtime = {
-    version: '1.7.1',
+    version: '1.7.2',
     state: 'loading',
     manifestReady: false,
     units: [],
@@ -469,6 +604,12 @@
         readyState: unit.phoneSlot.video.readyState,
         warmState: unit.warmState,
         sourceMode: unit.phoneSlot.sourceOverride ? 'blob' : 'network',
+        previewMode: unit.scene.dataset.sequencePreviewMode || '',
+        atlasReady: unit.phoneAtlasReady,
+        atlasVisible: unit.phoneAtlasVisible,
+        atlasTile: unit.phoneAtlasTile,
+        landingReady: unit.phoneLandingReady,
+        landingVisible: unit.phoneLandingVisible,
       } : null,
     })),
   };
@@ -481,7 +622,7 @@
   }
 
   const validateManifest = (manifest) => {
-    if (manifest.schema !== 'cake-studio-bookends/v1' || manifest.version !== '1.7.1') {
+    if (manifest.schema !== 'cake-studio-bookends/v1' || manifest.version !== '1.7.2') {
       throw new Error('bookend manifest version mismatch');
     }
     if (manifest.width !== 1280 || manifest.height !== 720 || manifest.fps !== 30 || manifest.duration !== 5) {
@@ -490,6 +631,8 @@
     const delivery = manifest.delivery;
     const conditioning = delivery?.endpointConditioning;
     const phoneDelivery = delivery?.phoneMaster;
+    const scrubDelivery = delivery?.phoneScrubAtlas;
+    const terminalDelivery = delivery?.phoneTerminalStill;
     if (delivery?.codec !== 'H.264' || delivery?.pixelFormat !== 'yuv420p'
       || delivery?.silent !== true || delivery?.keyframeInterval !== 15 || delivery?.faststart !== true
       || conditioning?.openingConvergenceFrames !== 9
@@ -498,11 +641,18 @@
       || conditioning?.exactFinalHoldFrames !== 15
       || phoneDelivery?.codec !== 'H.264'
       || phoneDelivery?.pixelFormat !== 'yuv420p'
-      || phoneDelivery?.width !== 854 || phoneDelivery?.height !== 480
-      || phoneDelivery?.fps !== 30 || phoneDelivery?.beatFrames !== 136
-      || phoneDelivery?.finalTailExtraFrames !== 14
-      || phoneDelivery?.keyframeInterval !== 15
-      || phoneDelivery?.silent !== true || phoneDelivery?.faststart !== true) {
+      || phoneDelivery?.width !== 640 || phoneDelivery?.height !== 360
+      || phoneDelivery?.fps !== 15 || phoneDelivery?.beatFrames !== 68
+      || phoneDelivery?.finalTailExtraFrames !== 7
+      || phoneDelivery?.terminalFrameOffset !== 2
+      || phoneDelivery?.keyframeInterval !== 8
+      || phoneDelivery?.silent !== true || phoneDelivery?.faststart !== true
+      || scrubDelivery?.mimeType !== 'image/webp'
+      || scrubDelivery?.tileWidth !== 384 || scrubDelivery?.tileHeight !== 216
+      || scrubDelivery?.quality !== 85
+      || terminalDelivery?.mimeType !== 'image/webp'
+      || terminalDelivery?.width !== 640 || terminalDelivery?.height !== 360
+      || terminalDelivery?.quality !== 100) {
       throw new Error('bookend manifest delivery contract mismatch');
     }
     if (typeof manifest.ready !== 'boolean' || !manifest.tracks || typeof manifest.tracks !== 'object') {
@@ -526,14 +676,49 @@
       }
       const phone = track.phoneMaster;
       const phoneFrames = ids.length * phoneDelivery.beatFrames + phoneDelivery.finalTailExtraFrames;
-      const phoneSource = `cake-studio/v17/clips/CST17-${trackName === 'intro' ? 'INTRO' : 'OUTRO'}-PHONE-v171.mp4`;
+      const phoneSource = `cake-studio/v17/clips/CST17-${trackName === 'intro' ? 'INTRO' : 'OUTRO'}-PHONE-v172.mp4`;
+      const phonePrefix = `cake-studio/v17/clips/CST17-${trackName === 'intro' ? 'INTRO' : 'OUTRO'}-PHONE`;
+      const expectedSamples = trackName === 'intro' ? 32 : 16;
+      const expectedRows = trackName === 'intro' ? 4 : 2;
       if (!phone
         || phone.src !== phoneSource
         || phone.width !== phoneDelivery.width || phone.height !== phoneDelivery.height
         || phone.fps !== phoneDelivery.fps || phone.beatFrames !== phoneDelivery.beatFrames
+        || phone.finalTailExtraFrames !== phoneDelivery.finalTailExtraFrames
+        || phone.terminalFrameOffset !== phoneDelivery.terminalFrameOffset
+        || phone.keyframeInterval !== phoneDelivery.keyframeInterval
         || phone.frames !== phoneFrames
         || Math.abs(phone.duration - phoneFrames / phone.fps) > .001) {
         throw new Error(`bookend ${trackName} phone master contract mismatch`);
+      }
+      const atlas = phone.scrubAtlas;
+      const terminal = phone.terminalStill;
+      if (!atlas
+        || atlas.src !== `${phonePrefix}-SCRUB-v172.webp`
+        || atlas.width !== 8 * scrubDelivery.tileWidth
+        || atlas.height !== expectedRows * scrubDelivery.tileHeight
+        || atlas.tileWidth !== scrubDelivery.tileWidth || atlas.tileHeight !== scrubDelivery.tileHeight
+        || atlas.quality !== scrubDelivery.quality
+        || atlas.columns !== 8 || atlas.rows !== expectedRows
+        || atlas.samples !== expectedSamples
+        || !Array.isArray(atlas.frames) || atlas.frames.length !== expectedSamples
+        || atlas.frames[0] !== 0 || atlas.frames.at(-1) !== phoneFrames - phoneDelivery.terminalFrameOffset
+        || atlas.frames.some((frame, index) => !Number.isInteger(frame)
+          || frame < 0 || frame >= phoneFrames
+          || (index > 0 && frame <= atlas.frames[index - 1]))
+        || !Number.isInteger(atlas.bytes) || atlas.bytes <= 0
+        || !/^[0-9a-f]{64}$/.test(atlas.sha256 || '')) {
+        throw new Error(`bookend ${trackName} scrub atlas contract mismatch`);
+      }
+      if (!terminal
+        || terminal.src !== `${phonePrefix}-TERMINAL-v172.webp`
+        || terminal.width !== terminalDelivery.width || terminal.height !== terminalDelivery.height
+        || terminal.quality !== terminalDelivery.quality
+        || terminal.frame !== phoneFrames - phoneDelivery.terminalFrameOffset
+        || Math.abs(terminal.time - terminal.frame / phoneDelivery.fps) > .001
+        || !Number.isInteger(terminal.bytes) || terminal.bytes <= 0
+        || !/^[0-9a-f]{64}$/.test(terminal.sha256 || '')) {
+        throw new Error(`bookend ${trackName} terminal still contract mismatch`);
       }
       track.clips.forEach((clip, index) => {
         if (clip.id !== ids[index]) throw new Error(`bookend ${trackName} order mismatch`);
@@ -578,15 +763,215 @@
     unit.poster.src = source;
   };
 
+  const setPhoneCounter = (unit, frame) => {
+    const index = Math.min(
+      unit.clips.length - 1,
+      Math.max(0, Math.floor(frame / unit.phoneMaster.beatFrames)),
+    );
+    unit.counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(unit.clips.length).padStart(2, '0')}`;
+    unit.scene.dataset.sequencePresentedIndex = String(index + 1);
+  };
+
+  const hidePhoneAtlas = (unit, state = 'hidden') => {
+    if (!unit.phoneAtlasCanvas) return;
+    unit.phoneAtlasVisible = false;
+    unit.phoneAtlasCanvas.dataset.visible = 'false';
+    unit.scene.classList.remove('sequence-scrub-preview');
+    unit.scene.dataset.sequenceAtlas = state;
+  };
+
+  const hidePhoneLanding = (unit, state = 'hidden') => {
+    if (!unit.phoneLanding) return;
+    unit.phoneLandingVisible = false;
+    unit.phoneLanding.dataset.visible = 'false';
+    unit.scene.classList.remove('sequence-terminal-landing');
+    unit.scene.dataset.sequenceLanding = state;
+  };
+
+  const releasePhoneAtlas = (unit, preserveSurface = false) => {
+    if (!unit?.phoneMode) return;
+    unit.phoneAtlasGeneration += 1;
+    unit.phoneAtlasReady = false;
+    unit.phoneAtlasLoading = false;
+    unit.phoneAtlasImage?.removeAttribute('src');
+    unit.phoneAtlasImage = null;
+    if (preserveSurface && unit.phoneAtlasVisible) {
+      unit.scene.dataset.sequenceAtlas = 'held';
+    } else {
+      unit.phoneAtlasTile = -1;
+      unit.phoneAtlasContext.clearRect(0, 0, unit.phoneAtlasCanvas.width, unit.phoneAtlasCanvas.height);
+      hidePhoneAtlas(unit, 'released');
+    }
+  };
+
+  const drawPhoneAtlas = (unit, target) => {
+    const atlas = unit.phoneAtlas;
+    const image = unit.phoneAtlasImage;
+    if (!unit.phoneAtlasReady || !image?.complete || !image.naturalWidth) return false;
+    let tileIndex = 0;
+    let tileFrame = atlas.frames[0];
+    let tileTime = tileFrame / unit.phoneMaster.fps;
+    for (let index = 1; index < atlas.frames.length; index += 1) {
+      const candidateFrame = atlas.frames[index];
+      const candidateTime = candidateFrame / unit.phoneMaster.fps;
+      if (Math.abs(candidateTime - target) < Math.abs(tileTime - target)) {
+        tileIndex = index;
+        tileFrame = candidateFrame;
+        tileTime = candidateTime;
+      }
+    }
+    const sameTile = unit.phoneAtlasVisible && unit.phoneAtlasTile === tileIndex;
+    if (!sameTile) {
+      const column = tileIndex % atlas.columns;
+      const row = Math.floor(tileIndex / atlas.columns);
+      unit.phoneAtlasContext.drawImage(
+        image,
+        column * atlas.tileWidth,
+        row * atlas.tileHeight,
+        atlas.tileWidth,
+        atlas.tileHeight,
+        0,
+        0,
+        unit.phoneAtlasCanvas.width,
+        unit.phoneAtlasCanvas.height,
+      );
+    }
+    unit.phoneAtlasTile = tileIndex;
+    unit.phoneAtlasVisible = true;
+    unit.phoneAtlasCanvas.dataset.visible = 'true';
+    unit.phoneAtlasCanvas.dataset.tile = String(tileIndex);
+    unit.phoneAtlasCanvas.dataset.frame = String(tileFrame);
+    unit.phoneAtlasCanvas.dataset.time = tileTime.toFixed(6);
+    unit.scene.dataset.sequenceAtlas = 'visible';
+    unit.scene.dataset.sequenceTime = tileTime.toFixed(4);
+    unit.scene.dataset.sequenceLag = Math.abs(tileTime - target).toFixed(4);
+    unit.scene.classList.add('sequence-painted', 'sequence-scrub-preview');
+    setPhoneCounter(unit, tileFrame);
+    return true;
+  };
+
+  const showPhoneLanding = (unit, terminalTarget) => {
+    const landing = unit.phoneLanding;
+    if (!unit.phoneLandingReady || !landing.complete
+      || landing.naturalWidth !== unit.phoneTerminal.width
+      || landing.naturalHeight !== unit.phoneTerminal.height) return false;
+    if (!unit.phoneLandingVisible) {
+      unit.phoneLandingVisible = true;
+      landing.dataset.visible = 'true';
+      unit.scene.dataset.sequenceLanding = 'visible';
+      unit.scene.classList.add('sequence-painted', 'sequence-terminal-landing');
+    }
+    unit.scene.dataset.sequenceTime = terminalTarget.toFixed(4);
+    unit.scene.dataset.sequenceLag = '0.0000';
+    setPhoneCounter(unit, unit.phoneTerminal.frame);
+    return true;
+  };
+
+  const loadPhoneLanding = (unit) => {
+    if (!unit?.phoneMode || reducedMotion.matches || unit.phoneLandingReady
+      || unit.phoneLandingLoading) return unit?.phoneLandingPromise;
+    unit.phoneLandingLoading = true;
+    unit.phoneLanding.fetchPriority = 'high';
+    unit.phoneLanding.src = unit.phoneTerminal.src;
+    const decoded = typeof unit.phoneLanding.decode === 'function'
+      ? unit.phoneLanding.decode()
+      : Promise.resolve();
+    unit.phoneLandingPromise = decoded.then(() => {
+      unit.phoneLandingLoading = false;
+      unit.phoneLandingReady = unit.phoneLanding.naturalWidth === unit.phoneTerminal.width
+        && unit.phoneLanding.naturalHeight === unit.phoneTerminal.height;
+      unit.scene.dataset.sequenceLanding = unit.phoneLandingReady ? 'ready' : 'error';
+      if (unit.live) renderUnit(unit, readProgress(unit.scene));
+    }).catch(() => {
+      unit.phoneLandingLoading = false;
+      unit.phoneLandingReady = false;
+      unit.scene.dataset.sequenceLanding = 'error';
+    });
+    return unit.phoneLandingPromise;
+  };
+
+  const loadPhoneAtlas = (unit) => {
+    if (!unit?.phoneMode || reducedMotion.matches || unit.phoneAtlasReady
+      || unit.phoneAtlasLoading) return unit?.phoneAtlasPromise;
+    for (const other of runtime.units) {
+      if (other !== unit && (other.phoneAtlasReady || other.phoneAtlasLoading)) releasePhoneAtlas(other, true);
+    }
+    unit.phoneAtlasLoading = true;
+    unit.scene.dataset.sequenceAtlas = 'loading';
+    const generation = ++unit.phoneAtlasGeneration;
+    const image = new Image();
+    image.decoding = 'async';
+    image.fetchPriority = 'high';
+    unit.phoneAtlasImage = image;
+    image.src = unit.phoneAtlas.src;
+    const decoded = typeof image.decode === 'function' ? image.decode() : Promise.resolve();
+    unit.phoneAtlasPromise = decoded.then(() => {
+      if (generation !== unit.phoneAtlasGeneration || unit.phoneAtlasImage !== image) return;
+      const ready = image.naturalWidth === unit.phoneAtlas.width
+        && image.naturalHeight === unit.phoneAtlas.height;
+      if (ready) {
+        unit.phoneAtlasContext.drawImage(
+          image,
+          0,
+          0,
+          unit.phoneAtlas.tileWidth,
+          unit.phoneAtlas.tileHeight,
+          0,
+          0,
+          unit.phoneAtlasCanvas.width,
+          unit.phoneAtlasCanvas.height,
+        );
+        unit.phoneAtlasContext.getImageData(0, 0, 1, 1);
+        unit.phoneAtlasContext.clearRect(0, 0, unit.phoneAtlasCanvas.width, unit.phoneAtlasCanvas.height);
+      }
+      unit.phoneAtlasLoading = false;
+      unit.phoneAtlasReady = ready;
+      unit.scene.dataset.sequenceAtlas = ready ? 'ready' : 'error';
+      loadPhoneLanding(unit);
+      if (ready && unit.live) {
+        // A cold atlas can finish just after the last touch sample. Paint its
+        // current tile before the exact master catches up so the generic
+        // poster never remains exposed merely because the velocity hold
+        // expired while the image was decoding.
+        if (!unit.scene.classList.contains('sequence-painted')
+          && readProgress(unit.scene) < .999) {
+          drawPhoneAtlas(unit, unit.phoneTarget);
+        }
+        renderUnit(unit, readProgress(unit.scene));
+      }
+    }).catch(() => {
+      if (generation !== unit.phoneAtlasGeneration) return;
+      unit.phoneAtlasLoading = false;
+      unit.phoneAtlasReady = false;
+      unit.scene.dataset.sequenceAtlas = 'error';
+      loadPhoneLanding(unit);
+    });
+    return unit.phoneAtlasPromise;
+  };
+
   const commitPhoneFrame = (unit) => {
     const slot = unit.phoneSlot;
     if (!slot?.armed || !slot.metadata || slot.video.readyState < 2) return;
     const mediaTime = slot.video.currentTime;
     slot.lastPainted = mediaTime;
+    const terminalTarget = unit.phoneMaster.duration
+      - unit.phoneMaster.terminalFrameOffset / unit.phoneMaster.fps;
+    const tolerance = 1 / unit.phoneMaster.fps + .002;
+    const exactVisible = Math.abs(mediaTime - slot.target) <= tolerance
+      && Math.abs(slot.target - unit.phoneTarget) < .009;
+    const mayReplacePreview = unit.phoneTarget < terminalTarget - .009
+      && slot.targetExact === true && unit.phoneSettleAt > 0 && exactVisible;
+    if ((unit.phoneAtlasVisible || unit.phoneLandingVisible) && !mayReplacePreview) return;
     unit.scene.dataset.sequenceTime = mediaTime.toFixed(4);
     unit.scene.dataset.sequenceLag = Math.abs(mediaTime - unit.phoneTarget).toFixed(4);
     unit.scene.dataset.sequenceState = 'ready';
     unit.scene.classList.add('sequence-painted');
+    setPhoneCounter(unit, Math.round(mediaTime * unit.phoneMaster.fps));
+    if (mayReplacePreview) {
+      hidePhoneAtlas(unit, 'exact-video');
+      hidePhoneLanding(unit, 'exact-video');
+      unit.scene.dataset.sequencePreviewMode = 'exact-follow';
+    }
   };
 
   const issuePhoneSeek = (unit) => {
@@ -595,9 +980,11 @@
     clearTimeout(slot.seekTimer);
     slot.seekTimer = 0;
     const target = slot.wanted;
+    const exact = slot.wantedExact;
     slot.wanted = -1;
     slot.wantedExact = false;
     slot.target = target;
+    slot.targetExact = exact;
     if (Math.abs(slot.video.currentTime - target) < .009) {
       commitPhoneFrame(unit);
       return;
@@ -616,7 +1003,11 @@
     const slot = unit.phoneSlot;
     if (!slot?.armed) return;
     const duration = slot.video.duration || unit.phoneMaster.duration;
-    const target = Math.min(duration - 1 / unit.phoneMaster.fps, Math.max(.001, time));
+    // The final packet sits at EOF and can leave Chromium seeking forever.
+    // The penultimate keyed frame is the same conditioned endpoint, so stop
+    // there without changing what the visitor sees.
+    const terminalTime = duration - unit.phoneMaster.terminalFrameOffset / unit.phoneMaster.fps;
+    const target = Math.min(terminalTime, Math.max(.001, time));
     slot.wanted = target;
     slot.wantedExact ||= exact;
     if (!slot.metadata) return;
@@ -669,6 +1060,7 @@
     slot.seeking = false;
     slot.wanted = -1;
     slot.wantedExact = false;
+    slot.targetExact = false;
     slot.lastPainted = null;
     slot.video.removeAttribute('src');
     slot.video.load();
@@ -692,6 +1084,7 @@
     slot.seeking = false;
     slot.wanted = -1;
     slot.wantedExact = false;
+    slot.targetExact = false;
     slot.sourceOverride = source;
     slot.pendingSource = '';
     slot.video.removeAttribute('src');
@@ -724,7 +1117,11 @@
         activatePhoneBlob(unit, unit.phoneBlobUrl);
       })
       .catch((error) => {
-        if (error?.name === 'AbortError') return;
+        if (error?.name === 'AbortError') {
+          unit.warmState = 'idle';
+          unit.scene.dataset.sequenceWarm = 'idle';
+          return;
+        }
         unit.warmState = 'network-fallback';
         unit.scene.dataset.sequenceWarm = 'network-fallback';
       });
@@ -732,19 +1129,87 @@
   };
 
   const renderPhoneMaster = (unit, progress) => {
-    unit.phoneTarget = Math.min(
-      unit.phoneMaster.duration - 1 / unit.phoneMaster.fps,
-      progress * unit.phoneMaster.duration,
-    );
+    const now = performance.now();
+    const priorTarget = unit.phoneTarget;
+    const priorAt = unit.phoneVelocityAt;
+    const terminalTarget = unit.phoneMaster.duration
+      - unit.phoneMaster.terminalFrameOffset / unit.phoneMaster.fps;
+    unit.phoneTarget = Math.min(terminalTarget, progress * unit.phoneMaster.duration);
+    const elapsed = now - priorAt;
+    const targetChanged = Math.abs(unit.phoneTarget - priorTarget) >= .001;
+    const velocityWindow = Math.min(50, Math.max(1, elapsed));
+    const velocity = targetChanged
+      ? Math.abs(unit.phoneTarget - priorTarget) * 1000 / velocityWindow
+      : 0;
+    unit.phoneVelocityAt = now;
+    if (targetChanged) {
+      unit.phoneLastTargetAt = now;
+      unit.phoneSettleAt = 0;
+    }
+    if (velocity >= phoneVelocityThreshold) {
+      unit.phoneHighVelocitySamples += 1;
+    } else {
+      unit.phoneHighVelocitySamples = 0;
+    }
+    if (unit.phoneHighVelocitySamples >= 1) {
+      unit.phoneVelocityUntil = now + phoneVelocityHoldMs;
+    }
+    const highVelocity = now < unit.phoneVelocityUntil;
+    unit.phoneAtlasHighVelocity = highVelocity;
     unit.scene.dataset.sequenceTargetTime = unit.phoneTarget.toFixed(4);
+    unit.scene.dataset.sequenceVelocity = velocity.toFixed(3);
+    unit.scene.dataset.sequencePreviewMode = highVelocity ? 'sprite-atlas' : 'exact-follow';
     if (!solo && !unit.live) return;
     armPhoneMaster(unit);
-    queuePhoneSeek(unit, unit.phoneTarget);
+    loadPhoneAtlas(unit);
+    loadPhoneLanding(unit);
+
+    const terminal = progress >= .999;
+    if (terminal && showPhoneLanding(unit, terminalTarget)) {
+      hidePhoneAtlas(unit, 'terminal');
+      clearTimeout(unit.phoneSlot.seekTimer);
+      unit.phoneSlot.seekTimer = 0;
+      unit.phoneSlot.wanted = -1;
+      unit.phoneSlot.wantedExact = false;
+      unit.scene.dataset.sequencePreviewMode = 'terminal-landing';
+    }
+    const terminalHold = unit.phoneLandingVisible
+      && unit.phoneTarget >= terminalTarget - .009;
+    if (terminalHold) unit.scene.dataset.sequencePreviewMode = 'terminal-landing';
+
+    if (highVelocity) {
+      clearTimeout(unit.phoneSlot.seekTimer);
+      unit.phoneSlot.seekTimer = 0;
+      unit.phoneSlot.wanted = -1;
+      unit.phoneSlot.wantedExact = false;
+      if (!terminalHold) {
+        const drewAtlas = drawPhoneAtlas(unit, unit.phoneTarget);
+        if (drewAtlas && unit.phoneLandingVisible) {
+          hidePhoneLanding(unit, 'reverse-atlas');
+        }
+      }
+    } else if (!unit.phoneAtlasVisible && !unit.phoneLandingVisible) {
+      queuePhoneSeek(unit, unit.phoneTarget);
+    } else if (unit.phoneLandingVisible && !terminalHold) {
+      unit.scene.dataset.sequenceLanding = 'exit-pending';
+      queuePhoneSeek(unit, unit.phoneTarget);
+    }
+
     clearTimeout(unit.phoneSettleTimer);
     unit.phoneSettleTimer = setTimeout(() => {
       unit.phoneSettleTimer = 0;
+      unit.phoneHighVelocitySamples = 0;
+      unit.phoneVelocityUntil = 0;
+      unit.phoneAtlasHighVelocity = false;
+      if (progress >= .999 || terminalHold) {
+        unit.scene.dataset.sequencePreviewMode = unit.phoneLandingVisible
+          ? 'terminal-landing'
+          : unit.phoneAtlasVisible ? 'sprite-atlas' : 'terminal-pending';
+        return;
+      }
+      unit.phoneSettleAt = performance.now();
       queuePhoneSeek(unit, unit.phoneTarget, true);
-    }, 110);
+    }, phoneSettleMs);
   };
 
   const draw = (unit, slot, immediate = false) => {
@@ -845,7 +1310,9 @@
     unit.scene.dataset.sequenceClip = clip.id;
     unit.scene.dataset.sequenceFraction = beat.fraction.toFixed(5);
     unit.scene.dataset.sequenceTargetTime = targetTime.toFixed(4);
-    unit.counter.textContent = `${String(beat.index + 1).padStart(2, '0')} / ${String(unit.clips.length).padStart(2, '0')}`;
+    if (!unit.phoneMode || reducedMotion.matches) {
+      unit.counter.textContent = `${String(beat.index + 1).padStart(2, '0')} / ${String(unit.clips.length).padStart(2, '0')}`;
+    }
     unit.meter.style.setProperty('--sequence-progress', progress.toFixed(5));
 
     const endpointIndex = Math.min(unit.clips.length, Math.round(progress * unit.clips.length));
@@ -899,11 +1366,15 @@
     const sequence = scene.querySelector('[data-bookend-sequence]');
     const canvas = scene.querySelector('[data-bookend-canvas]');
     const phoneVideo = scene.querySelector('[data-bookend-phone-video]');
+    const phoneAtlasCanvas = scene.querySelector('[data-phone-scrub-atlas]');
+    const phoneLanding = scene.querySelector('[data-phone-terminal-landing]');
     const poster = scene.querySelector('[data-bookend-poster]');
     const meter = scene.querySelector('[data-bookend-meter]');
     const counter = scene.querySelector('[data-bookend-count]');
     const context = canvas?.getContext('2d', { alpha: false });
-    if (!sequence || !canvas || !phoneVideo || !poster || !meter || !counter || !context) return null;
+    const phoneAtlasContext = phoneAtlasCanvas?.getContext('2d', { alpha: false, willReadFrequently: true });
+    if (!sequence || !canvas || !phoneVideo || !phoneAtlasCanvas || !phoneLanding
+      || !poster || !meter || !counter || !context || !phoneAtlasContext) return null;
 
     const unit = {
       scene,
@@ -917,9 +1388,31 @@
       clips: track.clips,
       phoneMode: usePhoneMaster,
       phoneMaster: track.phoneMaster,
+      phoneAtlas: track.phoneMaster.scrubAtlas,
+      phoneTerminal: track.phoneMaster.terminalStill,
+      phoneAtlasCanvas,
+      phoneAtlasContext,
+      phoneAtlasImage: null,
+      phoneAtlasPromise: null,
+      phoneAtlasGeneration: 0,
+      phoneAtlasLoading: false,
+      phoneAtlasReady: false,
+      phoneAtlasVisible: false,
+      phoneAtlasTile: -1,
+      phoneLanding,
+      phoneLandingPromise: null,
+      phoneLandingLoading: false,
+      phoneLandingReady: false,
+      phoneLandingVisible: false,
       phoneSlot: null,
       phoneTarget: 0,
       phoneSettleTimer: 0,
+      phoneSettleAt: 0,
+      phoneVelocityAt: performance.now(),
+      phoneVelocityUntil: 0,
+      phoneHighVelocitySamples: 0,
+      phoneAtlasHighVelocity: false,
+      phoneLastTargetAt: performance.now(),
       warmState: 'idle',
       warmPromise: null,
       warmAbort: null,
@@ -936,6 +1429,9 @@
       slots: [],
     };
 
+    phoneAtlasCanvas.dataset.visible = 'false';
+    phoneLanding.dataset.visible = 'false';
+
     unit.phoneSlot = {
       video: phoneVideo,
       armed: false,
@@ -944,6 +1440,7 @@
       wanted: -1,
       wantedExact: false,
       target: 0,
+      targetExact: false,
       lastPainted: null,
       lastIssued: -Infinity,
       seekTimer: 0,
@@ -956,6 +1453,11 @@
       if (!slot.armed || !phoneVideo.getAttribute('src')) return;
       slot.metadata = true;
       unit.scene.dataset.sequenceState = 'phone-metadata';
+      if (unit.phoneAtlasHighVelocity) {
+        slot.wanted = -1;
+        slot.wantedExact = false;
+        return;
+      }
       queuePhoneSeek(unit, unit.phoneTarget, true);
     });
     phoneVideo.addEventListener('loadeddata', () => {
@@ -986,9 +1488,11 @@
       slot.seekTimer = 0;
       slot.seeking = false;
       unit.scene.dataset.sequenceState = 'phone-media-error';
-      unit.scene.classList.remove('sequence-painted');
-      delete unit.scene.dataset.sequenceTime;
-      delete unit.scene.dataset.sequenceLag;
+      if (!unit.phoneAtlasVisible && !unit.phoneLandingVisible) {
+        unit.scene.classList.remove('sequence-painted');
+        delete unit.scene.dataset.sequenceTime;
+        delete unit.scene.dataset.sequenceLag;
+      }
     });
 
     unit.slots = unit.phoneMode ? [] : Array.from({ length: 2 }, () => {
@@ -1046,10 +1550,26 @@
     scene.dataset.sequenceCount = String(unit.clips.length);
     scene.addEventListener('scene:live', () => {
       unit.live = true;
+      if (unit.phoneMode && !reducedMotion.matches) {
+        loadPhoneAtlas(unit);
+        loadPhoneLanding(unit);
+      }
       renderUnit(unit, readProgress(scene));
     });
     scene.addEventListener('scene:idle', () => {
       unit.live = false;
+      if (unit.phoneMode) {
+        clearTimeout(unit.phoneSettleTimer);
+        clearTimeout(unit.phoneSlot.seekTimer);
+        unit.phoneSettleTimer = 0;
+        unit.phoneSlot.seekTimer = 0;
+        unit.phoneSlot.wanted = -1;
+        unit.phoneSlot.wantedExact = false;
+        unit.phoneHighVelocitySamples = 0;
+        unit.phoneVelocityUntil = 0;
+        unit.phoneAtlasHighVelocity = false;
+        releasePhoneAtlas(unit, true);
+      }
       if (unit.phoneMode && unit.phoneSlot.pendingSource) {
         activatePhoneBlob(unit, unit.phoneSlot.pendingSource);
       } else if (!unit.phoneMode) {
@@ -1084,20 +1604,40 @@
       if (units.length !== 2) throw new Error('bookend runtime did not create both tracks');
       runtime.units = units;
       if (usePhoneMaster && manifest.ready === true && !reducedMotion.matches) {
-        // Prime each persistent source at its opening frame. This downloads
-        // only enough for a decoded cold-start surface; later scroll seeks
-        // keep the same URL attached. The intro may buffer ahead while the
-        // visitor reads the opening copy, while the distant outro stays at
-        // metadata/first-frame cost until approached.
-        for (const unit of runtime.units) {
-          armPhoneMaster(unit);
-          queuePhoneSeek(unit, unit.phoneTarget, true);
-        }
         const intro = runtime.units.find((unit) => unit.trackName === 'intro');
         const outro = runtime.units.find((unit) => unit.trackName === 'outro');
-        const warmOutro = () => warmPhoneMaster(outro);
+        const openingUnit = runtime.units.find((unit) => unit.live) || intro;
+        loadPhoneAtlas(openingUnit);
+        loadPhoneLanding(openingUnit);
+        // Prime only the bookend that is actually opening. Arming the distant
+        // master here competes with the small scrub atlas when a visitor lands
+        // directly on the outro. The normal intro path warms the outro after
+        // the intro has left the viewport.
+        armPhoneMaster(openingUnit);
+        queuePhoneSeek(openingUnit, openingUnit.phoneTarget, true);
+        let warmOutroTimer = 0;
+        const warmOutro = () => {
+          clearTimeout(warmOutroTimer);
+          warmOutroTimer = setTimeout(() => {
+            warmOutroTimer = 0;
+            if (outro && !outro.live) warmPhoneMaster(outro);
+          }, phoneSettleMs);
+        };
+        const cancelLiveOutroWarm = () => {
+          clearTimeout(warmOutroTimer);
+          warmOutroTimer = 0;
+          if (outro?.warmState === 'loading' && !outro.phoneBlobUrl) {
+            outro.warmAbort?.abort();
+            outro.warmState = 'idle';
+            outro.scene.dataset.sequenceWarm = 'idle';
+          }
+        };
         intro?.scene.addEventListener('scene:idle', warmOutro, { once: true });
-        outro?.scene.addEventListener('scene:live', warmOutro, { once: true });
+        intro?.scene.addEventListener('scene:idle', () => {
+          loadPhoneAtlas(outro);
+          loadPhoneLanding(outro);
+        }, { once: true });
+        outro?.scene.addEventListener('scene:live', cancelLiveOutroWarm);
       }
       runtime.state = manifest.ready === true ? 'ready' : 'awaiting-media';
       addEventListener('scroll', schedule, { passive: true });
@@ -1107,7 +1647,13 @@
           for (const unit of runtime.units) {
             unit.warmAbort?.abort();
             unit.slots.forEach(release);
-            if (unit.phoneMode) releasePhoneMaster(unit);
+            if (unit.phoneMode) {
+              releasePhoneMaster(unit);
+              releasePhoneAtlas(unit);
+              hidePhoneLanding(unit, 'reduced-motion');
+              unit.phoneLanding.removeAttribute('src');
+              unit.phoneLandingReady = false;
+            }
           }
         }
         paint();
@@ -1128,7 +1674,11 @@
     for (const unit of runtime.units) {
       unit.warmAbort?.abort();
       unit.slots.forEach(release);
-      if (unit.phoneMode) releasePhoneMaster(unit);
+      if (unit.phoneMode) {
+        releasePhoneMaster(unit);
+        releasePhoneAtlas(unit);
+        hidePhoneLanding(unit, 'pagehide');
+      }
       if (unit.phoneBlobUrl) URL.revokeObjectURL(unit.phoneBlobUrl);
     }
   }, { once: true });
