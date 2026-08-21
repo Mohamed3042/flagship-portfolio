@@ -1,0 +1,84 @@
+{
+  "schema": "netflix-red-thread-grok-board-qa/v1",
+  "status": "GREEN",
+  "errors": [],
+  "model": "grok-imagine-video-1.5",
+  "durationSeconds": 15,
+  "resolution": "1080p",
+  "shots": [
+    {
+      "id": "N01",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "24d5fb4c4ef53855d34f4ac89474095a9b388d2561b97f7385621b1230045091",
+      "promptFileMatches": true
+    },
+    {
+      "id": "N02",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "452242a2152c85cf6fb5d59c8f2b9d9acee1069a6b3448c91b0dded45ab90bca",
+      "promptFileMatches": true
+    },
+    {
+      "id": "N03",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "6a118bb8cb3544061f3dcc63275b48d0e086f903d658bc60fc6655b6d494aa81",
+      "promptFileMatches": true
+    },
+    {
+      "id": "N04",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "4f3b19d268011c3e4164023e9ec3aa60910987838a893f5c010917eb44196060",
+      "promptFileMatches": true
+    },
+    {
+      "id": "N05",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "41827125c9201cf66bd7e0281a9fa1c302dc52f774cc248fb037d5e76eecf653",
+      "promptFileMatches": true
+    },
+    {
+      "id": "N06",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "4c624feb9fa689d1c267b73468e0cf8277dfd68ec46d81cedb1a562f2af4a6d5",
+      "promptFileMatches": true
+    },
+    {
+      "id": "N07",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "52dae4f7dd00cca16c536067d78626155fdfa318e102e42edf94b192eabbde89",
+      "promptFileMatches": true
+    },
+    {
+      "id": "N08",
+      "sourceExists": true,
+      "inputExists": true,
+      "pixelExactCrop": true,
+      "inputSha256": "278e4ccb6d61ee66d8b8d661abacbdb8bb8e9b5886a9a040130f18ec6f70f92a",
+      "promptFileMatches": true
+    }
+  ],
+  "board": {
+    "exists": true,
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "sha256": "f3eb4d18962fb8561a622290c481faca2331d61729b43c9421c51f3d77866da2"
+  },
+  "callsMade": 0,
+  "apiSpendUsd": 0
+}

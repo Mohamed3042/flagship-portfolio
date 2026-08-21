@@ -1,0 +1,102 @@
+{
+  "schema": "netflix-red-thread-grok-board-qa/v1",
+  "status": "RED",
+  "errors": [
+    "N01: prompt file missing or does not match manifest",
+    "N01: missing 1080p input",
+    "N02: prompt file missing or does not match manifest",
+    "N02: missing 1080p input",
+    "N03: prompt file missing or does not match manifest",
+    "N03: missing 1080p input",
+    "N04: prompt file missing or does not match manifest",
+    "N04: missing 1080p input",
+    "N05: prompt file missing or does not match manifest",
+    "N05: missing 1080p input",
+    "N06: prompt file missing or does not match manifest",
+    "N06: missing 1080p input",
+    "N07: prompt file missing or does not match manifest",
+    "N07: missing 1080p input",
+    "N08: prompt file missing or does not match manifest",
+    "N08: missing 1080p input",
+    "comparison board is missing"
+  ],
+  "model": "grok-imagine-video-1.5",
+  "durationSeconds": 15,
+  "resolution": "1080p",
+  "shots": [
+    {
+      "id": "N01",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    },
+    {
+      "id": "N02",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    },
+    {
+      "id": "N03",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    },
+    {
+      "id": "N04",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    },
+    {
+      "id": "N05",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    },
+    {
+      "id": "N06",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    },
+    {
+      "id": "N07",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    },
+    {
+      "id": "N08",
+      "sourceExists": true,
+      "inputExists": false,
+      "pixelExactCrop": false,
+      "inputSha256": "",
+      "promptFileMatches": false
+    }
+  ],
+  "board": {
+    "exists": false,
+    "dimensions": [
+      0,
+      0
+    ],
+    "sha256": ""
+  },
+  "callsMade": 0,
+  "apiSpendUsd": 0
+}

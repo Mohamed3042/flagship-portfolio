@@ -1,0 +1,173 @@
+{
+  "schema": "netflix-red-thread-grok-board/v1",
+  "version": "red-thread-grok-board.1",
+  "status": "ready_for_manual_generation_no_calls_made",
+  "updatedAt": "2026-08-21",
+  "provider": "xAI",
+  "model": "grok-imagine-video-1.5",
+  "mode": "image-to-video",
+  "settings": {
+    "durationSeconds": 15,
+    "resolution": "1080p",
+    "aspectRatio": "16:9",
+    "expectedDimensions": {
+      "width": 1920,
+      "height": 1080
+    },
+    "generatedAudioExpected": true,
+    "promptAudioRule": "No dialogue. No music. Restrained physical ambience only."
+  },
+  "generation": {
+    "callsMade": 0,
+    "clipsGenerated": 0,
+    "generatedSeconds": 0,
+    "apiSpendUsd": 0,
+    "plannedClips": 8,
+    "plannedGeneratedSeconds": 120
+  },
+  "pricingSnapshot": {
+    "date": "2026-08-21",
+    "api1080pOutputUsdPerSecond": 0.25,
+    "apiImageInputUsdEach": 0.01,
+    "calculatedEightClipFirstPassUsd": 30.08,
+    "calculation": "8 * 15 * 0.25 + 8 * 0.01",
+    "consumerSubscriptionCost": "[LOST] account-specific quota and billing were not inspected"
+  },
+  "comparisonProtocol": {
+    "wanReference": "8 clips * 5 seconds * 720p",
+    "grokRaw": "8 clips * 15 seconds * 1080p",
+    "grokNoCherryPickWindow": "00:05.000-00:10.000",
+    "comparisonResolution": "1280x720",
+    "comparisonAudio": "muted",
+    "retainRawOutputs": true,
+    "score": [
+      "input fidelity",
+      "motion causality",
+      "geometry stability",
+      "signal-red continuity",
+      "centered 9:16 survival",
+      "landing stability",
+      "unintended cuts or flicker"
+    ]
+  },
+  "capabilityNotes": {
+    "verified": [
+      "grok-imagine-video-1.5 supports 1-15 second generation",
+      "grok-imagine-video-1.5 supports 1080p image-to-video",
+      "image-to-video uses the supplied image as the starting frame",
+      "generated URLs are temporary and outputs must be downloaded promptly"
+    ],
+    "limitations": [
+      "The documented public image-to-video request exposes a starting image but no exact last-frame image control.",
+      "Reference-to-video is capped at 720p, so this board uses one 1080p start image per shot instead of a separate style reference.",
+      "Grok website/app outputs include a Grok watermark; removal or concealment is prohibited by xAI policy."
+    ]
+  },
+  "styleLock": "absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain",
+  "shots": [
+    {
+      "id": "N01",
+      "title": "The Filament",
+      "sourceMaster": "../keyframes/NRT-KF01-filament-reflection.png",
+      "input1080": "inputs/NRT-GROK-N01-input-1920x1080.png",
+      "outputName": "NRT-GROK-N01-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "Macro push toward the red filament and reflection; intensity wakes without breaking the axis.",
+        "illusion5to12": "A slow upward tilt reveals that the lower line was the glass reflection of the real filament.",
+        "landing12to15": "The filament and reflection settle as one unbroken vertical line."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. During seconds 0-5, push the camera forward 0.25 meters very slowly toward the signal-red filament while it trembles by only a few pixels and brightens gently; preserve its exact central axis and reflection. During seconds 5-12, continue the same move into a slow 10-degree upward tilt, revealing that the lower line is a reflection on black glass and the real filament floats above it; only a little suspended dust catches the red light. During seconds 12-15, ease to a complete stop with filament and reflection forming one unbroken vertical line, stable by 14 seconds. Preserve the input architecture, black levels, red continuity, grain, and reflection. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, bodies, text, captions, logos, posters, morphing, flicker, warped geometry, duplicated lines, or unintended cuts. No dialogue. No music. Restrained physical ambience only."
+    },
+    {
+      "id": "N02",
+      "title": "The Beam Carves",
+      "sourceMaster": "../keyframes/NRT-KF02-beam-carves-hall.png",
+      "input1080": "inputs/NRT-GROK-N02-input-1920x1080.png",
+      "outputName": "NRT-GROK-N02-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "The filament turns into a horizontal carving beam as the camera begins a matched lateral track.",
+        "illusion5to12": "Seats, walls, and booth exist only after the beam passes and remain solid behind it.",
+        "landing12to15": "The completed hall settles on one centered red aisle."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. During seconds 0-5, the signal-red filament becomes a razor-thin horizontal beam and begins sweeping left to right while the camera tracks right 1.2 meters at the same slow speed. During seconds 5-12, the beam carves the screening hall into existence: black seats, walls, aisle, and projection booth appear only in the region the beam has crossed and remain physically solid behind it; untouched space stays an absolute black void. During seconds 12-15, the sweep completes and the camera eases into a centered aisle composition with the hall fully standing and one red aisle line stable by 14 seconds. Preserve the input geometry, black levels, red continuity, grain, and glass reflection. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. Empty room. No people, faces, silhouettes, text, captions, logos, posters, extra seats, morphing, flicker, warped architecture, or cuts. No dialogue. No music. Restrained physical ambience only."
+    },
+    {
+      "id": "N03",
+      "title": "The Archive",
+      "sourceMaster": "../keyframes/NRT-KF03-archive.png",
+      "input1080": "inputs/NRT-GROK-N03-input-1920x1080.png",
+      "outputName": "NRT-GROK-N03-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "A patient forward dolly follows the red shelf edges into the archive.",
+        "illusion5to12": "Perspective reveals that the far ending case and nearest case are the same object at impossible scale.",
+        "landing12to15": "One central unlabeled case slides out twenty centimeters and stops."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. Dolly the camera forward exactly 2 meters over the full 15 seconds with patient constant speed and a gentle ease-out. During seconds 0-5, the signal-red shelf edge light runs deeper into the symmetrical aisle while all unlabeled black cases remain rigid. During seconds 5-12, parallax exposes the forced-perspective illusion: the case that seemed to end the aisle is the same physical case as the nearest central one, revealed by scale rather than a cut or morph. During seconds 12-15, that one central case slides straight outward by 20 centimeters and stops completely by 14 seconds. Preserve the input shelves, centered vanishing point, black levels, red continuity, grain, and glass reflection. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, hands, faces, labels, text, captions, logos, recognizable media, bending shelves, duplicated cases, morphing, flicker, or cuts. No dialogue. No music. Restrained physical ambience only."
+    },
+    {
+      "id": "N04",
+      "title": "The Four Doors",
+      "sourceMaster": "../keyframes/NRT-KF04-four-doors.png",
+      "input1080": "inputs/NRT-GROK-N04-input-1920x1080.png",
+      "outputName": "NRT-GROK-N04-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "A slow lateral track begins with all four complete portals visible.",
+        "illusion5to12": "Four distinct floor pools fuse into one continuous spectrum band only at the exact midpoint.",
+        "landing12to15": "The camera settles squarely on the white-slatted noir portal."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. Track the camera laterally right by 2.5 meters over 15 seconds with a slow 40mm cinematic move; keep all four complete doorframes stable and readable until the final approach. Preserve their exact order: white horizontal noir slats, teal forensic cone, warm tungsten spill, blue-white control grid. During seconds 0-5, their four floor-light pools remain distinct. During seconds 5-12, the track crosses the exact optical midpoint and the four pools fuse for one moment into a single continuous spectrum band across the black glass, then separate naturally as the camera continues. During seconds 12-15, ease to a square stable view facing the white-slatted noir door. The corridor remains black and signal-red; only portals leak their assigned hues. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, text, logos, extra doors, missing doors, warped frames, morphing, flicker, or cuts. No dialogue. No music. Restrained physical ambience only."
+    },
+    {
+      "id": "N05",
+      "title": "Noir into Fog",
+      "sourceMaster": "../keyframes/NRT-KF05-noir-into-fog.png",
+      "input1080": "inputs/NRT-GROK-N05-input-1920x1080.png",
+      "outputName": "NRT-GROK-N05-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "A continuous push crosses the white-slatted noir threshold and reveals an ordinary empty editing desk.",
+        "illusion5to12": "Venetian stripes rotate and tighten into the teal fog cone without a cut.",
+        "landing12to15": "The desk falls into darkness; the camera settles inside the teal cone with a faint grid ahead."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. Push the camera forward 1.5 meters over 15 seconds through the white-slatted portal with one smooth 50mm move. During seconds 0-5, slatted white light passes across a simple ordinary matte-black film-editing desk with an empty top; no chair, lamp, weapons, restraints, or threatening props. A short clean ribbon of smoke hangs above it. During seconds 5-12, the venetian stripes rotate gradually and tighten into the same centered teal fog cone already suggested by the input, while the desk recedes into black without melting or morphing. During seconds 12-15, settle inside the teal cone with only faint rectilinear grid shapes suggested ahead, stable by 14 seconds. Preserve the input framing, black levels, red threshold line, grain, and glass reflection. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, text, logos, horror, interrogation mood, organic smoke forms, warped furniture, flicker, or cuts. No dialogue. No music. Restrained physical ambience only."
+    },
+    {
+      "id": "N06",
+      "title": "The Gate Freeze",
+      "sourceMaster": "../keyframes/NRT-KF06-gate-freeze.png",
+      "input1080": "inputs/NRT-GROK-N06-input-1920x1080.png",
+      "outputName": "NRT-GROK-N06-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "The camera begins a slow orbit around a completely frozen lamp, fog ribbon, and dust field.",
+        "illusion5to12": "Only parallax moves; every particle and suspended object remains absolutely frozen.",
+        "landing12to15": "The red cursor pulses once, returns to baseline, and the orbit stops."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. Orbit the camera clockwise by exactly 25 degrees over 15 seconds with slow constant speed and a gentle stop. The suspended cylindrical practical lamp, its cable, the clean laminar red fog ribbon, and every dust particle are absolutely frozen in world space for the entire shot: no swing, drift, boil, deformation, or secondary motion. During seconds 0-12, only camera parallax reveals the frozen instant as a calm sculpture. At 12.5 seconds, the thread-thin horizontal signal-red cursor pulses once to 15 percent greater brightness for half a second, returns to baseline, and never moves position. Stop the camera by 14 seconds. Preserve the nested frames, black levels, red continuity, grain, and glass reflection. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, creatures, organic smoke, horror, interrogation mood, text, logos, morphing, flicker, or cuts. No dialogue. No music. Restrained physical ambience only."
+    },
+    {
+      "id": "N07",
+      "title": "Evidence Theater",
+      "sourceMaster": "../keyframes/NRT-KF07-evidence-theater.png",
+      "input1080": "inputs/NRT-GROK-N07-input-1920x1080.png",
+      "outputName": "NRT-GROK-N07-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "A slow aisle push enters the projector beam as the existing blank dust-frame rail disperses.",
+        "illusion5to12": "Dust briefly reforms as identical blank apertures while a restrained optical spectrum blooms on screen.",
+        "landing12to15": "Dust disperses and the spectrum collapses to one stable central red line."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. Push the camera forward 2 meters slowly down the exact center aisle over 15 seconds. During seconds 0-5, the existing rail of tiny blank dust-frame apertures holds for one second, then disperses naturally into the projector beam above the empty seats. During seconds 5-12, the dust briefly resolves again into nine identical empty rectangular apertures while a restrained desaturated optical spectrum blooms only on the blank screen; the apertures contain no pictures or symbols. During seconds 12-15, the dust disperses completely and the spectrum collapses inward to one thread-thin signal-red vertical line at screen center, stable by 14 seconds. Preserve the room, seats, projector axis, black levels, red continuity, grain, and reflection. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, readable imagery, text, captions, logos, posters, warped seats, morphing, flicker, or cuts. No dialogue. No music. Restrained projector ambience only."
+    },
+    {
+      "id": "N08",
+      "title": "The Return",
+      "sourceMaster": "../keyframes/NRT-KF08-return-loop.png",
+      "input1080": "inputs/NRT-GROK-N08-input-1920x1080.png",
+      "outputName": "NRT-GROK-N08-v01-raw.mp4",
+      "timeline": {
+        "setup0to5": "The isolated line holds, then detaches from the last residual screen contour and drifts forward.",
+        "illusion5to12": "The void consumes the contour as the reflection lengthens into the N01 geometry.",
+        "landing12to15": "The line settles on the exact central axis, visually matching N01 as closely as raw generation permits."
+      },
+      "prompt": "Animate the supplied still as the exact first frame in one continuous photorealistic shot. Hold the central signal-red line perfectly still for the first 2 seconds. During seconds 2-5, the last barely visible black screen contour recedes into the absolute black void while the line detaches and drifts toward camera by 0.5 meters without changing thickness or central axis. During seconds 5-12, continue one extremely slow macro settle as the black-glass reflection lengthens downward and all residual theater geometry disappears. During seconds 12-15, ease to a complete stop with one pristine trembling hairline and its aligned reflection, matching the N01 opening geometry as closely as possible and stable by 14 seconds. Do not add side lights or a second filament. Preserve black levels, signal-red continuity, grain, and reflection direction. absolute black void, single signal-red light, cinematic haze, black glass reflection, film grain. No people, faces, silhouettes, text, captions, logos, screens, extra lines, duplicated reflections, morphing, flicker, or cuts. No dialogue. No music. Restrained physical ambience only."
+    }
+  ]
+}
