@@ -22,6 +22,7 @@
   const chapterStarts = chapterButtons.map((button) => Number(button.dataset.shot));
   const count = definitions.length;
   if (count !== 50 || videos.length !== 2 || !directorNoteEn || !directorNoteAr) return;
+  const clamp01 = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
 
   // The score is the product argument. Browsing ready forms is deliberately
   // quick; committing, catching an error, and closing the loop earn a hold.
@@ -79,6 +80,116 @@
     },
   ]);
 
+  /* The film is now photographed through a full-bleed aperture. These are
+     not fifty unrelated crops: every entry is the focus at one approved WAN
+     endpoint (KF01..KF50), so the end of shot N is exactly the beginning of
+     shot N+1 and KF50 closes back onto KF01. CAMERA_BEATS adds one motivated
+     bow inside each shot—toward the hand, moving part, measuring beam or
+     revealed proof—without breaking any linked ending. */
+  const CAMERA_ENDPOINTS = Object.freeze([
+    // KF01–KF07 · matter receives its first instruction.
+    [52, 53], [52, 50], [52, 49], [52, 52], [52, 53], [50, 47], [52, 47],
+    // KF08–KF17 · one body changes, then the full catalogue appears.
+    [52, 51], [52, 51], [52, 52], [52, 52], [52, 52], [52, 51], [52, 52], [52, 48], [52, 49], [56, 49],
+    // KF18–KF26 · the chosen cake advances and its controlled parts become material.
+    [60, 58], [55, 52], [56, 50], [60, 46], [62, 45], [61, 44], [56, 43], [54, 43], [50, 49],
+    // KF27–KF37 · colour is measured, printed and sealed as proof.
+    [50, 54], [60, 43], [58, 55], [50, 54], [50, 46], [50, 50], [50, 53], [50, 58], [50, 52], [50, 53], [50, 55],
+    // KF38–KF44 · the stale layer leaves; inspection opens the next passage.
+    [63, 58], [64, 63], [50, 48], [50, 49], [50, 48], [53, 50], [52, 31],
+    // KF45–KF50 · physical output folds back into the opening sheet.
+    [52, 48], [53, 49], [54, 47], [50, 49], [52, 51], [52, 53],
+  ]);
+
+  const CAMERA_BEATS = Object.freeze([
+    { intent: 'follow the hands into the standing sheet', via: [62, 53] },
+    { intent: 'trace the curling edge toward the arch', via: [44, 48] },
+    { intent: 'enter the portal before it folds forward', via: [58, 47] },
+    { intent: 'cross from the folding hand to the clean cake', via: [43, 55] },
+    { intent: 'hold the waiting surface under the arriving tool', via: [50, 43] },
+    { intent: 'climb with the cream staircase', via: [62, 39] },
+    { intent: 'orbit the turning atrium toward the berry form', via: [72, 48] },
+    { intent: 'follow the berry surface becoming chocolate', via: [59, 48] },
+    { intent: 'track the round body stretching into a sheet', via: [45, 54] },
+    { intent: 'follow the rectangle softening into a heart', via: [59, 52] },
+    { intent: 'cross the closing cleft into the oval', via: [45, 51] },
+    { intent: 'travel around the rising edible wrap', via: [63, 48] },
+    { intent: 'inspect the printed skin as it clears to ivory', via: [42, 51] },
+    { intent: 'rise with the second tier', via: [57, 38] },
+    { intent: 'circle the ornament gathering into vintage form', via: [44, 48] },
+    { intent: 'reveal the catalogue up its right-hand stair', via: [70, 43] },
+    { intent: 'follow the choosing hand to ready form six', via: [68, 64] },
+    { intent: 'stay with the chosen cake as it advances', via: [70, 58] },
+    { intent: 'trace the rose-gold surface contour', via: [42, 55] },
+    { intent: 'follow the hovering decoration along its map', via: [70, 42] },
+    { intent: 'meet the baker hand at the promised position', via: [69, 39] },
+    { intent: 'lift with the printable skin', via: [72, 40] },
+    { intent: 'climb the peeled strip into a typeset path', via: [66, 34] },
+    { intent: 'read the edible flourish from base to crest', via: [43, 37] },
+    { intent: 'move through the monument into the piping tip', via: [40, 49] },
+    { intent: 'emerge from the tool onto the measured patch field', via: [38, 58] },
+    { intent: 'follow the off-colour cast toward its source', via: [75, 38] },
+    { intent: 'scan the patch rows from the sprayer to the left edge', via: [29, 61] },
+    { intent: 'finish the measuring pass at the far right row', via: [74, 60] },
+    { intent: 'follow corrected colour lifting into droplets', via: [64, 42] },
+    { intent: 'rise with the calibrated arch into the press', via: [50, 34] },
+    { intent: 'ride the sheet through the press rollers', via: [56, 57] },
+    { intent: 'cross the physical print toward the steel rule', via: [68, 59] },
+    { intent: 'follow the ruler extending one-to-one', via: [66, 52] },
+    { intent: 'inspect the six proof facets from the left', via: [35, 56] },
+    { intent: 'converge with both hands on the revision seal', via: [64, 57] },
+    { intent: 'follow the changed layer separating to the right', via: [71, 61] },
+    { intent: 'escort the stale layer into shadow', via: [80, 64] },
+    { intent: 'return from rejection to the surviving proof', via: [34, 50] },
+    { intent: 'fan outward with the twelve inspection beams', via: [70, 43] },
+    { intent: 'inspect one visible fault across the left forms', via: [30, 52] },
+    { intent: 'sweep the corrected forms back into one system', via: [70, 47] },
+    { intent: 'climb the cake tower to its opening aperture', via: [53, 27] },
+    { intent: 'pass straight through the cake aperture', via: [52, 40] },
+    { intent: 'follow glaze becoming a peelable image', via: [66, 43] },
+    { intent: 'weave from the loose sheets into the cream arch', via: [34, 47] },
+    { intent: 'follow the arch straightening into the print room', via: [64, 49] },
+    { intent: 'compress the wide studio into one lit sheet', via: [38, 49] },
+    { intent: 'meet the returning hands at the final glow', via: [62, 53] },
+    { intent: 'lower the output sheet into its opening position', via: [50, 57] },
+  ]);
+
+  const CAMERA_SCORE = Object.freeze(CAMERA_BEATS.map((beat, index) => Object.freeze({
+    intent: beat.intent,
+    from: CAMERA_ENDPOINTS[index],
+    via: beat.via,
+    to: CAMERA_ENDPOINTS[(index + 1) % count],
+  })));
+  const smootherstep = (value) => {
+    const t = clamp01(value);
+    return t * t * t * (t * (t * 6 - 15) + 10);
+  };
+  const cameraForShot = (shotNumberValue, fractionValue = .5) => {
+    const index = Math.max(0, Math.min(count - 1, Math.round(Number(shotNumberValue) || 1) - 1));
+    const fraction = clamp01(Number(fractionValue) || 0);
+    const beat = CAMERA_SCORE[index];
+    // ARRIVE .00–.15, TRACK .15–.85, SETTLE .85–1.00.
+    const track = smootherstep((fraction - .15) / .7);
+    const midpoint = [
+      (beat.from[0] + beat.to[0]) * .5,
+      (beat.from[1] + beat.to[1]) * .5,
+    ];
+    const bend = Math.sin(Math.PI * track);
+    const baseX = beat.from[0] + (beat.to[0] - beat.from[0]) * track;
+    const baseY = beat.from[1] + (beat.to[1] - beat.from[1]) * track;
+    return Object.freeze({
+      x: Math.max(16, Math.min(84, baseX + (beat.via[0] - midpoint[0]) * bend)),
+      y: Math.max(24, Math.min(76, baseY + (beat.via[1] - midpoint[1]) * bend)),
+      intent: beat.intent,
+      phase: fraction < .15 ? 'arrive' : fraction > .85 ? 'settle' : 'track',
+    });
+  };
+  const cameraLoopLocked = CAMERA_ENDPOINTS.length === count
+    && CAMERA_SCORE.every((beat, index) => beat.to === CAMERA_SCORE[(index + 1) % count].from);
+  const CAMERA_TAU_MS = 140;
+  const CAMERA_SNAP_SCORE_UNITS = 1.5;
+  const CAMERA_MAX_SCORE_UNITS_PER_SECOND = 3.5;
+
   const totalDirectorWeight = DIRECTOR_WEIGHTS.reduce((sum, weight) => sum + weight, 0);
   const directorStops = DIRECTOR_WEIGHTS.reduce((stops, weight) => {
     stops.push(stops.at(-1) + weight);
@@ -102,6 +213,13 @@
     version: '1.2.0',
     weights: DIRECTOR_WEIGHTS,
     chapters: DIRECTOR_CHAPTERS,
+    cameraVersion: '1.0.0',
+    cameraTauMs: CAMERA_TAU_MS,
+    cameraSnapScoreUnits: CAMERA_SNAP_SCORE_UNITS,
+    cameraMaxScoreUnitsPerSecond: CAMERA_MAX_SCORE_UNITS_PER_SECOND,
+    cameraScore: CAMERA_SCORE,
+    cameraLoopLocked,
+    cameraForShot,
     progressForShot: (shotNumber, fraction = .5) => progressForIndex(
       Math.max(0, Math.min(count - 1, Number(shotNumber) - 1)),
       fraction,
@@ -122,7 +240,7 @@
 
   const solo = new URLSearchParams(location.search).has('solo');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const clamp = (value) => value < 0 ? 0 : value > 1 ? 1 : value;
+  const clamp = clamp01;
   const readRaw = () => clamp(Number.parseFloat(scene.style.getPropertyValue('--p') || '0'));
   const slots = videos.map((video) => ({
     video,
@@ -288,9 +406,14 @@
   function render(progress, raw) {
     const beat = locateDirectorProgress(progress);
     const { index, fraction, weight } = beat;
+    const focus = cameraForShot(index + 1, fraction);
     scene.style.setProperty('--f', fraction.toFixed(4));
     scene.style.setProperty('--journey', progress.toFixed(5));
     scene.style.setProperty('--pace-weight', weight.toFixed(2));
+    scene.style.setProperty('--camera-x', `${focus.x.toFixed(3)}%`);
+    scene.style.setProperty('--camera-y', `${focus.y.toFixed(3)}%`);
+    scene.dataset.cameraIntent = focus.intent;
+    scene.dataset.cameraPhase = focus.phase;
     setShot(index);
     if (!live && !solo) return;
 
@@ -324,13 +447,15 @@
     lastFrameWall = performance.now();
     const raw = readRaw();
     const gap = raw - smoothProgress;
-    if (solo || Math.abs(gap) * totalDirectorWeight > 2) {
+    if (solo || Math.abs(gap) * totalDirectorWeight > CAMERA_SNAP_SCORE_UNITS) {
       smoothProgress = raw;
     } else if (Math.abs(gap) < .0001) {
       smoothProgress = raw;
     } else {
       const delta = lastTimestamp ? Math.min(64, timestamp - lastTimestamp) : 1000 / 60;
-      smoothProgress += gap * (1 - Math.exp(-delta / 110));
+      const followerStep = gap * (1 - Math.exp(-delta / CAMERA_TAU_MS));
+      const maximumStep = CAMERA_MAX_SCORE_UNITS_PER_SECOND * (delta / 1000) / totalDirectorWeight;
+      smoothProgress += Math.sign(followerStep) * Math.min(Math.abs(followerStep), maximumStep);
     }
     lastTimestamp = timestamp;
     render(smoothProgress, raw);

@@ -12,6 +12,11 @@ const cssPath = join(worldRoot, 'cake-studio.css');
 const scriptPath = join(worldRoot, 'cake-studio.js');
 const codaScriptPath = join(worldRoot, 'cake-studio-coda.js');
 const threePath = join(worldRoot, 'cake-studio', 'three.module.js');
+const gltfLoaderPath = join(worldRoot, 'cake-studio', 'GLTFLoader.js');
+const bufferUtilsPath = join(worldRoot, 'cake-studio', 'BufferGeometryUtils.js');
+const modelManifestPath = join(worldRoot, 'cake-studio', 'models', 'model-manifest.js');
+const modelStagePath = join(root, 'scripts', 'stage-cake-studio-models.mjs');
+const packagePath = join(root, 'package.json');
 const threeLicensePath = join(worldRoot, 'cake-studio', 'THREE-LICENSE.txt');
 const manifestPath = join(worldRoot, 'cake-studio', 'manifest.json');
 const ownerPackRoot = join(worldRoot, 'assets', 'cake-studio');
@@ -53,11 +58,16 @@ const statOptional = async (path) => {
   try { return await stat(path); } catch { return null; }
 };
 
-const [css, originalScript, codaScript, threeFile, threeLicense, opticalPrompt, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
+const [css, originalScript, codaScript, threeFile, gltfLoaderFile, bufferUtilsFile, modelManifestSource, modelStageSource, packageSource, threeLicense, opticalPrompt, manifestRaw, clipsRaw, runLog, lobby] = await Promise.all([
   readFile(cssPath, 'utf8'),
   readFile(scriptPath, 'utf8'),
   readOptional(codaScriptPath),
   statOptional(threePath),
+  statOptional(gltfLoaderPath),
+  statOptional(bufferUtilsPath),
+  readOptional(modelManifestPath),
+  readOptional(modelStagePath),
+  readFile(packagePath, 'utf8'),
   readOptional(threeLicensePath),
   readOptional(opticalPromptPath),
   readFile(manifestPath, 'utf8'),
@@ -86,7 +96,18 @@ const videoTags = [...page.matchAll(/<video\b[^>]*>/g)].map((match) => match[0])
 check('no autoplay markup', videoTags.every((tag) => !/\sautoplay(?:\s|=|>)/i.test(tag)), 'no autoplay attribute');
 check('no play call', !/\.play\s*\(/.test(script), 'scroll seeks currentTime; play() absent');
 check('same phone and desktop mode', !/pointer:\s*coarse|hover:\s*none|mode-chain|mode-still/.test(script), 'no mobile-lite branch');
-check('contained film frame', /\.film-frame \.floor,[\s\S]*?object-fit:\s*contain/.test(css), 'whole 16:9 image remains visible');
+check(
+  'full-bleed directed camera',
+  /\.film-frame\s*\{[\s\S]*?width:\s*100%;[\s\S]*?height:\s*100%;/.test(css)
+    && /\.film-frame \.floor,[\s\S]*?object-fit:\s*cover/.test(css)
+    && css.includes('object-position: var(--camera-x) var(--camera-y)')
+    && script.includes('const CAMERA_ENDPOINTS = Object.freeze')
+    && script.includes('const CAMERA_BEATS = Object.freeze')
+    && script.includes('cameraForShot')
+    && script.includes("setProperty('--camera-x'")
+    && script.includes("setProperty('--camera-y'"),
+  'cover aperture · 50 linked endpoint framings · direction-led camera path',
+);
 check('captions outside picture', page.indexOf('<div class="film-frame"') < page.indexOf('<div class="cue"'), 'cue is a sibling after the frame');
 
 const figureMatches = [...page.matchAll(/<figure\s+data-clip="([^"]+)"\s+data-poster="([^"]+)"[\s\S]*?<\/figure>/g)];
@@ -193,6 +214,32 @@ check(
     && threeLicense.includes('MIT License')
     && threeLicense.includes('Three.js Authors'),
   `${threeFile?.size ?? 0} bytes · MIT notice`,
+);
+check(
+  'manifest-driven GLB upgrade path',
+  Boolean(gltfLoaderFile && gltfLoaderFile.size > 90_000)
+    && Boolean(bufferUtilsFile && bufferUtilsFile.size > 20_000)
+    && codaScript.includes("import { GLTFLoader } from './cake-studio/GLTFLoader.js';")
+    && codaScript.includes("import modelManifest from './cake-studio/models/model-manifest.js';")
+    && codaScript.includes('createRuntimeAssetStage')
+    && codaScript.includes("assetMode: 'proxy'")
+    && codaScript.includes('installRuntimeAsset')
+    && codaScript.includes('normaliseRuntimeAsset')
+    && modelManifestSource.includes("schema: 'cake-studio-runtime-models/v1'")
+    && modelManifestSource.includes('enabled: false')
+    && (modelManifestSource.match(/\.glb'/g) ?? []).length === 14,
+  `${gltfLoaderFile?.size ?? 0}B loader · ${bufferUtilsFile?.size ?? 0}B utils · ${(modelManifestSource.match(/\.glb'/g) ?? []).length}/14 model entries`,
+);
+check(
+  'web-model staging gate',
+  packageSource.includes('"stage:cake-studio:models": "node scripts/stage-cake-studio-models.mjs"')
+    && modelStageSource.includes('cake-studio-runtime-models/v1')
+    && modelStageSource.includes('generated-glb')
+    && modelStageSource.includes('web-glb')
+    && modelStageSource.includes('enabled: true')
+    && modelStageSource.includes('maxBytes')
+    && modelStageSource.includes('GLB'),
+  modelStageSource ? 'raw → optimized web GLB → disabled manifest promotion' : 'staging script missing',
 );
 check(
   'linked optical bridge prompt',

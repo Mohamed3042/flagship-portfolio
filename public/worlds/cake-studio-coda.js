@@ -1,4 +1,6 @@
 import * as THREE from './cake-studio/three.module.js';
+import { GLTFLoader } from './cake-studio/GLTFLoader.js';
+import modelManifest from './cake-studio/models/model-manifest.js';
 
 const READY_FORM_COUNT = 9;
 const CONTROLLED_PART_COUNT = 4;
@@ -26,6 +28,17 @@ const runtime = {
   triangles: 0,
   pixelRatio: 0,
   reducedMotion,
+  assetPipeline: modelManifest.schema,
+  assetManifestVersion: modelManifest.version,
+  assetMode: 'proxy',
+  assetStatus: modelManifest.enabled ? 'armed' : 'awaiting-generated-glb',
+  manifestEnabled: Boolean(modelManifest.enabled),
+  expectedAssets: modelManifest.expectedAssets,
+  loadedAssets: 0,
+  installedAssets: 0,
+  failedAssets: 0,
+  assetTriangles: 0,
+  assetErrors: [],
 };
 window.__cakeStudioCoda = runtime;
 
@@ -79,6 +92,7 @@ function initialise() {
   let frame = 0;
   let width = 0;
   let height = 0;
+  let assetStage = null;
 
   const resize = () => {
     const nextWidth = Math.max(1, Math.round(canvas.clientWidth));
@@ -129,9 +143,19 @@ function initialise() {
   };
   const scheduleRender = () => {
     const bounds = sceneElement.getBoundingClientRect();
+    assetStage?.consider(bounds, innerHeight);
     if (bounds.top > innerHeight * 1.5 || bounds.bottom < -innerHeight * 0.5) return;
     if (!frame) frame = requestAnimationFrame(draw);
   };
+
+  assetStage = createRuntimeAssetStage({
+    manifest: modelManifest,
+    sceneElement,
+    readyForms,
+    assembly,
+    handoff,
+    requestRender: scheduleRender,
+  });
 
   addEventListener('scroll', scheduleRender, { passive: true });
   addEventListener('resize', scheduleRender, { passive: true });
@@ -145,6 +169,7 @@ function initialise() {
   });
   addEventListener('pagehide', () => {
     if (frame) cancelAnimationFrame(frame);
+    assetStage?.dispose();
     renderer.dispose();
   }, { once: true });
 
@@ -430,7 +455,7 @@ function createProductionOutputs(scene) {
   });
   root.visible = false;
   scene.add(root);
-  return { root, source, artifacts };
+  return { root, source, miniature, artifacts };
 }
 
 function createCakeForm(index, simplified = false) {

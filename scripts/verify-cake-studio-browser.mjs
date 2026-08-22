@@ -220,6 +220,12 @@ try {
       version: document.body.dataset.version,
       directorVersion: window.__cakeStudioDirector?.version ?? '',
       directorWeights: window.__cakeStudioDirector?.weights?.length ?? 0,
+      cameraVersion: window.__cakeStudioDirector?.cameraVersion ?? '',
+      cameraShots: window.__cakeStudioDirector?.cameraScore?.length ?? 0,
+      cameraLoopLocked: window.__cakeStudioDirector?.cameraLoopLocked ?? false,
+      cameraTauMs: window.__cakeStudioDirector?.cameraTauMs ?? -1,
+      cameraSnapScoreUnits: window.__cakeStudioDirector?.cameraSnapScoreUnits ?? -1,
+      cameraMaxScoreUnitsPerSecond: window.__cakeStudioDirector?.cameraMaxScoreUnitsPerSecond ?? -1,
       fastWeight: window.__cakeStudioDirector?.weights?.[8] ?? -1,
       choiceWeight: window.__cakeStudioDirector?.weights?.[16] ?? -1,
       errorWeight: window.__cakeStudioDirector?.weights?.[26] ?? -1,
@@ -229,6 +235,12 @@ try {
       codaReady: window.__cakeStudioCoda?.ready ?? false,
       webgl: window.__cakeStudioCoda?.webglAvailable ?? false,
       engine: window.__cakeStudioCoda?.engine ?? '',
+      assetMode: window.__cakeStudioCoda?.assetMode ?? '',
+      assetStatus: window.__cakeStudioCoda?.assetStatus ?? '',
+      assetExpected: window.__cakeStudioCoda?.expectedAssets ?? -1,
+      assetLoaded: window.__cakeStudioCoda?.loadedAssets ?? -1,
+      assetFailed: window.__cakeStudioCoda?.failedAssets ?? -1,
+      assetManifestEnabled: window.__cakeStudioCoda?.manifestEnabled ?? true,
       canvases: document.querySelectorAll('[data-cake-canvas]').length,
       overflow: document.documentElement.scrollWidth - innerWidth,
       lang: document.documentElement.lang,
@@ -240,9 +252,25 @@ try {
       `${viewport.name} directed score`,
       basics.directorVersion === '1.2.0'
         && basics.directorWeights === 50
+        && basics.cameraVersion === '1.0.0'
+        && basics.cameraShots === 50
+        && basics.cameraLoopLocked
+        && basics.cameraTauMs === 140
+        && basics.cameraSnapScoreUnits === 1.5
+        && basics.cameraMaxScoreUnitsPerSecond > 0
         && basics.fastWeight < basics.choiceWeight
         && [basics.choiceWeight, basics.errorWeight, basics.rejectWeight, basics.loopWeight].every((weight) => weight >= 1.3),
-      `v${basics.directorVersion} · fast ${basics.fastWeight} · choice/error/reject/loop ${basics.choiceWeight}/${basics.errorWeight}/${basics.rejectWeight}/${basics.loopWeight}`,
+      `v${basics.directorVersion} · camera ${basics.cameraVersion}/${basics.cameraShots} @ ${basics.cameraTauMs}ms, snap ${basics.cameraSnapScoreUnits}, max ${basics.cameraMaxScoreUnitsPerSecond}/s · fast ${basics.fastWeight} · choice/error/reject/loop ${basics.choiceWeight}/${basics.errorWeight}/${basics.rejectWeight}/${basics.loopWeight}`,
+    );
+    check(
+      `${viewport.name} staged real-asset fallback`,
+      basics.assetMode === 'proxy'
+        && basics.assetStatus === 'awaiting-generated-glb'
+        && basics.assetExpected === 14
+        && basics.assetLoaded === 0
+        && basics.assetFailed === 0
+        && !basics.assetManifestEnabled,
+      `${basics.assetMode}/${basics.assetStatus} · ${basics.assetLoaded}/${basics.assetExpected} loaded · ${basics.assetFailed} failed · enabled=${basics.assetManifestEnabled}`,
     );
     check(
       `${viewport.name} dimensional engine`,
@@ -323,8 +351,12 @@ try {
       const result = await evaluate(`(() => {
         const scene=document.getElementById('cake-reel');
         const frame=scene.querySelector('.film-frame').getBoundingClientRect();
+        const picture=scene.querySelector('.picture-zone').getBoundingClientRect();
         const cue=scene.querySelector('.cue').getBoundingClientRect();
         const active=scene.querySelector('video.on');
+        const expected=window.__cakeStudioDirector.cameraForShot(${state.shot},.5);
+        const cameraX=Number.parseFloat(scene.style.getPropertyValue('--camera-x'));
+        const cameraY=Number.parseFloat(scene.style.getPropertyValue('--camera-y'));
         return {
           shot:Number(scene.dataset.currentShot),
           clip:scene.dataset.currentClip,
@@ -341,9 +373,16 @@ try {
           activeVideos:scene.querySelectorAll('video.on').length,
           playAttempts:window.__cakePlayAttempts,
           objectFit:active ? getComputedStyle(active).objectFit : '',
+          objectPosition:active ? getComputedStyle(active).objectPosition : '',
+          cameraX,
+          cameraY,
+          cameraExpected:expected,
+          cameraIntent:scene.dataset.cameraIntent ?? '',
           contained:frame.left>=-1 && frame.right<=innerWidth+1 && frame.top>=-1 && frame.bottom<=innerHeight+1,
           captionClear:cue.top>=frame.bottom-1,
+          fullBleed:Math.abs(frame.left-picture.left)<1 && Math.abs(frame.right-picture.right)<1 && Math.abs(frame.top-picture.top)<1 && Math.abs(frame.bottom-picture.bottom)<1,
           frame:{left:frame.left,right:frame.right,top:frame.top,bottom:frame.bottom,width:frame.width,height:frame.height},
+          picture:{left:picture.left,right:picture.right,top:picture.top,bottom:picture.bottom,width:picture.width,height:picture.height},
           cue:{top:cue.top,bottom:cue.bottom}
         };
       })()`);
@@ -352,16 +391,167 @@ try {
       check(`${viewport.name} ${state.name} identity`, result.shot === state.shot && result.activeVideos === 1, `shot ${result.shot} · ${result.activeVideos} active buffer`);
       check(`${viewport.name} ${state.name} direction`, result.rhythm === state.rhythm && result.weight > 0 && result.directorNote.length > 24, `${result.chapterKey}/${result.rhythm} · weight ${result.weight} · ${result.directorNote}`);
       check(`${viewport.name} ${state.name} scrub time`, Math.abs(result.time - state.time) < .7, `${result.time.toFixed(3)}s / expected ~${state.time.toFixed(1)}s`);
-      check(`${viewport.name} ${state.name} picture contained`, result.contained && result.captionClear && result.objectFit === 'contain', `${JSON.stringify(result.frame)} · cue top ${result.cue.top}`);
+      check(`${viewport.name} ${state.name} full-bleed picture`, result.contained && result.captionClear && result.fullBleed && result.objectFit === 'cover', `${JSON.stringify(result.frame)} · picture ${JSON.stringify(result.picture)} · cue top ${result.cue.top} · ${result.objectFit}`);
+      check(`${viewport.name} ${state.name} directed camera`, Math.abs(result.cameraX-result.cameraExpected.x)<.06 && Math.abs(result.cameraY-result.cameraExpected.y)<.06 && result.cameraIntent.length>8, `${result.cameraX.toFixed(2)}% ${result.cameraY.toFixed(2)}% · expected ${result.cameraExpected.x.toFixed(2)}% ${result.cameraExpected.y.toFixed(2)}% · ${result.cameraIntent}`);
       check(`${viewport.name} ${state.name} never autoplayed`, result.paused && result.playAttempts === 0, `paused=${result.paused} · play attempts=${result.playAttempts}`);
       await screenshot(state.name);
     }
 
+    const cameraProof = await evaluate(`(() => {
+      const director=window.__cakeStudioDirector;
+      const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+      const joints=Array.from({length:50},(_,index)=>distance(
+        director.cameraForShot(index+1,1),
+        director.cameraForShot((index+1)%50+1,0)
+      ));
+      const proofShots=[1,7,17,20,28,33,38,43,50].map(shot=>{
+        const start=director.cameraForShot(shot,0);
+        const middle=director.cameraForShot(shot,.5);
+        const end=director.cameraForShot(shot,1);
+        return {shot,start,middle,end,travel:distance(start,middle)+distance(middle,end)};
+      });
+      return {
+        joints,
+        maxJoint:Math.max(...joints),
+        proofShots,
+        minimumDirectedTravel:Math.min(...proofShots.map(item=>item.travel)),
+        distinctIntents:new Set(director.cameraScore.map(shot=>shot.intent)).size,
+      };
+    })()`);
+    check(`${viewport.name} camera endpoint locks`, cameraProof.maxJoint < .001, `50/50 joins · max discontinuity ${cameraProof.maxJoint.toFixed(5)}`);
+    check(`${viewport.name} camera follows scene actions`, cameraProof.minimumDirectedTravel >= 8 && cameraProof.distinctIntents === 50, `minimum proof-shot travel ${cameraProof.minimumDirectedTravel.toFixed(2)} · ${cameraProof.distinctIntents}/50 distinct intents`);
+
+    const motionStartProgress = await evaluate(`window.__cakeStudioDirector.progressForShot(28,.2)`);
+    const motionTargetProgress = await evaluate(`window.__cakeStudioDirector.progressForShot(28,.5)`);
+    await scrollScene('#cake-reel', motionStartProgress);
+    await waitFor(`document.getElementById('cake-reel').dataset.cameraState==='idle'`, 5_000);
+    await waitFor(`(() => { const v=document.querySelector('#cake-reel video.on'); return document.getElementById('cake-reel').dataset.currentShot==='28' && v?.readyState>=2 && !v.seeking; })()`, 20_000);
+    const stepResponse = await evaluate(`(() => new Promise(resolve => {
+      const scene=document.getElementById('cake-reel');
+      const director=window.__cakeStudioDirector;
+      const top=scene.getBoundingClientRect().top+scrollY;
+      const travel=Math.max(0,scene.offsetHeight-innerHeight);
+      const samples=[];
+      const started=performance.now();
+      const read=now=>{
+        const video=scene.querySelector('video.on');
+        const shot=Number(scene.dataset.currentShot);
+        const fraction=Number.parseFloat(scene.style.getPropertyValue('--f'));
+        const x=Number.parseFloat(scene.style.getPropertyValue('--camera-x'));
+        const y=Number.parseFloat(scene.style.getPropertyValue('--camera-y'));
+        const expected=director.cameraForShot(shot,fraction);
+        samples.push({
+          ms:now-started,
+          journey:Number.parseFloat(scene.style.getPropertyValue('--journey')),
+          shot,
+          fraction,
+          x,
+          y,
+          expectedX:expected.x,
+          expectedY:expected.y,
+          time:video?.currentTime ?? 0,
+          duration:video?.duration ?? 5,
+          seeking:video?.seeking ?? false,
+          cameraState:scene.dataset.cameraState,
+        });
+      };
+      read(started);
+      scrollTo(0,top+travel*${motionTargetProgress});
+      dispatchEvent(new Event('scroll'));
+      const frame=now=>{
+        read(now);
+        if(now-started<850) requestAnimationFrame(frame);
+        else resolve({samples,target:director.cameraForShot(28,.5),targetFraction:.5});
+      };
+      requestAnimationFrame(frame);
+    }))()`);
+    const distance = (first, second) => Math.hypot(first.x - second.x, first.y - second.y);
+    const sortedMedian = (values) => {
+      const ordered = [...values].sort((a, b) => a - b);
+      if (!ordered.length) return 0;
+      const middle = Math.floor(ordered.length / 2);
+      return ordered.length % 2 ? ordered[middle] : (ordered[middle - 1] + ordered[middle]) / 2;
+    };
+    const stepSamples = stepResponse.samples;
+    const stepStart = stepSamples[0];
+    const stepTarget = stepResponse.target;
+    const cameraMagnitude = distance(stepStart, stepTarget);
+    const cameraDeltas = stepSamples.slice(1).map((sample, index) => distance(sample, stepSamples[index]));
+    const clockDeltas = stepSamples.slice(1).map((sample, index) => Math.abs(sample.time - stepSamples[index].time));
+    const cameraMovementFrames = cameraDeltas.filter(delta => delta >= Math.max(.01, cameraMagnitude * .002)).length;
+    const clockMovementFrames = clockDeltas.filter(delta => delta >= .004).length;
+    const maxCameraShare = Math.max(...cameraDeltas) / Math.max(cameraMagnitude, 1e-9);
+    const targetTime = stepSamples.at(-1).duration * .5;
+    const clockMagnitude = Math.abs(targetTime - stepStart.time);
+    const maxClockShare = Math.max(...clockDeltas) / Math.max(clockMagnitude, 1e-9);
+    const cameraCross = stepSamples.findIndex(sample => distance(stepStart, sample) >= cameraMagnitude * .5);
+    const clockDirection = Math.sign(targetTime - stepStart.time) || 1;
+    const clockCross = stepSamples.findIndex(sample => clockDirection * (sample.time - stepStart.time) >= clockMagnitude * .5);
+    const finalStep = stepSamples.at(-1);
+    const cameraSourceError = Math.max(...stepSamples.map(sample => Math.hypot(sample.x - sample.expectedX, sample.y - sample.expectedY)));
+    check(`${viewport.name} weighted camera spreads motion`, cameraMovementFrames >= 8 && clockMovementFrames >= 6, `${cameraMovementFrames} camera frames · ${clockMovementFrames} decoded-clock frames`);
+    check(`${viewport.name} weighted camera has no teleport`, maxCameraShare <= .35 && maxClockShare <= .35, `largest camera ${maxCameraShare.toFixed(3)} · clock ${maxClockShare.toFixed(3)} of step`);
+    check(`${viewport.name} camera and film share one playhead`, cameraSourceError < .08 && cameraCross >= 0 && clockCross >= 0 && Math.abs(cameraCross - clockCross) <= 4, `source error ${cameraSourceError.toFixed(4)} · halfway frame camera ${cameraCross} / clock ${clockCross}`);
+    check(`${viewport.name} weighted camera settles`, distance(finalStep, stepTarget) <= .5 && Math.abs(finalStep.fraction - .5) <= .005, `camera error ${distance(finalStep, stepTarget).toFixed(3)} · fraction ${finalStep.fraction.toFixed(4)}`);
+
+    await scrollScene('#cake-reel', motionStartProgress);
+    await waitFor(`document.getElementById('cake-reel').dataset.cameraState==='idle'`, 5_000);
+    const burstTargets = await evaluate(`[.25,.30,.35,.40,.45].map(f=>window.__cakeStudioDirector.progressForShot(28,f))`);
+    const glideResponse = await evaluate(`(() => new Promise(resolve => {
+      const scene=document.getElementById('cake-reel');
+      const top=scene.getBoundingClientRect().top+scrollY;
+      const travel=Math.max(0,scene.offsetHeight-innerHeight);
+      const targets=${JSON.stringify(burstTargets)};
+      const cadence=70;
+      const inputEnd=(targets.length-1)*cadence;
+      const samples=[];
+      const started=performance.now();
+      const read=now=>samples.push({
+        ms:now-started,
+        x:Number.parseFloat(scene.style.getPropertyValue('--camera-x')),
+        y:Number.parseFloat(scene.style.getPropertyValue('--camera-y')),
+        fraction:Number.parseFloat(scene.style.getPropertyValue('--f')),
+        journey:Number.parseFloat(scene.style.getPropertyValue('--journey')),
+        state:scene.dataset.cameraState,
+      });
+      read(started);
+      targets.forEach((target,index)=>setTimeout(()=>{
+        scrollTo(0,top+travel*target);
+        dispatchEvent(new Event('scroll'));
+      },index*cadence));
+      const frame=now=>{
+        read(now);
+        if(now-started<inputEnd+720) requestAnimationFrame(frame);
+        else resolve({samples,inputEnd,targetFraction:.45,targetProgress:targets.at(-1)});
+      };
+      requestAnimationFrame(frame);
+    }))()`);
+    const glideSamples = glideResponse.samples;
+    const glideDeltas = glideSamples.slice(1).map((sample, index) => ({
+      ms: sample.ms,
+      delta: distance(sample, glideSamples[index]),
+    }));
+    const movingDeltas = glideDeltas
+      .filter(sample => sample.ms >= 70 && sample.ms <= glideResponse.inputEnd + 170 && sample.delta > .002)
+      .map(sample => sample.delta);
+    const medianDelta = sortedMedian(movingDeltas);
+    const maximumDelta = Math.max(...movingDeltas, 0);
+    const postStopFrames = glideDeltas.filter(sample => sample.ms > glideResponse.inputEnd + 34 && sample.ms < glideResponse.inputEnd + 300 && sample.delta > .006).length;
+    const glideFinal = glideSamples.at(-1);
+    check(`${viewport.name} steady scroll camera is even`, medianDelta > .002 && maximumDelta <= medianDelta * 3.2, `max ${maximumDelta.toFixed(4)} · median ${medianDelta.toFixed(4)} · ${(maximumDelta / Math.max(medianDelta, 1e-9)).toFixed(2)}x`);
+    check(`${viewport.name} camera glides after input stops`, postStopFrames >= 2, `${postStopFrames} moving frames after final input`);
+    check(`${viewport.name} glide converges to target`, Math.abs(glideFinal.fraction - glideResponse.targetFraction) <= .005, `final fraction ${glideFinal.fraction.toFixed(4)} · target ${glideResponse.targetFraction.toFixed(2)}`);
+    await waitFor(`document.getElementById('cake-reel').dataset.cameraState==='idle'`, 5_000);
+    const parkedState = await evaluate(`document.getElementById('cake-reel').dataset.cameraState`);
+    check(`${viewport.name} camera loop parks`, parkedState === 'idle', parkedState);
+
     const reverseProgress = await evaluate(`window.__cakeStudioDirector.progressForShot(17, .5)`);
     await scrollScene('#cake-reel', reverseProgress);
     const reversed = await waitFor(`document.getElementById('cake-reel').dataset.currentShot==='17'`, 10_000);
-    const reverseState = await evaluate(`(() => { const v=document.querySelector('#cake-reel video.on'); return {shot:Number(document.getElementById('cake-reel').dataset.currentShot),time:v?.currentTime ?? -1,playAttempts:window.__cakePlayAttempts}; })()`);
+    const reverseState = await evaluate(`(() => { const scene=document.getElementById('cake-reel'); const v=scene.querySelector('video.on'); return {shot:Number(scene.dataset.currentShot),time:v?.currentTime ?? -1,playAttempts:window.__cakePlayAttempts,cameraX:Number.parseFloat(scene.style.getPropertyValue('--camera-x')),cameraY:Number.parseFloat(scene.style.getPropertyValue('--camera-y'))}; })()`);
     check(`${viewport.name} reverse scrub`, reversed && reverseState.shot === 17 && Math.abs(reverseState.time - 2.5) < .8, `shot ${reverseState.shot} @ ${reverseState.time.toFixed(3)}s`);
+    const forwardShot17 = stateResults.find(result => result.shot === 17);
+    check(`${viewport.name} reverse restores camera`, Math.abs(reverseState.cameraX-forwardShot17.cameraX)<.06 && Math.abs(reverseState.cameraY-forwardShot17.cameraY)<.06, `${reverseState.cameraX.toFixed(2)}% ${reverseState.cameraY.toFixed(2)}% · forward ${forwardShot17.cameraX.toFixed(2)}% ${forwardShot17.cameraY.toFixed(2)}%`);
     check(`${viewport.name} reverse remains silent`, reverseState.playAttempts === 0, `${reverseState.playAttempts} play attempts`);
 
     const codaStates = [
