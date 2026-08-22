@@ -310,7 +310,7 @@ def main() -> int:
             # same code remains fatal on Pages; every local asset is separately
             # required to pass a 206 byte probe and three painted-frame seeks.
             if url.startswith("http://127.0.0.1:"):
-                expected_codes.append("ERR_INVALID_HTTP_RESPONSE")
+                expected_codes.extend(("ERR_INVALID_HTTP_RESPONSE", "ERR_CONTENT_LENGTH_MISMATCH"))
             expected_aborts = [e for e in browser_errors
                 if any(code in e for code in expected_codes)
                 and any(s in e for s in (".mp4", ".jpg", ".png"))]
