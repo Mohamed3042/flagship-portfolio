@@ -5,7 +5,7 @@
 - **VERIFIED:** the four owner-refused Cycles room sections are absent from the source and built page, and their former live paths are absent.
 - **VERIFIED:** all eight refused media files plus the former theater master/poster have byte-identical archive copies under `public/worlds/spotify/archive/rendered-room-wides-20260822/`.
 - **VERIFIED:** shared `cinema.js` and `cinema.css`, all seven WAN room plates, all twelve Side B legs, the finale, FLIP, and credits structure are unchanged.
-- **VERIFIED:** source and build browser gates pass. Staged Pages and public receipts are recorded below after publication.
+- **VERIFIED:** source, build, staged Pages, and public browser gates all pass.
 - **[INFERRED]:** all three new joins read as FLOWS in the engineering review; the owner sheet is the final taste authority.
 
 ## Intake and exact cut
@@ -27,7 +27,7 @@ The fail-first public gate reported `REFUSED_ABSENT RED 4/4`: every refused plat
 | F2 Act balance | **VERIFIED** | Plate counts by act: Prologue 7→5, Act I 4→3, Act II 4→4, Act III 2→2, Act IV 3→2. Every act retains at least one plate. Finale structure is unchanged. |
 | F3 Scroll rhythm | **VERIFIED** | Desktop height 115,420→103,420; portrait 97,570→87,442; landscape 45,517→40,837. Each delta is exactly four removed 300vh plate sections. Minimum surviving scrub travel remains desktop 2,000 px, portrait 1,688 px, landscape 780 px. No horizontal overflow. |
 | F4 Visual seams | **[INFERRED] FLOWS ×3** | `room01 → s04`: dark wide establishes the room, then the bright tonearm supplies the first close-up. `s07 → s09`: the quantized platter lights resolve into the green groove canyon. `room06 → room07`: purple chorus wide resolves into the needle-up record close-up. See `assets/spotify-room-wides-cut/seams/SEAMS.jpg`. No corrective slot spec was needed. |
-| F5 Live verification | **VERIFIED (source/build); PENDING (staged/public)** | Each completed target runs 17 HTTP 206 probes, 51 Side A painted/paused seeks, 72 Side B forward/reverse painted checkpoints, full down/up traversal, desktop + portrait + landscape, AR/RTL, zero overflow, zero `play()` calls, and zero fatal browser errors. |
+| F5 Live verification | **VERIFIED ×4** | Source, build, staged Pages, and public each run 17 HTTP 206 probes, 51 Side A painted/paused seeks, 72 Side B forward/reverse painted checkpoints, full down/up traversal, desktop + portrait + landscape, AR/RTL, zero overflow, zero `play()` calls, and zero fatal browser errors. |
 
 ## Counts and master truth
 
@@ -88,17 +88,18 @@ Granite tripwires moved exactly as expected: `room04` solo 18→15 and `room05` 
 
 ## Publication receipt
 
-- Source commit: `PENDING`
-- Source PR / merge: `PENDING`
-- Pages commit: `PENDING`
-- Pages HTML SHA-256: `PENDING`
+- Source commit: `f8fd61c8e7fbaf3d32e1e412109557b1a71d893a`
+- Source PR / merge: `#18` / `c6be76b13194f4e65e620de773722156a68a33ef`
+- Pages commit: `301731da40560156c3ca5ca5e45ba6c8cfad4aae`
+- Pages HTML SHA-256: `FD9DFFEAB10A9EE99EE477372C02A1DB3643CB32E15E51D3B7BDEE9F98900192` (public bytes equal committed blob)
 - Public URL: `https://mohamed3042.github.io/flagship-portfolio/worlds/spotify.html`
-- Public four-path retirement: `PENDING`
+- Public four-path retirement: `REFUSED_ABSENT GREEN 4/4`; all former MP4 URLs return HTTP 404
 - Review sheet: `C:\Users\GAMING\Downloads\spotify-review\REVIEW\seams.html`
+- Review-sheet runtime: `PASS questions=40 keys=1-9,Enter,Space,X,I,D,0`; JSON export downloaded successfully
 
 ## Rollback — exactly three commands
 
 1. `Copy-Item -LiteralPath public\worlds\spotify\archive\rendered-room-wides-20260822 -Destination $env:TEMP\spotify-room-wides-20260822 -Recurse -Force`
-2. `git revert --no-edit PENDING_SOURCE_COMMIT`
+2. `git revert --no-edit -m 1 c6be76b13194f4e65e620de773722156a68a33ef`
 3. `Copy-Item -Path $env:TEMP\spotify-room-wides-20260822\s*.mp4,$env:TEMP\spotify-room-wides-20260822\s*.jpg -Destination public\worlds\spotify\shots -Force; Copy-Item -Path $env:TEMP\spotify-room-wides-20260822\spotify-film.* -Destination public\worlds\spotify -Force`
 
