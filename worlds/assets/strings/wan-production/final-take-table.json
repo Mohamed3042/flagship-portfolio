@@ -1,0 +1,1986 @@
+{
+  "schema": "cut-the-strings-final-take-table/v1",
+  "result": "GREEN",
+  "label": "VERIFIED",
+  "sourceReturns": 56,
+  "slots": 40,
+  "contestedSlots": 8,
+  "instrumentMethod": "uniform endpoint orientation/correlation/luma MAD, 10 fps structural delta, unchanged R2 temporal convex-mixture ghost gate, measured WAN mark, ffprobe duration/audio, final-hold motion",
+  "eyeMethod": "Three 16-frame candidate grids stacked per slot; inspect solidity, duplicate bodies, physical entry/wipe, subject-set transition, and visible hard reframing after the unchanged instrument pass.",
+  "rows": [
+    {
+      "clip": "CTS-A-001",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "3ca606821a164d76ca1d164e73f65c964705729f5d1ecf673daae12ab95b14bd",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "3ca606821a164d76ca1d164e73f65c964705729f5d1ecf673daae12ab95b14bd",
+      "masterSha256": "c8bd528f8803c5ff28d1b6baa96dd4877c9956a494da998d3aca6e61a7efdc1b"
+    },
+    {
+      "clip": "CTS-A-002",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "545e8a65c9755adfcb53096580c7871a858d82ac2332117071f3fbb61c8871c0",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "545e8a65c9755adfcb53096580c7871a858d82ac2332117071f3fbb61c8871c0",
+      "masterSha256": "11b01f9d7e7ad4ed6adbe81104ef5121b60bcdda3e1ef600108d8f89346bbaa2"
+    },
+    {
+      "clip": "CTS-A-003",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "abe567c59d1e98d9c6183c305b875cf76b698c6442e128fc9bc91f1fb33a582b",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "abe567c59d1e98d9c6183c305b875cf76b698c6442e128fc9bc91f1fb33a582b",
+      "masterSha256": "053eedf94de9d8f39975132fc42002678bb8dcfd9d2267a845eee2a5d2244f0a"
+    },
+    {
+      "clip": "CTS-A-004",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "d227ba3b7e7a5a98b262855bd83e703edffa80a804173dc1eb3f74e23e79446c",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "d227ba3b7e7a5a98b262855bd83e703edffa80a804173dc1eb3f74e23e79446c",
+      "masterSha256": "633230cf80221449dfd2069ff5b1c618d7ac7badd43b747c98689ee5cf399f09"
+    },
+    {
+      "clip": "CTS-A-005",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "8e2ec7ef2d284ca91143aa7a82f0d92b12bcfdfddc88d8c6e289db4737501169",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "8e2ec7ef2d284ca91143aa7a82f0d92b12bcfdfddc88d8c6e289db4737501169",
+      "masterSha256": "4c1c7edb7abf38dfe447fd1a66186cd2cb9a7b7e3e8630dce61da74774fd1351"
+    },
+    {
+      "clip": "CTS-A-006",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "d141245e477011e602f603ce0ac68f198868920dfea82fec5c8308d13e2d071c",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "d141245e477011e602f603ce0ac68f198868920dfea82fec5c8308d13e2d071c",
+      "masterSha256": "9e6159bc7d5ea63255dda6b7c8037f4b7d141e391769d203786fc6e76f3bcfba"
+    },
+    {
+      "clip": "CTS-A-007",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "bfdd3d8ce512b149ab4b6af2568ad0ee03044c523f512dc31079395f48477bbf",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "bfdd3d8ce512b149ab4b6af2568ad0ee03044c523f512dc31079395f48477bbf",
+      "masterSha256": "38845f387390c6171c068f753b2d8ee03cb5f5f1009d0e4909cefaf77b1a99fd"
+    },
+    {
+      "clip": "CTS-A-008",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "5e61e96da93efe3266a87410ec6a6265eeeb250c871fa9698816aa06007c00ef",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "5e61e96da93efe3266a87410ec6a6265eeeb250c871fa9698816aa06007c00ef",
+      "masterSha256": "26470a48621c3605ab9c4f4d999d6e2f73356c2c3971f762fd3165518a0e5abd"
+    },
+    {
+      "clip": "CTS-A-009",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "6ba4a6b48f2e5aef408722f7f518db89f939d69dd4a7c4af2edce494e67ec6f5",
+          "instrumentScore": 69.506154,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.988487,
+            "endCorrelation": 0.976613,
+            "swappedStartCorrelation": 0.238693,
+            "swappedEndCorrelation": 0.239819,
+            "startLumaMad": 4.020173,
+            "endLumaMad": 4.405164
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 9.083983,
+            "secondPeakConsecutiveLumaMad": 8.424799,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.720086,
+            "peakSeconds": 1.0,
+            "longestOverThresholdSeconds": 1.3,
+            "ranges": [
+              {
+                "start": 0.8,
+                "end": 1.7
+              },
+              {
+                "start": 2.9,
+                "end": 4.2
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.101449,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2a",
+          "sha256": "f3a48baf1c999c581f6724a9808d63bddd958654c8f266581d278786ba51230f",
+          "instrumentScore": 69.687401,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.98832,
+            "endCorrelation": 0.986054,
+            "swappedStartCorrelation": 0.240037,
+            "swappedEndCorrelation": 0.233989,
+            "startLumaMad": 4.75541,
+            "endLumaMad": 4.074312
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 10.082884,
+            "secondPeakConsecutiveLumaMad": 9.575311,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.76967,
+            "peakSeconds": 3.3,
+            "longestOverThresholdSeconds": 1.3,
+            "ranges": [
+              {
+                "start": 2.4,
+                "end": 3.7
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.101449,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "5c63dfaf951f239c70595cef6a2a0d9ee44f5e0d84fa1c497a33eabd25d36770",
+          "instrumentScore": 73.685648,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.988468,
+            "endCorrelation": 0.987189,
+            "swappedStartCorrelation": 0.240982,
+            "swappedEndCorrelation": 0.23674,
+            "startLumaMad": 4.653172,
+            "endLumaMad": 4.059922
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 10.263292,
+            "secondPeakConsecutiveLumaMad": 10.181752,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.537851,
+            "peakSeconds": 2.8,
+            "longestOverThresholdSeconds": 0.6,
+            "ranges": [
+              {
+                "start": 2.5,
+                "end": 3.1
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.10628,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        }
+      ],
+      "instrumentRanking": [
+        "R2b",
+        "R2a",
+        "R1"
+      ],
+      "eyeVerdict": "RED_BEST_AVAILABLE",
+      "pick": "R2b",
+      "runnerUp": "R2a",
+      "why": "R2b has the shortest visible dissolve of the three and reaches the approved wide endpoint cleanly; R2a and R1 carry longer double exposures.",
+      "defect": "The close carving/hands still cross-dissolve over the wide portrait setup at about 2.3-3.3 s.",
+      "sourceSha256": "5c63dfaf951f239c70595cef6a2a0d9ee44f5e0d84fa1c497a33eabd25d36770",
+      "masterSha256": "543292bea28bee9db4ba1ad4684333a026c18b248df4bdc6fb0cdc93600768ed"
+    },
+    {
+      "clip": "CTS-A-010",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "4973cb54c2dd431093519bf723c2d25b3b18d4fd365c13c12b30d1daee0d04c3",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "4973cb54c2dd431093519bf723c2d25b3b18d4fd365c13c12b30d1daee0d04c3",
+      "masterSha256": "f46223c5ca4eeac62c4bef4eca69febacefbdefc0b9ad7a8820b02d88d51ed3d"
+    },
+    {
+      "clip": "CTS-A-011",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "a40afbd9326823d6e635d52558663498f00be436d9c9fbcd20b0f45a935ba3e4",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "a40afbd9326823d6e635d52558663498f00be436d9c9fbcd20b0f45a935ba3e4",
+      "masterSha256": "8dd01d008e84c4835b84bbde1bee9be670478e3071c84c688eaa9e271513d2c8"
+    },
+    {
+      "clip": "CTS-A-012",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "448adf3bbab0dc51366ce26e1894f62041d23354fa72e6dbe449e1392303c739",
+          "instrumentScore": 64.862142,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.993788,
+            "endCorrelation": 0.984465,
+            "swappedStartCorrelation": 0.170472,
+            "swappedEndCorrelation": 0.174459,
+            "startLumaMad": 4.701472,
+            "endLumaMad": 4.253675
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 15.127163,
+            "secondPeakConsecutiveLumaMad": 14.950714,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.485294,
+            "peakSeconds": 1.0,
+            "longestOverThresholdSeconds": 0.7,
+            "ranges": [
+              {
+                "start": 0.8,
+                "end": 1.5
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.111111,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2a",
+          "sha256": "651a110ef208a1c107ff620c8715f32f280a8ffe0e36fee973f574b32f5e017c",
+          "instrumentScore": 71.875099,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.993676,
+            "endCorrelation": 0.982666,
+            "swappedStartCorrelation": 0.164048,
+            "swappedEndCorrelation": 0.160116,
+            "startLumaMad": 4.474629,
+            "endLumaMad": 4.997941
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 23.192102,
+            "secondPeakConsecutiveLumaMad": 17.636106,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.501352,
+            "peakSeconds": 1.3,
+            "longestOverThresholdSeconds": 0.2,
+            "ranges": [
+              {
+                "start": 1.3,
+                "end": 1.5
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.111111,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "373e7f020544fb12f10083d1ba49dfeb19f4f500418a70e9f8effcc8e5c62290",
+          "instrumentScore": 87.755942,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.993641,
+            "endCorrelation": 0.984589,
+            "swappedStartCorrelation": 0.162403,
+            "swappedEndCorrelation": 0.166012,
+            "startLumaMad": 4.597533,
+            "endLumaMad": 4.533862
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 14.329154,
+            "secondPeakConsecutiveLumaMad": 14.040834,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.528772,
+            "peakSeconds": 3.3,
+            "longestOverThresholdSeconds": 0.1,
+            "ranges": [
+              {
+                "start": 1.4,
+                "end": 1.5
+              },
+              {
+                "start": 3.3,
+                "end": 3.4
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.115942,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": false
+        }
+      ],
+      "instrumentRanking": [
+        "R2b",
+        "R2a",
+        "R1"
+      ],
+      "eyeVerdict": "GREEN",
+      "pick": "R2b",
+      "runnerUp": "R2a",
+      "why": "R2b performs the clearest physical swatch occlusion and reveal with the shortest transition disturbance; R1 transparently morphs the bench into the hero.",
+      "defect": null,
+      "sourceSha256": "373e7f020544fb12f10083d1ba49dfeb19f4f500418a70e9f8effcc8e5c62290",
+      "masterSha256": "f735bca918ebc55a05b21b1629fdc2532f3b8b3b20c7f9c408cb4ecb7eb387fc"
+    },
+    {
+      "clip": "CTS-A-013",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "64417c9acba0599299e7dd6eee06188da349d1c7ae1686c6c3065048c2802468",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "64417c9acba0599299e7dd6eee06188da349d1c7ae1686c6c3065048c2802468",
+      "masterSha256": "7b0ad943cf9fd1f5ca8fe5834a9e8577409453b529d7362c040993b1bfe7c7e6"
+    },
+    {
+      "clip": "CTS-A-014",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "78693ffa772b5df550fb822feb907142f9b98a814805e175d18a37122d4ca878",
+          "instrumentScore": 66.452014,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.992717,
+            "endCorrelation": 0.980668,
+            "swappedStartCorrelation": 0.122608,
+            "swappedEndCorrelation": 0.124653,
+            "startLumaMad": 3.662053,
+            "endLumaMad": 5.299002
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 26.753431,
+            "secondPeakConsecutiveLumaMad": 22.149197,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.424855,
+            "peakSeconds": 2.2,
+            "longestOverThresholdSeconds": 0.1,
+            "ranges": [
+              {
+                "start": 2.2,
+                "end": 2.3
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.10628,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2a",
+          "sha256": "babab0e5966a96cef56bd65a1ee4a8c98df76aa0dd1912900627223d595188df",
+          "instrumentScore": 68.010498,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.992242,
+            "endCorrelation": 0.964584,
+            "swappedStartCorrelation": 0.119352,
+            "swappedEndCorrelation": 0.127369,
+            "startLumaMad": 3.795109,
+            "endLumaMad": 6.403289
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 25.447855,
+            "secondPeakConsecutiveLumaMad": 22.943159,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.344836,
+            "peakSeconds": 1.0,
+            "longestOverThresholdSeconds": 0.0,
+            "ranges": []
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.115942,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "29435e7f31db237315ab27b7f55e3b66bd3b6fffda7c1d490d80840cc131a24f",
+          "instrumentScore": 46.820762,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.993348,
+            "endCorrelation": 0.981552,
+            "swappedStartCorrelation": 0.120065,
+            "swappedEndCorrelation": 0.123278,
+            "startLumaMad": 3.475676,
+            "endLumaMad": 5.223513
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 38.752659,
+            "secondPeakConsecutiveLumaMad": 27.310289,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.306385,
+            "peakSeconds": 4.1,
+            "longestOverThresholdSeconds": 0.0,
+            "ranges": []
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.111111,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        }
+      ],
+      "instrumentRanking": [
+        "R2a",
+        "R1",
+        "R2b"
+      ],
+      "eyeVerdict": "GREEN",
+      "pick": "R2a",
+      "runnerUp": "R1",
+      "why": "R2a is the continuous face-to-wide pull-back with one comb action; R1 jumps to the wide endpoint at the end and R2b hard-reframes near the start.",
+      "defect": null,
+      "sourceSha256": "babab0e5966a96cef56bd65a1ee4a8c98df76aa0dd1912900627223d595188df",
+      "masterSha256": "12064dca826e8309503a8607144d55f94e0e6b636acb841b062903b077fc2f60"
+    },
+    {
+      "clip": "CTS-A-015",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "b1c2533b538c7acb8ed4f22622a8e07d9eaf9c12152130d8804b3c9f2e485fdd",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "b1c2533b538c7acb8ed4f22622a8e07d9eaf9c12152130d8804b3c9f2e485fdd",
+      "masterSha256": "0598b15db5f82e7c5824b3f1f146acb8aaa31db83a4e4885492a56af6d4ede89"
+    },
+    {
+      "clip": "CTS-A-016",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "417d794fad101c19b2f74a95708f057bc058ca7476341d5d022ba1829db84db9",
+          "instrumentScore": 71.306446,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.990259,
+            "endCorrelation": 0.983012,
+            "swappedStartCorrelation": 0.209301,
+            "swappedEndCorrelation": 0.21242,
+            "startLumaMad": 5.61668,
+            "endLumaMad": 5.689291
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 5.975915,
+            "secondPeakConsecutiveLumaMad": 3.904249,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.822052,
+            "peakSeconds": 2.6,
+            "longestOverThresholdSeconds": 0.9,
+            "ranges": [
+              {
+                "start": 0.8,
+                "end": 1.3
+              },
+              {
+                "start": 2.3,
+                "end": 3.2
+              },
+              {
+                "start": 3.9,
+                "end": 4.1
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.120773,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2a",
+          "sha256": "9c98d029c7044b4fad21f0c213c176cbd7927cfad0deb1452301598867ca8f2f",
+          "instrumentScore": 60.014696,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.99101,
+            "endCorrelation": 0.982486,
+            "swappedStartCorrelation": 0.207833,
+            "swappedEndCorrelation": 0.213265,
+            "startLumaMad": 4.692767,
+            "endLumaMad": 5.159191
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 16.948198,
+            "secondPeakConsecutiveLumaMad": 16.238964,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.54481,
+            "peakSeconds": 3.6,
+            "longestOverThresholdSeconds": 0.9,
+            "ranges": [
+              {
+                "start": 3.2,
+                "end": 4.1
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.120773,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "7e0262e432867621a2be364996b120352b9ce7252011f7135e9a18fedae8d23f",
+          "instrumentScore": 68.869476,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.990202,
+            "endCorrelation": 0.981487,
+            "swappedStartCorrelation": 0.208057,
+            "swappedEndCorrelation": 0.210705,
+            "startLumaMad": 5.426165,
+            "endLumaMad": 5.759552
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 9.001378,
+            "secondPeakConsecutiveLumaMad": 6.74585,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.759485,
+            "peakSeconds": 2.6,
+            "longestOverThresholdSeconds": 1.3,
+            "ranges": [
+              {
+                "start": 1.9,
+                "end": 3.2
+              },
+              {
+                "start": 3.5,
+                "end": 4.2
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.120773,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        }
+      ],
+      "instrumentRanking": [
+        "R1",
+        "R2b",
+        "R2a"
+      ],
+      "eyeVerdict": "RED_BEST_AVAILABLE",
+      "pick": "R2a",
+      "runnerUp": "R1",
+      "why": "All three fail; R2a holds one solid fitting action longest and confines the duplicate-body dissolve to the shortest late interval.",
+      "defect": "Fitting hands and the seated hero dissolve over the dressed standing hero and mirror at about 2.9-3.6 s.",
+      "sourceSha256": "9c98d029c7044b4fad21f0c213c176cbd7927cfad0deb1452301598867ca8f2f",
+      "masterSha256": "de6021b9ae74e9fee75f0feae00c64757a41bea8e1ad7ff30d16579d3b50a445"
+    },
+    {
+      "clip": "CTS-A-017",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "8743d5af3e617ed9fb5416db960e2696d80d2ad4a896b71c640403a8dd9bcb43",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "8743d5af3e617ed9fb5416db960e2696d80d2ad4a896b71c640403a8dd9bcb43",
+      "masterSha256": "c120b64ff06427013f71cacebc788d73e0d6cca9658038e153b83fa0a1484184"
+    },
+    {
+      "clip": "CTS-A-018",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "356ec207e430a90bf3711f0a3f58fec0f92a1092d482902081896ddc97576126",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "356ec207e430a90bf3711f0a3f58fec0f92a1092d482902081896ddc97576126",
+      "masterSha256": "512c22af7e362ba6e956c5c7d2ffb37aa8a15c0e6637211854d6c008ce7527db"
+    },
+    {
+      "clip": "CTS-A-019",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "dca0522229e0b763eb61ada2329d849f64daa9ff6135bd840b6aaf03a90a7361",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "dca0522229e0b763eb61ada2329d849f64daa9ff6135bd840b6aaf03a90a7361",
+      "masterSha256": "4fd8aa2ddd4066272b8fd895c0cd4aae58acc01cf96c96a54d9e5f3c6853e6f4"
+    },
+    {
+      "clip": "CTS-A-020",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "0883598c94b67284b2ee988e9e1f9140d478d29acaf17716ff50ec36537be89f",
+          "instrumentScore": 85.792051,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.98751,
+            "endCorrelation": 0.98488,
+            "swappedStartCorrelation": 0.248358,
+            "swappedEndCorrelation": 0.2342,
+            "startLumaMad": 4.025702,
+            "endLumaMad": 4.2148
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 15.496037,
+            "secondPeakConsecutiveLumaMad": 13.687417,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.403399,
+            "peakSeconds": 3.6,
+            "longestOverThresholdSeconds": 0.1,
+            "ranges": [
+              {
+                "start": 0.8,
+                "end": 0.9
+              },
+              {
+                "start": 3.6,
+                "end": 3.7
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.10628,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2a",
+          "sha256": "48c24a14c76f4dac4e34ab185479d9341dd5ef5e9b3400d08df77f443bb424ef",
+          "instrumentScore": 70.794515,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.986319,
+            "endCorrelation": 0.989123,
+            "swappedStartCorrelation": 0.24737,
+            "swappedEndCorrelation": 0.23997,
+            "startLumaMad": 4.472278,
+            "endLumaMad": 3.4636
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 1.799423,
+            "secondPeakConsecutiveLumaMad": 1.790986,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.73607,
+            "peakSeconds": 1.1,
+            "longestOverThresholdSeconds": 1.2,
+            "ranges": [
+              {
+                "start": 0.8,
+                "end": 1.7
+              },
+              {
+                "start": 1.9,
+                "end": 2.0
+              },
+              {
+                "start": 2.1,
+                "end": 2.2
+              },
+              {
+                "start": 2.3,
+                "end": 3.5
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.101449,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "47129ca2f347d14dd174dcfd21cc6eff6a681653cefd12262c5f9e0ef62443cf",
+          "instrumentScore": 72.08825,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.986938,
+            "endCorrelation": 0.982796,
+            "swappedStartCorrelation": 0.244908,
+            "swappedEndCorrelation": 0.241088,
+            "startLumaMad": 4.600942,
+            "endLumaMad": 3.966009
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 6.150277,
+            "secondPeakConsecutiveLumaMad": 5.966562,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.610767,
+            "peakSeconds": 4.1,
+            "longestOverThresholdSeconds": 0.9,
+            "ranges": [
+              {
+                "start": 0.8,
+                "end": 1.7
+              },
+              {
+                "start": 3.0,
+                "end": 3.1
+              },
+              {
+                "start": 3.2,
+                "end": 3.3
+              },
+              {
+                "start": 3.4,
+                "end": 3.5
+              },
+              {
+                "start": 3.6,
+                "end": 4.2
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.10628,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        }
+      ],
+      "instrumentRanking": [
+        "R1",
+        "R2b",
+        "R2a"
+      ],
+      "eyeVerdict": "RED_BEST_AVAILABLE",
+      "pick": "R2b",
+      "runnerUp": "R2a",
+      "why": "R2b keeps the head and seated body intact through most of the shot, unlike R1's smoke/head loss, and its late dissolve is shorter than R2a's long overlay.",
+      "defect": "The seated hero still dissolves into the chest macro at about 3.3-4.2 s.",
+      "sourceSha256": "47129ca2f347d14dd174dcfd21cc6eff6a681653cefd12262c5f9e0ef62443cf",
+      "masterSha256": "7776fad140eb6821966d9a8cdd1bd8212573caa69bc184f1d248c98bafee4ab0"
+    },
+    {
+      "clip": "CTS-A-021",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "e615079b3ae74ffbfa015cbf70885f4827059eb46ac1a65bb771ebb5a8ff8426",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "e615079b3ae74ffbfa015cbf70885f4827059eb46ac1a65bb771ebb5a8ff8426",
+      "masterSha256": "7646d1531f461b41489e5a7b779fc7d70f42762c73fccfcc5a954eb871535771"
+    },
+    {
+      "clip": "CTS-A-022",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "e2db69f26507e77ab848eecae268cb035b01130c0fd7bafdddb46b1e1e93bd01",
+          "instrumentScore": 88.650877,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.977217,
+            "endCorrelation": 0.964815,
+            "swappedStartCorrelation": 0.180184,
+            "swappedEndCorrelation": 0.153904,
+            "startLumaMad": 5.369431,
+            "endLumaMad": 6.020413
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 12.626041,
+            "secondPeakConsecutiveLumaMad": 12.297888,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.347658,
+            "peakSeconds": 2.1,
+            "longestOverThresholdSeconds": 0.0,
+            "ranges": []
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.10628,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2a",
+          "sha256": "fff5c73a093741aca8e874ca8657ec1c015d7ecb72c870bb2db19e5a6dd3f0be",
+          "instrumentScore": 92.295333,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.979355,
+            "endCorrelation": 0.984148,
+            "swappedStartCorrelation": 0.183498,
+            "swappedEndCorrelation": 0.162894,
+            "startLumaMad": 5.134359,
+            "endLumaMad": 4.868878
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 10.693339,
+            "secondPeakConsecutiveLumaMad": 8.864917,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.485356,
+            "peakSeconds": 4.1,
+            "longestOverThresholdSeconds": 0.2,
+            "ranges": [
+              {
+                "start": 1.7,
+                "end": 1.8
+              },
+              {
+                "start": 2.0,
+                "end": 2.2
+              },
+              {
+                "start": 3.4,
+                "end": 3.6
+              },
+              {
+                "start": 4.0,
+                "end": 4.2
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.10628,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "06347a082c54963acf51aee6f3dc9fbf3edc47b23bc8d5c0af57da8d1b488093",
+          "instrumentScore": 87.405441,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.979441,
+            "endCorrelation": 0.984174,
+            "swappedStartCorrelation": 0.180196,
+            "swappedEndCorrelation": 0.165227,
+            "startLumaMad": 4.885894,
+            "endLumaMad": 4.616953
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 14.381965,
+            "secondPeakConsecutiveLumaMad": 13.337516,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.326612,
+            "peakSeconds": 1.8,
+            "longestOverThresholdSeconds": 0.0,
+            "ranges": []
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.101449,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        }
+      ],
+      "instrumentRanking": [
+        "R2a",
+        "R1",
+        "R2b"
+      ],
+      "eyeVerdict": "RED_BEST_AVAILABLE",
+      "pick": "R1",
+      "runnerUp": "R2b",
+      "why": "R1 is the only candidate with one continuously solid hero and no duplicate-body fade; R2a visibly double-exposes two heroes and R2b jumps through incompatible crops.",
+      "defect": "The solid hero travels through multiple poses rather than exactly one grounded step.",
+      "sourceSha256": "e2db69f26507e77ab848eecae268cb035b01130c0fd7bafdddb46b1e1e93bd01",
+      "masterSha256": "7cffd4fff44436173bea453d3b092f0e2d5f0cbe02061fe21f27b977596489c4"
+    },
+    {
+      "clip": "CTS-A-023",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "d9cb8a2ae7d4bca591ef82be5419355e6dd481690072c9545c25d476c6c0ca04",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "d9cb8a2ae7d4bca591ef82be5419355e6dd481690072c9545c25d476c6c0ca04",
+      "masterSha256": "b9a03e3ac41bd4989298fd036142dfb9a3c289d4e39698bf8efa5dd747494ecc"
+    },
+    {
+      "clip": "CTS-A-024",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "c38b605f2b3fcef5c71662924cf0eba2ab9dadb0b4927c6f7c7358c3d0421511",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "c38b605f2b3fcef5c71662924cf0eba2ab9dadb0b4927c6f7c7358c3d0421511",
+      "masterSha256": "d2b7ebe5c2ca47e2ae5e3acc22b12c5afb39ed11b92474bd3d6b4a76b84acb01"
+    },
+    {
+      "clip": "CTS-A-025",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "64c896660256abc9efc9503e0ad0b0d1a0860613cab1293c9fbc4bafd7014df8",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "64c896660256abc9efc9503e0ad0b0d1a0860613cab1293c9fbc4bafd7014df8",
+      "masterSha256": "49fb5ab61d65b8302732b283e5a1762fb9311f107d06498240c959aabdcc099f"
+    },
+    {
+      "clip": "CTS-A-026",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "268c82bb5bf599f4a41da2c1d7a8a0530123a799b6ad8898ca3fa7d14ea52b7d",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "268c82bb5bf599f4a41da2c1d7a8a0530123a799b6ad8898ca3fa7d14ea52b7d",
+      "masterSha256": "193c070b87136c543955a01fe8bc9f3a4378fd4616b66ffafc412362012a903b"
+    },
+    {
+      "clip": "CTS-A-027",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "fe24928e5fd0f061723665701683400e39dec9d70790eba6e7c79daeea45b4b4",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "fe24928e5fd0f061723665701683400e39dec9d70790eba6e7c79daeea45b4b4",
+      "masterSha256": "21c8c422746b425a7f8deee23d7c799a6f74cab291746a94fa384d45cda88fcd"
+    },
+    {
+      "clip": "CTS-A-028",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "f9d5be78a48328483cd54b5997cef7a8df4a28da0a1722fc601f2783767270bd",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "f9d5be78a48328483cd54b5997cef7a8df4a28da0a1722fc601f2783767270bd",
+      "masterSha256": "c17ba23f0b77127d09291133143204011376d4344508aafd44dfd108944eaae1"
+    },
+    {
+      "clip": "CTS-A-029",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "44c34379d506ca539d0e464370bbca89f24d3cfe38714a8caa1c36d6a485e3e7",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "44c34379d506ca539d0e464370bbca89f24d3cfe38714a8caa1c36d6a485e3e7",
+      "masterSha256": "16c45cc7e06aeb63090547fcd37751c05457f2e72de0a7ddc725de8becc8f812"
+    },
+    {
+      "clip": "CTS-A-030",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "8219ffb7b2cb03084d13c6d7a107b543484700c6d93fc41a691e355c7e3f0142",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "8219ffb7b2cb03084d13c6d7a107b543484700c6d93fc41a691e355c7e3f0142",
+      "masterSha256": "88e3a52b79b24fa94c53561c908d35b5c8fbb60752f98ae1261b4248581ca8e6"
+    },
+    {
+      "clip": "CTS-A-031",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "e412d793c4179ff138bc10094caa2d5aaef4580424f3cecc1be82733f37fe14f",
+          "instrumentScore": 90.877458,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.992151,
+            "endCorrelation": 0.991773,
+            "swappedStartCorrelation": 0.018039,
+            "swappedEndCorrelation": 0.014589,
+            "startLumaMad": 3.854696,
+            "endLumaMad": 5.494192
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 12.615675,
+            "secondPeakConsecutiveLumaMad": 11.498405,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.455128,
+            "peakSeconds": 4.1,
+            "longestOverThresholdSeconds": 0.1,
+            "ranges": [
+              {
+                "start": 2.6,
+                "end": 2.7
+              },
+              {
+                "start": 4.1,
+                "end": 4.2
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.120773,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2a",
+          "sha256": "3b9e47cfec8fa0e9ed4484ea1345bea72950541d0620e03e956bd38f02865760",
+          "instrumentScore": 87.409427,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.992149,
+            "endCorrelation": 0.991708,
+            "swappedStartCorrelation": 0.019426,
+            "swappedEndCorrelation": 0.018552,
+            "startLumaMad": 3.317601,
+            "endLumaMad": 5.188633
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 15.180153,
+            "secondPeakConsecutiveLumaMad": 15.135313,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.352605,
+            "peakSeconds": 4.1,
+            "longestOverThresholdSeconds": 0.0,
+            "ranges": []
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.111111,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "9e1d6d34c8bdd6c103d78d60344621ae1f92509cb10bb4c20bff9e8987e6f912",
+          "instrumentScore": 88.607074,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.983087,
+            "endCorrelation": 0.989867,
+            "swappedStartCorrelation": 0.014445,
+            "swappedEndCorrelation": 0.016227,
+            "startLumaMad": 4.518337,
+            "endLumaMad": 5.850375
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 13.065638,
+            "secondPeakConsecutiveLumaMad": 13.060814,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.437901,
+            "peakSeconds": 3.1,
+            "longestOverThresholdSeconds": 0.2,
+            "ranges": [
+              {
+                "start": 3.1,
+                "end": 3.3
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.10628,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        }
+      ],
+      "instrumentRanking": [
+        "R1",
+        "R2b",
+        "R2a"
+      ],
+      "eyeVerdict": "GREEN",
+      "pick": "R2a",
+      "runnerUp": "R2b",
+      "why": "R2a uses the amber doorway as a physical edge wipe while the hero crosses it; R1 dissolves both environments and R2b is less clean at the threshold.",
+      "defect": null,
+      "sourceSha256": "3b9e47cfec8fa0e9ed4484ea1345bea72950541d0620e03e956bd38f02865760",
+      "masterSha256": "f0181e5389677153604c562271d6f37a71c89124c004296ba5af8e090c9a36f0"
+    },
+    {
+      "clip": "CTS-A-032",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "57fca5da4ba3912e62acc7bcd42a3c72c6ca16df9047bcd9a048eacb19765bc3",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "57fca5da4ba3912e62acc7bcd42a3c72c6ca16df9047bcd9a048eacb19765bc3",
+      "masterSha256": "498f949b9bb11b57a39150c8465dbbbb356d4574b0a940b23a8d1ff471380a91"
+    },
+    {
+      "clip": "CTS-A-033",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "607e56591b258d60975c708854d95cee22bf0ebf2a93a2ef8f834cf301bae71c",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "607e56591b258d60975c708854d95cee22bf0ebf2a93a2ef8f834cf301bae71c",
+      "masterSha256": "22e3320d045971ebf34c5b6ff3e52e6cd4c634436b1c2a71b869d58bbacd663b"
+    },
+    {
+      "clip": "CTS-A-034",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "c1b8b9a94d10f60bd5cd3c3ced6e9414b0b35c3f3b749bdbb290e99ae564fa79",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "c1b8b9a94d10f60bd5cd3c3ced6e9414b0b35c3f3b749bdbb290e99ae564fa79",
+      "masterSha256": "3071deb1f8c3a8a8fae2c72f0a15ad3c1965e7bb29506f60f0d57163bee6cd94"
+    },
+    {
+      "clip": "CTS-A-035",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "dabe783b681ea99924b782ed1b978d0f4754f13f6a1ab0c7431fe14422e736df",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "dabe783b681ea99924b782ed1b978d0f4754f13f6a1ab0c7431fe14422e736df",
+      "masterSha256": "2e5b6247b6de00d27fa0376c720088f33be868f154a50a510ec3a935e87c34c0"
+    },
+    {
+      "clip": "CTS-A-036",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "03d8e07fb58279957334a9f81bb216f18021de0545344b1114aa435b6051c959",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "03d8e07fb58279957334a9f81bb216f18021de0545344b1114aa435b6051c959",
+      "masterSha256": "cb802dbd54572cfd28a77a912915140946695bab2f87b9d304e6c42bfa59c5ef"
+    },
+    {
+      "clip": "CTS-A-037",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "2c06dd68addd863d546f5f6ad2f5ceb940e09adb749e38b55a4a7317c397a959",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "2c06dd68addd863d546f5f6ad2f5ceb940e09adb749e38b55a4a7317c397a959",
+      "masterSha256": "9bd7aa582c3c8bff665cd26955e01e20da5a8ae0faea768bfb3cc354bac0a27f"
+    },
+    {
+      "clip": "CTS-A-038",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "817e117f0675333ce84cdde59032d1372b7cd1189e57c2020bc912b28de66505",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "817e117f0675333ce84cdde59032d1372b7cd1189e57c2020bc912b28de66505",
+      "masterSha256": "6f06d900eea5de6e901f6c3c7e66faca6560f09503a09fa933e1b8a1d402ce52"
+    },
+    {
+      "clip": "CTS-A-039",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "c42b53bc67708ad7cb24b0ea4f37a7505c2e9072e01f0c2d673f56a874873a26",
+          "instrumentScore": 63.066354,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.93557,
+            "endCorrelation": 0.97325,
+            "swappedStartCorrelation": 0.133285,
+            "swappedEndCorrelation": 0.148032,
+            "startLumaMad": 8.567444,
+            "endLumaMad": 5.074354
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 9.466706,
+            "secondPeakConsecutiveLumaMad": 8.581661,
+            "hardCutCandidate": false,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "RED",
+            "peakScore": 0.693589,
+            "peakSeconds": 3.0,
+            "longestOverThresholdSeconds": 1.6,
+            "ranges": [
+              {
+                "start": 1.4,
+                "end": 1.8
+              },
+              {
+                "start": 1.9,
+                "end": 3.5
+              },
+              {
+                "start": 3.6,
+                "end": 3.7
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.115942,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": false
+        },
+        {
+          "take": "R2a",
+          "sha256": "fe48d6e7a1c6602b6e3b65dcf00182ec26d98c51eeec9bd7591830bde93ce262",
+          "instrumentScore": 77.451937,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.928594,
+            "endCorrelation": 0.925177,
+            "swappedStartCorrelation": 0.134355,
+            "swappedEndCorrelation": 0.142523,
+            "startLumaMad": 7.950653,
+            "endLumaMad": 6.653294
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 15.956038,
+            "secondPeakConsecutiveLumaMad": 15.409171,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.269266,
+            "peakSeconds": 0.8,
+            "longestOverThresholdSeconds": 0.0,
+            "ranges": []
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.120773,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        },
+        {
+          "take": "R2b",
+          "sha256": "0809f89521c0d6bb10d4dc23ba2b417c87d9f7557abb08cfc480cc7b03c6f654",
+          "instrumentScore": 77.401138,
+          "endpoint": {
+            "orientation": "GREEN",
+            "startCorrelation": 0.884153,
+            "endCorrelation": 0.971966,
+            "swappedStartCorrelation": 0.137206,
+            "swappedEndCorrelation": 0.142839,
+            "startLumaMad": 9.453746,
+            "endLumaMad": 4.761517
+          },
+          "structural": {
+            "peakConsecutiveLumaMad": 15.429094,
+            "secondPeakConsecutiveLumaMad": 15.400493,
+            "hardCutCandidate": true,
+            "freezeLongestSeconds": 0.0
+          },
+          "ghost": {
+            "result": "GREEN",
+            "peakScore": 0.545468,
+            "peakSeconds": 4.1,
+            "longestOverThresholdSeconds": 0.2,
+            "ranges": [
+              {
+                "start": 4.0,
+                "end": 4.2
+              }
+            ]
+          },
+          "watermark": {
+            "measuredBox": [
+              289,
+              167,
+              312,
+              176
+            ],
+            "brightLowChromaRatio": 0.115942,
+            "present": true
+          },
+          "durationSeconds": 5.062,
+          "audioStreams": 1,
+          "holdRepairNeeded": true
+        }
+      ],
+      "instrumentRanking": [
+        "R2a",
+        "R2b",
+        "R1"
+      ],
+      "eyeVerdict": "GREEN",
+      "pick": "R2a",
+      "runnerUp": "R2b",
+      "why": "R2a physically walks the hero in from frame-left and seats her; R1 materializes her and R2b begins from a partial body then disturbs the final reveal.",
+      "defect": null,
+      "sourceSha256": "fe48d6e7a1c6602b6e3b65dcf00182ec26d98c51eeec9bd7591830bde93ce262",
+      "masterSha256": "be723ea22f47ac627e30fa433e03c04cf3c32511ccd3c2cc2555eb066176084a"
+    },
+    {
+      "clip": "CTS-A-040",
+      "label": "VERIFIED",
+      "candidates": [
+        {
+          "take": "R1",
+          "sha256": "9f51ba0e11fd5c7194a6af4969acd1d4778bba74a1b5845311abc88b80b4622a",
+          "instrumentScore": null,
+          "status": "sole submitted return"
+        }
+      ],
+      "instrumentRanking": [
+        "R1"
+      ],
+      "eyeVerdict": "GREEN_UNCONTESTED",
+      "pick": "R1",
+      "runnerUp": null,
+      "why": "Only submitted return for this slot.",
+      "defect": null,
+      "sourceSha256": "9f51ba0e11fd5c7194a6af4969acd1d4778bba74a1b5845311abc88b80b4622a",
+      "masterSha256": "0324d5d716d79954a7d09462485cca1bef7df31e930730741e7681f7ecedd7ef"
+    }
+  ]
+}
