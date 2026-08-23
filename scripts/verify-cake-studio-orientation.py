@@ -173,6 +173,24 @@ def open_page(page: Page, url: str) -> None:
     page.wait_for_timeout(400)
 
 
+def browser_media_range_probe(page: Page) -> dict[str, Any]:
+    return page.evaluate(
+        """async () => {
+          const response = await fetch(
+            'cake-studio/v17/clips/CST17-I01.mp4',
+            {headers:{Range:'bytes=0-1'}, cache:'no-store'}
+          );
+          const bytes = (await response.arrayBuffer()).byteLength;
+          return {
+            status:response.status,
+            acceptRanges:response.headers.get('accept-ranges') || '',
+            contentRange:response.headers.get('content-range') || '',
+            bytes,
+          };
+        }"""
+    )
+
+
 def settle(page: Page, milliseconds: int = 900) -> None:
     page.evaluate(
         "() => new Promise(resolve => requestAnimationFrame(() => "
@@ -233,8 +251,7 @@ def surface_diagnostics(page: Page, checkpoint: str) -> dict[str, Any]:
           const candidates = checkpoint === 'mid-seam'
             ? [...surface.querySelectorAll('video.on,.floor')]
             : [...surface.querySelectorAll(
-                '.bookend-phone-terminal-landing,.bookend-phone-scrub-atlas,' +
-                '.bookend-phone-video,.bookend-canvas,.bookend-poster'
+                '.bookend-video.on,.bookend-poster'
               )];
           const visible = candidates
             .map(element => ({element, style:getComputedStyle(element)}))
@@ -265,7 +282,7 @@ def surface_diagnostics(page: Page, checkpoint: str) -> dict[str, Any]:
             && mediaRect.bottom >= viewport.height - tolerance
             && objectFit === 'cover';
           const progress = Number.parseFloat(scene.style.getPropertyValue('--p') || '0');
-          const activeVideo = surface.querySelector('video.on,.bookend-phone-video');
+          const activeVideo = surface.querySelector('video.on');
           const sourceSize = visible ? {
             width:visible.element.videoWidth || visible.element.naturalWidth || visible.element.width || 0,
             height:visible.element.videoHeight || visible.element.naturalHeight || visible.element.height || 0,
@@ -363,6 +380,7 @@ def run_profile(
     audit = NetworkAudit(page)
     set_metrics(context, page, width, height, orientation, angle)
     open_page(page, args.url)
+    explicit_range_probe = browser_media_range_probe(page)
 
     scroll_scene(page, ".bookend-intro", 0.015)
     opening = capture_checkpoint(page, args.output, args.label, profile, "opening")
@@ -390,6 +408,7 @@ def run_profile(
         "checkpoints": [opening, same_scene, middle, ending],
         "reversePoints": reverse_points,
         "traversal": [forward, reverse],
+        "explicitRangeProbe": explicit_range_probe,
         "network": network,
     }
 
@@ -610,7 +629,14 @@ def collect_failures(report: dict[str, Any]) -> list[str]:
             and item["contentRange"].lower().startswith("bytes ")
             for item in network["media206"]
         )
-        if not range_ok:
+        explicit = profile["explicitRangeProbe"]
+        explicit_ok = (
+            explicit["status"] == 206
+            and explicit["acceptRanges"].lower() == "bytes"
+            and explicit["contentRange"].lower().startswith("bytes 0-1/")
+            and explicit["bytes"] == 2
+        )
+        if not range_ok or not explicit_ok:
             failures.append(f"{profile['profile']} MP4 byte ranges")
     for key, passed in report["rotation"]["assertions"].items():
         if not passed:

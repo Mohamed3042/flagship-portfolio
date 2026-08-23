@@ -82,6 +82,10 @@ PHONE_TRACKS = {
         },
     },
 }
+PHONE_MASTER_SHA256 = {
+    "intro": "6c735d09ccd30cf70ff031ddbef7060ede653bfb680d11b78042d19188ad5670",
+    "outro": "65e51883d99862fd86ca159bda4fd1c7bdd0f394734be422cb650516f31dca15",
+}
 PHONE_OUTPUTS = tuple(
     output
     for contract in PHONE_TRACKS.values()
@@ -293,8 +297,8 @@ def runtime_still_url(source_relative: str) -> str:
 def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
     require(path.is_file(), f"runtime manifest missing: {path}")
     payload = json.loads(path.read_text(encoding="utf-8-sig"))
-    require(payload.get("schema") == "cake-studio-bookends/v1", "runtime manifest schema mismatch")
-    require(payload.get("version") == "1.7.2", "runtime manifest version mismatch")
+    require(payload.get("schema") == "cake-studio-bookends/v2", "runtime manifest schema mismatch")
+    require(payload.get("version") == "1.8.0", "runtime manifest version mismatch")
     require(
         (payload.get("width"), payload.get("height"), payload.get("fps"), payload.get("duration"))
         == (1280, 720, 30, 5),
@@ -321,41 +325,22 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
         "runtime manifest endpoint conditioning mismatch",
     )
     require(
-        delivery.get("phoneMaster")
+        delivery.get("scrubTransport")
         == {
-            "codec": "H.264",
-            "pixelFormat": "yuv420p",
-            "width": 640,
-            "height": 360,
-            "fps": 15,
-            "beatFrames": 68,
-            "finalTailExtraFrames": 7,
-            "keyframeInterval": 8,
-            "terminalFrameOffset": 2,
-            "silent": True,
-            "faststart": True,
+            "engine": "direct-video-anchor-three-slot",
+            "clock": "scroll",
+            "slots": 3,
+            "preloadWindow": 1,
+            "blobWarmAhead": 2,
+            "seekCoalescing": "last-write-wins",
+            "visibleProxy": "none",
+            "profiles": ["desktop", "phone-portrait", "phone-landscape"],
         },
-        "runtime manifest phone delivery contract mismatch",
+        "runtime manifest direct scrub transport mismatch",
     )
     require(
-        delivery.get("phoneScrubAtlas")
-        == {
-            "mimeType": "image/webp",
-            "tileWidth": 384,
-            "tileHeight": 216,
-            "quality": 85,
-        },
-        "runtime manifest phone scrub atlas delivery contract mismatch",
-    )
-    require(
-        delivery.get("phoneTerminalStill")
-        == {
-            "mimeType": "image/webp",
-            "width": 640,
-            "height": 360,
-            "quality": 100,
-        },
-        "runtime manifest phone terminal still delivery contract mismatch",
+        all(name not in delivery for name in ("phoneMaster", "phoneScrubAtlas", "phoneTerminalStill")),
+        "retired phone delivery remains active",
     )
     tracks = payload.get("tracks")
     require(isinstance(tracks, dict), "runtime manifest tracks missing")
@@ -376,52 +361,44 @@ def validate_runtime_manifest(path: Path, jobs: list[Job]) -> bool:
 
     require(tracks["intro"].get("poster") == runtime_still_url(jobs[0].first), "runtime intro poster mismatch")
     require(tracks["outro"].get("poster") == runtime_still_url(jobs[10].first), "runtime outro poster mismatch")
-    for track_name, contract in PHONE_TRACKS.items():
-        phone = tracks[track_name].get("phoneMaster")
-        require(isinstance(phone, dict), f"runtime {track_name} phone master missing")
-        expected_frames = int(contract["beats"]) * 68 + 7
-        atlas = contract["atlas"]
-        terminal = contract["terminal"]
+    require(
+        all("phoneMaster" not in tracks[track_name] for track_name in PHONE_TRACKS),
+        "a runtime track still activates its phone master",
+    )
+    retired = payload.get("retiredDelivery", {})
+    require(
+        set(retired) == {"phoneMaster", "phoneScrubAtlas", "phoneTerminalStill"},
+        "runtime retired phone ledger families mismatch",
+    )
+    expected_retired = {
+        "phoneMaster": [
+            (str(contract["master"]), PHONE_MASTER_SHA256[track_name])
+            for track_name, contract in PHONE_TRACKS.items()
+        ],
+        "phoneScrubAtlas": [
+            (str(contract["atlas"]["file"]), str(contract["atlas"]["sha256"]))
+            for contract in PHONE_TRACKS.values()
+        ],
+        "phoneTerminalStill": [
+            (str(contract["terminal"]["file"]), str(contract["terminal"]["sha256"]))
+            for contract in PHONE_TRACKS.values()
+        ],
+    }
+    for family, expected in expected_retired.items():
+        record = retired.get(family, {})
         require(
-            phone
-            == {
-                "src": f"cake-studio/v17/clips/{contract['master']}",
-                "width": 640,
-                "height": 360,
-                "fps": 15,
-                "beatFrames": 68,
-                "finalTailExtraFrames": 7,
-                "keyframeInterval": 8,
-                "terminalFrameOffset": 2,
-                "frames": expected_frames,
-                "duration": round(expected_frames / 15, 6),
-                "scrubAtlas": {
-                    "src": f"cake-studio/v17/clips/{atlas['file']}",
-                    "bytes": int(atlas["bytes"]),
-                    "sha256": str(atlas["sha256"]),
-                    "width": int(atlas["columns"]) * 384,
-                    "height": int(atlas["rows"]) * 216,
-                    "tileWidth": 384,
-                    "tileHeight": 216,
-                    "quality": 85,
-                    "columns": int(atlas["columns"]),
-                    "rows": int(atlas["rows"]),
-                    "samples": len(atlas["frames"]),
-                    "frames": [int(index) for index in atlas["frames"]],
-                },
-                "terminalStill": {
-                    "src": f"cake-studio/v17/clips/{terminal['file']}",
-                    "bytes": int(terminal["bytes"]),
-                    "sha256": str(terminal["sha256"]),
-                    "width": 640,
-                    "height": 360,
-                    "quality": 100,
-                    "frame": int(terminal["frame"]),
-                    "time": round(int(terminal["frame"]) / 15, 6),
-                },
-            },
-            f"runtime {track_name} phone master contract mismatch",
+            record.get("status") == "inert"
+            and record.get("active") is False
+            and record.get("since") == "1.8.0"
+            and isinstance(record.get("reason"), str)
+            and len(record["reason"]) > 20,
+            f"runtime retired {family} status mismatch",
         )
+        actual = [
+            (Path(str(asset.get("src", ""))).name, str(asset.get("sha256", "")))
+            for asset in record.get("assets", [])
+        ]
+        require(actual == expected, f"runtime retired {family} source/hash mismatch")
     require(len(runtime_stills) == 17, f"runtime still contract has {len(runtime_stills)} unique endpoints, expected 17")
     for source_url in sorted(runtime_stills):
         still_path = REPO / "public/worlds" / Path(*source_url.split("/"))
@@ -844,7 +821,7 @@ def main() -> int:
     validate_phone_masters(media_dir, media_only=False)
     print(
         "V17_MEDIA_GATE_OK "
-        f"desktop_clips=15 phone_masters=2 phone_atlases=2 phone_terminal_stills=2 "
+        f"desktop_clips=15 retired_phone_assets=6 retired_assets_decoded=true "
         f"order=10+5 duration=75.000s format=h264/yuv420p/1280x720/30fps "
         f"silent=15 faststart=15 max_gop={max_gop:.2f} decoded_anchors=30 "
         f"decoded_joins={len(joins) + 2} non_affine=" + ",".join(motion_summaries)
