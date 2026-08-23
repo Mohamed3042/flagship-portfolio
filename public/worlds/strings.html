@@ -1,382 +1,110 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0907"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23090806'/%3E%3Cpath d='M6 8h20M16 8v18' stroke='%23d7a64b' stroke-width='3'/%3E%3C/svg%3E"><title>CUT THE STRINGS — A Scroll Film</title>
-<style>
-:root{--ink:#f4e8d2;--muted:#b9a78d;--brass:#d7a64b;--red:#e47761;--night:#090806;color-scheme:dark}
-*{box-sizing:border-box}html{background:var(--night);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;scroll-behavior:auto}body{margin:0;background:var(--night);overflow-x:hidden}a{color:inherit}
-.chrome{position:fixed;z-index:20;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(13px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left));pointer-events:none;background:linear-gradient(#090806b8,transparent)}
-.brand{font-size:11px;font-weight:850;letter-spacing:.17em}.version{font-size:10px;color:var(--muted);letter-spacing:.1em}.rail{position:fixed;z-index:21;left:0;right:0;top:0;height:2px;background:#ffffff16}.rail i{display:block;width:calc(var(--p,0)*100%);height:100%;background:var(--brass)}
-.prologue,.epilogue{position:relative;min-height:100svh;display:grid;place-items:center;overflow:hidden;background:#0d0b08}.prologue img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.58) saturate(.84)}.prologue::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,transparent 15%,#090806d6 92%)}
-.title-card{position:relative;z-index:1;width:min(900px,90vw);text-align:center;text-shadow:0 3px 24px #000}.title-card .eyebrow{color:var(--brass);font-size:11px;font-weight:900;letter-spacing:.22em}h1{font:700 clamp(54px,11vw,150px)/.8 Georgia,serif;letter-spacing:-.07em;margin:18px 0}.title-card p{margin:0 auto;color:#dfd0ba;max-width:57ch;font-size:clamp(15px,2vw,21px)}.cue{display:block;margin-top:32px;color:var(--muted);font-size:11px;letter-spacing:.18em}
-.scene{position:relative;height:220svh;background:#080705}.stage{position:sticky;top:0;height:100svh;overflow:hidden;background:#080705;isolation:isolate}.anchor,.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}.anchor{z-index:0}.stage video{z-index:1;opacity:0;transition:opacity .12s linear}.scene.is-ready .stage video{opacity:1}.vignette{position:absolute;z-index:2;inset:0;pointer-events:none;background:linear-gradient(180deg,#0008 0,transparent 24%,transparent 67%,#000b 100%),radial-gradient(circle at 50% 50%,transparent 45%,#0006 110%)}
-.slate{position:absolute;z-index:4;left:max(5vw,env(safe-area-inset-left));bottom:max(6vh,env(safe-area-inset-bottom));max-width:min(620px,85vw);text-shadow:0 2px 20px #000;opacity:calc(1 - min(1,var(--p,0)*4));transform:translateY(calc(var(--p,0)*-15px))}.slate>span{color:var(--brass);font-size:10px;font-weight:900;letter-spacing:.18em}.slate h2{font:700 clamp(31px,6vw,74px)/.95 Georgia,serif;letter-spacing:-.04em;margin:7px 0}.slate>p{margin:0;color:#e4d6c2;font-size:11px;letter-spacing:.13em}.slate .defect{margin-top:11px;padding:8px 10px;border-left:2px solid var(--red);background:#130a08b8;max-width:55ch;letter-spacing:0;font-size:11px}.defect span{display:block;color:var(--red);font-size:9px;font-weight:900;letter-spacing:.13em}
-.seek-state{position:absolute;z-index:5;right:max(18px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));width:44px;height:2px;background:#ffffff25}.seek-state i{display:block;width:calc(var(--p,0)*100%);height:100%;background:var(--brass)}
-.epilogue{padding:10vh 6vw;text-align:center;background:radial-gradient(circle at 50% 30%,#312315,#090806 60%)}.end-card{max-width:800px}.end-card h2{font:700 clamp(48px,10vw,120px)/.86 Georgia,serif;letter-spacing:-.06em;margin:12px 0}.end-card p{color:var(--muted)}.links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:28px}.links a{border:1px solid #655039;padding:10px 14px;text-decoration:none;font-size:11px;letter-spacing:.1em}
-@media(max-width:600px){.version{display:none}.slate{left:18px;bottom:52px;max-width:calc(100vw - 54px)}.slate h2{font-size:39px}.scene{height:205svh}.stage video,.anchor{object-position:center center}}
-@media(orientation:landscape) and (max-height:500px){.chrome{padding-top:8px}.slate{bottom:20px;left:22px;max-width:58vw}.slate h2{font-size:31px}.slate .defect{display:none}.scene{height:230svh}}
-@media(prefers-reduced-motion:reduce){.stage video{transition:none}}
-</style></head><body>
-<div class="rail" data-rail aria-hidden="true"><i></i></div><header class="chrome"><div class="brand">CUT THE STRINGS</div><div class="version">FINAL 1.0.0 · 40 SLOTS · SCROLL TO SCRUB</div></header>
-<section class="prologue" id="top"><img data-anchor="KF00" src="assets/strings/keyframes/CTS-KF00-style-anchor.png" alt="The approved CUT THE STRINGS style anchor"><div class="title-card"><div class="eyebrow">A 200-SECOND SCROLL FILM</div><h1>CUT THE<br>STRINGS</h1><p>Forty existing takes. No missing slot. Scroll forward or backward: your hand is the playhead.</p><span class="cue">SCROLL TO ENTER THE WORKSHOP ↓</span></div></section>
-<section class="scene" id="slot-01" data-scene="pin" data-slot="1" data-slate="CTS-A-001" data-src="assets/strings/wan-production/accepted/CTS-A-001.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF01" src="assets/strings/keyframes/CTS-KF01-the-crate.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Crate -&gt; Borrowed Marionette"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 01/40</span><h2>The Crate → Borrowed Marionette</h2><p>CTS-A-001 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-02" data-scene="pin" data-slot="2" data-slate="CTS-A-002" data-src="assets/strings/wan-production/accepted/CTS-A-002.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF02" src="assets/strings/keyframes/CTS-KF02-borrowed-marionette.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Borrowed Marionette -&gt; The Tangle"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 02/40</span><h2>Borrowed Marionette → The Tangle</h2><p>CTS-A-002 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-03" data-scene="pin" data-slot="3" data-slate="CTS-A-003" data-src="assets/strings/wan-production/accepted/CTS-A-003.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF03" src="assets/strings/keyframes/CTS-KF03-the-tangle.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Tangle -&gt; T Pose Freeze"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 03/40</span><h2>The Tangle → T Pose Freeze</h2><p>CTS-A-003 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-04" data-scene="pin" data-slot="4" data-slate="CTS-A-004" data-src="assets/strings/wan-production/accepted/CTS-A-004.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF04" src="assets/strings/keyframes/CTS-KF04-t-pose-freeze.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="T Pose Freeze -&gt; Grey Drain"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 04/40</span><h2>T Pose Freeze → Grey Drain</h2><p>CTS-A-004 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-05" data-scene="pin" data-slot="5" data-slate="CTS-A-005" data-src="assets/strings/wan-production/accepted/CTS-A-005.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF05" src="assets/strings/keyframes/CTS-KF05-grey-drain.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Grey Drain -&gt; Painted Eye"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 05/40</span><h2>Grey Drain → Painted Eye</h2><p>CTS-A-005 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-06" data-scene="pin" data-slot="6" data-slate="CTS-A-006" data-src="assets/strings/wan-production/accepted/CTS-A-006.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF06" src="assets/strings/keyframes/CTS-KF06-painted-eye.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Painted Eye -&gt; Drawer Of Failures"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 06/40</span><h2>Painted Eye → Drawer Of Failures</h2><p>CTS-A-006 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-07" data-scene="pin" data-slot="7" data-slate="CTS-A-007" data-src="assets/strings/wan-production/accepted/CTS-A-007.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF07" src="assets/strings/keyframes/CTS-KF07-drawer-of-failures.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Drawer Of Failures -&gt; The Vow"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 07/40</span><h2>Drawer Of Failures → The Vow</h2><p>CTS-A-007 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-08" data-scene="pin" data-slot="8" data-slate="CTS-A-008" data-src="assets/strings/wan-production/accepted/CTS-A-008.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF08" src="assets/strings/keyframes/CTS-KF08-the-vow.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Vow -&gt; First Cut"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 1 · 08/40</span><h2>The Vow → First Cut</h2><p>CTS-A-008 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-09" data-scene="pin" data-slot="9" data-slate="CTS-A-009" data-src="assets/strings/wan-production/accepted/CTS-A-009.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF09" src="assets/strings/keyframes/CTS-KF09-first-cut.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="First Cut -&gt; The Photograph"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 09/40</span><h2>First Cut → The Photograph</h2><p>CTS-A-009 · R2b</p><p class="defect"><span>BEST AVAILABLE</span>The close carving/hands still cross-dissolve over the wide portrait setup at about 2.3-3.3 s.</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-10" data-scene="pin" data-slot="10" data-slate="CTS-A-010" data-src="assets/strings/wan-production/accepted/CTS-A-010.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF10" src="assets/strings/keyframes/CTS-KF10-the-photograph.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Photograph -&gt; Skin Laid"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 10/40</span><h2>The Photograph → Skin Laid</h2><p>CTS-A-010 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-11" data-scene="pin" data-slot="11" data-slate="CTS-A-011" data-src="assets/strings/wan-production/accepted/CTS-A-011.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF11" src="assets/strings/keyframes/CTS-KF11-skin-laid.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Skin Laid -&gt; Two Swatches"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 11/40</span><h2>Skin Laid → Two Swatches</h2><p>CTS-A-011 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-12" data-scene="pin" data-slot="12" data-slate="CTS-A-012" data-src="assets/strings/wan-production/accepted/CTS-A-012.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF12" src="assets/strings/keyframes/CTS-KF12-two-swatches.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Two Swatches -&gt; Neck Seam"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 12/40</span><h2>Two Swatches → Neck Seam</h2><p>CTS-A-012 · R2b</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-13" data-scene="pin" data-slot="13" data-slate="CTS-A-013" data-src="assets/strings/wan-production/accepted/CTS-A-013.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF13" src="assets/strings/keyframes/CTS-KF13-neck-seam.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Neck Seam -&gt; Glass Eyes"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 13/40</span><h2>Neck Seam → Glass Eyes</h2><p>CTS-A-013 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-14" data-scene="pin" data-slot="14" data-slate="CTS-A-014" data-src="assets/strings/wan-production/accepted/CTS-A-014.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF14" src="assets/strings/keyframes/CTS-KF14-glass-eyes.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Glass Eyes -&gt; The Groom"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 14/40</span><h2>Glass Eyes → The Groom</h2><p>CTS-A-014 · R2a</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-15" data-scene="pin" data-slot="15" data-slate="CTS-A-015" data-src="assets/strings/wan-production/accepted/CTS-A-015.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF15" src="assets/strings/keyframes/CTS-KF15-the-groom.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Groom -&gt; Cloth From Photo"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 15/40</span><h2>The Groom → Cloth From Photo</h2><p>CTS-A-015 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-16" data-scene="pin" data-slot="16" data-slate="CTS-A-016" data-src="assets/strings/wan-production/accepted/CTS-A-016.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF16" src="assets/strings/keyframes/CTS-KF16-cloth-from-photo.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Cloth From Photo -&gt; The Fitting"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 16/40</span><h2>Cloth From Photo → The Fitting</h2><p>CTS-A-016 · R2a</p><p class="defect"><span>BEST AVAILABLE</span>Fitting hands and the seated hero dissolve over the dressed standing hero and mirror at about 2.9-3.6 s.</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-17" data-scene="pin" data-slot="17" data-slate="CTS-A-017" data-src="assets/strings/wan-production/accepted/CTS-A-017.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF17" src="assets/strings/keyframes/CTS-KF17-the-fitting.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Fitting -&gt; Wardrobe Rail"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 17/40</span><h2>The Fitting → Wardrobe Rail</h2><p>CTS-A-017 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-18" data-scene="pin" data-slot="18" data-slate="CTS-A-018" data-src="assets/strings/wan-production/accepted/CTS-A-018.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF18" src="assets/strings/keyframes/CTS-KF18-wardrobe-rail.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Wardrobe Rail -&gt; The Stringing"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 2 · 18/40</span><h2>Wardrobe Rail → The Stringing</h2><p>CTS-A-018 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-19" data-scene="pin" data-slot="19" data-slate="CTS-A-019" data-src="assets/strings/wan-production/accepted/CTS-A-019.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF19" src="assets/strings/keyframes/CTS-KF19-the-stringing.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Stringing -&gt; First Motion"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 3 · 19/40</span><h2>The Stringing → First Motion</h2><p>CTS-A-019 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-20" data-scene="pin" data-slot="20" data-slate="CTS-A-020" data-src="assets/strings/wan-production/accepted/CTS-A-020.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF20" src="assets/strings/keyframes/CTS-KF20-first-motion.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="First Motion -&gt; The Breath"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 3 · 20/40</span><h2>First Motion → The Breath</h2><p>CTS-A-020 · R2b</p><p class="defect"><span>BEST AVAILABLE</span>The seated hero still dissolves into the chest macro at about 3.3-4.2 s.</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-21" data-scene="pin" data-slot="21" data-slate="CTS-A-021" data-src="assets/strings/wan-production/accepted/CTS-A-021.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF21" src="assets/strings/keyframes/CTS-KF21-the-breath.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Breath -&gt; The Cut"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 3 · 21/40</span><h2>The Breath → The Cut</h2><p>CTS-A-021 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-22" data-scene="pin" data-slot="22" data-slate="CTS-A-022" data-src="assets/strings/wan-production/accepted/CTS-A-022.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF22" src="assets/strings/keyframes/CTS-KF22-the-cut.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Cut -&gt; First Step"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 3 · 22/40</span><h2>The Cut → First Step</h2><p>CTS-A-022 · R1</p><p class="defect"><span>BEST AVAILABLE</span>The solid hero travels through multiple poses rather than exactly one grounded step.</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-23" data-scene="pin" data-slot="23" data-slate="CTS-A-023" data-src="assets/strings/wan-production/accepted/CTS-A-023.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF23" src="assets/strings/keyframes/CTS-KF23-first-step.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="First Step -&gt; Bench Becomes Road"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 3 · 23/40</span><h2>First Step → Bench Becomes Road</h2><p>CTS-A-023 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-24" data-scene="pin" data-slot="24" data-slate="CTS-A-024" data-src="assets/strings/wan-production/accepted/CTS-A-024.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF24" src="assets/strings/keyframes/CTS-KF24-bench-becomes-road.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Bench Becomes Road -&gt; Four Doors"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 3 · 24/40</span><h2>Bench Becomes Road → Four Doors</h2><p>CTS-A-024 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-25" data-scene="pin" data-slot="25" data-slate="CTS-A-025" data-src="assets/strings/wan-production/accepted/CTS-A-025.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF25" src="assets/strings/keyframes/CTS-KF25-four-doors.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Four Doors -&gt; Marble Hall"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 25/40</span><h2>Four Doors → Marble Hall</h2><p>CTS-A-025 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-26" data-scene="pin" data-slot="26" data-slate="CTS-A-026" data-src="assets/strings/wan-production/accepted/CTS-A-026.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF26" src="assets/strings/keyframes/CTS-KF26-marble-hall.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Marble Hall -&gt; Hardest Light"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 26/40</span><h2>Marble Hall → Hardest Light</h2><p>CTS-A-026 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-27" data-scene="pin" data-slot="27" data-slate="CTS-A-027" data-src="assets/strings/wan-production/accepted/CTS-A-027.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF27" src="assets/strings/keyframes/CTS-KF27-hardest-light.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Hardest Light -&gt; Sky Islands"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 27/40</span><h2>Hardest Light → Sky Islands</h2><p>CTS-A-027 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-28" data-scene="pin" data-slot="28" data-slate="CTS-A-028" data-src="assets/strings/wan-production/accepted/CTS-A-028.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF28" src="assets/strings/keyframes/CTS-KF28-sky-islands.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Sky Islands -&gt; Arena Holds"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 28/40</span><h2>Sky Islands → Arena Holds</h2><p>CTS-A-028 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-29" data-scene="pin" data-slot="29" data-slate="CTS-A-029" data-src="assets/strings/wan-production/accepted/CTS-A-029.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF29" src="assets/strings/keyframes/CTS-KF29-arena-holds.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Arena Holds -&gt; Low Poly Island"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 29/40</span><h2>Arena Holds → Low Poly Island</h2><p>CTS-A-029 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-30" data-scene="pin" data-slot="30" data-slate="CTS-A-030" data-src="assets/strings/wan-production/accepted/CTS-A-030.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF30" src="assets/strings/keyframes/CTS-KF30-low-poly-island.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Low Poly Island -&gt; Same Face"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 30/40</span><h2>Low Poly Island → Same Face</h2><p>CTS-A-030 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-31" data-scene="pin" data-slot="31" data-slate="CTS-A-031" data-src="assets/strings/wan-production/accepted/CTS-A-031.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF31" src="assets/strings/keyframes/CTS-KF31-same-face.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Same Face -&gt; Artillery Hill"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 31/40</span><h2>Same Face → Artillery Hill</h2><p>CTS-A-031 · R2a</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-32" data-scene="pin" data-slot="32" data-slate="CTS-A-032" data-src="assets/strings/wan-production/accepted/CTS-A-032.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF32" src="assets/strings/keyframes/CTS-KF32-artillery-hill.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Artillery Hill -&gt; Return Walk"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 32/40</span><h2>Artillery Hill → Return Walk</h2><p>CTS-A-032 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-33" data-scene="pin" data-slot="33" data-slate="CTS-A-033" data-src="assets/strings/wan-production/accepted/CTS-A-033.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF33" src="assets/strings/keyframes/CTS-KF33-return-walk.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Return Walk -&gt; The Shelf"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 33/40</span><h2>Return Walk → The Shelf</h2><p>CTS-A-033 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-34" data-scene="pin" data-slot="34" data-slate="CTS-A-034" data-src="assets/strings/wan-production/accepted/CTS-A-034.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF34" src="assets/strings/keyframes/CTS-KF34-the-shelf.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Shelf -&gt; Severed Coil"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 4 · 34/40</span><h2>The Shelf → Severed Coil</h2><p>CTS-A-034 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-35" data-scene="pin" data-slot="35" data-slate="CTS-A-035" data-src="assets/strings/wan-production/accepted/CTS-A-035.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF35" src="assets/strings/keyframes/CTS-KF35-severed-coil.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Severed Coil -&gt; The Ledger"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 5 · 35/40</span><h2>Severed Coil → The Ledger</h2><p>CTS-A-035 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-36" data-scene="pin" data-slot="36" data-slate="CTS-A-036" data-src="assets/strings/wan-production/accepted/CTS-A-036.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF36" src="assets/strings/keyframes/CTS-KF36-the-ledger.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="The Ledger -&gt; Empty Page"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 5 · 36/40</span><h2>The Ledger → Empty Page</h2><p>CTS-A-036 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-37" data-scene="pin" data-slot="37" data-slate="CTS-A-037" data-src="assets/strings/wan-production/accepted/CTS-A-037.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF37" src="assets/strings/keyframes/CTS-KF37-empty-page.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Empty Page -&gt; Workshop Wide"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 5 · 37/40</span><h2>Empty Page → Workshop Wide</h2><p>CTS-A-037 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-38" data-scene="pin" data-slot="38" data-slate="CTS-A-038" data-src="assets/strings/wan-production/accepted/CTS-A-038.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF38" src="assets/strings/keyframes/CTS-KF38-workshop-wide.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Workshop Wide -&gt; Crate Outbound"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 5 · 38/40</span><h2>Workshop Wide → Crate Outbound</h2><p>CTS-A-038 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-39" data-scene="pin" data-slot="39" data-slate="CTS-A-039" data-src="assets/strings/wan-production/accepted/CTS-A-039.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF39" src="assets/strings/keyframes/CTS-KF39-crate-outbound.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Crate Outbound -&gt; Last Light"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 5 · 39/40</span><h2>Crate Outbound → Last Light</h2><p>CTS-A-039 · R2a</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="scene" id="slot-40" data-scene="pin" data-slot="40" data-slate="CTS-A-040" data-src="assets/strings/wan-production/accepted/CTS-A-040.mp4">
-  <div class="stage">
-    <img class="anchor" data-anchor="KF40" src="assets/strings/keyframes/CTS-KF40-last-light.png" loading="lazy" decoding="async" alt="" aria-hidden="true">
-    <video data-scrub-film muted playsinline preload="none" disablepictureinpicture aria-label="Last Light -&gt; The Crate"></video>
-    <div class="vignette" aria-hidden="true"></div>
-    <div class="slate"><span>ACT 5 · 40/40</span><h2>Last Light → The Crate</h2><p>CTS-A-040 · R1</p></div>
-    <div class="seek-state" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="epilogue"><div class="end-card"><span class="eyebrow">40 / 40 · VERIFIED</span><h2>NO STRINGS.</h2><p>Four best-available defects are disclosed on their frames. The film remains whole.</p><div class="links"><a href="assets/strings/CUT-THE-STRINGS-FINAL.mp4">OPEN SILENT MASTER</a><a href="assets/strings/wan-production/WAN-GENERATION-BOARD.html">OPEN TAKE BOARD</a></div></div></section>
-<script src="cinema.js?v=8"></script><script src="strings.js?v=1.0.0"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080705">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23080705'/%3E%3Cpath d='M6 8h20M16 8v18' stroke='%23d7a64b' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="strings.css?v=2.0.0">
+  <title>CUT THE STRINGS — One Scroll Film</title>
+</head>
+<body>
+  <div class="rail" data-rail aria-hidden="true"><i></i></div>
+  <header class="chrome" aria-label="Film identity">
+    <div class="brand">CUT THE STRINGS</div>
+    <div class="version">ONE PLAYHEAD · 200 SECONDS · 40 TAKES</div>
+  </header>
+
+  <section class="card-scene opening" data-scene="pin" id="top">
+    <div class="stage card-stage">
+      <img src="assets/strings/keyframes/CTS-KF00-style-anchor.png" alt="The approved CUT THE STRINGS style anchor">
+      <div class="card-shade" aria-hidden="true"></div>
+      <div class="title-card">
+        <p class="eyebrow">A 200-SECOND SCROLL FILM</p>
+        <h1>CUT THE<br>STRINGS</h1>
+        <p>Forty accepted takes become one uninterrupted reel. Your hand is the only clock.</p>
+        <span class="scroll-cue">SCROLL TO ENTER ↓</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="film-scene" id="strings-reel" data-scene="pin" aria-label="CUT THE STRINGS complete scroll film">
+    <div class="stage film-stage">
+      <div class="picture-zone">
+        <img class="ambient" src="assets/strings/keyframes/CTS-KF01-the-crate.png" alt="" aria-hidden="true">
+        <div class="film-frame">
+          <img class="floor" src="assets/strings/keyframes/CTS-KF01-the-crate.png" alt="" aria-hidden="true">
+          <video muted playsinline preload="auto" disablepictureinpicture aria-label="CUT THE STRINGS film buffer A"></video>
+          <video muted playsinline preload="auto" disablepictureinpicture aria-label="CUT THE STRINGS film buffer B"></video>
+        </div>
+      </div>
+      <div class="film-cue" id="strings-cue" aria-live="polite">
+        <span class="film-count" id="strings-shot-number">01 / 40</span>
+        <span class="film-title" id="strings-shot-title">The Crate → Borrowed Marionette</span>
+        <span class="film-source" id="strings-source">CTS-A-001 · R1</span>
+        <span class="film-disclosure" id="strings-disclosure" hidden>BEST AVAILABLE</span>
+      </div>
+    </div>
+
+    <div class="shot-data" hidden>
+      <figure data-source-id="CTS-A-001" data-clip="assets/strings/wan-production/accepted/CTS-A-001.mp4" data-poster="assets/strings/keyframes/CTS-KF01-the-crate.png" data-title="The Crate → Borrowed Marionette" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-002" data-clip="assets/strings/wan-production/accepted/CTS-A-002.mp4" data-poster="assets/strings/keyframes/CTS-KF02-borrowed-marionette.png" data-title="Borrowed Marionette → The Tangle" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-003" data-clip="assets/strings/wan-production/accepted/CTS-A-003.mp4" data-poster="assets/strings/keyframes/CTS-KF03-the-tangle.png" data-title="The Tangle → T Pose Freeze" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-004" data-clip="assets/strings/wan-production/accepted/CTS-A-004.mp4" data-poster="assets/strings/keyframes/CTS-KF04-t-pose-freeze.png" data-title="T Pose Freeze → Grey Drain" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-005" data-clip="assets/strings/wan-production/accepted/CTS-A-005.mp4" data-poster="assets/strings/keyframes/CTS-KF05-grey-drain.png" data-title="Grey Drain → Painted Eye" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-006" data-clip="assets/strings/wan-production/accepted/CTS-A-006.mp4" data-poster="assets/strings/keyframes/CTS-KF06-painted-eye.png" data-title="Painted Eye → Drawer Of Failures" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-007" data-clip="assets/strings/wan-production/accepted/CTS-A-007.mp4" data-poster="assets/strings/keyframes/CTS-KF07-drawer-of-failures.png" data-title="Drawer Of Failures → The Vow" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-008" data-clip="assets/strings/wan-production/accepted/CTS-A-008.mp4" data-poster="assets/strings/keyframes/CTS-KF08-the-vow.png" data-title="The Vow → First Cut" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-009" data-clip="assets/strings/wan-production/accepted/CTS-A-009.mp4" data-poster="assets/strings/keyframes/CTS-KF09-first-cut.png" data-title="First Cut → The Photograph" data-revision="R2b" data-defect="true"></figure>
+      <figure data-source-id="CTS-A-010" data-clip="assets/strings/wan-production/accepted/CTS-A-010.mp4" data-poster="assets/strings/keyframes/CTS-KF10-the-photograph.png" data-title="The Photograph → Skin Laid" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-011" data-clip="assets/strings/wan-production/accepted/CTS-A-011.mp4" data-poster="assets/strings/keyframes/CTS-KF11-skin-laid.png" data-title="Skin Laid → Two Swatches" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-012" data-clip="assets/strings/wan-production/accepted/CTS-A-012.mp4" data-poster="assets/strings/keyframes/CTS-KF12-two-swatches.png" data-title="Two Swatches → Neck Seam" data-revision="R2b"></figure>
+      <figure data-source-id="CTS-A-013" data-clip="assets/strings/wan-production/accepted/CTS-A-013.mp4" data-poster="assets/strings/keyframes/CTS-KF13-neck-seam.png" data-title="Neck Seam → Glass Eyes" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-014" data-clip="assets/strings/wan-production/accepted/CTS-A-014.mp4" data-poster="assets/strings/keyframes/CTS-KF14-glass-eyes.png" data-title="Glass Eyes → The Groom" data-revision="R2a"></figure>
+      <figure data-source-id="CTS-A-015" data-clip="assets/strings/wan-production/accepted/CTS-A-015.mp4" data-poster="assets/strings/keyframes/CTS-KF15-the-groom.png" data-title="The Groom → Cloth From Photo" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-016" data-clip="assets/strings/wan-production/accepted/CTS-A-016.mp4" data-poster="assets/strings/keyframes/CTS-KF16-cloth-from-photo.png" data-title="Cloth From Photo → The Fitting" data-revision="R2a" data-defect="true"></figure>
+      <figure data-source-id="CTS-A-017" data-clip="assets/strings/wan-production/accepted/CTS-A-017.mp4" data-poster="assets/strings/keyframes/CTS-KF17-the-fitting.png" data-title="The Fitting → Wardrobe Rail" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-018" data-clip="assets/strings/wan-production/accepted/CTS-A-018.mp4" data-poster="assets/strings/keyframes/CTS-KF18-wardrobe-rail.png" data-title="Wardrobe Rail → The Stringing" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-019" data-clip="assets/strings/wan-production/accepted/CTS-A-019.mp4" data-poster="assets/strings/keyframes/CTS-KF19-the-stringing.png" data-title="The Stringing → First Motion" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-020" data-clip="assets/strings/wan-production/accepted/CTS-A-020.mp4" data-poster="assets/strings/keyframes/CTS-KF20-first-motion.png" data-title="First Motion → The Breath" data-revision="R2b" data-defect="true"></figure>
+      <figure data-source-id="CTS-A-021" data-clip="assets/strings/wan-production/accepted/CTS-A-021.mp4" data-poster="assets/strings/keyframes/CTS-KF21-the-breath.png" data-title="The Breath → The Cut" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-022" data-clip="assets/strings/wan-production/accepted/CTS-A-022.mp4" data-poster="assets/strings/keyframes/CTS-KF22-the-cut.png" data-title="The Cut → First Step" data-revision="R1" data-defect="true"></figure>
+      <figure data-source-id="CTS-A-023" data-clip="assets/strings/wan-production/accepted/CTS-A-023.mp4" data-poster="assets/strings/keyframes/CTS-KF23-first-step.png" data-title="First Step → Bench Becomes Road" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-024" data-clip="assets/strings/wan-production/accepted/CTS-A-024.mp4" data-poster="assets/strings/keyframes/CTS-KF24-bench-becomes-road.png" data-title="Bench Becomes Road → Four Doors" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-025" data-clip="assets/strings/wan-production/accepted/CTS-A-025.mp4" data-poster="assets/strings/keyframes/CTS-KF25-four-doors.png" data-title="Four Doors → Marble Hall" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-026" data-clip="assets/strings/wan-production/accepted/CTS-A-026.mp4" data-poster="assets/strings/keyframes/CTS-KF26-marble-hall.png" data-title="Marble Hall → Hardest Light" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-027" data-clip="assets/strings/wan-production/accepted/CTS-A-027.mp4" data-poster="assets/strings/keyframes/CTS-KF27-hardest-light.png" data-title="Hardest Light → Sky Islands" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-028" data-clip="assets/strings/wan-production/accepted/CTS-A-028.mp4" data-poster="assets/strings/keyframes/CTS-KF28-sky-islands.png" data-title="Sky Islands → Arena Holds" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-029" data-clip="assets/strings/wan-production/accepted/CTS-A-029.mp4" data-poster="assets/strings/keyframes/CTS-KF29-arena-holds.png" data-title="Arena Holds → Low Poly Island" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-030" data-clip="assets/strings/wan-production/accepted/CTS-A-030.mp4" data-poster="assets/strings/keyframes/CTS-KF30-low-poly-island.png" data-title="Low Poly Island → Same Face" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-031" data-clip="assets/strings/wan-production/accepted/CTS-A-031.mp4" data-poster="assets/strings/keyframes/CTS-KF31-same-face.png" data-title="Same Face → Artillery Hill" data-revision="R2a"></figure>
+      <figure data-source-id="CTS-A-032" data-clip="assets/strings/wan-production/accepted/CTS-A-032.mp4" data-poster="assets/strings/keyframes/CTS-KF32-artillery-hill.png" data-title="Artillery Hill → Return Walk" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-033" data-clip="assets/strings/wan-production/accepted/CTS-A-033.mp4" data-poster="assets/strings/keyframes/CTS-KF33-return-walk.png" data-title="Return Walk → The Shelf" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-034" data-clip="assets/strings/wan-production/accepted/CTS-A-034.mp4" data-poster="assets/strings/keyframes/CTS-KF34-the-shelf.png" data-title="The Shelf → Severed Coil" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-035" data-clip="assets/strings/wan-production/accepted/CTS-A-035.mp4" data-poster="assets/strings/keyframes/CTS-KF35-severed-coil.png" data-title="Severed Coil → The Ledger" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-036" data-clip="assets/strings/wan-production/accepted/CTS-A-036.mp4" data-poster="assets/strings/keyframes/CTS-KF36-the-ledger.png" data-title="The Ledger → Empty Page" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-037" data-clip="assets/strings/wan-production/accepted/CTS-A-037.mp4" data-poster="assets/strings/keyframes/CTS-KF37-empty-page.png" data-title="Empty Page → Workshop Wide" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-038" data-clip="assets/strings/wan-production/accepted/CTS-A-038.mp4" data-poster="assets/strings/keyframes/CTS-KF38-workshop-wide.png" data-title="Workshop Wide → Crate Outbound" data-revision="R1"></figure>
+      <figure data-source-id="CTS-A-039" data-clip="assets/strings/wan-production/accepted/CTS-A-039.mp4" data-poster="assets/strings/keyframes/CTS-KF39-crate-outbound.png" data-title="Crate Outbound → Last Light" data-revision="R2a"></figure>
+      <figure data-source-id="CTS-A-040" data-clip="assets/strings/wan-production/accepted/CTS-A-040.mp4" data-poster="assets/strings/keyframes/CTS-KF40-last-light.png" data-title="Last Light → The Crate" data-revision="R1"></figure>
+    </div>
+  </section>
+
+  <section class="card-scene closing" data-scene="pin">
+    <div class="stage card-stage end-stage">
+      <div class="end-card">
+        <p class="eyebrow">40 / 40 · ONE COMPLETE REEL</p>
+        <h2>NO STRINGS.</h2>
+        <p>Four best-available defects remain disclosed. No shot was replaced, regenerated, or hidden.</p>
+        <div class="links">
+          <a href="assets/strings/CUT-THE-STRINGS-FINAL.mp4">OPEN SILENT MASTER</a>
+          <a href="assets/strings/wan-production/WAN-GENERATION-BOARD.html">OPEN TAKE BOARD</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="cinema.js?v=8"></script>
+  <script src="strings.js?v=2.0.0"></script>
+</body>
+</html>
