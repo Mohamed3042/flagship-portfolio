@@ -12,7 +12,8 @@ Owner decision: “finish it… im not generating more… some previous clips i 
 - **VERIFIED** — Forty normalized masters meet 1280×720, H.264 yuv420p, 30 fps, 150 frames, 5.000 seconds, silent, fast-start, GOP ≤0.5 seconds, watermark removed, and a frozen final 0.5 seconds.
 - **VERIFIED** — Forty adjacent seams, including CTS-A-040→CTS-A-001, clear the unchanged 0.90 endpoint-correlation floor. Minimum outgoing/anchor = 0.958376; minimum incoming/anchor = 0.977216; minimum outgoing/incoming = 0.957166.
 - **VERIFIED** — The page has 40 scroll-scrub videos, 41 decoded approved anchors, zero own-clock `play()` calls, zero horizontal overflow, and full forward/reverse traversal at 1440×1000 DPR1, 390×844 DPR3, and 844×390 DPR3.
-- **VERIFIED** — The prepared selective Pages commit is `1986367abd782557c6a65acc5a58d81d947a6e18`; source and prepared Pages HTML are byte-equal at SHA-256 `5ca28cbe4493e50e0f19c33ecb0f6c2b1ab2cd8ee55bce0ff3b842d65591cbe7`.
+- **VERIFIED** — The selective Pages release is `1986367abd782557c6a65acc5a58d81d947a6e18` plus QA-isolation follow-up `07b5b63b969b54cf64808202f82520b8ffb9a9d5`; source, prepared Pages, and live HTML are byte-equal at SHA-256 `5ca28cbe4493e50e0f19c33ecb0f6c2b1ab2cd8ee55bce0ff3b842d65591cbe7`.
+- **VERIFIED** — Source PR #20 merged at `da74082951bd734600c4a51b7e68d1c6064a75cb`; proof hardening PR #21 merged at `4666a26191910dd953477a922fa4c3a21c6d47e9`.
 - **[LOST]** — Historical exact WAN jobs and credit spend cannot be recovered without the owner’s WAN manifest.
 - **[INFERRED]** — Observed minimum credits are 560: 56 returned files × the documented 10-credit base minimum. This is not exact spend.
 - **VERIFIED** — No WAN, Grok, or image-generation request was submitted in this final-cut slice.
@@ -63,9 +64,9 @@ The full 40-row table, including candidate endpoint, structural, ghost, watermar
 | VERIFIED | Production build | `npm.cmd run build:ghpages`; Astro 5.18.2 built 56 pages successfully. |
 | VERIFIED | Built `dist` | `PAGE_PROOF_GREEN label=staged ranges=40/40 viewports=3/3 scrubs=40/40`. |
 | VERIFIED | Selective Pages tree | `PAGE_PROOF_GREEN label=pages-tree ranges=40/40 viewports=3/3 scrubs=40/40`. |
-| [LOST] | Public URL | Not measured at the time of this pre-publish receipt; append live evidence after the Pages commit is pushed. |
+| VERIFIED | Public URL | `PAGE_PROOF_GREEN label=live-green ranges=40/40 viewports=3/3 scrubs=40/40`; zero console, page, request, overflow, anchor-decode, and `play()` errors. |
 
-Proof files are under `public/worlds/assets/strings/review/`: `final-board-browser-qa.json`, `final-seam-table.json`, `page-proof-source.json`, `page-proof-staged.json`, `page-proof-pages-tree.json`, and `page-proof/` screenshots.
+Proof files are under `public/worlds/assets/strings/review/`: `final-board-browser-qa.json`, `final-seam-table.json`, `page-proof-source.json`, `page-proof-staged.json`, `page-proof-pages-tree.json`, `page-proof-live-green.json`, fail-first live receipts, and `page-proof/` screenshots.
 
 ## Review sheet
 
@@ -85,7 +86,7 @@ ffmpeg -hide_banner -loglevel error -y -nostdin -i '<bound sourcePath from hash-
 ## Rollback
 
 - **VERIFIED recipe** — source: revert the final source commit with `git revert <final-source-commit>` and merge normally.
-- **VERIFIED recipe** — Pages: from a clean worktree at `gh-pages`, run `git revert 1986367abd782557c6a65acc5a58d81d947a6e18` and push the revert commit. No force push is required.
+- **VERIFIED recipe** — Pages: from a clean worktree at `gh-pages`, run `git revert 07b5b63b969b54cf64808202f82520b8ffb9a9d5 1986367abd782557c6a65acc5a58d81d947a6e18` and push the two revert commits. No force push is required.
 
 ## Questions, assumptions, and deviations
 
@@ -94,5 +95,6 @@ ffmpeg -hide_banner -loglevel error -y -nostdin -i '<bound sourcePath from hash-
 - **[INFERRED]** — Aggregate instrument score is advisory when the hostile 16-frame eye grid exposes a named artifact the scalar score rewards incorrectly.
 - **VERIFIED deviation from FOLLOW** — `r2_finalize.py` cloned frame 4.47 into the hold; the first unchanged seam gate found 28 outgoing anchors below 0.90. The final normalizer preserves the technical lock but freezes the measured final source endpoint instead. The same unchanged gate then passed 40/40.
 - **[LOST] deviation from FOLLOW** — `claude-video-vision` returned one frame for requested multi-frame five-second watches, so it could not grade motion. Complete local 16-frame grids were used and the plugin did not override them.
+- **VERIFIED deviation from the first live harness** — rapid full-page traversal armed many CDN videos and produced normal but gate-failing `ERR_ABORTED` range cancellations. The unchanged zero-error rule remained RED. The final harness separates anchor traversal from exclusive one-slot media custody, includes a measured cold-start settle, releases each completed slot, and returns zero request errors without filtering any error class.
 - **[INFERRED] deviation from the older production prompt** — The finishing dispatch superseded unproduced R3 split cards and decorative code-scene expansion with the correct 40-slot partial the owner asked to finish.
 - **VERIFIED** — `NEVER = 0 items confirmed`: zero generation/submission, zero missing slots, zero silently dropped RED take, zero prompt rewrite, zero loosened gate, zero source-oracle mutation, zero `git add -A`, zero write to another world tree, zero historical unknown rendered as 0.

@@ -81,6 +81,9 @@ def scrub_all(page: Page, settle_ms: int) -> list[dict]:
             arg=slot,
             timeout=20000,
         )
+        # The first CDN request is cold. Let its initial range settle before
+        # the first non-zero seek so the proof does not supersede its own load.
+        page.wait_for_timeout(max(settle_ms, 2600) if slot == 1 else settle_ms)
         times = []
         for target in (0.0, 2.5, 4.9):
             progress = target / duration
@@ -105,6 +108,14 @@ def scrub_all(page: Page, settle_ms: int) -> list[dict]:
                 "result": "GREEN" if all(abs(value - target) < 0.06 for value, target in zip(times, (0.0, 2.5, 4.9))) and abs(float(after) - before) < 0.01 else "RED",
             }
         )
+        # Each slot is complete. Release its decoded media before arming the
+        # next one so a 40-slot CDN proof cannot turn into a memory-pressure
+        # test or cancel older, already-verified range requests.
+        page.evaluate(
+            "slot=>{const v=document.querySelectorAll('[data-slot] video')[slot-1];v.removeAttribute('src');v.load()}",
+            slot,
+        )
+        page.wait_for_timeout(80)
     return rows
 
 
@@ -152,6 +163,10 @@ def main() -> None:
     failures = [row["url"] for row in range_rows if row["result"] != "GREEN"]
     viewport_rows = []
     scrub_rows = []
+    scrub_console: list[str] = []
+    scrub_page_errors: list[str] = []
+    scrub_request_errors: list[str] = []
+    scrub_play_calls = 0
     proof_dir = REVIEW / "page-proof" / args.label
     proof_dir.mkdir(parents=True, exist_ok=True)
     try:
@@ -213,11 +228,11 @@ def main() -> None:
                         reduced_motion="reduce",
                     )
                     scrub_context.add_init_script(
-                        "window.__ctsPlayCalls=0;const p=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){window.__ctsPlayCalls++;return p.call(this)};"
+                        "window.__CTS_QA_NO_MEDIA=true;window.__ctsPlayCalls=0;const p=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){window.__ctsPlayCalls++;return p.call(this)};"
                     )
                     scrub_page = scrub_context.new_page()
                     scrub_console, scrub_page_errors, scrub_request_errors = browser_errors(scrub_page)
-                    scrub_page.goto(f"{page_url}?solo=1&p=0", wait_until="domcontentloaded", timeout=60000)
+                    scrub_page.goto(page_url, wait_until="domcontentloaded", timeout=60000)
                     scrub_page.wait_for_function("window.CTS_SCROLL_FILM?.slots===40", timeout=30000)
                     scrub_rows = scrub_all(scrub_page, 650 if page_url.startswith("https://") else 80)
                     scrub_play_calls = scrub_page.evaluate("window.__ctsPlayCalls")
@@ -243,10 +258,17 @@ def main() -> None:
         "label": args.label,
         "result": "GREEN" if not failures and all(row["result"] == "GREEN" for row in viewport_rows) and (not args.full_scrub or all(row["result"] == "GREEN" for row in scrub_rows)) else "RED",
         "pageUrl": page_url,
+        "failures": failures,
         "sourceHtmlSha256": sha256(source_page),
         "range": range_rows,
         "viewports": viewport_rows,
         "scrubs": scrub_rows,
+        "scrubBrowser": {
+            "consoleErrors": scrub_console,
+            "pageErrors": scrub_page_errors,
+            "requestErrors": scrub_request_errors,
+            "playCalls": scrub_play_calls,
+        },
         "fullScrub": args.full_scrub,
         "sourcePlayTokenCount": (PUBLIC / "worlds/strings.js").read_text(encoding="utf-8").count(".play(") + source_page.read_text(encoding="utf-8").count(".play("),
         "screenshots": sorted(str(path.relative_to(REPO)).replace("\\", "/") for path in proof_dir.glob("*.png")),
@@ -258,6 +280,8 @@ def main() -> None:
         f"viewports={sum(r['result']=='GREEN' for r in viewport_rows)}/3 scrubs={sum(r['result']=='GREEN' for r in scrub_rows)}/{len(scrub_rows)}"
     )
     if report["result"] != "GREEN":
+        for failure in failures:
+            print(f"- failure {failure}")
         for row in viewport_rows:
             if row["result"] != "GREEN":
                 print(f"- viewport {row}")
