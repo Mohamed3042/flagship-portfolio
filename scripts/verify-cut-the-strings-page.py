@@ -58,7 +58,11 @@ def traverse(page: Page) -> None:
     page.evaluate("window.scrollTo(0,0)")
     for number in range(1, 41):
         page.locator(f"#slot-{number:02d}").scroll_into_view_if_needed(timeout=15000)
-        page.wait_for_timeout(20)
+        page.wait_for_function(
+            "number=>{const i=document.querySelector(`[data-anchor=KF${String(number).padStart(2,'0')}]`);return i&&i.complete&&i.naturalWidth>0}",
+            arg=number,
+            timeout=30000,
+        )
     page.locator(".epilogue").scroll_into_view_if_needed(timeout=15000)
     page.wait_for_timeout(80)
     for number in range(40, 0, -1):
@@ -67,7 +71,7 @@ def traverse(page: Page) -> None:
     page.evaluate("window.scrollTo(0,0)")
 
 
-def scrub_all(page: Page) -> list[dict]:
+def scrub_all(page: Page, settle_ms: int) -> list[dict]:
     rows = []
     duration = 4.966
     for slot in range(1, 41):
@@ -88,6 +92,7 @@ def scrub_all(page: Page) -> list[dict]:
             )
             current = page.evaluate("slot=>window.CTS_SCROLL_FILM.snapshot()[slot-1].currentTime", slot)
             times.append(round(float(current), 4))
+            page.wait_for_timeout(settle_ms)
         before = times[-1]
         page.wait_for_timeout(180)
         after = page.evaluate("slot=>window.CTS_SCROLL_FILM.snapshot()[slot-1].currentTime", slot)
@@ -163,7 +168,7 @@ def main() -> None:
                         reduced_motion="reduce",
                     )
                     context.add_init_script(
-                        "window.__ctsPlayCalls=0;const p=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){window.__ctsPlayCalls++;return p.call(this)};"
+                        "window.__CTS_QA_NO_MEDIA=true;window.__ctsPlayCalls=0;const p=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){window.__ctsPlayCalls++;return p.call(this)};"
                     )
                     page = context.new_page()
                     console_errors, page_errors, request_errors = browser_errors(page)
@@ -178,8 +183,6 @@ def main() -> None:
                         for slot in (11, 21, 31):
                             page.locator(f"#slot-{slot:02d}").scroll_into_view_if_needed()
                             page.screenshot(path=proof_dir / f"desktop-act-bridge-{slot:02d}.png", full_page=False)
-                        if args.full_scrub:
-                            scrub_rows = scrub_all(page)
                     overflow = page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")
                     play_calls = page.evaluate("window.__ctsPlayCalls")
                     anchors = page.locator("[data-anchor]").count()
@@ -203,6 +206,27 @@ def main() -> None:
                     row["result"] = "GREEN" if slots == 40 and videos == 40 and anchors == 41 and not anchor_decode_failures and overflow <= 1 and play_calls == 0 and not console_errors and not page_errors and not request_errors else "RED"
                     viewport_rows.append(row)
                     context.close()
+                if args.full_scrub:
+                    scrub_context = browser.new_context(
+                        viewport={"width": 1440, "height": 1000},
+                        device_scale_factor=1,
+                        reduced_motion="reduce",
+                    )
+                    scrub_context.add_init_script(
+                        "window.__ctsPlayCalls=0;const p=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){window.__ctsPlayCalls++;return p.call(this)};"
+                    )
+                    scrub_page = scrub_context.new_page()
+                    scrub_console, scrub_page_errors, scrub_request_errors = browser_errors(scrub_page)
+                    scrub_page.goto(f"{page_url}?solo=1&p=0", wait_until="domcontentloaded", timeout=60000)
+                    scrub_page.wait_for_function("window.CTS_SCROLL_FILM?.slots===40", timeout=30000)
+                    scrub_rows = scrub_all(scrub_page, 650 if page_url.startswith("https://") else 80)
+                    scrub_play_calls = scrub_page.evaluate("window.__ctsPlayCalls")
+                    if scrub_console or scrub_page_errors or scrub_request_errors or scrub_play_calls:
+                        failures.append(
+                            f"scrub browser errors console={scrub_console} page={scrub_page_errors} "
+                            f"request={scrub_request_errors} playCalls={scrub_play_calls}"
+                        )
+                    scrub_context.close()
             finally:
                 browser.close()
     finally:
