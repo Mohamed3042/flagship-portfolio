@@ -59,7 +59,7 @@ The same cadence-v2 instrument later used on the release produced `CAKE_CADENCE_
 | staged Pages tree | GREEN | 2.2910 | 62.5 ms | 0 / 0 |
 | public live URL | GREEN | 3.1554 | 758.3 ms | 0 / 0 |
 
-The two long live desktop holds remained below the same-run reel holds: owner outro `758.3 <= 1300.1 + 33.333 ms`; fast intro `545.9 <= 4016.9 + 33.333 ms`. Phone bookend maximum was 108.4 ms. All 54 GREEN bookend segments (three profiles × three speeds × two bookends across three local surfaces and live) had zero proxy paints, source snaps, pixel snaps, `play()` calls, and network/page errors.
+The two long live desktop holds remained below the same-run reel holds: owner outro `758.3 <= 1300.1 + 33.333 ms`; fast intro `545.9 <= 4016.9 + 33.333 ms`. Phone bookend maximum was 108.4 ms. All 72 GREEN bookend segments (three profiles × three speeds × two bookends across three local surfaces and live) had zero proxy paints, source snaps, pixel snaps, `play()` calls, and network/page errors.
 
 ## Manifest and media custody
 
