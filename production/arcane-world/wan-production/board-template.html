@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>ARCANE WORLD · WAN Owner Generation Board</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #050b0d;
+      --panel: rgba(8, 21, 22, .95);
+      --panel-2: rgba(14, 30, 30, .94);
+      --ink: #f3ecdc;
+      --muted: #a9b6aa;
+      --amber: #d6a94e;
+      --amber-soft: #f2ce77;
+      --line: rgba(214, 169, 78, .3);
+      --green: #78d4bd;
+      --red: #f18bc6;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 9% 0%, rgba(28, 119, 106, .3), transparent 34rem),
+        radial-gradient(circle at 92% 8%, rgba(145, 38, 128, .22), transparent 30rem),
+        var(--page);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, select, textarea { font: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--amber-soft);
+      outline-offset: 3px;
+    }
+    button { cursor: pointer; }
+    .shell { width: min(1480px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 88px; }
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(28px, 5vw, 68px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(21, 61, 57, .96), rgba(18, 8, 19, .98));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, .42);
+    }
+    .masthead::after {
+      content: "";
+      position: absolute;
+      right: -18%;
+      bottom: -62%;
+      width: 76%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(214, 169, 78, .22);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .eyebrow, .frame-label, .prompt-label {
+      color: var(--amber-soft);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .eyebrow { margin: 0 0 14px; font-size: 12px; letter-spacing: .2em; }
+    h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 7vw, 92px);
+      font-weight: 400;
+      letter-spacing: -.045em;
+      line-height: .94;
+    }
+    .summary { position: relative; z-index: 1; max-width: 860px; margin: 22px 0 0; color: var(--muted); line-height: 1.65; }
+    .version { color: var(--amber-soft); font-weight: 800; }
+    .settings {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 32px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--line);
+    }
+    .setting { min-height: 72px; padding: 13px 14px; background: rgba(5, 11, 13, .96); }
+    .setting span { display: block; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .setting strong { display: block; margin-top: 6px; font-size: 13px; }
+    .progress-row { display: grid; grid-template-columns: auto minmax(100px, 1fr) auto auto auto; align-items: center; gap: 16px; margin: 28px 2px 12px; color: var(--muted); font-size: 13px; }
+    .progress-row strong { color: var(--ink); }
+    .now-job { color: var(--amber-soft); font-weight: 800; letter-spacing: .04em; }
+    .bar { height: 5px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, .08); }
+    .bar > i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--green), var(--amber), var(--red)); transition: width .25s ease; }
+    .spend-alert { color: var(--red); font-weight: 800; }
+    .toolbar {
+      position: sticky;
+      z-index: 20;
+      top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 20px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(5, 11, 13, .92);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .36);
+      backdrop-filter: blur(14px);
+    }
+    .filters, .toolbar-actions, .actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    button {
+      min-height: 39px;
+      padding: 0 14px;
+      border: 1px solid rgba(214, 169, 78, .42);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(214, 169, 78, .08);
+    }
+    button:hover { background: rgba(214, 169, 78, .18); }
+    button[aria-pressed="true"] { color: #1d1409; background: var(--amber-soft); }
+    button.copy.ok { color: var(--green); border-color: rgba(120, 212, 189, .5); }
+    .cards { display: grid; gap: 24px; }
+    .card {
+      scroll-margin-top: 98px;
+      padding: clamp(18px, 3vw, 34px);
+      border: 1px solid rgba(214, 169, 78, .2);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .28);
+    }
+    .card[data-status="done"] { border-color: rgba(120, 212, 189, .5); }
+    .card[data-status="rejected"] { border-color: rgba(241, 139, 198, .5); }
+    .card[hidden] { display: none; }
+    .card-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    .shot-no { color: var(--amber-soft); font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    h2 { margin: 5px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 4vw, 42px); font-weight: 400; line-height: 1.04; }
+    .output { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; text-align: right; }
+    .anchor { display: inline-block; margin-top: 8px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--amber-soft); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+    .pair { display: grid; grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr); align-items: center; gap: 14px; }
+    figure { margin: 0; min-width: 0; }
+    .frame-link { display: block; overflow: hidden; margin-top: 8px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; background: #000; aspect-ratio: 30 / 17; }
+    .frame-link img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    figcaption { overflow: hidden; margin-top: 7px; color: var(--muted); font: 500 10px ui-monospace, SFMono-Regular, Consolas, monospace; text-overflow: ellipsis; white-space: nowrap; }
+    .arrow { color: var(--amber); font-family: Georgia, serif; font-size: 34px; text-align: center; }
+    .job-meta { display: grid; grid-template-columns: 1fr 1.3fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .field { min-width: 0; }
+    .field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .field input, .field select, .field textarea {
+      width: 100%; min-height: 42px; border: 1px solid rgba(255, 255, 255, .11); border-radius: 10px; color: var(--ink); background: rgba(0, 0, 0, .25); padding: 9px 11px;
+    }
+    .field textarea { min-height: 42px; resize: vertical; }
+    .prompt-box { margin-top: 20px; padding: 18px; border: 1px solid rgba(255, 255, 255, .08); border-radius: 16px; background: var(--panel-2); }
+    .prompt-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .prompt { margin: 0; color: #e7e1d6; font-size: 14px; line-height: 1.65; white-space: pre-wrap; }
+    .negative { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .08); color: #c7bfb0; font-size: 12px; line-height: 1.55; }
+    .visible-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .noscript { margin: 24px 0; padding: 18px; border: 1px solid var(--red); color: var(--red); }
+    @media (max-width: 1050px) { .settings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .job-meta { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 18px, 1480px); padding-top: 9px; }
+      .masthead, .card { border-radius: 18px; }
+      .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .progress-row { grid-template-columns: 1fr auto; }
+      .progress-row .bar { grid-column: 1 / -1; grid-row: 2; }
+      .toolbar { position: static; }
+      .toolbar, .card-head, .prompt-top { align-items: flex-start; flex-direction: column; }
+      .toolbar-actions { width: 100%; }
+      .pair { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); }
+      .job-meta { grid-template-columns: 1fr; }
+      .output { text-align: left; }
+      button { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <p class="eyebrow">Owner generation surface · zero automatic submissions</p>
+      <h1>First frame → last frame. One exact prompt.</h1>
+      <p class="summary">Generate <strong>ARC-001 through ARC-040 in order</strong>. Upload the two approved stills shown on each card, paste the exact positive and negative prompts, use the recommended fixed seed, and download immediately. This offline board stores progress only in this browser. It cannot call WAN or spend credits. <span class="version">Board v1.0.1</span></p>
+      <section class="settings" aria-label="Locked WAN settings">
+        <div class="setting"><span>Model</span><strong>WAN 2.7</strong></div>
+        <div class="setting"><span>Mode</span><strong>First + Last</strong></div>
+        <div class="setting"><span>Resolution</span><strong>720P</strong></div>
+        <div class="setting"><span>Duration</span><strong>5 seconds</strong></div>
+        <div class="setting"><span>Outputs</span><strong>1</strong></div>
+        <div class="setting"><span>Prompt extend</span><strong>OFF</strong></div>
+        <div class="setting"><span>Audio</span><strong>OFF</strong></div>
+        <div class="setting"><span>Credits</span><strong>10 / clip</strong></div>
+      </section>
+    </header>
+
+    <section class="progress-row" aria-label="Generation progress">
+      <span><strong id="done-count">0</strong> / <strong id="job-count">40</strong> done</span>
+      <div class="bar" aria-hidden="true"><i id="bar-fill"></i></div>
+      <span><strong id="credits-spent">0</strong> credits entered</span>
+      <span id="projection"><strong>400</strong> projected</span>
+      <span class="now-job" id="now-job" aria-live="polite">NOW: ARC-001</span>
+    </section>
+
+    <nav class="toolbar" aria-label="Board filters and actions">
+      <div class="filters">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="pending" aria-pressed="false">Pending</button>
+        <button type="button" data-filter="done" aria-pressed="false">Done</button>
+        <button type="button" data-filter="rejected" aria-pressed="false">Rejected</button>
+      </div>
+      <div class="toolbar-actions">
+        <button type="button" id="first-pending">First pending</button>
+        <button type="button" id="copy-manifest">Copy manifest CSV</button>
+        <span class="visible-count"><strong id="visible-count">40</strong> visible</span>
+      </div>
+    </nav>
+
+    <section class="cards" id="cards" aria-label="WAN generation jobs"></section>
+    <noscript><p class="noscript">JavaScript is required to render the offline board and persistent local progress.</p></noscript>
+  </main>
+
+  <script type="application/json" id="job-data">__JOB_DATA__</script>
+  <script>
+    (() => {
+      "use strict";
+      const payload = JSON.parse(document.getElementById("job-data").textContent);
+      const jobs = payload.jobs;
+      const stateKey = "arcane-world-wan-owner-board-v1";
+      const emptyState = () => ({ status: "pending", taskId: "", seedUsed: "", attempts: 0, notes: "" });
+      let stored = {};
+      try { stored = JSON.parse(localStorage.getItem(stateKey) || "{}"); } catch (_) { stored = {}; }
+      const state = Object.fromEntries(jobs.map((job) => [job.id, { ...emptyState(), ...(stored[job.id] || {}) }]));
+      let activeFilter = "all";
+
+      const persist = () => {
+        try { localStorage.setItem(stateKey, JSON.stringify(state)); } catch (_) {}
+      };
+      const safeText = (value) => String(value ?? "");
+      const fileName = (value) => safeText(value).split("/").pop();
+      const cards = document.getElementById("cards");
+
+      async function copyText(button, value, normalLabel) {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch (_) {
+          const box = document.createElement("textarea");
+          box.value = value;
+          box.style.position = "fixed";
+          box.style.opacity = "0";
+          document.body.appendChild(box);
+          box.select();
+          document.execCommand("copy");
+          box.remove();
+        }
+        button.classList.add("ok");
+        button.textContent = "Copied ✓";
+        setTimeout(() => { button.classList.remove("ok"); button.textContent = normalLabel; }, 1000);
+      }
+
+      const csvQuote = (value) => `"${safeText(value).replaceAll('"', '""')}"`;
+      const manifestCsv = () => {
+        const header = ["clip", "act", "first", "last", "seed_family", "recommended_seed", "seed_used", "task_id", "status", "attempts", "credits", "file", "prompt", "notes"];
+        const rows = jobs.map((job) => {
+          const item = state[job.id];
+          return [job.id, `ACT ${job.act} - ${job.actTitle}`, job.firstId, job.lastId, job.seedFamily, job.seed, item.seedUsed, item.taskId, item.status, item.attempts, Number(item.attempts || 0) * 10, job.output, job.prompt, item.notes].map(csvQuote).join(",");
+        });
+        return `${header.map(csvQuote).join(",")}\n${rows.join("\n")}\n`;
+      };
+
+      function updateSummary() {
+        const done = jobs.filter((job) => state[job.id].status === "done").length;
+        const attempts = jobs.reduce((sum, job) => sum + Math.max(0, Number(state[job.id].attempts) || 0), 0);
+        const credits = attempts * payload.settings.creditsPerClip;
+        const projection = done > 0 ? Math.ceil((attempts / done) * jobs.length * payload.settings.creditsPerClip) : payload.settings.zeroRetakeCredits;
+        document.getElementById("done-count").textContent = done;
+        document.getElementById("bar-fill").style.width = `${done / jobs.length * 100}%`;
+        document.getElementById("credits-spent").textContent = credits;
+        const projectionNode = document.getElementById("projection");
+        projectionNode.innerHTML = `<strong>${projection}</strong> projected`;
+        projectionNode.classList.toggle("spend-alert", projection > payload.settings.stopReportCredits);
+        const nextJob = jobs.find((job) => state[job.id].status !== "done");
+        document.getElementById("now-job").textContent = nextJob ? `NOW: ${nextJob.id}` : "NOW: return clips";
+      }
+
+      function applyFilter() {
+        let visible = 0;
+        document.querySelectorAll(".card").forEach((card) => {
+          const show = activeFilter === "all" || card.dataset.status === activeFilter;
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+        document.getElementById("visible-count").textContent = visible;
+      }
+
+      function bindField(card, job, selector, property, parse = (value) => value) {
+        const field = card.querySelector(selector);
+        field.addEventListener("input", () => {
+          state[job.id][property] = parse(field.value);
+          if (property === "status") card.dataset.status = state[job.id].status;
+          persist();
+          updateSummary();
+          applyFilter();
+        });
+      }
+
+      jobs.forEach((job, index) => {
+        const item = state[job.id];
+        const card = document.createElement("article");
+        card.className = "card";
+        card.id = job.id;
+        card.dataset.id = job.id;
+        card.dataset.status = item.status;
+        card.innerHTML = `
+          <header class="card-head">
+            <div>
+              <div class="shot-no">${String(index + 1).padStart(2, "0")} / 40 · Act ${job.act} · ${job.actTitle}</div>
+              <h2>${job.title}</h2>
+              ${job.hardAnchor ? '<span class="anchor">HARD FLF ANCHOR</span>' : ''}
+            </div>
+            <div class="output">Save as ${job.output}<br>Seed ${job.seedFamily} · ${job.seed}</div>
+          </header>
+          <div class="pair">
+            <figure>
+              <span class="frame-label">FIRST frame · upload as Image 1</span>
+              <a class="frame-link" href="${job.first}" target="_blank" rel="noopener"><img src="${job.first}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} approved first frame"></a>
+              <figcaption>${job.firstId} · ${fileName(job.firstName)}</figcaption>
+            </figure>
+            <div class="arrow" aria-hidden="true">→</div>
+            <figure>
+              <span class="frame-label">LAST frame · upload as Image 2</span>
+              <a class="frame-link" href="${job.last}" target="_blank" rel="noopener"><img src="${job.last}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} approved last frame"></a>
+              <figcaption>${job.lastId} · ${fileName(job.lastName)}</figcaption>
+            </figure>
+          </div>
+          <div class="job-meta">
+            <div class="field"><label for="${job.id}-status">Status</label><select id="${job.id}-status" class="status"><option value="pending">Pending</option><option value="done">Done / downloaded</option><option value="rejected">Rejected / retry</option></select></div>
+            <div class="field"><label for="${job.id}-task">WAN task ID</label><input id="${job.id}-task" class="task-id" value="" autocomplete="off" placeholder="Paste after generation"></div>
+            <div class="field"><label for="${job.id}-seed">Seed used</label><input id="${job.id}-seed" class="seed-used" value="" inputmode="numeric" placeholder="${job.seed}"></div>
+            <div class="field"><label for="${job.id}-attempts">Attempts × 10 credits</label><input id="${job.id}-attempts" class="attempts" type="number" min="0" step="1" value="0"></div>
+          </div>
+          <div class="field" style="margin-top:10px"><label for="${job.id}-notes">Notes</label><textarea id="${job.id}-notes" class="notes" placeholder="Reason rejected, visible issue, or return note"></textarea></div>
+          <section class="prompt-box">
+            <div class="prompt-top"><span class="prompt-label">Exact positive prompt · prompt_extend OFF</span><div class="actions"><button class="copy copy-output" type="button">Copy filename</button><button class="copy copy-prompt" type="button">Copy prompt</button></div></div>
+            <p class="prompt"></p>
+            <div class="negative"><div class="prompt-top"><span class="prompt-label">Shared negative prompt</span><button class="copy copy-negative" type="button">Copy negative</button></div><p class="negative-text"></p></div>
+          </section>`;
+        card.querySelector(".prompt").textContent = job.prompt;
+        card.querySelector(".negative-text").textContent = job.negative;
+        card.querySelector(".status").value = item.status;
+        card.querySelector(".task-id").value = item.taskId;
+        card.querySelector(".seed-used").value = item.seedUsed;
+        card.querySelector(".attempts").value = item.attempts;
+        card.querySelector(".notes").value = item.notes;
+        card.querySelector(".copy-output").addEventListener("click", (event) => copyText(event.currentTarget, job.output, "Copy filename"));
+        card.querySelector(".copy-prompt").addEventListener("click", (event) => copyText(event.currentTarget, job.prompt, "Copy prompt"));
+        card.querySelector(".copy-negative").addEventListener("click", (event) => copyText(event.currentTarget, job.negative, "Copy negative"));
+        bindField(card, job, ".status", "status");
+        bindField(card, job, ".task-id", "taskId");
+        bindField(card, job, ".seed-used", "seedUsed");
+        bindField(card, job, ".attempts", "attempts", (value) => Math.max(0, Number(value) || 0));
+        bindField(card, job, ".notes", "notes");
+        cards.appendChild(card);
+      });
+
+      document.querySelectorAll("[data-filter]").forEach((button) => button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll("[data-filter]").forEach((node) => node.setAttribute("aria-pressed", String(node === button)));
+        applyFilter();
+      }));
+      document.getElementById("first-pending").addEventListener("click", () => {
+        const pending = jobs.find((job) => state[job.id].status === "pending");
+        if (pending) document.getElementById(pending.id)?.scrollIntoView({ block: "start" });
+      });
+      document.getElementById("copy-manifest").addEventListener("click", (event) => copyText(event.currentTarget, manifestCsv(), "Copy manifest CSV"));
+
+      persist();
+      updateSummary();
+      applyFilter();
+    })();
+  </script>
+</body>
+</html>

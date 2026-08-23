@@ -1,0 +1,18 @@
+{
+  "schema": "arcane-world-wan-board-browser-qa/v1",
+  "status": "GREEN",
+  "desktopViewport": "1440x1100@1",
+  "mobileViewport": "390x844@3",
+  "renderedCards": 40,
+  "decodedEndpointImages": 80,
+  "removedCardSabotageDetected": true,
+  "persistenceTest": true,
+  "copyTest": true,
+  "filterTest": true,
+  "nowMarkerTest": true,
+  "externalRequests": [],
+  "consoleErrors": [],
+  "failures": [],
+  "wanClipsGenerated": 0,
+  "wanCreditsSpent": 0
+}

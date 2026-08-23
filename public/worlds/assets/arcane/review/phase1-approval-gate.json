@@ -1,0 +1,11 @@
+{
+  "schema": "arcane-world-phase-gate/v1",
+  "ownerApprovalRecorded": true,
+  "ownerApprovalDate": "2026-08-23",
+  "ownerApprovalBasis": "Owner asked for the WAN prompts to be checked and the generation board left open for his execution.",
+  "approvedStillRange": "ARC-KF00 through ARC-KF40",
+  "ownerGenerationBoardBuilt": true,
+  "wanPhaseStatus": "AWAITING_OWNER_WAN_RETURNS",
+  "wanClipsGeneratedByCodex": 0,
+  "wanCreditsSpentByCodex": 0
+}

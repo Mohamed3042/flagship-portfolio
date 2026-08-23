@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>ARCANE WORLD · WAN Owner Generation Board</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #050b0d;
+      --panel: rgba(8, 21, 22, .95);
+      --panel-2: rgba(14, 30, 30, .94);
+      --ink: #f3ecdc;
+      --muted: #a9b6aa;
+      --amber: #d6a94e;
+      --amber-soft: #f2ce77;
+      --line: rgba(214, 169, 78, .3);
+      --green: #78d4bd;
+      --red: #f18bc6;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 9% 0%, rgba(28, 119, 106, .3), transparent 34rem),
+        radial-gradient(circle at 92% 8%, rgba(145, 38, 128, .22), transparent 30rem),
+        var(--page);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, input, select, textarea { font: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--amber-soft);
+      outline-offset: 3px;
+    }
+    button { cursor: pointer; }
+    .shell { width: min(1480px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 88px; }
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(28px, 5vw, 68px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(21, 61, 57, .96), rgba(18, 8, 19, .98));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, .42);
+    }
+    .masthead::after {
+      content: "";
+      position: absolute;
+      right: -18%;
+      bottom: -62%;
+      width: 76%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(214, 169, 78, .22);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .eyebrow, .frame-label, .prompt-label {
+      color: var(--amber-soft);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .eyebrow { margin: 0 0 14px; font-size: 12px; letter-spacing: .2em; }
+    h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 7vw, 92px);
+      font-weight: 400;
+      letter-spacing: -.045em;
+      line-height: .94;
+    }
+    .summary { position: relative; z-index: 1; max-width: 860px; margin: 22px 0 0; color: var(--muted); line-height: 1.65; }
+    .version { color: var(--amber-soft); font-weight: 800; }
+    .settings {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: 32px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--line);
+    }
+    .setting { min-height: 72px; padding: 13px 14px; background: rgba(5, 11, 13, .96); }
+    .setting span { display: block; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .setting strong { display: block; margin-top: 6px; font-size: 13px; }
+    .progress-row { display: grid; grid-template-columns: auto minmax(100px, 1fr) auto auto auto; align-items: center; gap: 16px; margin: 28px 2px 12px; color: var(--muted); font-size: 13px; }
+    .progress-row strong { color: var(--ink); }
+    .now-job { color: var(--amber-soft); font-weight: 800; letter-spacing: .04em; }
+    .bar { height: 5px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, .08); }
+    .bar > i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--green), var(--amber), var(--red)); transition: width .25s ease; }
+    .spend-alert { color: var(--red); font-weight: 800; }
+    .toolbar {
+      position: sticky;
+      z-index: 20;
+      top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 20px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(5, 11, 13, .92);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .36);
+      backdrop-filter: blur(14px);
+    }
+    .filters, .toolbar-actions, .actions { display: flex; flex-wrap: wrap; gap: 7px; }
+    button {
+      min-height: 39px;
+      padding: 0 14px;
+      border: 1px solid rgba(214, 169, 78, .42);
+      border-radius: 999px;
+      color: var(--ink);
+      background: rgba(214, 169, 78, .08);
+    }
+    button:hover { background: rgba(214, 169, 78, .18); }
+    button[aria-pressed="true"] { color: #1d1409; background: var(--amber-soft); }
+    button.copy.ok { color: var(--green); border-color: rgba(120, 212, 189, .5); }
+    .cards { display: grid; gap: 24px; }
+    .card {
+      scroll-margin-top: 98px;
+      padding: clamp(18px, 3vw, 34px);
+      border: 1px solid rgba(214, 169, 78, .2);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, .28);
+    }
+    .card[data-status="done"] { border-color: rgba(120, 212, 189, .5); }
+    .card[data-status="rejected"] { border-color: rgba(241, 139, 198, .5); }
+    .card[hidden] { display: none; }
+    .card-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+    .shot-no { color: var(--amber-soft); font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    h2 { margin: 5px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 4vw, 42px); font-weight: 400; line-height: 1.04; }
+    .output { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; text-align: right; }
+    .anchor { display: inline-block; margin-top: 8px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--amber-soft); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+    .pair { display: grid; grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr); align-items: center; gap: 14px; }
+    figure { margin: 0; min-width: 0; }
+    .frame-link { display: block; overflow: hidden; margin-top: 8px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; background: #000; aspect-ratio: 30 / 17; }
+    .frame-link img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    figcaption { overflow: hidden; margin-top: 7px; color: var(--muted); font: 500 10px ui-monospace, SFMono-Regular, Consolas, monospace; text-overflow: ellipsis; white-space: nowrap; }
+    .arrow { color: var(--amber); font-family: Georgia, serif; font-size: 34px; text-align: center; }
+    .job-meta { display: grid; grid-template-columns: 1fr 1.3fr 1fr 1fr; gap: 10px; margin-top: 20px; }
+    .field { min-width: 0; }
+    .field label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .field input, .field select, .field textarea {
+      width: 100%; min-height: 42px; border: 1px solid rgba(255, 255, 255, .11); border-radius: 10px; color: var(--ink); background: rgba(0, 0, 0, .25); padding: 9px 11px;
+    }
+    .field textarea { min-height: 42px; resize: vertical; }
+    .prompt-box { margin-top: 20px; padding: 18px; border: 1px solid rgba(255, 255, 255, .08); border-radius: 16px; background: var(--panel-2); }
+    .prompt-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .prompt { margin: 0; color: #e7e1d6; font-size: 14px; line-height: 1.65; white-space: pre-wrap; }
+    .negative { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .08); color: #c7bfb0; font-size: 12px; line-height: 1.55; }
+    .visible-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .noscript { margin: 24px 0; padding: 18px; border: 1px solid var(--red); color: var(--red); }
+    @media (max-width: 1050px) { .settings { grid-template-columns: repeat(4, minmax(0, 1fr)); } .job-meta { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 18px, 1480px); padding-top: 9px; }
+      .masthead, .card { border-radius: 18px; }
+      .settings { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .progress-row { grid-template-columns: 1fr auto; }
+      .progress-row .bar { grid-column: 1 / -1; grid-row: 2; }
+      .toolbar { position: static; }
+      .toolbar, .card-head, .prompt-top { align-items: flex-start; flex-direction: column; }
+      .toolbar-actions { width: 100%; }
+      .pair { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); }
+      .job-meta { grid-template-columns: 1fr; }
+      .output { text-align: left; }
+      button { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="masthead">
+      <p class="eyebrow">Owner generation surface · zero automatic submissions</p>
+      <h1>First frame → last frame. One exact prompt.</h1>
+      <p class="summary">Generate <strong>ARC-001 through ARC-040 in order</strong>. Upload the two approved stills shown on each card, paste the exact positive and negative prompts, use the recommended fixed seed, and download immediately. This offline board stores progress only in this browser. It cannot call WAN or spend credits. <span class="version">Board v1.0.1</span></p>
+      <section class="settings" aria-label="Locked WAN settings">
+        <div class="setting"><span>Model</span><strong>WAN 2.7</strong></div>
+        <div class="setting"><span>Mode</span><strong>First + Last</strong></div>
+        <div class="setting"><span>Resolution</span><strong>720P</strong></div>
+        <div class="setting"><span>Duration</span><strong>5 seconds</strong></div>
+        <div class="setting"><span>Outputs</span><strong>1</strong></div>
+        <div class="setting"><span>Prompt extend</span><strong>OFF</strong></div>
+        <div class="setting"><span>Audio</span><strong>OFF</strong></div>
+        <div class="setting"><span>Credits</span><strong>10 / clip</strong></div>
+      </section>
+    </header>
+
+    <section class="progress-row" aria-label="Generation progress">
+      <span><strong id="done-count">0</strong> / <strong id="job-count">40</strong> done</span>
+      <div class="bar" aria-hidden="true"><i id="bar-fill"></i></div>
+      <span><strong id="credits-spent">0</strong> credits entered</span>
+      <span id="projection"><strong>400</strong> projected</span>
+      <span class="now-job" id="now-job" aria-live="polite">NOW: ARC-001</span>
+    </section>
+
+    <nav class="toolbar" aria-label="Board filters and actions">
+      <div class="filters">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="pending" aria-pressed="false">Pending</button>
+        <button type="button" data-filter="done" aria-pressed="false">Done</button>
+        <button type="button" data-filter="rejected" aria-pressed="false">Rejected</button>
+      </div>
+      <div class="toolbar-actions">
+        <button type="button" id="first-pending">First pending</button>
+        <button type="button" id="copy-manifest">Copy manifest CSV</button>
+        <span class="visible-count"><strong id="visible-count">40</strong> visible</span>
+      </div>
+    </nav>
+
+    <section class="cards" id="cards" aria-label="WAN generation jobs"></section>
+    <noscript><p class="noscript">JavaScript is required to render the offline board and persistent local progress.</p></noscript>
+  </main>
+
+  <script type="application/json" id="job-data">{
+  "schema": "arcane-world-wan-board/v1",
+  "version": "1.0.1",
+  "project": "ARCANE WORLD",
+  "settings": {
+    "model": "WAN 2.7",
+    "mode": "First + Last Frame",
+    "resolution": "720P",
+    "durationSeconds": 5,
+    "outputs": 1,
+    "promptExtend": false,
+    "audio": false,
+    "creditsPerClip": 10,
+    "zeroRetakeCredits": 400,
+    "plannedCredits": 600,
+    "stopReportCredits": 660
+  },
+  "styleLock": "painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light",
+  "sharedNegative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars",
+  "jobs": [
+    {
+      "id": "ARC-001",
+      "position": 1,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "The Gilded Dawn → Gallery Avenue",
+      "output": "ARC-001.mp4",
+      "firstId": "ARC-KF01",
+      "lastId": "ARC-KF02",
+      "firstName": "ARC-KF01-gilded-dawn.png",
+      "lastName": "ARC-KF02-gallery-avenue.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF01-gilded-dawn.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF02-gallery-avenue.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF01 FIRST frame and ARC-KF02 LAST frame as immutable exact endpoints. One continuous dawn event lays the existing clouds into visible brushstrokes and carries their warm light down the central avenue until the streets and five monument plinths reach the supplied morning state. Make one slow 35 mm aerial push forward eighty metres toward the city along the avenue axis, preserving the exact skyline, central tower, cliff, ocean, airship lanes, gold-teal architecture, and centered sun as the painted clouds settle. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF02 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-002",
+      "position": 2,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "Gallery Avenue → Arena Globe",
+      "output": "ARC-002.mp4",
+      "firstId": "ARC-KF02",
+      "lastId": "ARC-KF03",
+      "firstName": "ARC-KF02-gallery-avenue.png",
+      "lastName": "ARC-KF03-arena-globe.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF02-gallery-avenue.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF03-arena-globe.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF02 FIRST frame and ARC-KF03 LAST frame as immutable exact endpoints. Each of the five complete plinths keeps its built monument rigid while its existing long shadow coherently reshapes into a small crowd using that monument, then settles in the original sun-cast direction as the brass globe becomes the destination. Make one slow 45 mm lateral track right twelve metres past all five complete plinths, preserving the globe, mask, cannon, dome, statue, their spacing, avenue symmetry, and warm upper-city daylight. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF03 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-003",
+      "position": 3,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "Arena Globe → Mask Plinth",
+      "output": "ARC-003.mp4",
+      "firstId": "ARC-KF03",
+      "lastId": "ARC-KF04",
+      "firstName": "ARC-KF03-arena-globe.png",
+      "lastName": "ARC-KF04-mask-plinth.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF03-arena-globe.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF04-mask-plinth.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF03 FIRST frame and ARC-KF04 LAST frame as immutable exact endpoints. The emerald-teal ocean inside the existing brass globe completes one gentle circulating swell while the glass carries a live reflection of one athlete's long leap toward the neighboring mask plinth. Make one slow 60 mm clockwise orbit of eight degrees around the globe, preserving the floating-island positions, moving water, glass reflections, gold gallery daylight, and rigid globe geometry as its real brass meridian crosses the lens as natural foreground occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF04 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-004",
+      "position": 4,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "Mask Plinth → Atelier Dome",
+      "output": "ARC-004.mp4",
+      "firstId": "ARC-KF04",
+      "lastId": "ARC-KF05",
+      "firstName": "ARC-KF04-mask-plinth.png",
+      "lastName": "ARC-KF05-atelier-dome.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF04-mask-plinth.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF05-atelier-dome.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF04 FIRST frame and ARC-KF05 LAST frame as immutable exact endpoints. The carved leaves around the existing mask perform one coherent rearrangement into a second readable face, then the same leaf forms finish as settled petals while the neighboring dome gleams beyond the gold frame. Make one slow 50 mm lateral track right four metres across the mask, preserving the rigid jungle-king features, bright inlays, gallery daylight, and carved material as the real frame passes close to the lens as physical occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF05 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-005",
+      "position": 5,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "Atelier Dome → Statue Hall",
+      "output": "ARC-005.mp4",
+      "firstId": "ARC-KF05",
+      "lastId": "ARC-KF06",
+      "firstName": "ARC-KF05-atelier-dome.png",
+      "lastName": "ARC-KF06-statue-hall.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF05-atelier-dome.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF06-statue-hall.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF05 FIRST frame and ARC-KF06 LAST frame as immutable exact endpoints. The existing printed picture completes one visible repaint stroke as its sheet settles onto the cake and dissolves cleanly into frosting; the resulting warm steam rises as a single coherent veil toward the statue hall. Make one slow 70 mm macro push forward one metre over the settling sheet, preserving the glass dome, brass arms, porcelain cake, warm window light, and painterly materials as the real steam passes across the lens as physical occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF06 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-006",
+      "position": 6,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "Statue Hall → Clock of Checks",
+      "output": "ARC-006.mp4",
+      "firstId": "ARC-KF06",
+      "lastId": "ARC-KF07",
+      "firstName": "ARC-KF06-statue-hall.png",
+      "lastName": "ARC-KF07-clock-of-checks.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF06-statue-hall.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF07-clock-of-checks.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF06 FIRST frame and ARC-KF07 LAST frame as immutable exact endpoints. The painted half of the existing statue completes one shallow breath while the marble half remains rigid; one gold clock reflection catches both eyes and travels down the central sternum seam. Make one slow 85 mm push forward 1.5 metres toward that seam, preserving the two material halves, stern identity, hard side light, statue proportions, and hall architecture as the real gold reflection expands across the lens into the supplied clock composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF07 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-007",
+      "position": 7,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "Clock of Checks → The Grate",
+      "output": "ARC-007.mp4",
+      "firstId": "ARC-KF07",
+      "lastId": "ARC-KF08",
+      "firstName": "ARC-KF07-clock-of-checks.png",
+      "lastName": "ARC-KF08-grate.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF07-clock-of-checks.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF08-grate.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF07 FIRST frame and ARC-KF08 LAST frame as immutable exact endpoints. Each existing green-gold window in the clock ring holds one minute machine scene completing its check; the full ring then reaches one steady illumination whose reflection descends along the tower brass toward the street grate. Make one slow 40 mm crane upward fifteen metres along the clock face, preserving the exact circular geometry, brass ribs, window count, warm sky, and architectural axis as the real outer rim passes across the lens as physical occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF08 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-008",
+      "position": 8,
+      "act": "I",
+      "actTitle": "THE CITY ABOVE",
+      "title": "The Grate → The Lift",
+      "output": "ARC-008.mp4",
+      "firstId": "ARC-KF08",
+      "lastId": "ARC-KF09",
+      "firstName": "ARC-KF08-grate.png",
+      "lastName": "ARC-KF09-lift.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF08-grate.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF09-lift.png",
+      "seedFamily": "UPPER_CITY",
+      "seed": 173201,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF08 FIRST frame and ARC-KF09 LAST frame as immutable exact endpoints. The same adult faceless engineer lifts the existing street grate as green undercity glow paints the coat's shadow upward across the wall, then completes the action by stepping down into the waiting brass cage lift. Make one controlled 50 mm push forward one metre behind the engineer's shoulder, preserving the navy coat, gold seams, parapet, city light direction, rigid grate, and vertical shaft geometry as the grate rim becomes natural foreground occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF09 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-009",
+      "position": 9,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "The Lift → Smog Sea",
+      "output": "ARC-009.mp4",
+      "firstId": "ARC-KF09",
+      "lastId": "ARC-KF10",
+      "firstName": "ARC-KF09-lift.png",
+      "lastName": "ARC-KF10-smog-sea.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF09-lift.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF10-smog-sea.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF09 FIRST frame and ARC-KF10 LAST frame as immutable exact endpoints. The occupied brass cage lift performs one steady descent while the existing masonry strata scroll past like frames of an old film reel, each era remaining a finished architectural layer before the cage enters the green smog sea. Keep one locked 35 mm camera riding with the cage downward thirty metres at a constant speed, preserving the faceless engineer silhouette, cage proportions, shaft rails, mosaic strata, green-magenta lights, and deep workshop geography. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF10 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-010",
+      "position": 10,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "Smog Sea → Decompiler Bench",
+      "output": "ARC-010.mp4",
+      "firstId": "ARC-KF10",
+      "lastId": "ARC-KF11",
+      "firstName": "ARC-KF10-smog-sea.png",
+      "lastName": "ARC-KF11-decompiler-bench.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF10-smog-sea.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF11-decompiler-bench.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF10 FIRST frame and ARC-KF11 LAST frame as immutable exact endpoints. The descending cage breaks through one coherent smog layer while the existing abstract neon sign-shapes bend their light around the smog instead of through it; the vapor parts around the rigid cage and the workshop lane brightens ahead. Make one controlled 30 mm crane forward fifteen metres through the opening, preserving the iron and verdigris catwalks, magenta shapes, distant city scale, atmospheric density, and pipe geography as one real pipe supplies natural foreground occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF11 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-011",
+      "position": 11,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "Decompiler Bench → Recovered Ladder",
+      "output": "ARC-011.mp4",
+      "firstId": "ARC-KF11",
+      "lastId": "ARC-KF12",
+      "firstName": "ARC-KF11-decompiler-bench.png",
+      "lastName": "ARC-KF12-recovered-ladder.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF11-decompiler-bench.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF12-recovered-ladder.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF11 FIRST frame and ARC-KF12 LAST frame as immutable exact endpoints. The existing golden reel unspools one final measured length into the punched-glass rack while its wall shadow shows tiny figures dancing the data being read; the last plate clicks into place and steadies. Make one patient 65 mm macro track right 1.5 metres along the reel path, preserving the exact machine, bench, plate edges, rear-view engineer, green workshop light, and real wall projection as the completed rack becomes the supplied landing composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF12 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-012",
+      "position": 12,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "Recovered Ladder → Character Forge",
+      "output": "ARC-012.mp4",
+      "firstId": "ARC-KF12",
+      "lastId": "ARC-KF13",
+      "firstName": "ARC-KF12-recovered-ladder.png",
+      "lastName": "ARC-KF13-character-forge.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF12-recovered-ladder.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF13-character-forge.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF12 FIRST frame and ARC-KF13 LAST frame as immutable exact endpoints. The existing backlight travels once from the lowest punched plate to the highest and casts their reflection onto the wall as an actual staircase of light, where the top step steadies at the open character-forge bay. Keep one locked 60 mm camera with zero translation and zero orbit, preserving the illuminated plates, etched marks, walls, catwalks, and centered engineer as the brightest real plate fills the lens as physical occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF13 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-013",
+      "position": 13,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "Character Forge → Export Tree",
+      "output": "ARC-013.mp4",
+      "firstId": "ARC-KF13",
+      "lastId": "ARC-KF14",
+      "firstName": "ARC-KF13-character-forge.png",
+      "lastName": "ARC-KF14-export-tree.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF13-character-forge.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF14-export-tree.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF13 FIRST frame and ARC-KF14 LAST frame as immutable exact endpoints. The existing brass armatures lift the blank mannequin through one continuous sheet of paint until the finished body clears the surface; the mirror already shows that finished result while the gauge needle settles inside its thin green band. Make one slow 55 mm lateral track right six metres past the forge and mirror, preserving mannequin proportions, armature count, paint surface, workshop palette, rear-view engineer, and rigid machinery as the connected copper trunk becomes the destination. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF14 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-014",
+      "position": 14,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "Export Tree → Transport Loom",
+      "output": "ARC-014.mp4",
+      "firstId": "ARC-KF14",
+      "lastId": "ARC-KF15",
+      "firstName": "ARC-KF14-export-tree.png",
+      "lastName": "ARC-KF15-transport-loom.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF14-export-tree.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF15-transport-loom.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF14 FIRST frame and ARC-KF15 LAST frame as immutable exact endpoints. Exactly four identical droplets leave exactly four existing valves at the same instant and land in exactly four visible copper channels leading toward the transport loom. Make one slow 45 mm push upward six metres along the single copper trunk to its four-way split, preserving the exact valve count, four door colors, droplet identity, trunk geometry, rear-view engineer, rigid pipes, and undercity light as the four channels carry the action toward the supplied loom bed. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF15 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-015",
+      "position": 15,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "Transport Loom → Gantry Wide",
+      "output": "ARC-015.mp4",
+      "firstId": "ARC-KF15",
+      "lastId": "ARC-KF16",
+      "firstName": "ARC-KF15-transport-loom.png",
+      "lastName": "ARC-KF16-gantry-wide.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF15-transport-loom.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF16-gantry-wide.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF15 FIRST frame and ARC-KF16 LAST frame as immutable exact endpoints. One coherent pulse travels from near to far across the existing woven light net; its knots brighten and dim in sequence like one living wave before the pulse reaches the ocean chart's distant edge. Make one slow 50 mm clockwise orbit of eighteen degrees above the loom bed, preserving every net knot, chart, brass frame, faceless engineer, green haze, magenta accents, and continuous workshop geography as the high gantry enters the supplied landing composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF16 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-016",
+      "position": 16,
+      "act": "II",
+      "actTitle": "THE DESCENT",
+      "title": "Gantry Wide → Raw Vat",
+      "output": "ARC-016.mp4",
+      "firstId": "ARC-KF16",
+      "lastId": "ARC-KF17",
+      "firstName": "ARC-KF16-gantry-wide.png",
+      "lastName": "ARC-KF17-raw-vat.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF16-gantry-wide.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF17-raw-vat.png",
+      "seedFamily": "DESCENT",
+      "seed": 284302,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF16 FIRST frame and ARC-KF17 LAST frame as immutable exact endpoints. The same adult faceless engineer walks ten metres along the high gantry toward the existing magenta vat while every visible steam plume leans in the same direction toward that destination and holds its coherent flow. Make one patient 35 mm track forward eight metres behind the engineer at walking speed, preserving the navy coat, gold seams, rail height, machine layout, green atmospheric light, rigid workshop geography, and consistent screen direction until the vat dominates the supplied frame. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF17 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-017",
+      "position": 17,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "Raw Vat → The Gathering",
+      "output": "ARC-017.mp4",
+      "firstId": "ARC-KF17",
+      "lastId": "ARC-KF18",
+      "firstName": "ARC-KF17-raw-vat.png",
+      "lastName": "ARC-KF18-gathering.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF17-raw-vat.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF18-gathering.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF17 FIRST frame and ARC-KF18 LAST frame as immutable exact endpoints. One existing magenta arc rises from the iron vat, freezes for one readable blink into glyph-like hand-drawn shapes, resumes its fluid path, and reaches the gantry rail as a single continuous energy event. Make one controlled 58 mm push forward five metres toward the vat rim, preserving the vessel, drawn-magenta energy, gantry, rear-view engineer, green workshop light, rigid pipe geography, and painterly arc thickness as the real rail crosses the lens as foreground occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF18 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-018",
+      "position": 18,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "The Gathering → The Press",
+      "output": "ARC-018.mp4",
+      "firstId": "ARC-KF18",
+      "lastId": "ARC-KF19",
+      "firstName": "ARC-KF18-gathering.png",
+      "lastName": "ARC-KF19-press.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF18-gathering.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF19-press.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF18 FIRST frame and ARC-KF19 LAST frame as immutable exact endpoints. The existing pneumatic tubes release one coordinated flight of brass cards toward the central hopper while each card shadow shows a tiny scene of the machine that sent it; the full hopper closes its lid once. Make one steady 40 mm lateral track right ten metres beneath the tubes, preserving card count continuity, tube paths, real shadows, rear-view engineer, green-magenta workshop palette, and hopper geometry as the closed lid supplies the landing surface. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF19 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-019",
+      "position": 19,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "The Press → Facet Lathe",
+      "output": "ARC-019.mp4",
+      "firstId": "ARC-KF19",
+      "lastId": "ARC-KF20",
+      "firstName": "ARC-KF19-press.png",
+      "lastName": "ARC-KF20-facet-lathe.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF19-press.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF20-facet-lathe.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF19 FIRST frame and ARC-KF20 LAST frame as immutable exact endpoints. The existing screw press completes one measured compression of the loaded cards into a single rough dark gem; at the strike, the room's light stamps down as one coherent plane and the opened press holds the steaming result. Keep one locked 50 mm camera with zero translation and zero orbit on the press bed, preserving the screw, hopper, bright work-light rectangle, engineer silhouette, iron floor, green-magenta machinery, and centered vertical mechanism. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF20 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-020",
+      "position": 20,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "Facet Lathe → Ignition Chamber",
+      "output": "ARC-020.mp4",
+      "firstId": "ARC-KF20",
+      "lastId": "ARC-KF21",
+      "firstName": "ARC-KF20-facet-lathe.png",
+      "lastName": "ARC-KF21-ignition-chamber.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF20-facet-lathe.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF21-ignition-chamber.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF20 FIRST frame and ARC-KF21 LAST frame as immutable exact endpoints. The existing brass lathe cuts the rough gem facet by facet through one continuous rotation while each new facet shows a different machine scene as a stable embedded image; the final facet catches the vat's magenta glow. Make one slow 85 mm macro track forward 1.2 metres along the cutting head, preserving the gem's polygon count, brass cradle, rear-view engineer, rigid assembly, work light, and distinct facet boundaries as the completed gem fills the supplied landing composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF21 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-021",
+      "position": 21,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "Ignition Chamber → The Ignition",
+      "output": "ARC-021.mp4",
+      "firstId": "ARC-KF21",
+      "lastId": "ARC-KF22",
+      "firstName": "ARC-KF21-ignition-chamber.png",
+      "lastName": "ARC-KF22-ignition-killshot.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF21-ignition-chamber.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF22-ignition-killshot.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF21 FIRST frame and ARC-KF22 LAST frame as immutable exact endpoints. The existing magenta arcs crawl from the two opposing coils toward the suspended faceted gem while each coil shadow lengthens and both shadows join into one tower silhouette on the chamber wall. Make one slow 45 mm clockwise orbit of ninety degrees around the chamber at constant speed, preserving the upper and lower coils, centered gem, rear-view engineer, rigid machinery, magenta energy, hard rim light, and real wall shadow as the arcs reach the supplied ignition position. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF22 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-022",
+      "position": 22,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "The Ignition → The Climb",
+      "output": "ARC-022.mp4",
+      "firstId": "ARC-KF22",
+      "lastId": "ARC-KF23",
+      "firstName": "ARC-KF22-ignition-killshot.png",
+      "lastName": "ARC-KF23-climb.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF22-ignition-killshot.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF23-climb.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF22 FIRST frame and ARC-KF23 LAST frame as immutable exact endpoints. The existing magenta arcs strike the suspended gem and turn blue as they pass through it; one coherent blue shockwave then repaints the chamber surfaces in brighter brushstrokes from the gem outward. Make one controlled 40 mm push forward six metres into the flood of light, preserving the faceted core, opposing coils, rear-view engineer, rigid iron pipes, chamber geometry, and hand-drawn energy as the supplied blue ignition state becomes stable. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF23 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-023",
+      "position": 23,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "The Climb → Arrival Above",
+      "output": "ARC-023.mp4",
+      "firstId": "ARC-KF23",
+      "lastId": "ARC-KF24",
+      "firstName": "ARC-KF23-climb.png",
+      "lastName": "ARC-KF24-arrival-above.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF23-climb.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF24-arrival-above.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF23 FIRST frame and ARC-KF24 LAST frame as immutable exact endpoints. The stable blue light runs upward through the existing pipe network floor by floor, and each architectural era wakes in its own palette only as the physical light front reaches it before arriving at the street grates. Make one steady 35 mm vertical rise thirty-five metres alongside the light, preserving every masonry stratum, rigid pipe axis, centered composition, era boundaries, and causal illumination as the upper-city direction enters the supplied frame. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF24 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-024",
+      "position": 24,
+      "act": "III",
+      "actTitle": "THE CORE",
+      "title": "Arrival Above → District Table",
+      "output": "ARC-024.mp4",
+      "firstId": "ARC-KF24",
+      "lastId": "ARC-KF25",
+      "firstName": "ARC-KF24-arrival-above.png",
+      "lastName": "ARC-KF25-district-table.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF24-arrival-above.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF25-district-table.png",
+      "seedFamily": "CORE",
+      "seed": 395403,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF24 FIRST frame and ARC-KF25 LAST frame as immutable exact endpoints. The blue light reaches the upper street one beat before it finishes leaving below, then the existing lamps, monuments, and clock ring bloom in one causal street-level sequence until the city stands fully lit. Make one slow 40 mm push forward two metres at street level, preserving the tower axis, gold-teal architecture, open grate, streetlamp spacing, blue central thread, and consistent light direction as the last real brass reflection fills the lens. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF25 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-025",
+      "position": 25,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "District Table → Arena District",
+      "output": "ARC-025.mp4",
+      "firstId": "ARC-KF25",
+      "lastId": "ARC-KF26",
+      "firstName": "ARC-KF25-district-table.png",
+      "lastName": "ARC-KF26-arena-district.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF25-district-table.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF26-arena-district.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF25 FIRST frame and ARC-KF26 LAST frame as immutable exact endpoints. The exactly five existing district pools wake together and fuse through the engraved channels into one continuous gradient; the arena pool expands within that same physical light path until its globe becomes the destination. Make one slow 40 mm lateral track right three metres past the brass model, preserving exactly five pools, two observer silhouettes, tabletop geometry, blue connecting lines, and city layout as the real arena globe and glass rim fill the lens. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF26 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-026",
+      "position": 26,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "Arena District → The Match",
+      "output": "ARC-026.mp4",
+      "firstId": "ARC-KF26",
+      "lastId": "ARC-KF27",
+      "firstName": "ARC-KF26-arena-district.png",
+      "lastName": "ARC-KF27-match.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF26-arena-district.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF27-match.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF26 FIRST frame and ARC-KF27 LAST frame as immutable exact endpoints. One arena match streak travels between the existing floating islands while every island shadow on the emerald-teal ocean remains the exact shape of its district-map counterpart and the distant sport action stays coherent. Make one steady 35 mm track forward twenty metres in a flythrough between islands, preserving their positions, brass rings, ocean scale, upper-city daylight, blue paths, and rigid map correspondence as the active platform becomes the supplied destination. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF27 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-027",
+      "position": 27,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "The Match → Mask District",
+      "output": "ARC-027.mp4",
+      "firstId": "ARC-KF27",
+      "lastId": "ARC-KF28",
+      "firstName": "ARC-KF27-match.png",
+      "lastName": "ARC-KF28-mask-district.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF27-match.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF28-mask-district.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF27 FIRST frame and ARC-KF28 LAST frame as immutable exact endpoints. One foreground athlete completes a single long sport leap between the existing islands while the brass ring unfurls heraldic banners as the score; the banners settle as the athlete reaches the landing platform. Make one steady 35 mm tracking move forward ten metres beside the athlete at matching speed, preserving the floating-island positions, emerald-teal ocean, blue light trail, distant participants, gold architecture, and safe athletic staging as the real fabric supplies a foreground wipe. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF28 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-028",
+      "position": 28,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "Mask District → Artillery District",
+      "output": "ARC-028.mp4",
+      "firstId": "ARC-KF28",
+      "lastId": "ARC-KF29",
+      "firstName": "ARC-KF28-mask-district.png",
+      "lastName": "ARC-KF29-artillery-district.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF28-mask-district.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF29-artillery-district.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF28 FIRST frame and ARC-KF29 LAST frame as immutable exact endpoints. The existing flat painted mask mural performs one continuous peel away from the stone wall, becoming a rigid 3D carved king who completes the motion by placing one foot onto the terrace. Make one slow 50 mm push forward four metres as the peel completes, preserving the same face, leaf silhouette, warm jungle inlays, terrace masonry, material colors, and upper-city daylight as the newly physical figure fills the supplied landing composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF29 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-029",
+      "position": 29,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "Artillery District → Atelier District",
+      "output": "ARC-029.mp4",
+      "firstId": "ARC-KF29",
+      "lastId": "ARC-KF30",
+      "firstName": "ARC-KF29-artillery-district.png",
+      "lastName": "ARC-KF30-atelier-district.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF29-artillery-district.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF30-atelier-district.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF29 FIRST frame and ARC-KF30 LAST frame as immutable exact endpoints. The existing artillery arcs rise above the dusk hill, freeze once into a readable dotted diagram when the carved king looks upward, resume their coherent paths, and let one arc land as a soft distant firework. Make one slow 45 mm crane upward sixteen metres from the hill toward the sky, preserving the king from behind, brass cannon park, amber dusk, safe public space, crowd scale, and exact arc spacing as the warm smoke supplies natural foreground occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF30 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-030",
+      "position": 30,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "Atelier District → The One Face",
+      "output": "ARC-030.mp4",
+      "firstId": "ARC-KF30",
+      "lastId": "ARC-KF31",
+      "firstName": "ARC-KF30-atelier-district.png",
+      "lastName": "ARC-KF31-one-face.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF30-atelier-district.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF31-one-face.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF30 FIRST frame and ARC-KF31 LAST frame as immutable exact endpoints. The final edible sheet completes one gentle settling action onto the existing cake while every cake reflection in the polished brass counter shows its stable source picture and the last reflection aligns with the statue-hall archway. Make one slow 55 mm lateral track right eight metres along the counter, preserving the bakers from behind, floral cakes, glass dome, carousel, warm daylight, brass surfaces, and distinct source pictures as the real final reflection fills the lens. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF31 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-031",
+      "position": 31,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "The One Face → Film District",
+      "output": "ARC-031.mp4",
+      "firstId": "ARC-KF31",
+      "lastId": "ARC-KF32",
+      "firstName": "ARC-KF31-one-face.png",
+      "lastName": "ARC-KF32-film-district.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF31-one-face.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF32-film-district.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF31 FIRST frame and ARC-KF32 LAST frame as immutable exact endpoints. One style seam travels steadily across the same face through the four existing archways—painted naturalism, toon, faceted form, and dusk—while both eyes remain aligned and the fourth arch completes the transformation. Make one slow 85 mm push forward two metres on the face mid-cross, preserving one identity, four stable presentations, arch geometry, marble-brass materials, gaze direction, and centered facial proportions as the fourth real arch fills the supplied landing composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF32 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-032",
+      "position": 32,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "Film District → Six Desks",
+      "output": "ARC-032.mp4",
+      "firstId": "ARC-KF32",
+      "lastId": "ARC-KF33",
+      "firstName": "ARC-KF32-film-district.png",
+      "lastName": "ARC-KF33-six-desks.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF32-film-district.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF33-six-desks.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF32 FIRST frame and ARC-KF33 LAST frame as immutable exact endpoints. The existing giant brass crank performs one deliberate half-turn in reverse, making the projected film run backward while it remains contained inside the screen behind its rigid brass frame; the crank stops and the frame holds. Make one slow 40 mm track forward eight metres from behind the crank toward the screen, preserving the audience silhouettes, curved film path, projector light, wheel geometry, theater scale, and screen surface as the held image fills the supplied landing composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF33 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-033",
+      "position": 33,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "Six Desks → Two Cities",
+      "output": "ARC-033.mp4",
+      "firstId": "ARC-KF33",
+      "lastId": "ARC-KF34",
+      "firstName": "ARC-KF33-six-desks.png",
+      "lastName": "ARC-KF34-two-cities.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF33-six-desks.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF34-two-cities.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF33 FIRST frame and ARC-KF34 LAST frame as immutable exact endpoints. The walking adult completes one circuit to the empty chair and rests one hand on it while the lamps at exactly six desks cast one shared shadow direction across the round chamber floor. Make one patient 50 mm clockwise orbit of one hundred twenty degrees inside the circle, preserving exactly six desks, five seated workers, one empty chair, six different crafts, warm lamp pools, circular spacing, and stable adult silhouettes as the shared shadow points toward the supplied destination. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF34 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-034",
+      "position": 34,
+      "act": "IV",
+      "actTitle": "THE DISTRICTS WAKE",
+      "title": "Two Cities → City Ledger",
+      "output": "ARC-034.mp4",
+      "firstId": "ARC-KF34",
+      "lastId": "ARC-KF35",
+      "firstName": "ARC-KF34-two-cities.png",
+      "lastName": "ARC-KF35-city-ledger.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF34-two-cities.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF35-city-ledger.png",
+      "seedFamily": "DISTRICTS",
+      "seed": 416504,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF34 FIRST frame and ARC-KF35 LAST frame as immutable exact endpoints. The gold-teal upper-city palette and green-magenta undercity palette meet at the horizon as one seamless painted gradient while both cities complete one slow breath of light and the existing blue thread keeps them joined. Make one slow 30 mm crane upward twenty metres and hold, preserving the bridge tower, faceless engineer, city geometry, night haze, palette identities, horizon, and continuous blue connection as the real tower window becomes the supplied transition surface. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF35 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-035",
+      "position": 35,
+      "act": "V",
+      "actTitle": "THE BRIDGE",
+      "title": "City Ledger → Heliograph",
+      "output": "ARC-035.mp4",
+      "firstId": "ARC-KF35",
+      "lastId": "ARC-KF36",
+      "firstName": "ARC-KF35-city-ledger.png",
+      "lastName": "ARC-KF36-heliograph.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF35-city-ledger.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF36-heliograph.png",
+      "seedFamily": "BRIDGE",
+      "seed": 527605,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF35 FIRST frame and ARC-KF36 LAST frame as immutable exact endpoints. The existing brass rule lines rise from the ledger page one half-beat before the blue stylus reaches each position, then the completed page turns once to a blank spread as one continuous bookkeeping action. Make one slow 85 mm macro track forward 1.5 metres down the page, preserving the paper fibers, abstract seals, inlaid borders, stylus shape, warm desk light, and rigid brass geometry as the raised final rule supplies physical foreground occlusion. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF36 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-036",
+      "position": 36,
+      "act": "V",
+      "actTitle": "THE BRIDGE",
+      "title": "Heliograph → Bridge Walk",
+      "output": "ARC-036.mp4",
+      "firstId": "ARC-KF36",
+      "lastId": "ARC-KF37",
+      "firstName": "ARC-KF36-heliograph.png",
+      "lastName": "ARC-KF37-bridge-walk.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF36-heliograph.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF37-bridge-walk.png",
+      "seedFamily": "BRIDGE",
+      "seed": 527605,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF36 FIRST frame and ARC-KF37 LAST frame as immutable exact endpoints. The existing heliograph performs one patient light exchange across the dark ocean: the far shore answers the same rhythm in reverse and both rhythms interleave once before becoming steady. Keep one patient held 50 mm camera with zero translation and zero orbit aimed past the signal lamp toward the horizon, preserving the paired light path, tower geometry, blue bridge lamps, ocean darkness, restrained dawn edge, and exact far-shore position as the real lens remains the foreground anchor. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF37 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-037",
+      "position": 37,
+      "act": "V",
+      "actTitle": "THE BRIDGE",
+      "title": "Bridge Walk → Empty Plinth",
+      "output": "ARC-037.mp4",
+      "firstId": "ARC-KF37",
+      "lastId": "ARC-KF38",
+      "firstName": "ARC-KF37-bridge-walk.png",
+      "lastName": "ARC-KF38-empty-plinth.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF37-bridge-walk.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF38-empty-plinth.png",
+      "seedFamily": "BRIDGE",
+      "seed": 527605,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF37 FIRST frame and ARC-KF38 LAST frame as immutable exact endpoints. The same adult faceless engineer walks twelve metres toward the gallery while the existing single shadow splits into one gold twin and one magenta twin that remain separated and move in step beside the coat. Make one steady 40 mm retreat ten metres ahead of the engineer at matching speed, preserving the bridge rail, both city lights, dawn direction, navy coat, gold seams, adult silhouette, and two colored shadows until the gallery end becomes the supplied destination. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF38 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-038",
+      "position": 38,
+      "act": "V",
+      "actTitle": "THE BRIDGE",
+      "title": "Empty Plinth → Public Core",
+      "output": "ARC-038.mp4",
+      "firstId": "ARC-KF38",
+      "lastId": "ARC-KF39",
+      "firstName": "ARC-KF38-empty-plinth.png",
+      "lastName": "ARC-KF39-public-core.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF38-empty-plinth.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF39-public-core.png",
+      "seedFamily": "BRIDGE",
+      "seed": 527605,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF38 FIRST frame and ARC-KF39 LAST frame as immutable exact endpoints. The existing half-pulled dust sheet keeps its real fabric shape while its folds hint at the next monument's silhouette and one band of morning light climbs from the empty plinth base to its top. Make one slow 50 mm push forward two metres and settle on the waiting plinth, preserving the clearly empty stone, gallery avenue, teal cloth, gold daylight, rigid pedestal, and benign atmosphere as the illuminated folds become the supplied transition surface. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF39 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-039",
+      "position": 39,
+      "act": "V",
+      "actTitle": "THE BRIDGE",
+      "title": "Public Core → Last Dawn",
+      "output": "ARC-039.mp4",
+      "firstId": "ARC-KF39",
+      "lastId": "ARC-KF40",
+      "firstName": "ARC-KF39-public-core.png",
+      "lastName": "ARC-KF40-last-dawn.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF39-public-core.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF40-last-dawn.png",
+      "seedFamily": "BRIDGE",
+      "seed": 527605,
+      "hardAnchor": false,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF39 FIRST frame and ARC-KF40 LAST frame as immutable exact endpoints. One small facet of the stable blue public core shows this exact camera move as it recurs inside its own image while the surrounding facets show the living districts and settle into steady light as dawn rises. Make one slow 60 mm push forward two metres into the facet field, preserving the core housing, clockwork, gathered citizens, blue geometry, gold hall, district identities, and sunrise direction as the recursive real facet fills the supplied composition. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF40 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    },
+    {
+      "id": "ARC-040",
+      "position": 40,
+      "act": "V",
+      "actTitle": "THE BRIDGE",
+      "title": "Last Dawn → Gilded Dawn Loop",
+      "output": "ARC-040.mp4",
+      "firstId": "ARC-KF40",
+      "lastId": "ARC-KF01",
+      "firstName": "ARC-KF40-last-dawn.png",
+      "lastName": "ARC-KF01-gilded-dawn.png",
+      "first": "../../../public/worlds/assets/arcane/keyframes/ARC-KF40-last-dawn.png",
+      "last": "../../../public/worlds/assets/arcane/keyframes/ARC-KF01-gilded-dawn.png",
+      "seedFamily": "BRIDGE",
+      "seed": 527605,
+      "hardAnchor": true,
+      "promptExtend": false,
+      "prompt": "Generate single shot. Treat the supplied ARC-KF40 FIRST frame and ARC-KF01 LAST frame as immutable exact endpoints. The same city performs one continuous predawn-to-sunrise light change: streetlamps dim into honest daylight while the final visible cloud brushstroke lays itself in the exact opening shape and then settles. Keep one held 35 mm aerial camera with zero translation and zero orbit, preserving the skyline, central tower, avenue, cliff, ocean, airship lanes, horizon, and composition until the supplied gilded opening frame is matched exactly. Complete the dominant action by 4.5 seconds, match the supplied ARC-KF01 LAST frame exactly, and hold motionless through 5.0 seconds. painterly graphic-novel realism, visible brushstrokes, art-deco gold-teal above, neon green-magenta undercity, hand-drawn smoke, hard rim light. No dialogue. No background music.",
+      "negative": "low resolution, worst quality, blur, compression artifacts, watermark, captions, subtitles, readable text, letters, numbers, logos, duplicate objects, extra limbs, deformed hands, face distortion, morphing, warping, flicker, jitter, frame jump, temporal inconsistency, sudden exposure shift, sudden color shift, unintended cut, split screen, franchise character, champion likeness, known city, rune, gore, child, slum, suffering, horror, photoreal glow, generated letterbox bars"
+    }
+  ]
+}</script>
+  <script>
+    (() => {
+      "use strict";
+      const payload = JSON.parse(document.getElementById("job-data").textContent);
+      const jobs = payload.jobs;
+      const stateKey = "arcane-world-wan-owner-board-v1";
+      const emptyState = () => ({ status: "pending", taskId: "", seedUsed: "", attempts: 0, notes: "" });
+      let stored = {};
+      try { stored = JSON.parse(localStorage.getItem(stateKey) || "{}"); } catch (_) { stored = {}; }
+      const state = Object.fromEntries(jobs.map((job) => [job.id, { ...emptyState(), ...(stored[job.id] || {}) }]));
+      let activeFilter = "all";
+
+      const persist = () => {
+        try { localStorage.setItem(stateKey, JSON.stringify(state)); } catch (_) {}
+      };
+      const safeText = (value) => String(value ?? "");
+      const fileName = (value) => safeText(value).split("/").pop();
+      const cards = document.getElementById("cards");
+
+      async function copyText(button, value, normalLabel) {
+        try {
+          await navigator.clipboard.writeText(value);
+        } catch (_) {
+          const box = document.createElement("textarea");
+          box.value = value;
+          box.style.position = "fixed";
+          box.style.opacity = "0";
+          document.body.appendChild(box);
+          box.select();
+          document.execCommand("copy");
+          box.remove();
+        }
+        button.classList.add("ok");
+        button.textContent = "Copied ✓";
+        setTimeout(() => { button.classList.remove("ok"); button.textContent = normalLabel; }, 1000);
+      }
+
+      const csvQuote = (value) => `"${safeText(value).replaceAll('"', '""')}"`;
+      const manifestCsv = () => {
+        const header = ["clip", "act", "first", "last", "seed_family", "recommended_seed", "seed_used", "task_id", "status", "attempts", "credits", "file", "prompt", "notes"];
+        const rows = jobs.map((job) => {
+          const item = state[job.id];
+          return [job.id, `ACT ${job.act} - ${job.actTitle}`, job.firstId, job.lastId, job.seedFamily, job.seed, item.seedUsed, item.taskId, item.status, item.attempts, Number(item.attempts || 0) * 10, job.output, job.prompt, item.notes].map(csvQuote).join(",");
+        });
+        return `${header.map(csvQuote).join(",")}\n${rows.join("\n")}\n`;
+      };
+
+      function updateSummary() {
+        const done = jobs.filter((job) => state[job.id].status === "done").length;
+        const attempts = jobs.reduce((sum, job) => sum + Math.max(0, Number(state[job.id].attempts) || 0), 0);
+        const credits = attempts * payload.settings.creditsPerClip;
+        const projection = done > 0 ? Math.ceil((attempts / done) * jobs.length * payload.settings.creditsPerClip) : payload.settings.zeroRetakeCredits;
+        document.getElementById("done-count").textContent = done;
+        document.getElementById("bar-fill").style.width = `${done / jobs.length * 100}%`;
+        document.getElementById("credits-spent").textContent = credits;
+        const projectionNode = document.getElementById("projection");
+        projectionNode.innerHTML = `<strong>${projection}</strong> projected`;
+        projectionNode.classList.toggle("spend-alert", projection > payload.settings.stopReportCredits);
+        const nextJob = jobs.find((job) => state[job.id].status !== "done");
+        document.getElementById("now-job").textContent = nextJob ? `NOW: ${nextJob.id}` : "NOW: return clips";
+      }
+
+      function applyFilter() {
+        let visible = 0;
+        document.querySelectorAll(".card").forEach((card) => {
+          const show = activeFilter === "all" || card.dataset.status === activeFilter;
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+        document.getElementById("visible-count").textContent = visible;
+      }
+
+      function bindField(card, job, selector, property, parse = (value) => value) {
+        const field = card.querySelector(selector);
+        field.addEventListener("input", () => {
+          state[job.id][property] = parse(field.value);
+          if (property === "status") card.dataset.status = state[job.id].status;
+          persist();
+          updateSummary();
+          applyFilter();
+        });
+      }
+
+      jobs.forEach((job, index) => {
+        const item = state[job.id];
+        const card = document.createElement("article");
+        card.className = "card";
+        card.id = job.id;
+        card.dataset.id = job.id;
+        card.dataset.status = item.status;
+        card.innerHTML = `
+          <header class="card-head">
+            <div>
+              <div class="shot-no">${String(index + 1).padStart(2, "0")} / 40 · Act ${job.act} · ${job.actTitle}</div>
+              <h2>${job.title}</h2>
+              ${job.hardAnchor ? '<span class="anchor">HARD FLF ANCHOR</span>' : ''}
+            </div>
+            <div class="output">Save as ${job.output}<br>Seed ${job.seedFamily} · ${job.seed}</div>
+          </header>
+          <div class="pair">
+            <figure>
+              <span class="frame-label">FIRST frame · upload as Image 1</span>
+              <a class="frame-link" href="${job.first}" target="_blank" rel="noopener"><img src="${job.first}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} approved first frame"></a>
+              <figcaption>${job.firstId} · ${fileName(job.firstName)}</figcaption>
+            </figure>
+            <div class="arrow" aria-hidden="true">→</div>
+            <figure>
+              <span class="frame-label">LAST frame · upload as Image 2</span>
+              <a class="frame-link" href="${job.last}" target="_blank" rel="noopener"><img src="${job.last}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" alt="${job.id} approved last frame"></a>
+              <figcaption>${job.lastId} · ${fileName(job.lastName)}</figcaption>
+            </figure>
+          </div>
+          <div class="job-meta">
+            <div class="field"><label for="${job.id}-status">Status</label><select id="${job.id}-status" class="status"><option value="pending">Pending</option><option value="done">Done / downloaded</option><option value="rejected">Rejected / retry</option></select></div>
+            <div class="field"><label for="${job.id}-task">WAN task ID</label><input id="${job.id}-task" class="task-id" value="" autocomplete="off" placeholder="Paste after generation"></div>
+            <div class="field"><label for="${job.id}-seed">Seed used</label><input id="${job.id}-seed" class="seed-used" value="" inputmode="numeric" placeholder="${job.seed}"></div>
+            <div class="field"><label for="${job.id}-attempts">Attempts × 10 credits</label><input id="${job.id}-attempts" class="attempts" type="number" min="0" step="1" value="0"></div>
+          </div>
+          <div class="field" style="margin-top:10px"><label for="${job.id}-notes">Notes</label><textarea id="${job.id}-notes" class="notes" placeholder="Reason rejected, visible issue, or return note"></textarea></div>
+          <section class="prompt-box">
+            <div class="prompt-top"><span class="prompt-label">Exact positive prompt · prompt_extend OFF</span><div class="actions"><button class="copy copy-output" type="button">Copy filename</button><button class="copy copy-prompt" type="button">Copy prompt</button></div></div>
+            <p class="prompt"></p>
+            <div class="negative"><div class="prompt-top"><span class="prompt-label">Shared negative prompt</span><button class="copy copy-negative" type="button">Copy negative</button></div><p class="negative-text"></p></div>
+          </section>`;
+        card.querySelector(".prompt").textContent = job.prompt;
+        card.querySelector(".negative-text").textContent = job.negative;
+        card.querySelector(".status").value = item.status;
+        card.querySelector(".task-id").value = item.taskId;
+        card.querySelector(".seed-used").value = item.seedUsed;
+        card.querySelector(".attempts").value = item.attempts;
+        card.querySelector(".notes").value = item.notes;
+        card.querySelector(".copy-output").addEventListener("click", (event) => copyText(event.currentTarget, job.output, "Copy filename"));
+        card.querySelector(".copy-prompt").addEventListener("click", (event) => copyText(event.currentTarget, job.prompt, "Copy prompt"));
+        card.querySelector(".copy-negative").addEventListener("click", (event) => copyText(event.currentTarget, job.negative, "Copy negative"));
+        bindField(card, job, ".status", "status");
+        bindField(card, job, ".task-id", "taskId");
+        bindField(card, job, ".seed-used", "seedUsed");
+        bindField(card, job, ".attempts", "attempts", (value) => Math.max(0, Number(value) || 0));
+        bindField(card, job, ".notes", "notes");
+        cards.appendChild(card);
+      });
+
+      document.querySelectorAll("[data-filter]").forEach((button) => button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll("[data-filter]").forEach((node) => node.setAttribute("aria-pressed", String(node === button)));
+        applyFilter();
+      }));
+      document.getElementById("first-pending").addEventListener("click", () => {
+        const pending = jobs.find((job) => state[job.id].status === "pending");
+        if (pending) document.getElementById(pending.id)?.scrollIntoView({ block: "start" });
+      });
+      document.getElementById("copy-manifest").addEventListener("click", (event) => copyText(event.currentTarget, manifestCsv(), "Copy manifest CSV"));
+
+      persist();
+      updateSummary();
+      applyFilter();
+    })();
+  </script>
+</body>
+</html>

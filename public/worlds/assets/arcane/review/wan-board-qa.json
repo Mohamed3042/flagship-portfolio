@@ -1,0 +1,37 @@
+{
+  "schema": "arcane-world-wan-board-qa/v1",
+  "status": "GREEN",
+  "jobCount": 40,
+  "hardAnchorCount": 7,
+  "lockedBeatChecks": 40,
+  "lockedCameraChecks": 40,
+  "endpointImageChecks": 80,
+  "uniqueEndpointDimensions": [
+    "1920x1088xRGB8"
+  ],
+  "promptCoreWordRange": {
+    "minimum": 65,
+    "maximum": 79,
+    "required": "45-90"
+  },
+  "seedFamilies": {
+    "UPPER_CITY": 173201,
+    "DESCENT": 284302,
+    "CORE": 395403,
+    "DISTRICTS": 416504,
+    "BRIDGE": 527605
+  },
+  "promptPrefix": "Generate single shot.",
+  "promptExtend": false,
+  "manualPromptQa": {
+    "stillsOutvotePrompt": true,
+    "physicalCarrierReviewed": true,
+    "positivePromptProhibitionScan": true,
+    "faceRoleToneReviewed": true,
+    "reviewedAt": "2026-08-23"
+  },
+  "forbiddenNetworkPrimitives": 0,
+  "wanClipsGenerated": 0,
+  "wanCreditsSpent": 0,
+  "errors": []
+}
