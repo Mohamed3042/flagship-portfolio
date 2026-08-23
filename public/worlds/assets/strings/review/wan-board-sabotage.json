@@ -1,0 +1,22 @@
+{
+  "schema": "cut-the-strings-wan-board-qa/v1",
+  "result": "RED",
+  "checks": 1264,
+  "passed": 1256,
+  "failures": [
+    "CTS-A-001 literal prompt prefix failed",
+    "CTS-A-001 literal prompt suffix failed",
+    "CTS-A-001 settle timing is missing",
+    "CTS-A-001 stable last-frame landing is missing",
+    "CTS-A-001 geometry lock is missing",
+    "CTS-A-001 exact style lock is missing",
+    "CTS-A-001 must state exactly one camera instruction",
+    "CTS-A-001 prompt file differs from clips.json"
+  ],
+  "clips": 40,
+  "approvedStills": 41,
+  "videoFiles": 0,
+  "jobsSubmitted": 0,
+  "creditsSpent": 0,
+  "sabotage": true
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "cut-the-strings-wan-board-qa/v1",
+  "result": "GREEN",
+  "checks": 1264,
+  "passed": 1264,
+  "failures": [],
+  "clips": 40,
+  "approvedStills": 41,
+  "videoFiles": 0,
+  "jobsSubmitted": 0,
+  "creditsSpent": 0,
+  "sabotage": false
+}
