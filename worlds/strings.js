@@ -3,6 +3,7 @@
   const scenes = [...document.querySelectorAll('[data-slot]')];
   const rails = [...document.querySelectorAll('[data-rail]')];
   const query = new URLSearchParams(location.search);
+  const qaNoMedia = window.__CTS_QA_NO_MEDIA === true;
   const clamp = value => Math.max(0, Math.min(1, value));
   let ticking = false;
 
@@ -54,7 +55,7 @@
       unit.scene.style.setProperty('--p', progress.toFixed(5));
       const near = rect.bottom > -vh && rect.top < vh * 2;
       unit.scene.classList.toggle('is-live', rect.top < vh * .55 && rect.bottom > vh * .45);
-      if (near) {
+      if (near && !qaNoMedia) {
         arm(unit);
         if (units[index + 1]) arm(units[index + 1]);
         seek(unit, progress);
@@ -103,6 +104,7 @@
         decoded: unit.video.readyState >= 2,
         currentTime: unit.video.currentTime,
         duration: unit.video.duration || null,
+        bufferedEnd: unit.video.buffered.length ? unit.video.buffered.end(unit.video.buffered.length - 1) : 0,
         error: unit.scene.dataset.mediaError || null,
       }));
     },
