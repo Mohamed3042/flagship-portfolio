@@ -1,7 +1,17 @@
 {
   "schema": "netflix-red-thread-wan-board-qa/v1",
-  "status": "GREEN",
-  "errors": [],
+  "status": "RED",
+  "errors": [
+    "N02: 4.5-second settle/final hold missing",
+    "N02: retry lock missing: bright activation head",
+    "N02: retry lock missing: Camera trucks right 0.5 meter only",
+    "N02: retry lock missing: no dolly, zoom, tilt, roll, or vertical drift",
+    "N02: retry lock missing: starting pixel row",
+    "N02: retry lock missing: global fade-in",
+    "N02: retry lock missing: hold final half-second frozen",
+    "N03: 4.5-second settle/final hold missing",
+    "N07: 4.5-second settle/final hold missing"
+  ],
   "product": "WAN 2.7",
   "durationSeconds": 5,
   "resolution": "720p",
@@ -14,7 +24,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "c7d6e3d06921ca736f6eec58e2bb1adacdb68252c0eec4cc90ba857907d1cfe2",
       "promptFileMatches": true,
-      "promptWords": 89,
+      "promptWords": 87,
       "flf": false
     },
     {
@@ -24,7 +34,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "bd0e3f857a35cf3dd561fe057712ea1293809f8a3e366d75a0ff97c806a5c4a4",
       "promptFileMatches": true,
-      "promptWords": 100,
+      "promptWords": 101,
       "flf": false
     },
     {
@@ -34,7 +44,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "cf7b5868b6b5b876bb0bc81dd8c800dc4643ca35d00db731b77da7397dc002a2",
       "promptFileMatches": true,
-      "promptWords": 82,
+      "promptWords": 81,
       "flf": false
     },
     {
@@ -44,7 +54,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "d1f482af8f2cbe626ebaebfd3fd77bf8051228364c2e1f7f280a5ef255d5c25d",
       "promptFileMatches": true,
-      "promptWords": 100,
+      "promptWords": 94,
       "flf": true
     },
     {
@@ -54,7 +64,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "f110d3b5ecb2c36ed29a713458a0345b476b436212c0320c8527345a0f66efa8",
       "promptFileMatches": true,
-      "promptWords": 83,
+      "promptWords": 84,
       "flf": false
     },
     {
@@ -64,7 +74,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "46183c527fbf268ff3154d946d0d3cb4b63ca76f804fb04902a3daf9509abab9",
       "promptFileMatches": true,
-      "promptWords": 77,
+      "promptWords": 82,
       "flf": false
     },
     {
@@ -74,7 +84,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "635ca2b2b70b05572143403ac083802d9a61f90a78331a78b8795ee0ffa3d3cf",
       "promptFileMatches": true,
-      "promptWords": 86,
+      "promptWords": 85,
       "flf": false
     },
     {
@@ -84,7 +94,7 @@
       "pixelExactDerivation": true,
       "inputSha256": "ae8bb7c958981a8ebdaeec3aabcaaf2e8a400c658817a15e5677135f75bf3d9d",
       "promptFileMatches": true,
-      "promptWords": 79,
+      "promptWords": 81,
       "flf": true
     }
   ],
@@ -94,7 +104,7 @@
       1920,
       1080
     ],
-    "sha256": "c4f3d3c7bb15b96dc9db3cebfc6ae5ad35865537b0df72429aa6f3749dcb7169"
+    "sha256": "8ab236eddaad788f255f68f771df1917ffcd7051623c9dbfb196bfb11d3bd49d"
   },
   "callsMade": 0,
   "creditsSpent": 0

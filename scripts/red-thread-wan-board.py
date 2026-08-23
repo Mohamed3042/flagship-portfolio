@@ -24,14 +24,61 @@ STYLE_LOCK = "absolute black void, single signal-red light, cinematic haze, blac
 AUDIO_LOCK = "No dialogue. No background music."
 PROMPT_PREFIX = "Generate single shot."
 MAX_PROMPT_WORDS = 110
-N02_RETRY_LOCKS = (
-    "bright activation head",
-    "Camera trucks right 0.5 meter only",
-    "no dolly, zoom, tilt, roll, or vertical drift",
-    "starting pixel row",
-    "global fade-in",
-    "hold final half-second frozen",
-)
+FINAL_HOLD_LOCK = "hold the final half second still"
+SHOT_LOCKS = {
+    "N01": (
+        "@Image1 is the immutable void geometry and art-direction",
+        "Camera pushes forward 0.25 meter very slowly",
+        "reflection in the black glass floor",
+    ),
+    "N02": (
+        "@Image1 is the immutable auditorium geometry and art-direction",
+        "Camera trucks right 0.5 meter slowly",
+        "travels once along the existing horizontal red line from left to right",
+        "already-visible seat rows",
+        "room remains lit only by red",
+        "no other light source wakes",
+    ),
+    "N03": (
+        "@Image1 is the immutable archive geometry and art-direction",
+        "Camera dollies forward 1 meter slowly",
+        "slides straight toward the camera 20 centimeters",
+        "every shelf stays rigid",
+    ),
+    "N04": (
+        "@Image1 is the immutable accepted N03 archive landing",
+        "@Image2 is the immutable four-portal destination",
+        "Camera tracks right 1.5 meters slowly",
+        "full-frame occluder",
+        "four complete portals",
+        "matching @Image2",
+    ),
+    "N05": (
+        "@Image1 is the immutable threshold geometry and art-direction",
+        "Camera pushes forward 1 meter slowly",
+        "slat light sweeps steadily",
+        "teal glow ahead widens",
+    ),
+    "N06": (
+        "@Image1 is the immutable frozen-instant geometry and art-direction",
+        "Camera orbits clockwise 25 degrees slowly",
+        "remain perfectly frozen in world space",
+        "only camera parallax changes",
+    ),
+    "N07": (
+        "@Image1 is the immutable auditorium geometry and art-direction",
+        "Camera pushes forward 1 meter slowly",
+        "screen's white glow narrows steadily inward",
+        "vertical red line stays bright",
+    ),
+    "N08": (
+        "@Image1 is the immutable starting line and reflection",
+        "@Image2 is the immutable N01 loop-closing destination",
+        "Camera pulls back 0.5 meter slowly",
+        "reflection lengthens",
+        "matching @Image2 exactly",
+    ),
+}
 
 
 def font(size: int, *, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
@@ -215,14 +262,18 @@ def verify(report_path: Path | None) -> int:
             errors.append(f"{shot['id']}: exact style lock missing")
         if AUDIO_LOCK not in prompt:
             errors.append(f"{shot['id']}: audio lock missing")
-        if "4.5 seconds" not in prompt or "hold" not in prompt.lower():
-            errors.append(f"{shot['id']}: 4.5-second settle/final hold missing")
+        if "4.5 seconds" not in prompt or FINAL_HOLD_LOCK not in prompt:
+            errors.append(f"{shot['id']}: exact 4.5-second settle/final-half-second hold missing")
         if word_count > MAX_PROMPT_WORDS:
             errors.append(f"{shot['id']}: prompt has {word_count} words > {MAX_PROMPT_WORDS}")
-        if shot["id"] == "N02":
-            for lock in N02_RETRY_LOCKS:
-                if lock not in prompt:
-                    errors.append(f"N02: retry lock missing: {lock}")
+        if shot.get("flf"):
+            if "@Image2" not in prompt:
+                errors.append(f"{shot['id']}: FLF prompt does not bind @Image2")
+        elif "@Image2" in prompt or "supplied last frame" in prompt:
+            errors.append(f"{shot['id']}: non-FLF prompt claims a last-frame input")
+        for lock in SHOT_LOCKS.get(shot["id"], ()):
+            if lock not in prompt:
+                errors.append(f"{shot['id']}: shot lock missing: {lock}")
         prompt_file_matches = prompt_path.is_file() and prompt_path.read_text(encoding="utf-8").strip() == prompt.strip()
         if not prompt_file_matches:
             errors.append(f"{shot['id']}: prompt file missing or does not match manifest")

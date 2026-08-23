@@ -1,0 +1,27 @@
+{
+  "schema": "netflix-red-thread-html-boards-qa/v1",
+  "status": "GREEN",
+  "errors": [],
+  "boards": {
+    "wan": {
+      "exists": true,
+      "manifestShots": 8,
+      "runtime": {
+        "url": "http://127.0.0.1:4617/worlds/assets/netflix/red-thread/wan/WAN-GENERATION-BOARD.html",
+        "status": 200,
+        "bytes": 3535,
+        "titleFound": true
+      }
+    },
+    "grok": {
+      "exists": true,
+      "manifestShots": 8,
+      "runtime": {
+        "url": "http://127.0.0.1:4617/worlds/assets/netflix/red-thread/grok/GROK-IMAGINE-2-GENERATION-BOARD.html",
+        "status": 200,
+        "bytes": 3588,
+        "titleFound": true
+      }
+    }
+  }
+}
