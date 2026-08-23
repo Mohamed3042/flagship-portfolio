@@ -1,0 +1,29 @@
+{
+  "schema": "cake-studio-bookend-scrub-parity-hashes/v1",
+  "implementationCommit": "79b426ac4fc7ce97ea615246a25c2d06066b61f1",
+  "mergedMainCommit": "e6dab0857bde077a9d738b75061051812c4a2a73",
+  "pagesCommit": "8edff86492602e4072250e1de0de3c3817160961",
+  "liveUrl": "https://mohamed3042.github.io/flagship-portfolio/worlds/cake-studio.html",
+  "sourceCheckoutSha256": {
+    "public/worlds/cake-studio.html": "7f1fee9863f16e94fbfb30f78106d3a05b8b8d6f5517ed64fab4c98e9fe3b749",
+    "public/worlds/cake-studio.css": "1f8d5c61c09462c5209e55b8d303efe0b4942c56093db3539f3febe37beb22c5",
+    "public/worlds/cake-studio.js": "5c283e2dac691d3369252599044ba1dc6233755fd0d3932eaec9300ad8d9096b",
+    "public/worlds/cake-studio-bookends.js": "cb7b33275a51a680b06c48b488790890c14d26e32a011de4b4e693b839163d82",
+    "public/worlds/cake-studio/v17/manifest.json": "564a73da0e2ef2433e10e7243ad03a75558aa830a2e5fe3ff68a745ba3238bd8"
+  },
+  "pagesBlobAndLiveSha256": {
+    "worlds/cake-studio.html": "137b662a879394620ebaad68c1b674eec4453563fc988c4a293656d22bf6840e",
+    "worlds/cake-studio.css": "18e458dd2c21fbd5b60753f0df56cd8c81c24cc51e7a401645e6cc512c20cb6a",
+    "worlds/cake-studio.js": "5c283e2dac691d3369252599044ba1dc6233755fd0d3932eaec9300ad8d9096b",
+    "worlds/cake-studio-bookends.js": "cb7b33275a51a680b06c48b488790890c14d26e32a011de4b4e693b839163d82",
+    "worlds/cake-studio/v17/manifest.json": "564a73da0e2ef2433e10e7243ad03a75558aa830a2e5fe3ff68a745ba3238bd8"
+  },
+  "mediaCustody": {
+    "baselineFileCount": 197,
+    "releaseFileCount": 197,
+    "mediaAndStillPayloadChanges": 0,
+    "onlyChangedFile": "public/worlds/cake-studio/v17/manifest.json",
+    "manifestBeforeSha256": "b16f225fbbe46633c4c5511b671155d3d3fe628baeb4e79974449bb00b130cf9",
+    "manifestAfterSha256": "564a73da0e2ef2433e10e7243ad03a75558aa830a2e5fe3ff68a745ba3238bd8"
+  }
+}
