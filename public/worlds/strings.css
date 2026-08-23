@@ -52,7 +52,11 @@ h1 { margin:18px 0; font:700 clamp(54px,11vw,150px)/.8 Georgia,serif; letter-spa
 }
 @media(orientation:landscape) and (max-height:500px) {
   .chrome { padding-top:8px; }
-  .film-stage { grid-template-rows:minmax(0,1fr) 54px; padding:8px max(12px,env(safe-area-inset-right)) max(3px,env(safe-area-inset-bottom)); }
+  .stage { height:100dvh; }
+  .film-stage {
+    grid-template-rows:minmax(0,1fr) 54px;
+    padding:calc(54px + max(3px,env(safe-area-inset-bottom))) max(12px,env(safe-area-inset-right)) max(3px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  }
   .film-frame { width:92vw; height:100%; max-height:none; aspect-ratio:auto; }
   .film-frame img, .film-frame video { object-fit:cover; }
   .film-cue { grid-template-columns:auto minmax(0,1fr) auto; padding-top:7px; }

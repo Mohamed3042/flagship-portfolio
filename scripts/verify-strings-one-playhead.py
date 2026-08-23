@@ -202,6 +202,7 @@ def sample_state(page: Page, selector: str, clip_ids: list[str]) -> dict[str, ob
           const api = window.CTS_ONE_PLAYHEAD?.snapshot?.();
           const stageRect = stage.getBoundingClientRect();
           const frameRect = frame.getBoundingClientRect();
+          const visual = window.visualViewport;
           const visibleVideos = videos.filter(video => {
             const cs = getComputedStyle(video), r = video.getBoundingClientRect();
             return cs.display !== 'none' && cs.visibility !== 'hidden' &&
@@ -229,6 +230,9 @@ def sample_state(page: Page, selector: str, clip_ids: list[str]) -> dict[str, ob
             stageRect: [stageRect.left, stageRect.top, stageRect.width, stageRect.height],
             frameRect: [frameRect.left, frameRect.top, frameRect.width, frameRect.height],
             viewport: [innerWidth, innerHeight],
+            visualViewport: visual
+              ? [visual.offsetLeft, visual.offsetTop, visual.width, visual.height]
+              : [0, 0, innerWidth, innerHeight],
           };
         }""",
         {"selector": selector, "clipIds": clip_ids},
@@ -442,16 +446,31 @@ def main() -> int:
                             "playAttempts": vp_page.evaluate("window.__onePlayheadPlayAttempts || 0"),
                             "errors": vp_errors,
                         }
+                        visual_top = state["visualViewport"][1]
+                        visual_height = state["visualViewport"][3]
+                        visual_center = visual_top + visual_height / 2
+                        row["pictureCenterDeltaPx"] = (
+                            state["frameRect"][1] + state["frameRect"][3] / 2 - visual_center
+                        )
+                        row["stageHeightDeltaPx"] = state["stageRect"][3] - visual_height
                         landscape_width_pass = (
                             name != "landscape"
                             or abs(row["pictureWidthRatio"] - LANDSCAPE_PICTURE_WIDTH_RATIO)
                             <= LANDSCAPE_PICTURE_WIDTH_TOLERANCE
+                        )
+                        landscape_center_pass = (
+                            name != "landscape"
+                            or (
+                                abs(row["pictureCenterDeltaPx"]) <= 1
+                                and abs(row["stageHeightDeltaPx"]) <= 1
+                            )
                         )
                         row["pass"] = (
                             state["visibleVideos"] == 1
                             and not state["overlays"]
                             and state["paused"] is True
                             and landscape_width_pass
+                            and landscape_center_pass
                             and row["overflow"] <= 1
                             and row["playAttempts"] == 0
                             and not any(vp_errors.values())
@@ -460,7 +479,7 @@ def main() -> int:
                         vp_page.screenshot(path=str(args.output_dir / f"{args.label}-{name}-film.png"))
                         ctx.close()
                     report["phoneViewports"] = viewport_rows
-                    gate.check("portrait one-picture and landscape 92% contract", all(row["pass"] for row in viewport_rows), viewport_rows)
+                    gate.check("portrait one-picture and landscape 92%-centered contract", all(row["pass"] for row in viewport_rows), viewport_rows)
 
                 report.update({"result": "GREEN" if not gate.failures else "RED", "checks": gate.checks, "errors": errors})
         finally:
