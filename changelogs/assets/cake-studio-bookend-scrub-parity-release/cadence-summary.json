@@ -1,0 +1,43 @@
+{
+  "schema": "cake-studio-bookend-scrub-parity-release/v1",
+  "generatedAt": "2026-08-23",
+  "instrument": "cake-studio-bookend-cadence/v2",
+  "thresholds": {
+    "presentationCadenceVsSameRunReel": ">= 0.90",
+    "presentationHoldVsSameRunReelMs": "<= reel + 33.333",
+    "nonVideoPaints": 0,
+    "sourceSnaps": 0,
+    "pixelSnapsAfter100Ms": 0,
+    "playCalls": 0
+  },
+  "red": {
+    "surface": "old public v1.7.2",
+    "actual": "RED",
+    "failureCount": 81,
+    "rows": [
+      {"profile":"desktop","speed":"slow","intro":{"fps":0,"nonVideo":177,"snaps":0},"outro":{"fps":0,"nonVideo":198,"snaps":0}},
+      {"profile":"desktop","speed":"owner","intro":{"fps":0,"nonVideo":37,"snaps":2},"outro":{"fps":0,"nonVideo":129,"snaps":2}},
+      {"profile":"desktop","speed":"fast","intro":{"fps":0,"nonVideo":208,"snaps":1},"outro":{"fps":0,"nonVideo":139,"snaps":3}},
+      {"profile":"phone-portrait","speed":"slow","intro":{"fps":0,"nonVideo":1702,"snaps":2},"outro":{"fps":0,"nonVideo":881,"snaps":2}},
+      {"profile":"phone-portrait","speed":"owner","intro":{"fps":0,"nonVideo":842,"snaps":2},"outro":{"fps":0,"nonVideo":441,"snaps":2}},
+      {"profile":"phone-portrait","speed":"fast","intro":{"fps":0,"nonVideo":287,"snaps":2},"outro":{"fps":0,"nonVideo":148,"snaps":2}},
+      {"profile":"phone-landscape","speed":"slow","intro":{"fps":0,"nonVideo":1589,"snaps":2},"outro":{"fps":0,"nonVideo":836,"snaps":2}},
+      {"profile":"phone-landscape","speed":"owner","intro":{"fps":0,"nonVideo":792,"snaps":2},"outro":{"fps":0,"nonVideo":418,"snaps":2}},
+      {"profile":"phone-landscape","speed":"fast","intro":{"fps":0,"nonVideo":272,"snaps":2},"outro":{"fps":0,"nonVideo":141,"snaps":2}}
+    ]
+  },
+  "greenSurfaces": [
+    {"surface":"source","actual":"GREEN","minimumCadenceRatio":3.0533,"maximumBookendHoldMs":45.9,"nonVideo":0,"snaps":0},
+    {"surface":"production-build","actual":"GREEN","minimumCadenceRatio":2.7219,"maximumBookendHoldMs":41.7,"nonVideo":0,"snaps":0},
+    {"surface":"staged-pages","actual":"GREEN","minimumCadenceRatio":2.2910,"maximumBookendHoldMs":62.5,"nonVideo":0,"snaps":0},
+    {"surface":"public-live","actual":"GREEN","minimumCadenceRatio":3.1554,"maximumBookendHoldMs":758.3,"nonVideo":0,"snaps":0}
+  ],
+  "live": {
+    "browserChecks": 205,
+    "browserFailures": 0,
+    "screenshots": 62,
+    "orientationFailures": 0,
+    "activeRangeResponses": 15,
+    "notes": "The 758.3 ms desktop owner-outro hold passed relative to its same-run 1300.1 ms reel hold; phone maximum was 108.4 ms."
+  }
+}
