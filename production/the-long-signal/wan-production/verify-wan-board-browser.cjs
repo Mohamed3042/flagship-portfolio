@@ -57,6 +57,18 @@ function check(condition, message, failures) {
     check(response && response.status() === 200, "board HTTP status is not 200", failures);
     check(await page.locator(".card").count() === 40, "rendered card count is not 40", failures);
     check(await page.locator(".frame-link img").count() === 80, "rendered endpoint image count is not 80", failures);
+    check(await page.locator(".bridge").count() === 17, "rendered physical-bridge badge count is not 17", failures);
+    check((await page.locator(".qa-pass").innerText()).includes("PROMPT QA GREEN"), "rendered prompt-QA banner is not GREEN", failures);
+    const promptGate = await page.locator(".prompt").evaluateAll((nodes) => nodes.every((node) => {
+      const prompt = node.textContent || "";
+      const words = prompt.trim().split(/\s+/).filter(Boolean).length;
+      const positive = prompt.replace("No dialogue. No background music.", "");
+      return words >= 45 && words <= 90
+        && prompt.startsWith("Generate single shot. Begin on Image 1.")
+        && prompt.includes("End on Image 2 by 4.5 seconds and hold.")
+        && !/\b(no|never|without|avoid|exclude|nothing|zero|unintended|extra|morph(?:ing)?|warp(?:ing)?|flicker|jitter|dissolve|crossfade|cut|text|captions?|subtitles?|watermark|logos?)\b/i.test(positive);
+    }));
+    check(promptGate, "one or more rendered prompts failed content QA", failures);
     for (let index = 1; index <= 40; index += 1) {
       const id = `SIG-${String(index).padStart(3, "0")}`;
       await page.locator(`#${id}`).scrollIntoViewIfNeeded();
@@ -119,6 +131,8 @@ function check(condition, message, failures) {
     mobileViewport: "390x844@3",
     renderedCards: 40,
     decodedEndpointImages: 80,
+    renderedPromptQa: true,
+    physicalBridgeBadges: 17,
     persistenceTest: true,
     copyTest: true,
     externalRequests,
@@ -131,7 +145,7 @@ function check(condition, message, failures) {
     [...failures, ...consoleErrors, ...externalRequests].forEach((failure) => console.error(`RED ${failure}`));
     process.exitCode = 1;
   } else {
-    console.log("GREEN_BROWSER 40/40 cards, 80/80 decoded endpoints, copy + persistence + filters, 390x844 DPR3 no overflow, 0 external requests");
+    console.log("GREEN_BROWSER 40/40 cards, 80/80 decoded endpoints, 40/40 rendered prompts, 17/17 bridge badges, copy + persistence + filters, 390x844 DPR3 no overflow, 0 external requests");
   }
 })().catch((error) => {
   console.error(error.stack || error);

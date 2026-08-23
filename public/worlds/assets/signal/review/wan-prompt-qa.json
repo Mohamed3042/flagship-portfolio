@@ -1,0 +1,15 @@
+{
+  "schema": "the-long-signal-wan-prompt-qa/v1",
+  "status": "GREEN",
+  "jobCount": 40,
+  "wordRange": [
+    69,
+    80
+  ],
+  "cleanPositivePrompts": 40,
+  "physicalBridgeJobs": 17,
+  "negativePromptCharacters": 460,
+  "promptExtend": false,
+  "wanCreditsSpent": 0,
+  "errors": []
+}

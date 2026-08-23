@@ -15,6 +15,13 @@
     "RETURN": 505505
   },
   "promptPrefix": "Generate single shot.",
+  "promptWordRange": [
+    69,
+    80
+  ],
+  "cleanPositivePrompts": 40,
+  "physicalBridgeJobs": 17,
+  "approvalGateBoardHash": "206812e2e7c2d06a3f4b8de31451ae9a63ac245712e698c3fac0af388bf9513d",
   "promptExtend": false,
   "forbiddenNetworkPrimitives": 0,
   "wanCreditsSpent": 0,

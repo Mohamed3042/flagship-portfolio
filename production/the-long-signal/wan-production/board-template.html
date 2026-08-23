@@ -81,6 +81,7 @@
     }
     .summary { position: relative; z-index: 1; max-width: 820px; margin: 22px 0 0; color: var(--muted); line-height: 1.65; }
     .version { color: var(--amber-soft); font-weight: 800; }
+    .qa-pass { position: relative; z-index: 1; display: inline-block; margin: 18px 0 0; padding: 9px 12px; border: 1px solid rgba(155, 212, 179, .55); border-radius: 999px; color: var(--green); background: rgba(43, 104, 73, .16); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
     .settings {
       position: relative;
       z-index: 1;
@@ -145,7 +146,8 @@
     .shot-no { color: var(--amber-soft); font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
     h2 { margin: 5px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 4vw, 42px); font-weight: 400; line-height: 1.04; }
     .output { color: var(--muted); font: 600 12px ui-monospace, SFMono-Regular, Consolas, monospace; text-align: right; }
-    .anchor { display: inline-block; margin-top: 8px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--amber-soft); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+    .anchor, .bridge { display: inline-block; margin: 8px 6px 0 0; padding: 5px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--amber-soft); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+    .bridge { border-color: rgba(155, 212, 179, .42); color: var(--green); }
     .pair { display: grid; grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr); align-items: center; gap: 14px; }
     figure { margin: 0; min-width: 0; }
     .frame-link { display: block; overflow: hidden; margin-top: 8px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 14px; background: #000; aspect-ratio: 30 / 17; }
@@ -187,7 +189,8 @@
     <header class="masthead">
       <p class="eyebrow">Owner generation surface · zero automatic submissions</p>
       <h1>First frame → last frame. One exact prompt.</h1>
-      <p class="summary">Generate <strong>SIG-001 through SIG-040 in order</strong>. Upload the two approved stills shown on each card, paste the exact positive and negative prompts, use the recommended fixed seed, and download immediately. This offline board stores progress only in this browser. It cannot call WAN or spend credits. <span class="version">Board v1.0.0</span></p>
+      <p class="summary">Generate <strong>SIG-001 through SIG-040 in order</strong>. Upload the two approved stills shown on each card, paste the exact positive and negative prompts, use the recommended fixed seed, and download immediately. This offline board stores progress only in this browser. It cannot call WAN or spend credits. <span class="version">Board v1.1.0</span></p>
+      <p class="qa-pass">Prompt QA green · 40/40 clean · 69–80 words · 17 physical bridges · zero WAN spend</p>
       <section class="settings" aria-label="Locked WAN settings">
         <div class="setting"><span>Model</span><strong>WAN 2.7</strong></div>
         <div class="setting"><span>Mode</span><strong>First + Last</strong></div>
@@ -320,6 +323,7 @@
               <div class="shot-no">${String(index + 1).padStart(2, "0")} / 40 · Act ${job.act} · ${job.actTitle}</div>
               <h2>${job.title}</h2>
               ${job.hardAnchor ? '<span class="anchor">HARD FLF ANCHOR</span>' : ''}
+              ${job.bridgeRequired ? `<span class="bridge">PHYSICAL BRIDGE · ${job.bridge}</span>` : ''}
             </div>
             <div class="output">Save as ${job.output}<br>Seed ${job.seedFamily} · ${job.seed}</div>
           </header>

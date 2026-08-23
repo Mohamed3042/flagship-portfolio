@@ -16,7 +16,7 @@ if (jobs.length !== 40) throw new Error(`expected 40 jobs, got ${jobs.length}`);
 
 const payload = JSON.stringify({
   schema: "the-long-signal-wan-board/v1",
-  version: "1.0.0",
+  version: "1.1.0",
   project: "THE LONG SIGNAL",
   settings: SETTINGS,
   styleLock: STYLE_LOCK,

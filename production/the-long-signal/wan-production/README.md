@@ -20,6 +20,14 @@ Use both supplied endpoint PNGs exactly. Clip `SIG-NNN` starts on `KFNN` and end
 
 The fixed seed families are DUST `101101`, CROSSING `202202`, WORLDS `303303`, LATTICE `404404`, and RETURN `505505`. Paste the board's shared negative prompt into WAN's negative field for every job.
 
+## Prompt QA lock
+
+- Board v1.1.0 contains 40 motion-first positive prompts measuring 69–80 words.
+- Every positive prompt has one motion sentence, one `Camera` sentence, the same style lock, and the same 4.5-second landing instruction.
+- Exclusions remain only in the 460-character shared negative field, apart from WAN's required `No dialogue. No background music.` audio lock.
+- Seventeen visually discontinuous endpoint pairs use one named physical carrier. The green `PHYSICAL BRIDGE` badge identifies those cards; keep that bridge wording intact.
+- `verify-wan-prompts.mjs` sabotages and rejects overlength, negative leakage, missing-bridge, and double-camera cases before grading the real 40 jobs.
+
 ## Credit boundary
 
 - Zero-retake target: 400 credits.
@@ -50,6 +58,7 @@ Returned clips still require the production acceptance gate: decoded first/last 
 ## Rebuild and verify
 
 ```powershell
+node production/the-long-signal/wan-production/verify-wan-prompts.mjs
 node production/the-long-signal/wan-production/build-board.mjs
 node production/the-long-signal/wan-production/verify-wan-board.mjs
 node production/the-long-signal/wan-production/verify-wan-board-browser.cjs
