@@ -366,92 +366,75 @@ def verify_track(media_dir: Path, name: str, sabotage: bool) -> dict:
 
 
 def verify_manifest(manifest: Path) -> None:
+    """Prove the accepted v1.7.2 phone assets survived as inert v1.8 records.
+
+    Media fidelity remains fully decoded above. This manifest check now fails if
+    any old phone master, atlas, or terminal still is reactivated, omitted from
+    the retirement ledger, or relabeled with a different digest.
+    """
     payload = json.loads(manifest.read_text(encoding="utf-8-sig"))
-    require(payload.get("version") == "1.7.2", "runtime manifest version is not 1.7.2")
+    require(payload.get("schema") == "cake-studio-bookends/v2", "runtime manifest schema is not v2")
+    require(payload.get("version") == "1.8.0", "runtime manifest version is not 1.8.0")
     require(payload.get("ready") is True, "runtime manifest is not ready")
+    delivery = payload.get("delivery", {})
     require(
-        payload.get("delivery", {}).get("phoneMaster")
+        delivery.get("scrubTransport")
         == {
-            "codec": "H.264",
-            "pixelFormat": "yuv420p",
-            "width": PHONE_WIDTH,
-            "height": PHONE_HEIGHT,
-            "fps": int(FPS),
-            "beatFrames": BEAT_FRAMES,
-            "finalTailExtraFrames": FINAL_TAIL_EXTRA_FRAMES,
-            "keyframeInterval": KEYFRAME_INTERVAL,
-            "terminalFrameOffset": TERMINAL_FRAME_OFFSET,
-            "silent": True,
-            "faststart": True,
+            "engine": "direct-video-anchor-three-slot",
+            "clock": "scroll",
+            "slots": 3,
+            "preloadWindow": 1,
+            "blobWarmAhead": 2,
+            "seekCoalescing": "last-write-wins",
+            "visibleProxy": "none",
+            "profiles": ["desktop", "phone-portrait", "phone-landscape"],
         },
-        "runtime manifest phone delivery contract drifted",
+        "runtime direct scrub transport contract drifted",
     )
     require(
-        payload.get("delivery", {}).get("phoneScrubAtlas")
-        == {
-            "mimeType": "image/webp",
-            "tileWidth": ATLAS_TILE_WIDTH,
-            "tileHeight": ATLAS_TILE_HEIGHT,
-            "quality": ATLAS_QUALITY,
-        },
-        "runtime manifest phone scrub atlas delivery contract drifted",
+        all(name not in delivery for name in ("phoneMaster", "phoneScrubAtlas", "phoneTerminalStill")),
+        "retired phone delivery remains active",
     )
+    tracks = payload.get("tracks", {})
     require(
-        payload.get("delivery", {}).get("phoneTerminalStill")
-        == {
-            "mimeType": "image/webp",
-            "width": PHONE_WIDTH,
-            "height": PHONE_HEIGHT,
-            "quality": TERMINAL_STILL_QUALITY,
-        },
-        "runtime manifest phone terminal still delivery contract drifted",
+        all("phoneMaster" not in tracks.get(name, {}) for name in TRACKS),
+        "a track still activates its phone master",
     )
-    for name, contract in TRACKS.items():
-        phone = payload.get("tracks", {}).get(name, {}).get("phoneMaster")
-        require(isinstance(phone, dict), f"manifest {name}.phoneMaster missing")
-        expected_frames = int(contract["beats"]) * BEAT_FRAMES + FINAL_TAIL_EXTRA_FRAMES
-        atlas_contract = contract["scrubAtlas"]
-        still_contract = contract["terminalStill"]
+
+    retired = payload.get("retiredDelivery", {})
+    require(
+        set(retired) == {"phoneMaster", "phoneScrubAtlas", "phoneTerminalStill"},
+        "retired phone ledger families drifted",
+    )
+    expected_assets = {
+        "phoneMaster": [
+            (str(contract["file"]), str(contract["sha256"]))
+            for contract in TRACKS.values()
+        ],
+        "phoneScrubAtlas": [
+            (str(contract["scrubAtlas"]["file"]), str(contract["scrubAtlas"]["sha256"]))
+            for contract in TRACKS.values()
+        ],
+        "phoneTerminalStill": [
+            (str(contract["terminalStill"]["file"]), str(contract["terminalStill"]["sha256"]))
+            for contract in TRACKS.values()
+        ],
+    }
+    for family, expected in expected_assets.items():
+        record = retired.get(family, {})
         require(
-            phone
-            == {
-                "src": f"cake-studio/v17/clips/{contract['file']}",
-                "width": PHONE_WIDTH,
-                "height": PHONE_HEIGHT,
-                "fps": int(FPS),
-                "beatFrames": BEAT_FRAMES,
-                "finalTailExtraFrames": FINAL_TAIL_EXTRA_FRAMES,
-                "keyframeInterval": KEYFRAME_INTERVAL,
-                "terminalFrameOffset": TERMINAL_FRAME_OFFSET,
-                "frames": expected_frames,
-                "duration": round(expected_frames / FPS, 6),
-                "scrubAtlas": {
-                    "src": f"cake-studio/v17/clips/{atlas_contract['file']}",
-                    "bytes": int(atlas_contract["bytes"]),
-                    "sha256": str(atlas_contract["sha256"]),
-                    "width": int(atlas_contract["columns"]) * ATLAS_TILE_WIDTH,
-                    "height": int(atlas_contract["rows"]) * ATLAS_TILE_HEIGHT,
-                    "tileWidth": ATLAS_TILE_WIDTH,
-                    "tileHeight": ATLAS_TILE_HEIGHT,
-                    "quality": ATLAS_QUALITY,
-                    "columns": int(atlas_contract["columns"]),
-                    "rows": int(atlas_contract["rows"]),
-                    "samples": len(atlas_contract["frames"]),
-                    "frames": [int(index) for index in atlas_contract["frames"]],
-                },
-                "terminalStill": {
-                    "src": f"cake-studio/v17/clips/{still_contract['file']}",
-                    "bytes": int(still_contract["bytes"]),
-                    "sha256": str(still_contract["sha256"]),
-                    "width": PHONE_WIDTH,
-                    "height": PHONE_HEIGHT,
-                    "quality": TERMINAL_STILL_QUALITY,
-                    "frame": int(still_contract["frame"]),
-                    "time": round(int(still_contract["frame"]) / FPS, 6),
-                },
-            },
-            f"manifest {name} phone contract drifted",
+            record.get("status") == "inert"
+            and record.get("active") is False
+            and record.get("since") == "1.8.0"
+            and isinstance(record.get("reason"), str)
+            and len(record["reason"]) > 20,
+            f"retired {family} status drifted",
         )
+        actual = [
+            (Path(str(asset.get("src", ""))).name, str(asset.get("sha256", "")))
+            for asset in record.get("assets", [])
+        ]
+        require(actual == expected, f"retired {family} source/hash ledger drifted")
 
 
 def main() -> int:
