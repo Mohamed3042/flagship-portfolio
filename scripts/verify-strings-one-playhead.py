@@ -16,6 +16,8 @@ from playwright.sync_api import BrowserContext, Page, TimeoutError, sync_playwri
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_REPORT = REPO / "public/worlds/assets/strings/review"
 ACADEMY_SCROLL_VIEWPORTS_PER_SECOND = 15 / 70
+LANDSCAPE_PICTURE_WIDTH_RATIO = 0.92
+LANDSCAPE_PICTURE_WIDTH_TOLERANCE = 0.005
 VIEWPORTS = (
     ("desktop", 1440, 1000, 1, False),
     ("portrait", 390, 844, 3, True),
@@ -435,14 +437,21 @@ def main() -> int:
                             "name": name,
                             "viewport": [width, height, dpr],
                             "state": state,
+                            "pictureWidthRatio": state["frameRect"][2] / width,
                             "overflow": vp_page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth"),
                             "playAttempts": vp_page.evaluate("window.__onePlayheadPlayAttempts || 0"),
                             "errors": vp_errors,
                         }
+                        landscape_width_pass = (
+                            name != "landscape"
+                            or abs(row["pictureWidthRatio"] - LANDSCAPE_PICTURE_WIDTH_RATIO)
+                            <= LANDSCAPE_PICTURE_WIDTH_TOLERANCE
+                        )
                         row["pass"] = (
                             state["visibleVideos"] == 1
                             and not state["overlays"]
                             and state["paused"] is True
+                            and landscape_width_pass
                             and row["overflow"] <= 1
                             and row["playAttempts"] == 0
                             and not any(vp_errors.values())
@@ -451,7 +460,7 @@ def main() -> int:
                         vp_page.screenshot(path=str(args.output_dir / f"{args.label}-{name}-film.png"))
                         ctx.close()
                     report["phoneViewports"] = viewport_rows
-                    gate.check("portrait and landscape one-picture contract", all(row["pass"] for row in viewport_rows), viewport_rows)
+                    gate.check("portrait one-picture and landscape 92% contract", all(row["pass"] for row in viewport_rows), viewport_rows)
 
                 report.update({"result": "GREEN" if not gate.failures else "RED", "checks": gate.checks, "errors": errors})
         finally:
