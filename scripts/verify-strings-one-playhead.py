@@ -135,6 +135,31 @@ def range_checks(context: BrowserContext, page_url: str, clips: list[dict[str, s
     return rows
 
 
+def warm_posters(page: Page, posters: list[str]) -> None:
+    page.evaluate(
+        """async sources => {
+          window.__onePlayheadWarmPosters = sources.map(source => {
+            const image = new Image();
+            image.src = source;
+            return image;
+          });
+          await Promise.all(window.__onePlayheadWarmPosters.map(image => image.decode().catch(() => undefined)));
+        }""",
+        posters,
+    )
+
+
+def settle_buffers(page: Page, selector: str, timeout: int = 30_000) -> None:
+    page.wait_for_function(
+        """selector => [...document.querySelectorAll(`${selector} video`)].every(video =>
+          !video.getAttribute('src') ||
+          (video.readyState >= 1 && !video.seeking && video.networkState !== 2)
+        )""",
+        arg=selector,
+        timeout=timeout,
+    )
+
+
 def scroll_to_progress(page: Page, selector: str, progress: float) -> None:
     page.locator(selector).evaluate(
         """(scene, progress) => {
@@ -148,7 +173,9 @@ def scroll_to_progress(page: Page, selector: str, progress: float) -> None:
         """arg => {
           const scene = document.querySelector(arg.selector);
           const p = parseFloat(scene?.style.getPropertyValue('--p') || '-1');
-          return Math.abs(p - arg.progress) <= .003;
+          const director = window.CTS_ONE_PLAYHEAD?.snapshot?.();
+          const directorReady = !director || Math.abs(Number(director.progress) - arg.progress) <= .003;
+          return Math.abs(p - arg.progress) <= .003 && directorReady;
         }""",
         arg={"selector": selector, "progress": progress},
         timeout=10_000,
@@ -223,7 +250,11 @@ def trace(
         scroll_to_progress(page, selector, progress)
         page.wait_for_timeout(settle_ms)
         state = sample_state(page, selector, clip_ids)
-        if state["index"] != last_index or state["readyState"] < 1:
+        # A new scroll target may supersede the CDN byte range that is still
+        # painting the prior target. Serialise measured seeks so requestfailed
+        # remains a real browser/network signal instead of a harness artifact.
+        transition = state["index"] != last_index
+        if transition or state["readyState"] < 1 or state["seeking"]:
             try:
                 page.wait_for_function(
                     """arg => {
@@ -234,6 +265,12 @@ def trace(
                     arg={"selector": selector},
                     timeout=20_000,
                 )
+            except TimeoutError:
+                pass
+            state = sample_state(page, selector, clip_ids)
+        if transition:
+            try:
+                settle_buffers(page, selector)
             except TimeoutError:
                 pass
             state = sample_state(page, selector, clip_ids)
@@ -284,7 +321,7 @@ def grade_trace(rows: list[dict[str, object]], runtime: float, reverse: bool) ->
         "onePicture": one_picture,
         "paused": paused,
         "noPictureOverlays": no_overlays,
-        "pass": monotonic and continuous and one_picture and paused and max_stage_drift <= 1.25,
+        "pass": monotonic and continuous and longest_hold == 0 and one_picture and paused and no_overlays and max_stage_drift <= 1.25,
         "rows": rows,
     }
 
@@ -351,6 +388,8 @@ def main() -> int:
                 ranges = range_checks(context, args.url, clips)
                 report["ranges"] = ranges
                 gate.check("all clips return HTTP 206", all(row["pass"] for row in ranges), f"{sum(row['pass'] for row in ranges)}/{len(ranges)}")
+                warm_posters(page, [clip["poster"] for clip in clips])
+                settle_buffers(page, args.film_selector)
                 clip_ids = [clip["id"] for clip in clips]
                 forward = grade_trace(
                     trace(page, args.film_selector, clip_ids, args.samples, False, args.settle_ms),
@@ -368,11 +407,15 @@ def main() -> int:
                 gate.check("desktop full chain coverage", forward["maxClipIndex"] == args.expected_clips - 1 and reverse["minClipIndex"] == 0, {"forward": forward["maxClipIndex"], "reverse": reverse["minClipIndex"]})
                 gate.check("zero play attempts", page.evaluate("window.__onePlayheadPlayAttempts || 0") == 0, page.evaluate("window.__onePlayheadPlayAttempts || 0"))
                 page.screenshot(path=str(args.output_dir / f"{args.label}-desktop-film.png"))
+                gate.check("console clean", not errors["console"], errors["console"])
+                gate.check("page exceptions clean", not errors["page"], errors["page"])
+                gate.check("request failures clean", not errors["request"], errors["request"])
                 context.close()
 
                 if args.profile == "strings":
                     viewport_rows = []
                     for name, width, height, dpr, mobile in VIEWPORTS[1:]:
+                        vp_errors = {"console": [], "page": [], "request": []}
                         ctx = browser.new_context(
                             viewport={"width": width, "height": height},
                             screen={"width": width, "height": height},
@@ -381,9 +424,12 @@ def main() -> int:
                             has_touch=mobile,
                         )
                         install_instruments(ctx)
-                        vp_page = open_page(ctx, args.url, errors)
+                        vp_page = open_page(ctx, args.url, vp_errors)
+                        warm_posters(vp_page, [clip["poster"] for clip in clips])
+                        settle_buffers(vp_page, args.film_selector)
                         scroll_to_progress(vp_page, args.film_selector, 0.5)
                         vp_page.wait_for_timeout(900)
+                        settle_buffers(vp_page, args.film_selector)
                         state = sample_state(vp_page, args.film_selector, clip_ids)
                         row = {
                             "name": name,
@@ -391,6 +437,7 @@ def main() -> int:
                             "state": state,
                             "overflow": vp_page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth"),
                             "playAttempts": vp_page.evaluate("window.__onePlayheadPlayAttempts || 0"),
+                            "errors": vp_errors,
                         }
                         row["pass"] = (
                             state["visibleVideos"] == 1
@@ -398,6 +445,7 @@ def main() -> int:
                             and state["paused"] is True
                             and row["overflow"] <= 1
                             and row["playAttempts"] == 0
+                            and not any(vp_errors.values())
                         )
                         viewport_rows.append(row)
                         vp_page.screenshot(path=str(args.output_dir / f"{args.label}-{name}-film.png"))
@@ -405,9 +453,6 @@ def main() -> int:
                     report["phoneViewports"] = viewport_rows
                     gate.check("portrait and landscape one-picture contract", all(row["pass"] for row in viewport_rows), viewport_rows)
 
-                gate.check("console clean", not errors["console"], errors["console"])
-                gate.check("page exceptions clean", not errors["page"], errors["page"])
-                gate.check("request failures clean", not errors["request"], errors["request"])
                 report.update({"result": "GREEN" if not gate.failures else "RED", "checks": gate.checks, "errors": errors})
         finally:
             browser.close()
