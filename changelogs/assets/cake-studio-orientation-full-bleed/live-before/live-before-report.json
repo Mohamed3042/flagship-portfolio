@@ -1,0 +1,174 @@
+{
+  "gate": "cake-landscape-full-bleed-live-before",
+  "url": "https://mohamed3042.github.io/flagship-portfolio/worlds/cake-studio.html",
+  "sameSceneProgress": 0.46,
+  "results": [
+    {
+      "label": "portrait",
+      "url": "https://mohamed3042.github.io/flagship-portfolio/worlds/cake-studio.html",
+      "dpr": 3,
+      "touchPoints": 1,
+      "coarsePointer": true,
+      "orientation": {
+        "type": "portrait-primary",
+        "angle": 0
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visualViewport": {
+        "width": 390,
+        "height": 844,
+        "scale": 1
+      },
+      "progress": 0.4599314000623636,
+      "stage": {
+        "left": 0,
+        "top": 0,
+        "right": 390,
+        "bottom": 844,
+        "width": 390,
+        "height": 844
+      },
+      "mediaSurface": {
+        "left": 0,
+        "top": 312.3125,
+        "right": 390,
+        "bottom": 531.6875,
+        "width": 390,
+        "height": 219.375
+      },
+      "visibleMedia": {
+        "className": "bookend-phone-video",
+        "rect": {
+          "left": 0,
+          "top": 312.3125,
+          "right": 390,
+          "bottom": 531.6875,
+          "width": 390,
+          "height": 219.375
+        },
+        "objectFit": "contain",
+        "opacity": "1"
+      },
+      "sequence": {
+        "scene": "pin",
+        "slate": "Cinematic prologue",
+        "bookend": "intro",
+        "cakeBookend": "intro",
+        "bookendTrack": "intro",
+        "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.1-phone-final",
+        "sequenceMode": "motion",
+        "sequenceTransport": "phone-master",
+        "sequenceState": "ready",
+        "sequenceCount": "10",
+        "sequenceIndex": "5",
+        "sequenceClip": "I05",
+        "sequenceFraction": "0.59900",
+        "sequenceTargetTime": "21.0634",
+        "sequenceTime": "21.0634",
+        "sequenceLag": "0.0000"
+      },
+      "bars": {
+        "left": 0,
+        "top": 312.3125,
+        "right": 0,
+        "bottom": 312.3125
+      },
+      "assertions": {
+        "stageBounds": true,
+        "mediaSurfaceBounds": false,
+        "mediaCovering": false,
+        "noLetterbox": false
+      },
+      "fullBleed": false
+    },
+    {
+      "label": "landscape",
+      "url": "https://mohamed3042.github.io/flagship-portfolio/worlds/cake-studio.html",
+      "dpr": 3,
+      "touchPoints": 1,
+      "coarsePointer": true,
+      "orientation": {
+        "type": "landscape-primary",
+        "angle": 90
+      },
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "visualViewport": {
+        "width": 844,
+        "height": 390,
+        "scale": 1
+      },
+      "progress": 0.4601139601139601,
+      "stage": {
+        "left": 0,
+        "top": 0,
+        "right": 844,
+        "bottom": 390,
+        "width": 844,
+        "height": 390
+      },
+      "mediaSurface": {
+        "left": 75.328125,
+        "top": 0,
+        "right": 768.65625,
+        "bottom": 389.984375,
+        "width": 693.328125,
+        "height": 389.984375
+      },
+      "visibleMedia": {
+        "className": "bookend-phone-video",
+        "rect": {
+          "left": 75.328125,
+          "top": 0,
+          "right": 768.65625,
+          "bottom": 389.984375,
+          "width": 693.328125,
+          "height": 389.984375
+        },
+        "objectFit": "contain",
+        "opacity": "1"
+      },
+      "sequence": {
+        "scene": "pin",
+        "slate": "Cinematic prologue",
+        "bookend": "intro",
+        "cakeBookend": "intro",
+        "bookendTrack": "intro",
+        "bookendManifest": "cake-studio/v17/manifest.json?v=1.7.1-phone-final",
+        "sequenceMode": "motion",
+        "sequenceTransport": "phone-master",
+        "sequenceState": "ready",
+        "sequenceCount": "10",
+        "sequenceIndex": "5",
+        "sequenceClip": "I05",
+        "sequenceFraction": "0.60100",
+        "sequenceTargetTime": "21.0726",
+        "sequenceTime": "21.0726",
+        "sequenceLag": "0.0000"
+      },
+      "bars": {
+        "left": 75.328125,
+        "top": 0,
+        "right": 75.34375,
+        "bottom": 0.015625
+      },
+      "assertions": {
+        "stageBounds": true,
+        "mediaSurfaceBounds": false,
+        "mediaCovering": false,
+        "noLetterbox": false
+      },
+      "fullBleed": false
+    }
+  ],
+  "status": "RED",
+  "failures": [
+    "portrait",
+    "landscape"
+  ]
+}

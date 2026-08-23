@@ -1,0 +1,54 @@
+{
+  "schema": "cut-the-strings-final-board-browser/v1",
+  "result": "GREEN",
+  "checks": 46,
+  "passed": 46,
+  "failures": [],
+  "sabotage": false,
+  "audits": [
+    {
+      "board": "WAN-GENERATION-BOARD.html",
+      "mode": "shipped",
+      "viewport": "1440x1100",
+      "cards": 40,
+      "images": 80,
+      "overflow": 0,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requestErrors": []
+    },
+    {
+      "board": "WAN-GENERATION-BOARD.html",
+      "mode": "shipped",
+      "viewport": "390x844",
+      "cards": 40,
+      "images": 80,
+      "overflow": 0,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requestErrors": []
+    },
+    {
+      "board": "WAN-R3-GENERATION-BOARD.html",
+      "mode": "archive",
+      "viewport": "1440x1100",
+      "cards": 10,
+      "images": 20,
+      "overflow": 0,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requestErrors": []
+    },
+    {
+      "board": "WAN-R3-GENERATION-BOARD.html",
+      "mode": "archive",
+      "viewport": "390x844",
+      "cards": 10,
+      "images": 20,
+      "overflow": 0,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requestErrors": []
+    }
+  ]
+}

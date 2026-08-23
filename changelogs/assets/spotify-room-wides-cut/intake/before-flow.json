@@ -1,0 +1,389 @@
+[
+  {
+    "innerWidth": 1440,
+    "innerHeight": 1000,
+    "dpr": 1,
+    "scrollHeight": 115420,
+    "scrollTravel": 114420,
+    "overflow": 0,
+    "sceneCount": 36,
+    "sideAPlateCount": 21,
+    "wanCount": 7,
+    "cyclesCount": 14,
+    "minScrubPx": 2000,
+    "travels": [
+      {
+        "plate": "spotify/live/room01-silence-recut.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s01-line.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s03-room.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s04-arm.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s02-pulse.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/live/room02-contact-recut.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s05-needle.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/live/room03-runway-recut.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s07-quantize.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s08-lanes.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s09-canyon.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s06-groove.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/live/room04-build-recut.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s10-t01.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s11-t02.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s12-t03.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/live/room05-lounge-recut.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s13-master.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/live/room06-chorus-recut.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/shots/s14-chorus.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      },
+      {
+        "plate": "spotify/live/room07-needle-up-recut.mp4",
+        "sectionPx": 3000,
+        "scrubPx": 2000
+      }
+    ],
+    "playCalls": 0,
+    "enCount": 225,
+    "arCount": 225,
+    "profile": "desktop",
+    "errors": [
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4 net::ERR_ABORTED",
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4 net::ERR_ABORTED",
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/room01-silence-recut.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "innerWidth": 390,
+    "innerHeight": 844,
+    "dpr": 3,
+    "scrollHeight": 97570,
+    "scrollTravel": 96726,
+    "overflow": 0,
+    "sceneCount": 36,
+    "sideAPlateCount": 21,
+    "wanCount": 7,
+    "cyclesCount": 14,
+    "minScrubPx": 1688,
+    "travels": [
+      {
+        "plate": "spotify/live/room01-silence-recut.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s01-line.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s03-room.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s04-arm.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s02-pulse.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/live/room02-contact-recut.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s05-needle.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/live/room03-runway-recut.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s07-quantize.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s08-lanes.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s09-canyon.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s06-groove.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/live/room04-build-recut.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s10-t01.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s11-t02.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s12-t03.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/live/room05-lounge-recut.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s13-master.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/live/room06-chorus-recut.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/shots/s14-chorus.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      },
+      {
+        "plate": "spotify/live/room07-needle-up-recut.mp4",
+        "sectionPx": 2532,
+        "scrubPx": 1688
+      }
+    ],
+    "playCalls": 0,
+    "enCount": 225,
+    "arCount": 225,
+    "profile": "portrait",
+    "errors": [
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4 net::ERR_ABORTED",
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4 net::ERR_ABORTED",
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/room01-silence-recut.mp4 net::ERR_ABORTED"
+    ]
+  },
+  {
+    "innerWidth": 844,
+    "innerHeight": 390,
+    "dpr": 3,
+    "scrollHeight": 45517,
+    "scrollTravel": 45127,
+    "overflow": 0,
+    "sceneCount": 36,
+    "sideAPlateCount": 21,
+    "wanCount": 7,
+    "cyclesCount": 14,
+    "minScrubPx": 780,
+    "travels": [
+      {
+        "plate": "spotify/live/room01-silence-recut.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s01-line.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s03-room.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s04-arm.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s02-pulse.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/live/room02-contact-recut.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s05-needle.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/live/room03-runway-recut.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s07-quantize.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s08-lanes.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s09-canyon.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s06-groove.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/live/room04-build-recut.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s10-t01.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s11-t02.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s12-t03.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/live/room05-lounge-recut.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s13-master.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/live/room06-chorus-recut.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/shots/s14-chorus.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      },
+      {
+        "plate": "spotify/live/room07-needle-up-recut.mp4",
+        "sectionPx": 1170,
+        "scrubPx": 780
+      }
+    ],
+    "playCalls": 0,
+    "enCount": 225,
+    "arCount": 225,
+    "profile": "landscape",
+    "errors": [
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j01-portal.mp4 net::ERR_ABORTED",
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/room01-silence-recut.mp4 net::ERR_ABORTED",
+      "requestfailed: https://mohamed3042.github.io/flagship-portfolio/worlds/spotify/live/j02-equalizer.mp4 net::ERR_ABORTED"
+    ]
+  }
+]

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The Kingdom of Running Things — Disney Storybook World · Mohamed Mahmoud</title>
-<meta name="description" content="Edition II — a dark cut-paper folktale, full-bleed: the scroll runs the film and pans across each frame's hidden width, and the picture moves only under your hand. Twenty WAN 2.7 chapters: a golden book opens, ink becomes fireflies, a thread proves a loop, a human seal wakes thirty lanterns.">
+<meta name="description" content="Edition II — a 100-shot dark cut-paper folktale scrubbed by scroll, forward and reverse, through one continuous first-and-last-frame chain that ends with an open circle.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%230f0b07"/><path d="M8 7h7v18H8zM17 7h7v18h-7z" fill="%23e8dcc0"/><path d="M15 7h2v18h-2z" fill="%23e2b13c"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=5">
 <style>
@@ -34,7 +34,7 @@
   /* ————— cold open ————— */
   .open .stage{ display:grid; place-items:center; text-align:center;
     background:radial-gradient(80% 60% at 72% 30%, rgba(226,177,60,.14), transparent 60%), #080604; }
-  .open .plate{ position:absolute; inset:0; background:url('disney2/posters/kf-01.jpg') center/cover no-repeat;
+  .open .plate{ position:absolute; inset:0; background:var(--opening-poster, none) center/cover no-repeat;
     opacity:calc(.42 - var(--p,0)*.2); }
   .open .veil{ position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 50%, transparent 30%, rgba(7,5,3,.9) 78%); }
   .open .card{ position:relative; z-index:3; padding:0 6vw; transform:translateY(calc(var(--p,0)*-6vh)); }
@@ -55,10 +55,10 @@
      Owner contract: full-bleed on every screen, nothing over the picture.
      The frames are wider than the viewport, so the scroll is projector and
      rostrum camera at once — inside each chapter the same hand that runs
-     the clock PANS across the frame's hidden width (--pan 0..1, serpentine:
-     odd chapters sweep back, so the camera never jumps at a join). One rule
+     the clock PANS across the frame's hidden width (--pan 0..1, serpentine
+     only at story-block cuts, with continuous position and velocity). One rule
      for phone and desktop; the only words on the picture are the cue. ————— */
-  .film{ height:1900vh; --depth:-.5; --journey:0; --pan:.5; }
+  .film{ height:9100vh; --depth:-.5; --journey:0; --pan:.5; }
   .film .stage{ background:#070503; isolation:isolate; }
   .film .depth-far, .film .film-frame{ will-change:transform; pointer-events:none; }
   .film .depth-far{ position:absolute; inset:-16%; z-index:0; overflow:hidden;
@@ -93,115 +93,6 @@
   .act{ position:relative; }
   .act .rule{ width:64px; height:1px; margin:18px auto 0; background:linear-gradient(90deg, transparent, var(--w-accent), transparent); }
 
-  /* ————— handoff (code takes the kingdom) ————— */
-  .handoff{ height:260vh; }
-  .handoff .stage{ background:#0a0705; }
-  .handoff .plate{ position:absolute; inset:0; background:url('disney2/posters/kf-17.jpg') center/cover no-repeat;
-    filter:brightness(calc(1 - var(--p,0)*.25)); }
-  .handoff .paperize{ position:absolute; inset:0; background:var(--parch);
-    opacity:calc(max(0, var(--p,0) - .72) * 2.6); mix-blend-mode:soft-light; }
-  .handoff svg.thread{ position:absolute; inset:0; width:100%; height:100%; z-index:4; }
-  .handoff svg.thread path{ fill:none; stroke:var(--w-accent); stroke-width:2.6; stroke-linecap:round;
-    filter:drop-shadow(0 0 6px rgba(226,177,60,.65));
-    stroke-dasharray:1; stroke-dashoffset:calc(1 - min(1, var(--p,0)*1.25)); }
-  .handoff .caption{ bottom:auto; top:clamp(72px,12vh,140px); }
-
-  /* ————— BUILD: the paper kingdom (code) ————— */
-  .build{ height:320vh; }
-  .build .stage{ background:linear-gradient(#0a0705 0%, #1d150c 46%, #33261a 100%); }
-  .build .layer{ position:absolute; inset:auto 0 0 0; height:62vh; pointer-events:none; }
-  .build .layer svg{ position:absolute; inset:0; width:100%; height:100%; }
-  .build .l4{ transform:translateY(calc((1 - var(--p,0)) * 12vh)); opacity:.5; }   /* distant painted field .12 */
-  .build .l3{ transform:translateY(calc((1 - var(--p,0)) * 30vh)); opacity:.72; }  /* set plane .30 */
-  .build .l2{ transform:translateY(calc((1 - var(--p,0)) * 58vh)); opacity:.9; }   /* action plane .58 */
-  .build .l1{ transform:translateY(calc((1 - var(--p,0)) * 100vh)); }              /* foreground 1.0 */
-  .build svg.weave{ position:absolute; inset:0; width:100%; height:100%; z-index:5; }
-  .build svg.weave path{ fill:none; stroke:var(--w-accent); stroke-width:2.2; stroke-linecap:round;
-    filter:drop-shadow(0 0 7px rgba(226,177,60,.6));
-    stroke-dasharray:1; stroke-dashoffset:calc(1 - min(1, max(0, var(--p,0) - .1) * 1.35)); }
-  .build .caption{ z-index:8; }
-  /* ————— GATE: the signet (code) ————— */
-  .gate{ height:300vh; }
-  .gate .stage{ background:radial-gradient(90% 70% at 50% 38%, #4a3c2a 0%, #241c14 62%, #17110c 100%); }
-  .gate .field{ position:absolute; inset:0; display:grid; place-items:center; }
-  .gate .paper{ width:min(520px,74vw); aspect-ratio:4/3; background:
-      radial-gradient(120% 100% at 50% 0%, #f7eed3 0%, var(--parch) 60%, #e4d5ac 100%);
-    border-radius:6px; box-shadow:0 30px 80px rgba(0,0,0,.5), inset 0 0 60px rgba(53,39,31,.18);
-    position:relative; overflow:hidden; }
-  .gate .paper .script{ position:absolute; inset:12% 10%;
-    background:repeating-linear-gradient(180deg, transparent 0 26px, rgba(53,39,31,.24) 26px 27px);
-    -webkit-mask:linear-gradient(90deg,#000 0%,#000 calc(var(--p,0)*130%),transparent calc(var(--p,0)*130% + 8%));
-            mask:linear-gradient(90deg,#000 0%,#000 calc(var(--p,0)*130%),transparent calc(var(--p,0)*130% + 8%)); }
-  .gate .signet{ position:absolute; z-index:4; left:50%; top:50%; width:110px; height:150px;
-    transform:translate(-50%, calc(-140% + min(1, max(0, var(--p,0) - .45) * 2.2) * 74%))
-              scale(calc(1 + (1 - min(1, max(0, var(--p,0) - .45) * 2.2)) * .06));
-    transition:transform .05s linear; }
-  .gate .wax{ position:absolute; z-index:3; left:50%; top:58%; width:96px; height:96px; border-radius:50%;
-    transform:translate(-50%,-50%) scale(calc(min(1, max(0, var(--p,0) - .70) * 5.6)));
-    background:radial-gradient(circle at 36% 32%, #ffd977 0%, var(--w-accent) 42%, #b88a1f 100%);
-    box-shadow:0 4px 26px rgba(226,177,60,.5), inset 0 2px 8px rgba(255,255,255,.45); }
-  .gate .wax::after{ content:""; position:absolute; inset:16%; border-radius:50%;
-    border:2px solid rgba(53,39,31,.4);
-    background:conic-gradient(from 40deg, transparent 0 20%, rgba(53,39,31,.35) 20% 24%, transparent 24% 47%, rgba(53,39,31,.35) 47% 52%, transparent 52% 78%, rgba(53,39,31,.35) 78% 83%, transparent 83%); }
-  .gate .caption{ z-index:8; }
-
-  /* ————— PROVE: thirty lanterns (code) ————— */
-  .prove{ height:300vh; }
-  .prove .stage{ background:radial-gradient(100% 80% at 50% 20%, #1d150c 0%, var(--w-bg) 52%, #070503 100%); }
-  .prove canvas{ position:absolute; inset:0; width:100%; height:100%; }
-  .prove .caption a{ color:var(--w-accent); }
-
-  /* ————— finale: the book closes ————— */
-  .finale{ height:280vh; }
-  .finale .stage{ display:grid; place-items:center; perspective:1400px;
-    background:radial-gradient(80% 60% at 68% 28%, rgba(226,177,60,.13), transparent 60%), #080604; }
-  .finale .book{ position:relative; width:min(540px,78vw); aspect-ratio:16/10; transform-style:preserve-3d; }
-  .finale .pageimg{ position:absolute; inset:0; border-radius:6px; overflow:hidden;
-    background:url('disney2/posters/kf-20.jpg') center/cover; box-shadow:0 40px 90px rgba(0,0,0,.6); }
-  .finale .cover{ position:absolute; inset:0; border-radius:6px; transform-origin:left center;
-    transform:rotateY(calc((1 - min(1, var(--p,0) * 1.5)) * -168deg));
-    background:linear-gradient(115deg, #2a1d10 0%, #1c130a 55%, #120c06 100%);
-    box-shadow:inset 0 0 0 2px rgba(226,177,60,.35), inset 0 0 44px rgba(0,0,0,.5);
-    backface-visibility:hidden; display:grid; place-items:center; }
-  .lang-ar .finale .cover{ transform-origin:right center;
-    transform:rotateY(calc((1 - min(1, var(--p,0) * 1.5)) * 168deg)); }
-  .finale .cover .mark{ width:34%; aspect-ratio:1; border-radius:50%;
-    border:2px solid rgba(226,177,60,.6); display:grid; place-items:center; }
-  .finale .cover .mark i{ width:44%; height:1px; background:var(--w-accent); box-shadow:0 6px 0 var(--w-accent), 0 -6px 0 var(--w-accent); }
-  .finale .latch{ position:absolute; inset-inline-end:-8px; top:50%; width:22px; height:56px; translate:0 -50%;
-    background:linear-gradient(#d9b04b, #a97e22); border-radius:4px;
-    opacity:calc(max(0, var(--p,0) - .68) * 4); box-shadow:0 0 18px rgba(226,177,60,.55); }
-  .finale .caption{ text-align:center; inset-inline:0; margin-inline:auto; max-width:640px; }
-
-  /* ————— VAULT: the unmade shots (code) ————— */
-  .vault{ height:300vh; }
-  .vault .stage{ background:radial-gradient(110% 85% at 50% 0%, #1d150c 0%, #100b06 55%, #080503 100%); }
-  .vault .drawer{ position:absolute; inset:14% 8% 24%; display:grid; align-content:center;
-    grid-template-columns:repeat(auto-fill, minmax(52px, 1fr)); gap:7px;
-    transform:perspective(900px) rotateX(calc(18deg - min(1, var(--p,0)*1.4) * 14deg));
-    transform-origin:50% 100%; }
-  .vault .slate{ aspect-ratio:16/10; border-radius:3px; position:relative;
-    background:linear-gradient(160deg, #221a10 0%, #171008 70%);
-    border:1px solid rgba(232,220,192,.14);
-    opacity:calc(min(1, max(0, var(--p,0)*1.15 - var(--i,0)) * 8));
-    transform:translateY(calc((1 - min(1, max(0, var(--p,0)*1.15 - var(--i,0)) * 8)) * 12px)); }
-  .vault .slate::before{ content:""; position:absolute; inset:0 0 auto; height:22%;
-    background:repeating-linear-gradient(115deg, #e2b13c 0 6px, #171008 6px 12px);
-    border-radius:3px 3px 0 0; opacity:.5; }
-  .vault .slate.retired{ border-color:rgba(226,177,60,.35); }
-  .vault .slate.retired::after{ content:""; position:absolute; inset:30% 22%;
-    border:1px solid rgba(226,177,60,.4); border-radius:2px; }
-  .vault .slate.lit{ background:linear-gradient(160deg, #4a3c1a 0%, #2c250f 70%);
-    border-color:rgba(226,177,60,.7); box-shadow:0 0 22px rgba(226,177,60,.35); }
-  .vault .slate.lit::after{ content:""; position:absolute; left:50%; top:60%; width:5px; height:5px;
-    border-radius:50%; translate:-50% -50%; background:#FFE49A; box-shadow:0 0 12px 4px rgba(226,177,60,.6); }
-  .vault .tally{ position:absolute; z-index:6; top:clamp(56px,7vh,80px); inset-inline-end:clamp(18px,6vw,84px);
-    text-align:end; font:700 clamp(30px,5vw,54px)/1 var(--w-ui); color:var(--w-accent);
-    font-variant-numeric:tabular-nums; text-shadow:0 2px 30px rgba(0,0,0,.5); }
-  .vault .tally small{ display:block; margin-top:8px; font:700 10.5px/1.5 var(--w-ui);
-    letter-spacing:.22em; text-transform:uppercase; color:var(--w-dim); }
-  .vault .caption{ z-index:8; }
-
   /* Owner contract: one motion system for every visitor — phone, desktop,
      and reduced-motion all scrub the same film with the same planes. */
   @media (prefers-reduced-motion: reduce){
@@ -217,7 +108,6 @@
   html.boxed .chrome:focus-within{ opacity:1; pointer-events:auto; }
   @media (max-width:640px){
     .film .cue .s{ font-size:14.5px; line-height:1.5; }
-    .vault .drawer{ inset:16% 5% 30%; grid-template-columns:repeat(auto-fill, minmax(38px, 1fr)); gap:5px; }
   }
 </style>
 </head>
@@ -231,7 +121,7 @@
     <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
   </div>
   <div class="grp">
-    <span class="ver" title="The Kingdom of Running Things — Edition II · The Weighted Camera">v3.3 · II</span>
+    <span class="ver" title="The Kingdom of Running Things — Edition II · The Weighted Camera · Open Circle">v4.0 · II</span>
     <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
   </div>
 </nav>
@@ -257,9 +147,9 @@
     <div class="veil" aria-hidden="true"></div>
     <div class="candle" aria-hidden="true"></div>
     <div class="card">
-      <p class="kick"><span class="L en">World 03 · Edition II · 20 parallax-scroll WAN 2.7 chapters</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ٢٠ فصلاً من WAN 2.7 بتمريرٍ متعدّد الطبقات</span></p>
+      <p class="kick"><span class="L en">World 03 · Edition II · 100 parallax-scroll WAN 2.7 chapters</span><span class="L ar">العالم ٠٣ · الإصدار الثاني · ١٠٠ فصل من WAN 2.7 بتمريرٍ متعدّد الطبقات</span></p>
       <h1><span class="L en">The Kingdom of&nbsp;Running&nbsp;Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h1>
-      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. Twenty full-bleed chapters, each frame wider than your screen — so the scroll is projector and camera at once: it runs the film and pans across each frame's hidden width, and nothing ever covers the picture. The film itself moves only under your hand: forward and reverse, never on its own.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. عشرون فصلاً بملء الشاشة، وكل كادرٍ أعرض من شاشتك — فالتمرير آلة عرضٍ وكاميرا معًا: يُدير الفيلم ويجول عبر العرض الخفيّ لكل كادر، ولا شيء يغطّي الصورة أبدًا. والفيلم نفسه لا يتحرّك إلا بيدك: ذهابًا وإيابًا، ولا يجري وحده أبدًا.</span></p>
+      <p class="sub"><span class="L en">A dark cut-paper folktale built as a traveling paper theatre. One hundred full-bleed chapters, each frame wider than your screen — so the scroll is projector and camera at once: it runs the film and pans across each frame's hidden width, and nothing ever covers the picture. The film itself moves only under your hand: forward and reverse, never on its own.</span><span class="L ar">حكاية ورقٍ داكنة مبنيّة كمسرحٍ ورقيّ متنقّل. مئة فصل بملء الشاشة، وكل كادرٍ أعرض من شاشتك — فالتمرير آلة عرضٍ وكاميرا معًا: يُدير الفيلم ويجول عبر العرض الخفيّ لكل كادر، ولا شيء يغطّي الصورة أبدًا. والفيلم نفسه لا يتحرّك إلا بيدك: ذهابًا وإيابًا، ولا يجري وحده أبدًا.</span></p>
     </div>
     <div class="hintwrap"><div class="quill" aria-hidden="true"></div><p class="hint"><span class="L en">Scroll to open the book</span><span class="L ar">مرِّر لفتح الكتاب</span></p></div>
   </div>
@@ -267,18 +157,18 @@
 
 <!-- ============ ACT CARD ============ -->
 <section class="act">
-  <p class="no"><span class="L en">One journey · chapters 01–20 · full-bleed; the hand runs the clock and pans the frame</span><span class="L ar">رحلة واحدة · الفصول ٠١–٢٠ · بملء الشاشة؛ اليد تُدير الزمن وتجول في الكادر</span></p>
+  <p class="no"><span class="L en">One journey · chapters 01–100 · full-bleed; the hand runs the clock and pans the frame</span><span class="L ar">رحلة واحدة · الفصول ٠١–١٠٠ · بملء الشاشة؛ اليد تُدير الزمن وتجول في الكادر</span></p>
   <h2><span class="L en">The Book Wakes</span><span class="L ar">الكتاب يستيقظ</span></h2>
-  <p><span class="L en">Cause precedes magic. The Maker touches, winds, and stamps — only then may ink, thread, and light respond.</span><span class="L ar">السبب يسبق السحر. الصانع يلمس ويلفّ ويختم — وعندها فقط يُسمح للحبر والخيط والضوء أن تستجيب.</span></p>
+  <p><span class="L en">A final ember wakes what the book buried. One forgotten district, one storm, eight failed attempts, three fragile fibres, a sky workshop, and a human choice carry the road toward an ending that stays open.</span><span class="L ar">توقظ جمرة أخيرة ما أخفاه الكتاب. حي منسي، وعاصفة، وثماني محاولات فاشلة، وثلاثة ألياف هشة، وورشة في السماء، واختيار بشري تحمل الطريق نحو خاتمة تبقى مفتوحة.</span></p>
   <div class="rule"></div>
 </section>
 
-<!-- ============ THE BOOK — 20 chapters, four parallax planes ============ -->
-<section class="scene film" id="book" data-scene="pin" data-slate="The book · 20 shots">
+<!-- ============ THE BOOK — 100 chapters, four parallax planes ============ -->
+<section class="scene film" id="book" data-scene="pin" data-slate="The book · 100 shots">
   <div class="stage">
-    <div class="depth-far" aria-hidden="true"><img class="backdrop" src="disney2/posters/kf-01.jpg" alt=""></div>
+    <div class="depth-far" aria-hidden="true"><img class="backdrop" alt=""></div>
     <div class="film-frame">
-      <img class="floor" src="disney2/posters/kf-01.jpg" alt="" aria-hidden="true">
+      <img class="floor" alt="" aria-hidden="true">
       <video muted playsinline preload="auto"></video>
       <video muted playsinline preload="auto"></video>
     </div>
@@ -360,8 +250,329 @@
       <figcaption><span class="L en">Everything pauses at the seal. On purpose.</span><span class="L ar">كل شيءٍ يقف عند الختم. عن قصد.</span></figcaption>
     </figure>
     <figure class="legcap" data-clip="disney2/clips/DSN2-020.mp4" data-poster="disney2/posters/kf-20.jpg"
-      data-act-en="Act VI" data-act-ar="الفصل السادس" data-t-en="Proof, Vault, Return" data-t-ar="برهانٌ وخزانةٌ وعودة">
-      <figcaption><span class="L en">Thirty lanterns close the circle. The book closes with them.</span><span class="L ar">ثلاثون فانوسًا تغلق الدائرة. والكتاب يُغلَق معها.</span></figcaption>
+      data-act-en="Act VI" data-act-ar="الفصل السادس" data-t-en="The Ember Remains" data-t-ar="الجمرة تبقى">
+      <figcaption><span class="L en">Thirty lanterns circle the seal. The book closes; one ember remains.</span><span class="L ar">تدور ثلاثون فانوسًا حول الختم. يُغلَق الكتاب؛ وتبقى جمرة واحدة.</span></figcaption>
+    </figure>
+
+    <figure class="legcap" data-clip="disney2/clips/DSN2-021.mp4" data-poster="disney2/posters/kf-21.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Last Ember" data-t-ar="الجمرة الأخيرة">
+      <figcaption><span class="L en">From the sealed book, one last ember unfolds its wings.</span><span class="L ar">من الكتاب المختوم، تنبثق الجمرة الأخيرة وتفرد جناحيها.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-022.mp4" data-poster="disney2/posters/kf-22.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Listening Emblem" data-t-ar="الشعار المُصغي">
+      <figcaption><span class="L en">The tiny visitor settles; the brass rings answer its weight.</span><span class="L ar">تحط الزائرة الصغيرة، فتستجيب الحلقات النحاسية لثقلها.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-023.mp4" data-poster="disney2/posters/kf-23.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Second Latch" data-t-ar="المزلاج الثاني">
+      <figcaption><span class="L en">The awakened mechanism releases a latch hidden in the spine.</span><span class="L ar">تطلق الآلية المستيقظة مزلاجًا خفيًا في كعب الكتاب.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-024.mp4" data-poster="disney2/posters/kf-24.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Night Page" data-t-ar="صفحة الليل">
+      <figcaption><span class="L en">The cover opens onto a page made of night.</span><span class="L ar">ينفتح الغلاف على صفحة من ليل.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-025.mp4" data-poster="disney2/posters/kf-25.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Aperture Kingdom" data-t-ar="المملكة وراء الفتحة">
+      <figcaption><span class="L en">The golden circle opens, revealing a kingdom far below.</span><span class="L ar">تنفتح الدائرة الذهبية، فتظهر مملكة بعيدة في الأسفل.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-026.mp4" data-poster="disney2/posters/kf-26.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Clock Without Time" data-t-ar="ساعة بلا زمن">
+      <figcaption><span class="L en">Below the page, a handless clock waits in silence.</span><span class="L ar">تحت الصفحة، ينتظر برج ساعة بلا عقارب في صمت.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-027.mp4" data-poster="disney2/posters/kf-27.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Stilled Heart" data-t-ar="القلب الساكن">
+      <figcaption><span class="L en">At its heart, the pendulum hangs still beneath the firefly.</span><span class="L ar">في قلبه، يتوقف البندول تحت اليراعة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-028.mp4" data-poster="disney2/posters/kf-28.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The First Pulse" data-t-ar="النبضة الأولى">
+      <figcaption><span class="L en">One touch sends the first pulse through the sleeping gears.</span><span class="L ar">ترسل لمسة واحدة النبضة الأولى عبر التروس النائمة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-029.mp4" data-poster="disney2/posters/kf-29.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Dark District" data-t-ar="الحي المظلم">
+      <figcaption><span class="L en">The city glows, except for one district left in darkness.</span><span class="L ar">تضيء المدينة، ويبقى حي واحد غارقًا في الظلام.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-030.mp4" data-poster="disney2/posters/kf-30.jpg"
+      data-act-en="Act VII" data-act-ar="الفصل السابع" data-t-en="The Messenger" data-t-ar="المرسال">
+      <figcaption><span class="L en">The firefly leaves the light and follows the road that stays dark.</span><span class="L ar">تغادر اليراعة الضوء وتتبع الطريق الذي ظل مظلمًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-031.mp4" data-poster="disney2/posters/kf-31.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The Torn Route" data-t-ar="الطريق الممزق">
+      <figcaption><span class="L en">The road ends at a torn chasm before the silent gate.</span><span class="L ar">ينتهي الطريق عند هوة ممزقة أمام البوابة الصامتة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-032.mp4" data-poster="disney2/posters/kf-32.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The First Fold" data-t-ar="الطية الأولى">
+      <figcaption><span class="L en">A golden filament begins folding a bridge across the void.</span><span class="L ar">يبدأ خيط ذهبي بطي جسر فوق الفراغ.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-033.mp4" data-poster="disney2/posters/kf-33.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The Wind Test" data-t-ar="اختبار الريح">
+      <figcaption><span class="L en">The unfinished bridge bows, but its single thread holds.</span><span class="L ar">ينحني الجسر الناقص، لكن خيطه الوحيد يصمد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-034.mp4" data-poster="disney2/posters/kf-34.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The Crossing" data-t-ar="العبور">
+      <figcaption><span class="L en">Reinforced folds lock into place, carrying the messenger across.</span><span class="L ar">تثبت الطيات المدعمة في مواضعها وتحمل الرسول إلى الضفة الأخرى.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-035.mp4" data-poster="disney2/posters/kf-35.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The Silent Workshop" data-t-ar="الورشة الصامتة">
+      <figcaption><span class="L en">Beyond the gate, a sealed workshop waits without light.</span><span class="L ar">خلف البوابة، تنتظر ورشة مختومة بلا ضوء.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-036.mp4" data-poster="disney2/posters/kf-36.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The Quiet Channel" data-t-ar="القناة الخافتة">
+      <figcaption><span class="L en">Three channels listen. Only the middle one carries a faint reply.</span><span class="L ar">ثلاث قنوات تُصغي؛ الوسطى وحدها تحمل جوابًا خافتًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-037.mp4" data-poster="disney2/posters/kf-37.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The Ink Wedge" data-t-ar="إسفين الحبر">
+      <figcaption><span class="L en">Inside, an ink-black wedge jams the heart of the gears.</span><span class="L ar">في الداخل، يعيق إسفين من الحبر الأسود قلب التروس.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-038.mp4" data-poster="disney2/posters/kf-38.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The False Teeth" data-t-ar="الأسنان الزائفة">
+      <figcaption><span class="L en">Three tempting replacements fail to fit the wounded wheel.</span><span class="L ar">تعجز ثلاثة بدائل مغرية عن ملاءمة العجلة المصابة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-039.mp4" data-poster="disney2/posters/kf-39.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The True Tooth" data-t-ar="السن الحقيقية">
+      <figcaption><span class="L en">Beneath the ink, the lost tooth was there all along.</span><span class="L ar">تحت الحبر، كانت السن المفقودة في مكانها منذ البداية.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-040.mp4" data-poster="disney2/posters/kf-40.jpg"
+      data-act-en="Act VIII" data-act-ar="الفصل الثامن" data-t-en="The District Wakes" data-t-ar="الحي يستيقظ">
+      <figcaption><span class="L en">Light and motion return to the forgotten district.</span><span class="L ar">يعود الضوء والحركة إلى الحي المنسي.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-041.mp4" data-poster="disney2/posters/kf-41.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="Ink at the Horizon" data-t-ar="الحبر في الأفق">
+      <figcaption><span class="L en">A black tide gathers at the edge of the restored road.</span><span class="L ar">يتجمع مد أسود عند حافة الطريق المستعاد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-042.mp4" data-poster="disney2/posters/kf-42.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="The Gates Fold Shut" data-t-ar="البوابات تُطوى">
+      <figcaption><span class="L en">The brass gates fold into a wall before the storm.</span><span class="L ar">تُطوى البوابات النحاسية لتصير جدارًا أمام العاصفة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-043.mp4" data-poster="disney2/posters/kf-43.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="Anchor Threads" data-t-ar="خيوط التثبيت">
+      <figcaption><span class="L en">Golden anchor threads bind the towers against the coming force.</span><span class="L ar">تربط خيوط التثبيت الذهبية الأبراج في وجه القوة القادمة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-044.mp4" data-poster="disney2/posters/kf-44.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="Rain into Channels" data-t-ar="المطر يجد مجراه">
+      <figcaption><span class="L en">Black rain falls, and folded channels carry it away.</span><span class="L ar">يهطل المطر الأسود، وتحمله القنوات المطوية بعيدًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-045.mp4" data-poster="disney2/posters/kf-45.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="The Tower Takes the Wind" data-t-ar="البرج يحتمل الريح">
+      <figcaption><span class="L en">The tower bends, but its anchors and counterweights keep it standing.</span><span class="L ar">ينحني البرج، لكن مراسيه وأثقاله الموازنة تمنعه من السقوط.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-046.mp4" data-poster="disney2/posters/kf-46.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="One Lantern Route" data-t-ar="طريق الفوانيس الوحيد">
+      <figcaption><span class="L en">Every road goes dark but one lantern line through the storm.</span><span class="L ar">تغرق الطرق كلها في الظلام إلا صفًا من الفوانيس وسط العاصفة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-047.mp4" data-poster="disney2/posters/kf-47.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="The District Relay" data-t-ar="تتابع الضوء بين الأحياء">
+      <figcaption><span class="L en">Each district passes the light onward until the farthest answers.</span><span class="L ar">يمرر كل حي الضوء إلى التالي، حتى يضيء أبعد حي.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-048.mp4" data-poster="disney2/posters/kf-48.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="The Storm Divides" data-t-ar="العاصفة تنقسم">
+      <figcaption><span class="L en">Converging lines split the storm around the guarded gate.</span><span class="L ar">تشطر الخطوط المتلاقية العاصفة حول البوابة المحروسة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-049.mp4" data-poster="disney2/posters/kf-49.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="The Storm Sheet" data-t-ar="ورقة العاصفة">
+      <figcaption><span class="L en">The storm&#x27;s two black wings fold into one quiet sheet.</span><span class="L ar">ينطوي جناحا العاصفة الأسودان ليصيرا ورقة ساكنة واحدة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-050.mp4" data-poster="disney2/posters/kf-50.jpg"
+      data-act-en="Act IX" data-act-ar="الفصل التاسع" data-t-en="Road after Rain" data-t-ar="الطريق بعد المطر">
+      <figcaption><span class="L en">Rain clears, leaving a bright road into the archive.</span><span class="L ar">ينقشع المطر ويترك طريقًا مضيئًا إلى الأرشيف.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-051.mp4" data-poster="disney2/posters/kf-51.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="The Gate Becomes a Stair" data-t-ar="البوابة تصير درجًا">
+      <figcaption><span class="L en">The sealed wall releases its leaves and becomes a stair below.</span><span class="L ar">تحرر البوابة مصاريعها، فتصير درجًا يهبط تحت المملكة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-052.mp4" data-poster="disney2/posters/kf-52.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="The Drawer Canyon" data-t-ar="وادي الأدراج">
+      <figcaption><span class="L en">Blank drawers rise like canyon walls around one golden path.</span><span class="L ar">ترتفع الأدراج الخالية كجدران واد حول طريق ذهبي واحد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-053.mp4" data-poster="disney2/posters/kf-53.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="Routes That Did Not Hold" data-t-ar="طرق لم تصمد">
+      <figcaption><span class="L en">Inside them lie the routes that could not bear their load.</span><span class="L ar">في داخلها ترقد طرق لم تستطع حمل أثقالها.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-054.mp4" data-poster="disney2/posters/kf-54.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="Cracked Seals" data-t-ar="أختام متشققة">
+      <figcaption><span class="L en">Old seals crack, yet every piece remains.</span><span class="L ar">تتشقق الأختام القديمة، لكن كل قطعة تبقى في مكانها.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-055.mp4" data-poster="disney2/posters/kf-55.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="Kingdoms That Almost Worked" data-t-ar="ممالك كادت تنجح">
+      <figcaption><span class="L en">Shadowed drawers cradle kingdoms that almost found their form.</span><span class="L ar">تحتضن الأدراج المظلمة ممالك كادت تجد شكلها.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-056.mp4" data-poster="disney2/posters/kf-56.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="Eight at the Inspection Wheel" data-t-ar="الثمانية عند عجلة الفحص">
+      <figcaption><span class="L en">Eight failed pieces take their places on the inspection wheel.</span><span class="L ar">تأخذ ثماني قطع فاشلة مواضعها على عجلة الفحص.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-057.mp4" data-poster="disney2/posters/kf-57.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="Failure Finds Weight" data-t-ar="للفشل وزن">
+      <figcaption><span class="L en">What failed is folded again: some becomes weight, some a path.</span><span class="L ar">يُطوى ما فشل من جديد؛ بعضه يصير ثقلًا، وبعضه طريقًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-058.mp4" data-poster="disney2/posters/kf-58.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="Bridge of Discards" data-t-ar="جسر من البقايا">
+      <figcaption><span class="L en">Nothing is wasted: eight discarded parts balance one bridge.</span><span class="L ar">لا يضيع شيء؛ ثماني قطع مهملة تحفظ توازن جسر فوق العتمة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-059.mp4" data-poster="disney2/posters/kf-59.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="Eight Shadows, One Circle" data-t-ar="ثمانية ظلال، دائرة واحدة">
+      <figcaption><span class="L en">Eight shadows join to reveal one perfect circle below.</span><span class="L ar">تلتقي ثمانية ظلال لتكشف دائرة كاملة في الأسفل.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-060.mp4" data-poster="disney2/posters/kf-60.jpg"
+      data-act-en="Act X" data-act-ar="الفصل العاشر" data-t-en="The Door beneath the Kingdom" data-t-ar="الباب تحت المملكة">
+      <figcaption><span class="L en">The hidden circle opens a door beneath the kingdom.</span><span class="L ar">تفتح الدائرة الخفية بابًا تحت المملكة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-061.mp4" data-poster="disney2/posters/kf-61.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Deep Door" data-t-ar="باب الأعماق">
+      <figcaption><span class="L en">The hidden door opens, revealing what carries the kingdom below.</span><span class="L ar">ينفتح باب الأعماق، فيظهر ما يحمل المملكة من تحت الصفحة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-062.mp4" data-poster="disney2/posters/kf-62.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Spool Forest" data-t-ar="غابة البكرات">
+      <figcaption><span class="L en">A forest of spools feeds every thread that holds the page.</span><span class="L ar">تغذي غابة من البكرات كل خيط يحمل الصفحة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-063.mp4" data-poster="disney2/posters/kf-63.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Tension Chamber" data-t-ar="حجرة الشد">
+      <figcaption><span class="L en">One golden line strains inside a narrow tension chamber.</span><span class="L ar">يتوتر خيط ذهبي داخل حجرة شد ضيقة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-064.mp4" data-poster="disney2/posters/kf-64.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Counterweight Descent" data-t-ar="هبوط أثقال الموازنة">
+      <figcaption><span class="L en">Counterweights descend, releasing the strain before it breaks.</span><span class="L ar">تهبط أثقال الموازنة، فتخفف الشد من دون أن تقطع الخيط.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-065.mp4" data-poster="disney2/posters/kf-65.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Unbroken Fibre" data-t-ar="الليف الذي لم ينقطع">
+      <figcaption><span class="L en">The outer fibres fray, but one golden core refuses to part.</span><span class="L ar">تتنسل الألياف الخارجية، لكن قلبًا ذهبيًا واحدًا لا ينقطع.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-066.mp4" data-poster="disney2/posters/kf-66.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Quiet Supports" data-t-ar="الدعامات الصامتة">
+      <figcaption><span class="L en">Quiet supports move in and share the burden.</span><span class="L ar">تتحرك دعامات صامتة لتتقاسم الحمل.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-067.mp4" data-poster="disney2/posters/kf-67.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Threefold Braid" data-t-ar="الضفيرة الثلاثية">
+      <figcaption><span class="L en">Three fragile strands braid into one enduring cable.</span><span class="L ar">تتضافر ثلاثة خيوط هشة في حبل واحد متين.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-068.mp4" data-poster="disney2/posters/kf-68.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Clockwork River" data-t-ar="نهر التروس">
+      <figcaption><span class="L en">A pulse follows the braid beside a river of turning gears.</span><span class="L ar">تسري نبضة في الضفيرة بمحاذاة نهر من التروس الدوارة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-069.mp4" data-poster="disney2/posters/kf-69.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="The Kingdom Lift" data-t-ar="رافعة المملكة">
+      <figcaption><span class="L en">The braid reaches the lift, and the whole kingdom rises as one.</span><span class="L ar">تبلغ الضفيرة الرافعة، فتنهض المملكة كلها كجسد واحد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-070.mp4" data-poster="disney2/posters/kf-70.jpg"
+      data-act-en="Act XI" data-act-ar="الفصل الحادي عشر" data-t-en="Sunrise Through Paper" data-t-ar="شروق عبر الورق">
+      <figcaption><span class="L en">Dawn shines through the paper and reveals the city within.</span><span class="L ar">يشرق الفجر عبر الورق ويكشف المدينة في داخله.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-071.mp4" data-poster="disney2/posters/kf-71.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Observatory Unfolds" data-t-ar="المرصد يتفتح">
+      <figcaption><span class="L en">Above the waking roofs, an observatory unfolds petal by petal.</span><span class="L ar">فوق الأسطح المستيقظة، يتفتح مرصد بتلة بعد بتلة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-072.mp4" data-poster="disney2/posters/kf-72.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Lantern Constellation" data-t-ar="كوكبة الفوانيس">
+      <figcaption><span class="L en">Lanterns rise from the dome and find their places in the dark.</span><span class="L ar">تصعد الفوانيس من القبة، وتتخذ مواضعها في العتمة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-073.mp4" data-poster="disney2/posters/kf-73.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Orbits Align" data-t-ar="المدارات تصطف">
+      <figcaption><span class="L en">Brass orbits rise and align around the waiting lights.</span><span class="L ar">ترتفع المدارات النحاسية وتصطف حول الأضواء المنتظرة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-074.mp4" data-poster="disney2/posters/kf-74.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Moon Iris" data-t-ar="قزحية القمر">
+      <figcaption><span class="L en">Beyond them, the moon opens like a paper iris.</span><span class="L ar">خلفها، ينفتح القمر كقزحية من ورق.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-075.mp4" data-poster="disney2/posters/kf-75.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Ascending Route" data-t-ar="الطريق الصاعد">
+      <figcaption><span class="L en">The braided road lifts through the open moon.</span><span class="L ar">يرتفع الطريق المضفور عبر القمر المفتوح.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-076.mp4" data-poster="disney2/posters/kf-76.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Paper Planets" data-t-ar="الكواكب الورقية">
+      <figcaption><span class="L en">It crosses a sky of suspended paper worlds.</span><span class="L ar">يعبر سماء من عوالم ورقية معلقة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-077.mp4" data-poster="disney2/posters/kf-77.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Cosmic Loom" data-t-ar="النول الكوني">
+      <figcaption><span class="L en">A vast loom gathers those worlds into one working system.</span><span class="L ar">يجمع نول هائل تلك العوالم في منظومة واحدة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-078.mp4" data-poster="disney2/posters/kf-78.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Empty Socket" data-t-ar="المقبس الخالي">
+      <figcaption><span class="L en">At its center, one star socket remains dark.</span><span class="L ar">في مركزه، يبقى مقبس نجمي واحد معتمًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-079.mp4" data-poster="disney2/posters/kf-79.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Messenger Star" data-t-ar="النجمة حاملة الرسالة">
+      <figcaption><span class="L en">The messenger folds its wings and completes the missing star.</span><span class="L ar">تطوي اليراعة جناحيها، وتكمل النجمة الناقصة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-080.mp4" data-poster="disney2/posters/kf-80.jpg"
+      data-act-en="Act XII" data-act-ar="الفصل الثاني عشر" data-t-en="The Outward Beam" data-t-ar="الشعاع المنطلق">
+      <figcaption><span class="L en">The completed sky engine sends one precise beam outward.</span><span class="L ar">يرسل محرك السماء المكتمل شعاعًا واحدًا دقيقًا إلى الخارج.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-081.mp4" data-poster="disney2/posters/kf-81.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Moon Passage" data-t-ar="ممر القمر">
+      <figcaption><span class="L en">The beam crosses the moon into a workshop beyond the known world.</span><span class="L ar">يعبر الشعاع القمر إلى ورشة تتجاوز العالم المعروف.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-082.mp4" data-poster="disney2/posters/kf-82.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Nested Workshop" data-t-ar="الورشة المتداخلة">
+      <figcaption><span class="L en">The familiar workshop is revealed as a miniature inside another book.</span><span class="L ar">تنكشف الورشة المألوفة كمجسم مصغر داخل كتاب آخر.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-083.mp4" data-poster="disney2/posters/kf-83.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Other Volumes" data-t-ar="المجلدات الأخرى">
+      <figcaption><span class="L en">Around it, countless sealed volumes wait in darkness.</span><span class="L ar">حولها تنتظر مجلدات مختومة لا تُحصى في الظلام.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-084.mp4" data-poster="disney2/posters/kf-84.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Escaping Thread" data-t-ar="الخيط المنفلت">
+      <figcaption><span class="L en">The beam narrows into a thread and reaches the nearest volume.</span><span class="L ar">يضيق الشعاع إلى خيط ويبلغ أقرب مجلد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-085.mp4" data-poster="disney2/posters/kf-85.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Paper Courier" data-t-ar="الساعي الورقي">
+      <figcaption><span class="L en">A parchment scrap folds into a courier and takes the thread in its beak.</span><span class="L ar">تنطوي قصاصة من الرق فتصير طائرًا ساعيًا يحمل الخيط في منقاره.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-086.mp4" data-poster="disney2/posters/kf-86.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="Across the Shelves" data-t-ar="عبر الرفوف">
+      <figcaption><span class="L en">The courier carries the unbroken line across the sleeping shelves.</span><span class="L ar">يحمل الرسول الخيط المتصل عبر الرفوف النائمة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-087.mp4" data-poster="disney2/posters/kf-87.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Sleeping Shelf" data-t-ar="الرف النائم">
+      <figcaption><span class="L en">It lands before one sealed book in the silent row.</span><span class="L ar">يحط أمام كتاب مختوم في الصف الصامت.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-088.mp4" data-poster="disney2/posters/kf-88.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Shared Spark" data-t-ar="الشرارة المشتركة">
+      <figcaption><span class="L en">One emblem wakes, then shares its spark with four neighbors.</span><span class="L ar">يضيء شعار واحد، ثم يقاسم شرارته أربعة شعارات مجاورة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-089.mp4" data-poster="disney2/posters/kf-89.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Library Wakes" data-t-ar="المكتبة تستيقظ">
+      <figcaption><span class="L en">Shelves unfold into a living city joined by golden routes.</span><span class="L ar">تنفتح الرفوف إلى مدينة حية تصلها طرق ذهبية.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-090.mp4" data-poster="disney2/posters/kf-90.jpg"
+      data-act-en="Act XIII" data-act-ar="الفصل الثالث عشر" data-t-en="The Far Door" data-t-ar="الباب البعيد">
+      <figcaption><span class="L en">At the end of the awakened library, a far door admits dawn.</span><span class="L ar">عند نهاية المكتبة المستيقظة، يسمح باب بعيد للفجر بالدخول.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-091.mp4" data-poster="disney2/posters/kf-91.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Open Horizon" data-t-ar="الأفق المفتوح">
+      <figcaption><span class="L en">Beyond the door, a single road crosses an open horizon.</span><span class="L ar">خلف الباب، يعبر طريق وحيد أفقًا مفتوحًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-092.mp4" data-poster="disney2/posters/kf-92.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The First Step" data-t-ar="الخطوة الأولى">
+      <figcaption><span class="L en">The Maker steps onto it, carrying the thread forward.</span><span class="L ar">يخطو الصانع عليه حاملًا الخيط إلى الأمام.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-093.mp4" data-poster="disney2/posters/kf-93.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Many Roads" data-t-ar="الطرق الكثيرة">
+      <figcaption><span class="L en">One thread opens into seven roads; choice finally takes shape.</span><span class="L ar">يتشعب خيط واحد إلى سبعة طرق؛ وأخيرًا يتخذ الاختيار شكلًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-094.mp4" data-poster="disney2/posters/kf-94.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Trial Rings" data-t-ar="حلقات الاختبار">
+      <figcaption><span class="L en">Three rings test them, leaving only one path standing.</span><span class="L ar">تختبرها ثلاث حلقات، فلا يبقى قائمًا سوى طريق واحد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-095.mp4" data-poster="disney2/posters/kf-95.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Human Mark" data-t-ar="الأثر البشري">
+      <figcaption><span class="L en">The Maker presses one mark into the chosen road, making choice real.</span><span class="L ar">يطبع الصانع علامة على الطريق المختار، فيصبح الاختيار حقيقة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-096.mp4" data-poster="disney2/posters/kf-96.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Kingdom Answers" data-t-ar="المملكة تجيب">
+      <figcaption><span class="L en">The answer travels home, and lanterns circle the distant book.</span><span class="L ar">تعود الإجابة إلى المملكة، وتلتف الفوانيس حول الكتاب البعيد.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-097.mp4" data-poster="disney2/posters/kf-97.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="Every District Moves" data-t-ar="كل حي يتحرك">
+      <figcaption><span class="L en">The pulse reaches every district, and the kingdom moves together.</span><span class="L ar">تبلغ النبضة كل حي، وتتحرك المملكة كلها معًا.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-098.mp4" data-poster="disney2/posters/kf-98.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Road Returns" data-t-ar="الطريق يعود">
+      <figcaption><span class="L en">The road travels home and settles on the book&#x27;s emblem.</span><span class="L ar">يعود الطريق إلى موطنه ويستقر على شعار الكتاب.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-099.mp4" data-poster="disney2/posters/kf-99.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Unfinished Page" data-t-ar="الصفحة غير المكتملة">
+      <figcaption><span class="L en">The book opens to a finished trace and one blank page.</span><span class="L ar">ينفتح الكتاب على أثر مكتمل وصفحة فارغة.</span></figcaption>
+    </figure>
+    <figure class="legcap" data-clip="disney2/clips/DSN2-100.mp4" data-poster="disney2/posters/kf-100.jpg"
+      data-act-en="Act XIV" data-act-ar="الفصل الرابع عشر" data-t-en="The Open Circle" data-t-ar="الدائرة المفتوحة">
+      <figcaption><span class="L en">The thread almost closes the circle, then leaves a way forward.</span><span class="L ar">يكاد الخيط يغلق الدائرة، ثم يترك طريقًا إلى الأمام.</span></figcaption>
     </figure>
 
     <div class="cue" id="cue">
@@ -371,178 +582,40 @@
   </div>
 </section>
 
-<!-- ============ THE HANDOFF (film → code) ============ -->
-<section class="scene handoff" data-scene="pin" data-slate="Film hands to code">
-  <div class="stage">
-    <div class="plate" aria-hidden="true"></div>
-    <svg class="thread" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path pathLength="1" d="M 492 300 C 560 250, 640 210, 700 240 S 810 340, 870 300 S 960 190, 1000 170" />
-      <path pathLength="1" d="M 492 300 C 430 350, 350 400, 280 380 S 150 300, 90 340 S 20 430, 0 450" style="stroke-width:1.6; opacity:.7" />
-    </svg>
-    <div class="paperize" aria-hidden="true"></div>
-    <div class="caption">
-      <p class="kick"><span class="L en">Twenty chapters · one playhead · now the code takes the thread</span><span class="L ar">عشرون فصلاً · رأس قراءةٍ واحد · والآن تأخذ الشيفرة الخيط</span></p>
-      <h2><span class="L en">The film proves it. The code runs it.</span><span class="L ar">الفيلم يثبتها. والشيفرة تُديرها.</span></h2>
-      <p><span class="L en">Everything you just watched was generated shot-by-shot and shown full-bleed — no overlay ever covered the picture — while one playhead in your hand ran the clock and panned the hidden width of every frame, forward or reverse. What follows is the same kingdom rendered live in code — same palette, same laws, no more footage needed. The human proves the loop; the system runs it.</span><span class="L ar">كل ما شاهدتَه للتوّ وُلِّد لقطةً بعد لقطة وعُرِض بملء الشاشة — لم يغطِّ الكادرَ شيءٌ قط — بينما رأسُ قراءةٍ واحد في يدك يُدير الزمن ويجول عبر العرض الخفيّ لكل كادر، ذهابًا أو إيابًا. وما يلي هو المملكة نفسها تُعرَض حيًّا بالشيفرة — باللوحة نفسها والقوانين نفسها، دون حاجةٍ إلى مشهدٍ جديد. الإنسان يثبت الحلقة؛ والنظام يديرها.</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BUILD (code) ============ -->
-<section class="act">
-  <p class="no"><span class="L en">Rendered live by code</span><span class="L ar">يُعرَض حيًّا بالشيفرة</span></p>
-  <h2><span class="L en">The Paper Kingdom Rises</span><span class="L ar">مملكة الورق تنهض</span></h2>
-  <p><span class="L en">Thirty districts — every one a real, shipped system from this portfolio, wearing storybook paper.</span><span class="L ar">ثلاثون حيًّا — كلٌّ منها منظومة حقيقية مُنجزة من هذا الملف، تلبس ورق الحكايات.</span></p>
+<!-- ============ OPEN CIRCLE EPILOGUE ============ -->
+<section class="act" data-epilogue="open-circle">
+  <p class="no"><span class="L en">After shot 100 · the road remains open</span><span class="L ar">بعد اللقطة ١٠٠ · الطريق يبقى مفتوحًا</span></p>
+  <h2><span class="L en">The circle stays open</span><span class="L ar">الدائرة تبقى مفتوحة</span></h2>
+  <p><span class="L en">The road returns to the page, stops one breath before closure, and lifts toward the moon. The kingdom has answered; what comes next remains a human choice.</span><span class="L ar">يعود الطريق إلى الصفحة، ويتوقف قبل اكتمال الدائرة بلحظة، ثم يرتفع نحو القمر. لقد أجابت المملكة؛ وما يأتي بعد ذلك يبقى اختيارًا بشريًا.</span></p>
   <div class="rule"></div>
-</section>
-
-<section class="scene build" data-scene="pin" data-slate="The paper kingdom">
-  <div class="stage">
-    <div class="layer l4" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 300 L60 290 L90 240 L120 296 L200 280 L240 210 L285 285 L370 270 L420 230 L470 278 L560 262 L610 200 L662 270 L760 258 L820 214 L868 268 L940 250 L1000 262 L1000 400 Z" fill="#241a10"/>
-    </svg></div>
-    <div class="layer l3" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 320 L80 310 L110 250 L150 315 L230 300 L268 235 L310 305 L400 292 L448 240 L500 300 L590 285 L640 225 L695 295 L790 280 L850 235 L905 292 L1000 278 L1000 400 Z" fill="#2e2114" stroke="#e2b13c" stroke-width="1" stroke-opacity=".25"/>
-      <g fill="#e2b13c" opacity=".8"><circle cx="268" cy="252" r="2.4"/><circle cx="640" cy="243" r="2.4"/><circle cx="850" cy="252" r="2.4"/></g>
-    </svg></div>
-    <div class="layer l2" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 336 L70 330 L105 268 L146 332 L240 320 L286 252 L332 326 L430 312 L484 258 L540 320 L636 305 L692 243 L748 315 L845 300 L900 255 L950 312 L1000 300 L1000 400 Z" fill="#382a18" stroke="#e2b13c" stroke-width="1.2" stroke-opacity=".35"/>
-      <g fill="#FFE49A"><circle cx="105" cy="280" r="2.8"/><circle cx="286" cy="266" r="2.8"/><circle cx="692" cy="257" r="2.8"/><circle cx="900" cy="268" r="2.8"/></g>
-    </svg></div>
-    <div class="layer l1" aria-hidden="true"><svg viewBox="0 0 1000 400" preserveAspectRatio="none">
-      <path d="M0 400 L0 352 L90 346 L130 286 L175 350 L285 338 L340 270 L395 344 L505 330 L565 274 L625 338 L730 322 L790 262 L850 334 L1000 320 L1000 400 Z" fill="#453322" stroke="#e2b13c" stroke-width="1.4" stroke-opacity=".5"/>
-      <g fill="#FFE49A"><circle cx="130" cy="300" r="3.2"/><circle cx="340" cy="284" r="3.2"/><circle cx="790" cy="276" r="3.2"/></g>
-    </svg></div>
-    <svg class="weave" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path pathLength="1" d="M 0 450 C 120 430, 180 360, 260 350 S 420 380, 500 340 S 660 250, 740 260 S 900 320, 1000 280"/>
-    </svg>
-    <div class="caption">
-      <p class="kick"><span class="L en">Live-rendered · no footage</span><span class="L ar">عرضٌ حيّ · بلا مشهد مصوَّر</span></p>
-      <h2><span class="L en">Built district by district</span><span class="L ar">تُبنى حيًّا بعد حيّ</span></h2>
-      <p><span class="L en">The thread the fireflies proved now weaves the skyline. Four paper layers, exactly as the production bible staged them: 1.0 / 0.58 / 0.30 / 0.12.</span><span class="L ar">الخيط الذي أثبتته اليراعات ينسج الآن أفقَ المدينة. أربع طبقاتٍ ورقية كما رسمها كتاب الإنتاج تمامًا: ١٫٠ / ٠٫٥٨ / ٠٫٣٠ / ٠٫١٢.</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ GATE (code) ============ -->
-<section class="act">
-  <p class="no"><span class="L en">The gate</span><span class="L ar">البوّابة</span></p>
-  <h2><span class="L en">One Decision No Machine May Make</span><span class="L ar">قرارٌ واحد لا يملكه أي نظام</span></h2>
-  <p><span class="L en">Every system in this portfolio keeps a human gate. The kingdom stops at the seal — on purpose.</span><span class="L ar">كل منظومة في هذا الملف تحتفظ ببوّابة بشرية. المملكة تتوقف عند الختم — عن قصد.</span></p>
-  <div class="rule"></div>
-</section>
-
-<section class="scene gate" data-scene="pin" data-slate="The signet">
-  <div class="stage">
-    <div class="field">
-      <div class="paper">
-        <div class="script" aria-hidden="true"></div>
-      </div>
-      <svg class="signet" viewBox="0 0 110 150" aria-hidden="true">
-        <rect x="42" y="0" width="26" height="86" rx="9" fill="#8a6a2a"/>
-        <rect x="38" y="6" width="34" height="14" rx="7" fill="#b88e3e"/>
-        <rect x="20" y="86" width="70" height="44" rx="8" fill="#b88e3e"/>
-        <rect x="26" y="92" width="58" height="32" rx="5" fill="#8a6a2a"/>
-      </svg>
-      <div class="wax" aria-hidden="true"></div>
-    </div>
-    <div class="caption">
-      <p class="kick"><span class="L en">The signet descends as you scroll</span><span class="L ar">الخاتم يهبط مع تمريرك</span></p>
-      <h2><span class="L en">Approved — by a hand</span><span class="L ar">مُعتمَد — بيدٍ بشرية</span></h2>
-      <p><span class="L en">Anticipation, press, follow-through, hold. The wax carries no words — approval is an act, not a caption.</span><span class="L ar">تأهُّبٌ، فضغطةٌ، فمتابعةٌ، فسكون. لا كلماتِ على الشمع — فالاعتماد فعلٌ لا عبارة.</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ PROVE (code) ============ -->
-<section class="act">
-  <p class="no"><span class="L en">The proof</span><span class="L ar">البرهان</span></p>
-  <h2><span class="L en">Thirty Lanterns Answer</span><span class="L ar">ثلاثون فانوسًا تُجيب</span></h2>
-  <p><span class="L en">Each light is one verified story from the live portfolio — no invented numbers, ever.</span><span class="L ar">كل ضوءٍ قصةٌ موثَّقة من الموقع الحيّ — لا أرقامَ مخترعة، أبدًا.</span></p>
-  <div class="rule"></div>
-</section>
-
-<section class="scene prove" data-scene="pin" id="prove" data-slate="Thirty lanterns">
-  <div class="stage">
-    <canvas id="lanterns"></canvas>
-    <div class="caption">
-      <p class="kick"><span class="L en">The constellation is the loop</span><span class="L ar">الكوكبة هي الحلقة</span></p>
-      <h2><span class="L en">Proof, then rest</span><span class="L ar">برهانٌ، ثم سكينة</span></h2>
-      <p><span class="L en">Thirty lanterns rise and settle into the same circular route the thread drew. <a href="../">Read the true stories on the portfolio →</a></span><span class="L ar">ثلاثون فانوسًا تصعد ثم تستقر على المسار الدائري نفسه الذي رسمه الخيط. <a href="../">اقرأ القصص الحقيقية في الموقع ←</a></span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ THE VAULT (code) ============ -->
-<section class="act">
-  <p class="no"><span class="L en">The vault</span><span class="L ar">الخزانة</span></p>
-  <h2><span class="L en">The Shots That Wait</span><span class="L ar">اللقطات التي تنتظر</span></h2>
-  <p><span class="L en">The production bible scripts 144 clips. The first edition produced 32 — retired with honor when the grammar changed. Edition II re-tells the whole tale in 20 parallax chapters. The rest wait, honestly dark.</span><span class="L ar">كتاب الإنتاج يكتب ١٤٤ مقطعًا. الإصدار الأول صنع ٣٢ — أُحيلت إلى الأرشيف بشرفٍ حين تغيّرت القواعد. والإصدار الثاني يعيد الحكاية كاملةً في ٢٠ فصلاً متعدّد العمق. والبقية تنتظر، معتمةً بصدق.</span></p>
-  <div class="rule"></div>
-</section>
-
-<section class="scene vault" data-scene="pin" data-slate="The vault">
-  <div class="stage">
-    <div class="drawer" id="vault-drawer" aria-hidden="true"></div>
-    <p class="tally"><span data-counter data-from="0" data-to="112">0</span><small><span class="L en">scripted shots, unproduced</span><span class="L ar">لقطة مكتوبة لم تُنتَج</span></small></p>
-    <div class="caption">
-      <p class="kick"><span class="L en">DSN-H-033 → DSN-H-144</span><span class="L ar">DSN-H-033 ← DSN-H-144</span></p>
-      <h2><span class="L en">The vault stays honest</span><span class="L ar">الخزانة تبقى صادقة</span></h2>
-      <p><span class="L en">Every slate is a real entry in the production bible — storyboarded, captioned, never generated. Outlined slates are the first edition's 32, retired to the archive; nothing pretends to be film that is not film.</span><span class="L ar">كل لوحٍ قيدٌ حقيقي في كتاب الإنتاج — مرسومٌ مشهديًّا ومُعنوَن ولم يُولَّد قط. والألواح المؤطَّرة هي لقطات الإصدار الأول الاثنتان والثلاثون، المُحالة إلى الأرشيف؛ لا شيء هنا يتظاهر بأنه فيلمٌ وهو ليس كذلك.</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FINALE ============ -->
-<section class="act">
-  <p class="no"><span class="L en">Finale</span><span class="L ar">الخاتمة</span></p>
-  <h2><span class="L en">Fold Safely Home</span><span class="L ar">عودةٌ آمنة إلى الرفّ</span></h2>
-  <p><span class="L en">Shot 20 lands on shot 01's exact composition — the loop closes, as the continuity spec demands.</span><span class="L ar">اللقطة ٢٠ تحطّ على تكوين اللقطة ٠١ نفسه — فتنغلق الحلقة كما يشترط عقد الاستمرارية.</span></p>
-  <div class="rule"></div>
-</section>
-
-<section class="scene finale" data-scene="pin" data-slate="The book closes">
-  <div class="stage">
-    <div class="book">
-      <div class="pageimg" aria-hidden="true"></div>
-      <div class="cover" aria-hidden="true"><div class="mark"><i></i></div></div>
-      <div class="latch" aria-hidden="true"></div>
-    </div>
-    <div class="caption" style="position:absolute; bottom:clamp(20px,8vh,80px);">
-      <h2><span class="L en">The book waits for the next story</span><span class="L ar">الكتاب ينتظر الحكاية القادمة</span></h2>
-      <p><span class="L en">112 shots remain scripted in the bible, ready if generation ever resumes. Until then — the kingdom runs.</span><span class="L ar">ما زالت ١١٢ لقطة مكتوبةً في كتاب الإنتاج، جاهزةً إن عاد التوليد يومًا. وحتى ذلك الحين — المملكة تجري.</span></p>
-    </div>
-  </div>
 </section>
 
 <!-- ============ END CREDITS ============ -->
-<section class="scene credits" data-scene="pin" data-slate="End credits" style="height:340vh">
+<section class="scene credits" data-scene="pin" data-slate="Open-circle credits" style="height:300vh">
   <div class="stage">
     <div class="roll">
       <p class="sec"><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></p>
       <h3><span class="L en">The Kingdom of Running Things</span><span class="L ar">مملكة الأشياء التي تجري</span></h3>
       <dl class="duo">
         <dt><span class="L en">Written, directed &amp; produced</span><span class="L ar">كتابة وإخراج وإنتاج</span></dt><dd><span class="L en">Mohamed Mahmoud</span><span class="L ar">محمد محمود</span></dd>
-        <dt><span class="L en">Edition</span><span class="L ar">الإصدار</span></dt><dd><span class="L en">II — dark cut-paper folktale, parallax-scrolled</span><span class="L ar">الثاني — حكاية ورقٍ داكنة بتمريرٍ متعدّد الطبقات</span></dd>
-        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">مواصفات مكتوبة بمساعدة الذكاء الاصطناعي</span></dd>
-        <dt><span class="L en">Footage</span><span class="L ar">المشاهد المصوَّرة</span></dt><dd><span class="L en">20 WAN 2.7 shots · first+last-frame chain · scrubbed by scroll, never autoplayed</span><span class="L ar">٢٠ لقطة WAN 2.7 · سلسلة إطار أول/أخير · تُفرَك بالتمرير ولا تعمل تلقائيًا أبدًا</span></dd>
-        <dt><span class="L en">First edition</span><span class="L ar">الإصدار الأول</span></dt><dd><span class="L en">32 shots, retired to the archive</span><span class="L ar">٣٢ لقطة، أُحيلت إلى الأرشيف</span></dd>
-        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v6 · one scroll playhead · full-bleed serpentine pan, zero overlays</span><span class="L ar">cinema.js v6 · رأس قراءةٍ واحد بالتمرير · جولان متعرّج بملء الشاشة، بلا أي غطاء</span></dd>
-        <dt><span class="L en">Kingdom, gate, lanterns, vault</span><span class="L ar">المملكة والبوّابة والفوانيس والخزانة</span></dt><dd><span class="L en">Rendered live, in code — no footage</span><span class="L ar">تُعرَض حيًّا بالشيفرة — بلا مشهد مصوَّر</span></dd>
-        <dt><span class="L en">Production bible</span><span class="L ar">كتاب الإنتاج</span></dt><dd><span class="L en">144 scripted clips · 112 unproduced</span><span class="L ar">١٤٤ مقطعًا مكتوبًا · ١١٢ لم تُنتَج</span></dd>
-        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd>English · العربية</dd>
+        <dt><span class="L en">Edition</span><span class="L ar">الإصدار</span></dt><dd><span class="L en">II — dark cut-paper folktale, parallax-scrolled</span><span class="L ar">الثاني — حكاية ورق داكنة بتمرير متعدد الطبقات</span></dd>
+        <dt><span class="L en">Production method</span><span class="L ar">أسلوب الإنتاج</span></dt><dd><span class="L en">Spec-driven, AI-assisted</span><span class="L ar">إنتاج محكوم بالمواصفات بمساعدة الذكاء الاصطناعي</span></dd>
+        <dt><span class="L en">Film</span><span class="L ar">الفيلم</span></dt><dd><span class="L en">100 WAN 2.7 shots · linked first-and-last-frame chain</span><span class="L ar">١٠٠ لقطة WAN 2.7 · سلسلة مترابطة من الإطار الأول إلى الأخير</span></dd>
+        <dt><span class="L en">Cinematography</span><span class="L ar">التصوير السينمائي</span></dt><dd><span class="L en">cinema.js v6 · one weighted scroll playhead · full-bleed serpentine pan · never autoplayed</span><span class="L ar">cinema.js v6 · رأس قراءة موزون واحد بالتمرير · حركة متعرجة بملء الشاشة · بلا تشغيل تلقائي</span></dd>
+        <dt><span class="L en">Structure</span><span class="L ar">البنية</span></dt><dd><span class="L en">14 acts · one continuous journey · an open-circle ending</span><span class="L ar">١٤ فصلًا · رحلة واحدة متصلة · خاتمة بدائرة مفتوحة</span></dd>
+        <dt><span class="L en">Languages</span><span class="L ar">اللغتان</span></dt><dd><span class="L en">English · Arabic</span><span class="L ar">العربية · الإنجليزية</span></dd>
       </dl>
-      <p class="fine"><span class="L en">A brand-inspired study. No third-party marks, characters or product replicas appear. Every number above is real; every claim traces to the production files. The true stories — with their own receipts — live on the portfolio.</span><span class="L ar">دراسة مستلهَمة. لا تظهر فيها علاماتٌ أو شخصياتٌ أو نسخُ منتجاتٍ لأطراف ثالثة. كل رقمٍ أعلاه حقيقي، وكل ادّعاءٍ يعود إلى ملفات الإنتاج. أما القصص الحقيقية — بإيصالاتها — ففي الموقع.</span></p>
+      <p class="fine"><span class="L en">A brand-inspired study. No third-party marks, characters, or product replicas appear. The final road does not close; it leaves a deliberate way forward.</span><span class="L ar">دراسة مستلهَمة لا تظهر فيها علامات أو شخصيات أو نسخ منتجات لأطراف ثالثة. لا ينغلق الطريق الأخير؛ بل يترك منفذًا مقصودًا إلى الأمام.</span></p>
       <p><a href="./" style="color:var(--w-accent)"><span class="L en">◂ Back to the Worlds lobby</span><span class="L ar">◂ العودة إلى بهو العوالم</span></a></p>
-      <p class="fin"><span class="L en">FIN</span><span class="L ar">تمّت</span></p>
+      <p class="fin"><span class="L en">THE CIRCLE REMAINS OPEN</span><span class="L ar">الدائرة تبقى مفتوحة</span></p>
     </div>
     <div class="vig" aria-hidden="true"></div>
   </div>
 </section>
 
 <footer class="disclosure">
-  <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio — dark storybook visual grammar in the shadow-puppet folktale tradition. Not affiliated with, endorsed by, or representing The Walt Disney Company. No characters, marks, or logos are depicted. Edition II's 20 shots generated with WAN 2.7 from an original 20-keyframe shot bible; the first edition's 32 shots are retired to the archive; kingdom, gate, lanterns and vault render live in code. All project claims live on the <a href="../">portfolio's story pages</a>.</span>
-  <span class="L ar">دراسة حركية أصلية مستلهَمة لأغراض ملف أعمال محمد محمود — بقواعد الحكاية المظلمة في تقليد مسرح خيال الظلّ الورقي. لا انتساب ولا تأييد ولا تمثيل لشركة ديزني، ولا تظهر فيها شخصيات أو علامات أو شعارات. لقطات الإصدار الثاني العشرون مولَّدة بـ WAN 2.7 من كتاب لقطاتٍ أصلي من عشرين إطارًا؛ ولقطات الإصدار الأول الاثنتان والثلاثون محالةٌ إلى الأرشيف؛ والمملكة والبوّابة والفوانيس والخزانة تُعرَض حيًّا بالشيفرة. جميع الأرقام والادّعاءات في <a href="../">صفحات القصص بالموقع</a>.</span></p>
+  <p><span class="L en">An original, brand-inspired motion study for Mohamed Mahmoud's portfolio, using dark storybook imagery in the cut-paper shadow-theatre tradition. Not affiliated with, endorsed by, or representing The Walt Disney Company. No characters, marks, or logos are depicted. Edition II contains 100 WAN 2.7 shots in an original linked endpoint chain; one weighted scroll playhead scrubs them forward and reverse, and the film never autoplays. Project claims trace to the <a href="../">portfolio's story pages</a>.</span>
+  <span class="L ar">دراسة حركية أصلية مستلهَمة لأغراض ملف أعمال محمد محمود، بصور حكاية داكنة من تقاليد مسرح الظل بالورق المقصوص. لا انتساب ولا تأييد ولا تمثيل لشركة ديزني، ولا تظهر شخصيات أو علامات أو شعارات. يضم الإصدار الثاني ١٠٠ لقطة WAN 2.7 في سلسلة أصلية مترابطة النهايات؛ ويحرّكها رأس قراءة موزون واحد بالتمرير ذهابًا وإيابًا، ولا يعمل الفيلم تلقائيًا. تعود ادعاءات المشروع إلى <a href="../">صفحات القصص بالموقع</a>.</span></p>
 </footer>
 
 <script src="cinema.js?v=6"></script>
@@ -551,29 +624,16 @@
   'use strict';
   /* Owner contract: desktop and phone share one full-motion parallax edition. */
 
-  /* ---------- VAULT: 144 slates — first edition's 32 retired (outlined) ---------- */
-  const drawer = document.getElementById('vault-drawer');
-  if (drawer) {
-    const frag = document.createDocumentFragment();
-    for (let i = 0; i < 144; i++) {
-      const s = document.createElement('i');
-      s.className = 'slate' + (i < 32 ? ' retired' : '');
-      s.style.setProperty('--i', (i / 144 * 0.82).toFixed(3));
-      frag.appendChild(s);
-    }
-    drawer.appendChild(frag);
-  }
-
   /* ════════════════════════════════════════════════════════════════════
      THE BOOK — one film, one playhead: the visitor's hand.
-     The scene's --p is the position in the whole tale: leg = floor(p*20),
+     The scene's --p is the position in the whole tale: leg = floor(p*N),
      the fraction inside the leg is the clip's currentTime — the film is
      scrubbed, forward and reverse; play() is never called on it. The same
      scroll writes --journey (whole-film travel) and --depth (position
      inside the chapter), so the four paper planes travel while the film
      runs under the hand. Two <video> elements double-buffer: the shown one
      is seeked, the other is armed with the leg the scroll is heading
-     towards, so 100 seconds scrub as one take with no boundary to fall
+     towards, so 500 seconds scrub as one take with no boundary to fall
      through. Desktop, phone and reduced-motion all share this one mode.
      ════════════════════════════════════════════════════════════════════ */
   (() => {
@@ -588,8 +648,17 @@
     const cueStory = document.getElementById('cue-story');
     const N = caps.length;
     if (!N || vids.length < 2) return;
+    const MEDIA_BASE = location.hostname === 'mohamed3042.github.io'
+      ? new URL('/flagship-disney-media/disney2/', location.origin)
+      : new URL('disney2/', location.href);
+    const mediaUrl = path => new URL(path.replace(/^disney2\//, ''), MEDIA_BASE).href;
+    scene.dataset.mediaBase = MEDIA_BASE.href;
+    const openingPoster = mediaUrl('disney2/posters/kf-01.jpg');
+    scene.style.setProperty('--opening-poster', `url("${openingPoster}")`);
+    floor.src = openingPoster;
+    backdrop.src = openingPoster;
     const LEGS = caps.map(c => ({
-      clip: c.dataset.clip, poster: c.dataset.poster,
+      clip: mediaUrl(c.dataset.clip), poster: mediaUrl(c.dataset.poster),
       tEn: c.dataset.tEn, tAr: c.dataset.tAr,
       html: c.querySelector('figcaption').innerHTML,
     }));
@@ -598,11 +667,38 @@
     scene.classList.add('mode-scrub');
 
     const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-    const smoothstep = v => v * v * (3 - 2 * v);
+    const smootherstep = v => v * v * v * (v * (v * 6 - 15) + 10);
     const TAU = 140;
     const SNAP_LEGS = 1.5;
     const IDLE_EPS = 1e-4;
     const IDLE_FRAMES = 3;
+    /* One continuous rostrum track across the 100-shot story. Each span is
+       monotonic; direction returns only at authored story-block cuts. The
+       fifth-order ease has zero velocity at every return, while ordinary
+       shot joins inherit the same curve and therefore the same velocity. */
+    const CAMERA_TRACK = [
+      [0,   .18],  /* Act I — the sealed book wakes */
+      [4,   .82],  /* Act II — ink answers */
+      [9,   .24],  /* Act III — the true fibre */
+      [16,  .80],  /* Acts IV–VI — handoff, gate, ember */
+      [20,  .32],  /* Act VII — the second journey */
+      [30,  .78],  /* Act VIII — the torn route */
+      [40,  .22],  /* Act IX — storm and relay */
+      [50,  .80],  /* Act X — the archive descends */
+      [60,  .20],  /* Act XI — the deep supports */
+      [70,  .76],  /* Act XII — the observatory */
+      [80,  .24],  /* Act XIII — the other volumes */
+      [90,  .78],  /* Act XIV — the open horizon */
+      [100, .50],  /* Open Circle — centered handoff */
+    ];
+    const cameraPan = g => {
+      let k = 1;
+      while (k < CAMERA_TRACK.length - 1 && g > CAMERA_TRACK[k][0]) k += 1;
+      const a = CAMERA_TRACK[k - 1], b = CAMERA_TRACK[k];
+      const t = clamp01((g - a[0]) / (b[0] - a[0]));
+      return a[1] + (b[1] - a[1]) * smootherstep(t);
+    };
+    scene.dataset.cameraTrack = 'story-blocks-v1';
     const readRaw = () => clamp01(parseFloat(scene.style.getPropertyValue('--p') || '0'));
     const slots = vids.map(v => ({
       v, leg: -1, ready: false, seeking: false, want: -1,
@@ -711,10 +807,7 @@
       const i = Math.floor(g), f = g - i;
       scene.style.setProperty('--depth', (f - .5).toFixed(4));
       scene.style.setProperty('--journey', p.toFixed(5));
-      /* ARRIVE 0-.12: hold the entry composition. CROSS .12-.88: pan with
-         zero velocity at both ends. SETTLE .88-1: hold into the join. */
-      const cross = smoothstep(clamp01((f - .12) / .76));
-      scene.style.setProperty('--pan', (i % 2 === 0 ? cross : 1 - cross).toFixed(4));
+      scene.style.setProperty('--pan', cameraPan(g).toFixed(4));
       setLeg(i);
       const s = slotFor(i);
       show(s);
@@ -797,63 +890,6 @@
     if (live && !solo) start();
   })();
 
-  /* ---------- PROVE: thirty lanterns settle into the loop ---------- */
-  const cv = document.getElementById('lanterns');
-  if (cv) {
-    const scene = cv.closest('[data-scene]');
-    const ctx = cv.getContext('2d');
-    const dpr = Math.min(devicePixelRatio || 1, 2);
-    const N = 30;
-    const pts = [];
-    let W = 0, H = 0, raf = 0;
-    const size = () => {
-      W = cv.clientWidth; H = cv.clientHeight;
-      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    for (let i = 0; i < N; i++) {
-      const a = (i / N) * Math.PI * 2;
-      pts.push({ a, seed: Math.sin(i * 999) * 0.5 + 0.5, ph: (i * 0.61803) % 1 });
-    }
-    const draw = (t) => {
-      const p = parseFloat(scene.style.getPropertyValue('--p') || '0');
-      ctx.clearRect(0, 0, W, H);
-      const cx = W / 2, cy = H * 0.44;
-      const R = Math.min(W, H) * 0.30;
-      const settle = Math.min(1, Math.max(0, (p - 0.15) * 1.7));
-      if (settle > 0.35) {
-        ctx.beginPath();
-        ctx.strokeStyle = 'rgba(226,177,60,' + (0.35 * (settle - 0.35) / 0.65) + ')';
-        ctx.lineWidth = 1.2;
-        ctx.ellipse(cx, cy, R, R * 0.72, 0, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      for (const q of pts) {
-        const wanderX = cx + (q.seed - 0.5) * W * 0.9 + Math.sin(t / 1400 + q.ph * 9) * 30;
-        const wanderY = H * (0.25 + q.ph * 0.6) + Math.cos(t / 1700 + q.a * 3) * 24;
-        const tx = cx + Math.cos(q.a) * R;
-        const ty = cy + Math.sin(q.a) * R * 0.72;
-        const x = wanderX + (tx - wanderX) * settle;
-        const y = wanderY + (ty - wanderY) * settle;
-        const tw = 0.72 + 0.28 * Math.sin(t / 600 + q.ph * 20);
-        const r = 2 + q.seed * 2.2;
-        const g = ctx.createRadialGradient(x, y, 0, x, y, r * 6);
-        g.addColorStop(0, 'rgba(255,228,154,' + (0.85 * tw) + ')');
-        g.addColorStop(0.35, 'rgba(226,177,60,' + (0.4 * tw) + ')');
-        g.addColorStop(1, 'rgba(226,177,60,0)');
-        ctx.fillStyle = g;
-        ctx.beginPath(); ctx.arc(x, y, r * 6, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = 'rgba(255,240,200,' + (0.9 * tw) + ')';
-        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
-      }
-      raf = requestAnimationFrame(draw);
-    };
-    const start = () => { if (!raf) { size(); raf = requestAnimationFrame(draw); } };
-    const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-    scene.addEventListener('scene:live', start);
-    scene.addEventListener('scene:idle', stop);
-    if (scene.classList.contains('is-live')) start();
-    addEventListener('resize', () => { if (raf) size(); }, { passive: true });
-  }
 })();
 </script>
 </body>

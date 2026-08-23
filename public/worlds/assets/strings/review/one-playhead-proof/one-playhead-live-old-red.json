@@ -1,0 +1,83 @@
+{
+  "schema": "strings-one-playhead/v1",
+  "label": "live-old-red",
+  "profile": "strings",
+  "url": "https://mohamed3042.github.io/flagship-portfolio/worlds/strings.html",
+  "verifiedAtUtc": "2026-08-23T03:52:09.798836+00:00",
+  "structure": {
+    "filmStages": 0,
+    "stageCount": 0,
+    "videos": 0,
+    "clips": [],
+    "perSlotPins": 40,
+    "pinnedScenes": 40,
+    "filmFrames": 0,
+    "visibleOverlays": [],
+    "stage": false,
+    "picture": false,
+    "runway": null
+  },
+  "result": "RED",
+  "checks": [
+    {
+      "name": "exactly one film stage",
+      "pass": false,
+      "detail": {
+        "filmStages": 0,
+        "stageCount": 0,
+        "videos": 0,
+        "clips": [],
+        "perSlotPins": 40,
+        "pinnedScenes": 40,
+        "filmFrames": 0,
+        "visibleOverlays": [],
+        "stage": false,
+        "picture": false,
+        "runway": null
+      }
+    },
+    {
+      "name": "double buffer only",
+      "pass": false,
+      "detail": 0
+    },
+    {
+      "name": "ordered clip chain",
+      "pass": false,
+      "detail": 0
+    },
+    {
+      "name": "one film frame",
+      "pass": false,
+      "detail": 0
+    },
+    {
+      "name": "no per-slot pins",
+      "pass": false,
+      "detail": 40
+    },
+    {
+      "name": "zero visible overlays in picture",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "opening film closing only",
+      "pass": false,
+      "detail": 40
+    },
+    {
+      "name": "Academy px-per-second runway",
+      "pass": false,
+      "detail": {
+        "measuredViewportPerSecond": 0.0,
+        "academy": 0.21428571428571427
+      }
+    }
+  ],
+  "errors": {
+    "console": [],
+    "page": [],
+    "request": []
+  }
+}

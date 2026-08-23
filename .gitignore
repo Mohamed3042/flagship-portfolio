@@ -43,3 +43,12 @@ public/worlds/assets/cake-studio/review/CST-contact-sheet-portrait-[0-9][0-9].pn
 # review sheets, prompts, manifests, and verdicts remain versioned.
 public/worlds/assets/arcane/raw/
 public/worlds/assets/arcane/review/rejected-*/
+
+# Cut The Strings Phase-1 generation evidence kept locally; Git receives only
+# accepted keyframes, compact master review sheets, prompts, review, and QA.
+public/worlds/assets/strings/raw/
+public/worlds/assets/strings/review/rejected-v1/
+public/worlds/assets/strings/review/rolling/
+public/worlds/assets/strings/review/CTS-KF*.png
+public/worlds/assets/strings/review/CTS-contact-sheet-[0-9][0-9].png
+public/worlds/assets/strings/review/CTS-contact-sheet-portrait-[0-9][0-9].png

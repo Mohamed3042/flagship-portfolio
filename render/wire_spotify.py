@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Weave the fifteen rendered shots into public/worlds/spotify.html.
+"""Weave the eleven retained rendered shots into public/worlds/spotify.html.
 
 The page already told its story in code. This puts a Cycles plate next to each
 beat, so every claim the DOM makes in CSS is answered in real light a screen
@@ -9,8 +9,11 @@ Idempotent: run it twice and the second run is a no-op.
 """
 import io, os, re, sys
 
-HTML = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    '..', 'public', 'worlds', 'spotify.html')
+HTML = os.environ.get(
+    'SPOTIFY_HTML',
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 '..', 'public', 'worlds', 'spotify.html'),
+)
 
 # Technical slates are DERIVED, never transcribed. Hand-maintaining the same
 # numbers twice — once in Latin digits, once in Arabic-Indic — is how a page
@@ -27,13 +30,12 @@ def _ar(text):
 
 # shot: (frames, focal-from, focal-to, f-stop)  — must match film_spotify.SHOTS
 OPTICS = {
-    'line': (168, 32, 38, '2.8'),   'pulse': (120, 85, 105, '4'),
-    'room': (216, 24, 28, '5.6'),   'arm': (144, 65, 85, '4'),
+    'pulse': (120, 85, 105, '4'),   'arm': (144, 65, 85, '4'),
     'needle': (168, 90, 125, '9'),  'groove': (168, 100, 135, '11'),
-    'quantize': (192, 50, 70, '4'), 'lanes': (192, 40, 48, '4'),
+    'quantize': (192, 50, 70, '4'),
     'canyon': (240, 30, 38, '2.8'), 't01': (168, 85, 110, '6.3'),
     't02': (168, 85, 112, '6.3'),   't03': (144, 62, 85, '4'),
-    'master': (216, 62, 105, '5.6'), 'chorus': (216, 58, 34, '4'),
+    'master': (216, 62, 105, '5.6'),
     'outro': (192, 92, 52, '4'),
 }
 PLATE_W, PLATE_H = 1280, 536
@@ -55,22 +57,6 @@ RUNTIME_EN = '%d:%02d' % (_secs // 60, round(_secs) % 60)
 RUNTIME_AR = _ar(RUNTIME_EN)
 
 COPY = {
-'line': ('s01-line', 'Shot 1 · the room before anything',
-    ('Rendered · before the first bar', 'مُصيَّر · قبل أول مازورة'),
-    ('The room, and one green line', 'الغرفة، وخطٌّ أخضر واحد'),
-    ('Room 6 at night: concrete, a slat ceiling, a bench, a deck. Nothing is playing yet. '
-     'The line on the wall is what silence looks like when something is still listening.',
-     'الغرفة ٦ ليلًا: خرسانة، وسقفٌ من الشرائح، وطاولة، وجهاز. لا شيء يُعزف بعد. '
-     'والخطُّ على الجدار هو شكلُ الصمت حين يبقى أحدٌ منصتًا.')),
-
-'room': ('s03-room', 'Shot 3 · the room states itself',
-    ('Rendered · 24 mm, the whole set', 'مُصيَّر · ٢٤ مم، المشهد كاملًا'),
-    ('Everything here is a real object', 'كلُّ شيءٍ هنا جسمٌ حقيقي'),
-    ('Bench, monitors, rack, stool, cable — geometry at true metric scale, lit by six practicals '
-     'and photographed on a physical camera, so the shadows are solved rather than drawn.',
-     'الطاولة، والسمّاعات، والرفّ، والمقعد، والكابل — هندسةٌ بمقياسٍ متريٍّ حقيقي، '
-     'يضيئها ستةُ مصادر وتصوّرها كاميرا فيزيائية، فالظلالُ محسوبةٌ لا مرسومة.')),
-
 'pulse': ('s02-pulse', 'Shot 2 · one beat crosses',
     ('Rendered · 105 mm on the wall', 'مُصيَّر · ١٠٥ مم على الجدار'),
     ('One beat crosses the line', 'نبضةٌ واحدة تعبر الخطّ'),
@@ -94,14 +80,6 @@ COPY = {
      'ring turning with the record. What resists the grid scales to nothing — on the downbeat, not near it.',
      'بواعثُ متناثرة تسبح فوق القرص حتى تحلَّ النبضة، فتأخذ مواضعها في حلقةٍ تدور مع الأسطوانة. '
      'وما يقاوم الشبكةَ يتلاشى — على النبضة تمامًا، لا قربها.')),
-
-'lanes': ('s08-lanes', 'Shot 8 · one line becomes three',
-    ('Rendered · three channels', 'مُصيَّر · ثلاث قنوات'),
-    ('One line becomes three', 'خطٌّ واحد يصير ثلاثة'),
-    ('Bass, mids, highs: a single strip of light on the bench splits into three, and each one keeps '
-     'its own lane and its own colour spill across the wood.',
-     'الجهيرُ والوسطُ والحادّ: شريطُ ضوءٍ واحدٍ على الطاولة ينقسم ثلاثةً، '
-     'ويحتفظ كلٌّ بمساره وبلونِ انسكابهِ على الخشب.')),
 
 'canyon': ('s09-canyon', 'Shot 9 · inside the groove',
     ('Rendered · forty-six metres', 'مُصيَّر · ستةٌ وأربعون مترًا'),
@@ -136,13 +114,6 @@ COPY = {
      'مؤشراتُ الرفّ تخطو على ساعةٍ ثابتة عند ٦٠ هرتز والكاميرا تدور عند ٢٤ إطارًا، فما تراه هو '
      'ارتعاشُ مقياسٍ حقيقيٍّ مُلتقَط — الفرقُ بين ساعتين، لا حركةٌ مُنعّمة لتبدو جميلة.')),
 
-'chorus': ('s14-chorus', 'Shot 14 · the chorus returns',
-    ('Rendered · thirty tracks', 'مُصيَّر · ثلاثون مقطعًا'),
-    ('Thirty tracks light in order', 'ثلاثون مقطعًا تُضاء بالترتيب'),
-    ('Each bar takes its own beat, the pink and the violet come back with them, and the camera lifts off '
-     'the deck into the room it started in.',
-     'كلُّ عمودٍ يأخذ نبضته، ويعود معها الورديُّ والبنفسجيّ، '
-     'وترتفع الكاميرا عن الجهاز إلى الغرفة التي بدأت منها.')),
 }
 
 
@@ -213,9 +184,9 @@ def main():
     s = s.replace(
         '<dd><span class="L en">Live — 4 canvases + CSS, no footage, no audio</span>'
         '<span class="L ar">حيًّا — ٤ لوحات وCSS، بلا مشهدٍ مصوَّر وبلا صوت</span></dd>',
-        '<dd><span class="L en">Live canvases + CSS, and 15 Cycles plates '
+        '<dd><span class="L en">Live canvases + CSS, and 11 Cycles plates '
         '(%s frames, path-traced, no AI footage, no audio)</span>'
-        '<span class="L ar">لوحاتٌ حيّة وCSS، مع ١٥ لقطة Cycles '
+        '<span class="L ar">لوحاتٌ حيّة وCSS، مع ١١ لقطة Cycles '
         '(%s إطارًا، تتبُّع مسار، بلا مشاهد مولَّدة بالذكاء الاصطناعي وبلا صوت)</span></dd>'
         % ('{:,}'.format(TOTAL_FRAMES), _ar(TOTAL_FRAMES)), 1)
     s = s.replace(
@@ -231,19 +202,16 @@ def main():
         '<h2><span class="L en">The colours leave the room</span>'
         '<span class="L ar">الألوانُ تغادر الغرفة</span></h2>', 1)
 
-    # ── weave the eleven new plates in at their beats ─────────────────────
+    # ── weave the seven retained insert plates in at their beats ──────────
     P = '<section class="scene rplate" data-scene="pin" data-slate="%s"'
     inserts = [
-        ('<section class="scene rplate"', ['line', 'room']),          # after the ident
         ('<section class="scene sc-needle"', ['pulse']),
         ('<section class="act" style="--k:var(--vi)">', ['needle']),
         ('<section class="scene sc-lanes"', ['quantize']),
-        ('<section class="scene sc-canyon"', ['lanes']),
         (P % 'Shot 2 · the groove', ['canyon']),      # the flight, then the macro
         ('<section class="scene track sc-t2"', ['t01']),
         ('<section class="scene track sc-t3"', ['t02']),
         ('<section class="scene sc-spine"', ['t03']),
-        (P % 'Shot 4 · the spin', ['chorus']),        # the chorus, then the lift
     ]
     for anchor, keys in inserts:
         i = s.find(anchor)
@@ -256,10 +224,10 @@ def main():
                's13-master': 'Shot 3 · the stylus', 's15-outro': 'Shot 4 · the spin'}[tag]
         s = s.replace('data-slate="%s"' % old, 'data-slate="%s"' % slate, 1)
 
-    assert s.count('data-plate=') == 15, 'expected 15 plates, got %d' % s.count('data-plate=')
+    assert s.count('data-plate=') == 11, 'expected 11 plates, got %d' % s.count('data-plate=')
     assert s.count('<span class="L en">') == s.count('<span class="L ar">'), 'EN/AR parity broken'
     io.open(HTML, 'w', encoding='utf-8').write(s)
-    print('wired: 15 rendered plates + theater button (%d -> %d bytes)' % (len(orig), len(s)))
+    print('wired: 11 rendered plates + theater button (%d -> %d bytes)' % (len(orig), len(s)))
     return 0
 
 
