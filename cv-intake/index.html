@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex,nofollow,noarchive">
+    <meta name="referrer" content="no-referrer">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; form-action 'none'; object-src 'none'; base-uri 'none'; frame-src 'none'; worker-src 'none'"
+    >
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#07101f">
+    <title>Mohamed Mahmoud — CV Facts Intake</title>
+    <meta
+      name="description"
+      content="Private-by-default intake editor for Mohamed Mahmoud's AI and Automation Engineer application campaign."
+    >
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#facts-form">Skip to remaining questions</a>
+
+    <header class="site-header">
+      <a class="wordmark" href="../" aria-label="Mohamed Mahmoud portfolio home">
+        <span class="wordmark-mark" aria-hidden="true">MM</span>
+        <span>
+          <strong>Mohamed Mahmoud</strong>
+          <small data-i18n="headerSubtitle">Campaign facts</small>
+        </span>
+      </a>
+      <button class="language-toggle" id="language-toggle" type="button" data-action="language" aria-label="Switch to Arabic">
+        <span aria-hidden="true">ع</span>
+        <span data-i18n="languageButton">العربية</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="eyebrow">500-application campaign · 0 submitted</p>
+          <h1 id="page-title" data-i18n="title">Your CV truth lock</h1>
+          <p class="hero-lede" data-i18n="lede">
+            Answer the remaining items once. Confirmed answers stay locked; choose Other whenever the default is not right.
+          </p>
+        </div>
+
+        <div class="truth-orbit" aria-hidden="true">
+          <span class="orbit-core">1×</span>
+          <span class="orbit-label">SOURCE<br>OF TRUTH</span>
+        </div>
+      </section>
+
+      <section class="privacy-panel" id="privacy-note" aria-labelledby="privacy-title">
+        <div class="privacy-icon" aria-hidden="true">↳</div>
+        <div>
+          <h2 id="privacy-title" data-i18n="privacyTitle">Answers do not leave this page</h2>
+          <p data-i18n="privacyBody">
+            GitHub hosts the empty editor and CV-safe locked facts. New answers stay in this tab unless you explicitly remember them on this device or download a private file. No submit button, analytics, account token, or server exists here.
+          </p>
+        </div>
+        <span class="privacy-state" data-i18n="privateState">PRIVATE MODE</span>
+      </section>
+
+      <section class="cockpit" aria-labelledby="progress-title">
+        <div class="progress-heading">
+          <div>
+            <p class="section-kicker" data-i18n="progressKicker">Truth rail</p>
+            <h2 id="progress-title" data-i18n="progressTitle">Campaign readiness</h2>
+          </div>
+          <output id="progress-percent" class="progress-percent">0%</output>
+        </div>
+
+        <div class="truth-rail" aria-hidden="true">
+          <span id="rail-confirmed"></span>
+          <span id="rail-proposed"></span>
+          <span id="rail-open"></span>
+        </div>
+
+        <div class="status-grid" aria-live="polite">
+          <div class="status-stat status-confirmed">
+            <span class="status-dot" aria-hidden="true"></span>
+            <strong id="count-confirmed">0</strong>
+            <span data-i18n="confirmed">Confirmed</span>
+          </div>
+          <div class="status-stat status-proposed">
+            <span class="status-dot" aria-hidden="true"></span>
+            <strong id="count-proposed">0</strong>
+            <span data-i18n="proposed">Defaults</span>
+          </div>
+          <div class="status-stat status-open">
+            <span class="status-dot" aria-hidden="true"></span>
+            <strong id="count-open">0</strong>
+            <span data-i18n="needsInput">Needs input</span>
+          </div>
+          <div class="status-stat status-changed">
+            <span class="status-dot" aria-hidden="true"></span>
+            <strong id="count-changed">0</strong>
+            <span data-i18n="changed">Changed</span>
+          </div>
+        </div>
+
+        <div class="session-controls">
+          <label class="remember-control" for="remember-device">
+            <input id="remember-device" type="checkbox">
+            <span>
+              <strong data-i18n="rememberTitle">Remember on this device</strong>
+              <small data-i18n="rememberHelp">Off by default for salary, visa, and form-only privacy.</small>
+            </span>
+          </label>
+          <output id="save-state" class="save-state" aria-live="polite" data-i18n="sessionOnly">Session only · download before closing</output>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="CV facts workspace">
+        <aside class="workspace-nav" aria-label="Filters and file actions">
+          <div class="side-block">
+            <p class="side-label" data-i18n="showLabel">Show</p>
+            <div class="filter-list" role="group" aria-label="Filter facts">
+              <button class="filter-button is-active" type="button" data-filter="open">
+                <span data-i18n="filterOpen">Needs input</span><b id="filter-open-count">0</b>
+              </button>
+              <button class="filter-button" type="button" data-filter="proposed">
+                <span data-i18n="filterDefaults">Defaults</span><b id="filter-proposed-count">0</b>
+              </button>
+              <button class="filter-button" type="button" data-filter="confirmed">
+                <span data-i18n="filterConfirmed">Locked</span><b id="filter-confirmed-count">0</b>
+              </button>
+              <button class="filter-button" type="button" data-filter="changed">
+                <span data-i18n="filterChanged">Changed</span><b id="filter-changed-count">0</b>
+              </button>
+              <button class="filter-button" type="button" data-filter="all">
+                <span data-i18n="filterAll">Everything</span><b id="filter-all-count">0</b>
+              </button>
+            </div>
+          </div>
+
+          <div class="side-block">
+            <p class="side-label" data-i18n="fileLabel">Private handoff</p>
+            <label class="side-action" for="import-json">
+              <span aria-hidden="true">↑</span><span data-i18n="importAction">Import private JSON</span>
+            </label>
+            <input id="import-json" class="visually-hidden" type="file" accept="application/json,.json">
+            <button class="side-action" id="export-json" type="button">
+              <span aria-hidden="true">↓</span><span data-i18n="jsonAction">Download working JSON</span>
+            </button>
+            <button class="side-action" id="export-markdown" type="button">
+              <span aria-hidden="true">↓</span><span data-i18n="markdownAction">Download working Markdown</span>
+            </button>
+            <button class="side-action" id="copy-markdown" type="button">
+              <span aria-hidden="true">⧉</span><span data-i18n="copyAction">Copy remaining answers</span>
+            </button>
+          </div>
+
+          <div class="source-rule">
+            <span aria-hidden="true">!</span>
+            <p data-i18n="sourceRule">Only a final exported FACTS.md may feed later application sessions.</p>
+          </div>
+        </aside>
+
+        <div class="facts-column">
+          <div class="list-heading">
+            <div>
+              <p class="section-kicker" id="list-kicker" data-i18n="remainingKicker">Do these now</p>
+              <h2 id="list-title" data-i18n="remainingTitle">Remaining answers</h2>
+            </div>
+            <p id="visible-count" class="visible-count">0 items</p>
+          </div>
+
+          <div id="error-summary" class="error-summary" tabindex="-1" hidden></div>
+
+          <form id="facts-form" novalidate autocomplete="off" spellcheck="false">
+            <div id="facts-list" class="facts-list"></div>
+          </form>
+
+          <div id="empty-state" class="empty-state" hidden>
+            <span aria-hidden="true">✓</span>
+            <h2 data-i18n="emptyTitle">Nothing in this view</h2>
+            <p data-i18n="emptyBody">Choose another filter or continue with the final export.</p>
+          </div>
+
+          <section class="finish-panel" aria-labelledby="finish-title">
+            <div>
+              <p class="section-kicker" data-i18n="finishKicker">Final gate</p>
+              <h2 id="finish-title" data-i18n="finishTitle">FACTS.md unlocks at zero open items</h2>
+              <p id="finish-copy" data-i18n="finishBody">Finish every required answer. Proposed defaults do not become facts until you accept them.</p>
+            </div>
+            <button class="final-button" id="final-export" type="button" disabled>
+              <span data-i18n="finalAction">Download final FACTS.md</span>
+              <span aria-hidden="true">→</span>
+            </button>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Mohamed Mahmoud · AI &amp; Automation Engineer</p>
+      <p data-i18n="footerRule">No passwords, ID numbers, scans, or signatures belong in this editor.</p>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  </body>
+</html>
