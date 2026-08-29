@@ -64,7 +64,7 @@ const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: pick(lang, profile.name),
-  alternateName: [lang === 'ar' ? profile.name.en : profile.name.ar, profile.nickname],
+  alternateName: [lang === 'ar' ? profile.name.en : profile.name.ar],
   jobTitle: pick(lang, profile.title),
   description: pick(lang, profile.tagline),
   inLanguage: lang === 'ar' ? 'ar' : 'en',

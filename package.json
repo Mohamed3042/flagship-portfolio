@@ -12,6 +12,8 @@
     "og": "node scripts/generate-og.mjs",
     "verify:static": "node scripts/verify-portfolio.mjs",
     "verify:browser": "python scripts/test-portfolio.py",
+    "verify:cv-intake": "node scripts/verify-cv-intake.mjs",
+    "verify:cv-intake:browser": "python scripts/test-cv-intake.py",
     "verify:cake-studio": "node scripts/verify-cake-studio-bookends.mjs",
     "verify:cake-studio:browser": "python scripts/verify-cake-studio-bookends-browser.py",
     "verify:cake-studio:glb": "node scripts/verify-cake-studio-glb.mjs",

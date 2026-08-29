@@ -10,7 +10,6 @@
 
 export const profile = {
   name: { en: 'Mohamed Mahmoud', ar: 'محمد محمود' },
-  nickname: 'Medmac',
   title: {
     en: 'Automation Engineer',
     ar: 'مهندس أتمتة',
