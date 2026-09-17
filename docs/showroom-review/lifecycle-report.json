@@ -1,0 +1,72 @@
+[
+  {
+    "name": "1440 story ask-repos",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "1440 renderer restored ask-repos",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "1440 story spaceframe-world",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "1440 renderer restored spaceframe-world",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "1440 lab navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "1440 mirrored language",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "1440 no lifecycle exceptions",
+    "passed": true,
+    "detail": []
+  },
+  {
+    "name": "390 story ask-repos",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "390 renderer restored ask-repos",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "390 story spaceframe-world",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "390 renderer restored spaceframe-world",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "390 lab navigation",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "390 mirrored language",
+    "passed": true,
+    "detail": null
+  },
+  {
+    "name": "390 no lifecycle exceptions",
+    "passed": true,
+    "detail": []
+  }
+]

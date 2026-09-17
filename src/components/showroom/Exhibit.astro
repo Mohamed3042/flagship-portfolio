@@ -1,0 +1,17 @@
+---
+import { pick, type Lang } from '../../i18n/utils';
+interface Props { lang: Lang; kind?: 'truss' | 'box' | 'flow'; id: string; poster: string; alt: string; }
+const { lang, kind = 'truss', id, poster, alt } = Astro.props;
+const ar = lang === 'ar';
+---
+<div class="sr-exhibit" data-exhibit data-kind={kind} id={id}>
+  <div class="sr-exhibit__viewport" data-exhibit-viewport>
+    <img class="sr-exhibit__fallback" src={poster} alt={alt} width="1280" height="800" decoding="async" data-exhibit-fallback />
+  </div>
+  <div class="sr-exhibit__controls" data-exhibit-controls hidden>
+    <label for={`${id}-assembly`}>{ar ? 'استكشف الآلية' : 'Explore the mechanism'}</label>
+    <input id={`${id}-assembly`} data-assembly type="range" min="0" max="100" value="80" aria-label={ar ? 'تقدم التجميع التوضيحي' : 'Illustrative assembly progress'} />
+    <button type="button" data-motion-toggle aria-pressed="false" data-pause={ar ? 'إيقاف الحركة' : 'Pause motion'} data-play={ar ? 'تشغيل الحركة' : 'Play motion'}>{ar ? 'إيقاف الحركة' : 'Pause motion'}</button>
+  </div>
+  <p class="sr-exhibit__note" data-exhibit-note data-interactive={ar ? 'نموذج توضيحي تفاعلي، وليس جلسة فعلية للمنتج.' : 'Interactive illustration, not a live product session.'}>{ar ? 'صورة المنتج. النموذج التوضيحي ثلاثي الأبعاد اختياري.' : 'Product screenshot. The 3D illustration is optional.'}</p>
+</div>

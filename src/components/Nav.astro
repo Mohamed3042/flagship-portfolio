@@ -27,6 +27,16 @@ const otherLabel = other === 'ar' ? 'ع' : 'EN';
     <a href={`${base}#contact`}>{t('nav.contact')}</a>
   </div>
   <div class="nav__tools">
+    <details class="sr-mobile-menu" data-mobile-menu>
+      <summary aria-label={lang === 'ar' ? 'قائمة التنقل' : 'Navigation menu'}><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" /></svg></summary>
+      <div class="sr-mobile-menu__links">
+        <a href={`${base}#work`}>{t('nav.work')}</a>
+        <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/worlds/`} data-astro-reload>{t('nav.worlds')}</a>
+        <a href={`${base}#lab`}>{t('nav.team')}</a>
+        <a href={`${base}#foundation`}>{t('nav.about')}</a>
+        <a href={`${base}#contact`}>{t('nav.contact')}</a>
+      </div>
+    </details>
     <a class="pill" href={mirror} aria-label={t('a11y.switchLang')} data-astro-reload>{otherLabel}</a>
     <div class="theme-menu" data-theme-menu>
       <button
@@ -51,3 +61,29 @@ const otherLabel = other === 'ar' ? 'ع' : 'EN';
     </div>
   </div>
 </nav>
+
+<style>
+  .sr-mobile-menu{display:none;position:relative}
+  .sr-mobile-menu summary{list-style:none;width:44px;height:44px;display:grid;place-items:center;cursor:pointer;border:1px solid var(--panel-brd);border-radius:10px}
+  .sr-mobile-menu summary::-webkit-details-marker{display:none}
+  .sr-mobile-menu summary:focus-visible,.sr-mobile-menu a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .sr-mobile-menu[open] summary{background:var(--panel)}
+  .sr-mobile-menu__links{position:fixed;top:66px;inset-inline:16px;padding:12px;background:var(--surface-raised);border:1px solid var(--panel-brd);border-radius:12px;box-shadow:0 18px 44px -18px rgba(0,0,0,.6);z-index:100}
+  .sr-mobile-menu__links a{display:flex;align-items:center;min-height:48px;padding:10px 14px;font-size:15px;border-radius:8px;color:var(--ink)}
+  .sr-mobile-menu__links a:hover{background:var(--panel)}
+  @media(max-width:980px){.sr-mobile-menu{display:block}:global(.nav__links){display:none}:global(.nav__tools){gap:6px}:global(.nav .pill){min-width:44px;min-height:44px}}
+  @media(max-width:560px){:global(.nav){padding-inline:12px}:global(.nav__brand){font-size:15px;gap:7px}:global(.nav__tools){gap:5px}}
+  @media(max-width:359px){:global(.nav__brand){font-size:13px}:global(.nav__brand .dot){width:6px;height:6px}:global(.nav){padding-inline:8px}}
+</style>
+<script>
+  const menus = () => document.querySelectorAll<HTMLDetailsElement>('[data-mobile-menu]');
+  document.addEventListener('click', e => {
+    const target=e.target as Element;
+    menus().forEach(menu=>{if(menu.open && (!menu.contains(target) || target.closest('a')))menu.open=false;});
+  });
+  document.addEventListener('keydown', e => {
+    if(e.key !== 'Escape')return;
+    menus().forEach(menu=>{if(menu.open){menu.open=false;menu.querySelector('summary')?.focus();}});
+  });
+  document.addEventListener('astro:before-swap',()=>menus().forEach(menu=>{menu.open=false;}));
+</script>

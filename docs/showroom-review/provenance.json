@@ -1,0 +1,51 @@
+[
+  {
+    "file": "desktop.jpg",
+    "source": ".impeccable/review/ghpages/desktop.png",
+    "source_sha256": "0e595512c14258e367140a3e144c89492f9be54a09197cfd335d7e206aaecd79",
+    "sha256": "082e01311e4ee29c78016c72840f984bff5c4b2a90483b9b21ea407dc5a08dab",
+    "method": "Playwright screenshot of the actual local GitHub Pages build; JPEG copy, quality 90; no image generation."
+  },
+  {
+    "file": "mobile.jpg",
+    "source": ".impeccable/review/ghpages/mobile.png",
+    "source_sha256": "0a524ed59a178addf1636af4bba8b150b931241a7bd2f0c82a1395626ad475b9",
+    "sha256": "547f14bb8638f4b5c915598945806fc73c2c02bd1281740ab435213712c5497a",
+    "method": "Playwright screenshot of the actual local GitHub Pages build; JPEG copy, quality 90; no image generation."
+  },
+  {
+    "file": "desktop-work.jpg",
+    "source": ".impeccable/review/ghpages/desktop-work.png",
+    "source_sha256": "65b782ae69dc05af03e9a92307f7255714d7631c471027c4f2164ed40aba543d",
+    "sha256": "f9157cd1571234a8138add964ae9fb1a74fd8eee68322b15e0c30fc97927f8cf",
+    "method": "Playwright screenshot of the actual local GitHub Pages build; JPEG copy, quality 90; no image generation."
+  },
+  {
+    "file": "desktop-atlas.jpg",
+    "source": ".impeccable/review/ghpages/desktop-atlas.png",
+    "source_sha256": "9bc255c90c1165c774673797a144b77eaabfbaa091a8a97048f6549c0f1d8405",
+    "sha256": "af625c24cd1d93ff1869859128f4d9ee3697c38071add520fc019466b60f67b6",
+    "method": "Playwright screenshot of the actual local GitHub Pages build; JPEG copy, quality 90; no image generation."
+  },
+  {
+    "file": "arabic-mobile.jpg",
+    "source": ".impeccable/review/ghpages/arabic-mobile.png",
+    "source_sha256": "76a2255a3cd657301c8d14c41f9e98c6cc849c6d72b97df08c5f4217133f8238",
+    "sha256": "b86220cb747722548a45c7cb845115412fa7af815e25ca11b6ca8fd8034128e4",
+    "method": "Playwright screenshot of the actual local GitHub Pages build; JPEG copy, quality 90; no image generation."
+  },
+  {
+    "file": "desktop-box.jpg",
+    "source": ".impeccable/review/ghpages/desktop-box.png",
+    "source_sha256": "74523b62dfdfe96027497c916a58cc16d167ced289b0163c079eb797186e939f",
+    "sha256": "6a8fd2661f46493f89976d7c753e4485c8a9aff2784a3bdc7097601cf32d4851",
+    "method": "Playwright screenshot of the actual local GitHub Pages build; JPEG copy, quality 90; no image generation."
+  },
+  {
+    "file": "desktop-flow.jpg",
+    "source": ".impeccable/review/ghpages/desktop-flow.png",
+    "source_sha256": "c912546d794aae339cfd7510a78e221d4018dadd285398f565dc7bba5c58ba06",
+    "sha256": "be86465fb7ce7fb5a73e0d9c6a163c5e82e19727bde10fb4c62d743f0513a6d1",
+    "method": "Playwright screenshot of the actual local GitHub Pages build; JPEG copy, quality 90; no image generation."
+  }
+]
