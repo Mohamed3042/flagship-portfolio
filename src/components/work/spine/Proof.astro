@@ -15,7 +15,7 @@ interface Props {
 const { mult = 2.4, center } = Astro.props;
 ---
 
-<section class="beat beat--proof" data-proof data-mult={mult.toString()} data-center={center}>
+<section class="beat beat--proof" data-proof data-mult={mult.toString()} data-center={center} data-flight-stop="proof">
   <div class="beat__sticky proof__sticky" data-proof-sticky>
     <div class="beat__wrap"><slot /></div>
   </div>

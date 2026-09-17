@@ -30,6 +30,45 @@
   font-weight:751 950;font-style:normal;font-display:swap;
 }
 
+/* ---------- Particle text: the scene draws the marked headlines ----------
+   The words stay in the DOM (semantics, search, screen readers); once the
+   WebGL flight is live the ink goes transparent and the points take over. */
+html.sky-live [data-ptext],html.flight-live [data-ptext],
+html.sky-live [data-ptext] *,html.flight-live [data-ptext] *{
+  color:transparent!important;-webkit-text-fill-color:transparent!important;
+  text-shadow:none!important;background:none!important;filter:none!important}
+
+/* ---------- Transmissions: body copy received as a signal ----------
+   lib/transmission.ts splits [data-tx] into words that arrive as accent
+   blocks and settle into the real words; a scan line sweeps the block once. */
+[data-tx]{position:relative}
+.tx-w{display:inline;transition:color .32s var(--ease-expo),text-shadow .32s var(--ease-expo)}
+.tx-w[data-on="0"]{color:color-mix(in srgb,var(--accent) 78%,transparent);text-shadow:0 0 12px color-mix(in srgb,var(--accent) 60%,transparent)}
+[data-tx].tx-live::after{content:"";position:absolute;left:-8px;right:-8px;top:0;height:1.5px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.9;animation:tx-sweep 1.25s var(--ease-expo) forwards}
+@keyframes tx-sweep{from{top:0;opacity:.95}to{top:100%;opacity:0}}
+/* the full text folds under one quiet control */
+.tx-more{margin-top:14px;max-width:65ch}
+.tx-more summary{display:inline-flex;align-items:center;gap:8px;cursor:pointer;list-style:none;padding:8px 14px;border-radius:999px;
+  border:1px solid color-mix(in srgb,var(--accent) 34%,transparent);font-family:var(--font-label);font-size:12px;letter-spacing:.04em;color:var(--ink-2);
+  transition:color .25s,border-color .25s,background-color .25s}
+.tx-more summary::-webkit-details-marker{display:none}
+.tx-more summary::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:tx-pulse 2.4s ease-in-out infinite}
+.tx-more summary:hover{color:var(--ink);border-color:color-mix(in srgb,var(--accent) 70%,transparent)}
+.tx-more[open] summary{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--ink)}
+.tx-more>p{margin-top:16px;font-size:clamp(15px,1.3vw,18px);line-height:1.65;color:var(--ink-2)}
+@keyframes tx-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+/* gate readouts: only the gate the camera is passing unfolds its line */
+.build__body{display:grid;grid-template-rows:1fr;transition:grid-template-rows .55s var(--ease-expo)}
+.build__body>p{min-height:0;overflow:hidden;margin:0}
+.build__item[data-state="past"] .build__body,.build__item[data-state="future"] .build__body{grid-template-rows:0fr}
+.build__item[data-state="past"] .build__body>p,.build__item[data-state="future"] .build__body>p{margin-top:-4px}
+/* holographic controls: one light sweep across the face on hover */
+.skyhero__btn,.system-hook__actions a,.hook__back,.station__story,.tx-more summary{position:relative;overflow:hidden;isolation:isolate}
+.skyhero__btn::after,.system-hook__actions a::after,.station__story::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.26) 50%,transparent 68%);transform:translateX(-140%);transition:transform .9s var(--ease-expo)}
+.skyhero__btn:hover::after,.system-hook__actions a:hover::after,.station__story:hover::after{transform:translateX(140%)}
+
 /* ---------- Reset ---------- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
@@ -867,7 +906,9 @@ h1,h2,h3{line-height:1.05;letter-spacing:-.03em;font-weight:800}
 .handoff__eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--next);margin-bottom:10px}
 /* darken the next-story accent for AA as small text on the light surface */
 [data-theme="light"] .handoff__eyebrow{color:color-mix(in srgb,var(--next) 46%,#14141a)}
-.handoff__label{font-size:clamp(28px,5vw,56px);font-weight:600;letter-spacing:-.02em;line-height:1}
+.handoff__copy{display:block;min-width:0}
+.handoff__label{display:block;font-size:clamp(28px,5vw,56px);font-weight:600;letter-spacing:-.02em;line-height:1}
+.sourcing__title{margin:0 0 10px;font-size:clamp(24px,2.6vw,34px);font-weight:700;letter-spacing:-.02em;line-height:1.1}
 .handoff__num{font-size:clamp(40px,7vw,90px);font-weight:700;letter-spacing:-.03em;color:var(--next);
   display:flex;align-items:center;gap:14px;direction:ltr;unicode-bidi:isolate}
 .handoff:hover .handoff__arrow{transform:translateX(6px)}

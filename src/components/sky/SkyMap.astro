@@ -28,8 +28,8 @@ const template = ar ? 'المعروض: {n}' : '{n} shown';
 
   <div class="skymap__grid">
     <div class="skymap__intro" data-sky-intro>
-      <h2 id="skymap-title" class="skymap__title">{ar ? 'السماء كاملة.' : 'The whole sky.'}</h2>
-      <p class="skymap__lead">
+      <h2 id="skymap-title" class="skymap__title" data-ptext>{ar ? 'السماء كاملة.' : 'The whole sky.'}</h2>
+      <p class="skymap__lead" data-tx>
         {
           ar
             ? `كل المشاريع الـ${n(entries.length)}، مجمّعة حسب طريقة التحقق منها: مستودعات عامة، وأنظمة أتمتة خاصة، والمختبر الهندسي، والأساس المهني الذي نشأت منه. كل نجمة تفتح قصتها.`

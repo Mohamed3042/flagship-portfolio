@@ -209,6 +209,7 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
       import { initMotion } from '../lib/motion';
       import { initAurora } from '../lib/aurora';
       import { initSpace } from '../lib/space';
+      import { initTransmissions } from '../lib/transmission';
       import { activeTheme, THEME_GLYPHS } from '../lib/theme';
 
       // Reflect the active theme in the nav menu (trigger glyph + selected row).
@@ -227,6 +228,7 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
         initMotion();
         initAurora();
         initSpace();
+        initTransmissions();
         syncThemeUI();
       }
       boot();

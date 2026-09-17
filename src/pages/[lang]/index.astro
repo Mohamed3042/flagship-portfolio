@@ -9,6 +9,7 @@ import { useTranslations, workPath, pick, locales, type Lang } from '../../i18n/
 import { automationProjects, labProjects, publicAiProjects } from '../../data/system-projects';
 import { legacyProjects, getProject, type ProjectMeta } from '../../data/projects';
 import { featured } from '../../data/featured';
+import { systemSpec } from '../../data/flight';
 
 export function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang } }));
@@ -35,7 +36,8 @@ const entries: { project: ProjectMeta; group: MapGroup }[] = [
 ];
 
 const skyData = {
-  stations: stations.map(({ project }) => ({ id: project.slug, a: project.cardA, b: project.cardB })),
+  // The same seat, kind and seed the story flight reads: one planet per project.
+  stations: stations.map(({ project }) => systemSpec(project.slug, project.cardA, project.cardB)),
   stars: entries.map(({ project, group }) => ({
     slug: project.slug,
     group,
@@ -72,14 +74,14 @@ const chapters = {
     {
       publicStations.length > 0 && (
         <header class="chapter">
-          <h2>{chapters.public.title}</h2>
+          <h2 data-ptext>{chapters.public.title}</h2>
           <p>{chapters.public.lead}</p>
         </header>
       )
     }
     {publicStations.map(({ project, feature }, i) => <SkyStation lang={lang} project={project} feature={feature} index={i} />)}
     <header class="chapter">
-      <h2>{chapters.private.title}</h2>
+      <h2 data-ptext>{chapters.private.title}</h2>
       <p>{chapters.private.lead}</p>
     </header>
     {privateStations.map(({ project, feature }, i) => <SkyStation lang={lang} project={project} feature={feature} index={i + publicStations.length} />)}
@@ -109,6 +111,14 @@ const chapters = {
   }
   html.sky-live #space {
     visibility: hidden !important;
+  }
+  /* the headline is drawn in the scene now: DOM scrims would dim it */
+  html.sky-live .skyhero__halo,
+  html.sky-live .beat::before {
+    display: none;
+  }
+  html.sky-live .skymap__intro::before {
+    opacity: 0.55;
   }
   html.sky-live .finale .cf {
     background: transparent;

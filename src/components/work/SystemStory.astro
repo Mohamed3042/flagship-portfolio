@@ -20,14 +20,17 @@ const ar = lang === 'ar';
 ---
 
 <article class="system-story" data-spine>
-  <section class="system-hook" data-screen="hook">
+  <section class="system-hook" data-screen="hook" data-flight-stop="hook">
     <Biome kind="nebula" tint={project.cardA} />
     <span class="system-hook__ghost" aria-hidden="true">{story.ghost}</span>
     <div class="system-hook__grid">
       <div class="system-hook__copy">
-        <span class="system-hook__tag"><i></i>{pick(lang, project.tag)}</span>
-        <h1 set:html={pick(lang, story.headline)}></h1>
-        <p set:html={pick(lang, story.lead)}></p>
+        <h1 data-ptext set:html={pick(lang, story.headline)}></h1>
+        <p class="system-hook__line" data-tx>{pick(lang, project.blurb)}</p>
+        <details class="tx-more">
+          <summary>{ar ? 'الإرسال الكامل' : 'Full transmission'}</summary>
+          <p set:html={pick(lang, story.lead)}></p>
+        </details>
         <div class="system-hook__actions">
           <a href={homePath(lang) + '#work'}>{ar ? '→' : '←'} {t('work.all')}</a>
           {story.link && <a class="primary" href={story.link.href} target="_blank" rel="noopener">{pick(lang, story.link.label)} ↗</a>}
@@ -66,9 +69,8 @@ const ar = lang === 'ar';
   <Proof lang={lang} mult={2.8} center={`system-${story.visual}`}>
     <div class="system-proof">
       <div class="system-proof__copy">
-        <span>{pick(lang, story.proofKicker)}</span>
-        <h2>{pick(lang, story.proofHeading)}</h2>
-        <p>{pick(lang, story.proofBody)}</p>
+        <h2 data-ptext>{pick(lang, story.proofHeading)}</h2>
+        <p data-tx>{pick(lang, story.proofBody)}</p>
       </div>
       <SystemVisual lang={lang} story={story} />
     </div>
@@ -91,6 +93,7 @@ const ar = lang === 'ar';
   .system-hook h1{margin:0;font-size:clamp(44px,7vw,104px);line-height:.96;letter-spacing:-.035em;text-wrap:balance;color:var(--ink)}
   :global([dir="rtl"]) .system-hook h1{letter-spacing:0;line-height:1.14}
   .system-hook p{max-width:65ch;margin:clamp(24px,3.4vw,38px) 0 0;font-size:clamp(16px,1.6vw,21px);line-height:1.65;color:var(--ink-2)}
+  .system-hook__line{font-size:clamp(18px,1.9vw,24px);color:var(--ink)}
   .system-hook__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}.system-hook__actions a{display:inline-flex;align-items:center;min-height:46px;padding:0 18px;border-radius:14px;border:1px solid var(--glass-brd);color:var(--ink-2);text-decoration:none;font-size:13px;transition:transform .25s var(--ease),color .25s,border-color .25s}.system-hook__actions a:hover{transform:translateY(-2px);color:var(--ink);border-color:color-mix(in srgb,var(--accent) 48%,var(--glass-brd))}.system-hook__actions .primary{background:var(--accent);border-color:var(--accent);color:#08090d;font-weight:700}
   .system-hook__cue{position:absolute;bottom:26px;left:50%;translate:-50%;display:flex;align-items:center;gap:10px;color:var(--ink-3);font:10px var(--font-mono);letter-spacing:.13em;text-transform:uppercase}.system-hook__cue i{display:block;width:46px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
   .contract-panel{position:relative;width:min(100%,500px);margin-inline:auto;padding:clamp(24px,4vw,48px);border-radius:28px;background:color-mix(in srgb,var(--surface) 91%,var(--accent) 9%);box-shadow:0 38px 90px rgba(0,0,0,.28);overflow:hidden}.contract-panel::before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}.contract-panel__label{display:block;margin-bottom:26px;color:var(--accent);font:10px var(--font-mono);letter-spacing:.14em}.contract-panel div{display:grid;grid-template-columns:74px 1fr;gap:18px;padding:17px 0;border-top:1px solid color-mix(in srgb,var(--ink-3) 18%,transparent)}.contract-panel i{font:9px var(--font-mono);font-style:normal;letter-spacing:.1em;color:var(--ink-3)}.contract-panel b{font-size:13px;line-height:1.5;font-weight:500;color:var(--ink-2)}.contract-panel__pulse{position:absolute;right:-30px;bottom:-30px;width:120px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--accent),transparent 68%);opacity:.22;animation:contract-pulse 4s ease-in-out infinite}

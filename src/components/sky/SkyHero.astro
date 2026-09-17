@@ -12,12 +12,10 @@ const ar = lang === 'ar';
 
 const l1 = ar ? 'أحوّل العمل اليدوي' : 'I turn manual work';
 const l2 = ar ? 'إلى أنظمة تعمل.' : 'into systems that run.';
-const lead = ar
-  ? 'أرسم العملية، وأبني الأداة الداخلية، وأضع بوابات الموافقة والتدقيق، ثم أتحقق من النتيجة على بيانات حقيقية — محليًا، وثنائي اللغة، وجاهزًا للعمل.'
-  : 'I map the process, build the internal tool, add approval and audit gates, then verify it against real operating data — local-first, bilingual, and built to run.';
+const lead = ar ? 'أرسم العملية. أبني الأداة. أضع البوابة. أثبت النتيجة.' : 'I map it. I build it. I gate it. I prove it.';
 const status = ar
   ? `${pick(lang, profile.title)} · ${pick(lang, profile.location)} · ${projectCount.toLocaleString('ar-EG')} مشروعًا، منها ${publicCount.toLocaleString('ar-EG')} مستودعات عامة`
-  : `${pick(lang, profile.title)} · ${pick(lang, profile.location)} · ${projectCount} projects, ${publicCount} public repositories`;
+  : '';
 const cta1 = ar ? 'شاهد الأنظمة' : 'See the systems';
 const cta2 = ar ? 'تواصل معي' : 'Get in touch';
 ---
@@ -25,11 +23,11 @@ const cta2 = ar ? 'تواصل معي' : 'Get in touch';
 <section class:list={['skyhero', { 'is-ar': ar }]} id="intro" data-sky-stop="hero" aria-labelledby="skyhero-title">
   <div class="skyhero__halo" aria-hidden="true"></div>
   <div class="skyhero__wrap">
-    <h1 id="skyhero-title" class="skyhero__title">
+    <h1 id="skyhero-title" class="skyhero__title" data-ptext>
       <span class="skyhero__l1">{l1}</span>
       <span class="skyhero__l2">{l2}</span>
     </h1>
-    <p class="skyhero__lead">{lead}</p>
+    <p class="skyhero__lead" data-tx>{lead}</p>
     <div class="skyhero__cta">
       <a class="skyhero__btn skyhero__btn--primary" href="#work">
         {cta1}
@@ -37,7 +35,15 @@ const cta2 = ar ? 'تواصل معي' : 'Get in touch';
       </a>
       <a class="skyhero__btn skyhero__btn--ghost" href="#contact">{cta2}</a>
     </div>
-    <p class="skyhero__status">{status}</p>
+    {
+      ar ? (
+        <p class="skyhero__status" data-tx>{status}</p>
+      ) : (
+        <p class="skyhero__status" data-tx>
+          {pick(lang, profile.title)} · {pick(lang, profile.location)} · <b data-count={projectCount}>{projectCount}</b> systems · <b data-count={publicCount}>{publicCount}</b> public repositories
+        </p>
+      )
+    }
   </div>
   <div class="skyhero__cue" aria-hidden="true"><span>{ar ? 'مرّر' : 'Scroll'}</span><b><i></i></b></div>
 </section>
@@ -118,7 +124,9 @@ const cta2 = ar ? 'تواصل معي' : 'Get in touch';
   .skyhero__lead {
     margin: clamp(22px, 3.2vh, 32px) 0 0;
     max-width: 46ch;
-    color: var(--ink-2);
+    color: var(--ink);
+    font-weight: 560;
+    letter-spacing: -0.01em;
     text-shadow: 0 1px 18px rgba(3, 3, 10, 0.95);
     font-size: clamp(16px, 1.75vw, 20px);
     line-height: 1.55;
@@ -187,6 +195,7 @@ const cta2 = ar ? 'تواصل معي' : 'Get in touch';
     margin-top: 22px;
     font-family: var(--font-label);
     font-size: 13px;
+    font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
     color: var(--ink-3);
     animation: skyRise 1.1s 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;

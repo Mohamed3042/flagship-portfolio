@@ -31,7 +31,7 @@ const layers = [...feature.shots].reverse();
       <span class="station__vis" data-public={feature.repo ? 'true' : 'false'}>{visibility}{feature.version && <span dir="ltr"> · {feature.version}</span>}</span>
       <span class="station__tag">{pick(lang, project.tag)}</span>
     </p>
-    <p class="station__line">{pick(lang, project.blurb)}</p>
+    <p class="station__line" data-tx>{pick(lang, project.blurb)}</p>
 
     <figure class="station__shots" data-depth data-layers={layers.length}>
       {
@@ -60,7 +60,7 @@ const layers = [...feature.shots].reverse();
       }
     </dl>
 
-    <p class="station__limit">
+    <p class="station__limit" data-tx>
       <b>{pick(lang, story.boundaryKicker)}</b>
       {pick(lang, story.boundary)}
     </p>

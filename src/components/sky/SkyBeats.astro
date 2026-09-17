@@ -32,8 +32,8 @@ const beats = ar
     {
       beats.map((b, i) => (
         <li class="beat" data-beat style={`--i:${i}`}>
-          <p class="beat__h">{b.h}</p>
-          <p class="beat__p">{b.p}</p>
+          <p class="beat__h" data-ptext>{b.h}</p>
+          <p class="beat__p" data-tx>{b.p}</p>
         </li>
       ))
     }

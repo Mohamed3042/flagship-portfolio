@@ -2,7 +2,9 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Pager from '../../../components/work/Pager.astro';
 import SystemStory from '../../../components/work/SystemStory.astro';
-import { getProject, projectSlugs } from '../../../data/projects';
+import { getProject, neighbours, projectSlugs } from '../../../data/projects';
+import { featured } from '../../../data/featured';
+import { systemSpec } from '../../../data/flight';
 import { profile } from '../../../data/profile';
 import { pick, workPath, locales, type Lang } from '../../../i18n/utils';
 
@@ -51,6 +53,25 @@ const creativeWork = {
   author: { '@type': 'Person', name: profile.name.en },
   url: new URL(workPath(lang, slug), Astro.site ?? 'https://mohamed-mahmoud-kuwait.netlify.app').href,
 };
+
+// The flight: this story's planet (the same seat, kind and seed the home
+// flies to), its sanitized screens where a privacy-reviewed set exists, and
+// the next story's planet so the rail can already point at it.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { next } = neighbours(slug);
+const feature = featured.find((f) => f.slug === slug);
+const cakeModels = ['cake-01-ivory-spiral', 'cake-06-two-tier-cocoa', 'cake-09-tall-oval-teal'];
+const flightData = {
+  spec: systemSpec(project.slug, project.cardA, project.cardB),
+  visual: project.story?.visual ?? `legacy-${slug}`,
+  legacy: !project.story,
+  proof: project.story?.proof.length ?? 0,
+  shots: (feature?.shots ?? []).map((s) => ({ src: `${base}/img/sky/${s.src}.webp`, w: s.w, h: s.h })),
+  next: { ...systemSpec(next.slug, next.cardA, next.cardB), href: workPath(lang, next.slug) },
+  models: slug === 'cake-studio' ? cakeModels.map((m) => `${base}/worlds/cake-studio/models/${m}.glb`) : [],
+  draco: `${base}/worlds/cake-studio/draco/gltf/`,
+  basis: `${base}/worlds/cake-studio/addons/libs/basis/`,
+};
 ---
 
 <BaseLayout
@@ -61,6 +82,165 @@ const creativeWork = {
   accent={project.accent}
   jsonLd={creativeWork}
 >
+  <canvas class="sky sky--flight" data-flight-canvas aria-hidden="true"></canvas>
+  <script type="application/json" id="flight-data" set:html={JSON.stringify(flightData)} is:inline />
+
   {Story ? <Story lang={lang} /> : <SystemStory lang={lang} project={project} />}
   <Pager lang={lang} slug={slug} />
 </BaseLayout>
+
+<style is:global>
+  /* ---- the flight canvas: fixed behind the whole story ---- */
+  .sky--flight {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    display: block;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  html.flight-live .sky--flight {
+    opacity: 1;
+  }
+  html.flight-live #space {
+    visibility: hidden !important;
+  }
+
+  /* ---- the hook: the planet is the visual, so the CSS stand-ins step aside ---- */
+  html.flight-live .system-hook .biome,
+  html.flight-live .beat--hook .biome,
+  html.flight-live .beat--hook .beat__glow {
+    display: none;
+  }
+  html.flight-live .system-hook .system-visual.compact {
+    visibility: hidden;
+  }
+  html.flight-live .system-hook__ghost,
+  html.flight-live .beat__ghost {
+    display: none;
+  }
+  @media (min-width: 981px) {
+    /* the whole hook (headline, lead, actions, cue) fits one viewport */
+    html.flight-live .hook__content {
+      max-width: min(1000px, 58%);
+    }
+    html.flight-live .system-hook h1 {
+      font-size: clamp(40px, 5.4vw, 82px);
+    }
+    html.flight-live .system-hook__grid {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    }
+    html.flight-live .hook__title {
+      font-size: clamp(42px, 6.4vw, 90px);
+    }
+    html.flight-live .hook__num {
+      margin-top: 30px;
+    }
+    html.flight-live .hook__num b {
+      font-size: clamp(44px, 6vw, 84px);
+    }
+  }
+  @media (max-width: 980px) {
+    html.flight-live .system-hook .system-visual.compact {
+      display: none;
+    }
+    /* the planet rides above and behind the headline on a phone */
+    html.flight-live .system-hook,
+    html.flight-live .beat--hook {
+      min-height: 100svh;
+      padding-top: 30svh;
+    }
+  }
+
+  /* ---- copy over a live scene: a dark lens behind every reading column ---- */
+  html.flight-live .system-hook__copy > p,
+  html.flight-live .hook__lead,
+  html.flight-live .brief__col > p,
+  html.flight-live .build__head > p,
+  html.flight-live .system-proof__copy > p,
+  html.flight-live .sourcing__quote,
+  html.flight-live .sourcing {
+    position: relative;
+    isolation: isolate;
+  }
+  html.flight-live .system-hook__copy > p::before,
+  html.flight-live .hook__lead::before,
+  html.flight-live .brief__col > p::before,
+  html.flight-live .build__head > p::before,
+  html.flight-live .system-proof__copy > p::before,
+  html.flight-live .sourcing__quote::before {
+    content: '';
+    position: absolute;
+    inset: -30% -14%;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse farthest-side at 50% 50%, color-mix(in srgb, var(--space-1) 94%, transparent), color-mix(in srgb, var(--space-1) 80%, transparent) 58%, transparent 100%);
+  }
+  html.flight-live .system-hook h1,
+  html.flight-live .hook__title,
+  html.flight-live .brief__col h2,
+  html.flight-live .build__head h2,
+  html.flight-live .system-proof__copy h2,
+  html.flight-live .handoff__label {
+    text-shadow: 0 2px 34px color-mix(in srgb, var(--space-1) 90%, transparent);
+  }
+  html.flight-live .system-hook p,
+  html.flight-live .hook__lead,
+  html.flight-live .brief__col p,
+  html.flight-live .build__head p,
+  html.flight-live .system-proof__copy p,
+  html.flight-live .sourcing__quote {
+    text-shadow: 0 1px 22px color-mix(in srgb, var(--space-1) 95%, transparent);
+  }
+  html.flight-live .contract-panel {
+    background: color-mix(in srgb, var(--space-1) 86%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  html.flight-live .build__item {
+    background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* ---- proof: the 3D array stands where the CSS scene was; the numbers stay ---- */
+  html.flight-live .beat--proof .system-visual {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+  html.flight-live .beat--proof .system-visual::before,
+  html.flight-live .beat--proof .visual-grid,
+  html.flight-live .beat--proof .scene,
+  html.flight-live .proof__sticky::after {
+    display: none;
+  }
+  html.flight-live .beat--proof .visual-caption span {
+    background: color-mix(in srgb, var(--surface) 78%, transparent);
+  }
+
+  /* ---- the boundary: the handoff rides the gate ---- */
+  html.flight-live .handoff {
+    border-top-color: color-mix(in srgb, #ffc36b 30%, transparent);
+  }
+  html.flight-live .handoff__wash {
+    background: linear-gradient(0deg, color-mix(in srgb, var(--space-1) 78%, transparent), transparent 80%);
+  }
+  html.flight-live .handoff__row {
+    padding-top: 26vh;
+    padding-bottom: 22vh;
+  }
+</style>
+
+<script>
+  import { bootFlight, stopFlight } from '../../../lib/sky/flight-boot';
+  // ClientRouter fires astro:page-load on the first load too.
+  document.addEventListener('astro:page-load', () => {
+    if (document.querySelector('[data-flight-canvas]')) bootFlight();
+  });
+  document.addEventListener('astro:before-swap', stopFlight);
+</script>

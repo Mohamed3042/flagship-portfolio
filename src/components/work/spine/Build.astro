@@ -21,12 +21,11 @@ interface Props {
 const { lang, kicker, heading, intro, mult = 2.6, items } = Astro.props;
 ---
 
-<section class="beat beat--build" data-build data-mult={mult.toString()}>
+<section class="beat beat--build" data-build data-mult={mult.toString()} data-flight-stop="build">
   <div class="beat__sticky" data-build-sticky>
     <div class="build__grid">
       <div class="build__head reveal">
-        <span class="kicker">{pick(lang, kicker)}</span>
-        <h2>{pick(lang, heading)}</h2>
+        <h2 data-ptext>{pick(lang, heading)}</h2>
         {intro && <p>{pick(lang, intro)}</p>}
         <div class="build__bar"><i data-build-bar></i></div>
       </div>
@@ -37,7 +36,7 @@ const { lang, kicker, heading, intro, mult = 2.6, items } = Astro.props;
               <span class="n">{it.n}</span>
               <div>
                 <h4>{pick(lang, it.title)}</h4>
-                <p>{pick(lang, it.body)}</p>
+                <div class="build__body"><p data-tx="gate">{pick(lang, it.body)}</p></div>
               </div>
             </div>
           ))

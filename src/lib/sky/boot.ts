@@ -6,8 +6,8 @@
       station layers so the typography and screenshot stacks parallax on
       every device, including ones the 3D never reaches.
    2. The sky map controls: filters, live count, #lab / #foundation deep links.
-   3. The WebGL scene: capability-gated, loaded after first paint, torn down
-      before Astro swaps the page.
+   3. The WebGL scene: capability-gated (never tiered), loaded after first
+      paint, torn down before Astro swaps the page.
    ===================================================================== */
 import type { SkyData, SkyEngine, StarGroup } from './engine';
 
@@ -16,28 +16,28 @@ type Filter = (typeof GROUPS)[number];
 
 let teardown: (() => void) | null = null;
 
-function tier(): 'high' | 'low' | null {
-  if (new URLSearchParams(location.search).get('sky') === 'off') return null;
-  const force = new URLSearchParams(location.search).get('sky') === 'force';
+/** The only gate: a browser that cannot draw the scene at all keeps the CSS
+ *  sky. There is no low tier: phones render the identical scene at native
+ *  resolution (the owner's rule). `?sky=off` / `?sky=force` exist for tests. */
+export function skyCapable(): boolean {
+  const q = new URLSearchParams(location.search).get('sky');
+  if (q === 'off') return false;
+  const force = q === 'force';
   const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  if (conn?.saveData && !force) return null;
+  if (conn?.saveData && !force) return false;
   try {
     const probe = document.createElement('canvas');
     const gl = (probe.getContext('webgl2') || probe.getContext('webgl')) as WebGLRenderingContext | null;
-    if (!gl) return null;
+    if (!gl) return false;
     const dbg = gl.getExtension('WEBGL_debug_renderer_info');
     const name = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
     gl.getExtension('WEBGL_lose_context')?.loseContext();
     // Software rasterisers cannot hold a frame here; the CSS sky is kinder.
-    if (/swiftshader|llvmpipe|software/i.test(name) && !force) return null;
+    if (/swiftshader|llvmpipe|software/i.test(name) && !force) return false;
   } catch {
-    return null;
+    return false;
   }
-  const mem = (navigator as Navigator & { deviceMemory?: number }).deviceMemory;
-  const coarse = window.matchMedia('(pointer: coarse)').matches;
-  const small = Math.min(window.innerWidth, window.innerHeight) < 700;
-  if (coarse || small || (typeof mem === 'number' && mem < 4) || (navigator.hardwareConcurrency ?? 4) < 4) return 'low';
-  return 'high';
+  return true;
 }
 
 export function bootSky(): void {
@@ -145,15 +145,14 @@ export function bootSky(): void {
   window.addEventListener('click', onClick);
 
   /* ---- 3. WebGL ---- */
-  const level = tier();
   let cancelled = false;
   const onTheme = () => engine?.retheme();
   document.addEventListener('mm:themechange', onTheme);
-  if (level) {
+  if (skyCapable()) {
     const start = () => {
       if (cancelled) return;
       import('./engine')
-        .then(({ mountSky }) => mountSky(canvas, data, { tier: level, rtl, tag: document.querySelector('[data-sky-tag]') }))
+        .then(({ mountSky }) => mountSky(canvas, data, { rtl, tag: document.querySelector('[data-sky-tag]') }))
         .then((e) => {
           if (cancelled) {
             e.dispose();

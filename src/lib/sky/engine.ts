@@ -9,57 +9,54 @@
 
    The DOM owns every word. This file only reads where the stops are
    ([data-sky-stop]) and draws. It is dynamic-imported by boot.ts after the
-   first paint and only on a device that passed the capability gate.
+   first paint and only on a device that passed the capability gate. The
+   universe itself (galaxy, nebulae, planets) comes from world.ts, which the
+   story flights share, and the frame goes through the post stack in post.ts.
    ===================================================================== */
 import {
-  AdditiveBlending,
-  BackSide,
   BufferAttribute,
   BufferGeometry,
   CatmullRomCurve3,
   Color,
-  Group,
   LineBasicMaterial,
   LineSegments,
-  Mesh,
-  NormalBlending,
+  NoToneMapping,
   PerspectiveCamera,
-  PlaneGeometry,
   Points,
   Scene,
-  ShaderMaterial,
-  SphereGeometry,
   Vector3,
   WebGLRenderer,
-  type Blending,
 } from 'three';
-import {
-  atmoFrag,
-  atmoVert,
-  glowFrag,
-  glowVert,
-  mapFrag,
-  mapVert,
-  nebulaFrag,
-  nebulaVert,
-  planetFrag,
-  planetVert,
-  routeFrag,
-  routeVert,
-  starFrag,
-  starVert,
-} from './shaders';
+import { mapFrag, mapVert, routeFrag, routeVert } from './shaders';
 import { skyPalette, type SkyPalette } from './palette';
+import { createPost } from './post';
+import { createTextField } from './text';
+import {
+  buildBackdrop,
+  buildComets,
+  buildCore,
+  buildFarShell,
+  buildGalaxy,
+  buildNebulae,
+  buildSystem,
+  clamp01,
+  createWorld,
+  prepareBake,
+  damp,
+  docTop,
+  easeInOut,
+  sharedGeometry,
+  type SystemSpec,
+} from './world';
 
 export type StarGroup = 'public' | 'automation' | 'lab' | 'foundation';
 
 export interface SkyData {
-  stations: { id: string; a: string; b: string }[];
+  stations: SystemSpec[];
   stars: { slug: string; group: StarGroup; a: string; title: string; href: string }[];
 }
 
 export interface SkyOptions {
-  tier: 'high' | 'low';
   rtl: boolean;
   tag: HTMLElement | null;
 }
@@ -85,346 +82,43 @@ interface Stop {
   oy: number;
 }
 
-/* ------------------------------------------------------------ utilities -- */
-
-function rng(seed: number) {
-  let s = seed >>> 0;
-  return () => {
-    s = (s + 0x6d2b79f5) >>> 0;
-    let t = s;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function gauss(r: () => number) {
-  const u = Math.max(r(), 1e-6);
-  return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2831853 * r());
-}
-
-const easeInOut = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, t)));
-const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
-const docTop = (el: Element) => el.getBoundingClientRect().top + window.scrollY;
-
 /* --------------------------------------------------------------- engine -- */
 
 export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: SkyOptions): Promise<SkyEngine> {
-  const high = opts.tier === 'high';
-  const OCT = high ? 5 : 4;
+  const t0 = performance.now();
   let pal: SkyPalette = skyPalette();
 
-  const renderer = new WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: window.devicePixelRatio < 1.5,
-    powerPreference: 'high-performance',
-  });
-  renderer.setClearColor(0x000000, 0);
-  const dprCap = high ? 1.75 : 1.3;
-  let dpr = Math.min(window.devicePixelRatio || 1, dprCap);
+  const renderer = new WebGLRenderer({ canvas, alpha: false, antialias: false, powerPreference: 'high-performance' });
+  renderer.toneMapping = NoToneMapping;
+  renderer.setClearColor(0x000000, 1);
+  // Native resolution on every device: the owner's rule is no reduced
+  // quality on a phone, so the pixel ratio is the device's own.
+  let dpr = window.devicePixelRatio || 1;
   renderer.setPixelRatio(dpr);
 
   const scene = new Scene();
-  const camera = new PerspectiveCamera(high ? 42 : 52, 1, 0.1, 4000);
-  const disposables: { dispose(): void }[] = [];
-  const track = <T extends { dispose(): void }>(x: T) => (disposables.push(x), x);
+  const camera = new PerspectiveCamera(42, 1, 0.1, 4000);
+  const world = createWorld(scene, pal, dpr, renderer);
+  const { common } = world;
 
-  const common = { uTime: { value: 0 }, uPixel: { value: dpr }, uLight: { value: pal.light ? 1 : 0 } };
-  const blend = (): Blending => (pal.light ? NormalBlending : AdditiveBlending);
-  const blended: ShaderMaterial[] = [];
-  const shader = (m: ConstructorParameters<typeof ShaderMaterial>[0], additive = true) => {
-    const mat = track(new ShaderMaterial({ transparent: true, depthWrite: false, ...m }));
-    if (additive) {
-      mat.blending = blend();
-      blended.push(mat);
-    }
-    return mat;
-  };
-
-  /* ---- galaxy disc ---- */
-  const R = 120;
-  const starCount = high ? 64000 : 22000;
-  const gRand = rng(7);
-  const gPos = new Float32Array(starCount * 3);
-  const gSize = new Float32Array(starCount);
-  const gSeed = new Float32Array(starCount);
-  const gArm = new Uint8Array(starCount);
-  const gMix = new Float32Array(starCount);
-  const ARMS = 4;
-  for (let i = 0; i < starCount; i++) {
-    const rr = Math.min(R, (-Math.log(1 - gRand() * 0.985) * R) / 3.1);
-    const arm = Math.floor(gRand() * ARMS);
-    const ang = (arm / ARMS) * Math.PI * 2 + rr * 0.042 + gauss(gRand) * (0.2 + (rr / R) * 0.22);
-    const thick = 4.2 * Math.exp(-rr / 22) + 0.9;
-    const scatter = 1.4 + (rr / R) * 2.6;
-    gPos[i * 3] = Math.cos(ang) * rr + gauss(gRand) * scatter;
-    gPos[i * 3 + 1] = gauss(gRand) * thick;
-    gPos[i * 3 + 2] = Math.sin(ang) * rr + gauss(gRand) * scatter;
-    const bright = gRand();
-    gSize[i] = 0.55 + Math.pow(bright, 7) * 4.2;
-    gSeed[i] = gRand();
-    gArm[i] = arm;
-    gMix[i] = clamp01(rr / 48) * (0.75 + gRand() * 0.25);
-  }
-  const galaxyGeo = track(new BufferGeometry());
-  galaxyGeo.setAttribute('position', new BufferAttribute(gPos, 3));
-  galaxyGeo.setAttribute('aSize', new BufferAttribute(gSize, 1));
-  galaxyGeo.setAttribute('aSeed', new BufferAttribute(gSeed, 1));
-  const gColor = new BufferAttribute(new Float32Array(starCount * 3), 3);
-  galaxyGeo.setAttribute('aColor', gColor);
-  const paintGalaxy = () => {
-    const c = new Color();
-    const core = new Color(pal.core);
-    const arms = pal.arms.map((h) => new Color(h));
-    const hot = new Color('#cfe3ff');
-    const r = rng(11);
-    for (let i = 0; i < starCount; i++) {
-      c.copy(core).lerp(arms[gArm[i] % arms.length], gMix[i]);
-      if (r() < 0.035) c.lerp(hot, 0.7);
-      const k = 0.55 + r() * 0.45;
-      gColor.setXYZ(i, c.r * k, c.g * k, c.b * k);
-    }
-    gColor.needsUpdate = true;
-  };
-  paintGalaxy();
-  const galaxyMat = shader({
-    vertexShader: starVert,
-    fragmentShader: starFrag,
-    uniforms: { ...common, uScale: { value: high ? 260 : 300 } },
-  });
-  const galaxy = new Points(galaxyGeo, galaxyMat);
-  galaxy.frustumCulled = false;
-  scene.add(galaxy);
-
-  /* ---- far sky shell ---- */
-  const farCount = high ? 5000 : 2400;
-  const fRand = rng(23);
-  const fPos = new Float32Array(farCount * 3);
-  const fSize = new Float32Array(farCount);
-  const fSeed = new Float32Array(farCount);
-  const fCol = new Float32Array(farCount * 3);
-  for (let i = 0; i < farCount; i++) {
-    const u = fRand() * 2 - 1;
-    const th = fRand() * Math.PI * 2;
-    const s = Math.sqrt(1 - u * u);
-    const d = 1300 + fRand() * 500;
-    fPos[i * 3] = s * Math.cos(th) * d;
-    fPos[i * 3 + 1] = u * d;
-    fPos[i * 3 + 2] = s * Math.sin(th) * d;
-    fSize[i] = 3 + Math.pow(fRand(), 8) * 10;
-    fSeed[i] = fRand();
-    const w = 0.6 + fRand() * 0.4;
-    fCol[i * 3] = w;
-    fCol[i * 3 + 1] = w * (0.9 + fRand() * 0.1);
-    fCol[i * 3 + 2] = w;
-  }
-  const farGeo = track(new BufferGeometry());
-  farGeo.setAttribute('position', new BufferAttribute(fPos, 3));
-  farGeo.setAttribute('aSize', new BufferAttribute(fSize, 1));
-  farGeo.setAttribute('aSeed', new BufferAttribute(fSeed, 1));
-  farGeo.setAttribute('aColor', new BufferAttribute(fCol, 3));
-  const far = new Points(
-    farGeo,
-    shader({ vertexShader: starVert, fragmentShader: starFrag, uniforms: { ...common, uScale: { value: 420 } } }),
-  );
-  far.frustumCulled = false;
-  scene.add(far);
-
-  /* ---- nebula sheets ---- */
-  const nebulaCount = high ? 7 : 3;
-  const nRand = rng(31);
-  const nebulaGeo = track(new PlaneGeometry(1, 1));
-  const nebulae: ShaderMaterial[] = [];
-  for (let k = 0; k < nebulaCount; k++) {
-    const mat = shader({
-      vertexShader: nebulaVert,
-      fragmentShader: nebulaFrag(high ? 4 : 3),
-      side: 2,
-      uniforms: {
-        ...common,
-        uSeed: { value: k * 7.13 },
-        uOpacity: { value: 0.3 + nRand() * 0.18 },
-        uColA: { value: new Color() },
-        uColB: { value: new Color() },
-      },
-    });
-    nebulae.push(mat);
-    const m = new Mesh(nebulaGeo, mat);
-    const ang = (k / nebulaCount) * Math.PI * 2 + 0.5;
-    const r = 26 + (k % 3) * 24;
-    m.position.set(Math.cos(ang) * r, -3 + (k % 2) * 4, Math.sin(ang) * r);
-    m.rotation.set(-Math.PI / 2 + (nRand() - 0.5) * 0.45, 0, nRand() * Math.PI);
-    const s = 80 + nRand() * 50;
-    m.scale.set(s, s * (0.55 + nRand() * 0.4), 1);
-    m.renderOrder = -1;
-    scene.add(m);
-  }
-  const paintNebulae = () => {
-    nebulae.forEach((mat, k) => {
-      (mat.uniforms.uColA.value as Color).set(pal.arms[k % pal.arms.length]);
-      (mat.uniforms.uColB.value as Color).set(pal.arms[(k + 1) % pal.arms.length]);
-    });
-  };
-  paintNebulae();
-
-  /* ---- core glow ---- */
-  const quad = track(new PlaneGeometry(1, 1));
-  const glow = (color: string, opacity: number, size: number) => {
-    const mat = shader({
-      vertexShader: glowVert,
-      fragmentShader: glowFrag,
-      uniforms: { ...common, uColor: { value: new Color(color) }, uOpacity: { value: opacity } },
-    });
-    const m = new Mesh(quad, mat);
-    m.scale.set(size, size, 1);
-    m.frustumCulled = false;
-    return m;
-  };
-  const coreOuter = glow(pal.core, 0.38, 150);
-  const coreInner = glow('#ffffff', 0.5, 26);
-  scene.add(coreOuter, coreInner);
+  const backdrop = buildBackdrop(world);
+  const galaxy = buildGalaxy(world);
+  buildFarShell(world);
+  const nebulae = buildNebulae(world);
+  const core = buildCore(world);
+  const comets = buildComets(world);
 
   /* ---- featured systems ---- */
-  const N = data.stations.length;
-  const planetGeo = track(new SphereGeometry(1, high ? 96 : 48, high ? 64 : 32));
-  const atmoGeo = track(new SphereGeometry(1, high ? 64 : 32, high ? 40 : 20));
-  const moonGeo = track(new SphereGeometry(1, 32, 20));
-  interface Sys {
-    group: Group;
-    planet: Mesh;
-    moons: { mesh: Mesh; r: number; speed: number; phase: number; tilt: number }[];
-    ring: Points | null;
-    pos: Vector3;
-    radius: number;
-    spin: number;
-  }
-  const systems: Sys[] = data.stations.map((st, i) => {
-    const t = N > 1 ? i / (N - 1) : 0;
-    const ang = 0.55 + i * 0.84;
-    const orbit = 100 - t * 56;
-    const pos = new Vector3(Math.cos(ang) * orbit, Math.sin(i * 1.7) * 6, Math.sin(ang) * orbit);
-    const radius = [4.6, 5.6, 4.0, 5.0][i % 4];
-    const kind = i % 4;
-    const group = new Group();
-    group.position.copy(pos);
-    // Key light from the arrival side (three-quarter), so the face the camera
-    // sees is lit rather than a black disc against the galaxy.
-    const outDir = new Vector3(pos.x, 0, pos.z).normalize();
-    const side = new Vector3(-outDir.z, 0, outDir.x).multiplyScalar(i % 2 ? 1 : -1);
-    const keyLight = pos.clone().add(outDir.clone().multiplyScalar(0.55).add(side.multiplyScalar(1.1)).add(new Vector3(0, 0.7, 0)).normalize().multiplyScalar(600));
-    const planetMat = track(
-      new ShaderMaterial({
-        vertexShader: planetVert,
-        fragmentShader: planetFrag(OCT),
-        uniforms: {
-          uTime: common.uTime,
-          uA: { value: new Color(st.a) },
-          uB: { value: new Color(st.b) },
-          uLightPos: { value: keyLight },
-          uRadius: { value: radius },
-          uSeed: { value: i * 3.7 + 1.3 },
-          uKind: { value: kind },
-        },
-      }),
-    );
-    const planet = new Mesh(planetGeo, planetMat);
-    planet.scale.setScalar(radius);
-    planet.rotation.z = 0.25 + (i % 3) * 0.12;
-    group.add(planet);
-
-    const atmo = new Mesh(
-      atmoGeo,
-      track(
-        new ShaderMaterial({
-          vertexShader: atmoVert,
-          fragmentShader: atmoFrag,
-          side: BackSide,
-          transparent: true,
-          depthWrite: false,
-          blending: AdditiveBlending,
-          uniforms: { uColor: { value: new Color(st.b) }, uLightPos: { value: keyLight } },
-        }),
-      ),
-    );
-    atmo.scale.setScalar(radius * 1.16);
-    group.add(atmo);
-
-    const halo = glow(st.b, 0.3, radius * 10);
-    group.add(halo);
-
-    let ring: Points | null = null;
-    if (kind === 1 || kind === 2) {
-      const rc = high ? 2600 : 1100;
-      const rr = rng(100 + i);
-      const rp = new Float32Array(rc * 3);
-      const rs = new Float32Array(rc);
-      const rsd = new Float32Array(rc);
-      const rcol = new Float32Array(rc * 3);
-      const ca = new Color(st.a);
-      const cb = new Color(st.b);
-      const c = new Color();
-      for (let k = 0; k < rc; k++) {
-        const a = rr() * Math.PI * 2;
-        const band = rr();
-        const d = radius * (1.55 + band * 0.95);
-        rp[k * 3] = Math.cos(a) * d;
-        rp[k * 3 + 1] = gauss(rr) * 0.05 * radius;
-        rp[k * 3 + 2] = Math.sin(a) * d;
-        rs[k] = 0.5 + rr() * 0.9;
-        rsd[k] = rr();
-        c.copy(ca).lerp(cb, band);
-        rcol[k * 3] = c.r;
-        rcol[k * 3 + 1] = c.g;
-        rcol[k * 3 + 2] = c.b;
-      }
-      const rg = track(new BufferGeometry());
-      rg.setAttribute('position', new BufferAttribute(rp, 3));
-      rg.setAttribute('aSize', new BufferAttribute(rs, 1));
-      rg.setAttribute('aSeed', new BufferAttribute(rsd, 1));
-      rg.setAttribute('aColor', new BufferAttribute(rcol, 3));
-      ring = new Points(
-        rg,
-        shader({ vertexShader: starVert, fragmentShader: starFrag, uniforms: { ...common, uScale: { value: 140 } } }),
-      );
-      ring.rotation.set(0.42 - (i % 2) * 0.2, 0, 0.3);
-      ring.frustumCulled = false;
-      group.add(ring);
-    }
-
-    const moons: Sys['moons'] = [];
-    const moonCount = kind === 0 ? 2 : kind === 3 ? 1 : 0;
-    for (let k = 0; k < moonCount; k++) {
-      const moonMat = track(
-        new ShaderMaterial({
-          vertexShader: planetVert,
-          fragmentShader: planetFrag(3),
-          uniforms: {
-            uTime: common.uTime,
-            uA: { value: new Color('#9aa3b8') },
-            uB: { value: new Color(st.a) },
-            uLightPos: { value: keyLight },
-            uRadius: { value: 1 },
-            uSeed: { value: 40 + i + k },
-            uKind: { value: 2 },
-          },
-        }),
-      );
-      const mesh = new Mesh(moonGeo, moonMat);
-      const mr = radius * (0.16 + k * 0.07);
-      mesh.scale.setScalar(mr);
-      group.add(mesh);
-      moons.push({ mesh, r: radius * (2.1 + k * 0.9), speed: 0.22 - k * 0.07, phase: i + k * 2.1, tilt: 0.3 + k * 0.25 });
-    }
-
-    scene.add(group);
-    return { group, planet, moons, ring, pos, radius, spin: 0.045 + (i % 3) * 0.02 };
-  });
+  const geo = sharedGeometry(world);
+  await prepareBake(world, [...data.stations.map((s) => s.kind), 2]);
+  const systems = data.stations.map((spec, i) => buildSystem(world, spec, geo, i, { size: 2048, start: 512 }));
+  // the full-size surfaces bake one per frame once the first frame is up
+  const upgrades = [...systems];
 
   /* ---- the route that threads every system ---- */
   const routePts = [new Vector3(-30, 16, 175), ...systems.map((s) => s.pos.clone().add(new Vector3(0, s.radius * 1.9, 0))), new Vector3(0, 3, 0)];
   const routeCurve = new CatmullRomCurve3(routePts, false, 'centripetal');
-  const routeCount = high ? 2200 : 900;
+  const routeCount = 4000;
   const rPos = new Float32Array(routeCount * 3);
   const rT = new Float32Array(routeCount);
   const tmp = new Vector3();
@@ -436,10 +130,10 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
     rPos[i * 3 + 2] = tmp.z;
     rT[i] = t;
   }
-  const routeGeo = track(new BufferGeometry());
+  const routeGeo = world.track(new BufferGeometry());
   routeGeo.setAttribute('position', new BufferAttribute(rPos, 3));
   routeGeo.setAttribute('aT', new BufferAttribute(rT, 1));
-  const routeMat = shader({
+  const routeMat = world.shader({
     vertexShader: routeVert,
     fragmentShader: routeFrag,
     uniforms: { ...common, uDraw: { value: 0.2 }, uColor: { value: new Color(pal.route) } },
@@ -483,30 +177,33 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
     if (prev) lineVerts.push(prev.x, prev.y, prev.z, p.x, p.y, p.z);
     prevInGroup[s.group] = p;
   });
-  const mapGeo = track(new BufferGeometry());
+  const mapGeo = world.track(new BufferGeometry());
   mapGeo.setAttribute('position', new BufferAttribute(mPos, 3));
   mapGeo.setAttribute('aColor', new BufferAttribute(mCol, 3));
   const hiAttr = new BufferAttribute(mHi, 1);
   const onAttr = new BufferAttribute(mOn, 1);
   mapGeo.setAttribute('aHi', hiAttr);
   mapGeo.setAttribute('aOn', onAttr);
-  const mapMat = shader({
-    vertexShader: mapVert,
-    fragmentShader: mapFrag,
-    uniforms: { ...common, uMap: { value: 0 } },
-  });
+  const mapMat = world.shader({ vertexShader: mapVert, fragmentShader: mapFrag, uniforms: { ...common, uMap: { value: 0 } } });
   const mapStars = new Points(mapGeo, mapMat);
   mapStars.frustumCulled = false;
   mapStars.renderOrder = 5;
   scene.add(mapStars);
-  const linesGeo = track(new BufferGeometry());
+  const linesGeo = world.track(new BufferGeometry());
   linesGeo.setAttribute('position', new BufferAttribute(new Float32Array(lineVerts), 3));
-  const linesMat = track(
-    new LineBasicMaterial({ color: new Color(pal.route), transparent: true, opacity: 0, depthWrite: false, blending: blend() }),
+  const linesMat = world.track(
+    new LineBasicMaterial({ color: new Color(pal.route), transparent: true, opacity: 0, depthWrite: false, blending: world.blend() }),
   );
   const lines = new LineSegments(linesGeo, linesMat);
   lines.frustumCulled = false;
   scene.add(lines);
+
+  /* ---- post stack ---- */
+  const post = createPost(renderer, scene, camera, { strength: 0.7, radius: 0.55, threshold: 0.76 });
+  post.setLight(pal.light);
+
+  /* ---- every headline as particles ---- */
+  const text = createTextField(world, camera, Array.from(document.querySelectorAll<HTMLElement>('[data-ptext]')), ['#ff5e8a', '#a259ff', '#2997ff', '#64d2ff']);
 
   /* ---------------------------------------------------------- layout -- */
   let W = 1;
@@ -527,13 +224,26 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
     return { pos: s.pos.clone().addScaledVector(dir, dist), look: s.pos.clone() };
   }
 
-  function relayout() {
-    W = window.innerWidth || 1;
-    H = window.innerHeight || 1;
+  function resize() {
+    const w = window.innerWidth || 1;
+    const h = window.innerHeight || 1;
+    const d = window.devicePixelRatio || 1;
+    if (w === W && h === H && d === dpr) return;
+    W = w;
+    H = h;
+    dpr = d;
     phone = W < 760;
+    renderer.setPixelRatio(dpr);
+    common.uPixel.value = dpr;
     renderer.setSize(W, H, false);
+    post.resize(W, H, dpr);
     camera.aspect = W / H;
     camera.fov = phone ? 56 : 42;
+    text.refresh();
+  }
+
+  function relayout() {
+    resize();
     const vh = H;
     const maxScroll = Math.max(0, document.documentElement.scrollHeight - vh);
 
@@ -547,7 +257,8 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
       const rect = el.getBoundingClientRect();
       if (kind === 'hero') {
         const pos = HERO_POS.clone().multiplyScalar(phone ? 1.5 : 1);
-        next.push({ kind, id, y0: 0, y1: 0, pos, look: ORIGIN.clone(), ox: 0, oy: phone ? 0.2 : 0.16 });
+        // the core sits above the headline band, never behind it
+        next.push({ kind, id, y0: 0, y1: 0, pos, look: ORIGIN.clone(), ox: 0, oy: phone ? 0.32 : 0.29 });
       } else if (kind === 'beats') {
         const y = top + h * 0.5 - vh * 0.5;
         next.push({ kind, id, y0: y, y1: y, pos: new Vector3(), look: new Vector3(), ox: 0, oy: 0 });
@@ -646,8 +357,9 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
   let raf = 0;
   let last = performance.now();
   let elapsed = 0;
+  let velocity = 0;
   let frames = 0;
-  let slowFrames = 0;
+  let lastY = window.scrollY;
   const tmpPos = new Vector3();
   const tmpLook = new Vector3();
   const right = new Vector3();
@@ -655,6 +367,12 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
 
   relayout();
   u = progressAt(window.scrollY);
+  // Parallel shader compile (KHR_parallel_shader_compile where available), so
+  // the page stays interactive while the planets' programs build.
+  const tBuilt = performance.now();
+  await renderer.compileAsync(scene, camera).catch(() => undefined);
+  last = performance.now();
+  console.info(`[sky] scene built in ${(tBuilt - t0).toFixed(0)} ms, programs compiled in ${(last - tBuilt).toFixed(0)} ms`);
 
   const frame = (now: number) => {
     raf = requestAnimationFrame(frame);
@@ -662,25 +380,16 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
       last = now;
       return;
     }
-    const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
+    const dt = Math.min(0.05, Math.max(0.001, (now - last) / 1000));
     last = now;
     elapsed += dt;
     common.uTime.value = elapsed;
+    frames++;
 
-    // Adaptive resolution: a phone that cannot hold the frame gets fewer pixels,
-    // never fewer systems.
-    if (frames < 240) {
-      frames++;
-      if (dt > 0.026) slowFrames++;
-      if (frames === 120 && slowFrames > 50 && dpr > 0.9) {
-        dpr = Math.max(0.85, dpr - 0.35);
-        renderer.setPixelRatio(dpr);
-        common.uPixel.value = dpr;
-        renderer.setSize(W, H, false);
-      }
-    }
-
-    const target = progressAt(window.scrollY);
+    const y = window.scrollY;
+    velocity = damp(velocity, Math.min(1, Math.abs(y - lastY) / (dt * 2600)), 7, dt);
+    lastY = y;
+    const target = progressAt(y);
     u += (target - u) * (1 - Math.exp(-dt * 5.5));
     if (Math.abs(target - u) < 1e-4) u = target;
 
@@ -721,11 +430,11 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
     mapMat.uniforms.uMap.value = mapLevel;
     // Text sits on top of the scene at the close: the core steps back there.
     const contactIdx = stops.findIndex((s) => s.kind === 'contact');
-    const closeLevel = contactIdx >= 0 ? clamp01(1 - Math.abs(u - contactIdx) * 1.2) : 0;
-    (coreOuter.material as ShaderMaterial).uniforms.uOpacity.value = 0.38 * (1 - closeLevel * 0.6);
-    (coreInner.material as ShaderMaterial).uniforms.uOpacity.value = 0.5 * (1 - closeLevel * 0.7);
+    // the core steps back under the hero headline and again under the close
+    const heroLevel = clamp01(1 - u * 1.3) * 0.94;
+    core.setClose(Math.max(heroLevel, contactIdx >= 0 ? clamp01(1 - Math.abs(u - contactIdx) * 1.2) : 0), 1 - clamp01(1 - u) * 0.62);
     linesMat.opacity = mapLevel * (pal.light ? 0.35 : 0.22);
-    galaxyMat.uniforms.uScale.value = (high ? 260 : 300) * (1 - mapLevel * 0.25);
+    galaxy.material.uniforms.uScale.value = 260 * (1 - mapLevel * 0.25);
 
     let dirty = false;
     for (let i = 0; i < S; i++) {
@@ -740,16 +449,13 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
       onAttr.needsUpdate = true;
     }
 
-    for (const s of systems) {
-      s.planet.rotation.y += dt * s.spin;
-      if (s.ring) s.ring.rotation.y += dt * 0.02;
-      for (const m of s.moons) {
-        const a = m.phase + elapsed * m.speed;
-        m.mesh.position.set(Math.cos(a) * m.r, Math.sin(a) * m.r * Math.sin(m.tilt), Math.sin(a) * m.r * Math.cos(m.tilt));
-      }
-    }
+    for (const s of systems) s.update(dt, elapsed);
+    if (upgrades.length && frames > 2) upgrades.shift()?.upgrade();
+    galaxy.points.rotation.y += dt * 0.0022;
+    comets.update(dt);
+    text.update(dt, elapsed, W, H);
 
-    renderer.render(scene, camera);
+    post.render(elapsed, velocity, world.overlay);
 
     if (opts.tag) {
       if (highlighted >= 0 && mapLevel > 0.55) {
@@ -799,25 +505,25 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
     },
     retheme() {
       pal = skyPalette();
-      common.uLight.value = pal.light ? 1 : 0;
-      blended.forEach((m) => {
-        m.blending = blend();
-        m.needsUpdate = true;
-      });
-      linesMat.blending = blend();
+      world.retheme(pal);
+      linesMat.blending = world.blend();
       linesMat.color.set(pal.route);
       linesMat.needsUpdate = true;
       (routeMat.uniforms.uColor.value as Color).set(pal.route);
-      (coreOuter.material as ShaderMaterial).uniforms.uColor.value.set(pal.core);
-      paintGalaxy();
-      paintNebulae();
+      backdrop.repaint(pal);
+      galaxy.repaint(pal);
+      nebulae.repaint(pal);
+      core.repaint(pal);
+      post.setLight(pal.light);
     },
     dispose() {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onPointer);
       ro.disconnect();
-      disposables.forEach((d) => d.dispose());
+      text.dispose();
+      post.dispose();
+      world.dispose();
       renderer.dispose();
     },
   };
