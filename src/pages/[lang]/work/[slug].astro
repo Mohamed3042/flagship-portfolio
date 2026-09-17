@@ -110,7 +110,10 @@ const flightData = {
     visibility: hidden !important;
   }
 
-  /* ---- the hook: the planet is the visual, so the CSS stand-ins step aside ---- */
+  /* ---- the hook: the planet is the visual, so the CSS stand-ins step aside.
+       Layout-affecting rules key off html.js (set before first paint) so the
+       page never shifts when the flight mounts; a browser that cannot fly
+       gets html.flight-off and the CSS spine's own layout back. ---- */
   html.flight-live .system-hook .biome,
   html.flight-live .beat--hook .biome,
   html.flight-live .beat--hook .beat__glow {
@@ -125,32 +128,32 @@ const flightData = {
   }
   @media (min-width: 981px) {
     /* the whole hook (headline, lead, actions, cue) fits one viewport */
-    html.flight-live .hook__content {
+    html.js:not(.flight-off) .hook__content {
       max-width: min(1000px, 58%);
     }
-    html.flight-live .system-hook h1 {
+    html.js:not(.flight-off) .system-hook h1 {
       font-size: clamp(40px, 5.4vw, 82px);
     }
-    html.flight-live .system-hook__grid {
+    html.js:not(.flight-off) .system-hook__grid {
       grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
     }
-    html.flight-live .hook__title {
+    html.js:not(.flight-off) .hook__title {
       font-size: clamp(42px, 6.4vw, 90px);
     }
-    html.flight-live .hook__num {
+    html.js:not(.flight-off) .hook__num {
       margin-top: 30px;
     }
-    html.flight-live .hook__num b {
+    html.js:not(.flight-off) .hook__num b {
       font-size: clamp(44px, 6vw, 84px);
     }
   }
   @media (max-width: 980px) {
-    html.flight-live .system-hook .system-visual.compact {
+    html.js:not(.flight-off) .system-hook .system-visual.compact {
       display: none;
     }
     /* the planet rides above and behind the headline on a phone */
-    html.flight-live .system-hook,
-    html.flight-live .beat--hook {
+    html.js:not(.flight-off) .system-hook,
+    html.js:not(.flight-off) .beat--hook {
       min-height: 100svh;
       padding-top: 30svh;
     }
@@ -209,28 +212,28 @@ const flightData = {
   }
 
   /* ---- brief: one display line over the limb; the old contract panel steps aside ---- */
-  html.flight-live .system-story .brief__grid {
+  html.js:not(.flight-off) .system-story .brief__grid {
     grid-template-columns: 1fr;
   }
-  html.flight-live .system-story .brief__col:last-child {
+  html.js:not(.flight-off) .system-story .brief__col:last-child {
     display: none;
   }
-  html.flight-live .brief__col h2 {
+  html.js:not(.flight-off) .brief__col h2 {
     max-width: 16ch;
     font-size: clamp(40px, 6vw, 92px);
     font-weight: 850;
     line-height: 1;
     letter-spacing: -0.035em;
   }
-  html.flight-live [dir='rtl'] .brief__col h2 {
+  html.js:not(.flight-off) [dir='rtl'] .brief__col h2 {
     font-family: var(--font-ar-display);
     letter-spacing: 0;
     line-height: 1.2;
   }
-  html.flight-live .system-proof {
+  html.js:not(.flight-off) .system-proof {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
-  html.flight-live .system-proof__copy h2 {
+  html.js:not(.flight-off) .system-proof__copy h2 {
     font-size: clamp(36px, 5vw, 72px);
     max-width: 14ch;
   }

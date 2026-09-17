@@ -40,7 +40,7 @@ const cta2 = ar ? 'تواصل معي' : 'Get in touch';
         <p class="skyhero__status" data-tx>{status}</p>
       ) : (
         <p class="skyhero__status" data-tx>
-          {pick(lang, profile.title)} · {pick(lang, profile.location)} · <b data-count={projectCount}>{projectCount}</b> systems · <b data-count={publicCount}>{publicCount}</b> public repositories
+          {pick(lang, profile.title)} · {pick(lang, profile.location)} · <b data-count={projectCount} style={`display:inline-block;min-width:${String(projectCount).length}ch;text-align:end`}>{projectCount}</b> systems · <b data-count={publicCount} style={`display:inline-block;min-width:${String(publicCount).length}ch;text-align:end`}>{publicCount}</b> public repositories
         </p>
       )
     }

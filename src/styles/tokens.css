@@ -42,8 +42,10 @@ html.sky-live [data-ptext] *,html.flight-live [data-ptext] *{
    lib/transmission.ts splits [data-tx] into words that arrive as accent
    blocks and settle into the real words; a scan line sweeps the block once. */
 [data-tx]{position:relative}
-.tx-w{display:inline;transition:color .32s var(--ease-expo),text-shadow .32s var(--ease-expo)}
-.tx-w[data-on="0"]{color:color-mix(in srgb,var(--accent) 78%,transparent);text-shadow:0 0 12px color-mix(in srgb,var(--accent) 60%,transparent)}
+.tx-w{position:relative;display:inline;transition:color .32s var(--ease-expo),text-shadow .32s var(--ease-expo)}
+.tx-w[data-on="0"]{color:transparent;text-shadow:none}
+.tx-w[data-on="0"]::after{content:attr(data-blocks);position:absolute;inset:0;overflow:hidden;white-space:nowrap;pointer-events:none;
+  color:color-mix(in srgb,var(--accent) 78%,transparent);text-shadow:0 0 12px color-mix(in srgb,var(--accent) 60%,transparent)}
 [data-tx].tx-live::after{content:"";position:absolute;left:-8px;right:-8px;top:0;height:1.5px;pointer-events:none;
   background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.9;animation:tx-sweep 1.25s var(--ease-expo) forwards}
 @keyframes tx-sweep{from{top:0;opacity:.95}to{top:100%;opacity:0}}
@@ -96,12 +98,11 @@ html.sky-live .letterbox,html.flight-live .letterbox{display:block}
 .sourcing .tx-more[open]{text-align:start}
 
 /* ---------- Touch targets: every control reaches 44px without moving the layout ---------- */
-.nav__links a{position:relative;display:inline-flex;align-items:center;min-height:44px}
+.nav__links a{position:relative;display:inline-flex;align-items:center;min-height:44px;padding-inline:5px;margin-inline:-5px}
 .nav__brand{display:inline-flex;align-items:center;min-height:44px}
 .pill{min-width:44px;min-height:44px}
 .tx-more summary{min-height:44px}
 .hook__back{min-height:44px;align-items:center}
-@media(pointer:coarse){.nav__links a{padding-inline:6px}}
 
 /* ---------- Reset ---------- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -515,7 +516,7 @@ h1,h2,h3{line-height:1.05;letter-spacing:-.03em;font-weight:800}
 .pill{
   border:1px solid var(--panel-brd);border-radius:999px;padding:7px 13px;font-size:13px;
   font-weight:600;color:var(--ink);display:inline-flex;gap:6px;align-items:center;
-  transition:border-color .25s,background .25s,transform .2s;min-width:40px;justify-content:center;
+  transition:border-color .25s,background .25s,transform .2s;min-width:44px;justify-content:center;
 }
 .pill:hover{border-color:var(--accent);transform:translateY(-1px)}
 @media(max-width:760px){.nav__links a{display:none}}

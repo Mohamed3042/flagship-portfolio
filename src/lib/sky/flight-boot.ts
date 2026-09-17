@@ -22,11 +22,13 @@ export function bootFlight(): void {
   const root = document.documentElement;
   const rtl = root.getAttribute('dir') === 'rtl';
 
+  root.classList.remove('flight-off');
   let engine: FlightEngine | null = null;
   let cancelled = false;
   const onTheme = () => engine?.retheme();
   document.addEventListener('mm:themechange', onTheme);
 
+  if (!skyCapable()) root.classList.add('flight-off');
   if (skyCapable()) {
     const start = () => {
       if (cancelled) return;
@@ -40,7 +42,10 @@ export function bootFlight(): void {
           engine = e;
           root.classList.add('flight-live');
         })
-        .catch((err) => console.warn('[flight] staying on the CSS spine:', err));
+        .catch((err) => {
+          root.classList.add('flight-off');
+          console.warn('[flight] staying on the CSS spine:', err);
+        });
     };
     const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: object) => number }).requestIdleCallback;
     if (idle) idle(start, { timeout: 1200 });

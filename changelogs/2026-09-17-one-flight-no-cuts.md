@@ -60,6 +60,13 @@ planets in real detail ("4K, not a ball with juice textures"), heavier particles
   focus ring, DOM/heap/fps at 390@3, 768@2, 1440) and four Lighthouse runs. Fixes: one `h1` per
   page (the contact close is an `h2`), every control 44px tall (nav links, brand, pills, folds).
   DESIGN.md + `.impeccable/design.json` written from the built world.
+- **No layout shift when the flight mounts.** Every layout rule that used to switch on
+  `html.flight-live` (hidden compact visual, hook padding, grid columns, type sizes) now keys off
+  `html.js`, set before first paint; a browser that cannot fly gets `html.flight-off` and the CSS
+  spine's own layout back. Transmissions keep each word's box from the first paint and draw the
+  signal blocks over it, so a decode never re-wraps a line. Home counters reserve their width.
+  CLS went from 0.97 / 0.59 / 0.38 / 0.18 (story mobile / story desktop / home mobile / home
+  desktop) to 0.13 / 0.04 / 0.14 / 0.09. Every control is 44px.
 - **Phones**: the low tier and the pixel-ratio cap are gone; the canvas is the viewport at the
   device pixel ratio (1170×2532 on the 390×844@3 profile), same counts, same passes.
 
@@ -67,11 +74,19 @@ planets in real detail ("4K, not a ball with juice textures"), heavier particles
 
 - Mount on Windows Chrome (ANGLE/D3D11): scene built ≈ 320 ms, programs compiled ≈ 60 ms
   (was 2.3 s + 5.7 s before texture noise and baked planets).
-- Headless Chrome, hardware WebGL: ≈ 180 fps at 1440×900 and at the phone profile; every page
-  reaches the boundary (u ≥ 5.3).
-- Gates on the built dist: `verify-portfolio.mjs` pass; `test-portfolio.py` desktop 76/76 clicks,
-  0 console errors, 0 bad responses; mobile 76/76, 0, 0; `test-flight.py --all` desktop and mobile:
-  see the run logs recorded in this session (76 pages each).
+- Gates on the built dist (headless Chrome, hardware WebGL, one Chrome at a time):
+  `verify-portfolio.mjs` pass; `test-portfolio.py` desktop 76/76 clicks, 0 console
+  errors, 0 failures; mobile 76/76, 0, 0; `test-flight.py --all` desktop 76 pages,
+  0 failures, frame loop 179–185 fps; mobile (390×844 @3, canvas 1170×2532) 76 pages, 0 failures,
+  178–185 fps; `audit-flight.py` 7 pages × 3 widths: 0 console errors, 0 overflow, 0 pages with h1 ≠ 1,
+  0 unnamed controls, 0 targets under 44px, JS heap ≤ 81 MB.
+- Lighthouse 13.4.1 on the local static server with the WebGL scene live:
+  home-mobile: performance 49, accessibility 100, best practices 100, SEO 100; LCP 3.7 s, TBT 1,910 ms, CLS 0.135
+  home-desktop: performance 80, accessibility 100, best practices 100, SEO 100; LCP 0.7 s, TBT 370 ms, CLS 0.088
+  story-mobile: performance 52, accessibility 100, best practices 100, SEO 100; LCP 3.6 s, TBT 1,680 ms, CLS 0.133
+  story-desktop: performance 82, accessibility 100, best practices 100, SEO 100; LCP 0.7 s, TBT 360 ms, CLS 0.035
+  Mobile performance is the cost of the owner's native-resolution rule (main-thread scene build
+  under 4× CPU throttling); accessibility, best practices and SEO are 100 on every run.
 - Real-phone frame rate is NOT measured here: the owner's rule is native resolution regardless.
 
 ## Boundaries

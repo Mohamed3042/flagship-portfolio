@@ -40,6 +40,10 @@ function split(block: HTMLElement): Word[] {
           const w = document.createElement('span');
           w.className = 'tx-w';
           w.textContent = part;
+          // the real word keeps its box from the first paint; the signal
+          // blocks are drawn over it by CSS (::after reads data-blocks), so
+          // the decode never re-wraps a line
+          w.dataset.blocks = blocksFor(part);
           frag.appendChild(w);
           list.push({ el: w, text: part });
         }
@@ -73,7 +77,7 @@ export function decode(block: HTMLElement): void {
   const t0 = performance.now();
   for (const w of list) {
     w.el.dataset.on = '0';
-    w.el.textContent = blocksFor(w.text);
+    w.el.dataset.blocks = blocksFor(w.text);
   }
   const tick = (now: number) => {
     const t = now - t0;
@@ -82,12 +86,11 @@ export function decode(block: HTMLElement): void {
       const settle = i * STAGGER + HOLD;
       if (w.el.dataset.on === '1') return;
       if (t >= settle) {
-        w.el.textContent = w.text;
         w.el.dataset.on = '1';
       } else {
         done = false;
         // the blocks flicker while they wait
-        if (((t / 60) | 0) % 2 === 0) w.el.textContent = blocksFor(w.text + i);
+        w.el.dataset.blocks = blocksFor(((t / 60) | 0) % 2 === 0 ? w.text + i : w.text);
       }
     });
     if (done) {
