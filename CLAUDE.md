@@ -38,15 +38,24 @@ WebGL keep the CSS spine unchanged.
   computed font, sampled into points that assemble where the DOM box is (a dark lens sits behind
   them in the scene); the DOM ink goes transparent via `tokens.css` (`html.sky-live/flight-live
   [data-ptext]`). The words stay in the DOM for search, screen readers and the gates.
-- **Transmissions** (`src/lib/transmission.ts`, `[data-tx]`): body copy decodes word by word from
-  accent signal blocks as it enters (words, not letters, so Arabic keeps its joins); `data-tx="gate"`
-  on a build step's line re-decodes each time that step becomes the active gate, and only the active
-  gate's line unfolds (`.build__body`). The story hook shows the project blurb as its one line and
-  folds the full lead under `<details class="tx-more">`. Kickers/eyebrows were removed from every
-  beat on the owner's word ("text nobody reads"); the honesty label is a real `h2` now.
+- **Less text is the rule** (owner, 2026-09-17: "the less text the better"). A beat carries ONE short
+  line and folds the rest under `<details class="tx-more">` ("Full transmission"). The build beat is
+  the gate run (`spine/Build.astro`): one centred `[data-ptext]` line per step, `text.ts` assembles
+  only the step whose `data-state` is `active`. Brief = one display line; proof = the line plus the
+  metric captions; honesty = its first sentence as a line. Body copy that does show decodes as a
+  transmission (`src/lib/transmission.ts`, `[data-tx]`). No kickers, eyebrows or section numbers
+  anywhere. DESIGN.md (root) + `.impeccable/design.json` record the world; keep them in step.
+- **The reel** (story.ts / engine.ts / post.ts): every effect is a function of the flight
+  parameter `u` (scroll), never of wall time — dolly zoom (`camera.fov` vs distance to the
+  planet), terminator reveal (`setLight`), banking roll (`camera.up`), gate kick + flash gated by
+  scroll velocity, hyperspace warp/flash through the boundary (`post.setFx`), letterbox
+  (`.letterbox` `--lb`). The iris/shockwave live in rigs.ts (`spokeFrag`, `RigPulse`). The
+  Disney rule holds: scroll drives the sequencing; only twinkle/spin are ambient.
 - **Rigs** (`rigs.ts`): one part vocabulary, a recipe per `story.visual` (+ `legacy-<slug>` for the
   nine foundation stories). Gates = the page's `[data-build-item]` count. Cake Studio loads its real
   GLB cakes (Draco/KTX2 decoders from `public/worlds/cake-studio/`), falling back to tiers.
+- **Audit**: `python scripts/audit-flight.py --base-url <static dist server>` (console, overflow,
+  landmarks, names, touch targets, focus ring, DOM/heap/fps at 390@3, 768@2, 1440).
 - **Gates**: `npm run build` → `node scripts/verify-portfolio.mjs` → `node scripts/serve-static.mjs
   dist 4332` → `python scripts/test-portfolio.py --base-url http://127.0.0.1:4332 --viewport
   desktop|mobile` → `npm run verify:flight` / `verify:flight:mobile` (`scripts/test-flight.py`:

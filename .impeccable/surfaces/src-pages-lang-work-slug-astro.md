@@ -25,7 +25,7 @@ FIRST VIEWPORT: Desktop: the copy column (H1 as particle text over an in-scene l
 
 FORM: One flight, no cuts — candidate 4 of 7 on the ordered list (descent, data-flow river, exploded mechanism, route continued, constellation, bench, boundary-first). Dealt 6 / 4 / 5 by concept-seed key b223f74c (scope surface, mode experience); the owner locked 4.
 
-Body copy is a transmission: the hook shows one short decoded line (the project blurb) with the full lead folded under "Full transmission"; every paragraph decodes word by word from accent signal blocks as it enters, with a scan sweep; the build steps are gate readouts, only the gate the camera is passing unfolds its line.
+Body copy is a transmission: the hook shows one short decoded line (the project blurb) with the full lead folded under "Full transmission"; every paragraph decodes word by word from accent signal blocks as it enters, with a scan sweep; the build beat is the gate run: no cards, one short centred particle line per gate that assembles as the camera reaches it and scatters as it passes; the honesty beat opens with its first sentence as a centred particle line; brief, proof and honesty bodies fold under "Full transmission".
 
 Signature interaction: scroll is the flight. The Build pin scrubs the camera gate to gate while each step's text reveals; the Proof pin sweeps the metric array as the numbers land; velocity streaks and chromatic edges answer scroll speed; the handoff link sits on the boundary gate with the next planet behind it. Motion grammar: gates light, parts rise, camera glides on exponential damping; no scattered hover effects.
 

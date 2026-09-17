@@ -35,6 +35,7 @@ import {
   buildBackdrop,
   buildComets,
   buildCore,
+  buildDustField,
   buildFarShell,
   buildGalaxy,
   buildNebulae,
@@ -141,6 +142,8 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
   const route = new Points(routeGeo, routeMat);
   route.frustumCulled = false;
   scene.add(route);
+  // near dust along the route so the moving camera always has bokeh to pass
+  [0.18, 0.42, 0.66, 0.88].forEach((t, k) => buildDustField(world, routeCurve.getPointAt(t), new Vector3(46, 18, 46), 30000, 300 + k));
 
   /* ---- the sky map: every project as a star ---- */
   const GROUPS: Record<StarGroup, { ang: number; r: number; spread: number }> = {
@@ -201,6 +204,12 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
   /* ---- post stack ---- */
   const post = createPost(renderer, scene, camera, { strength: 0.7, radius: 0.55, threshold: 0.76 });
   post.setLight(pal.light);
+  post.setAnamorphic(0.6, pal.route);
+  const letterbox = document.querySelector<HTMLElement>('.letterbox');
+  let lbShown = -1;
+  let roll = 0;
+  const viewDir = new Vector3();
+  const upTilt = new Vector3();
 
   /* ---- every headline as particles ---- */
   const text = createTextField(world, camera, Array.from(document.querySelectorAll<HTMLElement>('[data-ptext]')), ['#ff5e8a', '#a259ff', '#2997ff', '#64d2ff']);
@@ -404,6 +413,14 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
       const ox = stops[i0].ox + (stops[i1].ox - stops[i0].ox) * fr;
       const oy = stops[i0].oy + (stops[i1].oy - stops[i0].oy) * fr;
       camera.position.copy(tmpPos);
+      // the dive banks; the pull-back over the disc rolls slowly into the map
+      const mapIdx0 = stops.findIndex((s) => s.kind === 'map');
+      let rollTarget = 0;
+      if (u > 0.4 && u < 1.9) rollTarget = 0.1 * clamp01((u - 0.4) / 0.5) * clamp01((1.9 - u) / 0.5);
+      else if (mapIdx0 > 0) rollTarget = 0.07 * clamp01(1 - Math.abs(u - mapIdx0) * 1.2);
+      roll = damp(roll, rollTarget, 2.5, dt);
+      viewDir.copy(tmpLook).sub(camera.position).normalize();
+      camera.up.copy(upTilt.set(0, 1, 0).applyAxisAngle(viewDir, roll));
       camera.lookAt(tmpLook);
       camera.updateMatrixWorld();
       right.setFromMatrixColumn(camera.matrixWorld, 0);
@@ -414,6 +431,11 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
       camera.position.addScaledVector(right, px * 1.8 + sway).addScaledVector(up, -py * 1.1);
       camera.lookAt(tmpLook);
       camera.setViewOffset(W, H, ox * W, oy * H, W, H);
+      // the dive: the lens widens as the camera drops into the arms and
+      // settles again at the first arrival (a dolly zoom on the galaxy core)
+      const base = phone ? 56 : 42;
+      const dive = easeInOut(clamp01((u - 0.15) / 0.85)) * (1 - easeInOut(clamp01((u - 1.35) / 0.65)));
+      camera.fov = base + 26 * dive;
 
       // Route and map visibility follow where the camera is on the page.
       const mapIdx = stops.findIndex((s) => s.kind === 'map');
@@ -432,7 +454,9 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
     const contactIdx = stops.findIndex((s) => s.kind === 'contact');
     // the core steps back under the hero headline and again under the close
     const heroLevel = clamp01(1 - u * 1.3) * 0.94;
-    core.setClose(Math.max(heroLevel, contactIdx >= 0 ? clamp01(1 - Math.abs(u - contactIdx) * 1.2) : 0), 1 - clamp01(1 - u) * 0.62);
+    // the core is scenery in the dive too: it steps back while the sky streaks
+    const diveDim = clamp01((u - 0.55) / 0.6) * (1 - clamp01((u - 1.55) / 0.45));
+    core.setClose(Math.max(heroLevel, contactIdx >= 0 ? clamp01(1 - Math.abs(u - contactIdx) * 1.2) : 0), (1 - clamp01(1 - u) * 0.62) * (1 - diveDim * 0.82));
     linesMat.opacity = mapLevel * (pal.light ? 0.35 : 0.22);
     galaxy.material.uniforms.uScale.value = 260 * (1 - mapLevel * 0.25);
 
@@ -454,6 +478,15 @@ export async function mountSky(canvas: HTMLCanvasElement, data: SkyData, opts: S
     galaxy.points.rotation.y += dt * 0.0022;
     comets.update(dt);
     text.update(dt, elapsed, W, H);
+
+    // the dive streaks the sky; the letterbox closes for it and opens at the arrivals
+    const warp = clamp01((u - 0.55) / 0.6) * (1 - clamp01((u - 1.55) / 0.45));
+    post.setFx({ warp: warp * 0.34, flash: 0, flashColor: '#ffffff' });
+    const lb = clamp01((u - 0.5) / 0.4) * (1 - clamp01((u - 1.75) / 0.4));
+    if (letterbox && Math.abs(lb - lbShown) > 0.004) {
+      lbShown = lb;
+      letterbox.style.setProperty('--lb', lb.toFixed(3));
+    }
 
     post.render(elapsed, velocity, world.overlay);
 

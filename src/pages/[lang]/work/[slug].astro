@@ -83,6 +83,7 @@ const flightData = {
   jsonLd={creativeWork}
 >
   <canvas class="sky sky--flight" data-flight-canvas aria-hidden="true"></canvas>
+  <div class="letterbox" aria-hidden="true"><i></i><i></i></div>
   <script type="application/json" id="flight-data" set:html={JSON.stringify(flightData)} is:inline />
 
   {Story ? <Story lang={lang} /> : <SystemStory lang={lang} project={project} />}
@@ -205,6 +206,33 @@ const flightData = {
     background: color-mix(in srgb, var(--surface-raised) 88%, transparent);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* ---- brief: one display line over the limb; the old contract panel steps aside ---- */
+  html.flight-live .system-story .brief__grid {
+    grid-template-columns: 1fr;
+  }
+  html.flight-live .system-story .brief__col:last-child {
+    display: none;
+  }
+  html.flight-live .brief__col h2 {
+    max-width: 16ch;
+    font-size: clamp(40px, 6vw, 92px);
+    font-weight: 850;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  html.flight-live [dir='rtl'] .brief__col h2 {
+    font-family: var(--font-ar-display);
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+  html.flight-live .system-proof {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  html.flight-live .system-proof__copy h2 {
+    font-size: clamp(36px, 5vw, 72px);
+    max-width: 14ch;
   }
 
   /* ---- proof: the 3D array stands where the CSS scene was; the numbers stay ---- */

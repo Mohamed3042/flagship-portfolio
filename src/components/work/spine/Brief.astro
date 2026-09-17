@@ -11,7 +11,8 @@ interface Props {
   /** faint oversized word drifting behind the beat (parallax) */
   ghostWord?: string;
 }
-const { lang, kicker, heading, body, ghostWord } = Astro.props;
+const { lang, heading, body, ghostWord } = Astro.props;
+const ar = lang === 'ar';
 ---
 
 <section class="beat beat--brief" data-screen="brief" data-flight-stop="brief">
@@ -19,9 +20,12 @@ const { lang, kicker, heading, body, ghostWord } = Astro.props;
   <div class="beat__wrap">
     <div class="brief__grid">
       <div class="brief__col reveal">
-        <h2 data-read data-ptext>{pick(lang, heading)}</h2>
-        <p data-read set:html={pick(lang, body)}></p>
-        <slot name="aside" />
+        <h2 data-ptext>{pick(lang, heading)}</h2>
+        <details class="tx-more">
+          <summary>{ar ? 'الإرسال الكامل' : 'Full transmission'}</summary>
+          <p set:html={pick(lang, body)}></p>
+          <slot name="aside" />
+        </details>
       </div>
       <div class="brief__col reveal d2">
         <div class="brief__art" data-px="0.05"><slot /></div>

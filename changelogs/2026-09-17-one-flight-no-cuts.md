@@ -39,6 +39,27 @@ planets in real detail ("4K, not a ball with juice textures"), heavier particles
   four short sentences and the status line a live counter readout. Kickers and eyebrows are gone
   from every beat (the honesty label became a real headline). Particle headlines render in an
   overlay after the post stack, so bloom and lens effects never blur the lettering.
+- **The reel (animate pass).** Scroll-driven shots, nothing on its own clock: a Vertigo dolly
+  zoom on the hook while the planet's terminator sweeps into day; a banking flyby; a gate run
+  where each gate carries a counter-rotating moiré iris that dissolves as you reach it, a
+  shockwave that bursts on the crossing, a camera kick and an accent flash (only while
+  scrolling); anamorphic flares on the brightest points; near dust rendered as lens bokeh; a
+  hyperspace jump through the boundary (sky streaks, white flash, the next planet resolves);
+  letterbox bars that close over the chrome for the action legs; a flash cut between pages
+  (view transition). The home gets the dolly zoom into the dive with warp streaks, a banking
+  roll, and bokeh dust along the route. Speed ramps: the camera floats at the hook and snaps
+  through the run.
+- **Less text (owner's second pass).** The build beat is the gate run: no cards, one short
+  centred particle line per gate that assembles as the camera reaches it and streams past the
+  viewer as it leaves; the brief is one display line over the limb (the old contract panel is
+  gone); the proof line gets half the row; the honesty beat opens with its first sentence as a
+  particle line; every longer body (brief, proof, honesty, home station boundaries) folds under
+  one "Full transmission" control. Particle lines are measured word by word in the DOM, so
+  wrapping, balance and Arabic bidi are the browser's own.
+- **Audit pass.** `scripts/audit-flight.py` (console, overflow, landmarks, names, touch targets,
+  focus ring, DOM/heap/fps at 390@3, 768@2, 1440) and four Lighthouse runs. Fixes: one `h1` per
+  page (the contact close is an `h2`), every control 44px tall (nav links, brand, pills, folds).
+  DESIGN.md + `.impeccable/design.json` written from the built world.
 - **Phones**: the low tier and the pixel-ratio cap are gone; the canvas is the viewport at the
   device pixel ratio (1170×2532 on the 390×844@3 profile), same counts, same passes.
 

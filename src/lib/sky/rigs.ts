@@ -23,13 +23,14 @@ import {
   Mesh,
   Object3D,
   PlaneGeometry,
+  RingGeometry,
   ShaderMaterial,
   SphereGeometry,
   TorusGeometry,
   TubeGeometry,
   Vector3,
 } from 'three';
-import { constructFrag, constructVert } from './shaders';
+import { constructFrag, constructVert, spokeFrag, spokeVert } from './shaders';
 import { clamp01, easeOut, rng, type WorldCtx } from './world';
 
 /* ------------------------------------------------------------- recipes -- */
@@ -402,12 +403,20 @@ export interface RigInput {
   visual: string;
 }
 
+export interface RigPulse {
+  /** 0 → 1 how close the camera is to crossing a gate (for the camera kick) */
+  kick: number;
+  /** 0 → 1 the crossing flash */
+  flash: number;
+}
+
 export interface Rig {
   group: Group;
   gates: Group[];
   /** where the primary stack stands (a GLB set can replace it) */
   stackAnchor: Object3D | null;
-  update(p: number, elapsed: number): void;
+  /** armed 0 → 1: the gates only light once the flight reaches the build leg */
+  update(p: number, elapsed: number, armed?: number): RigPulse;
 }
 
 interface Part {
@@ -457,6 +466,10 @@ export function buildRig(input: RigInput): Rig {
   const gateMats: ShaderMaterial[] = [];
   const gateGlows: Mesh[] = [];
   const gateBars: Mesh[] = [];
+  const irises: ShaderMaterial[][] = [];
+  const shocks: { mesh: Mesh; mat: ShaderMaterial }[] = [];
+  const irisGeo = world.track(new RingGeometry(2.3, 5.6, 96, 1));
+  const shockGeo = world.track(new TorusGeometry(6.4, 0.1, 8, 96));
   const gateGeo = (() => {
     switch (recipe.gate) {
       case 'hex':
@@ -490,6 +503,28 @@ export function buildRig(input: RigInput): Rig {
     const glow = world.glow(b.getStyle(), 0, 20);
     g.add(glow);
     gateGlows.push(glow);
+    // the iris: two spoked discs that counter-rotate with the scroll and
+    // interfere into a moiré the camera flies through
+    const pair: ShaderMaterial[] = [];
+    [17, 19].forEach((spokes, k) => {
+      const im = world.shader({
+        vertexShader: spokeVert,
+        fragmentShader: spokeFrag,
+        side: DoubleSide,
+        uniforms: { uLight: world.common.uLight, uColor: { value: (k ? a : b).clone() }, uPhase: { value: 0 }, uSpokes: { value: spokes }, uHot: { value: 0 } },
+      });
+      const im2 = new Mesh(irisGeo, im);
+      im2.position.z = (k - 0.5) * 0.25;
+      g.add(im2);
+      pair.push(im);
+    });
+    irises.push(pair);
+    // the shockwave: a ring that bursts outward as the camera crosses
+    const sm = makeConstruct(world, b);
+    sm.uniforms.uRise.value = 0;
+    const shock = new Mesh(shockGeo, sm);
+    g.add(shock);
+    shocks.push({ mesh: shock, mat: sm });
     gateMats.push(mat);
     gates.push(g);
     group.add(g);
@@ -770,15 +805,32 @@ export function buildRig(input: RigInput): Rig {
     group,
     gates,
     stackAnchor,
-    update(p, elapsed) {
-      // gates light as the camera passes each one
+    update(p, elapsed, armed = 1) {
+      let kick = 0;
+      let flash = 0;
+      // gates light as the camera reaches each one
       for (let i = 0; i < N; i++) {
-        const passed = clamp01((p * Math.max(1, N - 1) - i + 0.55) / 0.5);
+        const cross = p * Math.max(1, N - 1) - i;
+        const passed = clamp01((cross + 0.3) / 0.35) * armed;
         const hot = easeOut(passed);
         gateMats[i].uniforms.uHot.value = hot * (0.6 + 0.4 * (0.5 + 0.5 * Math.sin(elapsed * 2.4 + i)));
         (gateGlows[i].material as ShaderMaterial).uniforms.uOpacity.value = hot * 0.22;
         gates[i].children[1].rotation.z += 0.004 + hot * 0.02;
         if (gateBars[i]) gateBars[i].rotation.z = hot * (Math.PI / 2);
+        // the iris turns with the scroll, each disc its own way: moiré
+        irises[i][0].uniforms.uPhase.value = p * 6.0 + elapsed * 0.02;
+        irises[i][1].uniforms.uPhase.value = -p * 6.0 - elapsed * 0.017;
+        irises[i][0].uniforms.uHot.value = hot;
+        irises[i][1].uniforms.uHot.value = hot;
+        // the shockwave bursts just after the crossing and fades as it grows
+        const burst = clamp01(cross / 0.5);
+        const sc = 1 + easeOut(burst) * 2.6;
+        shocks[i].mesh.scale.set(sc, sc, 1);
+        shocks[i].mat.uniforms.uRise.value = burst > 0 && burst < 1 ? (1 - burst) * 0.9 : 0;
+        shocks[i].mat.uniforms.uHot.value = 1;
+        const near = Math.exp(-Math.abs(cross) * 7);
+        if (near > kick) kick = near;
+        if (near > flash) flash = near;
       }
       for (const part of parts) {
         // a part rises well before the camera reaches it, so it is seen approaching
@@ -798,6 +850,7 @@ export function buildRig(input: RigInput): Rig {
           }
         if (part.kind === 'box') for (const hinge of part.extra) hinge.rotation.x = (hinge.userData.dir as number) * (-Math.PI / 2) * rise;
       }
+      return { kick, flash };
     },
   };
 }

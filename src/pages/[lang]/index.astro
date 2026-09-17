@@ -65,6 +65,7 @@ const chapters = {
 
 <BaseLayout lang={lang} title={t('site.title')} description={t('site.description')} path={`/${lang}`} accent="blue" home={true}>
   <canvas class="sky" data-sky aria-hidden="true"></canvas>
+  <div class="letterbox" aria-hidden="true"><i></i><i></i></div>
   <script type="application/json" id="sky-data" set:html={JSON.stringify(skyData)} is:inline />
 
   <SkyHero lang={lang} projectCount={entries.length} publicCount={publicAiProjects.length} />

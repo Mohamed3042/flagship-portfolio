@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-17T19:03:43+00:00",
+  "title": "Design System: Mohamed Mahmoud — One Sky",
+  "extensions": {
+    "colorMeta": {
+      "space-top": {
+        "role": "neutral",
+        "displayName": "Space Top",
+        "canonical": "oklch(10% 0.022 282)",
+        "tonalRamp": [
+          "oklch(15% 0.022 282)",
+          "oklch(27% 0.022 282)",
+          "oklch(39% 0.022 282)",
+          "oklch(51% 0.022 282)",
+          "oklch(63% 0.022 282)",
+          "oklch(75% 0.022 282)",
+          "oklch(85% 0.022 282)",
+          "oklch(95% 0.022 282)"
+        ]
+      },
+      "space-bottom": {
+        "role": "neutral",
+        "displayName": "Space Bottom",
+        "canonical": "oklch(14% 0.027 282)",
+        "tonalRamp": [
+          "oklch(15% 0.027 282)",
+          "oklch(27% 0.027 282)",
+          "oklch(39% 0.027 282)",
+          "oklch(51% 0.027 282)",
+          "oklch(63% 0.027 282)",
+          "oklch(75% 0.027 282)",
+          "oklch(85% 0.027 282)",
+          "oklch(95% 0.027 282)"
+        ]
+      },
+      "nebula-blue": {
+        "role": "primary",
+        "displayName": "Nebula Blue",
+        "canonical": "oklch(67% 0.181 252)",
+        "tonalRamp": [
+          "oklch(15% 0.181 252)",
+          "oklch(27% 0.181 252)",
+          "oklch(39% 0.181 252)",
+          "oklch(51% 0.181 252)",
+          "oklch(63% 0.181 252)",
+          "oklch(75% 0.181 252)",
+          "oklch(85% 0.12 252)",
+          "oklch(95% 0.12 252)"
+        ]
+      },
+      "nebula-violet": {
+        "role": "primary",
+        "displayName": "Nebula Violet",
+        "canonical": "oklch(63% 0.235 300)",
+        "tonalRamp": [
+          "oklch(15% 0.235 300)",
+          "oklch(27% 0.235 300)",
+          "oklch(39% 0.235 300)",
+          "oklch(51% 0.235 300)",
+          "oklch(63% 0.235 300)",
+          "oklch(75% 0.235 300)",
+          "oklch(85% 0.12 300)",
+          "oklch(95% 0.12 300)"
+        ]
+      },
+      "nebula-pink": {
+        "role": "secondary",
+        "displayName": "Nebula Pink",
+        "canonical": "oklch(70% 0.198 7)",
+        "tonalRamp": [
+          "oklch(15% 0.198 7)",
+          "oklch(27% 0.198 7)",
+          "oklch(39% 0.198 7)",
+          "oklch(51% 0.198 7)",
+          "oklch(63% 0.198 7)",
+          "oklch(75% 0.198 7)",
+          "oklch(85% 0.12 7)",
+          "oklch(95% 0.12 7)"
+        ]
+      },
+      "nebula-cyan": {
+        "role": "secondary",
+        "displayName": "Nebula Cyan",
+        "canonical": "oklch(82% 0.119 228)",
+        "tonalRamp": [
+          "oklch(15% 0.119 228)",
+          "oklch(27% 0.119 228)",
+          "oklch(39% 0.119 228)",
+          "oklch(51% 0.119 228)",
+          "oklch(63% 0.119 228)",
+          "oklch(75% 0.119 228)",
+          "oklch(85% 0.119 228)",
+          "oklch(95% 0.119 228)"
+        ]
+      },
+      "boundary-amber": {
+        "role": "tertiary",
+        "displayName": "Boundary Amber",
+        "canonical": "oklch(85% 0.126 75)",
+        "tonalRamp": [
+          "oklch(15% 0.126 75)",
+          "oklch(27% 0.126 75)",
+          "oklch(39% 0.126 75)",
+          "oklch(51% 0.126 75)",
+          "oklch(63% 0.126 75)",
+          "oklch(75% 0.126 75)",
+          "oklch(85% 0.12 75)",
+          "oklch(95% 0.12 75)"
+        ]
+      },
+      "public-green": {
+        "role": "tertiary",
+        "displayName": "Public Green",
+        "canonical": "oklch(88% 0.13 153)",
+        "tonalRamp": [
+          "oklch(15% 0.13 153)",
+          "oklch(27% 0.13 153)",
+          "oklch(39% 0.13 153)",
+          "oklch(51% 0.13 153)",
+          "oklch(63% 0.13 153)",
+          "oklch(75% 0.13 153)",
+          "oklch(85% 0.12 153)",
+          "oklch(95% 0.12 153)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(97% 0.003 286)",
+        "tonalRamp": [
+          "oklch(15% 0.003 286)",
+          "oklch(27% 0.003 286)",
+          "oklch(39% 0.003 286)",
+          "oklch(51% 0.003 286)",
+          "oklch(63% 0.003 286)",
+          "oklch(75% 0.003 286)",
+          "oklch(85% 0.003 286)",
+          "oklch(95% 0.003 286)"
+        ]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "oklch(71% 0.007 286)",
+        "tonalRamp": [
+          "oklch(15% 0.007 286)",
+          "oklch(27% 0.007 286)",
+          "oklch(39% 0.007 286)",
+          "oklch(51% 0.007 286)",
+          "oklch(63% 0.007 286)",
+          "oklch(75% 0.007 286)",
+          "oklch(85% 0.007 286)",
+          "oklch(95% 0.007 286)"
+        ]
+      },
+      "ink-tertiary": {
+        "role": "neutral",
+        "displayName": "Ink Tertiary",
+        "canonical": "oklch(61% 0.012 280)",
+        "tonalRamp": [
+          "oklch(15% 0.012 280)",
+          "oklch(27% 0.012 280)",
+          "oklch(39% 0.012 280)",
+          "oklch(51% 0.012 280)",
+          "oklch(63% 0.012 280)",
+          "oklch(75% 0.012 280)",
+          "oklch(85% 0.012 280)",
+          "oklch(95% 0.012 280)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home hero and story hooks, always drawn as particle text."
+      },
+      "display-arabic": {
+        "displayName": "Arabic Display",
+        "purpose": "Al Rai Media for Arabic headlines; Latin product names inside fall back to Inter at the same weight."
+      },
+      "gate": {
+        "displayName": "Gate Line",
+        "purpose": "One centred line per build step; only the active gate is assembled."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Brief, proof and honesty lines; home chapter titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "One short decoded line per beat; the rest folds."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Instrument copy: captions, the fold control, the scroll cue, nav pills."
+      }
+    },
+    "shadows": [
+      {
+        "name": "panel",
+        "value": "0 40px 120px -40px rgba(0,0,0,.8)",
+        "purpose": "The home station glass panel over the scene."
+      },
+      {
+        "name": "plate",
+        "value": "0 30px 70px -24px rgba(0,0,0,.85)",
+        "purpose": "A screenshot plate in the station depth stack."
+      },
+      {
+        "name": "primary-glow",
+        "value": "0 16px 40px -16px rgba(80,120,255,.9)",
+        "purpose": "Under the home primary button only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-expo",
+        "value": "cubic-bezier(.16,1,.3,1)",
+        "purpose": "Every arrival: reveals, folds, sweeps, the letterbox."
+      },
+      {
+        "name": "ease-quint",
+        "value": "cubic-bezier(.83,0,.17,1)",
+        "purpose": "The flash cut out and the scroll cue."
+      },
+      {
+        "name": "flight-damping",
+        "value": "u += (target - u) * (1 - exp(-dt * rate)), rate 4.5 (hook) to 8.5 (gate run)",
+        "purpose": "The camera follows scroll with speed ramps per leg; nothing plays on its own clock."
+      },
+      {
+        "name": "headline-assemble",
+        "value": "damp 3.2 (in), 4.5 (out)",
+        "purpose": "Particle headlines assemble entering the viewport and scatter past the viewer leaving it."
+      },
+      {
+        "name": "transmission",
+        "value": "26 ms per word, 140 ms hold, 1.25 s scan sweep",
+        "purpose": "Body copy decodes word by word from accent blocks."
+      },
+      {
+        "name": "view-transition",
+        "value": "out .28s quint (scale 1.05, brightness 2.4); in .55s expo (from blur 10px, brightness 2.6)",
+        "purpose": "The flash cut between pages."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone-camera",
+        "value": "760px"
+      },
+      {
+        "name": "story-stack",
+        "value": "980px"
+      },
+      {
+        "name": "station-stack",
+        "value": "1020px"
+      },
+      {
+        "name": "metrics-stack",
+        "value": "560px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (home)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The home hero call to action: the site gradient, a downward glow, a light sweep on hover.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#work\">See the systems <span aria-hidden=\"true\">→</span></a>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:10px;min-height:50px;padding:0 26px;border-radius:999px;font:620 16px/1 \"Inter Variable\",sans-serif;letter-spacing:-.01em;color:#fff;background:linear-gradient(120deg,#2997ff,#a259ff);box-shadow:0 16px 40px -16px rgba(80,120,255,.9),inset 0 1px 0 rgba(255,255,255,.25);position:relative;overflow:hidden;isolation:isolate;text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s}.ds-btn-primary::after{content:\"\";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 32%,rgba(255,255,255,.26) 50%,transparent 68%);transform:translateX(-140%);transition:transform .9s cubic-bezier(.16,1,.3,1)}.ds-btn-primary:hover{transform:translateY(-2px);box-shadow:0 24px 56px -18px rgba(100,120,255,1)}.ds-btn-primary:hover::after{transform:translateX(140%)}.ds-btn-primary:focus-visible{outline:2px solid #64d2ff;outline-offset:3px}"
+    },
+    {
+      "name": "Story Primary Link",
+      "kind": "button",
+      "refersTo": "button-story-primary",
+      "description": "A story's public link, filled with that project's accent.",
+      "html": "<a class=\"ds-btn-story\" href=\"#\" style=\"--accent:#30d158\">Ask it a question <span aria-hidden=\"true\">↗</span></a>",
+      "css": ".ds-btn-story{display:inline-flex;align-items:center;gap:6px;min-height:46px;padding:0 18px;border-radius:14px;border:1px solid var(--accent,#2997ff);background:var(--accent,#2997ff);color:#08090d;font:700 13px/1 \"Inter Variable\",sans-serif;text-decoration:none;transition:transform .25s cubic-bezier(.16,1,.3,1)}.ds-btn-story:hover{transform:translateY(-2px)}.ds-btn-story:focus-visible{outline:2px solid var(--accent,#2997ff);outline-offset:3px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "The secondary action beside a primary: dark glass, a faint border.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#contact\">Get in touch</a>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;min-height:50px;padding:0 26px;border-radius:999px;font:620 16px/1 \"Inter Variable\",sans-serif;color:#f5f5f7;background:rgba(8,9,20,.45);border:1px solid rgba(255,255,255,.18);text-decoration:none;transition:transform .35s cubic-bezier(.16,1,.3,1),border-color .35s}.ds-btn-ghost:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.36)}.ds-btn-ghost:focus-visible{outline:2px solid #64d2ff;outline-offset:3px}"
+    },
+    {
+      "name": "Transmission Fold",
+      "kind": "custom",
+      "refersTo": "transmission-fold",
+      "description": "The one control a beat carries: the full text folds under it.",
+      "html": "<details class=\"ds-tx-more\"><summary>Full transmission</summary><p>Public repositories and text files only, nothing over 200 KB. The hosted demo answers from a corpus frozen at image-build time and refuses every write.</p></details>",
+      "css": ".ds-tx-more{max-width:65ch;font-family:\"Inter Variable\",sans-serif;color:#a1a1a6}.ds-tx-more summary{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border-radius:999px;border:1px solid rgba(41,151,255,.34);font:500 12px/1 \"Space Grotesk Variable\",sans-serif;letter-spacing:.04em;color:#a1a1a6;cursor:pointer;list-style:none;transition:color .25s,border-color .25s,background-color .25s}.ds-tx-more summary::-webkit-details-marker{display:none}.ds-tx-more summary::before{content:\"\";width:6px;height:6px;border-radius:50%;background:#2997ff;box-shadow:0 0 10px #2997ff}.ds-tx-more summary:hover{color:#f5f5f7;border-color:rgba(41,151,255,.7)}.ds-tx-more[open] summary{background:rgba(41,151,255,.12);color:#f5f5f7}.ds-tx-more p{margin:16px 0 0;font-size:17px;line-height:1.65}"
+    },
+    {
+      "name": "Station Panel",
+      "kind": "card",
+      "refersTo": "station-panel",
+      "description": "A featured system on the home: glass over the scene, an accent hairline, the project's title and one line.",
+      "html": "<article class=\"ds-station\" style=\"--a:#2997ff;--b:#64d2ff\"><h3>ask-repos</h3><p class=\"ds-station-meta\"><span class=\"ds-station-vis\">Public repository · v0.2.0</span></p><p class=\"ds-station-line\">A public service that answers questions about GitHub repositories with the exact file and lines — or refuses.</p></article>",
+      "css": ".ds-station{position:relative;max-width:560px;padding:32px;border-radius:26px;background:linear-gradient(160deg,rgba(10,11,24,.78),rgba(5,6,14,.66));border:1px solid rgba(255,255,255,.09);box-shadow:0 40px 120px -40px rgba(0,0,0,.8);font-family:\"Inter Variable\",sans-serif;color:#f5f5f7}.ds-station::before{content:\"\";position:absolute;inset:0 26px auto;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--a),var(--b),transparent)}.ds-station h3{margin:0;font-size:44px;font-weight:850;line-height:.98;letter-spacing:-.035em}.ds-station-meta{margin:16px 0 0;font:500 13px/1 \"Space Grotesk Variable\",sans-serif;color:#82838b}.ds-station-vis{padding:5px 11px;border-radius:999px;border:1px solid rgba(48,209,88,.55);color:#8ff0ae}.ds-station-line{margin:18px 0 0;max-width:54ch;font-size:18px;line-height:1.55;color:#a1a1a6}"
+    },
+    {
+      "name": "Metric Caption",
+      "kind": "chip",
+      "refersTo": "station-panel",
+      "description": "A proof figure with its exact label: tabular numerals, label type, a glass tile.",
+      "html": "<div class=\"ds-metric\"><b>0.930</b><i>recall@5, fused + reranked</i></div>",
+      "css": ".ds-metric{display:flex;flex-direction:column;gap:4px;padding:13px 14px;border-radius:14px;background:rgba(14,14,17,.84);border:1px solid rgba(41,151,255,.24);font-family:\"Inter Variable\",sans-serif}.ds-metric b{font-size:23px;color:#f5f5f7;font-variant-numeric:tabular-nums}.ds-metric i{font:500 10px/1.3 \"Space Grotesk Variable\",sans-serif;font-style:normal;color:#82838b;text-transform:uppercase;letter-spacing:.06em}"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-pill",
+      "description": "Brand, links and two 44px pills (language, theme) in label type over the scene.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span class=\"ds-dot\"></span>Mohamed Mahmoud</a><div class=\"ds-nav-links\"><a href=\"#\">Work</a><a href=\"#\">Worlds</a><a href=\"#\">Engineering Lab</a><a href=\"#\">Contact</a></div><div class=\"ds-nav-tools\"><a class=\"ds-pill\" href=\"#\" aria-label=\"Switch language\">ع</a><button class=\"ds-pill\" type=\"button\" aria-label=\"Choose a theme\">☾</button></div></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:8px 24px;background:rgba(3,3,10,.6);font-family:\"Inter Variable\",sans-serif;color:#f5f5f7}.ds-nav-brand{display:inline-flex;align-items:center;gap:.5em;min-height:44px;font-weight:700;letter-spacing:-.02em;font-size:18px;color:#f5f5f7;text-decoration:none}.ds-dot{width:8px;height:8px;border-radius:50%;background:#2997ff;box-shadow:0 0 12px #2997ff}.ds-nav-links{display:flex;gap:22px}.ds-nav-links a{display:inline-flex;align-items:center;min-height:44px;font-size:14px;color:#a1a1a6;text-decoration:none;transition:color .25s}.ds-nav-links a:hover{color:#f5f5f7}.ds-nav-tools{display:flex;gap:8px}.ds-pill{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:transparent;color:#f5f5f7;font:600 13px/1 \"Space Grotesk Variable\",sans-serif;text-decoration:none;cursor:pointer}.ds-pill:hover{border-color:rgba(255,255,255,.3)}.ds-pill:focus-visible{outline:2px solid #64d2ff;outline-offset:2px}"
+    },
+    {
+      "name": "Letterbox",
+      "kind": "custom",
+      "refersTo": "station-panel",
+      "description": "The two bars that close over the chrome during the action legs; --lb is written by the flight (0 open, 1 closed).",
+      "html": "<div class=\"ds-letterbox-demo\"><div class=\"ds-letterbox\" style=\"--lb:1\"><i></i><i></i></div><span>a frame with the bars closed</span></div>",
+      "css": ".ds-letterbox-demo{position:relative;height:220px;border-radius:16px;overflow:hidden;background:radial-gradient(60% 60% at 50% 50%,#1b1f4a,#03030a);display:grid;place-items:center;color:#82838b;font:500 12px/1 \"Space Grotesk Variable\",sans-serif;letter-spacing:.04em}.ds-letterbox{position:absolute;inset:0;pointer-events:none;--lb:1}.ds-letterbox i{position:absolute;left:0;right:0;top:0;height:14%;background:#000;transform:translateY(calc((1 - var(--lb)) * -100%))}.ds-letterbox i:last-child{top:auto;bottom:0;transform:translateY(calc((1 - var(--lb)) * 100%))}"
+    }
+  ],
+  "narrative": {
+    "northStar": "One Sky",
+    "overview": "The whole site is a single universe rendered live in WebGL, and every page is a leg of the same flight through it. The home flies a lit route through eight star systems and pulls back to the whole disc; each project page is the next leg, approaching that project's own planet, running a rail of gates through the system's mechanism, sweeping its proof array and leaving through an amber boundary toward the next planet. Scroll is the clock: nothing plays on its own time, only stars twinkle and planets spin. The reading layer sits on top of the scene, drawn by the scene itself: every headline is a cloud of particles that assembles where the layout placed it and scatters as it leaves, and body copy arrives as a decoded transmission. The eye is meant to watch, not read; a beat carries one short line, and the full text folds under a single control.\n\nThe world is dark, luminous and dense by decision: deep space, four nebula accents, a tinted planet per project, bloom and lens effects, letterbox bars that close for the action legs. Phones render the identical scene at native resolution. Browsers without WebGL keep the same words on the same CSS spine.",
+    "keyCharacteristics": [
+      "one continuous scene across pages",
+      "particle headlines and decoded body copy",
+      "one short line per beat with the rest folded",
+      "scroll-scrubbed camera, effects and transitions",
+      "per-project accent that tints the planet, the rail, the gates and the controls",
+      "amber reserved for the boundary",
+      "identical density on every device"
+    ],
+    "rules": [
+      {
+        "name": "The Amber Is The Boundary Rule",
+        "body": "Amber marks the honest limit and nothing else; a warning, a chip or a highlight never borrows it.",
+        "section": "colors"
+      },
+      {
+        "name": "The Planet Owns Its Accent Rule",
+        "body": "A project's accent comes from its data, never from a status taxonomy; the planet, the rail and the controls on that page all read the same pair.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Line Rule",
+        "body": "A beat shows one short line; everything longer folds under \"Full transmission\". The words stay in the document for search and screen readers.",
+        "section": "typography"
+      },
+      {
+        "name": "The Scene Draws The Headline Rule",
+        "body": "Every display or headline element carries `data-ptext`; its DOM ink is transparent while the flight is live and the particles are the type. Never add a visible DOM headline beside a particle one.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Kicker Rule",
+        "body": "No eyebrow, kicker or section number above a headline anywhere.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lens Rule",
+        "body": "Text over a live scene sits on a dark radial lens (space at 94% fading to 80%), never on a box.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Letterbox Rule",
+        "body": "During the action legs the 7vh bars close over the chrome; the chrome never fights the scene for the frame.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do drive every effect from scroll: camera, gates, iris, warp, flash, letterbox all read the flight parameter.",
+      "Do give each beat one short line and fold the rest under \"Full transmission\".",
+      "Do render the same scene on phones at native device pixel ratio with the same counts and passes.",
+      "Do keep the words in the DOM (search, screen readers, gates) and let the scene draw them.",
+      "Do tint a page from its project's accent pair and keep amber for the boundary."
+    ],
+    "donts": [
+      "Don't add a kicker, eyebrow, section number or a second visible headline beside a particle one.",
+      "Don't add a phone quality tier, a pixel-ratio cap or a reduced particle count.",
+      "Don't play any sequence on its own clock; only twinkle and spin are ambient.",
+      "Don't put text on a box over the scene; use the lens.",
+      "Don't hand-tune hash noise into a shader: all noise samples the 256² noise texture (compile time)."
+    ]
+  }
+}

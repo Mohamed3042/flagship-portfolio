@@ -62,6 +62,7 @@ import {
   prepareBake,
   damp,
   docTop,
+  easeInOut,
   easeOut,
   sharedGeometry,
   type SystemSpec,
@@ -153,8 +154,14 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
   const a = new Color(spec.a);
   const b = new Color(spec.b);
   // the key light comes from the approach side, so the face the hook camera
-  // meets is the lit one on every story, whatever the seat's galaxy geometry
-  sys.keyLight.copy(P0).addScaledVector(new Vector3().addScaledVector(side, 1.0).addScaledVector(fwd, -0.55).addScaledVector(up, 0.6).normalize(), 600);
+  // meets is the lit one on every story, whatever the seat's galaxy geometry.
+  // During the hook it swings from a wide crescent into full day (the reveal).
+  const lightDir = new Vector3().addScaledVector(side, 1.0).addScaledVector(fwd, -0.55).addScaledVector(up, 0.6).normalize();
+  const setLight = (turn: number) => {
+    const dir = lightDir.clone().applyAxisAngle(up, turn);
+    sys.keyLight.copy(P0).addScaledVector(dir, 600);
+  };
+  setLight(0);
 
   /* ---- the rail ---- */
   const L = 122;
@@ -411,6 +418,9 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
   /* ---- post ---- */
   const post = createPost(renderer, scene, camera, { strength: 0.62, radius: 0.5, threshold: 0.8 });
   post.setLight(pal.light);
+  post.setAnamorphic(0.8, spec.b);
+  const letterbox = document.querySelector<HTMLElement>('.letterbox');
+  let lbShown = -1;
 
   /* ---- every headline as particles ---- */
   const text = createTextField(world, camera, Array.from(document.querySelectorAll<HTMLElement>('[data-ptext]')), [spec.a, spec.b]);
@@ -458,6 +468,7 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
     // next: through the gate, the next planet ahead
     push(5.5, G.clone().addScaledVector(gateTan, 20).addScaledVector(side, 2).addScaledVector(up, 3), nextPos.clone());
     keys = K;
+    hookDist = K[0].pos.distanceTo(P0);
     posCurve = new CatmullRomCurve3(K.map((k) => k.pos), false, 'centripetal');
     lookCurve = new CatmullRomCurve3(K.map((k) => k.look), false, 'centripetal');
   }
@@ -562,7 +573,7 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
       : [
           [0, -0.24 * rtlSign, 0],
           [1, -0.2 * rtlSign, 0],
-          [2, -0.06 * rtlSign, 0],
+          [2, 0, 0.04],
           [3, -0.2 * rtlSign, 0.02],
           [4, 0, 0.06],
           [5, 0, 0.1],
@@ -589,6 +600,13 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
   let disposed = false;
   let frames = 0;
   let frameMs = 0;
+  let roll = 0;
+  let hookDist = 1;
+  const baseFov = () => (phone ? 60 : 46);
+  const viewDir = new Vector3();
+  const upTilt = new Vector3();
+  const tan0 = new Vector3();
+  const tan1 = new Vector3();
   let pointerX = 0;
   let pointerY = 0;
   let px = 0;
@@ -629,9 +647,14 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
 
     const target = progressAt(window.scrollY);
     const before = u;
-    u = damp(u, target, 5.5, dt);
+    // speed ramps: the camera floats at the hook, snaps through the gate run
+    const rate = u < 1 ? 4.5 : u < 2 ? 5.5 : u < 3 ? 8.5 : u < 4 ? 6 : u < 5 ? 5.5 : 7.5;
+    u = damp(u, target, rate, dt);
     if (Math.abs(target - u) < 1e-4) u = target;
     velocity = damp(velocity, Math.min(1, Math.abs(u - before) / dt / 2.4), 7, dt);
+
+    // the reveal: the terminator sweeps across the planet during the hook
+    setLight((1 - easeOut(clamp01(u / 0.85))) * 1.15);
 
     if (posCurve && lookCurve && keys.length > 1) {
       // keyframe index → curve parameter (three maps t uniformly per segment)
@@ -642,6 +665,19 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
       posCurve.getPoint(t, tmpPos);
       lookCurve.getPoint(t, tmpLook);
       camera.position.copy(tmpPos);
+      // banking: the camera rolls into the rail's curves like a ship, and
+      // holds a dutch angle on the flyby
+      let rollTarget = 0;
+      if (u > 1 && u < 1.9) rollTarget = -0.09 * clamp01((u - 1) / 0.4) * clamp01((1.9 - u) / 0.4);
+      else if (u >= 2 && u < 3) {
+        const tt = clamp01(0.08 + (u - 2) * 0.46);
+        rail.getTangentAt(tt, tan0);
+        rail.getTangentAt(Math.min(1, tt + 0.03), tan1);
+        rollTarget = clamp01(1) * -6.5 * side.dot(tan1.sub(tan0));
+      } else if (u >= 3 && u < 4) rollTarget = 0.07 * clamp01((u - 3) / 0.5) * clamp01((4 - u) / 0.5);
+      roll = damp(roll, Math.max(-0.16, Math.min(0.16, rollTarget)), 3, dt);
+      viewDir.copy(tmpLook).sub(camera.position).normalize();
+      camera.up.copy(upTilt.set(0, 1, 0).applyAxisAngle(viewDir, roll));
       camera.lookAt(tmpLook);
       camera.updateMatrixWorld();
       right.setFromMatrixColumn(camera.matrixWorld, 0);
@@ -653,6 +689,13 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
       camera.lookAt(tmpLook);
       const { ox, oy } = offsetsAt(u);
       camera.setViewOffset(W, H, ox * W, oy * H, W, H);
+      // the Vertigo shot: dollying in while the lens widens holds the planet's
+      // size and makes the whole sky rush past it
+      const hold = easeInOut(clamp01(u / 0.95)) * (1 - easeInOut(clamp01((u - 1.05) / 0.55)));
+      const d = camera.position.distanceTo(P0);
+      const base = baseFov();
+      const fovHold = (2 * Math.atan(Math.tan((base * Math.PI) / 360) * (hookDist / Math.max(d, 0.1))) * 180) / Math.PI;
+      camera.fov = base + (Math.min(fovHold, base + 34) - base) * hold * 0.7;
     }
     camera.updateProjectionMatrix();
 
@@ -664,7 +707,7 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
 
     // build progress: from the pin when it is live, else from the flight itself
     const p = clamp01(u - 2);
-    rig.update(p, elapsed);
+    const pulse = rig.update(p, elapsed, clamp01((u - 1.8) / 0.2));
 
     // proof: columns charge as the pin scrubs
     const q = clamp01(u - 3);
@@ -698,6 +741,24 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
     boundary.ring2.rotation.z += dt * 0.25;
     // the galaxy core is scenery here, never the subject: keep it below bloom
     core.setClose(0.8 + 0.2 * clamp01((u - 4.6) * 1.5), 0.35);
+
+    // the hyperspace jump through the boundary: the sky streaks, a flash, and
+    // the next planet resolves on the far side (all of it scrubbed)
+    const warp = clamp01((u - 4.75) / 0.5) * (1 - clamp01((u - 5.26) / 0.14));
+    const jump = Math.exp(-Math.pow((u - 5.2) / 0.075, 2));
+    // the gate run: a kick and a flash at each crossing, only while moving
+    const moving = Math.min(1, velocity * 5);
+    const kick = pulse.kick * moving;
+    camera.position.addScaledVector(right, kick * 0.18 * Math.sin(elapsed * 57)).addScaledVector(camUp, kick * 0.12 * Math.cos(elapsed * 43));
+    camera.updateMatrixWorld();
+    post.setFx({ warp, flash: Math.max(jump * 0.8, pulse.flash * moving * 0.28), flashColor: jump > pulse.flash * moving ? '#ffffff' : spec.b });
+    galaxy.material.uniforms.uScale.value = 260 * (1 + warp * 0.9);
+    // letterbox: the bars close for the action legs and open for the reading ones
+    const lb = clamp01((u - 1.6) / 0.5) * (1 - clamp01((u - 4.15) / 0.45));
+    if (letterbox && Math.abs(lb - lbShown) > 0.004) {
+      lbShown = lb;
+      letterbox.style.setProperty('--lb', lb.toFixed(3));
+    }
 
     sys.update(dt, elapsed);
     nextSys.update(dt, elapsed);

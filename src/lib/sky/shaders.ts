@@ -66,14 +66,18 @@ uniform float uPixel;
 uniform float uScale;
 varying vec3 vColor;
 varying float vAlpha;
+varying float vBokeh;
 void main() {
   vec4 mv = modelViewMatrix * vec4(position, 1.0);
   float twinkle = 0.72 + 0.28 * sin(uTime * (0.4 + aSeed * 1.9) + aSeed * 61.0);
   float ps = aSize * uPixel * uScale / max(-mv.z, 0.001);
-  // A star closer than a few units would bloom into a disc; fade it instead.
-  float near = smoothstep(0.6, 7.0, -mv.z);
-  vAlpha = near * twinkle * clamp(ps, 0.0, 1.0);
-  gl_PointSize = clamp(ps, 1.0, 42.0 * uPixel);
+  // A particle passing close to the lens goes out of focus: a soft, wide,
+  // faint disc (the lens's own bokeh) instead of a hard bright dot.
+  float bokeh = 1.0 - smoothstep(0.8, 9.0, -mv.z);
+  vBokeh = bokeh;
+  float shown = step(0.35, -mv.z);
+  vAlpha = shown * twinkle * clamp(ps, 0.0, 1.0) * mix(1.0, 0.16, bokeh);
+  gl_PointSize = clamp(ps * (1.0 + bokeh * 5.0), 1.0, 96.0 * uPixel);
   vColor = aColor;
   gl_Position = projectionMatrix * mv;
 }
@@ -83,11 +87,14 @@ export const starFrag = /* glsl */ `
 uniform float uLight;
 varying vec3 vColor;
 varying float vAlpha;
+varying float vBokeh;
 void main() {
   vec2 c = gl_PointCoord - 0.5;
   float d = length(c);
-  float a = smoothstep(0.5, 0.0, d);
-  a *= a;
+  float soft = smoothstep(0.5, 0.0, d);
+  soft *= soft;
+  float disc = smoothstep(0.5, 0.4, d) * 0.55 + smoothstep(0.34, 0.44, d) * smoothstep(0.5, 0.45, d) * 0.45;
+  float a = mix(soft, disc, vBokeh);
   vec3 col = mix(vColor, vColor * 0.32 + vec3(0.02, 0.03, 0.09), uLight);
   gl_FragColor = vec4(col, a * vAlpha * mix(1.0, 0.7, uLight));
 }
@@ -614,6 +621,11 @@ uniform float uLight;
 uniform float uGrain;
 uniform float uVignette;
 uniform float uAberration;
+uniform float uWarp;
+uniform float uFlash;
+uniform vec3 uFlashColor;
+uniform float uAnamorphic;
+uniform vec3 uAnamorphicTint;
 varying vec2 vUv;
 float hash21(vec2 p) {
   vec3 p3 = fract(vec3(p.xyx) * 0.1031);
@@ -625,8 +637,8 @@ void main() {
   vec2 c = uv - 0.5;
   float r2 = dot(c, c);
   vec2 dir = c / max(length(c), 1e-4);
-  float ca = (uAberration + uVelocity * 0.0045) * r2 * 3.0;
-  float streak = uVelocity * (0.012 + r2 * 0.06);
+  float ca = (uAberration + uVelocity * 0.0045 + uWarp * 0.02) * r2 * 3.0;
+  float streak = uVelocity * (0.012 + r2 * 0.06) + uWarp * (0.05 + r2 * 0.22);
   vec3 col = vec3(0.0);
   for (int i = 0; i < 6; i++) {
     float t = float(i) / 5.0;
@@ -636,6 +648,18 @@ void main() {
     col.b += texture2D(tDiffuse, uv - o + dir * ca).b;
   }
   col /= 6.0;
+  // anamorphic flare: the brightest points smear sideways in the accent tint
+  if (uAnamorphic > 0.001) {
+    vec3 flare = vec3(0.0);
+    for (int i = -6; i <= 6; i++) {
+      float t = float(i) / 6.0;
+      vec3 s = texture2D(tDiffuse, uv + vec2(t * 0.055, 0.0)).rgb;
+      float l = max(0.0, dot(s, vec3(0.3, 0.59, 0.11)) - 0.78);
+      flare += l * (1.0 - abs(t)) * (1.0 - abs(t));
+    }
+    col += flare * uAnamorphicTint * uAnamorphic * 0.55;
+  }
+  col = mix(col, uFlashColor, clamp(uFlash, 0.0, 1.0));
   float vig = 1.0 - smoothstep(0.3, 1.3, r2 * 2.6) * uVignette;
   col *= mix(vig, 1.0, uLight * 0.7);
   float g = hash21(uv * vec2(1920.0, 1080.0) + fract(uTime * 7.31) * 100.0) - 0.5;
@@ -662,6 +686,7 @@ uniform vec3 uRight;
 uniform vec3 uUp;
 uniform vec3 uFwd;
 uniform float uSize;
+uniform float uTravel;
 varying vec3 vColor;
 varying float vAlpha;
 void main() {
@@ -674,7 +699,10 @@ void main() {
   vec3 target = position + drift * (1.0 - 0.6 * e);
   vec3 rest = aScatter + tumble;
   vec3 local = mix(rest, target, e);
-  vec3 world = uOrigin + uRight * (local.x * uScale) + uUp * (local.y * uScale) + uFwd * (local.z * uScale * 6.0);
+  // the line travels: it arrives from deep in the scene and, when it leaves,
+  // streams past the viewer (uTravel is signed, in world units)
+  float travel = (1.0 - e) * uTravel * (0.6 + aSeed * 0.8);
+  vec3 world = uOrigin + uRight * (local.x * uScale) + uUp * (local.y * uScale) + uFwd * (local.z * uScale * 6.0 + travel);
   vec4 mv = viewMatrix * vec4(world, 1.0);
   float twinkle = 0.8 + 0.2 * sin(uTime * 3.0 + aSeed * 90.0);
   gl_PointSize = uSize * uPixel * mix(0.6, 1.0, e) * twinkle * (7.0 / max(-mv.z, 0.5));
@@ -723,5 +751,42 @@ void main() {
   float d = length(c * vec2(1.0, 1.15));
   float a = pow(clamp(1.0 - d, 0.0, 1.0), 1.5);
   gl_FragColor = vec4(uColor, a * uOpacity);
+}
+`;
+
+/* ------------------------------------------------------------ gate iris -- */
+
+/** A spoked ring on a RingGeometry (planar UVs). Two of them, counter-rotating
+ *  with the scroll, interfere into a moiré iris the camera flies through. */
+export const spokeVert = /* glsl */ `
+varying vec2 vUv;
+varying float vNear;
+void main() {
+  vUv = uv;
+  vec4 mv = modelViewMatrix * vec4(position, 1.0);
+  // the iris dissolves as the camera arrives, so flying through it reads as
+  // the iris opening rather than a wall of light
+  vNear = smoothstep(2.5, 11.0, -mv.z);
+  gl_Position = projectionMatrix * mv;
+}
+`;
+
+export const spokeFrag = /* glsl */ `
+uniform vec3 uColor;
+uniform float uPhase;
+uniform float uSpokes;
+uniform float uHot;
+uniform float uLight;
+varying vec2 vUv;
+varying float vNear;
+void main() {
+  vec2 c = vUv - 0.5;
+  float r = length(c) * 2.0;
+  float ang = atan(c.y, c.x) / 6.2831853;
+  float spoke = smoothstep(0.3, 0.5, abs(fract(ang * uSpokes + uPhase) - 0.5) * 2.0);
+  float band = smoothstep(0.0, 0.06, r) * (1.0 - smoothstep(0.94, 1.0, r));
+  vec3 col = uColor * (0.45 + uHot * 0.6) + vec3(1.0) * uHot * 0.06;
+  col = mix(col, uColor * 0.5, uLight);
+  gl_FragColor = vec4(col, spoke * band * (0.05 + uHot * 0.24) * vNear);
 }
 `;

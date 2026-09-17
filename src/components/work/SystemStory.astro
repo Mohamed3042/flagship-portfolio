@@ -70,7 +70,10 @@ const ar = lang === 'ar';
     <div class="system-proof">
       <div class="system-proof__copy">
         <h2 data-ptext>{pick(lang, story.proofHeading)}</h2>
-        <p data-tx>{pick(lang, story.proofBody)}</p>
+        <details class="tx-more">
+          <summary>{ar ? 'الإرسال الكامل' : 'Full transmission'}</summary>
+          <p>{pick(lang, story.proofBody)}</p>
+        </details>
       </div>
       <SystemVisual lang={lang} story={story} />
     </div>
