@@ -1,0 +1,39 @@
+---
+import { pick, workPath, type Lang } from '../../i18n/utils';
+import type { ProjectMeta } from '../../data/projects';
+import { featured } from '../../data/featured';
+import SystemVisual from '../work/SystemVisual.astro';
+export type MapGroup = 'public' | 'automation' | 'lab' | 'foundation';
+interface Props { lang: Lang; entries: { project: ProjectMeta; group: MapGroup }[]; }
+const { lang, entries } = Astro.props;
+const ar = lang === 'ar';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const n = (v: number) => v.toLocaleString(ar ? 'ar-EG' : 'en-US');
+const filters = [{ id: 'all', label: ar ? 'الكل' : 'All work' }, { id: 'public', label: ar ? 'المستودعات العامة' : 'Public repos' }, { id: 'automation', label: ar ? 'أنظمة الأتمتة' : 'Automation' }, { id: 'lab', label: ar ? 'المختبر الهندسي' : 'Engineering lab' }, { id: 'foundation', label: ar ? 'الأساس المهني' : 'Foundation' }];
+const shotFor = (slug: string) => featured.find(f => f.slug === slug)?.shots[0];
+const legacyShots: Record<string, string> = { 'meta-ads': 'meta-metrics.png', 'crm': 'crm-dashboard.png', 'sheep-app': 'sheep-app-en.png', 'hr-system': 'hr-master-tracker.png' };
+const visualEntries = entries.map(({project, group}) => {
+    const shot = shotFor(project.slug);
+    const src = shot ? `${base}/img/sky/${shot.src}.webp` : legacyShots[project.slug] ? `${base}/img/work/${legacyShots[project.slug]}` : null;
+    return {project, group, shot, src};
+});
+---
+<section class="sr-atlas sr-section" id="sky" data-atlas aria-labelledby="atlas-title">
+  <span id="lab" class="sr-anchor"></span><span id="foundation" class="sr-anchor"></span>
+  <header class="sr-section-head"><div><h2 id="atlas-title">{ar ? 'كل الأعمال، في مكان واحد.' : 'The whole body of work.'}</h2><p>{ar ? `${n(entries.length)} مشروعًا. ابحث عن مجال أو أداة أو نظام، ثم افتح أدلته.` : `${entries.length} projects. Find a discipline, a tool or a system. Then inspect the evidence.`}</p></div><a class="sr-text-link" href="#work">{ar ? 'المشاريع المختارة' : 'Back to selected work'}</a></header>
+  <div class="sr-atlas__toolbar">
+    <div class="sr-atlas__filters" role="group" aria-label={ar ? 'تصفية المشاريع' : 'Filter projects'}>{filters.map(f => <button type="button" data-sky-filter={f.id} aria-pressed={f.id === 'all' ? 'true' : 'false'}>{f.label}<span>{n(f.id === 'all' ? entries.length : entries.filter(e => e.group === f.id).length)}</span></button>)}</div>
+    <div class="sr-atlas__tools"><label class="sr-search"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="m12 12 5 5" stroke="currentColor" stroke-width="1.5" /></svg><span class="sr-only">{ar ? 'ابحث في المشاريع' : 'Search projects'}</span><input type="search" data-project-search placeholder={ar ? 'ابحث عن مشروع أو تقنية' : 'Search projects or technology'} /></label><button class="sr-view-toggle" data-view-toggle type="button" aria-pressed="false" data-grid-label={ar ? 'عرض شبكي' : 'Grid view'} data-list-label={ar ? 'عرض قائمة' : 'List view'}>{ar ? 'عرض قائمة' : 'List view'}</button></div>
+  </div>
+  <p class="sr-atlas__count" data-project-count aria-live="polite" aria-atomic="true" data-template={ar ? '{shown} من {total} مشروعًا' : '{shown} of {total} projects'}>{ar ? `${n(entries.length)} مشروعًا` : `${entries.length} projects`}</p>
+  <ol class="sr-atlas__grid" data-project-grid>{visualEntries.map(({project, group, shot, src}) => (<li data-sky-item data-slug={project.slug} data-group={group} data-search={`${project.title.en} ${project.title.ar} ${project.tag.en} ${project.tag.ar} ${project.story?.tools.join(' ') ?? ''}`} style={`--a:${project.cardA};--b:${project.cardB}`}>
+      <a class="sr-atlas__main" href={workPath(lang, project.slug)}>
+        <div class="sr-atlas__art" aria-hidden="true">{src ? <img src={src} alt="" width="640" height="400" loading="lazy" decoding="async" /> : project.story ? <SystemVisual lang={lang} story={project.story} compact /> : <span class="sr-atlas__wordmark">{pick(lang, project.tag)}</span>}{!src && <span class="sr-atlas__illustration">{ar ? 'رسم توضيحي للآلية' : 'Mechanism illustration'}</span>}</div>
+        <div class="sr-atlas__info"><h3>{pick(lang, project.title)}</h3><p>{pick(lang, project.tag)}</p><p class="sr-atlas__stat"><strong>{pick(lang, project.stat)}</strong> {pick(lang, project.statNote)}</p></div>
+      </a>
+      <button type="button" class="sr-atlas__preview" data-preview={`preview-${project.slug}`} aria-label={`${ar ? 'معاينة' : 'Preview'} ${pick(lang, project.title)}`}>{ar ? 'معاينة المشروع' : 'Quick view'}<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.5" /></svg></button>
+      <div hidden data-preview-source id={`preview-${project.slug}`}><div class="sr-preview" style={`--a:${project.cardA};--b:${project.cardB}`}><h2 data-preview-heading>{pick(lang, project.title)}</h2><p class="sr-preview__tag">{pick(lang, project.tag)}</p>{src && <img src={src} alt={shot ? pick(lang, shot.alt) : pick(lang, project.title)} width="1280" height="800" loading="lazy" />}<p>{pick(lang, project.blurb)}</p><p class="sr-proof"><strong>{pick(lang, project.stat)}</strong> {pick(lang, project.statNote)}</p>{project.story && <div class="sr-preview__boundary"><strong>{pick(lang, project.story.boundaryKicker)}</strong><p>{pick(lang, project.story.boundary)}</p></div>}<a class="sr-button" href={workPath(lang, project.slug)}>{ar ? 'افتح دراسة المشروع' : 'Open the project story'}</a></div></div>
+    </li>))}</ol>
+  <div class="sr-atlas__empty" data-project-empty hidden><h3>{ar ? 'لا توجد مشاريع مطابقة.' : 'No matching projects.'}</h3><p>{ar ? 'جرّب كلمة أخرى أو امسح عوامل التصفية.' : 'Try another term or clear the filters.'}</p><button type="button" class="sr-button sr-button--quiet" data-reset-search>{ar ? 'مسح البحث والتصفية' : 'Clear search and filters'}</button></div>
+  <button class="sr-button sr-button--quiet sr-atlas__more" type="button" data-project-more hidden>{ar ? 'عرض المزيد من المشاريع' : 'Show more projects'}</button>
+</section>

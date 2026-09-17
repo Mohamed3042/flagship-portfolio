@@ -153,7 +153,8 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
         // neutralised in tokens.css. (Reverting = delete this shim + restore the
         // @media blocks.)
         try {
-          const _mm = window.matchMedia.bind(window);
+          const _mm = window.__mmNativeMatchMedia || window.matchMedia.bind(window);
+          window.__mmNativeMatchMedia = _mm;
           window.matchMedia = (q) => {
             if (typeof q === 'string' && q.indexOf('prefers-reduced-motion') !== -1) {
               return {

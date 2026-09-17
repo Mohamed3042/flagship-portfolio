@@ -1,174 +1,76 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Contact from '../../components/Contact.astro';
-import SkyHero from '../../components/sky/SkyHero.astro';
-import SkyBeats from '../../components/sky/SkyBeats.astro';
-import SkyStation from '../../components/sky/SkyStation.astro';
-import SkyMap, { type MapGroup } from '../../components/sky/SkyMap.astro';
+import Exhibit from '../../components/showroom/Exhibit.astro';
+import ProjectCard from '../../components/showroom/ProjectCard.astro';
+import ProjectAtlas, { type MapGroup } from '../../components/showroom/ProjectAtlas.astro';
 import { useTranslations, workPath, pick, locales, type Lang } from '../../i18n/utils';
 import { automationProjects, labProjects, publicAiProjects } from '../../data/system-projects';
 import { legacyProjects, getProject, type ProjectMeta } from '../../data/projects';
 import { featured } from '../../data/featured';
-
-export function getStaticPaths() {
-  return locales.map((lang) => ({ params: { lang } }));
-}
-
+import { profile } from '../../data/profile';
+import '../../styles/showroom.css';
+export function getStaticPaths() { return locales.map(lang => ({ params: { lang } })); }
 const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
 const ar = lang === 'ar';
-
-// Featured flight: only systems whose story exists, in the order featured.ts gives.
-const stations = featured
-  .map((feature) => ({ feature, project: getProject(feature.slug) }))
-  .filter((s): s is { feature: (typeof featured)[number]; project: ProjectMeta } => !!s.project?.story);
-const publicStations = stations.filter((s) => s.feature.chapter === 'public');
-const privateStations = stations.filter((s) => s.feature.chapter === 'private');
-
-// Sky map: every story on the site, grouped by how a reader can check it.
-const publicSlugs = new Set(publicAiProjects.map((p) => p.slug));
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const stations = featured.map(feature => ({ feature, project: getProject(feature.slug)! })).filter(s => !!s.project?.story);
+const publicStations = stations.filter(s => s.feature.chapter === 'public');
+const privateStations = stations.filter(s => s.feature.chapter === 'private');
+const publicSlugs = new Set(publicAiProjects.map(p => p.slug));
 const entries: { project: ProjectMeta; group: MapGroup }[] = [
-  ...publicAiProjects.map((project) => ({ project, group: 'public' as const })),
-  ...automationProjects.filter((p) => !publicSlugs.has(p.slug)).map((project) => ({ project, group: 'automation' as const })),
-  ...labProjects.map((project) => ({ project, group: 'lab' as const })),
-  ...legacyProjects.map((project) => ({ project, group: 'foundation' as const })),
+  ...publicAiProjects.map(project => ({ project, group: 'public' as const })),
+  ...automationProjects.filter(p => !publicSlugs.has(p.slug)).map(project => ({ project, group: 'automation' as const })),
+  ...labProjects.map(project => ({ project, group: 'lab' as const })),
+  ...legacyProjects.map(project => ({ project, group: 'foundation' as const })),
 ];
-
-const skyData = {
-  stations: stations.map(({ project }) => ({ id: project.slug, a: project.cardA, b: project.cardB })),
-  stars: entries.map(({ project, group }) => ({
-    slug: project.slug,
-    group,
-    a: project.cardB,
-    title: pick(lang, project.title),
-    href: workPath(lang, project.slug),
-  })),
-};
-
-const chapters = {
-  public: {
-    title: ar ? 'أربعة تستطيع تشغيلها بدوني.' : 'Four you can run without me.',
-    lead: ar
-      ? 'مستودعات عامة بتكامل مستمر وحاويات، واثنان منها بعروض حية. كل رقم أدناه رقم تعيد الاختبارات إنتاجه، وكل نظام يقول ما لا يفعله.'
-      : 'Public repositories with continuous integration and containers — two of them run live demos. Every figure below is one the tests reproduce, and every system says what it does not do.',
-  },
-  private: {
-    title: ar ? 'أنظمة خاصة، تُعرض بأمان.' : 'Private systems, shown safely.',
-    lead: ar
-      ? 'تبقى الشيفرة خاصة. الشاشات منقّحة، والبيانات اصطناعية حيث يُذكر ذلك، والحدود مكتوبة بجانب كل ادعاء.'
-      : 'The source stays private. The screens are sanitized, the data is synthetic wherever it says so, and the limits sit next to every claim.',
-  },
-};
+const exhibits = [{slug:'spaceframe-world',kind:'truss',label:ar?'الهياكل':'Structures'}, {slug:'medmac-box-studio',kind:'box',label:ar?'التغليف':'Packaging'}, {slug:'enterprise-ai-automation-templates',kind:'flow',label:ar?'الأتمتة':'Automation'}].map(e => ({...e, project:getProject(e.slug)!, shot:featured.find(f => f.slug === e.slug)!.shots[0]}));
+const hero = exhibits[0];
+const method = [
+  { title: ar ? 'ارسم العملية' : 'Map the loop', body: ar ? 'المدخلات والقرارات والتسليمات، قبل أي أتمتة.' : 'Inputs, decisions and hand-offs, before automation.', slug:'sheep-business-management' },
+  { title: ar ? 'اربط الطبقات' : 'Connect the layers', body: ar ? 'اربط البيانات والأدوات في مسار واضح يمكن فحصه.' : 'Connect data and tools in a path you can inspect.', slug:'relayops' },
+  { title: ar ? 'احتفظ بالموافقة' : 'Keep human approval', body: ar ? 'اجعل القرارات المؤثرة مرئية وخاضعة للموافقة.' : 'Make consequential decisions visible and approval-gated.', slug:'enterprise-ai-automation-templates' },
+  { title: ar ? 'شغّل النظام' : 'Run the system', body: ar ? 'شغّل المسار مع سجل تدقيق وحدود واضحة.' : 'Run the workflow with an audit trail and explicit limits.', slug:'career-autopilot' },
+  { title: ar ? 'تحقق من الدليل' : 'Verify the evidence', body: ar ? 'اربط الادعاءات بمصادرها، ولا تخفِ ما لم يُثبت.' : 'Trace claims to their sources. Keep unproven outcomes visible.', slug:'ask-repos' },
+];
 ---
-
 <BaseLayout lang={lang} title={t('site.title')} description={t('site.description')} path={`/${lang}`} accent="blue" home={true}>
-  <canvas class="sky" data-sky aria-hidden="true"></canvas>
-  <script type="application/json" id="sky-data" set:html={JSON.stringify(skyData)} is:inline />
-
-  <SkyHero lang={lang} projectCount={entries.length} publicCount={publicAiProjects.length} />
-  <SkyBeats lang={lang} />
-
-  <div id="work" class="flight">
-    {
-      publicStations.length > 0 && (
-        <header class="chapter">
-          <h2>{chapters.public.title}</h2>
-          <p>{chapters.public.lead}</p>
-        </header>
-      )
-    }
-    {publicStations.map(({ project, feature }, i) => <SkyStation lang={lang} project={project} feature={feature} index={i} />)}
-    <header class="chapter">
-      <h2>{chapters.private.title}</h2>
-      <p>{chapters.private.lead}</p>
-    </header>
-    {privateStations.map(({ project, feature }, i) => <SkyStation lang={lang} project={project} feature={feature} index={i + publicStations.length} />)}
-  </div>
-
-  <SkyMap lang={lang} entries={entries} />
-
-  <div data-sky-stop="contact" class="finale">
-    <Contact lang={lang} />
+  <div class="showroom" data-showroom>
+    <canvas class="sr-renderer" data-showroom-renderer aria-hidden="true"></canvas>
+    <section class="sr-hero sr-container" id="intro" aria-labelledby="sr-title">
+      <div class="sr-hero__copy">
+        <h1 id="sr-title">{ar ? 'أحوّل العمل اليدوي' : 'I turn manual work'} <span>{ar ? 'إلى أنظمة تعمل.' : 'into systems that run.'}</span></h1>
+        <p class="sr-hero__lead">{ar ? 'أرسم العملية، وأبني الأداة الداخلية، وأضع بوابات الموافقة والتدقيق، ثم أتحقق من النتيجة على بيانات حقيقية — محليًا، وثنائي اللغة، وجاهزًا للعمل.' : 'I map the process, build the internal tool, add approval and audit gates, then verify it against real operating data — local-first, bilingual, and built to run.'}</p>
+        <div class="sr-hero__actions"><a class="sr-button" href="#work">{ar ? 'استكشف الأنظمة' : 'See the systems'}<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" /></svg></a><a class="sr-button sr-button--quiet" href="#contact">{ar ? 'تواصل معي' : 'Get in touch'}</a></div>
+        <p class="sr-hero__identity">{pick(lang,profile.title)} <span aria-hidden="true">·</span> {pick(lang,profile.location)}</p>
+        <div class="sr-hero__index"><a href="#sky"><strong>{entries.length.toLocaleString(ar?'ar-EG':'en-US')}</strong> {ar?'مشروعًا':'project stories'}</a><a href="#work"><strong>{publicAiProjects.length.toLocaleString(ar?'ar-EG':'en-US')}</strong> {ar?'مستودعات عامة':'public repositories'}</a><a href={`${base}/worlds/`} data-astro-reload>{ar?'العوالم السينمائية':'Cinematic worlds'} <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></a></div>
+      </div>
+      <div class="sr-hero__display">
+        <div class="sr-hero__caption"><a data-exhibit-story href={workPath(lang,hero.slug)}><span data-exhibit-title>{pick(lang,hero.project.title)}</span><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></a><span>{ar?'حرّك المؤشر أو استخدم المنزلق':'Drag to rotate · slide to assemble'}</span></div>
+        <div class="sr-hero__stage">
+          <Exhibit lang={lang} kind="truss" id="hero-exhibit" poster={`${base}/img/sky/${hero.shot.src}.webp`} alt={pick(lang,hero.shot.alt)} />
+          <button class="sr-floating-shot sr-floating-shot--main" type="button" data-hero-shot data-zoom data-src={`${base}/img/sky/${hero.shot.src}.webp`} data-alt={pick(lang,hero.shot.alt)} aria-label={ar?'كبّر صورة المنتج':'Enlarge the product screenshot'}><img src={`${base}/img/sky/${hero.shot.src}.webp`} width="1280" height="720" alt={pick(lang,hero.shot.alt)} decoding="async" /><span>{ar?'الصورة الفعلية للمنتج':'Actual product screen'}</span></button>
+          <a class="sr-floating-shot sr-floating-shot--secondary" href={workPath(lang,'ask-repos')}><img src={`${base}/img/sky/askrepos-answer.webp`} width="1280" height="738" alt={ar?'واجهة العرض العام لـ ask-repos':'ask-repos public demo interface'} decoding="async" /><span>ask-repos</span></a>
+        </div>
+        <div class="sr-exhibit-selector" role="group" aria-label={ar?'اختر النموذج التوضيحي':'Choose an illustrative exhibit'}>{exhibits.map((e,i) => <button type="button" data-select-exhibit={e.kind} data-title={pick(lang,e.project.title)} data-href={workPath(lang,e.slug)} data-src={`${base}/img/sky/${e.shot.src}.webp`} data-alt={pick(lang,e.shot.alt)} aria-pressed={i===0?'true':'false'} aria-controls="hero-exhibit"><img src={`${base}/img/sky/${e.shot.src}.webp`} width="80" height="50" alt="" decoding="async" /><span>{e.label}</span></button>)}</div>
+      </div>
+    </section>
+    <div class="sr-container">
+      <section class="sr-section" id="work" aria-labelledby="public-title">
+        <header class="sr-section-head"><div><h2 id="public-title">{ar?'أربعة تستطيع تشغيلها بدوني.':'Four you can run without me.'}</h2><p>{ar?'مستودعات عامة وتكامل مستمر وحاويات. اثنان منها بعروض حية. النطاق والحدود بجانب كل مشروع.':'Public repositories, continuous integration and containers. Two have live demos. Scope and limitations sit with every project.'}</p></div><a class="sr-text-link" href="#sky">{ar?'تصفح كل المشاريع':'Browse all projects'}<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="m5 7 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg></a></header>
+        <div class="sr-projects">{publicStations.map(s=><ProjectCard lang={lang} project={s.project} feature={s.feature} />)}</div>
+      </section>
+      <section class="sr-method sr-section" id="method" aria-labelledby="method-title"><header class="sr-section-head"><h2 id="method-title">{ar?'من العملية اليدوية إلى نظام.':'From a manual loop to a system.'}</h2></header><div class="sr-method__steps">{method.map((m,i)=><details><summary><span class="sr-method__node" aria-hidden="true">{i+1}</span>{m.title}</summary><p>{m.body}</p><a class="sr-text-link" href={workPath(lang,m.slug)}>{ar?'شاهد المثال':'See it in a project'}</a></details>)}</div></section>
+      <section class="sr-section" id="private-work" aria-labelledby="private-title"><header class="sr-section-head"><div><h2 id="private-title">{ar?'أنظمة خاصة، تُعرض بأمان.':'Private systems, shown safely.'}</h2><p>{ar?'تبقى الشيفرة خاصة. الشاشات منقّحة، والبيانات اصطناعية حيث يُذكر ذلك. افتح نطاق المشروع لمعرفة حدوده.':'The source stays private. Screens are sanitized; data is synthetic wherever stated. Open each project’s scope to inspect its limits.'}</p></div></header><div class="sr-projects sr-projects--private">{privateStations.map(s=><ProjectCard lang={lang} project={s.project} feature={s.feature} />)}</div></section>
+      <ProjectAtlas lang={lang} entries={entries} />
+    </div>
+    <div class="sr-contact"><Contact lang={lang}/></div>
+    <dialog class="sr-dialog" data-showroom-dialog aria-labelledby="sr-dialog-heading"><div class="sr-dialog__bar"><h2 id="sr-dialog-heading">{ar?'استكشف المشروع':'Inspect the project'}</h2><button type="button" data-close-dialog aria-label={ar?'إغلاق المعاينة':'Close preview'}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" fill="none" stroke="currentColor" stroke-width="1.7" /></svg></button></div><div data-dialog-content></div></dialog>
   </div>
 </BaseLayout>
-
-<style is:global>
-  .sky {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    display: block;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  html.sky-live .sky {
-    opacity: 1;
-  }
-  html.sky-live #space {
-    visibility: hidden !important;
-  }
-  html.sky-live .finale .cf {
-    background: transparent;
-  }
-  html.sky-live .finale .cf-stars {
-    display: none;
-  }
-  html.sky-live .finale .cf-scrim {
-    width: min(140vw, 1300px);
-    height: min(96vh, 900px);
-    background: radial-gradient(60% 56% at 50% 52%, rgba(3, 3, 10, 0.78), rgba(3, 3, 10, 0.42) 60%, transparent 82%);
-  }
-</style>
-
-<style>
-  .flight {
-    position: relative;
-    z-index: 1;
-  }
-  .chapter {
-    position: relative;
-    z-index: 1;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 22vh clamp(20px, 5vw, 72px) 0;
-  }
-  .chapter h2 {
-    max-width: 14ch;
-    margin: 0;
-    font-size: clamp(44px, 7vw, 104px);
-    font-weight: 860;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-    text-wrap: balance;
-    text-shadow: 0 2px 40px rgba(3, 3, 10, 0.9);
-  }
-  :global([dir='rtl']) .chapter h2 {
-    font-family: var(--font-ar-display);
-    letter-spacing: 0;
-    line-height: 1.15;
-  }
-  .chapter p {
-    max-width: 52ch;
-    margin-top: 24px;
-    font-size: clamp(16px, 1.5vw, 20px);
-    line-height: 1.6;
-    color: var(--ink-2);
-    text-shadow: 0 1px 24px rgba(3, 3, 10, 0.95);
-  }
-  :global([data-theme='light']) .chapter h2,
-  :global([data-theme='light']) .chapter p {
-    text-shadow: none;
-  }
-</style>
-
 <script>
-  import { bootSky, stopSky } from '../../lib/sky/boot';
-  // ClientRouter fires astro:page-load on the first load too.
-  document.addEventListener('astro:page-load', () => {
-    if (document.querySelector('[data-sky]')) bootSky();
-  });
-  document.addEventListener('astro:before-swap', stopSky);
+  import { initShowroom, stopShowroom } from '../../lib/showroom';
+  document.addEventListener('astro:page-load', initShowroom);
+  document.addEventListener('astro:before-swap', stopShowroom);
 </script>
