@@ -61,6 +61,10 @@ WebGL keep the CSS spine unchanged.
   desktop|mobile` → `npm run verify:flight` / `verify:flight:mobile` (`scripts/test-flight.py`:
   flight-live within 15 s, six stops, frame loop alive, camera reaches the boundary, canvas at native
   DPR, zero console errors; `--shots DIR` captures every stop, `--hop` follows the handoff link).
+- **Gotcha (layout shift)**: layout that differs between the flight and the CSS spine is keyed to
+  `html.js` (present before first paint), never to `html.flight-live` (set about half a second
+  later): a rule that changes size or display on `flight-live` is a CLS regression. `html.flight-off`
+  (set by `flight-boot.ts` when WebGL is missing or the mount fails) restores the spine layout.
 - **Gotchas**: never rebuild `dist/` while a gate runs (the pages 404 mid-run). The desktop app's
   browser pane pauses `requestAnimationFrame` while hidden, so verify WebGL with Playwright, not the
   pane. `src/lib/interactions.ts` overwrites every `[data-count]`. Save-Data still keeps the CSS sky
