@@ -1,5 +1,42 @@
 # CLAUDE.md — Project handoff for any AI agent
 
+> **Current truth first (2026-09-17). Sections 1–9 below are historical and partly stale:** the
+> owner is positioned as an **AI & Automation Engineer**, not a marketer, and "Medmac" is a former
+> employer, never his brand. The live site is **GitHub Pages**:
+> https://mohamed3042.github.io/flagship-portfolio/ (built with `npm run build:ghpages`, published
+> from the `gh-pages` branch of `Mohamed3042/flagship-portfolio`). Canonical tags still name
+> `mohamed-mahmoud-kuwait.netlify.app`. **Do not deploy unless the owner says "deploy".**
+
+## 0. The home page is "One Sky" (branch `feature/sss-home`, 2026-09-17)
+
+The pinned slogan biomes and the horizontal card strip were replaced by one continuous WebGL flight.
+
+- **Structure** (`src/pages/[lang]/index.astro`): `SkyHero` → `SkyBeats` (five method beats, about 2
+  screens) → `#work`, the featured flight of eight `SkyStation`s (four public repositories, then four
+  private systems) → `SkyMap` `#sky`, where every story is a filterable star (`#lab` and `#foundation`
+  are anchors inside it and pre-set the filter) → `Contact`.
+- **Engine** (`src/lib/sky/`): `boot.ts` handles the capability gate (no WebGL, a software
+  rasteriser or Save-Data leave the CSS sky), the depth driver that writes `--p` / `--f` on DOM
+  layers, the map filters and star picking, and the Astro lifecycle. `engine.ts` holds the Three.js
+  scene: a 64k-star galaxy (22k on the low tier), nebula sheets, core glow, one procedural planet per
+  station, the lit route, map stars and constellation lines. `shaders.ts` is all GLSL, `palette.ts`
+  re-tints per theme. Camera stops come from `[data-sky-stop]` in the DOM, so layout changes need no
+  engine edits. `?sky=off` / `?sky=force` exist for testing.
+- **Data**: `src/data/featured.ts` lists the flight order and which screens to layer (`repo` only for
+  PUBLIC repositories). New stories live in `src/data/new-projects.ts` and are merged into
+  `automationProjects` in `system-projects.ts`.
+- **Screens**: `node scripts/build-sky-shots.mjs` rebuilds `public/img/sky/*.webp` from the proof
+  book's privacy-reviewed assets. Crops remove a hosting badge and a recipe panel; several book
+  images are deliberately NOT used (real farm name, employer artwork, brand + price pairs); see the
+  script header.
+- **Gotcha**: `src/lib/interactions.ts` animates EVERY `[data-count]` element and overwrites its
+  content. Never use `data-count` as a plain attribute.
+- **Gates**: `npm run build` → `node scripts/verify-portfolio.mjs` (story set, sky-map grouping,
+  private-repo link allowlist) → `python scripts/test-portfolio.py --base-url <static dist server>
+  --viewport desktop|mobile`. Run the browser test against the built `dist` served by
+  `scripts/serve-static.mjs`, not `astro dev`: the dev toolbar injects extra elements and a console
+  error.
+
 Read this first. It explains what this project is, the two codebases involved, what has been
 done, the current live state, the active/pending work, and the non-obvious gotchas. Keep it
 updated as you make progress.

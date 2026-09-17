@@ -13,7 +13,13 @@ from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
 
 
-AUTOMATION = [
+PUBLIC_AI = [
+    "ask-repos",
+    "enterprise-ai-automation-templates",
+    "relayops",
+    "petpoint-ops-hub",
+]
+AUTOMATION = PUBLIC_AI + [
     "career-autopilot",
     "lifeos",
     "medmac-document-studio",
@@ -24,6 +30,14 @@ AUTOMATION = [
     "sheep-cycle",
     "resume-builder-skill",
     "polyblast-arena",
+    "sheep-business-management",
+    "spaceframe-world",
+    "macroforge",
+    "quotation-builder",
+    "statement-styler",
+    "prompt-king",
+    "mk-voice",
+    "montage-pro",
 ]
 FOUNDATION = [
     "meta-ads",
@@ -71,7 +85,7 @@ def main() -> None:
         browser = playwright.chromium.launch(
             headless=True,
             executable_path=str(CHROME),
-            args=["--disable-gpu"],
+            args=["--use-angle=d3d11", "--ignore-gpu-blocklist"],
         )
         context = browser.new_context(viewport=viewport, device_scale_factor=1)
         page = context.new_page()
@@ -99,7 +113,7 @@ def main() -> None:
             page.wait_for_timeout(1_600)
             page.screenshot(path=str(screenshot_dir / f"home-{lang}-{args.viewport}.png"), full_page=False)
 
-            for section in ("work", "foundation", "lab"):
+            for section in ("work", "sky"):
                 page.locator(f"#{section}").evaluate("el => el.scrollIntoView({block: 'start'})")
                 # The incumbent site uses inertial Lenis scrolling; wait for the
                 # destination to settle before capturing the viewport.
@@ -111,22 +125,10 @@ def main() -> None:
                 href = f"/{lang}/work/{slug}"
                 link = page.locator(f'a[href="{href}"]').first
                 try:
-                    if slug in AUTOMATION:
-                        progress = AUTOMATION.index(slug) / (len(AUTOMATION) - 1)
-                        page.evaluate(
-                            """p => {
-                              const section = document.querySelector('#work');
-                              const travel = section.offsetHeight - innerHeight;
-                              window.scrollTo(0, section.offsetTop + travel * p);
-                            }""",
-                            progress,
-                        )
-                        # Both desktop (pinned scrub) and mobile (native strip)
-                        # move the cards horizontally. Drive the section to the
-                        # requested card and let Lenis/GSAP settle before click.
-                        page.wait_for_timeout(500)
-                    else:
-                        link.scroll_into_view_if_needed(timeout=10_000)
+                    # One Sky home: every story is a plain link in the sky map
+                    # (featured ones also appear earlier in the flight).
+                    link.scroll_into_view_if_needed(timeout=10_000)
+                    page.wait_for_timeout(300)
                     link.click(timeout=10_000)
                     page.wait_for_url(f"**{href}", timeout=10_000)
                     page.wait_for_load_state("networkidle")

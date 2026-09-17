@@ -26,7 +26,7 @@ The work spans bilingual Kuwait business operations, offline and LAN-only intern
 
 - Astro 5 static site, deployed at the existing Netlify domain.
 - Separate, indexable `/en/` and `/ar/` editions with mirrored story routes.
-- Ten primary Automation Engineer stories, nine preserved foundation stories, and seven secondary Engineering Lab studies.
+- Twenty-two Automation Engineer stories (four of them public, CI-verified repositories), nine preserved foundation stories, and seven secondary Engineering Lab studies (38 in total, 2026-09-17).
 - Private repositories may inform verified copy but must never expose private URLs, credentials, personal identifiers, code, customer data, or third-party assets.
 - Public repository or demo links appear only when the linked material is intentionally public.
 - Platform status, shipping status, measurements, and limitations must use the exact scope documented by the corresponding repository.

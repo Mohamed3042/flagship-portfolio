@@ -1,0 +1,142 @@
+---
+import type { Lang } from '../../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const ar = lang === 'ar';
+
+// The five working beats, compressed from nine pinned screens into one short
+// passage the camera dives through. No figures here on purpose: the numbers
+// arrive with the systems that produced them.
+const beats = ar
+  ? [
+      { h: 'أجد الحلقة اليدوية.', p: 'مدخلات · قرارات · تسليمات' },
+      { h: 'أتتبّع كل ادعاء إلى مصدره.', p: 'ادعاء ← مصدر ← تحقق' },
+      { h: 'أربط الطبقات.', p: 'مدخل ← حالة ← قرار ← مخرج' },
+      { h: 'أصمّم حدود النظام.', p: 'موافقة · تراجع · تدقيق · فشل آمن' },
+      { h: 'ثم أُثبت أنه يعمل.', p: 'اختبارات · قياسات · قراءة راجعة · حدود' },
+    ]
+  : [
+      { h: 'I find the manual loop.', p: 'inputs · decisions · hand-offs' },
+      { h: 'I trace every claim to its source.', p: 'claim → source → verification' },
+      { h: 'I connect the layers.', p: 'input → state → decision → output' },
+      { h: 'I design the boundary.', p: 'approval · rollback · audit · fail closed' },
+      { h: 'Then I prove it works.', p: 'tests · measurements · readback · limits' },
+    ];
+---
+
+<section class:list={['beats', { 'is-ar': ar }]} data-sky-stop="beats" aria-label={ar ? 'طريقة العمل' : 'How the work gets done'}>
+  <ol class="beats__list">
+    {
+      beats.map((b, i) => (
+        <li class="beat" data-beat style={`--i:${i}`}>
+          <p class="beat__h">{b.h}</p>
+          <p class="beat__p">{b.p}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .beats {
+    position: relative;
+    z-index: 1;
+    padding: 6vh clamp(20px, 6vw, 88px) 10vh;
+  }
+  .beats__list {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 1280px;
+  }
+  .beat {
+    --f: 1;
+    position: relative;
+    isolation: isolate;
+    min-height: 42vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: start;
+    opacity: calc(0.22 + var(--f) * 0.78);
+    transform: translate3d(0, calc((1 - var(--f)) * 26px), 0);
+    will-change: transform, opacity;
+  }
+  .beat:nth-child(even) {
+    align-items: flex-end;
+    text-align: end;
+  }
+  .beat::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    inset-inline-start: -8%;
+    width: min(1000px, 96vw);
+    height: 72%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(3, 3, 10, 0.8), rgba(3, 3, 10, 0.45) 62%, transparent);
+  }
+  .beat:nth-child(even)::before {
+    inset-inline-start: auto;
+    inset-inline-end: -8%;
+  }
+  :global([data-theme='light']) .beat::before {
+    background: radial-gradient(closest-side, rgba(246, 246, 252, 0.85), rgba(246, 246, 252, 0.45) 62%, transparent);
+  }
+  .beat__h {
+    margin: 0;
+    max-width: 16ch;
+    font-weight: 850;
+    font-size: clamp(38px, 6.6vw, 92px);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    text-wrap: balance;
+    text-shadow: 0 2px 40px rgba(3, 3, 10, 0.85);
+  }
+  .beats.is-ar .beat__h {
+    font-family: var(--font-ar-display);
+    letter-spacing: 0;
+    line-height: 1.2;
+    max-width: 18ch;
+  }
+  .beat__p {
+    margin-top: 20px;
+    font-family: var(--font-label);
+    font-size: clamp(13px, 1.3vw, 16px);
+    letter-spacing: 0.04em;
+    color: #b9c6ff;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(159, 216, 255, calc(0.1 + var(--f) * 0.3));
+    background: rgba(5, 6, 16, 0.55);
+  }
+  .beats.is-ar .beat__p {
+    font-family: var(--font-ar);
+    letter-spacing: 0;
+    font-size: clamp(15px, 1.6vw, 18px);
+  }
+  :global([data-theme='light']) .beat__h {
+    text-shadow: 0 2px 30px rgba(246, 246, 252, 0.9);
+  }
+  :global([data-theme='light']) .beat__p {
+    color: #33407a;
+    background: rgba(255, 255, 255, 0.7);
+  }
+  @media (max-width: 700px) {
+    .beat {
+      min-height: 34vh;
+    }
+    .beat,
+    .beat:nth-child(even) {
+      align-items: flex-start;
+      text-align: start;
+    }
+  }
+</style>

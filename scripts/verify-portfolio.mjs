@@ -6,6 +6,13 @@ const root = join(import.meta.dirname, '..');
 const dist = join(root, 'dist');
 const canonicalOrigin = 'https://mohamed-mahmoud-kuwait.netlify.app';
 
+const publicAi = [
+  'ask-repos',
+  'enterprise-ai-automation-templates',
+  'relayops',
+  'petpoint-ops-hub',
+];
+
 const automation = [
   'career-autopilot',
   'lifeos',
@@ -17,6 +24,14 @@ const automation = [
   'sheep-cycle',
   'resume-builder-skill',
   'polyblast-arena',
+  'sheep-business-management',
+  'spaceframe-world',
+  'macroforge',
+  'quotation-builder',
+  'statement-styler',
+  'prompt-king',
+  'mk-voice',
+  'montage-pro',
 ];
 
 const foundation = [
@@ -41,7 +56,7 @@ const lab = [
   'portfolio-design-system',
 ];
 
-const all = [...automation, ...foundation, ...lab];
+const all = [...publicAi, ...automation, ...foundation, ...lab];
 const failures = [];
 const assert = (condition, message) => {
   if (!condition) failures.push(message);
@@ -77,8 +92,15 @@ for (const lang of ['en', 'ar']) {
     assert(story.length > 8_000, `${href} appears unexpectedly thin`);
   }
 
-  assert(automation.every((slug) => home.indexOf(`/work/${slug}`) < home.indexOf('id="foundation"')), `${lang} flagship stories are not ahead of the foundation section`);
-  assert(lab.every((slug) => home.indexOf(`/work/${slug}`) > home.indexOf('id="lab"')), `${lang} lab stories are not inside the Engineering Lab section`);
+  // One Sky home: the featured flight comes first, then the sky map lists
+  // every story exactly once under the group a reader can check it by.
+  assert(home.indexOf('id="work"') < home.indexOf('id="sky"'), `${lang} featured flight is not ahead of the sky map`);
+  const map = home.slice(home.indexOf('id="sky"'));
+  const groupOf = (slug) => map.match(new RegExp(`data-slug="${slug}" data-group="([a-z]+)"`))?.[1];
+  for (const [group, slugs] of [['public', publicAi], ['automation', automation], ['lab', lab], ['foundation', foundation]]) {
+    for (const slug of slugs) assert(groupOf(slug) === group, `${lang} sky map lists ${slug} under ${groupOf(slug)}, expected ${group}`);
+  }
+  assert(home.includes('id="lab"') && home.includes('id="foundation"'), `${lang} nav anchors #lab / #foundation are missing`);
 }
 
 const sourceFiles = await walkText(join(root, 'src'));
@@ -94,14 +116,23 @@ for (const stale of ['A whole marketing team.', 'فريق تسويقٍ كامل.
   assert(!searchable.includes(stale), `stale marketing positioning found: ${stale}`);
 }
 
-const systemSource = await readFile(join(root, 'src', 'data', 'system-projects.ts'), 'utf8');
-assert((systemSource.match(/section: 'automation'/g) ?? []).length === 10, 'automation story count must be 10');
+const systemSource =
+  (await readFile(join(root, 'src', 'data', 'system-projects.ts'), 'utf8')) +
+  (await readFile(join(root, 'src', 'data', 'new-projects.ts'), 'utf8'));
+assert((systemSource.match(/section: 'automation'/g) ?? []).length === publicAi.length + automation.length, `automation story count must be ${publicAi.length + automation.length}`);
 assert((systemSource.match(/section: 'lab'/g) ?? []).length === 7, 'Engineering Lab story count must be 7');
 
 const allowedRepositoryLinks = new Set([
   'https://github.com/Mohamed3042/polyblast-arena',
+  // verified PUBLIC with `gh repo view --json visibility` on 2026-09-17
+  'https://github.com/Mohamed3042/ask-repos',
+  'https://github.com/Mohamed3042/enterprise-ai-automation-templates',
+  'https://github.com/Mohamed3042/ai-automation-command-center',
+  'https://github.com/Mohamed3042/petpoint-ops-hub',
+  'https://github.com/Mohamed3042/prompt-king',
 ]);
-const repositoryLinks = [...systemSource.matchAll(/https:\/\/github\.com\/Mohamed3042\/[A-Za-z0-9_.-]+/g)].map((match) => match[0]);
+const featuredSource = await readFile(join(root, 'src', 'data', 'featured.ts'), 'utf8');
+const repositoryLinks = [...(systemSource + featuredSource).matchAll(/https:\/\/github\.com\/Mohamed3042\/[A-Za-z0-9_.-]+/g)].map((match) => match[0]);
 for (const link of repositoryLinks) {
   assert(allowedRepositoryLinks.has(link), `private or unreviewed repository URL leaked: ${link}`);
 }
@@ -120,4 +151,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Static verification passed: ${all.length} stories × 2 languages, correct canonicals, 10/9/7 ordering, and private-safe case studies.`);
+console.log(`Static verification passed: ${all.length} stories × 2 languages, correct canonicals, sky-map grouping, and private-safe case studies.`);

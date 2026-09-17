@@ -1,0 +1,297 @@
+---
+import { pick, workPath, type Lang } from '../../i18n/utils';
+import type { ProjectMeta } from '../../data/projects';
+
+export type MapGroup = 'public' | 'automation' | 'lab' | 'foundation';
+interface Props {
+  lang: Lang;
+  entries: { project: ProjectMeta; group: MapGroup }[];
+}
+const { lang, entries } = Astro.props;
+const ar = lang === 'ar';
+const n = (v: number) => (ar ? v.toLocaleString('ar-EG') : String(v));
+
+const filters: { id: 'all' | MapGroup; label: string }[] = [
+  { id: 'all', label: ar ? 'الكل' : 'All' },
+  { id: 'public', label: ar ? 'مستودعات عامة' : 'Public repos' },
+  { id: 'automation', label: ar ? 'أنظمة الأتمتة' : 'Automation systems' },
+  { id: 'lab', label: ar ? 'المختبر الهندسي' : 'Engineering lab' },
+  { id: 'foundation', label: ar ? 'الأساس المهني' : 'Foundation' },
+];
+const size = (id: string) => (id === 'all' ? entries.length : entries.filter((e) => e.group === id).length);
+const template = ar ? 'المعروض: {n}' : '{n} shown';
+---
+
+<section class:list={['skymap', { 'is-ar': ar }]} id="sky" data-sky-stop="map" aria-labelledby="skymap-title">
+  <span id="lab" class="skymap__anchor" aria-hidden="true"></span>
+  <span id="foundation" class="skymap__anchor" aria-hidden="true"></span>
+
+  <div class="skymap__grid">
+    <div class="skymap__intro" data-sky-intro>
+      <h2 id="skymap-title" class="skymap__title">{ar ? 'السماء كاملة.' : 'The whole sky.'}</h2>
+      <p class="skymap__lead">
+        {
+          ar
+            ? `كل المشاريع الـ${n(entries.length)}، مجمّعة حسب طريقة التحقق منها: مستودعات عامة، وأنظمة أتمتة خاصة، والمختبر الهندسي، والأساس المهني الذي نشأت منه. كل نجمة تفتح قصتها.`
+            : `All ${entries.length} projects, grouped by how you can check them: public repositories, private automation systems, the engineering lab, and the operating foundation they grew from. Every star opens its story.`
+        }
+      </p>
+      <div class="skymap__filters" role="group" aria-label={ar ? 'تصفية المشاريع' : 'Filter projects'}>
+        {
+          filters.map((f) => (
+            <button type="button" class="skymap__filter" data-sky-filter={f.id} aria-pressed={f.id === 'all' ? 'true' : 'false'}>
+              {f.label}
+              <span class="skymap__n">{n(size(f.id))}</span>
+            </button>
+          ))
+        }
+      </div>
+      <p class="skymap__count" data-sky-count data-template={template} aria-live="polite">
+        {template.replace('{n}', n(entries.length))}
+      </p>
+    </div>
+
+    <ol class="skymap__list" data-sky-list>
+      {
+        entries.map(({ project, group }) => (
+          <li data-sky-item data-slug={project.slug} data-group={group} style={`--a:${project.cardA};--b:${project.cardB}`}>
+            <a class="skymap__item" href={workPath(lang, project.slug)}>
+              <span class="skymap__dot" aria-hidden="true" />
+              <span class="skymap__name">{pick(lang, project.title)}</span>
+              <span class="skymap__tag">{pick(lang, project.tag)}</span>
+              <span class="skymap__stat">
+                <b>{pick(lang, project.stat)}</b> <span>{pick(lang, project.statNote)}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+  <div class="sky-tag" data-sky-tag aria-hidden="true"></div>
+</section>
+
+<style>
+  .skymap {
+    position: relative;
+    z-index: 1;
+    padding: 18vh clamp(20px, 5vw, 72px) 20vh;
+  }
+  .skymap[data-picking] {
+    cursor: pointer;
+  }
+  .skymap__anchor {
+    position: absolute;
+    top: 0;
+  }
+  .skymap__grid {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(28px, 5vw, 80px);
+    align-items: start;
+  }
+  .skymap__intro {
+    position: sticky;
+    top: 96px;
+    max-width: 30rem;
+    isolation: isolate;
+  }
+  .skymap__intro::before {
+    content: '';
+    position: absolute;
+    inset: -60px -90px -50px -90px;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(closest-side, rgba(3, 3, 10, 0.82), rgba(3, 3, 10, 0.5) 60%, transparent);
+  }
+  :global([data-theme='light']) .skymap__intro::before {
+    background: radial-gradient(closest-side, rgba(246, 246, 252, 0.9), rgba(246, 246, 252, 0.5) 60%, transparent);
+  }
+  .skymap__title {
+    margin: 0;
+    font-size: clamp(46px, 7vw, 104px);
+    font-weight: 860;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-shadow: 0 2px 40px rgba(3, 3, 10, 0.9);
+  }
+  .skymap.is-ar .skymap__title {
+    font-family: var(--font-ar-display);
+    letter-spacing: 0;
+    line-height: 1.15;
+  }
+  .skymap__lead {
+    margin-top: 22px;
+    color: var(--ink-2);
+    font-size: clamp(16px, 1.4vw, 18px);
+    line-height: 1.6;
+    text-shadow: 0 1px 20px rgba(3, 3, 10, 0.95);
+  }
+  .skymap__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 26px;
+  }
+  .skymap__filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: var(--ink-2);
+    background: rgba(6, 7, 18, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    transition: color 0.25s, border-color 0.25s, background-color 0.25s;
+  }
+  .skymap__filter:hover {
+    color: var(--ink);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  .skymap__filter[aria-pressed='true'] {
+    color: #06070f;
+    background: #e8ecff;
+    border-color: #e8ecff;
+  }
+  .skymap__filter:focus-visible {
+    outline: 2px solid #64d2ff;
+    outline-offset: 2px;
+  }
+  .skymap__n {
+    font-family: var(--font-label);
+    font-size: 12px;
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+  }
+  .skymap__count {
+    margin-top: 14px;
+    font-family: var(--font-label);
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+
+  .skymap__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .skymap__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto;
+    column-gap: 12px;
+    row-gap: 4px;
+    height: 100%;
+    padding: 16px 18px 16px 16px;
+    border-radius: 16px;
+    background: rgba(7, 8, 20, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: border-color 0.3s, background-color 0.3s, transform 0.4s var(--ease-expo);
+  }
+  .skymap__item:hover,
+  .skymap__item:focus-visible {
+    border-color: color-mix(in srgb, var(--b) 60%, transparent);
+    background: rgba(12, 13, 30, 0.86);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .skymap__item:focus-visible {
+    box-shadow: 0 0 0 2px var(--b);
+  }
+  .skymap__dot {
+    grid-row: 1 / span 3;
+    width: 10px;
+    height: 10px;
+    margin-top: 7px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0 20%, var(--a) 45%);
+    box-shadow: 0 0 12px var(--a);
+  }
+  .skymap__name {
+    font-weight: 720;
+    font-size: 17px;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+  .skymap__tag {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink-3);
+  }
+  .skymap__stat {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+  .skymap__stat b {
+    font-weight: 750;
+    color: color-mix(in srgb, var(--b) 70%, #fff);
+  }
+
+  .sky-tag {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 30;
+    pointer-events: none;
+    padding: 7px 12px;
+    margin: -46px 0 0 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
+    color: #fff;
+    background: rgba(6, 7, 18, 0.86);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .sky-tag[data-on='true'] {
+    opacity: 1;
+  }
+
+  :global([data-theme='light']) .skymap__item,
+  :global([data-theme='light']) .skymap__filter {
+    background: rgba(255, 255, 255, 0.82);
+    border-color: rgba(0, 0, 0, 0.09);
+  }
+  :global([data-theme='light']) .skymap__filter[aria-pressed='true'] {
+    background: #1d1d1f;
+    color: #fff;
+  }
+  :global([data-theme='light']) .skymap__stat b {
+    color: color-mix(in srgb, var(--a) 70%, #000);
+  }
+  :global([data-theme='light']) .skymap__title,
+  :global([data-theme='light']) .skymap__lead {
+    text-shadow: none;
+  }
+
+  @media (max-width: 1020px) {
+    .skymap__grid {
+      grid-template-columns: 1fr;
+    }
+    .skymap__intro {
+      position: relative;
+      top: auto;
+      max-width: 40rem;
+      padding-top: 30vh;
+    }
+  }
+  @media (max-width: 620px) {
+    .skymap {
+      padding-inline: 16px;
+    }
+    .skymap__list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

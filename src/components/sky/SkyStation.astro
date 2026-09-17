@@ -1,0 +1,376 @@
+---
+import { pick, workPath, type Lang } from '../../i18n/utils';
+import type { ProjectMeta } from '../../data/projects';
+import type { Featured } from '../../data/featured';
+
+interface Props {
+  lang: Lang;
+  project: ProjectMeta;
+  feature: Featured;
+  index: number;
+}
+const { lang, project, feature, index } = Astro.props;
+const ar = lang === 'ar';
+const story = project.story!;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const shot = (name: string) => `${base}/img/sky/${name}.webp`;
+const visibility = feature.repo ? (ar ? 'مستودع عام' : 'Public repository') : ar ? 'مستودع خاص' : 'Private repository';
+const extra = story.link && story.link.href !== feature.repo ? story.link : null;
+const layers = [...feature.shots].reverse();
+---
+
+<article
+  class:list={['station', { 'is-ar': ar, 'station--flip': index % 2 === 1 }]}
+  data-sky-stop={`station:${project.slug}`}
+  style={`--a:${project.cardA};--b:${project.cardB}`}
+  aria-labelledby={`st-${project.slug}`}
+>
+  <div class="station__panel" data-sky-panel>
+    <h3 class="station__title" id={`st-${project.slug}`}>{pick(lang, project.title)}</h3>
+    <p class="station__meta">
+      <span class="station__vis" data-public={feature.repo ? 'true' : 'false'}>{visibility}{feature.version && <span dir="ltr"> · {feature.version}</span>}</span>
+      <span class="station__tag">{pick(lang, project.tag)}</span>
+    </p>
+    <p class="station__line">{pick(lang, project.blurb)}</p>
+
+    <figure class="station__shots" data-depth data-layers={layers.length}>
+      {
+        layers.map((s, k) => (
+          <img
+            class={`station__shot station__shot--${layers.length - 1 - k}`}
+            src={shot(s.src)}
+            width={s.w}
+            height={s.h}
+            alt={k === layers.length - 1 ? pick(lang, s.alt) : ''}
+            loading="lazy"
+            decoding="async"
+          />
+        ))
+      }
+    </figure>
+
+    <dl class="station__proof">
+      {
+        story.proof.map((m) => (
+          <div>
+            <dt>{pick(lang, m.label)}</dt>
+            <dd dir="auto">{m.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="station__limit">
+      <b>{pick(lang, story.boundaryKicker)}</b>
+      {pick(lang, story.boundary)}
+    </p>
+
+    <p class="station__links">
+      <a class="station__story" href={workPath(lang, project.slug)}>
+        {ar ? 'اقرأ القصة' : 'Read the story'}
+        <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+      {feature.repo && (
+        <a href={feature.repo} target="_blank" rel="noopener">
+          {ar ? 'الشيفرة على GitHub' : 'Source on GitHub'} <span aria-hidden="true">↗</span>
+        </a>
+      )}
+      {extra && (
+        <a href={extra.href} target="_blank" rel="noopener">
+          {pick(lang, extra.label)} <span aria-hidden="true">↗</span>
+        </a>
+      )}
+    </p>
+  </div>
+</article>
+
+<style>
+  .station {
+    --p: 0;
+    position: relative;
+    z-index: 1;
+    min-height: 150vh;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: center;
+    padding: 14vh clamp(20px, 5vw, 72px);
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  .station__panel {
+    grid-column: 1 / span 7;
+    position: relative;
+    padding: clamp(24px, 3vw, 40px);
+    border-radius: 26px;
+    background: linear-gradient(160deg, rgba(10, 11, 24, 0.78), rgba(5, 6, 14, 0.66));
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 40px 120px -40px rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(14px) saturate(120%);
+    -webkit-backdrop-filter: blur(14px) saturate(120%);
+  }
+  .station__panel::before {
+    content: '';
+    position: absolute;
+    inset: 0 26px auto;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--a), var(--b), transparent);
+  }
+  .station--flip .station__panel {
+    grid-column: 6 / span 7;
+  }
+
+  .station__title {
+    margin: 0;
+    font-size: clamp(34px, 4.4vw, 62px);
+    font-weight: 850;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .station.is-ar .station__title {
+    /* Al Rai Media has no Latin glyphs: product names fall to Inter at the same weight */
+    font-family: 'Al Rai Media', 'Inter Variable', 'Cairo Variable', sans-serif;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+  .station__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-top: 16px;
+    font-family: var(--font-label);
+    font-size: 13px;
+    color: var(--ink-3);
+  }
+  .station__vis {
+    padding: 5px 11px;
+    border-radius: 999px;
+    color: var(--ink);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  .station__vis[data-public='true'] {
+    border-color: color-mix(in srgb, #30d158 55%, transparent);
+    color: #8ff0ae;
+  }
+  .station__line {
+    margin-top: 18px;
+    max-width: 54ch;
+    font-size: clamp(16px, 1.45vw, 19px);
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+
+  /* ---- the depth stack: three real screens at three depths ---- */
+  .station__shots {
+    position: relative;
+    margin: clamp(26px, 3.4vw, 40px) 0 0;
+    aspect-ratio: 16 / 10.4;
+    perspective: 1200px;
+  }
+  .station__shot {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 88%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: 50% 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.85);
+    background: #0b0c16;
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+  .station__shot--0 {
+    z-index: 3;
+    top: 16%;
+    transform: translate3d(0, calc(var(--p) * 26px), 0) rotateY(calc(var(--p) * -5deg));
+  }
+  .station__shot--1 {
+    z-index: 2;
+    left: 9%;
+    top: 7%;
+    opacity: 0.82;
+    transform: translate3d(0, calc(var(--p) * -24px), -60px) rotateY(calc(var(--p) * -7deg)) scale(0.94);
+  }
+  .station__shot--2 {
+    z-index: 1;
+    left: 17%;
+    top: 0;
+    opacity: 0.58;
+    transform: translate3d(0, calc(var(--p) * -70px), -130px) rotateY(calc(var(--p) * -9deg)) scale(0.88);
+  }
+  .station__shots[data-layers='2'] .station__shot--1 {
+    left: 14%;
+  }
+  .station.is-ar .station__shot {
+    inset: 0 0 auto auto;
+  }
+  .station.is-ar .station__shot--1 {
+    left: auto;
+    right: 9%;
+  }
+  .station.is-ar .station__shot--2 {
+    left: auto;
+    right: 17%;
+  }
+
+  .station__proof {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin: clamp(26px, 3vw, 36px) 0 0;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .station__proof div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 6px;
+    min-width: 0;
+  }
+  .station__proof dd {
+    margin: 0;
+    font-weight: 800;
+    font-size: clamp(22px, 2.3vw, 32px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--b) 70%, #fff);
+    overflow-wrap: anywhere;
+  }
+  .station__proof dt {
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--ink-3);
+  }
+
+  .station__limit {
+    margin-top: 22px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(255, 159, 10, 0.06);
+    border: 1px solid rgba(255, 159, 10, 0.18);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .station__limit b {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffc36b;
+  }
+  .station.is-ar .station__limit b {
+    font-family: var(--font-ar);
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 13px;
+  }
+
+  .station__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 22px;
+    margin-top: 24px;
+    font-size: 15px;
+  }
+  .station__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.25);
+    text-underline-offset: 5px;
+    transition: color 0.25s, text-decoration-color 0.25s;
+  }
+  .station__links a:hover {
+    color: var(--ink);
+    text-decoration-color: var(--b);
+  }
+  .station__links .station__story {
+    padding: 0 20px;
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    background: linear-gradient(120deg, color-mix(in srgb, var(--a) 80%, #000), color-mix(in srgb, var(--b) 70%, #000));
+    box-shadow: 0 12px 30px -14px var(--a);
+  }
+  .station__links .station__story:hover {
+    color: #fff;
+    transform: translateY(-1px);
+  }
+  .station.is-ar .station__story svg {
+    transform: scaleX(-1);
+  }
+  .station__links a:focus-visible {
+    outline: 2px solid var(--b);
+    outline-offset: 3px;
+  }
+
+  :global([data-theme='light']) .station__panel {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.86), rgba(246, 247, 252, 0.8));
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 40px 100px -50px rgba(20, 30, 80, 0.4);
+  }
+  :global([data-theme='light']) .station__proof dd {
+    color: color-mix(in srgb, var(--a) 70%, #000);
+  }
+  :global([data-theme='light']) .station__vis[data-public='true'] {
+    color: #0d7a35;
+  }
+  :global([data-theme='light']) .station__limit b {
+    color: #9a5a00;
+  }
+
+  @media (max-width: 1020px) {
+    .station,
+    .station--flip {
+      min-height: auto;
+      padding: 52vh 16px 12vh;
+    }
+    .station__panel,
+    .station--flip .station__panel {
+      grid-column: 1 / -1;
+      /* A blur over a canvas that redraws every frame costs a phone its frame
+         budget; a denser panel reads the same. */
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: linear-gradient(160deg, rgba(10, 11, 24, 0.93), rgba(5, 6, 14, 0.9));
+    }
+  }
+  @media (max-width: 560px) {
+    .station__panel {
+      padding: 22px 18px;
+      border-radius: 20px;
+    }
+    .station__proof {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .station__proof div {
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .station__proof dd {
+      flex: 0 0 auto;
+    }
+    .station__shot {
+      width: 90%;
+    }
+  }
+</style>

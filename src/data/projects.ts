@@ -44,7 +44,19 @@ export type StoryVisual =
   | 'restoration-layers'
   | 'world-audit'
   | 'evidence-ledger'
-  | 'theme-engine';
+  | 'theme-engine'
+  | 'citation-chain'
+  | 'signed-gate'
+  | 'webhook-relay'
+  | 'forecast-duel'
+  | 'spaceframe-lattice'
+  | 'macro-timeline'
+  | 'quote-sheet'
+  | 'ocr-grid'
+  | 'prompt-storyboard'
+  | 'voice-wave'
+  | 'multicam-sync'
+  | 'paper-intake';
 
 export interface StoryMetric {
   value: string;

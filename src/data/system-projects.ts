@@ -1,4 +1,5 @@
 import type { ProjectMeta } from './projects';
+import { publicAiProjects, newAutomationProjects } from './new-projects';
 
 /**
  * README-verified, public-safe stories for the Automation portfolio.
@@ -7,7 +8,7 @@ import type { ProjectMeta } from './projects';
  * Job Apply Engine, UberStrike restoration, and the internal MEDMACK systems are
  * deliberately described at architecture level without source or asset links.
  */
-export const automationProjects = [
+const coreAutomationProjects = [
   {
     slug: 'career-autopilot',
     accent: 'yellow',
@@ -206,8 +207,8 @@ export const automationProjects = [
       en: 'An offline Arabic-first packaging tool with parametric dielines, live 3D and print preflight.',
       ar: 'أداة تغليف عربية تعمل دون إنترنت بقوالب قص بارامترية ومعاينة ثلاثية وفحص قبل الطباعة.',
     },
-    stat: { en: '117 checks', ar: '١١٧ فحصًا' },
-    statNote: { en: '· 36 controls · 0.000% layout drift', ar: '· ٣٦ تحكمًا · انحراف تخطيط ٠٫٠٠٠٪' },
+    stat: { en: '32/32', ar: '٣٢/٣٢' },
+    statNote: { en: '· installed v5.0.1 acceptance · macOS', ar: '· قبول النسخة المثبّتة v5.0.1 · macOS' },
     story: {
       visual: 'packaging-dieline',
       ghost: '3D',
@@ -219,8 +220,8 @@ export const automationProjects = [
         en: 'Medmac Box Studio combines Arabic-first art direction, parametric packaging geometry, direct manipulation, live 3D and 1:1 printer approval in one offline Electron application.',
         ar: 'يجمع استوديو علب مدماك الإخراج العربي والهندسة البارامترية والتحكم المباشر والمعاينة ثلاثية الأبعاد واعتماد الطباعة ١:١ في تطبيق Electron يعمل دون إنترنت.',
       },
-      heroValue: '117',
-      heroLabel: { en: 'application<br>checks', ar: 'فحوصات<br>للتطبيق' },
+      heroValue: '39/39',
+      heroLabel: { en: 'orientation-model<br>checks', ar: 'فحوص نموذج<br>الاتجاه' },
       problemKicker: { en: 'The geometry problem', ar: 'مشكلة الهندسة' },
       problemHeading: { en: 'A pretty mockup is not a printable package.', ar: 'المجسم الجميل ليس عبوة قابلة للطباعة.' },
       problemBody: {
@@ -236,23 +237,27 @@ export const automationProjects = [
         { n: '03', title: { en: 'Inspect in 3D', ar: 'فحص ثلاثي الأبعاد' }, body: { en: 'The live model reads from the same panel geometry as the dieline.', ar: 'يقرأ المجسم الحي هندسة الأوجه نفسها التي يستخدمها قالب القص.' } },
         { n: '04', title: { en: 'Run preflight', ar: 'تشغيل الفحص' }, body: { en: 'Scale, contrast, image quality and print constraints are checked before export.', ar: 'يُفحص المقياس والتباين وجودة الصورة وقيود الطباعة قبل التصدير.' } },
       ],
-      proofKicker: { en: 'Measured parity', ar: 'تطابق مقاس' },
-      proofHeading: { en: 'The production view and design view agree.', ar: 'منظور الإنتاج والتصميم متفقان.' },
+      proofKicker: { en: 'Release acceptance', ar: 'قبول الإصدار' },
+      proofHeading: { en: 'One physical face, every output.', ar: 'وجه مادي واحد في كل مخرج.' },
       proofBody: {
-        en: 'The repository records 117 application checks and zero measured layout drift across the tested parity suite.',
-        ar: 'يسجّل المستودع ١١٧ فحصًا للتطبيق وصفر انحراف مقاس في مجموعة اختبار التطابق.',
+        en: 'Version 5.0.1 keeps asymmetric artwork readable while editing and applies exactly one physical-face transform across 3D, PAS, PDF and print-package output. On the universal macOS build, 39/39 orientation, 36/36 packaging-workflow and 32/32 exact-installed acceptance checks passed.',
+        ar: 'يُبقي الإصدار 5.0.1 الرسومات غير المتماثلة مقروءة أثناء التحرير، ويطبّق تحويل وجه مادي واحدًا بالضبط على مخرجات 3D وPAS وPDF وحزمة الطباعة. وعلى بناء macOS الشامل نجحت ٣٩/٣٩ من فحوص الاتجاه، و٣٦/٣٦ من فحوص مسار التغليف، و٣٢/٣٢ من فحوص قبول النسخة المثبّتة.',
       },
       proof: [
-        { value: '36', label: { en: 'controllable elements', ar: 'عنصرًا قابلًا للتحكم' } },
-        { value: '2', label: { en: 'packaging families', ar: 'عائلتا تغليف' } },
-        { value: '0.000%', label: { en: 'layout parity drift', ar: 'انحراف تطابق التخطيط' } },
+        { value: '39/39', label: { en: 'orientation model', ar: 'نموذج الاتجاه' } },
+        { value: '36/36', label: { en: 'packaging workflow', ar: 'مسار التغليف' } },
+        { value: '32/32', label: { en: 'installed-app acceptance', ar: 'قبول التطبيق المثبّت' } },
       ],
       boundaryKicker: { en: 'Deployment boundary', ar: 'حدود النشر' },
       boundary: {
-        en: 'The application is an offline production tool, not a cloud design service. Its print checks support — but do not replace — final printer approval.',
-        ar: 'التطبيق أداة إنتاج محلية وليس خدمة تصميم سحابية. فحوصاته تدعم اعتماد المطبعة النهائي ولا تستبدله.',
+        en: 'The application is an offline production tool, not a cloud design service. Its print checks support — but do not replace — final printer approval. The v5.0.1 build is for owner testing: no Developer ID or notarization, Windows is excluded, and print output remains CONVERTER_INPUT_RGB / HOLD rather than PDF/X or press-ready. Company artwork is excluded from public material.',
+        ar: 'التطبيق أداة إنتاج محلية وليس خدمة تصميم سحابية. فحوصاته تدعم اعتماد المطبعة النهائي ولا تستبدله. وبناء v5.0.1 لاختبار المالك: بلا Developer ID ولا توثيق من آبل، وWindows مستبعد، ومخرجات الطباعة ما زالت CONVERTER_INPUT_RGB / HOLD لا PDF/X ولا جاهزة للمطبعة. وتُستبعد رسومات الشركة من المواد العامة.',
       },
       tools: ['Electron', 'Three.js', 'ES modules', 'U²-Net / silueta', 'Oklab', 'Print preflight'],
+      link: {
+        href: 'https://mohamed3042.github.io/mk-editor-demo/',
+        label: { en: 'Open the public guided demo', ar: 'افتح العرض الموجّه العام' },
+      },
     },
   },
   {
@@ -310,13 +315,13 @@ export const automationProjects = [
       ],
       boundaryKicker: { en: 'Production boundary', ar: 'حدود الإنتاج' },
       boundary: {
-        en: 'The Windows installer is not code-signed, the macOS build is not verified, and direct printing still requires a human click. Physical ink, card stock and soft-proof accuracy remain printer-side checks.',
-        ar: 'مثبّت Windows غير موقّع، وبناء macOS غير متحقق منه، والطباعة المباشرة ما زالت تحتاج نقرة بشرية. دقة الحبر والخامة والبروفة اللونية تبقى فحوصات لدى المطبعة.',
+        en: 'The Windows installer is not code-signed, the macOS build is not verified, and direct printing still requires a human click. Physical ink, card stock and soft-proof accuracy remain printer-side checks. The public tour is presentation-only with clean-room graphics: application source, runtime, customer data, catalogue data, pricing, recipes, models and installers stay private, and no measured savings are claimed.',
+        ar: 'مثبّت Windows غير موقّع، وبناء macOS غير متحقق منه، والطباعة المباشرة ما زالت تحتاج نقرة بشرية. دقة الحبر والخامة والبروفة اللونية تبقى فحوصات لدى المطبعة. والجولة العامة للعرض فقط وبرسومات من غرفة نظيفة: تبقى شيفرة التطبيق وبيئة تشغيله وبيانات العملاء والكتالوج والأسعار والوصفات والنماذج والمثبّتات خاصة، ولا تُدّعى أي وفورات مقاسة.',
       },
       tools: ['Electron', 'JavaScript', 'HarfBuzz', 'UAX #9', 'PDF production', 'Blender pipeline'],
       link: {
-        href: 'https://mohamed3042.github.io/bakery-cake-studio-demo/',
-        label: { en: 'Open the public demo', ar: 'افتح العرض العام' },
+        href: 'https://mohamed3042.github.io/cake-studio-demo/',
+        label: { en: 'Open the public product tour', ar: 'افتح الجولة العامة للمنتج' },
       },
     },
   },
@@ -387,14 +392,14 @@ export const automationProjects = [
     cardA: '#2997ff',
     cardB: '#64d2ff',
     section: 'automation',
-    tag: { en: 'Windows systems · NTFS', ar: 'أنظمة Windows · NTFS' },
+    tag: { en: 'Storage analysis · Windows + macOS', ar: 'تحليل التخزين · Windows وmacOS' },
     title: { en: 'Reclaim', ar: 'ريكليم' },
     blurb: {
-      en: 'A Windows disk analyzer that parses the NTFS Master File Table, then puts deletion behind path-aware safety gates.',
-      ar: 'محلل أقراص Windows يقرأ جدول ملفات NTFS الرئيسي ويضع الحذف خلف بوابات أمان واعية بالمسار.',
+      en: 'A storage analyzer that streams the NTFS Master File Table on Windows and walks APFS natively on macOS, with deletion behind recoverable, path-aware gates.',
+      ar: 'محلل تخزين يقرأ جدول ملفات NTFS الرئيسي على Windows ويمسح APFS أصليًا على macOS، ويضع الحذف خلف بوابات قابلة للاسترجاع وواعية بالمسار.',
     },
-    stat: { en: '4–12 s', ar: '٤–١٢ ثانية' },
-    statNote: { en: '· 1.86 TB · 2.6M files · measured', ar: '· ١٫٨٦ تيرابايت · ٢٫٦ مليون ملف · مقاس' },
+    stat: { en: '3.76 s', ar: '٣٫٧٦ ثانية' },
+    statNote: { en: '· 2.62M files · Windows MFT · measured', ar: '· ٢٫٦٢ مليون ملف · MFT على Windows · مقاس' },
     story: {
       visual: 'mft-radar',
       ghost: 'MFT',
@@ -403,10 +408,10 @@ export const automationProjects = [
         ar: 'اقرأ فهرس نظام الملفات، <span class="gradient-text">لا كل مجلد.</span>',
       },
       lead: {
-        en: 'Reclaim scans a measured 1.86 TB NTFS volume with 2.6 million files in 4–12 seconds by streaming the Master File Table, then re-checks resolved paths before any deletion.',
-        ar: 'يفحص Reclaim قرص NTFS مقاسًا بسعة ١٫٨٦ تيرابايت و٢٫٦ مليون ملف خلال ٤–١٢ ثانية عبر قراءة جدول الملفات الرئيسي، ثم يعيد فحص المسار الحقيقي قبل أي حذف.',
+        en: 'Reclaim streams the NTFS Master File Table to scan 2.62 million files on the tested Windows volume in 3.76 seconds, and a native APFS walker brings the same scan-to-delete loop to macOS — re-checking resolved paths before any deletion.',
+        ar: 'يقرأ Reclaim جدول ملفات NTFS الرئيسي ليفحص ٢٫٦٢ مليون ملف على قرص Windows المختبَر خلال ٣٫٧٦ ثانية، ويحمل ماسح APFS أصلي حلقة الفحص حتى الحذف نفسها إلى macOS، مع إعادة فحص المسار الحقيقي قبل أي حذف.',
       },
-      heroValue: '4–12s',
+      heroValue: '3.76s',
       heroLabel: { en: 'whole-volume<br>measured scan', ar: 'فحص مقاس<br>لكامل القرص' },
       problemKicker: { en: 'The systems insight', ar: 'فكرة النظام' },
       problemHeading: { en: 'NTFS already knows where every file is.', ar: 'يعرف NTFS مكان كل ملف مسبقًا.' },
@@ -423,23 +428,27 @@ export const automationProjects = [
         { n: '03', title: { en: 'Explain the heavy path', ar: 'شرح المسار الثقيل' }, body: { en: 'Chain collapsing avoids listing the same storage through every ancestor.', ar: 'يمنع طي السلسلة عرض التخزين نفسه عبر كل أب.' } },
         { n: '04', title: { en: 'Re-judge before delete', ar: 'إعادة الحكم قبل الحذف' }, body: { en: 'Guard resolves the absolute path again, blocks protected areas and uses the Recycle Bin by default.', ar: 'يعيد Guard حل المسار المطلق ويمنع المناطق المحمية ويستخدم سلة المحذوفات افتراضيًا.' } },
       ],
-      proofKicker: { en: 'Measured on the build machine', ar: 'مقاس على جهاز البناء' },
+      proofKicker: { en: 'Measured on the tested volumes', ar: 'مقاس على الأقراص المختبَرة' },
       proofHeading: { en: 'Speed and accuracy are reported together.', ar: 'تُعرض السرعة والدقة معًا.' },
       proofBody: {
-        en: 'Warm MFT scan: 3.7 seconds. Cold: 9–12 seconds. The Downloads comparison differed from robocopy by 0.0001%, with live filesystem churn recorded as the residual.',
-        ar: 'فحص MFT الدافئ: ٣٫٧ ثوانٍ. البارد: ٩–١٢ ثانية. اختلف قياس التنزيلات عن robocopy بنسبة ٠٫٠٠٠١٪ مع توثيق تغيّر الملفات الحية كباقٍ.',
+        en: 'Windows: 2.62M files in 3.76 s against a 168.9 s folder-walk fallback. macOS: a live APFS scan of about 1.77M files in 54–61 s, 0.0000% drift against du on two real directories, and a Finder Trash-and-restore round trip.',
+        ar: 'على Windows: ‏٢٫٦٢ مليون ملف خلال ٣٫٧٦ ثانية مقابل ١٦٨٫٩ ثانية لبديل مسح المجلدات. وعلى macOS: فحص APFS حي لنحو ١٫٧٧ مليون ملف خلال ٥٤–٦١ ثانية، وانحراف ٠٫٠٠٠٠٪ عن du في مجلدين حقيقيين، ودورة كاملة للنقل إلى سلة Finder ثم الاستعادة.',
       },
       proof: [
         { value: '2.62M', label: { en: 'files in measured C:', ar: 'ملفًا في C: المقاس' } },
-        { value: '45×', label: { en: 'faster than measured fallback', ar: 'أسرع من البديل المقاس' } },
-        { value: '81', label: { en: 'real-filesystem checks', ar: 'فحصًا على نظام ملفات حقيقي' } },
+        { value: '168.9 s', label: { en: 'measured folder-walk fallback', ar: 'بديل مسح المجلدات المقاس' } },
+        { value: '0.0000%', label: { en: 'du drift on two macOS directories', ar: 'انحراف du في مجلدين على macOS' } },
       ],
       boundaryKicker: { en: 'Privilege boundary', ar: 'حدود الصلاحية' },
       boundary: {
-        en: 'Raw MFT access requires Administrator. If the storage stack rejects raw reads or elevation is absent, Reclaim says so and falls back to a directory walk. Permanent delete is separate and requires typing DELETE.',
-        ar: 'قراءة MFT الخام تتطلب صلاحية مدير. إذا رفضت طبقة التخزين القراءة أو غابت الصلاحية، يصرّح Reclaim بذلك ويعود إلى مسح المجلدات. الحذف الدائم منفصل ويتطلب كتابة DELETE.',
+        en: 'Raw MFT access requires Administrator. If the storage stack rejects raw reads or elevation is absent, Reclaim says so and falls back to a directory walk. Permanent delete is separate and requires typing DELETE. On macOS there is no MFT, so a full scan pays at least one metadata call per entry; 125 directories stayed visibly marked inaccessible under macOS privacy controls. All figures are measurements on the tested volumes.',
+        ar: 'قراءة MFT الخام تتطلب صلاحية مدير. إذا رفضت طبقة التخزين القراءة أو غابت الصلاحية، يصرّح Reclaim بذلك ويعود إلى مسح المجلدات. الحذف الدائم منفصل ويتطلب كتابة DELETE. وعلى macOS لا يوجد MFT، فيدفع الفحص الكامل استدعاء بيانات وصفية واحدًا على الأقل لكل عنصر، وبقي ١٢٥ مجلدًا موسومًا بوضوح بأنه غير قابل للوصول تحت ضوابط خصوصية macOS. وكل الأرقام قياسات على الأقراص المختبَرة.',
       },
-      tools: ['.NET 9', 'NTFS MFT', 'C#', 'WebView2', 'IFileOperation', 'Native aligned I/O'],
+      tools: ['.NET 9', 'NTFS MFT', 'C#', 'WebView2', 'IFileOperation', 'POSIX/APFS walker'],
+      link: {
+        href: 'https://mohamed3042.github.io/reclaim-demo/',
+        label: { en: 'Open the public simulator', ar: 'افتح المحاكي العام' },
+      },
     },
   },
   {
@@ -862,3 +871,8 @@ export const labProjects = [
     },
   },
 ] satisfies ProjectMeta[];
+
+/** Home and story order: the public repositories first, then the private systems. */
+export const automationProjects: ProjectMeta[] = [...publicAiProjects, ...coreAutomationProjects, ...newAutomationProjects];
+
+export { publicAiProjects, newAutomationProjects };
