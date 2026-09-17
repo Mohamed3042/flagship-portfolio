@@ -1,0 +1,985 @@
+{
+  "schema": "cut-the-strings-page-proof/v1",
+  "label": "staged-v2",
+  "result": "GREEN",
+  "pageUrl": "http://127.0.0.1:4606/flagship-portfolio/worlds/strings.html",
+  "sourceHtmlSha256": "5ca28cbe4493e50e0f19c33ecb0f6c2b1ab2cd8ee55bce0ff3b842d65591cbe7",
+  "range": [
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-001.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3383502",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-002.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3666877",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-003.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3813950",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-004.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3510040",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-005.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3786810",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-006.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4012530",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-007.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3345794",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-008.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3820693",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-009.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3432145",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-010.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3385406",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-011.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/6082418",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-012.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3781960",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-013.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3729526",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-014.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3866041",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-015.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4670012",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-016.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3866854",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-017.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4550673",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-018.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3729873",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-019.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3711896",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-020.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3925079",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-021.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4432272",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-022.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3915353",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-023.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3945768",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-024.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4284793",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-025.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3668851",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-026.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4751939",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-027.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3993621",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-028.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3676751",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-029.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3952164",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-030.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3820984",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-031.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3397978",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-032.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4286835",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-033.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4263414",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-034.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/4058309",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-035.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3332202",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-036.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/2847616",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-037.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/5150171",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-038.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/5589470",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-039.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/3594625",
+      "bytes": 64,
+      "result": "GREEN"
+    },
+    {
+      "url": "http://127.0.0.1:4606/flagship-portfolio/worlds/assets/strings/wan-production/accepted/CTS-A-040.mp4",
+      "status": 206,
+      "acceptRanges": "bytes",
+      "contentRange": "bytes 0-63/2933952",
+      "bytes": 64,
+      "result": "GREEN"
+    }
+  ],
+  "viewports": [
+    {
+      "viewport": "1440x1000@1",
+      "slots": 40,
+      "videos": 40,
+      "anchors": 41,
+      "anchorDecodeFailures": [],
+      "overflow": 0,
+      "playCalls": 0,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requestErrors": [],
+      "result": "GREEN"
+    },
+    {
+      "viewport": "390x844@3",
+      "slots": 40,
+      "videos": 40,
+      "anchors": 41,
+      "anchorDecodeFailures": [],
+      "overflow": 0,
+      "playCalls": 0,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requestErrors": [],
+      "result": "GREEN"
+    },
+    {
+      "viewport": "844x390@3",
+      "slots": 40,
+      "videos": 40,
+      "anchors": 41,
+      "anchorDecodeFailures": [],
+      "overflow": 0,
+      "playCalls": 0,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "requestErrors": [],
+      "result": "GREEN"
+    }
+  ],
+  "scrubs": [
+    {
+      "clip": "CTS-A-001",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-002",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-003",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-004",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-005",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-006",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-007",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-008",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-009",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-010",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-011",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-012",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-013",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-014",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-015",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-016",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-017",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-018",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-019",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-020",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-021",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-022",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-023",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-024",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-025",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-026",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-027",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-028",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-029",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-030",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-031",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-032",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-033",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-034",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-035",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-036",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-037",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-038",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-039",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    },
+    {
+      "clip": "CTS-A-040",
+      "requested": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "observed": [
+        0.0,
+        2.5,
+        4.9
+      ],
+      "ownClockDelta": 0.0,
+      "result": "GREEN"
+    }
+  ],
+  "fullScrub": true,
+  "sourcePlayTokenCount": 0,
+  "screenshots": [
+    "public/worlds/assets/strings/review/page-proof/staged-v2/desktop-act-bridge-11.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/desktop-act-bridge-21.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/desktop-act-bridge-31.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/desktop-ending.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/desktop-opening.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/landscape-ending.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/landscape-opening.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/portrait-ending.png",
+    "public/worlds/assets/strings/review/page-proof/staged-v2/portrait-opening.png"
+  ]
+}

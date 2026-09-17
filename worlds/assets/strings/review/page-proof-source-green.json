@@ -1,0 +1,438 @@
+{
+  "schema": "cut-the-strings-page-proof/v2",
+  "label": "source-green",
+  "verifiedAtUtc": "2026-08-23T04:02:26.380031+00:00",
+  "result": "GREEN",
+  "pageUrl": "http://127.0.0.1:4612/worlds/strings.html",
+  "retiredAssertion": "forty independent slot pins",
+  "replacementAssertion": "one pinned film stage and one 200-second scroll playhead",
+  "mediaCustody": {
+    "result": "GREEN",
+    "counts": {
+      "acceptedMasters": 40,
+      "silentMaster": 1,
+      "coreKeyframes": 41,
+      "total": 82
+    },
+    "ledgerSha256": "46282f79e0260436bc2ed34345be28b94041c9df94c2e8cc06e178e53853a560",
+    "files": [
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-001.mp4",
+        "bytes": 3383502,
+        "sha256": "c8bd528f8803c5ff28d1b6baa96dd4877c9956a494da998d3aca6e61a7efdc1b"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-002.mp4",
+        "bytes": 3666877,
+        "sha256": "11b01f9d7e7ad4ed6adbe81104ef5121b60bcdda3e1ef600108d8f89346bbaa2"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-003.mp4",
+        "bytes": 3813950,
+        "sha256": "053eedf94de9d8f39975132fc42002678bb8dcfd9d2267a845eee2a5d2244f0a"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-004.mp4",
+        "bytes": 3510040,
+        "sha256": "633230cf80221449dfd2069ff5b1c618d7ac7badd43b747c98689ee5cf399f09"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-005.mp4",
+        "bytes": 3786810,
+        "sha256": "4c1c7edb7abf38dfe447fd1a66186cd2cb9a7b7e3e8630dce61da74774fd1351"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-006.mp4",
+        "bytes": 4012530,
+        "sha256": "9e6159bc7d5ea63255dda6b7c8037f4b7d141e391769d203786fc6e76f3bcfba"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-007.mp4",
+        "bytes": 3345794,
+        "sha256": "38845f387390c6171c068f753b2d8ee03cb5f5f1009d0e4909cefaf77b1a99fd"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-008.mp4",
+        "bytes": 3820693,
+        "sha256": "26470a48621c3605ab9c4f4d999d6e2f73356c2c3971f762fd3165518a0e5abd"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-009.mp4",
+        "bytes": 3432145,
+        "sha256": "543292bea28bee9db4ba1ad4684333a026c18b248df4bdc6fb0cdc93600768ed"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-010.mp4",
+        "bytes": 3385406,
+        "sha256": "f46223c5ca4eeac62c4bef4eca69febacefbdefc0b9ad7a8820b02d88d51ed3d"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-011.mp4",
+        "bytes": 6082418,
+        "sha256": "8dd01d008e84c4835b84bbde1bee9be670478e3071c84c688eaa9e271513d2c8"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-012.mp4",
+        "bytes": 3781960,
+        "sha256": "f735bca918ebc55a05b21b1629fdc2532f3b8b3b20c7f9c408cb4ecb7eb387fc"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-013.mp4",
+        "bytes": 3729526,
+        "sha256": "7b0ad943cf9fd1f5ca8fe5834a9e8577409453b529d7362c040993b1bfe7c7e6"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-014.mp4",
+        "bytes": 3866041,
+        "sha256": "12064dca826e8309503a8607144d55f94e0e6b636acb841b062903b077fc2f60"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-015.mp4",
+        "bytes": 4670012,
+        "sha256": "0598b15db5f82e7c5824b3f1f146acb8aaa31db83a4e4885492a56af6d4ede89"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-016.mp4",
+        "bytes": 3866854,
+        "sha256": "de6021b9ae74e9fee75f0feae00c64757a41bea8e1ad7ff30d16579d3b50a445"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-017.mp4",
+        "bytes": 4550673,
+        "sha256": "c120b64ff06427013f71cacebc788d73e0d6cca9658038e153b83fa0a1484184"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-018.mp4",
+        "bytes": 3729873,
+        "sha256": "512c22af7e362ba6e956c5c7d2ffb37aa8a15c0e6637211854d6c008ce7527db"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-019.mp4",
+        "bytes": 3711896,
+        "sha256": "4fd8aa2ddd4066272b8fd895c0cd4aae58acc01cf96c96a54d9e5f3c6853e6f4"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-020.mp4",
+        "bytes": 3925079,
+        "sha256": "7776fad140eb6821966d9a8cdd1bd8212573caa69bc184f1d248c98bafee4ab0"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-021.mp4",
+        "bytes": 4432272,
+        "sha256": "7646d1531f461b41489e5a7b779fc7d70f42762c73fccfcc5a954eb871535771"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-022.mp4",
+        "bytes": 3915353,
+        "sha256": "7cffd4fff44436173bea453d3b092f0e2d5f0cbe02061fe21f27b977596489c4"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-023.mp4",
+        "bytes": 3945768,
+        "sha256": "b9a03e3ac41bd4989298fd036142dfb9a3c289d4e39698bf8efa5dd747494ecc"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-024.mp4",
+        "bytes": 4284793,
+        "sha256": "d2b7ebe5c2ca47e2ae5e3acc22b12c5afb39ed11b92474bd3d6b4a76b84acb01"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-025.mp4",
+        "bytes": 3668851,
+        "sha256": "49fb5ab61d65b8302732b283e5a1762fb9311f107d06498240c959aabdcc099f"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-026.mp4",
+        "bytes": 4751939,
+        "sha256": "193c070b87136c543955a01fe8bc9f3a4378fd4616b66ffafc412362012a903b"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-027.mp4",
+        "bytes": 3993621,
+        "sha256": "21c8c422746b425a7f8deee23d7c799a6f74cab291746a94fa384d45cda88fcd"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-028.mp4",
+        "bytes": 3676751,
+        "sha256": "c17ba23f0b77127d09291133143204011376d4344508aafd44dfd108944eaae1"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-029.mp4",
+        "bytes": 3952164,
+        "sha256": "16c45cc7e06aeb63090547fcd37751c05457f2e72de0a7ddc725de8becc8f812"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-030.mp4",
+        "bytes": 3820984,
+        "sha256": "88e3a52b79b24fa94c53561c908d35b5c8fbb60752f98ae1261b4248581ca8e6"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-031.mp4",
+        "bytes": 3397978,
+        "sha256": "f0181e5389677153604c562271d6f37a71c89124c004296ba5af8e090c9a36f0"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-032.mp4",
+        "bytes": 4286835,
+        "sha256": "498f949b9bb11b57a39150c8465dbbbb356d4574b0a940b23a8d1ff471380a91"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-033.mp4",
+        "bytes": 4263414,
+        "sha256": "22e3320d045971ebf34c5b6ff3e52e6cd4c634436b1c2a71b869d58bbacd663b"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-034.mp4",
+        "bytes": 4058309,
+        "sha256": "3071deb1f8c3a8a8fae2c72f0a15ad3c1965e7bb29506f60f0d57163bee6cd94"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-035.mp4",
+        "bytes": 3332202,
+        "sha256": "2e5b6247b6de00d27fa0376c720088f33be868f154a50a510ec3a935e87c34c0"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-036.mp4",
+        "bytes": 2847616,
+        "sha256": "cb802dbd54572cfd28a77a912915140946695bab2f87b9d304e6c42bfa59c5ef"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-037.mp4",
+        "bytes": 5150171,
+        "sha256": "9bd7aa582c3c8bff665cd26955e01e20da5a8ae0faea768bfb3cc354bac0a27f"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-038.mp4",
+        "bytes": 5589470,
+        "sha256": "6f06d900eea5de6e901f6c3c7e66faca6560f09503a09fa933e1b8a1d402ce52"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-039.mp4",
+        "bytes": 3594625,
+        "sha256": "be723ea22f47ac627e30fa433e03c04cf3c32511ccd3c2cc2555eb066176084a"
+      },
+      {
+        "path": "worlds/assets/strings/wan-production/accepted/CTS-A-040.mp4",
+        "bytes": 2933952,
+        "sha256": "0324d5d716d79954a7d09462485cca1bef7df31e930730741e7681f7ecedd7ef"
+      },
+      {
+        "path": "worlds/assets/strings/CUT-THE-STRINGS-FINAL.mp4",
+        "bytes": 76298278,
+        "sha256": "524435459df0c60dec9cbe564db690cc520412fc340a1f8105eaeb20556c930e"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF00-style-anchor.png",
+        "bytes": 2449564,
+        "sha256": "1f07f016260bd26315cedd489fc0ce676f74f05bc49ffabdcab6af5aca804396"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF01-the-crate.png",
+        "bytes": 2084447,
+        "sha256": "b94520aad75d64ac84ec842713a3a77da57577721d90e2d1aef7f5d272f8dbd7"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF02-borrowed-marionette.png",
+        "bytes": 2294374,
+        "sha256": "15c71dde69f8bc50ccfbc9076f27e4089e9d4e6f36fcc1e31d1197ea31ca54f4"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF03-the-tangle.png",
+        "bytes": 2320641,
+        "sha256": "47631d1df56397fd612da1040acdc9ca100262f0c668b787a7a68025a1e8c8cc"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF04-t-pose-freeze.png",
+        "bytes": 2153703,
+        "sha256": "339068ca7c7fd5b87b610f18f56a816a859c08a13d93e90aa81f777c37821bd0"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF05-grey-drain.png",
+        "bytes": 2208472,
+        "sha256": "0fa569e9f676da27d80aa256e3e70f2108fad1c6ed0a4a84d7cc155470815cad"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF06-painted-eye.png",
+        "bytes": 2085255,
+        "sha256": "0d34f315dcd997b9074743511e3eaa67fbbd1a3e74ff8245604171155ed48f20"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF07-drawer-of-failures.png",
+        "bytes": 2461434,
+        "sha256": "ddc4bcf7b45ee38afa3df72df3fda9bf7e6f5c9856b886a768bd04f5a3f6d399"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF08-the-vow.png",
+        "bytes": 2046154,
+        "sha256": "671c2d908b10341ad595a98f8ac3bb4577a84409e67189d20a9d7ce84053466f"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF09-first-cut.png",
+        "bytes": 2212401,
+        "sha256": "d71fbee9bcb64d2418ddb1907499863a4978c432219fce02707d7ba1c09b4a73"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF10-the-photograph.png",
+        "bytes": 2262503,
+        "sha256": "dc7021898c610f940bdd95f387b03903c432890d412225b78160c801b36dc472"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF11-skin-laid.png",
+        "bytes": 2243148,
+        "sha256": "fc404cb7f8f07db7b7993582ac1c54f7d19a907d456741d3f41f58cf288a20a2"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF12-two-swatches.png",
+        "bytes": 2696777,
+        "sha256": "4da13b0a19cc7c1446cbdc97576a7fa096323136c277e48defc4c14598013ecd"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF13-neck-seam.png",
+        "bytes": 2236891,
+        "sha256": "96995658c6cd39eb177b2aac40563c02af5fe75897d862fc1c16aae952ce5d47"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF14-glass-eyes.png",
+        "bytes": 2433433,
+        "sha256": "2b56cbdce8f5b696a96ccb823e8e8c63efe065c52424f569c0b0fc0786707004"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF15-the-groom.png",
+        "bytes": 2285866,
+        "sha256": "e56a04b32af37c7325152e6411f3e21cc628bf5fd6485415dc4c671e71b121b9"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF16-cloth-from-photo.png",
+        "bytes": 2376079,
+        "sha256": "891d51fab8b152f5fb67984cc272b1c1c230151e6bc7e4df1503e0f841fbf506"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF17-the-fitting.png",
+        "bytes": 2543714,
+        "sha256": "72ada162df7bcbd35dae13d9b398113131d561ae6a7c868f9ac1b6f3c12c87e4"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF18-wardrobe-rail.png",
+        "bytes": 2705355,
+        "sha256": "d0abeaca12418697d54f63d933e908a0a2eeabe55143b7449ba676324b2d2895"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF19-the-stringing.png",
+        "bytes": 2156063,
+        "sha256": "58ecebb63da59bdc7a0d8fd10d0de154b6b05a926c2d446743dd880d84e363b9"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF20-first-motion.png",
+        "bytes": 2184121,
+        "sha256": "f3cb70deca7cd691c476757f0a6750a8fc43f5dc286a41e7c7844c37b6281295"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF21-the-breath.png",
+        "bytes": 2206587,
+        "sha256": "ea3ebd7bab518a132644f946e82dd22c5056eaa8d9864c6fee2e8f52189f828a"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF22-the-cut.png",
+        "bytes": 2493678,
+        "sha256": "167685e75638d3235e8ef35558a6c3fb151491c778104115001654bd5bfb1d22"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF23-first-step.png",
+        "bytes": 2276350,
+        "sha256": "36c0ca95ab3c017575b4fc68d7cefa403cb97ed2fed00e9cd810f681f535a86d"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF24-bench-becomes-road.png",
+        "bytes": 2429393,
+        "sha256": "44eb6b2b94f209480ed7369e8d4364d530f5cf14b7efbe5abc65c28be1e1be68"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF25-four-doors.png",
+        "bytes": 2172401,
+        "sha256": "0a393beed8d1798c422917282230a79580a3690a017650debb8f9ca8dccb69b9"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF26-marble-hall.png",
+        "bytes": 2315574,
+        "sha256": "3884f8f40d9f07d61bb97d8db005416a1705120e27302666d14b250bcf4d1ce3"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF27-hardest-light.png",
+        "bytes": 2448792,
+        "sha256": "ae6d93b1093ee8716300842b1be807f413665f6a24c24e7edcece7be4b7fad3b"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF28-sky-islands.png",
+        "bytes": 2471099,
+        "sha256": "d6a042e5ee58f02abbb0c9f21c5292e97387c71dc30b5a21aa1d20f8a72bad27"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF29-arena-holds.png",
+        "bytes": 1944016,
+        "sha256": "af28350962984ac7f5d8609c7cd90c51caf6f2321ca3366c4357693f2d12c4f6"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF30-low-poly-island.png",
+        "bytes": 2198875,
+        "sha256": "28eaa6da0397f6cc03898ca9602fbf1b95c0007e445cc67ec42c451e699e2415"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF31-same-face.png",
+        "bytes": 2193899,
+        "sha256": "e4d262a2209492292d58df9b5ee914c066ec8938872c39a2b01d3b2341326f3e"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF32-artillery-hill.png",
+        "bytes": 2240664,
+        "sha256": "6e723956ffc2fd91b2c32fb392e146600728d690bc68f6436306fe6cd37adcbc"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF33-return-walk.png",
+        "bytes": 2495105,
+        "sha256": "2b99ae25de1ab40be0072f1af3024e96d6f3652eb3c8bbca000b7ff4c21e8f14"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF34-the-shelf.png",
+        "bytes": 2410888,
+        "sha256": "0b8a1905630da73c4492e1efabaea77d0913e4d23be1301dbc5fb1e4a4a7d38e"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF35-severed-coil.png",
+        "bytes": 2121349,
+        "sha256": "125d0375f7fe3863db0fe0ccd8e422f36c169b59571452f9bce49884e8d1a622"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF36-the-ledger.png",
+        "bytes": 2336229,
+        "sha256": "67e93ab2ea000b0ec5a1c7338c98e36d7772ff2f94041ba79816f9646272f7dd"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF37-empty-page.png",
+        "bytes": 2027582,
+        "sha256": "b5e2d28859494ba47f6daba96848d5f41e14c2200945afbce3c0c9cfcdf8d6a5"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF38-workshop-wide.png",
+        "bytes": 3377264,
+        "sha256": "8829ff259869cb59118c0ce39c2b89be92fcca39174660a7ac924aaf9afe1c26"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF39-crate-outbound.png",
+        "bytes": 2704958,
+        "sha256": "369479a1846272bab159e59229f2a0d71ad73cd96f573d68aa3ae9099312b022"
+      },
+      {
+        "path": "worlds/assets/strings/keyframes/CTS-KF40-last-light.png",
+        "bytes": 2482714,
+        "sha256": "494d421295e4c8a405b0a17e8f2beb7dd74a596f167b1afe9d95a34bb6487621"
+      }
+    ]
+  },
+  "renderedReport": "public/worlds/assets/strings/review/one-playhead-proof/one-playhead-source-green.json",
+  "renderedSummary": [
+    "ONE_PLAYHEAD_GREEN label=source-green film_stages=1 per_slot_pins=0 videos=2 clips=40 report=C:\\Users\\GAMING\\Documents\\Codex\\2026-08-23\\cut-the-strings-one-playhead\\public\\worlds\\assets\\strings\\review\\one-playhead-proof\\one-playhead-source-green.json"
+  ],
+  "renderedErrors": [],
+  "sourceHtmlSha256": "83001d2fb7ad532548f06b1d12e09bb26d1fe75229e0b1b7a4a3590f68cb3b2e",
+  "sourcePlayTokenCount": 0
+}

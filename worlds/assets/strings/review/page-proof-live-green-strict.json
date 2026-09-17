@@ -1,0 +1,20 @@
+{
+  "schema": "cut-the-strings-page-proof/v2",
+  "label": "live-green-strict",
+  "verifiedAtUtc": "2026-08-23T04:38:16.888357+00:00",
+  "result": "GREEN",
+  "pageUrl": "https://mohamed3042.github.io/flagship-portfolio/worlds/strings.html",
+  "retiredAssertion": "forty independent slot pins",
+  "replacementAssertion": "one pinned film stage and one 200-second scroll playhead",
+  "mediaCustody": {
+    "result": "REMOTE",
+    "counts": "See rendered 206 gate."
+  },
+  "renderedReport": "public/worlds/assets/strings/review/one-playhead-proof/one-playhead-live-green-strict.json",
+  "renderedSummary": [
+    "ONE_PLAYHEAD_GREEN label=live-green-strict film_stages=1 per_slot_pins=0 videos=2 clips=40 report=C:\\Users\\GAMING\\Documents\\Codex\\2026-08-23\\cut-the-strings-one-playhead\\public\\worlds\\assets\\strings\\review\\one-playhead-proof\\one-playhead-live-green-strict.json"
+  ],
+  "renderedErrors": [],
+  "sourceHtmlSha256": "83001d2fb7ad532548f06b1d12e09bb26d1fe75229e0b1b7a4a3590f68cb3b2e",
+  "sourcePlayTokenCount": 0
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "cut-the-strings-wan-board-qa/v1",
+  "result": "RED",
+  "checks": 224,
+  "passed": 214,
+  "failures": [
+    "WAN clip manifest is missing: C:\\Users\\GAMING\\Documents\\Codex\\2026-08-21\\cut-the-strings\\work\\flagship-strings\\public\\worlds\\assets\\strings\\wan-production\\clips.json",
+    "Required WAN artifact is missing: WAN-GENERATION-BOARD.html",
+    "Required WAN artifact is missing: README-FIRST.md",
+    "Required WAN artifact is missing: RUNBOOK.md",
+    "Required WAN artifact is missing: clips.json",
+    "Required WAN artifact is missing: negative-prompt.txt",
+    "Required WAN artifact is missing: run-log.csv",
+    "Required WAN artifact is missing: accepted/.gitkeep",
+    "Required WAN artifact is missing: raw/.gitkeep",
+    "Required WAN artifact is missing: rejected/.gitkeep"
+  ],
+  "clips": 0,
+  "approvedStills": 41,
+  "videoFiles": 0,
+  "jobsSubmitted": 0,
+  "creditsSpent": 0,
+  "sabotage": false
+}
