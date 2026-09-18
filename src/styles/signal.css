@@ -769,3 +769,135 @@ body:has(.signal[data-over=cinema]) .nav .nav__menu{
 .sr-contact .cf-scrim{
   background:radial-gradient(58% 52% at 50% 50%,rgb(0 0 0 / .62),rgb(0 0 0 / .28) 56%,transparent 78%);
 }
+
+/* ==================================================== the archive, re-toned
+   The canvas fades to nothing before the archive begins, and what it used to
+   fade ONTO was whichever of the site's six themes the visitor had chosen: a
+   white page under the light theme, a green-black one under neon, a warm one
+   under storybook. The cinema ends on #000 in all six, so five of them stepped
+   colour at the seam and one of them stepped from black to white.
+
+   Below the cinema the route takes the Deep Field tokens. The theme selector
+   still works everywhere else on the site; on this one route the archive is
+   the same night the film ended on.
+
+   WHERE these are declared is the whole trick, and it is old trap 6. They are
+   NOT on :root: a custom property on :root is the document, and it would carry
+   this into the header, the dialog (which is in the top layer and not a
+   descendant of anything here), and every other route the visitor navigates to
+   without a reload. They are on `.showroom:has(.signal)` — the nearest common
+   ancestor of the cinema and the archive, and only on a page that actually has
+   a cinema. Custom properties inherit from the nearest declaring ancestor, so
+   the subtree takes these and nothing outside it can see them.
+
+   The light theme is the one that has to be checked by eye and by instrument,
+   because it is the only theme whose own rules paint LIGHT surfaces and DARK
+   ink with literal values rather than through these tokens. Those rules are
+   answered one by one at the end of this block; a token swap alone would have
+   left white cards with white text on them. */
+.showroom:has(.signal){
+  color-scheme:dark;
+
+  /* Grounds */
+  --bg:var(--signal-bg);
+  --bg-2:var(--signal-depth);
+  --bg-soft:#0a0d14;
+  --space-1:var(--signal-bg);
+  --space-2:var(--signal-depth);
+  --surface-base:var(--signal-depth);
+  --surface-raised:#0b0e16;
+  --surface-card:#11151f;
+  --win-body:#0b0e16;
+  --win-bar:var(--signal-depth);
+  --mesh-a:#12151d;
+  --mesh-b:var(--signal-bg);
+
+  /* Ink */
+  --ink:var(--signal-ink);
+  --ink-2:var(--signal-ink-2);
+  /* 7.02:1 on #000. The site's --ink-3 is a tertiary that several themes push
+     under 4.5 against their own ground; on this one it is held above it. */
+  --ink-3:#8D97A4;
+
+  /* Edges and light */
+  --panel:rgb(255 255 255 / .04);
+  --panel-brd:color-mix(in srgb,var(--signal-ink) 12%,transparent);
+  --hair:color-mix(in srgb,var(--signal-ink) 10%,transparent);
+  --glass-bg:rgb(4 6 12 / .72);
+  --glass-brd:color-mix(in srgb,var(--signal-ink) 12%,transparent);
+  --glass-hi:color-mix(in srgb,var(--signal-ink) 18%,transparent);
+  --shadow:0 30px 80px -20px rgb(0 0 0 / .8);
+  --star:#dfe8ff;
+
+  /* The one accent, and the ink that is allowed to carry it as text. */
+  --accent:var(--signal-accent);
+  --accent-2:#B79BFF;
+  --accent-ink:var(--signal-accent);
+  --grad:linear-gradient(120deg,#8AB4FF 0%,#B79BFF 58%,#F0F3F6 100%);
+  --grad-soft:radial-gradient(60% 80% at 50% 0%,rgb(138 180 255 / .16),transparent 70%);
+}
+
+/* --- the literal-valued theme rules this block has to answer ---------------
+   Each of these paints a colour rather than reading a token, so the swap above
+   cannot reach it. Left alone, the first two are dark ink on the new black and
+   the rest are a white contact band at the foot of a black page. */
+[data-theme=light] .showroom:has(.signal) .sr-status[data-public=true]{color:#5FD08A}
+[data-theme=light] .showroom:has(.signal) .sr-proof strong{
+  color:color-mix(in srgb,var(--accent) 86%,#fff);
+}
+[data-theme=light] .showroom:has(.signal) .cf{
+  background:radial-gradient(150% 130% at 50% 46%,#05070d 0%,#020306 52%,#000 100%);
+}
+[data-theme=light] .showroom:has(.signal) .cf-scrim{
+  background:radial-gradient(58% 52% at 50% 50%,rgb(0 0 0 / .66),rgb(0 0 0 / .28) 56%,transparent 78%);
+}
+[data-theme=light] .showroom:has(.signal) .cf-l1{color:var(--signal-ink)}
+[data-theme=light] .showroom:has(.signal) .cf-lead,
+[data-theme=light] .showroom:has(.signal) .cf-card__sub,
+[data-theme=light] .showroom:has(.signal) .cf-sig{color:var(--signal-ink-2)}
+[data-theme=light] .showroom:has(.signal) .cf-card{
+  background:rgb(255 255 255 / .04);
+  border-color:color-mix(in srgb,var(--signal-ink) 12%,transparent);
+}
+
+/* --- and the ground the tokens sit on --------------------------------------
+   Re-tokening the subtree was not enough, and the light theme is what proved
+   it: `--bg` read #000000 inside .showroom while the archive still looked
+   white, because NOTHING in the archive paints a background. The ground is
+   the body's — a stack of theme radial gradients over the browser's own canvas
+   colour — and the body is not a descendant of .showroom.
+
+   So the route paints its own. This is a PAINT rule, not a token rule: the
+   tokens stay on .showroom, the nearest common ancestor of the cinema and the
+   archive, exactly where the brief puts them. The ground has to reach the body,
+   because the body is the element that owns it — and it stays route-local
+   through :has(.signal), which is how the header, the ambient star field and
+   the seam above the cinema are already scoped in this file.
+
+   Painting the body also fixes the canvas colour, which is propagated from it:
+   without this, an overscroll bounce under the light theme showed white above
+   a black page. */
+body:has(.signal){
+  /* #000000 and not var(--signal-bg), and this is the same trap the top of
+     this file describes from the other side: --signal-bg is declared on
+     .showroom, which is BELOW this element, so `var(--signal-bg)` here has no
+     value, the declaration is invalid at computed-value time, and `background`
+     silently falls back to transparent. That is exactly what shipped in the
+     first build of this rule: the dark themes looked right because the
+     browser's default canvas is dark, and the light theme showed a white
+     archive under a black film. The literal is the ground, and the suite reads
+     the painted body back and compares it to the token so the two cannot
+     drift. */
+  background:#000000;
+  background-image:none;
+  color-scheme:dark;
+}
+/* The footer is site chrome, outside .showroom, and it reads the theme's own
+   ink — which under the light theme is #1d1d1f on the new black. It takes the
+   route's ink for as long as the route is black. */
+body:has(.signal) .footer{
+  border-block-start-color:color-mix(in srgb,var(--signal-ink) 12%,transparent);
+  color:var(--signal-ink-2);
+}
+body:has(.signal) .footer a{color:var(--signal-ink-2)}
+body:has(.signal) .footer a:hover{color:var(--signal-ink)}

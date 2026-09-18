@@ -19,7 +19,14 @@ Run against a served production build:
     python scripts/test-signal.py --base-url http://127.0.0.1:4618
 """
 from pathlib import Path
-import argparse, io, json, sys
+import argparse, io, json, re, sys
+from pathlib import Path as _P
+sys.path.insert(0, str(_P(__file__).resolve().parent))
+
+# The contrast reader lives beside this file: the suite and the capture
+# scripts have to agree about what a ratio is, and two copies of it drifted
+# into being wrong in the same way once already.
+from signal_probes import CONTRAST  # noqa: E402
 
 # A failing check must be able to print itself. Arabic copy in a failure detail
 # was crashing the reporter on a cp1252 console, which turns a red suite into a
@@ -103,35 +110,6 @@ SETTLE = '''async () => {
 # — black. The field of stars sits between, and the copy carries its own scrim;
 # both only ever darken or lighten a fraction of the area, so the flat ground is
 # the conservative reading, not a flattering one.
-CONTRAST = '''(selectors) => {
-  const lum = (css) => {
-    const m = css.match(/[\\d.]+/g).map(Number);
-    const ch = m.slice(0, 3).map(v => {
-      const s = v / 255;
-      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-    });
-    return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
-  };
-  const ground = (el) => {
-    for (let n = el; n; n = n.parentElement) {
-      const bg = getComputedStyle(n).backgroundColor;
-      const m = bg.match(/[\\d.]+/g);
-      if (m && (m.length < 4 || Number(m[3]) > 0.5)) return bg;
-    }
-    return 'rgb(0, 0, 0)';
-  };
-  const out = {};
-  for (const sel of selectors) {
-    const el = document.querySelector(sel);
-    if (!el) { out[sel] = null; continue; }
-    const fg = getComputedStyle(el).color;
-    const bg = ground(el);
-    const a = lum(fg), b = lum(bg);
-    out[sel] = {color: fg, ground: bg,
-                ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)};
-  }
-  return out;
-}'''
 
 
 # Where the renderer says each labelled star is, against where the DOM actually
@@ -313,6 +291,27 @@ HOLD_FLOOR, RELEASE_FLOOR, ASSEMBLY_FLOOR = 450, 400, 700
 # looks for one of them rather than for a selector, because what it is asserting
 # is that a KEYBOARD reaches the nav, not that a node exists.
 SEEK_WORDS = {'Previous', 'Next', 'View work', 'السابق', 'التالي', 'إلى الأعمال'}
+
+# Every ink slot the archive below the cinema actually paints, read where it
+# is painted. The card body and the contact lede are the two that go through
+# color-mix, which is what made the contrast reader's scale bug visible.
+ARCHIVE_TEXT = ['#work h2', '#work .sr-section-head p', '#work .sr-projects h3',
+                '#work .sr-projects p', '#work .sr-text-link', '#work .sr-status',
+                '#method summary', '.sr-contact .cf-l1', '.sr-contact .cf-lead']
+
+
+def chan_black(css):
+    """Is this computed colour opaque black?
+
+    Both shapes and BOTH SCALES: `rgb(0, 0, 0)` is 0..255 and
+    `color(srgb 0 0 0)` is 0..1, so one threshold for both would call white
+    black in the second. This is the same scale trap the contrast reader had.
+    """
+    nums = [float(v) for v in re.findall(r'[-\d.]+', css or '')]
+    if len(nums) < 3 or (len(nums) > 3 and nums[3] <= 0.5):
+        return False
+    ceiling = 0.02 if css.strip().lower().startswith('color(') else 4.0
+    return all(v <= ceiling for v in nums[:3])
 
 # Every off-site host the landing is allowed to point at. Each was requested
 # live while this round was built and its status is in the round's report; the
@@ -996,6 +995,82 @@ with sync_playwright() as p:
         check(f'{name} no failed requests', not bad, bad[:3])
         page.screenshot(path=str(OUT / f'{name}-{lang}.png'))
         ctx.close()
+
+    # ------------------------------------------------- the archive, re-toned
+    # The cinema ends on #000 in all six themes. What it used to fade ONTO was
+    # whichever theme the visitor had chosen, so five of them stepped colour at
+    # the seam and one stepped from black to white. Six claims, per theme, all
+    # read from the rendered page:
+    #
+    #   the tokens the archive inherits are the Deep Field ones;
+    #   the PAINTED ground is that same black — the token can read #000 while a
+    #     body above the token's scope paints white, which is exactly what the
+    #     first build of this did;
+    #   every ink slot the archive uses clears 4.5:1 on it;
+    #   and the light theme, which is the only one that paints literal values
+    #     rather than reading tokens, has nothing white left on it.
+    ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, device_scale_factor=1)
+    page = ctx.new_page()
+    page.goto(f'{args.base_url}/en', wait_until='networkidle')
+    page.wait_for_timeout(2400)
+    themes = {}
+    for theme in ('dark', 'light', 'neon', 'cinema', 'storybook', 'wave'):
+        page.evaluate('(t) => { if (t === "dark") document.documentElement.removeAttribute("data-theme");'
+                      ' else document.documentElement.setAttribute("data-theme", t); }', theme)
+        page.wait_for_timeout(420)
+        page.evaluate("""() => {
+          const work = document.querySelector('#work');
+          scrollTo({top: work.getBoundingClientRect().top + scrollY - 200, behavior: 'instant'});
+        }""")
+        page.wait_for_timeout(700)
+        got = page.evaluate(r"""() => {
+          const cs = getComputedStyle(document.querySelector('.showroom'));
+          const body = getComputedStyle(document.body);
+          // The ground as PAINTED: the first element from the body up that has
+          // an opaque background. A token is an intention; this is the pixel.
+          const chan = (css) => (css.match(/[-\d.]+/g) || []).map(Number);
+          const opaque = (css) => { const n = chan(css); return n.length && (n.length < 4 || n[3] > 0.5); };
+          let ground = body.backgroundColor;
+          if (!opaque(ground)) ground = getComputedStyle(document.documentElement).backgroundColor;
+          return {token: cs.getPropertyValue('--bg').trim(),
+                  ink: cs.getPropertyValue('--ink').trim(),
+                  accent: cs.getPropertyValue('--accent').trim(),
+                  painted: ground, bodyImage: body.backgroundImage,
+                  colourScheme: body.colorScheme};
+        }""")
+        ratios = page.evaluate(CONTRAST, ARCHIVE_TEXT)
+        themes[theme] = {**got, 'contrast': {k: v and round(v['ratio'], 2) for k, v in ratios.items()}}
+        check(f'archive ground is the Deep Field black under the {theme} theme',
+              got['token'].lower() in ('#000000', 'rgb(0, 0, 0)'), got['token'])
+        # The decisive one. A token that says black over a body that paints
+        # white is a page that looks white.
+        check(f'the {theme} theme PAINTS that black behind the archive',
+              chan_black(got['painted']) and got['bodyImage'] == 'none',
+              f"{got['painted']} / {got['bodyImage'][:40]}")
+        for sel, got_ratio in ratios.items():
+            label = sel.split(' ')[-1].lstrip('.')
+            check(f'{theme}: {label} contrast >= 4.5:1 on the archive',
+                  bool(got_ratio) and got_ratio['ratio'] >= 4.5,
+                  f"{got_ratio['ratio']:.2f}:1 {got_ratio['color']} on {got_ratio['ground']}"
+                  if got_ratio else 'element not found')
+    # THE CONTROL. Plant a ground that is not black and the check has to catch
+    # it — otherwise "the archive is black in all six themes" is six readings
+    # of an instrument that says yes to everything.
+    page.evaluate('''() => {
+      document.documentElement.removeAttribute('data-theme');
+      const style = document.createElement('style');
+      style.id = 'planted-ground';
+      style.textContent = 'body:has(.signal){background:#ffffff!important}';
+      document.head.append(style);
+    }''')
+    page.wait_for_timeout(300)
+    planted_ground = page.evaluate(
+        '() => getComputedStyle(document.body).backgroundColor')
+    check('a planted white ground is caught', not chan_black(planted_ground), planted_ground)
+    page.evaluate("() => document.getElementById('planted-ground').remove()")
+    report['themes'] = themes
+    report['themeControl'] = {'plantedGround': planted_ground}
+    ctx.close()
 
     # ------------------------------------------------------------- the band
     # Is the field actually deep, or is it a uniform scatter of equal pinpricks?
