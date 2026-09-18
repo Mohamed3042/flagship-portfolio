@@ -2,20 +2,37 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// This one build serves TWO public hosts, which need different roots:
+// This one build serves public hosts that need different roots:
 //   • Netlify, at the domain ROOT            → base '/'   (the DEFAULT)
 //   • GitHub Pages, a *project site* under   → base '/flagship-portfolio'
 //     /flagship-portfolio/
+//   • a SECOND Pages project site            → base '/flagship-portfolio-v2'
 // `base` is prepended to every bundled asset and to every internal-link helper,
 // so the build is self-contained under whichever root it is served from.
 // Netlify builds straight from Git (plain `npm run build`, no env), so the root
 // host is the default; the GitHub Pages deploy sets DEPLOY_TARGET=ghpages first
 // (see `npm run build:ghpages`).
+//
+// GH_PAGES_BASE names the project site. It DEFAULTS to the original, so a
+// build with no new variable set is byte-identical to the one that has been
+// shipping — the second site is opt-in and cannot move the first one by
+// accident:
+//   node scripts/build-ghpages.mjs --base flagship-portfolio-v2
+//
+// WRITE IT WITHOUT A LEADING SLASH. Git Bash on Windows rewrites an argument
+// that looks like an absolute POSIX path into a Windows one, so `--base
+// /flagship-portfolio-v2` arrives as `C:/Program Files/Git/flagship-portfolio-v2`
+// — which Astro accepted for the asset URLs and then wrote verbatim into every
+// <loc> of the sitemap. The slash is added here instead, where no shell can
+// touch it.
 const GH_PAGES = process.env.DEPLOY_TARGET === 'ghpages';
 const SITE = GH_PAGES
   ? 'https://mohamed3042.github.io'
   : 'https://mohamed-mahmoud-kuwait.netlify.app';
-const BASE = GH_PAGES ? '/flagship-portfolio' : '/';
+const PROJECT_BASE = `/${(process.env.GH_PAGES_BASE || 'flagship-portfolio')
+  .replace(/^[A-Za-z]:[\/].*?([^\/]+)$/, '$1')
+  .replace(/^\/+|\/+$/g, '')}`;
+const BASE = GH_PAGES ? PROJECT_BASE : '/';
 
 // https://astro.build/config
 export default defineConfig({

@@ -35,8 +35,11 @@ const server = createServer((req, res) => {
   res.setHeader('connection', 'close');
   res.shouldKeepAlive = false;
   let p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  // the built site may be mounted under a base path; accept it either way
-  p = p.replace(/^\/flagship-portfolio/, '') || '/';
+  // The built site may be mounted under a project base; accept it either way,
+  // and accept ANY of them — there is a second Pages site at
+  // /flagship-portfolio-v2, and a strip that only knew the first one turned
+  // its paths into `-v2/...` and answered 404 for the whole site.
+  p = p.replace(/^\/flagship-portfolio[^/]*/, '') || '/';
   let file = normalize(join(root, p));
   if (!file.startsWith(root)) { res.writeHead(403).end('forbidden'); return; }
   let st;

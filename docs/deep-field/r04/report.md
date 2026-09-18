@@ -236,6 +236,40 @@ was not taken on a finishing round without measuring it first.
   down with an `ENOSPC`. 36 GB was reclaimed from the npm cache and Node's
   compile cache — regenerable tooling caches only, nothing of the owner's.
 
+## Published as a second Pages site
+
+The owner asked for this build live at its own GitHub URL with the existing
+site untouched, so it is a SECOND Pages project rather than a deploy over the
+first one.
+
+| | |
+|---|---|
+| Live | **https://mohamed3042.github.io/flagship-portfolio-v2/** — `/en/` and `/ar/` both 200, zero failed requests and zero page errors in either |
+| Repository | `Mohamed3042/flagship-portfolio-v2`, public, branch `gh-pages`, commit `fee5498`. The BUILT site only; the source stays in `flagship-portfolio` on `feature/deep-field` |
+| Built by | `node scripts/build-ghpages.mjs --base flagship-portfolio-v2 --outDir dist-v2` |
+| The first site | untouched. `/flagship-portfolio/en/`, `/worlds/` and `/worlds/academy.html` all still 200 |
+
+`GH_PAGES_BASE` **defaults to the original**, so a build with no new variable
+set is byte-identical to the one that has been shipping: the second site cannot
+move the first one by accident.
+
+**`worlds/` is deliberately absent from v2.** It is 1.68 GB of the 1.7 GB
+build — the scroll-film pages and their clips — and nothing on the site links
+to it by a relative path: the five portals point at
+`https://mohamed3042.github.io/flagship-portfolio/worlds/…` absolutely, which
+is where those pages already live. v2 is 30 MB. `robots.txt` was rewritten for
+the v2 tree to name its own sitemap instead of the Netlify one.
+
+One thing that cost a build: Git Bash rewrites an argument that looks like an
+absolute POSIX path, so `--base /flagship-portfolio-v2` arrived as
+`C:/Program Files/Git/flagship-portfolio-v2` — which Astro accepted for the
+asset URLs and then wrote verbatim into every `<loc>` of the sitemap. The base
+is normalised in the config now and the flag is documented without the slash.
+
+**Both copies are indexable.** Two public copies of the same content on one
+domain compete in search; a `noindex` or a canonical on v2 is one line if you
+want the first site to stay the one Google finds.
+
 ## Merge note
 
 Branch `feature/deep-field`, at the head of this round. `origin/main` moved
