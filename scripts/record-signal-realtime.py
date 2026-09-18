@@ -1,17 +1,17 @@
-"""A real-time recording of the Signal landing route, driven by real scroll input.
+"""A real-time recording of the DEEP FIELD landing route, driven by real input.
 
-This is the counterpart to `capture-signal-round02.py`, which frame-steps a virtual
-clock and therefore proves composition and pacing but says nothing about how the
-page behaves while it is actually running.
-
-Here nothing is stepped. The page is scrolled with mouse-wheel events, the browser
-renders at whatever rate it manages, and Chrome's own screencast hands back the
-frames it presented, each stamped with the time it was presented. ffmpeg then
-encodes those frames at their real intervals, so the recording runs at the speed
-the session ran at — including any pause where the browser did not produce a frame.
+Nothing here is stepped. The page is scrolled with mouse-wheel events, the
+browser renders at whatever rate it manages, and Chrome's own screencast hands
+back the frames it presented, each stamped with the time it was presented.
+ffmpeg then encodes those frames at their real intervals, so the recording runs
+at the speed the session ran at - including any pause where the browser did not
+produce a frame.
 
 The same timestamps give an honest cadence report: observed frames per second,
-the longest gap between presented frames, and how many intervals exceeded 100 ms.
+the longest gap between presented frames, how many intervals exceeded 100 ms,
+and - the part that matters - whether each long gap fell inside a voluntary
+stop, where a browser presents nothing because nothing changed, or during
+active input, where it would be a real stall.
 
 What this is NOT: a GPU frame-time profile, a physical device, or Safari. It is
 headless Chromium on one Windows machine, and the numbers should be read as the
@@ -37,7 +37,7 @@ CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--base-url', default='http://127.0.0.1:4618')
-parser.add_argument('--out', default=str(ROOT / 'docs' / 'signal-review' / 'round04' / 'after'))
+parser.add_argument('--out', default=str(ROOT / 'docs' / 'deep-field' / 'r01'))
 parser.add_argument('--lang', default='en')
 args = parser.parse_args()
 
@@ -48,27 +48,23 @@ OUT.mkdir(parents=True, exist_ok=True)
 # back, stop, go on. Every entry is (wheel delta per tick, ticks, pause after).
 # A negative delta scrolls back up.
 SCRIPT = [
-    ('hold', 0, 0, 2.2),        # look at the opening
-    ('scroll', 140, 26, 1.6),   # into the forge
-    ('scroll', 140, 16, 2.4),   # let the form settle, then read it
-    ('scroll', -140, 10, 1.8),  # change of direction: back up over the reveal
-    ('scroll', 140, 22, 2.6),   # forward again, into the workflow proof stop
-    ('hold', 0, 0, 2.0),        # a voluntary stop while reading
-    ('scroll', 140, 24, 2.4),   # the carton's own interval
-    ('scroll', 140, 12, 2.2),   # its proof stop
-    ('scroll', -140, 14, 1.6),  # back to the object
-    ('scroll', 140, 26, 2.0),   # forward through the tracks
-    ('scroll', 140, 22, 2.6),   # the portal approach and crossing
-    ('hold', 0, 0, 1.8),
-    ('scroll', 140, 26, 1.8),   # the archive, then the release
-    ('scroll', 140, 18, 2.6),   # the real project rows
-    ('scroll', -140, 30, 1.4),  # a long run back up
-    ('scroll', 140, 18, 1.6),
+    ('hold', 0, 0, 1.5),        # the name, assembled, before anything moves
+    ('scroll', 140, 18, 1.2),   # release it back into the field
+    ('scroll', 140, 14, 1.5),   # into the first constellation, and read it
+    ('scroll', -140, 10, 1.0),  # change of direction: back over the assembly
+    ('scroll', 140, 20, 1.4),   # forward again, through the next worlds
+    ('hold', 0, 0, 1.2),        # a voluntary stop while reading
+    ('scroll', 140, 22, 1.3),
+    ('scroll', 140, 18, 1.2),   # the films and the public work
+    ('scroll', -140, 16, 1.0),  # back up again
+    ('scroll', 140, 24, 1.0),   # on to contact and out into the archive
 ]
 
+# One recording, at the size the owner reviews the film at. The phone gets its
+# own pass on a real device in Round 3; an emulated portrait recording here
+# would look like evidence about a phone and be nothing of the kind.
 VIEWS = [
     {'key': 'desktop', 'w': 1440, 'h': 900},
-    {'key': 'portrait', 'w': 390, 'h': 844},
 ]
 
 report = {'base_url': args.base_url, 'lang': args.lang, 'views': {}}
@@ -87,7 +83,7 @@ with sync_playwright() as p:
         errors = []
         page.on('pageerror', lambda e: errors.append(str(e)))
         page.goto(f"{args.base_url}/{args.lang}", wait_until='networkidle')
-        page.wait_for_timeout(1800)
+        page.wait_for_timeout(2800)
 
         frames = []  # (presented_seconds, jpeg_bytes)
         client = ctx.new_cdp_session(page)
@@ -156,7 +152,7 @@ with sync_playwright() as p:
                     fh.write(f"duration {max(0.008, times[i + 1] - times[i]):.4f}\n")
             fh.write(f"file '{listing[-1]}'\n")
 
-        mp4 = OUT / f"signal-realtime-{view['key']}.mp4"
+        mp4 = OUT / 'real-input.mp4'
         subprocess.run(
             ['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0',
              '-i', str(concat), '-fps_mode', 'vfr', '-video_track_timescale', '1000',
