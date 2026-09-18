@@ -402,6 +402,11 @@ body:has(.signal) #space{display:none}
   .signal[data-graphics=webgl] .signal__label:hover .signal__label-box{
     color:var(--signal-accent);text-decoration:underline;
   }
+  /* The ring belongs to the CHIP, which is the thing a reader sees and clicks.
+     The anchor is a POINT — zero by zero, on the star — and the route's own
+     :focus-visible rule was drawing a second 2px box around nothing, four
+     pixels wide, floating on the star beside the caption. */
+  .signal[data-graphics=webgl] .signal__label:focus-visible{outline:none}
   .signal[data-graphics=webgl] .signal__label:focus-visible .signal__label-box{
     outline:2px solid var(--signal-accent);outline-offset:3px;border-radius:2px;
   }

@@ -1,0 +1,130 @@
+{
+  "baseUrl": "http://127.0.0.1:4618",
+  "focus": {
+    "file": "a11y-focus.jpg",
+    "bytes": 117776,
+    "jpegQuality": 90,
+    "cells": [
+      {
+        "name": "a portal link",
+        "chapter": "world-strings",
+        "selector": "[data-chapter=\"world-strings\"] .signal__action",
+        "reached": true,
+        "tabPresses": 10,
+        "tag": "A",
+        "text": "Enter the world",
+        "rect": {
+          "x": 95,
+          "y": 497.828125,
+          "w": 128.296875,
+          "h": 44
+        },
+        "outline": "2px solid rgb(138, 180, 255)",
+        "offset": "4px"
+      },
+      {
+        "name": "a figure beat link",
+        "chapter": "game-war-strikes",
+        "selector": "[data-chapter=\"game-war-strikes\"] .signal__action",
+        "reached": true,
+        "tabPresses": 10,
+        "tag": "A",
+        "text": "Explore the project",
+        "rect": {
+          "x": 794.609375,
+          "y": 497.828125,
+          "w": 153.640625,
+          "h": 44
+        },
+        "outline": "2px solid rgb(138, 180, 255)",
+        "offset": "4px"
+      },
+      {
+        "name": "a star caption (public work)",
+        "chapter": "public",
+        "selector": "[data-chapter=\"public\"] .signal__label[href]",
+        "reached": true,
+        "tabPresses": 10,
+        "tag": "A",
+        "text": "ask-repos",
+        "rect": {
+          "x": 803.0999755859375,
+          "y": 355.5,
+          "w": 117.703125,
+          "h": 44
+        },
+        "outline": "2px solid rgb(138, 180, 255)",
+        "offset": "3px"
+      },
+      {
+        "name": "the seek nav",
+        "chapter": "tools",
+        "selector": "[data-signal-seek] [data-seek=next]",
+        "reached": true,
+        "tabPresses": 11,
+        "tag": "BUTTON",
+        "text": "Next",
+        "rect": {
+          "x": 1123.53125,
+          "y": 834.40625,
+          "w": 86.765625,
+          "h": 44
+        },
+        "outline": "2px solid rgb(138, 180, 255)",
+        "offset": "4px"
+      }
+    ]
+  },
+  "reduced-en": {
+    "file": "reduced-motion-en.jpg",
+    "bytes": 155019,
+    "jpegQuality": 90,
+    "graphics": "webgl",
+    "cells": [
+      {
+        "chapter": "world-academy",
+        "morph": 1,
+        "held": true,
+        "graphics": "webgl"
+      },
+      {
+        "chapter": "game-artillery3d",
+        "morph": 1,
+        "held": true,
+        "graphics": "webgl"
+      },
+      {
+        "chapter": "tools",
+        "morph": 1,
+        "held": true,
+        "graphics": "webgl"
+      }
+    ]
+  },
+  "reduced-ar": {
+    "file": "reduced-motion-ar.jpg",
+    "bytes": 150547,
+    "jpegQuality": 90,
+    "graphics": "webgl",
+    "cells": [
+      {
+        "chapter": "world-academy",
+        "morph": 1,
+        "held": true,
+        "graphics": "webgl"
+      },
+      {
+        "chapter": "game-artillery3d",
+        "morph": 1,
+        "held": true,
+        "graphics": "webgl"
+      },
+      {
+        "chapter": "tools",
+        "morph": 1,
+        "held": true,
+        "graphics": "webgl"
+      }
+    ]
+  }
+}
