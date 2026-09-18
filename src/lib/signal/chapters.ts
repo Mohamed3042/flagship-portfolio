@@ -271,17 +271,17 @@ export const COPY: Record<string, ChapterCopy> = {
     // The one line of story. It appears exactly once on the page.
     line: {
       en: 'Point at the dark long enough and it fills with worlds.',
-      ar: 'صوّب نحو العتمة وقتًا كافيًا، فتمتلئ بالعوالم.',
+      ar: 'وجِّه النظر إلى العتمة وقتًا كافيًا، فتمتلئ بالعوالم.',
     },
   },
-  worlds: { kicker: { en: 'Scroll film', ar: 'فيلم تمرير' } },
+  worlds: { kicker: { en: 'Scroll film', ar: 'سينما التمرير' } },
   voice: { kicker: voice.kicker },
   tools: {
     kicker: { en: 'Tools', ar: 'أدوات' },
     title: { en: 'Twelve tools that do the repeating.', ar: 'اثنتا عشرة أداةً تتولّى المتكرِّر.' },
     line: {
       en: 'Skills I wrote so the repeating half of the work runs itself.',
-      ar: 'مهاراتٌ كتبتُها كي يُنجز النصفُ المتكرِّر من العمل نفسَه.',
+      ar: 'مهاراتٌ كتبتُها كي يُنجِزَ النصفُ المتكرِّر من العمل نفسَه.',
     },
   },
   public: {
@@ -293,7 +293,7 @@ export const COPY: Record<string, ChapterCopy> = {
     title: { en: 'Let’s talk.', ar: 'لنتحدّث.' },
     line: {
       en: 'Open to Automation Engineering and internal-tools roles in Kuwait, the GCC, and remote teams.',
-      ar: 'متاح لوظائف هندسة الأتمتة والأدوات الداخلية في الكويت ودول الخليج وعن بُعد.',
+      ar: 'متاحٌ لوظائف هندسة الأتمتة والأدوات الداخلية في الكويت ودول الخليج، ومع الفرق التي تعمل عن بُعد.',
     },
   },
 };

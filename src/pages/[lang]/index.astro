@@ -115,7 +115,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     const game = games.find(g => `game-${g.id}` === chapter.id)!;
     // The three with an archive entry lead to it; the one with a public
     // repository leads to the repository. Every beat leads somewhere real.
-    if (game.slug) actions.push({ href: workPath(lang, game.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
+    if (game.slug) actions.push({ href: workPath(lang, game.slug), label: ar ? 'استكشف المشروع' : 'Explore the project' });
     if (game.repo) {
       actions.push({ href: game.repo, label: ar ? 'المستودع العام' : 'Public repository', external: true });
     }
@@ -129,7 +129,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
   }
 
   if (chapter.act === 'voice') {
-    actions.push({ href: workPath(lang, voice.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
+    actions.push({ href: workPath(lang, voice.slug), label: ar ? 'استكشف المشروع' : 'Explore the project' });
     actions.push({
       href: `mailto:${profile.contact.email}`,
       label: ar ? 'اطلب عرضًا' : 'Ask for a demo',
@@ -146,7 +146,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
   if (chapter.act === 'systems') {
     const project = getProject(chapter.project as string)!;
     const feature = featured.find(f => f.slug === chapter.project) ?? null;
-    actions.push({ href: workPath(lang, project.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
+    actions.push({ href: workPath(lang, project.slug), label: ar ? 'استكشف المشروع' : 'Explore the project' });
     if (feature?.repo) actions.push({ href: feature.repo, label: ar ? 'المستودع العام' : 'Public repository', external: true });
     return {
       ...shared,
@@ -178,8 +178,12 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
       ...shared,
       kicker: pick(lang, copy.kicker),
       title: copy.title ? pick(lang, copy.title) : '',
+      // The count is the site's own convention for a number inside an Arabic
+      // sentence: Arabic-Indic digits, from toLocaleString, exactly as the
+      // atlas and the sky map already render theirs. A Latin 4 in a line that
+      // sits two beats after ٥٠٣ and ١٨٤ is the page changing its mind.
       line: ar
-        ? `${repos.length} مستودعات عامة، مع تكامل مستمر وحاويات.`
+        ? `${repos.length.toLocaleString('ar-EG')} مستودعات عامة، مع تكامل مستمر وحاويات.`
         : `${repos.length} public repositories, with continuous integration and containers.`,
       actions,
       labels: repoLabels,

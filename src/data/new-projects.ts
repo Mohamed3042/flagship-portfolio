@@ -153,11 +153,11 @@ export const publicAiProjects = [
     cardA: '#bf5af2',
     cardB: '#2997ff',
     section: 'automation',
-    tag: { en: 'Integration edge · Public', ar: 'حافة تكامل · عام' },
+    tag: { en: 'Integration edge · Public', ar: 'واجهة تكامل · عام' },
     title: { en: 'RelayOps', ar: 'RelayOps' },
     blurb: {
       en: 'A retail automation control plane with signed webhooks and retries — on a runtime that is still the Python standard library.',
-      ar: 'لوحة تحكم لأتمتة التجزئة بخطافات موقّعة وإعادة محاولة، على زمن تشغيل ما زال مكتبة Python القياسية وحدها.',
+      ar: 'لوحة تحكم لأتمتة التجزئة بخطافات موقّعة وإعادة محاولة، على زمن تشغيلٍ لا يزال مكتبةَ Python القياسية وحدها.',
     },
     stat: { en: '121 tests', ar: '١٢١ اختبارًا' },
     statNote: { en: '· green on Python 3.9 and 3.14', ar: '· ناجحة على Python 3.9 و3.14' },

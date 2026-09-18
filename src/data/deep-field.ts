@@ -53,7 +53,7 @@ export const worlds: World[] = [
     title: { en: 'The Cake Is Made Twice', ar: 'تُصنع الكعكة مرتين' },
     line: {
       en: 'Fifty linked shots, 4:10 — a flexible design, a measured approval, a kitchen-ready handoff.',
-      ar: 'خمسون لقطة مترابطة، ٤:١٠ — تصميم مرن، واعتماد مقاس، وتسليم جاهز للمطبخ.',
+      ar: 'خمسون لقطةً مترابطة، ٤:١٠ — تصميمٌ مرن، واعتمادٌ مَقيس، وتسليمٌ جاهز للمطبخ.',
     },
     frame: cakeFrame,
     aspect: 1.7778,
@@ -69,7 +69,7 @@ export const worlds: World[] = [
     title: { en: 'The Kingdom of Running Things', ar: 'مملكة الأشياء التي تجري' },
     line: {
       en: 'Twenty scroll-scrubbed shots: a golden book opens, and the code keeps the kingdom running.',
-      ar: 'عشرون لقطة تُفرَك بالتمرير: كتابٌ مذهّب يُفتح، ثم تُبقي الشيفرةُ المملكةَ تجري.',
+      ar: 'عشرون لقطةً يقودها التمرير: كتابٌ مذهّب يُفتح، ثم تُبقي الشيفرةُ المملكةَ جاريةً.',
     },
     frame: disneyFrame,
     aspect: 2.1769,
@@ -98,7 +98,7 @@ export const worlds: World[] = [
     slug: 'academy',
     href: `${FLOOR}academy.html`,
     live: true,
-    title: { en: 'The Academy of Proven Spells', ar: 'أكاديمية التعاويذ المُثبتة' },
+    title: { en: 'The Academy of Proven Spells', ar: 'أكاديمية التعاويذ المُثبَتة' },
     line: {
       en: 'Nothing is magic until it survives the proof. Fourteen accepted shots, one scroll.',
       ar: 'لا يصبح شيءٌ سحرًا حتى ينجو من البرهان. أربع عشرة لقطة مقبولة، وتمريرة واحدة.',
@@ -117,7 +117,7 @@ export const worlds: World[] = [
     title: { en: 'The Album', ar: 'الألبوم' },
     line: {
       en: 'Silence acquires a pulse; the pulse becomes a studio; a hand rides the fader to unity.',
-      ar: 'الصمت يكتسب نبضة؛ والنبضة تصير استوديو؛ ويدٌ تقود الخافضَ الرئيس إلى الوحدة.',
+      ar: 'الصمتُ يكتسب نبضًا؛ ثم يصير النبضُ استوديو؛ ويدٌ تدفع المستوى الرئيسَ إلى تمامه.',
     },
     frame: spotifyFrame,
     aspect: 2.3881,
@@ -161,7 +161,7 @@ export const games: Game[] = [
     slug: 'war-strikes',
     line: {
       en: 'An arena shooter re-implemented as an inspectable module: ability-driven combat, content that lives in data, 184 automation tests.',
-      ar: 'مُطلِق نار حلبي أُعيدت كتابته كوحدةٍ قابلة للفحص: قتالٌ تقوده القدرات، ومحتوى يعيش في البيانات، و١٨٤ اختبارًا آليًا.',
+      ar: 'لعبةُ إطلاق نار في حَلبة أُعيدت كتابتها كوحدةٍ قابلة للفحص: قتالٌ تقوده القدرات، ومحتوًى يعيش في البيانات، و١٨٤ اختبارًا آليًا.',
     },
   },
   {
@@ -171,7 +171,7 @@ export const games: Game[] = [
     slug: 'cocolani-3d',
     line: {
       en: 'A bilingual world rebuilt from a discontinued client, every conclusion labelled verified, inferred or lost, and the packaged build audited.',
-      ar: 'عالم ثنائي اللغة أُعيد بناؤه من عميلٍ متوقّف، مع وسم كل استنتاج موثّقًا أو مستنتجًا أو مفقودًا، وتدقيق النسخة المحزومة.',
+      ar: 'عالمٌ ثنائي اللغة أُعيد بناؤه من تطبيقٍ متوقّف، مع وسم كل نتيجة: متحقَّقٌ منها أو مُستنتَجة أو مفقودة، وتدقيقُ النسخة المحزومة.',
     },
   },
   {
@@ -181,7 +181,7 @@ export const games: Game[] = [
     slug: 'artillery3d',
     line: {
       en: 'Gameplay rules as inspectable data: 503 battle-map records carrying their own source citations, and one authoritative server that owns the match.',
-      ar: 'قواعد اللعب كبياناتٍ قابلة للفحص: ٥٠٣ سجلات خرائط معركة تحمل مراجع مصدرها، وخادمٌ موثوق واحد يملك المباراة.',
+      ar: 'قواعد اللعب كبياناتٍ قابلة للفحص: ٥٠٣ سجلات خرائط معركة تحمل مراجع مصدرها، وخادمٌ مرجعيٌّ واحد يملك المباراة.',
     },
   },
   {
@@ -190,7 +190,7 @@ export const games: Game[] = [
     engine: 'Godot 4.7',
     line: {
       en: 'An original arena shooter: a 60 Hz authoritative simulation, bots on the same intent path as the player, four maps, nine weapons.',
-      ar: 'مُطلِق نار حلبي أصلي: محاكاة مرجعية بمعدّل ٦٠ هرتز، وروبوتات على مسار النوايا نفسه الذي يسلكه اللاعب، وأربع خرائط، وتسعة أسلحة.',
+      ar: 'لعبةُ إطلاق نار في حَلبة، أصليةٌ بالكامل: محاكاةٌ مرجعية بمعدّل ٦٠ هرتز، وروبوتاتٌ على مسار النوايا نفسه الذي يسلكه اللاعب، وأربع خرائط، وتسعة أسلحة.',
     },
     repo: 'https://github.com/Mohamed3042/polyblast-arena',
   },
@@ -205,7 +205,7 @@ export const voice = {
   kicker: { en: 'Voice engine', ar: 'محرّك صوت' } as Localized,
   line: {
     en: 'A local training studio: a version ledger whose numbers never move, four run presets, warm-start fine-tuning, and quality gates measured on held-out audio. Private build. Demo on request.',
-    ar: 'استوديو تدريب محلي: سجلّ إصدارات لا تتغيّر أرقامه، وأربعة إعدادات تشغيل، وضبط دقيق ببداية دافئة، وبوابات جودة تُقاس على عيّنات محجوزة. نسخة خاصة. عرض عند الطلب.',
+    ar: 'استوديو تدريبٍ محلي: سجلّ إصداراتٍ لا تتغيّر أرقامه، وأربعةُ إعدادات تشغيل، وضبطٌ دقيق ببداية دافئة، وبوابات جودةٍ تُقاس على عيّنات صوتٍ محجوزة عن التدريب. نسخة خاصة. عرضٌ عند الطلب.',
   } as Localized,
 };
 

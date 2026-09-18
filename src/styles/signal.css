@@ -558,6 +558,18 @@ body:has(.signal) #space{display:none}
 }
 
 /* ------------------------------------------------------------------- rtl */
+/* Arabic is not Latin at a smaller size.
+   The Arabic face carries its meaning in the shape of a word rather than in a
+   run of distinct letterforms, its x-height sits lower in the em, and its
+   ascenders and descenders reach further — so the same point size reads a step
+   smaller and a step tighter than the Latin beside it. Every slot on this
+   route therefore runs 1–2 px larger in Arabic with a looser leading, and the
+   tracking that spaces Latin small-caps is taken off, because tracking an
+   Arabic word pulls its joins apart.
+
+   These are `em` steps, not new clamps: the responsive curve the Latin slot
+   already has is kept and shifted, so a slot that shrinks on a phone shrinks
+   in both languages by the same law. */
 [dir=rtl] .signal__name,[dir=rtl] .signal__title{
   font-family:'Cairo Variable','Inter Variable',sans-serif;
   letter-spacing:0;line-height:1.28;
@@ -565,6 +577,31 @@ body:has(.signal) #space{display:none}
 [dir=rtl] .signal__kicker,[dir=rtl] .signal__role,[dir=rtl] .signal__hint{
   letter-spacing:.06em;text-transform:none;
 }
+/* 16px -> 17.5px, and 1.62 -> 1.85: the body line, which is where Arabic loses
+   most when it is set at the Latin size. */
+[dir=rtl] .signal__line{font-size:17.5px;line-height:1.85;letter-spacing:0}
+/* 14px -> 15.5px. A link is a word a reader has to be able to hit as well as
+   read, so this one takes the top of the range. */
+[dir=rtl] .signal__action{font-size:15.5px;letter-spacing:0}
+/* 13px -> 14.5px, and the uppercase transform goes: Arabic has no case. */
+[dir=rtl] .signal__role{font-size:14.5px;line-height:1.5}
+/* 11px -> 12.5px for the two eyebrow slots. */
+[dir=rtl] .signal__kicker,[dir=rtl] .signal__hint{font-size:12.5px}
+[dir=rtl] .signal__skip{font-size:15.5px}
+[dir=rtl] .signal__seek button,[dir=rtl] .signal__seek a{font-size:13.5px;letter-spacing:.04em}
+/* ...and the phone's own seek size, stepped the same way. This rule has to be
+   here, after the portrait block it is answering: the two have equal
+   specificity, so source order is what decides which one a phone gets. */
+@media (max-width:899px){
+  [dir=rtl] .signal[data-graphics=webgl] .signal__seek button,
+  [dir=rtl] .signal[data-graphics=webgl] .signal__seek a{font-size:13px}
+}
+@media (max-height:700px){
+  [dir=rtl] .signal[data-graphics=webgl] .signal__line{font-size:16.5px;line-height:1.72}
+  [dir=rtl] .signal[data-graphics=webgl] .signal__action{font-size:14.5px}
+}
+/* The star captions stay Latin — they are repository and skill names, set
+   `dir=ltr` in the markup — so they keep the Latin size in both routes. */
 
 /* ============================================== the route's progress hairline
    The site already draws one: a shared 2px gradient bar with a 12px glow, fixed

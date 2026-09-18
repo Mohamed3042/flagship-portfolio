@@ -17,7 +17,7 @@ const ar = lang === 'ar';
 // only once it holds a live context.
 ---
 <div class="signal__stage" data-signal-stage style={`--signal-vh:${runway}`}>
-  <a class="signal__skip" href="#work">{ar ? 'تخطَّ المشهد إلى الأعمال' : 'Skip the cinematic to the work'}</a>
+  <a class="signal__skip" href="#work">{ar ? 'تخطَّ المشهد وانتقل إلى الأعمال' : 'Skip the cinematic to the work'}</a>
   <div class="signal__runway" data-signal-runway>
     <div class="signal__frame" data-signal-frame>
       {chapters.map((chapter, i) => <Chapter lang={lang} chapter={chapter} index={i} />)}
