@@ -61,6 +61,10 @@
 
 /* Browser surfaces ship with defaults that belong to no design system. */
 .signal :focus-visible{outline:2px solid var(--signal-accent);outline-offset:4px;border-radius:2px}
+/* A heading only receives focus programmatically, from a seek. It shows where the
+   visitor landed; it is not a control and does not draw a control's ring. */
+.signal__line:focus{outline:none}
+.signal__line:focus-visible{outline:2px solid var(--signal-accent);outline-offset:6px}
 .signal ::selection{background:var(--signal-accent);color:var(--signal-bg)}
 .signal input,.signal textarea{caret-color:var(--signal-accent)}
 .signal{scrollbar-color:color-mix(in srgb,var(--signal-ink) 26%,transparent) transparent;scrollbar-width:thin}
@@ -172,6 +176,50 @@
 body:has(.signal) #space{display:none}
 .signal__canvas{display:none}
 
+/* Chapter navigation. It is present in the still document too, where it simply
+   does not apply, so the cinema block below is what reveals it. */
+.signal__seek{display:none}
+
+@media (prefers-reduced-motion:no-preference){
+  .signal[data-graphics=webgl] .signal__seek{
+    display:flex;align-items:center;gap:6px;
+    position:absolute;z-index:4;pointer-events:auto;
+    inset-block-end:calc(clamp(14px,2.4vh,26px) + env(safe-area-inset-bottom,0px));
+    inset-inline-end:calc(max(var(--signal-gutter),(100% - var(--signal-measure)) / 2)
+      + env(safe-area-inset-right,0px));
+  }
+  .signal[data-graphics=webgl] .signal__seek button,
+  .signal[data-graphics=webgl] .signal__seek a{
+    display:inline-flex;align-items:center;gap:6px;
+    min-height:44px;padding:10px 14px;
+    border:1px solid var(--signal-line);border-radius:10px;
+    background:color-mix(in srgb,var(--signal-bg) 82%,transparent);
+    color:var(--signal-ink);
+    font-family:var(--font-label);font-size:13px;font-weight:600;
+    text-decoration:none;cursor:pointer;
+  }
+  .signal[data-graphics=webgl] .signal__seek button:hover:not(:disabled),
+  .signal[data-graphics=webgl] .signal__seek a:hover{
+    background:var(--signal-depth);border-color:color-mix(in srgb,var(--signal-ink) 26%,transparent);
+  }
+  .signal[data-graphics=webgl] .signal__seek button:disabled{
+    opacity:.42;cursor:default;
+  }
+  .signal[data-graphics=webgl] .signal__seek .signal__seek-out{
+    margin-inline-start:6px;border-color:color-mix(in srgb,var(--signal-accent) 42%,transparent);
+  }
+  [dir=rtl] .signal__seek svg{transform:scaleX(-1)}
+  /* Portrait: the copy owns the bottom, so the group sits above it, still clear
+     of the artifact band and of the home indicator. */
+  @media (max-width:899px){
+    .signal[data-graphics=webgl] .signal__seek{
+      inset-inline:auto calc(var(--signal-gutter) + env(safe-area-inset-right,0px));
+    }
+    .signal[data-graphics=webgl] .signal__seek button,
+    .signal[data-graphics=webgl] .signal__seek a{padding:9px 11px;font-size:12px}
+  }
+}
+
 /* A nine-viewport runway is a keyboard trap without a way past it. Navigation. */
 .signal__skip{
   position:absolute;z-index:6;inset-block-start:0;inset-inline-start:var(--signal-gutter);
@@ -271,6 +319,11 @@ body:has(.signal) #space{display:none}
   color:var(--signal-ink-2);
 }
 .signal__evidence+.signal__evidence{margin-block-start:2px}
+/* The phase the chapter is in decides which caption is true. Both are in the
+   document, so the still composition -- which always has its capture -- keeps
+   the pair it is about, and no path is left without one. */
+.signal__chapter[data-phase=proof] [data-phase=object],
+.signal__chapter[data-phase=object] [data-phase=proof]{display:none}
 .signal__evidence[data-evidence=screenshot]{
   border-block-start:2px solid color-mix(in srgb,var(--signal-ink) 55%,transparent);
   color:var(--signal-ink);font-weight:600;
@@ -373,7 +426,8 @@ body:has(.signal) #space{display:none}
     opacity:var(--signal-rest,1);transition:opacity 160ms linear;
   }
   .signal[data-graphics=webgl] .signal__copy,
-  .signal[data-graphics=webgl] .signal__actions{pointer-events:auto}
+  .signal[data-graphics=webgl] .signal__actions,
+  .signal[data-graphics=webgl] .signal__seek{pointer-events:auto}
   /* The narration gives the stage back during a transformation: the display
      type steps down and the field under it thins. It is a weight, not a
      visibility -- a visitor who stops mid-transformation still has the sentence,
@@ -415,9 +469,23 @@ body:has(.signal) #space{display:none}
     .signal[data-graphics=webgl] .signal__action{min-height:40px;font-size:14px}
     .signal[data-graphics=webgl] .signal__action+.signal__action{min-height:38px}
   }
-  @media (max-height:560px){
+  /* 568px-tall phones are still in production. At that height the copy ran 52px
+     past a frame that clips, taking both actions with it — and a control that is
+     clipped away is still focusable, so the keyboard could reach it and drag the
+     whole film to find it. */
+  @media (max-height:620px){
     .signal[data-graphics=webgl] .signal__blurb{display:none}
-    .signal[data-graphics=webgl] .signal__chapter{padding-block:12px;gap:6px}
+    .signal[data-graphics=webgl] .signal__chapter{
+      padding-block:10px;gap:5px;
+      padding-block-end:calc(10px + 50px + env(safe-area-inset-bottom,0px));
+    }
+    .signal[data-graphics=webgl] .signal__line{
+      font-size:calc(clamp(19px,4.8vw,24px) * (.58 + .42 * var(--signal-narration,1)));
+    }
+    .signal[data-graphics=webgl] .signal__proof{font-size:13px}
+    .signal[data-graphics=webgl] .signal__limit-more>div{max-height:min(16svh,110px)}
+    .signal[data-graphics=webgl] .signal__seek button,
+    .signal[data-graphics=webgl] .signal__seek a{min-height:40px;padding:7px 10px}
   }
   /* A focused control inside the sticky frame must not sit under the fixed nav. */
   .signal [data-chapter-actions] a,
@@ -481,7 +549,13 @@ body:has(.signal) #space{display:none}
       rgb(5 7 10 / .97) 0%,rgb(5 7 10 / .93) 52%,rgb(5 7 10 / .72) 80%,rgb(5 7 10 / 0) 100%);
   }
   .signal[data-graphics=webgl] .signal__copy::after{display:none}
-  .signal[data-graphics=webgl] .signal__chapter{padding-inline:0;align-content:end}
+  /* The narration and the chapter navigation both live at the block end in
+     portrait, so the copy reserves the navigation's row rather than being
+     printed underneath it. */
+  .signal[data-graphics=webgl] .signal__chapter{
+    padding-inline:0;align-content:end;
+    padding-block-end:calc(clamp(14px,2.4vh,26px) + 54px + env(safe-area-inset-bottom,0px));
+  }
   .signal[data-graphics=webgl] .signal__line{font-size:clamp(24px,6.2vw,32px);max-width:18ch}
   /* The artifact keeps the upper band and crops at full scale. */
   .signal[data-graphics=webgl] .signal__plate[data-handoff=flow]{
@@ -516,6 +590,43 @@ body:has(.signal) #space{display:none}
 }
 [dir=rtl] .signal__status{letter-spacing:0;text-transform:none;font-size:12px}
 
+
+/* ===================================================== the seam above the cinema
+   The fixed header is shared by every route and follows the selected theme. The
+   stage under it is black in all six, so in the light theme a silver bar floated
+   on a black film for the whole runway. While the header overlaps the stage it
+   takes a quiet near-black surface and light controls; the moment it leaves,
+   the theme's own treatment returns.
+
+   Scoped by :has() to a page that renders .signal — which is this route and no
+   other — so the 38 story routes and the Worlds keep their headers untouched. */
+.signal[data-over=cinema] ~ * .nav,
+body:has(.signal[data-over=cinema]) .nav{
+  background:color-mix(in srgb,#05070A 86%,transparent);
+  border-block-end-color:color-mix(in srgb,#F0F3F6 11%,transparent);
+  color:#F0F3F6;
+}
+body:has(.signal[data-over=cinema]) .nav a,
+body:has(.signal[data-over=cinema]) .nav button,
+body:has(.signal[data-over=cinema]) .nav summary,
+body:has(.signal[data-over=cinema]) .nav .nav__brand{color:#F0F3F6}
+body:has(.signal[data-over=cinema]) .nav a:hover,
+body:has(.signal[data-over=cinema]) .nav button:hover,
+body:has(.signal[data-over=cinema]) .nav summary:hover{color:#70B8FF}
+body:has(.signal[data-over=cinema]) .nav .pill{
+  border-color:color-mix(in srgb,#F0F3F6 22%,transparent);
+  background:color-mix(in srgb,#F0F3F6 6%,transparent);
+}
+body:has(.signal[data-over=cinema]) .nav :focus-visible{
+  outline:2px solid #70B8FF;outline-offset:3px;
+}
+/* An open menu is a surface, not a tint: it needs its own ground or it reads
+   through onto the film behind it. */
+body:has(.signal[data-over=cinema]) .nav [open] > *:not(summary),
+body:has(.signal[data-over=cinema]) .nav .theme-menu__list,
+body:has(.signal[data-over=cinema]) .nav .nav__menu{
+  background:#080C12;border-color:color-mix(in srgb,#F0F3F6 14%,transparent);color:#F0F3F6;
+}
 
 /* ======================================================= the seam below the cinema
    The archive and the close inherit the previous world. Colour in this page is

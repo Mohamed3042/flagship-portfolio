@@ -1,0 +1,757 @@
+{
+  "tag": "after",
+  "base_url": "http://127.0.0.1:4618",
+  "editions": {
+    "desktop-en": {
+      "01-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 748,
+          "y": 1017,
+          "w": 620,
+          "h": 358
+        }
+      },
+      "02-aligned-form": {
+        "u": 0.15,
+        "scrollY": 1980,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "03-separated-depth": {
+        "u": 0.2140277777777778,
+        "scrollY": 2441,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "04-automation-screen": {
+        "u": 0.355,
+        "scrollY": 3456,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 699,
+          "y": 57,
+          "w": 709,
+          "h": 443
+        }
+      },
+      "05-carton-object": {
+        "u": 0.47402777777777777,
+        "scrollY": 4313,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 1222,
+          "y": 254,
+          "w": 240,
+          "h": 229
+        }
+      },
+      "06-carton-proof": {
+        "u": 0.545,
+        "scrollY": 4824,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 699,
+          "y": 32,
+          "w": 709,
+          "h": 443
+        }
+      },
+      "07-media-alignment": {
+        "u": 0.655,
+        "scrollY": 5616,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "08-portal-approach": {
+        "u": 0.715,
+        "scrollY": 6048,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 633,
+          "y": 326,
+          "w": 487,
+          "h": 296
+        }
+      },
+      "09-portal-inside": {
+        "u": 0.79,
+        "scrollY": 6588,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 650,
+          "y": 283,
+          "w": 709,
+          "h": 407
+        }
+      },
+      "10-arrival": {
+        "u": 0.96,
+        "scrollY": 7812,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "11-project-rows": {
+        "u": 1,
+        "scrollY": 8928,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "12-atlas": {
+        "u": 1,
+        "scrollY": 12480,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "13-close": {
+        "u": 1,
+        "scrollY": 13669,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    },
+    "portrait-en": {
+      "01-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 16,
+          "y": 920,
+          "w": 496,
+          "h": 287
+        }
+      },
+      "02-aligned-form": {
+        "u": 0.1500789889415482,
+        "scrollY": 1604,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "03-separated-depth": {
+        "u": 0.21406003159557663,
+        "scrollY": 1928,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "04-automation-screen": {
+        "u": 0.3550552922590837,
+        "scrollY": 2642,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 108,
+          "y": 40,
+          "w": 250,
+          "h": 156
+        }
+      },
+      "05-carton-object": {
+        "u": 0.47393364928909953,
+        "scrollY": 3244,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 373,
+          "y": 60,
+          "w": 166,
+          "h": 118
+        }
+      },
+      "06-carton-proof": {
+        "u": 0.5450236966824644,
+        "scrollY": 3604,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 52,
+          "y": 32,
+          "w": 306,
+          "h": 192
+        }
+      },
+      "07-media-alignment": {
+        "u": 0.6550157977883097,
+        "scrollY": 4161,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "08-portal-approach": {
+        "u": 0.715047393364929,
+        "scrollY": 4465,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 68,
+          "y": 123,
+          "w": 218,
+          "h": 132
+        }
+      },
+      "09-portal-inside": {
+        "u": 0.790086887835703,
+        "scrollY": 4845,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 54,
+          "y": 42,
+          "w": 280,
+          "h": 157
+        }
+      },
+      "10-arrival": {
+        "u": 0.959913112164297,
+        "scrollY": 5705,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "11-project-rows": {
+        "u": 1,
+        "scrollY": 6680,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "12-atlas": {
+        "u": 1,
+        "scrollY": 12373,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "13-close": {
+        "u": 1,
+        "scrollY": 14542,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    },
+    "desktop-ar": {
+      "01-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 72,
+          "y": 1017,
+          "w": 620,
+          "h": 358
+        }
+      },
+      "02-aligned-form": {
+        "u": 0.15,
+        "scrollY": 1980,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "03-separated-depth": {
+        "u": 0.2140277777777778,
+        "scrollY": 2441,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "04-automation-screen": {
+        "u": 0.355,
+        "scrollY": 3456,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 77,
+          "y": 42,
+          "w": 709,
+          "h": 443
+        }
+      },
+      "05-carton-object": {
+        "u": 0.47402777777777777,
+        "scrollY": 4313,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 764,
+          "y": 198,
+          "w": 296,
+          "h": 248
+        }
+      },
+      "06-carton-proof": {
+        "u": 0.545,
+        "scrollY": 4824,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 77,
+          "y": 32,
+          "w": 709,
+          "h": 443
+        }
+      },
+      "07-media-alignment": {
+        "u": 0.655,
+        "scrollY": 5616,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "08-portal-approach": {
+        "u": 0.715,
+        "scrollY": 6048,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 190,
+          "y": 327,
+          "w": 508,
+          "h": 287
+        }
+      },
+      "09-portal-inside": {
+        "u": 0.79,
+        "scrollY": 6588,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 74,
+          "y": 285,
+          "w": 709,
+          "h": 399
+        }
+      },
+      "10-arrival": {
+        "u": 0.96,
+        "scrollY": 7812,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "11-project-rows": {
+        "u": 1,
+        "scrollY": 8928,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "12-atlas": {
+        "u": 1,
+        "scrollY": 12500,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "13-close": {
+        "u": 1,
+        "scrollY": 13920,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    },
+    "portrait-ar": {
+      "01-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": -122,
+          "y": 920,
+          "w": 496,
+          "h": 287
+        }
+      },
+      "02-aligned-form": {
+        "u": 0.1500789889415482,
+        "scrollY": 1604,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "03-separated-depth": {
+        "u": 0.21406003159557663,
+        "scrollY": 1928,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "04-automation-screen": {
+        "u": 0.3550552922590837,
+        "scrollY": 2642,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 77,
+          "y": 32,
+          "w": 281,
+          "h": 176
+        }
+      },
+      "05-carton-object": {
+        "u": 0.47393364928909953,
+        "scrollY": 3244,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 332,
+          "y": 52,
+          "w": 128,
+          "h": 92
+        }
+      },
+      "06-carton-proof": {
+        "u": 0.5450236966824644,
+        "scrollY": 3604,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 128,
+          "y": 41,
+          "w": 230,
+          "h": 144
+        }
+      },
+      "07-media-alignment": {
+        "u": 0.6550157977883097,
+        "scrollY": 4161,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "08-portal-approach": {
+        "u": 0.715047393364929,
+        "scrollY": 4465,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "aligning",
+          "x": 56,
+          "y": 131,
+          "w": 236,
+          "h": 142
+        }
+      },
+      "09-portal-inside": {
+        "u": 0.790086887835703,
+        "scrollY": 4845,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 41,
+          "y": 48,
+          "w": 306,
+          "h": 172
+        }
+      },
+      "10-arrival": {
+        "u": 0.959913112164297,
+        "scrollY": 5705,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "11-project-rows": {
+        "u": 1,
+        "scrollY": 6680,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "12-atlas": {
+        "u": 1,
+        "scrollY": 12225,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "13-close": {
+        "u": 1,
+        "scrollY": 14280,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    }
+  },
+  "video": {
+    "desktop": {
+      "file": "signal-round02-desktop.mp4",
+      "bytes": 5761631,
+      "frames": 754,
+      "fps": 12,
+      "seconds": 62.8,
+      "method": "frame-stepped, one virtual clock for scroll and ambient time"
+    },
+    "portrait": {
+      "file": "signal-round02-portrait.mp4",
+      "bytes": 2021839,
+      "frames": 697,
+      "fps": 12,
+      "seconds": 58.1,
+      "method": "frame-stepped, one virtual clock for scroll and ambient time"
+    }
+  },
+  "reduced": {
+    "graphics": "static",
+    "visible": 7,
+    "inert": 0
+  }
+}

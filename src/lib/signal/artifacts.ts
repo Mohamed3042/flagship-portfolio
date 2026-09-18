@@ -139,13 +139,55 @@ export function projectSurface(
   return { x: minX, y: minY, width: maxX - minX, height: maxY - minY, blend: 0, fit: 0 };
 }
 
+const BOUNDS = new THREE.Box3();
+
+/**
+ * Screen-space rectangle of everything inside an object, in CSS pixels.
+ *
+ * `projectSurface` reads one mesh's own bounding box, which is right for a plane
+ * and useless for a group: a folded carton is thirty meshes and a Group carries
+ * no geometry at all, so asking it for its box returns the unit cube and the
+ * camera gets fitted to a guess. This measures what is actually there, which is
+ * the only thing "fit the object into the region" can mean.
+ */
+export function projectBounds(
+  object: THREE.Object3D, camera: THREE.PerspectiveCamera, width: number, height: number,
+): HandoffRect {
+  object.updateWorldMatrix(true, true);
+  camera.updateMatrixWorld();
+  BOUNDS.setFromObject(object);
+  if (BOUNDS.isEmpty()) return { x: width / 2, y: height / 2, width: 0, height: 0, blend: 0, fit: 0 };
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (let i = 0; i < 8; i++) {
+    CORNER.set(
+      i & 1 ? BOUNDS.max.x : BOUNDS.min.x,
+      i & 2 ? BOUNDS.max.y : BOUNDS.min.y,
+      i & 4 ? BOUNDS.max.z : BOUNDS.min.z,
+    ).project(camera);
+    const x = (CORNER.x * .5 + .5) * width, y = (.5 - CORNER.y * .5) * height;
+    minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+    minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+  }
+  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY, blend: 0, fit: 0 };
+}
+
 export interface SurfaceSize { width: number; height: number }
 
 /**
  * A stage that hands a 3D surface to a real HTML screenshot. The stage does not own
  * the camera, so the orchestrator supplies one; until it does, `handoff()` is null.
  */
+/** An object the camera should frame while the chapter is about that object. */
+export interface FocusRequest { object: THREE.Object3D; fit: number }
+
 export interface SurfaceStage extends ArtifactStage {
+  /**
+   * What this chapter is asking the visitor to look at right now, when that is
+   * the artifact itself rather than the plate it later hands off to. The camera
+   * fits this the same way it fits a handoff surface, so the recognition pose is
+   * composed against the same protected region instead of being hand-aimed.
+   */
+  focus?(): FocusRequest | null;
   /** The plane a screenshot takes over from. */
   surface: THREE.Object3D | null;
   /**
@@ -447,6 +489,9 @@ export function cartonStage(): SurfaceStage {
     object,
     surface,
     chrome: screen,
+    // The object's own interval, and only it: once the box starts clearing, the
+    // capture is the subject and the camera belongs to the surface again.
+    focus: () => ({ object: carton, fit: ramp(progress, .16, .32) * (1 - ramp(progress, .46, .56)) }),
     setCamera(next: THREE.PerspectiveCamera | null, size: SurfaceSize) {
       portrait = size.width > 0 && (size.width < 820 || size.height > size.width);
       handoff.setCamera(next, size);
@@ -712,6 +757,15 @@ export function portalStage(assets: StageAssets = {}): SurfaceStage {
     object,
     surface,
     setCamera: handoff.setCamera,
+    // The approach is about the threshold, so the threshold is what the camera
+    // is fitted to -- into the same protected region every other artifact is
+    // fitted into. On a phone that is the difference between a room seen through
+    // an opening and a heading printed across the opening. It releases before the
+    // crossing, which is the aperture's own move and must not be fought.
+    focus: () => ({
+      object: aperture,
+      fit: ramp(progress, .04, .15) * (1 - ramp(progress, .19, .29)),
+    }),
     update(local, time) {
       progress = clamp(local, 0, 1);
       // Approach, cross, arrive. The crossing has its own interval rather than
@@ -748,6 +802,76 @@ export function portalStage(assets: StageAssets = {}): SurfaceStage {
 export interface StageAssets {
   /** A frame of the published World whose interior the portal opens onto. */
   worldInterior?: string | null;
+  /** Approved captures of the first real work entries, for the arrival. */
+  arrival?: string[];
+}
+
+/* ------------------------------------------------------------------ arrival */
+
+/**
+ * The end of the film is four real project captures settling into the places the
+ * real cards are about to occupy.
+ *
+ * It used to be thirty-eight empty outlines held for five hundred pixels — a
+ * loading skeleton as the last frame of the piece, and the last frame is the one
+ * a visitor keeps. These are not a second catalogue and not invented art: they
+ * are the same approved screenshots the four public cards below the scene carry,
+ * arriving in the same arrangement, so the release reads as the work coming into
+ * focus rather than as the scene giving up.
+ */
+export function arrivalStage(assets: StageAssets = {}): ArtifactStage {
+  const res = bin(), object = new THREE.Group();
+  const urls = (assets.arrival ?? []).slice(0, 4);
+  const random = mulberry32(0xa771);
+
+  const COLS = 2, W = 2.05, H = 1.27, GAP_X = 2.28, GAP_Y = 1.52;
+  const cards = urls.map((url, i) => {
+    const col = i % COLS, row = Math.floor(i / COLS);
+    const rest = new THREE.Vector3(
+      (col - (COLS - 1) / 2) * GAP_X,
+      ((Math.ceil(urls.length / COLS) - 1) / 2 - row) * GAP_Y,
+      0,
+    );
+    // Where it comes from: scattered and deep, in the same volume the points
+    // occupied, so the cards look like the cloud resolving rather than new
+    // objects flown in from off stage.
+    const from = new THREE.Vector3(
+      rest.x + (random() - 0.5) * 4.2,
+      rest.y + (random() - 0.5) * 2.6,
+      -2.4 - random() * 4.4,
+    );
+    const material = res.mat(new THREE.MeshBasicMaterial({
+      color: 0x0b1017, transparent: true, opacity: 0, depthWrite: false,
+    }));
+    const mesh = new THREE.Mesh(res.geo(new THREE.PlaneGeometry(W, H)), material);
+    mesh.position.copy(from);
+    object.add(outline(res, mesh, res.mat(new THREE.LineBasicMaterial({
+      color: INK, transparent: true, opacity: .16,
+    }))));
+    new THREE.TextureLoader().load(url, (texture: THREE.Texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      res.map(texture);
+      material.map = texture;
+      material.color.setHex(0xffffff);
+      material.needsUpdate = true;
+    });
+    return { mesh, material, from, rest, lag: (i / Math.max(1, urls.length)) * 0.22 };
+  });
+
+  return {
+    object,
+    update(local) {
+      const progress = clamp(local, 0, 1);
+      for (const card of cards) {
+        // Staggered by index, so they settle in the order they are read in.
+        const settle = ramp(progress, .08 + card.lag, .62 + card.lag);
+        card.mesh.position.lerpVectors(card.from, card.rest, settle);
+        card.mesh.rotation.y = (1 - settle) * -.5;
+        card.material.opacity = settle;
+      }
+    },
+    dispose() { object.clear(); res.dispose(); },
+  };
 }
 
 export const STAGES: Record<ArtifactId, (assets: StageAssets) => ArtifactStage> = {
@@ -755,4 +879,5 @@ export const STAGES: Record<ArtifactId, (assets: StageAssets) => ArtifactStage> 
   carton: cartonStage,
   tracks: tracksStage,
   portal: portalStage,
+  arrival: arrivalStage,
 };

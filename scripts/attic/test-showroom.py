@@ -1,3 +1,21 @@
+"""RETIRED — kept for reference, not run.
+
+This suite tested the showroom composition that `src/pages/[lang]/index.astro`
+rendered before the "From Signal to Systems" cinema replaced it. It waits for
+`[data-motion-toggle]`, which lives only in `src/components/showroom/Exhibit.astro`,
+and that component is imported by no route any more.
+
+It is NOT deleted, because a selector can go obsolete without the requirement
+behind it going obsolete. Its enduring behaviour assertions — the archive filters
+and search, the quick-view dialog's focus contract, the card screenshot picker,
+the method disclosure, the mobile menu, and the no-JavaScript archive — were moved
+into `scripts/test-signal.py`, where they run against what this route actually
+renders. The Exhibit-specific ones stay here and only here; if Exhibit is ever
+mounted again, this file is where they are.
+
+Retired 2026-09-18, against the landing route at commit b1bdd94.
+"""
+
 """Production-build regression checks for the bilingual Systems in Orbit home."""
 from pathlib import Path
 import argparse, json, sys, time

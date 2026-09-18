@@ -71,13 +71,36 @@ const OBJECT: Record<string, { scene: { en: string; ar: string }; plate: { en: s
     plate: { en: 'The frame on its far wall is authorized media from an existing World.',
              ar: 'الإطار على جدارها البعيد وسائط مُصرَّح بها من عالم قائم.' },
   },
+  archive: {
+    scene: { en: 'Four actual product screenshots, of the four projects below.',
+             ar: 'أربع صور فعلية من المنتجات، للمشاريع الأربعة أدناه.' },
+    plate: { en: '', ar: '' },
+  },
 };
 
+/**
+ * Some chapters have an interval where the capture is deliberately not on screen
+ * at all. A caption that names "the window beside it" while the window is absent
+ * describes a different frame; both sentences ship, and the renderer shows the
+ * one that is true. They are ordinary text, not a live region: this is a caption
+ * matching its own picture, not an announcement.
+ */
+const PHASED: Record<string, { en: string; ar: string }> = {
+  matter: {
+    en: 'Illustrative carton. The actual application capture follows.',
+    ar: 'علبة توضيحية. تأتي بعدها الصورة الفعلية من التطبيق.',
+  },
+};
+
+const phased = PHASED[id] ?? null;
 const scoped = sceneEvidence && sceneEvidence !== 'none' ? OBJECT[id] ?? null : null;
+// A chapter with no plate carries only the statement about what it draws.
 const labels: { kind: EvidenceKind; text: string }[] = scoped
   ? [
       { kind: sceneEvidence as EvidenceKind, text: pick(lang, scoped.scene) },
-      { kind: evidence, text: pick(lang, scoped.plate) },
+      ...(plate && evidence !== 'none'
+        ? [{ kind: evidence, text: pick(lang, scoped.plate) }]
+        : []),
     ]
   : evidence === 'none'
     ? []
@@ -113,9 +136,12 @@ function splitLimit(text: string): [string, string | null] {
 
 const [lede, rest] = boundary ? splitLimit(boundary) : ['', null];
 ---
-<section class="signal__chapter" data-chapter={id} id={`signal-${id}`} aria-labelledby={`signal-${id}-line`}>
+<section class="signal__chapter" data-chapter={id} id={`signal-${id}`}
+         data-phase="proof" aria-labelledby={`signal-${id}-line`}>
   <div class="signal__copy" data-chapter-copy>
-    <h2 class="signal__line" id={`signal-${id}-line`}>{line}</h2>
+    {/* tabindex -1: a seek moves focus here so the visitor lands on what the
+        chapter says, not on whatever control they pressed. Not in the tab order. */}
+    <h2 class="signal__line" id={`signal-${id}-line`} tabindex="-1">{line}</h2>
 
     {title && (
       <p class="signal__project">
@@ -139,8 +165,14 @@ const [lede, rest] = boundary ? splitLimit(boundary) : ['', null];
       </div>
     )}
 
+    {phased && (
+      <p class="signal__evidence" data-evidence="illustration" data-phase="object">
+        {pick(lang, phased)}
+      </p>
+    )}
     {labels.map(entry => (
-      <p class="signal__evidence" data-evidence={entry.kind}>{entry.text}</p>
+      <p class="signal__evidence" data-evidence={entry.kind}
+         data-phase={phased ? 'proof' : undefined}>{entry.text}</p>
     ))}
     {gap && (
       <p class="signal__gap">

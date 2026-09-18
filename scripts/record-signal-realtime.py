@@ -37,7 +37,7 @@ CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--base-url', default='http://127.0.0.1:4618')
-parser.add_argument('--out', default=str(ROOT / 'docs' / 'signal-review' / 'round03' / 'after'))
+parser.add_argument('--out', default=str(ROOT / 'docs' / 'signal-review' / 'round04' / 'after'))
 parser.add_argument('--lang', default='en')
 args = parser.parse_args()
 
@@ -108,12 +108,20 @@ with sync_playwright() as p:
 
         started = time.time()
         page.mouse.move(view['w'] // 2, view['h'] // 2)
+        # Every step is stamped, so a gap in the presented frames can be matched
+        # to what the hand was actually doing. "The holds explain the gaps" is a
+        # claim, and a claim needs the timestamps that support it.
+        steps = []
         for kind, delta, ticks, pause in SCRIPT:
+            t0 = time.time() - started
             if kind == 'scroll':
                 for _ in range(ticks):
                     page.mouse.wheel(0, delta)
                     page.wait_for_timeout(45)   # a hand, not a teleport
+            t1 = time.time() - started
             page.wait_for_timeout(int(pause * 1000))
+            steps.append({'kind': kind, 'moveFrom': round(t0, 3), 'moveTo': round(t1, 3),
+                          'holdTo': round(time.time() - started, 3)})
         wall = time.time() - started
 
         client.send('Page.stopScreencast')
@@ -158,6 +166,21 @@ with sync_playwright() as p:
             check=True)
         shutil.rmtree(work, ignore_errors=True)
 
+        # Where each long gap fell: inside a scripted hold (the page was not being
+        # scrolled and a browser presents nothing when nothing changes) or during
+        # input (which would be a real stall).
+        long_gaps = []
+        for i, gap in enumerate(gaps):
+            if gap <= 0.1:
+                continue
+            at = times[i]
+            during = 'hold'
+            for step in steps:
+                if step['moveFrom'] <= at <= step['moveTo'] and step['kind'] == 'scroll':
+                    during = 'input'
+                    break
+            long_gaps.append({'atSeconds': round(at, 2), 'gapMs': round(gap * 1000, 1), 'during': during})
+
         report['views'][view['key']] = {
             'file': mp4.name,
             'bytes': mp4.stat().st_size,
@@ -169,6 +192,9 @@ with sync_playwright() as p:
             'p95FrameGapMs': round(sorted(gaps)[int(len(gaps) * 0.95)] * 1000, 2) if gaps else None,
             'longestFrameGapMs': round(max(gaps) * 1000, 2) if gaps else None,
             'gapsOver100ms': sum(1 for g in gaps if g > 0.1),
+            'longGaps': long_gaps,
+            'longGapsDuringHold': sum(1 for g in long_gaps if g['during'] == 'hold'),
+            'longGapsDuringInput': sum(1 for g in long_gaps if g['during'] == 'input'),
             'pageErrors': errors[:5],
             'method': 'CDP Page.startScreencast; real wheel input; encoded at the presented timestamps',
             'notMeasured': 'GPU frame time, input latency, physical touch scrolling, Safari, any real device',

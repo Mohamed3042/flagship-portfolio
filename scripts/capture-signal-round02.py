@@ -117,10 +117,12 @@ POSES = [
     # The approach, where the near pilasters occlude the room and slide across it.
     {'key': '08-portal-approach',   'mode': 'u', 'u': 0.715},
     {'key': '09-portal-inside',     'mode': 'u', 'u': 0.790},
-    {'key': '10-project-rows',      'mode': 'sel', 'sel': '#work'},
+    # The film's last beat: four real captures settling toward the work below.
+    {'key': '10-arrival',           'mode': 'u', 'u': 0.960},
+    {'key': '11-project-rows',      'mode': 'sel', 'sel': '#work'},
     # The seam below the cinema, where the route's own colour tokens live.
-    {'key': '11-atlas',             'mode': 'sel', 'sel': '#sky'},
-    {'key': '12-close',             'mode': 'sel', 'sel': '#contact'},
+    {'key': '12-atlas',             'mode': 'sel', 'sel': '#sky'},
+    {'key': '13-close',             'mode': 'sel', 'sel': '#contact'},
 ]
 
 EDITIONS = [
@@ -284,9 +286,9 @@ with sync_playwright() as p:
               const work = document.querySelector('#work');
               return {
                 forward: [0, at(.15), at(.214), at(.355), at(.474), at(.545), at(.655),
-                          at(.715), at(.79), at(1),
+                          at(.715), at(.79), at(.96),
                           Math.round(work.getBoundingClientRect().top + scrollY - 72)],
-                back: [at(1), at(.79), at(.715), at(.655), at(.545), at(.474), at(.355),
+                back: [at(.96), at(.79), at(.715), at(.655), at(.545), at(.474), at(.355),
                        at(.214), at(.15), 0],
               };
             }""")

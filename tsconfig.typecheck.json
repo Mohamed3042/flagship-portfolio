@@ -1,0 +1,26 @@
+{
+  "//": [
+    "Typecheck only. `astro build` does not read this file, so Astro and Vite keep",
+    "resolving the real `three` runtime out of node_modules exactly as before — the",
+    "paths below point the COMPILER at declarations and nothing else, and aliasing",
+    "the bundle to .d.ts files is the failure mode this arrangement exists to avoid.",
+    "",
+    "The declarations live in .typedeps/, a real isolated install: node_modules here",
+    "is a junction into a second checkout, and writing @types into it would put bytes",
+    "in another repository that neither project records. Reproduce with:",
+    "    npm install --prefix .typedeps --ignore-scripts @types/three@0.180.0",
+    "@types/three is pinned to the runtime's exact version (three 0.180.0).",
+    "",
+    "No ambient stubs, no `any` module declarations, no relaxed strictness: those",
+    "silence the diagnostic without restoring a single type."
+  ],
+  "extends": "./tsconfig.json",
+  "exclude": ["dist", ".typedeps"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "three": [".typedeps/node_modules/@types/three"],
+      "three/*": [".typedeps/node_modules/@types/three/*"]
+    }
+  }
+}

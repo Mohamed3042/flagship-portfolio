@@ -296,8 +296,12 @@ const archive: ChapterSpec = {
   id: 'archive',
   from: .82, to: 1,
   shape: 'constellation',
-  artifact: null,
+  artifact: 'arrival',
   evidence: 'none',
+  // Four approved captures of the work immediately below, and the caption says
+  // so. The cloud describes the collection; these are four members of it.
+  sceneEvidence: 'screenshot',
+  recede: [0, .5],
   reading: { from: .93, to: 1 },
   camera: { landscape: archiveLandscape, portrait: archivePortrait },
 };

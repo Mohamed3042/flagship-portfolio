@@ -160,7 +160,7 @@ export interface ChapterSpec {
   camera: Record<Layout, CameraPose[]>;
 }
 
-export type ArtifactId = 'workflow' | 'carton' | 'tracks' | 'portal';
+export type ArtifactId = 'workflow' | 'carton' | 'tracks' | 'portal' | 'arrival';
 
 /* ------------------------------------------------------------------- stage */
 

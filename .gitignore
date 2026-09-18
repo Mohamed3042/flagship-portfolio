@@ -50,3 +50,7 @@ public/worlds/assets/strings/review/CTS-contact-sheet-portrait-[0-9][0-9].png
 
 # Impeccable review captures (large, regenerated per review)
 .impeccable/review/
+
+# Isolated type declarations for the typecheck gate. The install is generated;
+# the manifest and lockfile that make it reproducible are not.
+.typedeps/node_modules/

@@ -10,8 +10,16 @@ Run against a served production build:
     python scripts/test-signal.py --base-url http://127.0.0.1:4618
 """
 from pathlib import Path
-import argparse, json, sys
+import argparse, io, json, sys
 
+# A failing check must be able to print itself. Arabic copy in a failure detail
+# was crashing the reporter on a cp1252 console, which turns a red suite into a
+# traceback and hides what actually failed.
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
+from PIL import Image, ImageChops
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -66,6 +74,13 @@ PROBE = '''() => {
     })(),
   };
 }'''
+
+
+def changed_pixels(a, b):
+    """Pixels that differ between two frames, ignoring encoder noise below 4/255."""
+    ia = Image.open(io.BytesIO(a)).convert('RGB')
+    ib = Image.open(io.BytesIO(b)).convert('RGB')
+    return sum(ImageChops.difference(ia, ib).convert('L').histogram()[4:])
 
 
 def scroll_to(page, u):
@@ -262,21 +277,308 @@ with sync_playwright() as p:
             check(f'{name} the proof stop shows the capture outright',
                   proof_stop['opacity'] > 0.98, proof_stop['opacity'])
 
+        # --- registration, measured from pixels rather than from data-fit ----
+        #
+        # `data-fit` is the renderer marking its own homework, so this reads the
+        # frame instead. Two renders of the SAME progress are compared: one with
+        # the HTML image suppressed, one with it at full strength.
+        #
+        # What that can and cannot establish, stated plainly. The region that
+        # CHANGES between the two is exactly where the image painted, and it must
+        # coincide with the rectangle the image was placed at and appear nowhere
+        # else — that is what catches a ghost quad or a second draw, and it holds
+        # for every chapter. Comparing the lit EXTENT of the 3D surface against
+        # the image only means something where that surface is itself visible;
+        # the workflow's and carton's screens are near-black planes whose lit area
+        # is not their rectangle, so the corner comparison is run for the portal,
+        # whose far wall carries a texture, and its measured drift is recorded
+        # rather than asserted away.
+        def boxes(shot_a, shot_b, region, floor):
+            a = Image.open(io.BytesIO(shot_a)).convert('L').crop(region)
+            b = Image.open(io.BytesIO(shot_b)).convert('L').crop(region)
+            diff = ImageChops.difference(a, b)
+            return diff.getbbox(), a, b
+
+        def lit_bbox(image, floor):
+            return image.point(lambda v: 255 if v > floor else 0).getbbox()
+
+        def registration_corners():
+            measured = {}
+            for label, u in [('system', 0.33), ('matter', 0.545), ('world', 0.78)]:
+                scroll_to(page, u)
+                page.wait_for_timeout(400)
+                rect = page.evaluate("""() => {
+                  const p = document.querySelector('[data-chapter][data-active="true"] [data-plate]');
+                  if (!p) return null;
+                  const r = p.getBoundingClientRect();
+                  return {x: Math.round(r.x), y: Math.round(r.y),
+                          w: Math.round(r.width), h: Math.round(r.height)};
+                }""")
+                if not rect or rect['w'] < 40:
+                    continue
+                hide = ("document.querySelector('[data-chapter][data-active=\"true\"] [data-plate]')"
+                        ".style.setProperty('opacity','%s','important')")
+                page.evaluate(hide % '0'); page.wait_for_timeout(280)
+                without = page.screenshot()
+                page.evaluate(hide % '1'); page.wait_for_timeout(280)
+                with_html = page.screenshot()
+                page.evaluate("document.querySelector('[data-chapter][data-active=\"true\"] [data-plate]')"
+                              ".style.removeProperty('opacity')")
+                page.wait_for_timeout(120)
+
+                # Whole frame: what changed, and did anything change anywhere else?
+                whole = (0, 0, page.viewport_size['width'], page.viewport_size['height'])
+                changed, a_img, b_img = boxes(without, with_html, whole, 40)
+                if not changed:
+                    check(f'{name} {label}: the image actually draws', False, 'no pixels changed')
+                    continue
+                corners = [abs(changed[0] - rect['x']), abs(changed[1] - rect['y']),
+                           abs(changed[2] - (rect['x'] + rect['w'])),
+                           abs(changed[3] - (rect['y'] + rect['h']))]
+                measured[label] = {'plate': rect, 'changed': list(changed), 'corners': corners}
+                # The image paints over the whole rectangle it was placed at.
+                # That is the claim this measurement can carry on its own, and it
+                # is the one that catches a plate landing somewhere else.
+                covers = (changed[0] <= rect['x'] + 4 and changed[1] <= rect['y'] + 4
+                          and changed[2] >= rect['x'] + rect['w'] - 4
+                          and changed[3] >= rect['y'] + rect['h'] - 4)
+                check(f'{name} {label}: the image paints the whole rectangle it is placed at',
+                      covers, f"changed={changed} plate={rect}")
+                # The tighter claim -- that NOTHING outside that rectangle
+                # changes -- is deliberately not asserted. The observed changed
+                # region is consistently larger than the plate, and I have not
+                # established whether that is a real second draw or frame-to-frame
+                # noise between the two renders. The numbers are recorded above so
+                # the difference can be judged; asserting on an unattributed
+                # measurement would turn it green without making it true.
+
+                if label == 'world':
+                    lit_a = lit_bbox(a_img, 40)
+                    lit_b = lit_bbox(b_img, 40)
+                    measured[label]['lit3d'] = list(lit_a) if lit_a else None
+                    measured[label]['litHtml'] = list(lit_b) if lit_b else None
+            report['viewports'][name]['registration_px'] = measured
+
+        attempt(f'{name} four-corner registration', registration_corners)
+
         # --- the evidence names the object, not the scene --------------------
-        evidence = page.evaluate("""() => {
-          const out = {};
-          for (const panel of document.querySelectorAll('[data-chapter]')) {
-            out[panel.dataset.chapter] = [...panel.querySelectorAll('.signal__evidence')]
-              .map(e => ({kind: e.dataset.evidence, text: e.textContent.trim()}));
-          }
-          return out;
-        }""")
+        # What is SHOWN, not what is in the document. A chapter with an interval
+        # where the capture is deliberately absent carries both captions and
+        # displays one; counting nodes would call that a defect, and counting only
+        # the settled phase would never see the claim that matters.
+        def visible_evidence():
+            return page.evaluate("""() => {
+              const out = {};
+              for (const panel of document.querySelectorAll('[data-chapter]')) {
+                out[panel.dataset.chapter] = [...panel.querySelectorAll('.signal__evidence')]
+                  .filter(e => getComputedStyle(e).display !== 'none')
+                  .map(e => ({kind: e.dataset.evidence, text: e.textContent.trim()}));
+              }
+              return out;
+            }""")
+
+        scroll_to(page, 0.545)          # the carton's proof stop
+        page.wait_for_timeout(250)
+        evidence = visible_evidence()
         report['viewports'][name]['evidence'] = evidence
         for chapter in ('system', 'matter', 'world'):
             lines = evidence.get(chapter) or []
             check(f'{name} {chapter}: the drawn object and the capture are labelled separately',
-                  len(lines) == 2 and any(l['kind'] == 'illustration' for l in lines),
+                  len(lines) == 2 and any(l['kind'] == 'illustration' for l in lines)
+                  and any(l['kind'] == 'screenshot' or l['kind'] == 'media' for l in lines),
                   lines)
+
+        scroll_to(page, 0.474)          # the carton's own stop: no capture exists
+        page.wait_for_timeout(250)
+        at_object = (visible_evidence().get('matter') or [])
+        report['viewports'][name]['evidenceAtObject'] = at_object
+        check(f'{name} matter: the object stop shows one caption', len(at_object) == 1, at_object)
+        check(f'{name} matter: no caption claims a screenshot that is not on screen',
+              all(l['kind'] != 'screenshot' for l in at_object), at_object)
+        scroll_to(page, 0.0)
+
+        # ====================================================================
+        # Migrated from scripts/test-showroom.py
+        #
+        # That suite waited for `[data-motion-toggle]`, which lives only in
+        # Exhibit.astro — a component this route stopped importing when the
+        # cinema replaced the showroom composition. A selector can go obsolete
+        # without the requirement behind it going obsolete, so what follows is
+        # the behaviour it was protecting, re-expressed against what this route
+        # actually renders. What was genuinely retired is listed at the bottom of
+        # this file, with the reason, rather than in a commit message.
+        # ====================================================================
+
+        # The old suite let a visitor stop the motion. Here the motion stops
+        # itself at every reading stop, so the equivalent requirement is that a
+        # reading stop is actually STILL. Asserting that progress and the chapter
+        # did not drift only proves the scroll stopped; it says nothing about
+        # whether the scene is still moving in front of someone reading it.
+        def stillness():
+            for label, u in [('system', 0.34), ('matter', 0.52), ('world', 0.78)]:
+                scroll_to(page, u)
+                page.wait_for_timeout(1200)
+                first = page.screenshot()
+                page.wait_for_timeout(2000)
+                second = page.screenshot()
+                rest = page.evaluate("getComputedStyle(document.querySelector('[data-signal]'))"
+                                     ".getPropertyValue('--signal-rest').trim()")
+                moved = changed_pixels(first, second)
+                check(f'{name} {label} reading stop declares itself at rest', rest == '1', rest)
+                check(f'{name} {label} reading stop is a still frame', moved == 0, f'{moved} px moved')
+
+        attempt(f'{name} reading stops are still', stillness)
+
+        # Keyboard: the rewind this suite previously could not see. From the
+        # middle of the cinema, Tab must not scroll the page or change the
+        # chapter, and the live chapter's own controls must be reachable.
+        def keyboard_hold():
+            scroll_to(page, 0.53)
+            page.wait_for_timeout(300)
+            before = page.evaluate('() => ({y: Math.round(scrollY), '
+                                   "ch: document.querySelector('[data-signal]').dataset.signalChapter})")
+            # Only while focus is still inside the film. Tabbing PAST the last
+            # control in the stage and on into the page below it is ordinary
+            # document order, and the browser scrolling there is correct; the
+            # requirement is that focusing what is on screen does not move it.
+            seen = []
+            for _ in range(16):
+                page.keyboard.press('Tab')
+                page.wait_for_timeout(90)
+                state = page.evaluate("""() => {
+                  const a = document.activeElement, r = a.getBoundingClientRect();
+                  const stage = document.querySelector('[data-signal-stage]');
+                  return {y: Math.round(scrollY),
+                          ch: document.querySelector('[data-signal]').dataset.signalChapter,
+                          inStage: !!(stage && stage.contains(a)),
+                          inChapter: !!a.closest('[data-chapter]'),
+                          inSeek: !!a.closest('[data-signal-seek]'),
+                          inert: !!a.closest('[inert]'),
+                          onScreen: r.width > 0 && r.top >= 0 && r.bottom <= innerHeight + 1};
+                }""")
+                if not state['inStage'] and any(f['inStage'] for f in seen):
+                    break     # focus has left the film; the rest is the page
+                seen.append(state)
+            check(f'{name} the film offers real keyboard stops',
+                  sum(1 for f in seen if f['inStage']) >= 3,
+                  sum(1 for f in seen if f['inStage']))
+            check(f'{name} the chapter navigation is reachable',
+                  any(f['inSeek'] for f in seen))
+            drift = max(abs(f['y'] - before['y']) for f in seen)
+            check(f'{name} Tab from mid-cinema does not scroll the page', drift <= 2, drift)
+            check(f'{name} Tab from mid-cinema does not change the chapter',
+                  all(f['ch'] == before['ch'] for f in seen),
+                  sorted({f['ch'] for f in seen}))
+            check(f'{name} the live chapter is reachable by keyboard',
+                  any(f['inChapter'] for f in seen), 'no chapter control was focused')
+            check(f'{name} focus never lands inside an inert subtree',
+                  not any(f['inert'] for f in seen))
+            check(f'{name} every focused element is on screen',
+                  all(f['onScreen'] for f in seen),
+                  sum(1 for f in seen if not f['onScreen']))
+
+        attempt(f'{name} keyboard holds its place mid-cinema', keyboard_hold)
+
+        def seek_controls():
+            scroll_to(page, 0.53)
+            page.wait_for_timeout(250)
+            page.click('[data-seek=next]')
+            page.wait_for_timeout(600)
+            after = page.evaluate("""() => {
+              const a = document.activeElement;
+              return {ch: document.querySelector('[data-signal]').dataset.signalChapter, id: a.id};
+            }""")
+            check(f'{name} Next advances the chapter', after['ch'] == 'signal', after['ch'])
+            check(f'{name} Next lands focus on what it arrived at',
+                  after['id'] == 'signal-signal-line', after['id'])
+            page.click('[data-seek=prev]')
+            page.wait_for_timeout(600)
+            back = page.evaluate("document.querySelector('[data-signal]').dataset.signalChapter")
+            check(f'{name} Previous goes back', back == 'matter', back)
+            page.click('[data-seek=work]')
+            page.wait_for_timeout(700)
+            landed = page.evaluate("() => ({id: document.activeElement.id, "
+                                   "vis: !!document.querySelector('#work')})")
+            check(f'{name} View work lands on the work itself', landed['id'] == 'public-title', landed)
+
+        attempt(f'{name} chapter navigation', seek_controls)
+
+        # --- the archive directory, migrated ---------------------------------
+        def archive_directory():
+            page.locator('[data-sky-filter="all"]').click(); page.wait_for_timeout(150)
+            shown = page.locator('[data-sky-item]:visible').count()
+            check(f'{name} archive opens on the first twelve', shown == 12, shown)
+            # 'all' and 'automation' are capped by the pager, so the cap and the
+            # group size are asserted separately: otherwise 12 silently stands in
+            # for 18 and the test agrees with a defect.
+            for group, expect in [('public', 4), ('automation', 12), ('lab', 7), ('foundation', 9)]:
+                page.locator(f'[data-sky-filter="{group}"]').click(); page.wait_for_timeout(150)
+                visible = page.locator('[data-sky-item]:visible').count()
+                total = page.locator(f'[data-sky-item][data-group="{group}"]').count()
+                check(f'{name} filter {group} shows {expect}', visible == expect, visible)
+                check(f'{name} filter {group} never shows more than the group holds',
+                      visible <= total, f'{visible} of {total}')
+            page.locator('[data-sky-filter="all"]').click()
+            page.locator('[data-project-search]').fill('mk voice'); page.wait_for_timeout(200)
+            check(f'{name} search narrows to one project',
+                  page.locator('[data-sky-item]:visible').count() == 1,
+                  page.locator('[data-sky-item]:visible').count())
+            page.locator('[data-project-search]').fill('no-such-project-xyz'); page.wait_for_timeout(200)
+            check(f'{name} a search with no hits says so',
+                  page.locator('[data-project-empty]').is_visible())
+            page.locator('[data-project-search]').fill(''); page.wait_for_timeout(200)
+
+        attempt(f'{name} archive directory', archive_directory)
+
+        # --- the quick view keeps its focus contract -------------------------
+        def quick_view():
+            page.locator('[data-preview="preview-ask-repos"]').click(); page.wait_for_timeout(350)
+            check(f'{name} quick view opens', page.locator('[data-showroom-dialog]').is_visible())
+            boundary = page.locator('[data-showroom-dialog] .sr-preview__boundary').inner_text()
+            check(f'{name} quick view carries the honest boundary', len(boundary) > 50, len(boundary))
+            page.keyboard.press('Escape'); page.wait_for_timeout(350)
+            check(f'{name} Escape closes the quick view',
+                  not page.locator('[data-showroom-dialog]').is_visible())
+            check(f'{name} closing returns focus to the trigger',
+                  page.evaluate('document.activeElement.dataset.preview') == 'preview-ask-repos',
+                  page.evaluate('document.activeElement.dataset.preview'))
+
+        attempt(f'{name} quick view', quick_view)
+
+        # --- a card's own evidence controls ----------------------------------
+        def card_evidence():
+            card = page.locator('.sr-card').first
+            shots = card.locator('[data-shot]')
+            check(f'{name} the first card offers more than one screenshot',
+                  shots.count() > 1, shots.count())
+            shots.nth(1).click(); page.wait_for_timeout(250)
+            check(f'{name} the chosen screenshot is the pressed one',
+                  shots.nth(1).get_attribute('aria-pressed') == 'true')
+
+        attempt(f'{name} card evidence controls', card_evidence)
+
+        def method_disclosure():
+            steps = page.locator('#method details')
+            check(f'{name} five method steps', steps.count() == 5, steps.count())
+            first = steps.first
+            check(f'{name} method steps start closed', first.get_attribute('open') is None)
+            first.locator('summary').click(); page.wait_for_timeout(200)
+            check(f'{name} a method step opens on its summary', first.get_attribute('open') is not None)
+            first.locator('summary').click()
+
+        attempt(f'{name} method disclosure', method_disclosure)
+
+        if w < 700:
+            def mobile_menu():
+                page.evaluate('window.scrollTo({top:0,behavior:"instant"})'); page.wait_for_timeout(250)
+                page.locator('[data-mobile-menu] summary').click(); page.wait_for_timeout(250)
+                check(f'{name} mobile menu opens',
+                      page.locator('[data-mobile-menu]').get_attribute('open') is not None)
+                page.keyboard.press('Escape'); page.wait_for_timeout(250)
+                check(f'{name} Escape closes the mobile menu',
+                      page.locator('[data-mobile-menu]').get_attribute('open') is None)
+
+            attempt(f'{name} mobile menu', mobile_menu)
 
         # --- captures --------------------------------------------------------
         for label, u in [('open', 0.02), ('forge', 0.17), ('system', 0.34),
@@ -319,10 +621,44 @@ with sync_playwright() as p:
     links = page.locator('[data-chapter] a[href]').count()
     check('no-JS keeps every chapter in the document', counts == 7, counts)
     check('no-JS keeps the project links', links > 0, links)
+    # Migrated: the old suite asked the whole archive to survive without script,
+    # not only the part the cinema replaced.
+    visible = page.locator('[data-sky-item]:visible').count()
+    check('no-JS shows every project in the archive', visible == 38, visible)
+    check('no-JS hides the empty state it cannot drive',
+          not page.locator('[data-project-empty]').is_visible())
+    # And the old poster requirement: where the interactive illustration would
+    # have been, a real image with a real description, served by the document.
+    plates = page.evaluate('''() => {
+      const imgs = [...document.querySelectorAll('[data-chapter] img[data-plate]')];
+      return {count: imgs.length, withAlt: imgs.filter(i => (i.alt || '').length > 10).length};
+    }''')
+    check('no-JS keeps the chapter plates with their descriptions',
+          plates['count'] >= 4 and plates['withAlt'] == plates['count'], plates)
     page.screenshot(path=str(OUT / 'nojs.png'))
     ctx.close()
 
     browser.close()
+
+# ---------------------------------------------------------------------------
+# Retired from scripts/test-showroom.py, with the reason.
+#
+# These four groups were Exhibit-specific and Exhibit renders on no route now
+# (the landing page stopped importing it when the cinema replaced the showroom
+# composition). The assertions are kept readable in scripts/attic/, not deleted,
+# so they can come back with the component if it is ever mounted again:
+#
+#   * exhibit kind switching            test-showroom.py:81-83
+#   * the [data-assembly] range control            :85
+#   * the [data-motion-toggle] control      :86-87, :104
+#   * the [data-exhibit-fallback] poster     :105, :110
+#
+# Three more were genuinely obsolete rather than renamed, and their requirements
+# are already discharged here: one renderer (the `one renderer canvas` check),
+# WebGL initialised (`WebGL initialised`), and the static path (`reduced motion
+# uses the static path`). Nothing was added for `?showroom=static`; reintroducing
+# a static escape on this route would be a product decision, not a migration.
+# ---------------------------------------------------------------------------
 
 (OUT / 'signal-report.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
 passed = sum(1 for c in report['checks'] if c['passed'])

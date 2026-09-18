@@ -7,16 +7,16 @@
  * link, Home/End and a fast swipe all land on exactly the state the same
  * progress produces going forward.
  *
- * The page is useful before this file runs and if it never runs: the poster,
- * the headline, every chapter's copy, its screenshot and its links are real
- * HTML in document order. This module upgrades that composition; it does not
+ * The page is useful before this file runs and if it never runs: the headline,
+ * every chapter's copy, its screenshot and its links are real HTML in document
+ * order. This module upgrades that composition; it does not
  * supply it.
  */
 import * as THREE from 'three';
 import type { ArtifactId, ArtifactStage, CameraPose, Layout, Progress, ShapeId, Tier } from './types';
 import { TIERS } from './types';
 import { RIM, buildShapes } from './shapes';
-import { projectSurface } from './artifacts';
+import { projectBounds, projectSurface } from './artifacts';
 import { applyPose, blendPose, frameHeightAt, microParallax } from './camera';
 import { CHAPTERS, SEGMENT_VH, evaluate } from './chapters';
 import { STAGES } from './artifacts';
@@ -55,7 +55,8 @@ export function initSignal(): void {
   const foundCanvas = found.querySelector<HTMLCanvasElement>('[data-signal-canvas]');
   const foundRunway = found.querySelector<HTMLElement>('[data-signal-runway]');
   const foundFrame = found.querySelector<HTMLElement>('[data-signal-frame]');
-  const poster = found.querySelector<HTMLElement>('[data-signal-poster]');
+  const intro = found.querySelector<HTMLElement>('.signal__intro');
+  const seek = found.querySelector<HTMLElement>('[data-signal-seek]');
   const panels = Array.from(found.querySelectorAll<HTMLElement>('[data-chapter]'));
   if (!foundCanvas || !foundRunway || !foundFrame || panels.length === 0) return;
 
@@ -82,16 +83,71 @@ export function initSignal(): void {
   // The visible chapter is a function of progress, so this is a plain setter and
   // not a transition. `inert` is what keeps a hidden panel's links out of the tab
   // order; visibility alone would leave focusable targets behind.
+  /**
+   * Move focus off a subtree that is about to become inert, and nowhere else.
+   *
+   * This is the whole rule for focus here: we take focus ONLY from an element we
+   * are ourselves about to make unreachable, and we hand it to the nearest thing
+   * that says where the visitor now is. Anything wider than that is focus theft
+   * during an ordinary scroll.
+   */
+  function rescueFocus(from: HTMLElement, to: HTMLElement | null | undefined) {
+    const active = document.activeElement;
+    if (!(active instanceof HTMLElement) || !from.contains(active)) return;
+    (to ?? seek?.querySelector<HTMLElement>('button:not([disabled])') ?? null)
+      ?.focus({ preventScroll: true });
+  }
+
   let shownChapter = '';
   function showChapter(id: string) {
     if (id === shownChapter) return;
     shownChapter = id;
+    const arriving = panels.find((p) => p.dataset.chapter === id) ?? null;
     for (const panel of panels) {
       const active = panel.dataset.chapter === id;
+      if (!active) rescueFocus(panel, arriving?.querySelector<HTMLElement>('.signal__line'));
       panel.toggleAttribute('inert', !active);
       panel.setAttribute('aria-hidden', active ? 'false' : 'true');
       panel.dataset.active = active ? 'true' : 'false';
     }
+  }
+
+  /**
+   * The first viewport leaves the tab order once it has left the screen.
+   *
+   * This is the Tab rewind. From the middle of the film the next element in
+   * document order was the hero's own button, sitting nine viewports above; the
+   * browser scrolled it into view to focus it, and the film wound back to the
+   * start. The intro is genuinely off screen by then — the same condition that
+   * takes the inactive chapters out of the tab order takes it out too. Scroll
+   * back up and it returns. No Tab is cancelled, no tabindex is positive, and
+   * nothing is trapped.
+   */
+  /**
+   * Whether the fixed header is currently over the stage.
+   *
+   * The stage is black in all six themes, and the header is not: in the light
+   * theme a silver bar floated on it for the whole runway. This is read from the
+   * region the header actually overlaps — not a timer, not a hard-coded document
+   * height — so it is right at any runway length and on the static path too.
+   */
+  const HEADER = 56;
+  let overStage = '';
+  function updateHeader() {
+    const bottom = root.getBoundingClientRect().bottom;
+    const over = bottom > HEADER ? 'cinema' : 'released';
+    if (over === overStage) return;
+    overStage = over;
+    root.dataset.over = over;
+  }
+
+  let introInert = false;
+  function updateIntro(progress: number) {
+    const away = progress > 0.015;
+    if (away === introInert || !intro) return;
+    introInert = away;
+    if (away) rescueFocus(intro, null);
+    intro.toggleAttribute('inert', away);
   }
   showChapter(panels[0]?.dataset.chapter ?? '');
 
@@ -170,6 +226,54 @@ export function initSignal(): void {
     request();
   }
 
+  /** Progress at the settled middle of a chapter, the same value an address resolves to. */
+  const midpoint = (index: number) => {
+    const chapter = CHAPTERS[Math.min(Math.max(index, 0), CHAPTERS.length - 1)];
+    return chapter.from + (chapter.to - chapter.from) * 0.55;
+  };
+
+  /**
+   * A seek scrolls, then puts focus on what the visitor arrived at. The focus
+   * call is `preventScroll`, because the destination is inside a sticky frame
+   * that is already on screen: letting the browser scroll to it as well is the
+   * second, unasked-for jump.
+   */
+  function seekTo(index: number) {
+    const bounded = Math.min(Math.max(index, 0), CHAPTERS.length - 1);
+    scrollTo({ top: runwayTop + runwayRange * midpoint(bounded), behavior: 'instant' as ScrollBehavior });
+    request();
+    // The destination panel is still inert until the next frame evaluates the new
+    // progress, and focusing inside an inert subtree does nothing at all. Wait for
+    // the frame that makes it the live chapter, then land on it.
+    const panel = panels.find((p) => p.dataset.chapter === CHAPTERS[bounded].id);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      panel?.querySelector<HTMLElement>('.signal__line')?.focus({ preventScroll: true });
+    }));
+  }
+
+  const seekPrev = seek?.querySelector<HTMLButtonElement>('[data-seek=prev]') ?? null;
+  const seekNext = seek?.querySelector<HTMLButtonElement>('[data-seek=next]') ?? null;
+  const seekWork = seek?.querySelector<HTMLAnchorElement>('[data-seek=work]') ?? null;
+
+  function currentIndex() {
+    return CHAPTERS.findIndex((c) => c.id === shownChapter);
+  }
+
+  seekPrev?.addEventListener('click', () => seekTo(currentIndex() - 1), { signal });
+  seekNext?.addEventListener('click', () => seekTo(currentIndex() + 1), { signal });
+  // A real link, so it works with the renderer off. The handler only adds the
+  // focus destination the browser does not give an in-page jump.
+  seekWork?.addEventListener('click', () => {
+    requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('#public-title')?.focus({ preventScroll: true });
+    });
+  }, { signal });
+
+  function updateSeek(index: number) {
+    if (seekPrev) seekPrev.disabled = index <= 0;
+    if (seekNext) seekNext.disabled = index >= CHAPTERS.length - 1;
+  }
+
   /* --------------------------------- the static path: reduced motion / no WebGL */
 
   // A deliberate stillness, not a failure page. The stylesheet lays every chapter
@@ -181,7 +285,16 @@ export function initSignal(): void {
       panel.setAttribute('aria-hidden', 'false');
       panel.dataset.active = 'true';
     }
-    poster?.removeAttribute('hidden');
+    // Nothing is sticky on this path, so there is no chapter to seek between and
+    // nothing above the fold to take out of the tab order. The document is the
+    // navigation.
+    intro?.removeAttribute('inert');
+    seek?.setAttribute('hidden', '');
+    // The still composition is the same black stage under the same fixed header,
+    // so the seam is the same seam. It just has no render loop to drive it.
+    updateHeader();
+    addEventListener('scroll', updateHeader, { passive: true, signal });
+    addEventListener('resize', updateHeader, { passive: true, signal });
   }
 
   if (reduced.matches) {
@@ -282,7 +395,10 @@ export function initSignal(): void {
   function stageFor(id: ArtifactId): BoundStage {
     let stage = resident.get(id);
     if (!stage) {
-      stage = STAGES[id]({ worldInterior: root.dataset.worldInterior || null }) as BoundStage;
+      stage = STAGES[id]({
+        worldInterior: root.dataset.worldInterior || null,
+        arrival: parseList(root.dataset.arrival),
+      }) as BoundStage;
       stage.setCamera?.(camera, { width: viewportWidth, height: viewportHeight });
       scene.add(stage.object);
       resident.set(id, stage);
@@ -457,7 +573,6 @@ export function initSignal(): void {
   let contextLost = false;
   let motionTime = 0;
   let lastTick = 0;
-  let posterCleared = false;
   let lastGone = -1;
 
   const smooth01 = (t: number) => {
@@ -473,6 +588,14 @@ export function initSignal(): void {
     if (step === narrationStep) return;
     narrationStep = step;
     root.style.setProperty('--signal-narration', (step / 25).toFixed(2));
+  }
+
+  let phaseOn: HTMLElement | null = null;
+  function setPhase(panel: HTMLElement | undefined, phase: string) {
+    if (!panel) return;
+    if (phaseOn && phaseOn !== panel) phaseOn.dataset.phase = 'proof';
+    phaseOn = panel;
+    if (panel.dataset.phase !== phase) panel.dataset.phase = phase;
   }
 
   let restState = -1;
@@ -498,6 +621,9 @@ export function initSignal(): void {
     const index = CHAPTERS.indexOf(state.chapter);
 
     showChapter(state.chapter.id);
+    updateIntro(u);
+    updateSeek(index);
+    updateHeader();
     root.dataset.signalChapter = state.chapter.id;
 
     // Ambient motion only advances while the story is moving. At a reading stop
@@ -520,7 +646,8 @@ export function initSignal(): void {
     // than leaves.
     const depth =
       state.chapter.id === 'matter' || state.chapter.id === 'signal' || state.chapter.id === 'world' ? 1
-      : state.chapter.id === 'system' ? 0.74 : 0;
+      : state.chapter.id === 'system' ? 0.74
+      : state.chapter.id === 'archive' ? 0.97 : 0;
     const surfaced = depth > 0 ? smooth01((state.local - 0.1) / 0.28) * depth : 0;
     const gone = released();
     cloud.setOpacity((state.chapter.id === 'horizon' ? 1 : 0.82) * (1 - surfaced) * (1 - gone));
@@ -593,23 +720,34 @@ export function initSignal(): void {
     const panel = panels.find((p) => p.dataset.chapter === state.chapter.id);
     const surface = (live as (BoundStage & { surface?: THREE.Object3D | null }) | undefined)?.surface;
     const wanted = live?.handoff?.()?.fit ?? 0;
-    if (wanted > 0.001 && surface && panel) {
+    // Whichever the chapter is currently about. The object's own interval frames
+    // the object -- its whole silhouette, flaps included -- and the proof stop
+    // frames the surface the capture is taking over.
+    const focus = (live as (BoundStage & { focus?: () => { object: THREE.Object3D; fit: number } | null }) | undefined)
+      ?.focus?.() ?? null;
+    if (panel && focus && focus.fit > wanted && focus.fit > 0.001) {
+      applyPose(
+        camera,
+        microParallax(
+          fitSurface(composed, focus.object, freeBox(panel), focus.fit, true),
+          pointerX, pointerY, parallax,
+        ),
+      );
+    } else if (wanted > 0.001 && surface && panel) {
       applyPose(
         camera,
         microParallax(fitSurface(composed, surface, freeBox(panel), wanted), pointerX, pointerY, parallax),
       );
     }
 
+    // Which claim is currently true. At the carton's own stop there is no
+    // screenshot on screen, so the sentence that names one may not be showing.
+    const blended = live?.handoff?.()?.blend ?? 0;
+    setPhase(panel, blended > 0.5 ? 'proof' : 'object');
+
     alignPlate(state.chapter.id, state.local, live);
 
     renderer.render(scene, camera);
-
-    if (!posterCleared) {
-      // Replace the poster only once a matching frame exists, and at whatever
-      // progress the visitor has already reached -- never rewind them.
-      posterCleared = true;
-      poster?.setAttribute('hidden', '');
-    }
 
     request();
   }
@@ -710,18 +848,35 @@ export function initSignal(): void {
    */
   const probe = new THREE.PerspectiveCamera(38, 1, 0.1, 140);
   const CENTRE = new THREE.Vector3();
-  function projectWith(pose: CameraPose, surface: THREE.Object3D) {
+  const WHOLE = new THREE.Box3();
+  function projectWith(pose: CameraPose, surface: THREE.Object3D, whole = false) {
     probe.aspect = viewportWidth / Math.max(1, viewportHeight);
     applyPose(probe, pose);
     probe.updateMatrixWorld(true);
     probe.updateProjectionMatrix();
-    return projectSurface(surface, probe, viewportWidth, viewportHeight);
+    return whole
+      ? projectBounds(surface, probe, viewportWidth, viewportHeight)
+      : projectSurface(surface, probe, viewportWidth, viewportHeight);
   }
 
-  function fitSurface(pose: CameraPose, surface: THREE.Object3D, box: ReturnType<typeof freeBox>, amount: number) {
+  function fitSurface(
+    pose: CameraPose, surface: THREE.Object3D, box: ReturnType<typeof freeBox>, amount: number,
+    whole = false,
+  ) {
     if (amount <= 0.001) return pose;
-    surface.updateWorldMatrix(true, false);
-    CENTRE.setFromMatrixPosition(surface.matrixWorld);
+    surface.updateWorldMatrix(true, true);
+    if (whole) {
+      const b = projectWith(pose, surface, true);
+      if (!(b.width > 1)) return pose;
+      // The CENTRE of what is there, not the origin of the node holding it. A
+      // carton's group sits on its own base, so aiming at the origin put the box
+      // half out of the top of the frame -- the fit was exact about the wrong
+      // point.
+      WHOLE.setFromObject(surface);
+      WHOLE.getCenter(CENTRE);
+    } else {
+      CENTRE.setFromMatrixPosition(surface.matrixWorld);
+    }
     const target: [number, number, number] = [CENTRE.x, CENTRE.y, CENTRE.z];
     // Aim a little inside the band. The correction is computed at the surface's
     // centre depth while its rectangle spans a range of depths, so each pass
@@ -737,7 +892,7 @@ export function initSignal(): void {
     // the whole loop on scale and never corrected the position, so the rectangle
     // was the right size in the wrong place and still outside the band.
     for (let pass = 0; pass < 5; pass++) {
-      let rect = projectWith(out, surface);
+      let rect = projectWith(out, surface, whole);
       if (!(rect.width > 1 && rect.height > 1)) return pose;
 
       // Dolly only if it does not fit, and shift only by what is still outside.
@@ -780,7 +935,7 @@ export function initSignal(): void {
           // longer exists: the surface had been scaled 2.7x and the shift was
           // computed against its old, already-inside-the-band position, so the
           // loop congratulated itself and left the capture off the screen.
-          rect = projectWith(out, surface);
+          rect = projectWith(out, surface, whole);
           if (!(rect.width > 1 && rect.height > 1)) return pose;
         }
       }
@@ -886,7 +1041,6 @@ export function initSignal(): void {
     'webglcontextrestored',
     () => {
       contextLost = false;
-      posterCleared = false;
       root.dataset.graphics = 'webgl';
       measure();
       request();
@@ -920,6 +1074,17 @@ export function initSignal(): void {
 export function stopSignal(): void {
   teardown?.();
   teardown = null;
+}
+
+/** A data attribute carrying a list of URLs. A malformed one is no list, not a throw. */
+function parseList(value: string | undefined): string[] {
+  if (!value) return [];
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed.filter((v): v is string => typeof v === 'string') : [];
+  } catch {
+    return [];
+  }
 }
 
 /** mulberry32. Deterministic and seeded, so the scene is identical on every load. */
