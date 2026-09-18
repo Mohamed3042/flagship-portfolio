@@ -223,6 +223,13 @@ was not taken on a finishing round without measuring it first.
   phone GPU, and Safari is not measured at all.
 - **`valid-source-maps` fails** in every Lighthouse run: the build ships no
   source maps. A choice, not a defect.
+- **The still document ships an eyebrow above every heading.** The documenter
+  found it: `.signal__kicker` — 11 px, tracked, uppercase, secondary ink —
+  renders above the title on all nineteen beats with no JS, no WebGL and for
+  every crawler. The cinema hides it, and `signal.css`'s own comment states
+  the ban, so the form is live precisely on the layer this design calls its
+  base. Not fixed: the still document's composition is not one of this
+  round's four scopes, and changing it is a design decision, not a repair.
 - **LinkedIn answers 999 to a script** and was not machine-checked; unchanged
   from the shipped site.
 - The machine's C: drive hit **zero bytes free** mid-round and took the suite
