@@ -1,0 +1,19 @@
+{
+  "pack_id": "signal-director-round-02-20260918",
+  "status": "director reference, not an approved production UI",
+  "created_from": "Four images already generated in this conversation; this pass packages and annotates them, not a new image-generation run.",
+  "original_pixel_dimensions": [1672, 941],
+  "content_authority": "Current verified repository project data. Generated words, figures, names and menus are not facts.",
+  "assets": [
+    {"id":"01-horizon","original":"boards/01-horizon.png","conversation_filename":"from_signal_to_systems.png","generation_id":"4b818809-2c05-4426-b6cc-819ef9a8dbdd","sha256":"575e4c9c2eba253ea4e6ef7ea97b5b80e6769a4a47874e77e9dc6ec5e2a41194","dimensions":[1672,941],"study_crop":"studies/01-horizon-crop.png","crop_box_pixels":[990,45,1450,740],"use":"One immense rim-lit mass. Clear type and actions.","exclude":"Do not copy invented Signal product or new navigation.","production_ready":false,"approved_factual_copy":false},
+    {"id":"02-star-forge","original":"boards/02-star-forge.png","conversation_filename":"from_fragments_to_intelligence.png","generation_id":"cda7c3ee-cdf2-4aff-9ea6-7f4f6349992a","sha256":"bee724e8feb83c6e0354ad155588104576a5f43a6253a076e2e95e9aae779f79","dimensions":[1672,941],"study_crop":"studies/02-star-forge-crop.png","crop_box_pixels":[853,48,1185,298],"use":"Aligned arcs separate into real spatial layers.","exclude":"Reject the generated dashboard, figures and human-review photo.","production_ready":false,"approved_factual_copy":false},
+    {"id":"03-paperboard","original":"boards/03-paperboard.png","conversation_filename":"light_becomes_matter_signal_continues.png","generation_id":"5886ac3d-a3d5-4df7-80c7-edcc1de87bfd","sha256":"c21fbd343c86b9d5ec1a94fbcdd5e9411bbd943bdb43756b240c0ec5c95597db","dimensions":[1672,941],"study_crop":"studies/03-paperboard-crop.png","crop_box_pixels":[855,60,1235,403],"use":"Solid paperboard, thickness, hinges and fold shadows.","exclude":"Reference material only; match the actual carton topology.","production_ready":false,"approved_factual_copy":false},
+    {"id":"04-portal","original":"boards/04-portal.png","conversation_filename":"a_portal_to_projects_in_orbit.png","generation_id":"1f24878d-8ac5-4eb3-8aad-ad39f588094a","dimensions":[1672,941],"study_crop":"studies/04-portal-crop.png","crop_box_pixels":[630,48,1510,460],"use":"A visible threshold with coherent interior depth.","exclude":"Do not turn the sci-fi illustration or invented archive into Cake Studio evidence.","production_ready":false,"approved_factual_copy":false}
+  ],
+  "github_distribution": {
+    "files": "Markdown, provenance, response template and compact PREVIEW.webp",
+    "original_boards": "Full-resolution boards and studies are distributed in the conversation ZIP, not claimed uploaded to GitHub.",
+    "preview_dimensions": [480,437],
+    "preview_sha256": "f8ae58d51ea8fd1cd73c08c74c25dd37297d40f6d8a6dd7e9cb5e3a86ec6ef9e"
+  }
+}
