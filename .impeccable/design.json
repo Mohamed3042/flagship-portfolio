@@ -1,136 +1,238 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-17T01:31:23.999690+00:00",
-  "title": "Design System: Mohamed Mahmoud",
+  "generatedAt": "2026-09-18T00:00:00+00:00",
+  "title": "Design System: From Signal to Systems",
   "extensions": {
+    "scope": {
+      "governs": [
+        "src/pages/[lang]/index.astro — the landing route and its first viewport",
+        "src/components/signal/*",
+        "src/styles/signal.css",
+        "src/lib/signal/*"
+      ],
+      "doesNotGovern": [
+        "public/worlds/* — the cinematic Worlds keep their own art direction",
+        "the 38 project story routes",
+        "src/components/Contact.astro — re-toned on this route only, through route-scoped overrides at the end of signal.css"
+      ],
+      "inheritsFrom": "src/styles/tokens.css (font faces and the six-theme system). signal.css declares nothing on :root."
+    },
     "colorMeta": {
-      "primary": {
+      "signal-bg": {
+        "role": "neutral",
+        "displayName": "Night Ground",
+        "canonical": "#05070A",
+        "measuredLuminance": 0.002061,
+        "tonalRamp": ["oklch(15% 0.012 250)", "oklch(25% 0.012 250)", "oklch(35% 0.012 250)", "oklch(45% 0.012 250)", "oklch(58% 0.012 250)", "oklch(70% 0.012 250)", "oklch(83% 0.012 250)", "oklch(95% 0.012 250)"]
+      },
+      "signal-depth": {
+        "role": "neutral",
+        "displayName": "Reading Surface",
+        "canonical": "#0B1017",
+        "measuredLuminance": 0.005036,
+        "tonalRamp": ["oklch(15% 0.018 250)", "oklch(25% 0.018 250)", "oklch(35% 0.018 250)", "oklch(45% 0.018 250)", "oklch(58% 0.018 250)", "oklch(70% 0.018 250)", "oklch(83% 0.018 250)", "oklch(95% 0.018 250)"]
+      },
+      "signal-ink": {
+        "role": "neutral",
+        "displayName": "Primary Ink",
+        "canonical": "#F0F3F6",
+        "contrastOnGround": "18.11:1 (verified)",
+        "contrastOnDepth": "17.13:1 (verified)",
+        "tonalRamp": ["oklch(15% 0.006 240)", "oklch(25% 0.006 240)", "oklch(35% 0.006 240)", "oklch(48% 0.006 240)", "oklch(60% 0.006 240)", "oklch(72% 0.006 240)", "oklch(85% 0.006 240)", "oklch(96% 0.006 240)"]
+      },
+      "signal-ink-2": {
+        "role": "neutral",
+        "displayName": "Secondary Ink",
+        "canonical": "#98A5B1",
+        "contrastOnGround": "8.02:1 (verified)",
+        "contrastOnDepth": "7.59:1 (verified)",
+        "tonalRamp": ["oklch(15% 0.022 245)", "oklch(25% 0.022 245)", "oklch(35% 0.022 245)", "oklch(45% 0.022 245)", "oklch(56% 0.022 245)", "oklch(69% 0.022 245)", "oklch(82% 0.022 245)", "oklch(95% 0.022 245)"]
+      },
+      "signal-accent": {
         "role": "primary",
-        "displayName": "Cosmic blue",
-        "canonical": "#2997ff",
-        "tonalRamp": [
-          "oklch(15% 0.13 250)",
-          "oklch(25% 0.13 250)",
-          "oklch(35% 0.13 250)",
-          "oklch(45% 0.13 250)",
-          "oklch(55% 0.13 250)",
-          "oklch(65% 0.13 250)",
-          "oklch(80% 0.13 250)",
-          "oklch(95% 0.13 250)"
-        ]
-      }
+        "displayName": "Signal Blue",
+        "canonical": "#70B8FF",
+        "contrastOnGround": "9.59:1 (verified)",
+        "contrastOnDepth": "9.08:1 (verified)",
+        "usage": "The single accent. Marks only a real path: the travelled workflow route (stopping at the approval gate), the matched media clip, the focused control, the primary action fill, the selection highlight and the caret.",
+        "tonalRamp": ["oklch(15% 0.11 250)", "oklch(25% 0.11 250)", "oklch(35% 0.11 250)", "oklch(48% 0.11 250)", "oklch(60% 0.11 250)", "oklch(76% 0.11 250)", "oklch(87% 0.11 250)", "oklch(95% 0.11 250)"]
+      },
+      "cta-ink": {
+        "role": "neutral",
+        "displayName": "Action Ink",
+        "canonical": "#04121F",
+        "contrastOnAccent": "8.99:1 (verified)",
+        "tonalRamp": ["oklch(15% 0.03 245)", "oklch(25% 0.03 245)", "oklch(35% 0.03 245)", "oklch(45% 0.03 245)", "oklch(57% 0.03 245)", "oklch(70% 0.03 245)", "oklch(83% 0.03 245)", "oklch(95% 0.03 245)"]
+      },
+      "mass-shipped": {
+        "role": "neutral",
+        "displayName": "Opening Mass (as shipped)",
+        "canonical": "rgb(0,1,2)",
+        "note": "MEASURED, not specified. index.ts asks for MeshBasicMaterial 0x080B12 (luminance 0.003346, lighter than the ground); the finish review measured rgb(0,1,2), darker than the ground. The blend or the scrim inverts it. #080B12 is not a shipped token.",
+        "tonalRamp": ["oklch(8% 0.01 245)", "oklch(18% 0.01 245)", "oklch(30% 0.01 245)", "oklch(42% 0.01 245)", "oklch(55% 0.01 245)", "oklch(68% 0.01 245)", "oklch(82% 0.01 245)", "oklch(95% 0.01 245)"]
+      },
+      "scene-graphite": { "role": "tertiary", "displayName": "Graphite", "canonical": "#1A222A", "usage": "Rendered-scene machined bodies. roughness .55, metalness .35.", "tonalRamp": ["oklch(15% 0.018 245)", "oklch(25% 0.018 245)", "oklch(35% 0.018 245)", "oklch(45% 0.018 245)", "oklch(57% 0.018 245)", "oklch(70% 0.018 245)", "oklch(83% 0.018 245)", "oklch(95% 0.018 245)"] },
+      "scene-card": { "role": "tertiary", "displayName": "Card Stock", "canonical": "#C6CCD3", "usage": "Rendered-scene card faces. roughness .78, metalness 0.", "tonalRamp": ["oklch(15% 0.012 245)", "oklch(25% 0.012 245)", "oklch(35% 0.012 245)", "oklch(48% 0.012 245)", "oklch(60% 0.012 245)", "oklch(73% 0.012 245)", "oklch(85% 0.012 245)", "oklch(96% 0.012 245)"] },
+      "scene-paperboard": { "role": "tertiary", "displayName": "Paperboard", "canonical": "#B2ABA0", "usage": "The carton. roughness .95, metalness 0, with a deterministic fibre roughness map.", "tonalRamp": ["oklch(15% 0.014 80)", "oklch(25% 0.014 80)", "oklch(35% 0.014 80)", "oklch(48% 0.014 80)", "oklch(60% 0.014 80)", "oklch(73% 0.014 80)", "oklch(86% 0.014 80)", "oklch(96% 0.014 80)"] },
+      "scene-fold-edge": { "role": "tertiary", "displayName": "Fold Edge", "canonical": "#3C434B", "usage": "Dieline fold lines, 50% opacity.", "tonalRamp": ["oklch(15% 0.016 250)", "oklch(25% 0.016 250)", "oklch(35% 0.016 250)", "oklch(45% 0.016 250)", "oklch(57% 0.016 250)", "oklch(70% 0.016 250)", "oklch(83% 0.016 250)", "oklch(95% 0.016 250)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The first viewport headline only. Two lines, at most 22ch; the second line drops to 74% ink mixed toward the ground." },
+      "display-ar": { "displayName": "Arabic Display", "purpose": "Al Rai Media, declared in tokens.css as --font-ar-display (weights 500-950). Arabic display resets letter-spacing to 0 and line-height to 1.24. Arabic body stays on Cairo Variable, which supplies the regular weight Al Rai Media lacks." },
+      "headline": { "displayName": "Narration Line", "purpose": "The chapter heading. Nothing sits above it. 18ch cap in the still document." },
+      "headline-cinema": { "displayName": "Narration Line (cinema)", "purpose": "The same element inside the sticky stage, smaller and uncapped." },
+      "title": { "displayName": "Project Name", "purpose": "The project identity line. The proof figure shares its size in primary ink with tabular numerals." },
+      "body": { "displayName": "Blurb", "purpose": "The project summary, 56ch. 14px and uncapped inside the cinema." },
+      "body-limit": { "displayName": "Limitation", "purpose": "The boundary paragraph, 56ch. Its lead-in phrase sets 650 in primary ink INLINE, never above the heading." },
+      "label": { "displayName": "Evidence Label", "purpose": "Space Grotesk. The honesty caption naming what the dominant visual actually is. 11px below 560px." },
+      "label-status": { "displayName": "Status Label", "purpose": "Public / Private, uppercase over a hairline. Arabic drops the uppercasing and the tracking and rises to 12px." }
     },
     "shadows": [
-      {
-        "name": "floating-product-panel",
-        "value": "0 18px 40px -18px rgba(0,0,0,.7)",
-        "purpose": "Overlapping product screenshot panels."
-      }
+      { "name": "opening-artifact", "value": "0 34px 70px -30px rgb(0 0 0 / .85)", "purpose": "The first viewport's named capture." },
+      { "name": "plate-inflow", "value": "0 30px 60px -28px rgb(0 0 0 / .8)", "purpose": "A plate in the still document." },
+      { "name": "plate-cinema", "value": "0 24px 48px -24px rgb(0 0 0 / .9)", "purpose": "The handed-off capture over the rendered scene." },
+      { "name": "evidence-doubled-rule", "value": "0 -4px 0 -3px color-mix(in srgb,#F0F3F6 14%,transparent)", "purpose": "NOT elevation. The media evidence kind's second rule, drawn with box-shadow because it is a line." }
     ],
     "motion": [
-      {
-        "name": "ease-expo",
-        "value": "cubic-bezier(.16,1,.3,1)",
-        "purpose": "Interface transitions; the renderer has native reduced-motion and pause support."
-      }
+      { "name": "scroll-is-the-clock", "value": "state = f(scrollProgress u in [0,1])", "purpose": "Every frame is a pure evaluation of scroll progress. There is no animation queue and no entrance animation, so reverse scroll, restored scroll, deep links and Home/End reconstruct earlier states exactly." },
+      { "name": "reading-stop-decay", "value": "residual motion -> 0 at a reading stop", "purpose": "The camera rests and ambient life decays to zero at each reading stop. That decay is what makes the stop readable." },
+      { "name": "runway", "value": "9 viewport heights landscape, 7 portrait", "purpose": "The scroll length the seven chapters are mapped onto." },
+      { "name": "handoff-blend", "value": "--plate-blend 0 -> 1", "purpose": "0 while the 3D surface owns the pixels, 1 once the HTML capture does. The image is aligned to the projected rect first, so the handoff neither jumps nor double-renders." },
+      { "name": "no-motion-path", "value": "prefers-reduced-motion: reduce", "purpose": "Animation and transition are cleared and the still composition stands. The cinema block never applies." }
+    ],
+    "tiers": [
+      { "name": "desktop", "morph": 32000, "stars": 2200, "foreground": 40, "pixelRatio": 1.5 },
+      { "name": "phone", "morph": 12000, "stars": 900, "foreground": 20, "pixelRatio": 1.25 },
+      { "name": "light", "morph": 6000, "stars": 420, "foreground": 0, "pixelRatio": 1.0 },
+      { "name": "rule", "note": "Lower tiers keep the same story and the same major illusions. A smaller budget never substitutes static art." }
+    ],
+    "fallbacks": [
+      { "condition": "prefers-reduced-motion: reduce", "result": "the still composition" },
+      { "condition": "no WebGL context", "result": "the still composition" },
+      { "condition": "no JavaScript", "result": "the still composition (it is what the server ships; data-graphics is set only after a live frame)" },
+      { "condition": "lost WebGL context", "result": "the still composition" },
+      { "note": "All four land on the same document: seven chapters in document order with their real plates. It is a document worth reading, not a degraded page." }
     ],
     "breakpoints": [
-      {
-        "name": "wide",
-        "value": "1500px"
-      },
-      {
-        "name": "medium",
-        "value": "1150px"
-      },
-      {
-        "name": "navigation",
-        "value": "980px"
-      },
-      {
-        "name": "tablet",
-        "value": "820px"
-      },
-      {
-        "name": "phone",
-        "value": "560px"
-      },
-      {
-        "name": "narrow",
-        "value": "359px"
-      }
+      { "name": "composition", "value": "900px" },
+      { "name": "portrait", "value": "899px" },
+      { "name": "compact", "value": "560px" }
     ]
   },
   "components": [
     {
       "name": "Primary action",
       "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Homepage primary action.",
-      "html": "<button class='ds-primary'>See the systems</button>",
-      "css": ".ds-primary{font:650 15px var(--font,sans-serif);color:#fff;background:color-mix(in srgb,var(--accent,#2997ff) 70%,#000);border:0;border-radius:10px;min-height:48px;padding:12px 21px;cursor:pointer;transition:background .2s,transform .25s}.ds-primary:hover{background:color-mix(in srgb,var(--accent,#2997ff) 76%,#000);transform:translateY(-2px)}.ds-primary:focus-visible{outline:2px solid var(--accent,#2997ff);outline-offset:4px}"
+      "refersTo": "cta-primary",
+      "description": "The first viewport's leading action. Skips the cinema and lands on inspectable work.",
+      "html": "<a class=\"ds-cta\" href=\"#work\">See the systems<svg viewBox=\"0 0 20 20\" width=\"18\" height=\"18\" aria-hidden=\"true\"><path d=\"M3 10h13m-5-5 5 5-5 5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"/></svg></a>",
+      "css": ".ds-cta{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:12px 22px;border-radius:10px;background:#70B8FF;color:#04121F;font:700 15px/1 'Inter Variable',system-ui,sans-serif;text-decoration:none}.ds-cta>svg{flex:none}.ds-cta:hover{background:color-mix(in srgb,#70B8FF 82%,#fff)}.ds-cta:focus-visible{outline:2px solid #70B8FF;outline-offset:4px;border-radius:2px}"
     },
     {
-      "name": "Secondary action",
+      "name": "Quiet action",
       "kind": "button",
-      "description": "Quieter companion action.",
-      "html": "<button class='ds-quiet'>Get in touch</button>",
-      "css": ".ds-quiet{font:650 15px var(--font,sans-serif);color:var(--ink,#f5f5f7);background:color-mix(in srgb,var(--ink,#f5f5f7) 6%,transparent);border:1px solid var(--panel-brd,rgba(255,255,255,.15));border-radius:10px;min-height:48px;padding:12px 21px}.ds-quiet:hover{background:color-mix(in srgb,var(--ink,#f5f5f7) 12%,transparent)}.ds-quiet:focus-visible{outline:2px solid var(--accent,#2997ff);outline-offset:4px}"
+      "refersTo": "cta-quiet",
+      "description": "The companion action. Ink on a hairline, no fill until hover.",
+      "html": "<a class=\"ds-cta-quiet\" href=\"#contact\">Get in touch</a>",
+      "css": ".ds-cta-quiet{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:12px 22px;border-radius:10px;background:transparent;color:#F0F3F6;border:1px solid color-mix(in srgb,#F0F3F6 13%,transparent);font:700 15px/1 'Inter Variable',system-ui,sans-serif;text-decoration:none}.ds-cta-quiet:hover{background:#0B1017;border-color:color-mix(in srgb,#F0F3F6 26%,transparent)}.ds-cta-quiet:focus-visible{outline:2px solid #70B8FF;outline-offset:4px;border-radius:2px}"
     },
     {
-      "name": "Project search",
-      "kind": "input",
-      "description": "Directory search field.",
-      "html": "<label class='ds-search'>Search projects<input placeholder='Search projects or technology' type='search'></label>",
-      "css": ".ds-search{display:grid;gap:8px;color:var(--ink,#f5f5f7);font:14px var(--font,sans-serif)}.ds-search input{font:inherit;min-height:46px;padding:0 13px;border:1px solid var(--panel-brd,rgba(255,255,255,.15));border-radius:8px;background:var(--surface-raised,#0e0e11);color:inherit;caret-color:var(--accent,#2997ff)}.ds-search input:focus-visible{outline:2px solid var(--accent,#2997ff);outline-offset:2px}"
+      "name": "Evidence caption — all four kinds plus the gap",
+      "kind": "custom",
+      "refersTo": "evidence-screenshot",
+      "description": "The signature component. What the dominant visual actually is, set as type and rule weight — never as a coloured chip. An approved capture sets solid over a 2px rule; an illustration sets hairline; a synthetic replay sets hairline over a dashed rule; authorized media sets hairline plus a doubled rule; a chapter naming a project with no approved capture draws the unwoven rule instead of concealing the absence.",
+      "html": "<div class=\"ds-ev-set\"><p class=\"ds-ev\" data-evidence=\"screenshot\">Actual product screenshot.</p><p class=\"ds-ev\" data-evidence=\"illustration\">Illustration. It explains the idea; it measures nothing.</p><p class=\"ds-ev\" data-evidence=\"synthetic\">Authored replay over synthetic data.</p><p class=\"ds-ev\" data-evidence=\"media\">Authorized media from an existing World.</p><p class=\"ds-gap\">No approved capture of this product yet. The mechanism above is an illustration.</p></div>",
+      "css": ".ds-ev-set{display:grid;gap:20px;background:#05070A;padding:20px;max-width:54ch}.ds-ev{margin:0;padding-block-start:9px;font:400 12px/1.55 'Space Grotesk Variable',system-ui,sans-serif;color:#98A5B1}.ds-ev[data-evidence=screenshot]{border-block-start:2px solid color-mix(in srgb,#F0F3F6 55%,transparent);color:#F0F3F6;font-weight:600}.ds-ev[data-evidence=illustration]{border-block-start:1px solid color-mix(in srgb,#F0F3F6 8%,transparent)}.ds-ev[data-evidence=synthetic]{border-block-start:1px dashed color-mix(in srgb,#F0F3F6 22%,transparent)}.ds-ev[data-evidence=media]{border-block-start:1px solid color-mix(in srgb,#F0F3F6 8%,transparent);box-shadow:0 -4px 0 -3px color-mix(in srgb,#F0F3F6 14%,transparent)}.ds-gap{margin:0;padding-block-start:9px;font:400 12px/1.55 'Inter Variable',system-ui,sans-serif;color:#98A5B1;border-block-start:1px solid transparent;background-image:repeating-linear-gradient(to right,color-mix(in srgb,#F0F3F6 20%,transparent) 0 5px,transparent 5px 11px);background-size:100% 1px;background-repeat:no-repeat;background-position:top left}"
     },
     {
-      "name": "Directory filter",
-      "kind": "chip",
-      "description": "A selected group filter.",
-      "html": "<button class='ds-filter' aria-pressed='true'>Public repos <span>4</span></button>",
-      "css": ".ds-filter{font:13px var(--font,sans-serif);display:inline-flex;gap:10px;align-items:center;min-height:44px;padding:9px 13px;background:var(--ink,#f5f5f7);color:var(--space-1,#03030a);border:1px solid var(--ink,#f5f5f7);border-radius:8px}.ds-filter span{font-size:11px;font-variant-numeric:tabular-nums}.ds-filter:hover{opacity:.85}.ds-filter:focus-visible{outline:2px solid var(--accent,#2997ff);outline-offset:4px}"
-    },
-    {
-      "name": "Evidence card",
+      "name": "Chapter copy block",
       "kind": "card",
-      "description": "Text portion of a project card; an approved screenshot precedes it in the site.",
-      "html": "<article class='ds-card'><h3>ask-repos</h3><p>A public service that answers questions about GitHub repositories with the exact file and lines — or refuses.</p><a href='#work'>Explore the project</a></article>",
-      "css": ".ds-card{font:15px/1.6 var(--font,sans-serif);color:var(--ink,#f5f5f7);background:var(--surface-raised,#0e0e11);border:1px solid var(--panel-brd,rgba(255,255,255,.15));border-radius:14px;padding:24px;max-width:36rem}.ds-card h3{font-size:28px;line-height:1.12;letter-spacing:-.03em;margin:0}.ds-card p{color:var(--ink-2,#a1a1a6)}.ds-card a{color:inherit;display:inline-flex;align-items:center;min-height:44px;text-underline-offset:5px}.ds-card a:focus-visible{outline:2px solid var(--accent,#2997ff);outline-offset:4px}.ds-card a:hover{color:var(--accent,#2997ff)}"
+      "description": "One chapter's narration, project identity, proof, limitation and evidence label, registered against the datum. The narration line IS the heading; nothing sits above it.",
+      "html": "<div class=\"ds-copy\"><h2 class=\"ds-line\">A workflow you can inspect.</h2><p class=\"ds-project\"><span class=\"ds-name\">ask-repos</span><span class=\"ds-status\">Public</span></p><p class=\"ds-blurb\">A public service that answers questions about GitHub repositories with the exact file and lines — or refuses.</p><p class=\"ds-proof\"><strong>38</strong> <span>projects with inspectable scope</span></p><p class=\"ds-limit\"><strong>Scope.</strong> It reads public repositories only; nothing private is indexed.</p><p class=\"ds-ev2\">Actual product screenshot.</p></div>",
+      "css": ".ds-copy{display:grid;gap:14px;background:#05070A;color:#F0F3F6;padding:24px;max-width:40rem;font-family:'Inter Variable',system-ui,sans-serif}.ds-line{margin:0;max-width:18ch;font-size:clamp(30px,4.6vw,58px);font-weight:820;line-height:1.05;letter-spacing:-.035em;text-wrap:balance}.ds-project{margin:4px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}.ds-name{font-size:17px;font-weight:700;letter-spacing:-.01em}.ds-status{font-family:'Space Grotesk Variable',system-ui,sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#98A5B1;padding-block:3px;border-block-start:1px solid color-mix(in srgb,#F0F3F6 13%,transparent)}.ds-blurb{margin:0;max-width:56ch;font-size:15px;line-height:1.62;color:#98A5B1}.ds-proof{margin:0;display:flex;gap:10px;align-items:baseline;font-size:14px;color:#98A5B1}.ds-proof strong{font-size:17px;color:#F0F3F6;font-variant-numeric:tabular-nums;letter-spacing:-.01em}.ds-limit{margin:0;max-width:56ch;font-size:13px;line-height:1.6;color:#98A5B1}.ds-limit strong{color:#F0F3F6;font-weight:650}.ds-ev2{margin:0;padding-block-start:9px;border-block-start:2px solid color-mix(in srgb,#F0F3F6 55%,transparent);font:600 12px/1.55 'Space Grotesk Variable',system-ui,sans-serif;color:#F0F3F6}"
     },
     {
-      "name": "Phone navigation",
+      "name": "Chapter actions",
       "kind": "nav",
-      "description": "Native details navigation with accessible links.",
-      "html": "<details class='ds-nav'><summary>Menu</summary><nav><a href='#work'>Work</a><a href='#sky'>All projects</a><a href='#contact'>Contact</a></nav></details>",
-      "css": ".ds-nav{font:15px var(--font,sans-serif);color:var(--ink,#f5f5f7)}.ds-nav summary{cursor:pointer;min-height:44px;padding:12px;list-style:none;border:1px solid var(--panel-brd,rgba(255,255,255,.15));border-radius:10px}.ds-nav nav{padding:12px;border-radius:12px;background:var(--surface-raised,#0e0e11)}.ds-nav a{color:inherit;display:flex;align-items:center;min-height:48px;padding:10px 14px;text-decoration:none;border-radius:8px}.ds-nav a:hover{background:var(--panel,rgba(255,255,255,.04))}.ds-nav :focus-visible{outline:2px solid var(--accent,#2997ff);outline-offset:3px}"
+      "refersTo": "action-link",
+      "description": "Real destinations, never a second CTA group. The first is primary ink at 48px; every one after it steps down to secondary ink at 44px.",
+      "html": "<div class=\"ds-actions\"><a class=\"ds-action\" href=\"#\">Explore the project</a><a class=\"ds-action\" href=\"#\">Public repository<svg viewBox=\"0 0 20 20\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M5 15 15 5M5 5h10v10\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"/></svg></a></div>",
+      "css": ".ds-actions{display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;background:#05070A;padding:16px;font-family:'Inter Variable',system-ui,sans-serif}.ds-action{display:inline-flex;align-items:center;gap:8px;min-height:48px;font-size:15px;font-weight:650;color:#F0F3F6;text-decoration:none}.ds-action+.ds-action{min-height:44px;font-size:14px;font-weight:550;color:#98A5B1}.ds-action:hover{color:#70B8FF;text-decoration:underline;text-underline-offset:5px}.ds-action:focus-visible{outline:2px solid #70B8FF;outline-offset:4px;border-radius:2px}"
+    },
+    {
+      "name": "Plate (approved capture)",
+      "kind": "card",
+      "refersTo": "plate",
+      "description": "An approved, privacy-reviewed still. Also the element a 3D surface hands off to. In the still document it is bordered and softly dropped; in the cinema the renderer owns its transform and opacity.",
+      "html": "<figure class=\"ds-plate-frame\"><img class=\"ds-plate\" src=\"/img/sky/ask-repos-1.webp\" alt=\"The ask-repos answer view, citing the exact file and lines.\" width=\"1280\" height=\"800\"></figure>",
+      "css": ".ds-plate-frame{margin:0;background:#05070A;padding:24px}.ds-plate{display:block;width:100%;height:auto;border:1px solid color-mix(in srgb,#F0F3F6 13%,transparent);border-radius:12px;background:#0B1017;box-shadow:0 30px 60px -28px rgb(0 0 0 / .8)}"
+    },
+    {
+      "name": "Skip the cinematic",
+      "kind": "nav",
+      "description": "Clipped and transparent until focused, then fixed at the gutter. A nine-viewport runway without a way past it is a keyboard trap.",
+      "html": "<a class=\"ds-skip\" href=\"#work\">Skip the cinematic to the work</a>",
+      "css": ".ds-skip{display:inline-flex;align-items:center;min-height:48px;padding:12px 20px;border:1px solid color-mix(in srgb,#F0F3F6 13%,transparent);border-block-start:0;border-radius:0 0 10px 10px;background:#0B1017;color:#F0F3F6;font:650 14px 'Inter Variable',system-ui,sans-serif;text-decoration:none;opacity:.35}.ds-skip:focus-visible,.ds-skip:hover{opacity:1;outline:2px solid #70B8FF;outline-offset:4px}"
+    },
+    {
+      "name": "Registration datum",
+      "kind": "custom",
+      "description": "One inline offset (42% desktop, 0 portrait) that the copy column, the in-flow plate and the chapter rule all register against, holding still across all seven chapters. In the cinema it becomes a vertical gradient fading at both ends.",
+      "html": "<div class=\"ds-datum-demo\"><span class=\"ds-datum\" aria-hidden=\"true\"></span><p class=\"ds-datum-copy\">Copy stops at the datum.</p><p class=\"ds-datum-plate\">The plate begins at the datum.</p></div>",
+      "css": ".ds-datum-demo{--ds-datum:42%;position:relative;display:grid;grid-template-columns:var(--ds-datum) 1fr;column-gap:0;background:#05070A;color:#F0F3F6;padding:28px 0;font:14px/1.6 'Inter Variable',system-ui,sans-serif}.ds-datum{position:absolute;inset-block:0;inset-inline-start:var(--ds-datum);width:1px;background:color-mix(in srgb,#F0F3F6 8%,transparent)}.ds-datum-copy{margin:0;padding-inline:20px 24px;color:#98A5B1}.ds-datum-plate{margin:0;padding-inline-start:24px;color:#98A5B1}"
     }
   ],
   "narrative": {
-    "northStar": "Cosmic Keynote",
-    "overview": "Retain the established dark, luminous, bilingual identity. The revised homepage puts actual product screens and clearly labelled interactive mechanisms in the foreground; its cosmic environment is supporting scenery, not substitute evidence. Existing Worlds and individual case studies keep their own established art direction.",
+    "northStar": "Night Sky, Lit Object",
+    "overview": "This world governs one thing: the landing route's first viewport and the seven-chapter cinematic segment that follows it. Everything in it is charcoal and silver until a real product capture enters the frame. The stage is dark in every one of the site's six themes, because the scene it frames is a night sky and a lit object — the stylesheet deliberately touches nothing on :root, so the theme system outside the stage survives untouched.\n\nThe density is low and the surfaces are few. There are two material families: the flat HTML layer (ground, reading scrims, hairlines, captures) and the rendered layer (graphite, satin, steel, paperboard, thin luminous edges). No glass, no rainbow nebula, no chrome. Depth is carried by tonal separation and one long soft drop under a capture; it is never carried by an outline that pretends to be light.\n\nThe system's governing idea is that a visual makes a claim, so the claim is labelled in type. Four evidence kinds render as rule weight and font weight — never as a coloured chip — and a chapter that names a project with no approved capture draws the absence as a broken rule rather than filling it with something that merely looks like proof.",
     "keyCharacteristics": [
-      "inspectable product imagery",
-      "spatial foreground exhibits",
-      "compact project browsing",
-      "equivalent English and Arabic navigation"
+      "Near-monochrome ground with exactly one accent that only ever marks a real path.",
+      "Status carried in rule weight, dash and doubling; never in hue.",
+      "One registration datum at 42% that holds still across all seven chapters.",
+      "Every frame a pure function of scroll; no animation queue, no entrance motion.",
+      "The still document is the base layer, not the fallback."
     ],
     "rules": [
-      {
-        "name": "The Evidence Foreground Rule",
-        "body": "Color and stars frame the work; they must not replace a product screenshot or a legible project name.",
-        "section": "colors"
-      }
+      { "name": "The Colour Is Evidence Rule", "body": "Colour arrives from real product screenshots, never from the environment. If a surface is not a capture, it is charcoal, silver or ink.", "section": "colors" },
+      { "name": "The One Path Rule", "body": "The accent marks one thing at a time and only a thing that is real: the travelled path, the matched clip, the focused control. It never invents a status, and a number never takes a hue to mean pass or fail.", "section": "colors" },
+      { "name": "The Line Is The Heading Rule", "body": "A chapter's narration line is the <h2>. No eyebrow, no kicker, no label sits above it. Qualifying words go inline inside the paragraph they qualify.", "section": "typography" },
+      { "name": "The Arabic Is Not Tracked Latin Rule", "body": "Arabic display swaps the face to Al Rai Media and resets letter-spacing to 0 and line-height to 1.24. Never ship Arabic display type on the Latin metrics.", "section": "typography" },
+      { "name": "The Datum Holds Rule", "body": "Nothing floats free. Every copy column, in-flow plate and chapter rule registers against --signal-datum, and the datum holds still for the whole segment.", "section": "layout" },
+      { "name": "The Crop, Don't Shrink Rule", "body": "The opening artifact and the chapter plate cross the frame edge rather than scaling down to fit inside it. A smaller viewport gets less of the artifact at full size, never all of it at toy size.", "section": "layout" },
+      { "name": "The Falloff, Not The Box Rule", "body": "The copy in the cinema sits on a gradient scrim that decays to fully transparent on the reading-direction side (and upward in portrait). A scrim with a visible edge makes the rectangle the loudest shape on screen; it must fall off, never terminate.", "section": "elevation" }
     ],
     "dos": [
-      "Do use the existing verified project data and approved screenshots; keep limits inspectable.",
-      "Do mirror layout, text direction and navigation in Arabic.",
-      "Do label conceptual mechanisms as illustrations and preserve a usable static fallback."
+      "Do let colour arrive only from a real product capture; keep every authored surface charcoal, silver or ink.",
+      "Do carry evidence status in rule weight, dash and doubling (2px solid / 1px hairline / 1px dashed / hairline plus doubled rule) so it never depends on telling two hues apart.",
+      "Do draw the absence: a chapter naming a project with no approved capture gets the unwoven rule and a sentence saying so.",
+      "Do register every column, plate and rule against --signal-datum (42% desktop, 0 portrait) and hold it still across all seven chapters.",
+      "Do make every frame a pure function of scroll progress, so reverse scroll, restored scroll, deep links and Home/End evaluate to exactly the same state.",
+      "Do let residual motion decay to zero at a reading stop; a reading stop that still drifts is not readable.",
+      "Do keep the same story at every tier — desktop 32000 morph points / 2200 stars at pixel ratio 1.5, phone 12000 / 900 at 1.25, light 6000 / 420 at 1.0 — rather than substituting static art for a smaller budget.",
+      "Do ship the still composition as the base layer: all seven chapters in document order with their real plates, which is what reduced motion, no WebGL, no JS and a lost context all land on.",
+      "Do swap the Arabic display face to Al Rai Media and reset its tracking to 0 and leading to 1.24.",
+      "Do crop the opening artifact and the plate past the frame edge instead of scaling them down.",
+      "Do keep colour scoped: this stylesheet touches nothing on :root, and its seam overrides apply to the landing route alone."
     ],
     "donts": [
-      "Don't add a private repository link, fabricated result, simulated live session, or unreviewed customer screenshot.",
-      "Don't restore full-screen empty spacing ahead of the work or shrink meaningful body copy to fit more cards.",
-      "Don't generalize this homepage's layout into a replacement for the separate Worlds."
+      "Don't use hue to carry a status, a result or a quality judgement. The accent is not a success colour and secondary ink is not a warning.",
+      "Don't put an eyebrow, kicker or label above a narration line or a heading. Qualifiers go inline in the paragraph they qualify.",
+      "Don't use gradient-filled or shimmering text anywhere in this world; the close carries its weight in type.",
+      "Don't add a hard offset shadow or an ambient hover shadow; the only shadows are the three long soft drops above.",
+      "Don't give a scrim a visible edge. It falls off on every free side or it becomes the loudest rectangle on screen.",
+      "Don't add an entrance animation, a scroll-reveal or an animation queue to this segment. There is no queue; there is only scroll progress.",
+      "Don't render an evidence label as a coloured chip, pill or badge.",
+      "Don't let a plate become a full-bleed background behind the copy.",
+      "Don't move the datum per chapter, or let a plate or action float free of it.",
+      "Don't introduce glass, blur panels, rainbow nebulae, glyph-font icons or a system display face; icons are inline SVG and the display face is Inter Variable / Al Rai Media.",
+      "Don't extend these rules to the cinematic Worlds under public/worlds/, the 38 project story routes, or the shared Contact.astro component. They keep their own art direction; the landing route re-tones only the close, and only through route-scoped overrides."
+    ],
+    "notCanonized": [
+      "The opening mass inverts: index.ts specifies MeshBasicMaterial 0x080B12 (luminance 0.003346, lighter than the #05070A ground at 0.002061), but the finish review measured it rendering at rgb(0,1,2) — darker than the ground. The measured value is recorded; #080B12 is not a shipped token and the inversion is not a rule.",
+      "The Email tile in the closing contact band still renders violet rgb(78,52,87) with an rgb(29,18,33) bloom; its wash is not driven by the --cf-* custom properties the route re-points, so the token override does not reach it. Leftover of the previous world, not a palette entry.",
+      "The opening mass and rim fall outside the frame at 390px, so the first viewport's thesis element currently reads on desktop only.",
+      "Limitation paragraphs clip on a line boundary at full contrast inside the cinema (max-height: calc(3 * 1.6em)), which can end mid-sentence with no affordance signalling that the sentence continues.",
+      "The close's kicker element survives as markup: the route neutralizes .cf-kicker's gradient fill and recolours it, but the eyebrow still renders above the closing heading. An eyebrow above a heading is banned by this system; this instance is a carried defect of the inherited component, not a pattern to copy."
     ]
   }
 }

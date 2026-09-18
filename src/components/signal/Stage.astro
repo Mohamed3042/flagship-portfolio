@@ -1,0 +1,29 @@
+---
+import Chapter, { type SignalAction, type SignalChapterCopy, type SignalPlate } from './Chapter.astro';
+import type { Lang } from '../../i18n/utils';
+export type { SignalAction, SignalChapterCopy, SignalPlate };
+
+interface Props {
+  lang: Lang;
+  /** Already-resolved copy, one entry per chapter, in narrative order. */
+  chapters: SignalChapterCopy[];
+  /** Scroll runway length in viewport heights. The renderer maps it onto u in [0,1]. */
+  runway?: number;
+}
+const { lang, chapters, runway = 9 } = Astro.props;
+const ar = lang === 'ar';
+// `data-graphics` is deliberately absent: the still composition is what the
+// server ships, and it is complete. The renderer adds data-graphics="webgl"
+// only once it holds a live context and has drawn a matching frame.
+---
+<div class="signal__stage" data-signal-stage style={`--signal-vh:${runway}`}>
+  <a class="signal__skip" href="#work">{ar ? 'تخطَّ المشهد إلى الأعمال' : 'Skip the cinematic to the work'}</a>
+  <div class="signal__runway" data-signal-runway>
+    <div class="signal__frame" data-signal-frame>
+      {/* The registration datum: one vertical rule every chapter's copy, plate and
+          action hangs off, holding still for the whole segment. */}
+      <span class="signal__datum" aria-hidden="true"></span>
+      {chapters.map((chapter, i) => <Chapter lang={lang} chapter={chapter} index={i} />)}
+    </div>
+  </div>
+</div>

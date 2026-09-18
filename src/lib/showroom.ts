@@ -122,7 +122,10 @@ export function initShowroom(): void {
     abort.abort(); destroy3D?.(); document.documentElement.removeAttribute('data-showroom-paused');
   };
   const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  if (!connection?.saveData && new URLSearchParams(location.search).get('showroom') !== 'static') {
+  // Only boot the exhibit renderer when this page actually hosts an exhibit.
+  // The landing sequence owns the single cinematic renderer; a second scene
+  // behind it would be pure cost.
+  if (!connection?.saveData && root.querySelector('[data-exhibit]') && new URLSearchParams(location.search).get('showroom') !== 'static') {
     import('./showroom-scene').then(({ createShowroomScenes }) => {
       if (signal.aborted) return;
       const engine = createShowroomScenes(root, () => paused);

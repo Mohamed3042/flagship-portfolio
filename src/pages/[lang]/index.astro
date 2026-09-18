@@ -1,7 +1,18 @@
 ---
+/**
+ * The landing page: "From Signal to Systems".
+ *
+ * Document order is the story order, and it is all real HTML: the first
+ * viewport, then the seven cinematic chapters, then selected work, the method,
+ * the private systems, the full archive and contact. The scroll-controlled
+ * scene upgrades the chapters in place; it never supplies their only copy.
+ *
+ * "See the systems" skips the cinema entirely and lands on inspectable work,
+ * because a cinematic default must stay compatible with a fast route.
+ */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Contact from '../../components/Contact.astro';
-import Exhibit from '../../components/showroom/Exhibit.astro';
+import Stage, { type SignalAction, type SignalChapterCopy } from '../../components/signal/Stage.astro';
 import ProjectCard from '../../components/showroom/ProjectCard.astro';
 import ProjectAtlas, { type MapGroup } from '../../components/showroom/ProjectAtlas.astro';
 import { useTranslations, workPath, pick, locales, type Lang } from '../../i18n/utils';
@@ -9,12 +20,16 @@ import { automationProjects, labProjects, publicAiProjects } from '../../data/sy
 import { legacyProjects, getProject, type ProjectMeta } from '../../data/projects';
 import { featured } from '../../data/featured';
 import { profile } from '../../data/profile';
+import { CHAPTERS, COPY, SEGMENT_VH } from '../../lib/signal/chapters';
 import '../../styles/showroom.css';
+import '../../styles/signal.css';
+
 export function getStaticPaths() { return locales.map(lang => ({ params: { lang } })); }
 const { lang } = Astro.params as { lang: Lang };
 const t = useTranslations(lang);
 const ar = lang === 'ar';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const stations = featured.map(feature => ({ feature, project: getProject(feature.slug)! })).filter(s => !!s.project?.story);
 const publicStations = stations.filter(s => s.feature.chapter === 'public');
 const privateStations = stations.filter(s => s.feature.chapter === 'private');
@@ -25,8 +40,68 @@ const entries: { project: ProjectMeta; group: MapGroup }[] = [
   ...labProjects.map(project => ({ project, group: 'lab' as const })),
   ...legacyProjects.map(project => ({ project, group: 'foundation' as const })),
 ];
-const exhibits = [{slug:'spaceframe-world',kind:'truss',label:ar?'الهياكل':'Structures'}, {slug:'medmac-box-studio',kind:'box',label:ar?'التغليف':'Packaging'}, {slug:'enterprise-ai-automation-templates',kind:'flow',label:ar?'الأتمتة':'Automation'}].map(e => ({...e, project:getProject(e.slug)!, shot:featured.find(f => f.slug === e.slug)!.shots[0]}));
-const hero = exhibits[0];
+
+/**
+ * The portal chapter shows a real frame from the published Cake Studio world,
+ * which is what its "authorized media" label promises. Anything else would make
+ * that label false.
+ */
+const WORLD_FRAME = {
+  src: `${base}/worlds/cake-studio/posters/CST-048.jpg`,
+  alt: ar
+    ? 'إطار من عالم Cake Studio السينمائي المنشور: قاعة عرض بجدران خضراء داكنة، منضدة رخامية تمتد يسارًا ورفوف زجاجية يمينًا، وفي وسطها فاترينة نحاسية.'
+    : 'A frame from the published Cake Studio world: a deep green display room, a marble counter running away to the left and glass shelving to the right, with a copper vitrine at its centre.',
+  width: 1280,
+  height: 720,
+};
+
+/**
+ * Resolve each chapter against the real project data here, so the stage
+ * component and the scene script never hold a second, unsynchronised copy of a
+ * project's facts. A chapter with no approved screenshot gets no plate — its
+ * mechanism is labelled an illustration instead.
+ */
+const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
+  const project = chapter.project ? getProject(chapter.project) ?? null : null;
+  const feature = chapter.project ? featured.find(f => f.slug === chapter.project) ?? null : null;
+  const shot = feature?.shots[0] ?? null;
+  const copy = COPY[chapter.id];
+
+  const actions: SignalAction[] = [];
+  if (project) actions.push({ href: workPath(lang, project.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
+  if (feature?.repo) actions.push({ href: feature.repo, label: ar ? 'المستودع العام' : 'Public repository', external: true });
+  // Entering a World is always an explicit action, never a scroll side effect.
+  if (chapter.id === 'world') actions.push({ href: `${base}/worlds/cake-studio.html`, label: ar ? 'ادخل العالم' : 'Enter the world', external: true });
+  // The scene releases into the selected work, which is the next section in the
+  // document; the whole archive is the second action, not the only one. Naming
+  // #sky alone sent the visitor three sections past everything they had just
+  // been shown settling into place.
+  if (chapter.id === 'archive') {
+    actions.push({ href: '#work', label: ar ? `ابدأ بالأربعة المفتوحة` : `Start with the four open ones` });
+    actions.push({ href: '#sky', label: ar ? `تصفح ${entries.length} مشروعًا` : `Browse all ${entries.length} projects` });
+  }
+
+  return {
+    id: chapter.id,
+    line: pick(lang, copy.line),
+    evidence: chapter.evidence,
+    title: project ? pick(lang, project.title) : null,
+    status: project ? (feature?.repo ? (ar ? 'عام' : 'Public') : (ar ? 'خاص' : 'Private')) : null,
+    blurb: project ? pick(lang, project.blurb) : null,
+    stat: project ? pick(lang, project.stat) : null,
+    statNote: project ? pick(lang, project.statNote) : null,
+    boundaryKicker: project?.story ? pick(lang, project.story.boundaryKicker) : null,
+    boundary: project?.story ? pick(lang, project.story.boundary) : null,
+    plate: chapter.id === 'world'
+      ? WORLD_FRAME
+      : shot
+        ? { src: `${base}/img/sky/${shot.src}.webp`, alt: pick(lang, shot.alt), width: shot.w, height: shot.h }
+        : null,
+    actions,
+  };
+});
+
+// The five-step method disclosure, kept from the approved showroom round.
 const method = [
   { title: ar ? 'ارسم العملية' : 'Map the loop', body: ar ? 'المدخلات والقرارات والتسليمات، قبل أي أتمتة.' : 'Inputs, decisions and hand-offs, before automation.', slug:'sheep-business-management' },
   { title: ar ? 'اربط الطبقات' : 'Connect the layers', body: ar ? 'اربط البيانات والأدوات في مسار واضح يمكن فحصه.' : 'Connect data and tools in a path you can inspect.', slug:'relayops' },
@@ -34,43 +109,64 @@ const method = [
   { title: ar ? 'شغّل النظام' : 'Run the system', body: ar ? 'شغّل المسار مع سجل تدقيق وحدود واضحة.' : 'Run the workflow with an audit trail and explicit limits.', slug:'career-autopilot' },
   { title: ar ? 'تحقق من الدليل' : 'Verify the evidence', body: ar ? 'اربط الادعاءات بمصادرها، ولا تخفِ ما لم يُثبت.' : 'Trace claims to their sources. Keep unproven outcomes visible.', slug:'ask-repos' },
 ];
+
+
+// The opening artifact: a named piece of work, present and legible in the first
+// viewport rather than a screenshot floating behind a title.
+const openingShot = featured.find(f => f.slug === 'ask-repos')!.shots[1];
+const openingProject = getProject('ask-repos')!;
 ---
 <BaseLayout lang={lang} title={t('site.title')} description={t('site.description')} path={`/${lang}`} accent="blue" home={true}>
   <div class="showroom" data-showroom>
-    <canvas class="sr-renderer" data-showroom-renderer aria-hidden="true"></canvas>
-    <section class="sr-hero sr-container" id="intro" aria-labelledby="sr-title">
-      <div class="sr-hero__copy">
-        <h1 id="sr-title">{ar ? 'أحوّل العمل اليدوي' : 'I turn manual work'} <span>{ar ? 'إلى أنظمة تعمل.' : 'into systems that run.'}</span></h1>
-        <p class="sr-hero__lead">{ar ? 'أرسم العملية، وأبني الأداة الداخلية، وأضع بوابات الموافقة والتدقيق، ثم أتحقق من النتيجة على بيانات حقيقية — محليًا، وثنائي اللغة، وجاهزًا للعمل.' : 'I map the process, build the internal tool, add approval and audit gates, then verify it against real operating data — local-first, bilingual, and built to run.'}</p>
-        <div class="sr-hero__actions"><a class="sr-button" href="#work">{ar ? 'استكشف الأنظمة' : 'See the systems'}<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" /></svg></a><a class="sr-button sr-button--quiet" href="#contact">{ar ? 'تواصل معي' : 'Get in touch'}</a></div>
-        <p class="sr-hero__identity">{pick(lang,profile.title)} <span aria-hidden="true">·</span> {pick(lang,profile.location)}</p>
-        <div class="sr-hero__index"><a href="#sky"><strong>{entries.length.toLocaleString(ar?'ar-EG':'en-US')}</strong> {ar?'مشروعًا':'project stories'}</a><a href="#work"><strong>{publicAiProjects.length.toLocaleString(ar?'ar-EG':'en-US')}</strong> {ar?'مستودعات عامة':'public repositories'}</a><a href={`${base}/worlds/`} data-astro-reload>{ar?'العوالم السينمائية':'Cinematic worlds'} <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></a></div>
-      </div>
-      <div class="sr-hero__display">
-        <div class="sr-hero__caption"><a data-exhibit-story href={workPath(lang,hero.slug)}><span data-exhibit-title>{pick(lang,hero.project.title)}</span><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></a><span>{ar?'حرّك المؤشر أو استخدم المنزلق':'Drag to rotate · slide to assemble'}</span></div>
-        <div class="sr-hero__stage">
-          <Exhibit lang={lang} kind="truss" id="hero-exhibit" poster={`${base}/img/sky/${hero.shot.src}.webp`} alt={pick(lang,hero.shot.alt)} />
-          <button class="sr-floating-shot sr-floating-shot--main" type="button" data-hero-shot data-zoom data-src={`${base}/img/sky/${hero.shot.src}.webp`} data-alt={pick(lang,hero.shot.alt)} aria-label={ar?'كبّر صورة المنتج':'Enlarge the product screenshot'}><img src={`${base}/img/sky/${hero.shot.src}.webp`} width="1280" height="720" alt={pick(lang,hero.shot.alt)} decoding="async" /><span>{ar?'الصورة الفعلية للمنتج':'Actual product screen'}</span></button>
-          <a class="sr-floating-shot sr-floating-shot--secondary" href={workPath(lang,'ask-repos')}><img src={`${base}/img/sky/askrepos-answer.webp`} width="1280" height="738" alt={ar?'واجهة العرض العام لـ ask-repos':'ask-repos public demo interface'} decoding="async" /><span>ask-repos</span></a>
+    {/* The cinema scope covers the intro and the stage only, so the archive
+        and contact below keep the existing six-theme system. */}
+    <div class="signal" data-signal data-nodes={entries.length} data-world-interior={WORLD_FRAME.src}>
+    {/* The scene is live behind the first viewport, not only inside the runway:
+        the opening horizon is the thesis, so it cannot start below the fold. */}
+    <canvas class="signal__canvas" data-signal-canvas aria-hidden="true"></canvas>
+    <section class="signal__intro" id="intro" aria-labelledby="signal-title">
+      <div class="signal__intro-copy">
+        <h1 id="signal-title">{ar ? 'أحوّل العمل اليدوي' : 'I turn manual work'} <span>{ar ? 'إلى أنظمة تعمل.' : 'into systems that run.'}</span></h1>
+        <p class="signal__role">{pick(lang, profile.title)} <span aria-hidden="true">·</span> {pick(lang, profile.location)}</p>
+        <div class="signal__intro-actions">
+          <a class="signal__cta" href="#work">{ar ? 'استكشف الأنظمة' : 'See the systems'}
+            <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" /></svg>
+          </a>
+          <a class="signal__cta signal__cta--quiet" href="#contact">{ar ? 'تواصل معي' : 'Get in touch'}</a>
         </div>
-        <div class="sr-exhibit-selector" role="group" aria-label={ar?'اختر النموذج التوضيحي':'Choose an illustrative exhibit'}>{exhibits.map((e,i) => <button type="button" data-select-exhibit={e.kind} data-title={pick(lang,e.project.title)} data-href={workPath(lang,e.slug)} data-src={`${base}/img/sky/${e.shot.src}.webp`} data-alt={pick(lang,e.shot.alt)} aria-pressed={i===0?'true':'false'} aria-controls="hero-exhibit"><img src={`${base}/img/sky/${e.shot.src}.webp`} width="80" height="50" alt="" decoding="async" /><span>{e.label}</span></button>)}</div>
+      </div>
+      <div class="signal__intro-artifact">
+        <a href={workPath(lang, 'ask-repos')}>
+          <img src={`${base}/img/sky/${openingShot.src}.webp`} width={openingShot.w} height={openingShot.h} alt={pick(lang, openingShot.alt)} fetchpriority="high" decoding="async" />
+          <span>{pick(lang, openingProject.title)}</span>
+        </a>
       </div>
     </section>
+
+    <Stage lang={lang} chapters={chapters} runway={SEGMENT_VH.landscape} />
+    </div>
+
     <div class="sr-container">
       <section class="sr-section" id="work" aria-labelledby="public-title">
         <header class="sr-section-head"><div><h2 id="public-title">{ar?'أربعة تستطيع تشغيلها بدوني.':'Four you can run without me.'}</h2><p>{ar?'مستودعات عامة وتكامل مستمر وحاويات. اثنان منها بعروض حية. النطاق والحدود بجانب كل مشروع.':'Public repositories, continuous integration and containers. Two have live demos. Scope and limitations sit with every project.'}</p></div><a class="sr-text-link" href="#sky">{ar?'تصفح كل المشاريع':'Browse all projects'}<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="m5 7 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg></a></header>
         <div class="sr-projects">{publicStations.map(s=><ProjectCard lang={lang} project={s.project} feature={s.feature} />)}</div>
       </section>
+
       <section class="sr-method sr-section" id="method" aria-labelledby="method-title"><header class="sr-section-head"><h2 id="method-title">{ar?'من العملية اليدوية إلى نظام.':'From a manual loop to a system.'}</h2></header><div class="sr-method__steps">{method.map((m,i)=><details><summary><span class="sr-method__node" aria-hidden="true">{i+1}</span>{m.title}</summary><p>{m.body}</p><a class="sr-text-link" href={workPath(lang,m.slug)}>{ar?'شاهد المثال':'See it in a project'}</a></details>)}</div></section>
+
       <section class="sr-section" id="private-work" aria-labelledby="private-title"><header class="sr-section-head"><div><h2 id="private-title">{ar?'أنظمة خاصة، تُعرض بأمان.':'Private systems, shown safely.'}</h2><p>{ar?'تبقى الشيفرة خاصة. الشاشات منقّحة، والبيانات اصطناعية حيث يُذكر ذلك. افتح نطاق المشروع لمعرفة حدوده.':'The source stays private. Screens are sanitized; data is synthetic wherever stated. Open each project’s scope to inspect its limits.'}</p></div></header><div class="sr-projects sr-projects--private">{privateStations.map(s=><ProjectCard lang={lang} project={s.project} feature={s.feature} />)}</div></section>
+
       <ProjectAtlas lang={lang} entries={entries} />
     </div>
+
     <div class="sr-contact"><Contact lang={lang}/></div>
+
     <dialog class="sr-dialog" data-showroom-dialog aria-labelledby="sr-dialog-heading"><div class="sr-dialog__bar"><h2 id="sr-dialog-heading">{ar?'استكشف المشروع':'Inspect the project'}</h2><button type="button" data-close-dialog aria-label={ar?'إغلاق المعاينة':'Close preview'}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6" fill="none" stroke="currentColor" stroke-width="1.7" /></svg></button></div><div data-dialog-content></div></dialog>
   </div>
 </BaseLayout>
 <script>
+  import { initSignal, stopSignal } from '../../lib/signal';
   import { initShowroom, stopShowroom } from '../../lib/showroom';
-  document.addEventListener('astro:page-load', initShowroom);
-  document.addEventListener('astro:before-swap', stopShowroom);
+  document.addEventListener('astro:page-load', () => { initShowroom(); initSignal(); });
+  document.addEventListener('astro:before-swap', () => { stopSignal(); stopShowroom(); });
 </script>

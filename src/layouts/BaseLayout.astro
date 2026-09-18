@@ -227,7 +227,9 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
         initInteractions();
         initMotion();
         initAurora();
-        initSpace();
+        // A page with its own cinematic renderer owns the screen: a second
+        // ambient star field behind it is pure cost.
+        if (!document.querySelector('[data-signal]')) initSpace();
         syncThemeUI();
       }
       boot();

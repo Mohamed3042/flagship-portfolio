@@ -1,0 +1,237 @@
+{
+  "desktop-opening": {
+    "skyBandFraction": 0.27,
+    "canvas": {
+      "w": 1440,
+      "h": 900
+    },
+    "massRGBA": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "skyRGBA": [
+      19,
+      29,
+      48,
+      255
+    ],
+    "justBelowCrestRGBA": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "note": "canvas is alpha-composited over --signal-bg #05070A; alpha is the 4th value",
+    "firstViewport": {
+      "viewportHeight": 900,
+      "headline": {
+        "top": 187,
+        "bottom": 323,
+        "inside": true
+      },
+      "role": {
+        "top": 347,
+        "bottom": 368,
+        "inside": true
+      },
+      "primaryAction": {
+        "top": 395,
+        "bottom": 443,
+        "inside": true
+      },
+      "secondaryAction": {
+        "top": 395,
+        "bottom": 443,
+        "inside": true
+      },
+      "namedPreview": {
+        "top": 187,
+        "bottom": 578,
+        "inside": true
+      },
+      "previewCaption": "ask-repos",
+      "documentOverflowX": 0
+    },
+    "massMinusSkyLuminance": -0.012306
+  },
+  "portrait-opening": {
+    "skyBandFraction": 0.33,
+    "canvas": {
+      "w": 390,
+      "h": 844
+    },
+    "massRGBA": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "skyRGBA": [
+      19,
+      29,
+      48,
+      255
+    ],
+    "justBelowCrestRGBA": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "note": "canvas is alpha-composited over --signal-bg #05070A; alpha is the 4th value",
+    "firstViewport": {
+      "viewportHeight": 844,
+      "headline": {
+        "top": 89,
+        "bottom": 156,
+        "inside": true
+      },
+      "role": {
+        "top": 173,
+        "bottom": 194,
+        "inside": true
+      },
+      "primaryAction": {
+        "top": 213,
+        "bottom": 261,
+        "inside": true
+      },
+      "secondaryAction": {
+        "top": 213,
+        "bottom": 261,
+        "inside": true
+      },
+      "namedPreview": {
+        "top": 283,
+        "bottom": 553,
+        "inside": true
+      },
+      "previewCaption": "ask-repos",
+      "documentOverflowX": 0
+    },
+    "massMinusSkyLuminance": -0.012306
+  },
+  "close": {
+    "tiles": [
+      {
+        "label": "WhatsApp the faste",
+        "chip": {
+          "background": "linear-gradient(150deg, color(srgb 0.130196 0.50902 0.235294), color(srgb 0.0779608 0.22949 0.136471))",
+          "color": "rgb(255, 255, 255)",
+          "boxShadow": "rgb(48, 209, 88) 0px 8px 24px -12px"
+        },
+        "acc": "#30d158"
+      },
+      {
+        "label": "Email medo433447@g",
+        "chip": {
+          "background": "linear-gradient(150deg, color(srgb 0.280784 0.450196 0.628235), color(srgb 0.138196 0.205961 0.293647))",
+          "color": "rgb(255, 255, 255)",
+          "boxShadow": "rgb(112, 184, 255) 0px 8px 24px -12px"
+        },
+        "acc": "#70B8FF"
+      },
+      {
+        "label": "LinkedIn my profes",
+        "chip": {
+          "background": "linear-gradient(150deg, color(srgb 0.280784 0.450196 0.628235), color(srgb 0.138196 0.205961 0.293647))",
+          "color": "rgb(255, 255, 255)",
+          "boxShadow": "rgb(112, 184, 255) 0px 8px 24px -12px"
+        },
+        "acc": "#70B8FF"
+      }
+    ],
+    "pulse": {
+      "background": "rgb(48, 209, 88)",
+      "boxShadow": "rgb(48, 209, 88) 0px 0px 10px 0px"
+    },
+    "canvasFilter": "saturate(0.12) brightness(0.9)",
+    "headingColor": "rgb(240, 243, 246)",
+    "tokensResolve": "#70B8FF"
+  },
+  "seam": {
+    "cardMediaBackground": "radial-gradient(at 40% 100%, color(srgb 0.439216 0.721569 1 / 0.1), rgba(0, 0, 0, 0) 72%)",
+    "atlasWordmarkColor": "rgb(152, 165, 177)",
+    "proofStrongColor": "rgb(240, 243, 246)"
+  },
+  "openingTone": {
+    "method": "mean RGB of a centre column band, read from the captured PNGs with PIL",
+    "note": "before/portrait-en reads near-white above AND below the crest: the enlarged hero screenshot covered the whole band. That is the defect, not a sky reading.",
+    "samples": {
+      "before/desktop-en": {
+        "crestRow": 657,
+        "aboveCrest": [
+          142.8,
+          145.5,
+          146.3
+        ],
+        "belowCrest": [
+          36.1,
+          37.9,
+          39.6
+        ],
+        "bottomOfFrame": [
+          0.0,
+          1.0,
+          2.0
+        ]
+      },
+      "before/portrait-en": {
+        "crestRow": 565,
+        "aboveCrest": [
+          245.0,
+          248.0,
+          247.0
+        ],
+        "belowCrest": [
+          245.0,
+          248.0,
+          247.0
+        ],
+        "bottomOfFrame": [
+          245.0,
+          248.0,
+          247.0
+        ]
+      },
+      "after/desktop-en": {
+        "crestRow": 657,
+        "aboveCrest": [
+          5.0,
+          7.0,
+          10.0
+        ],
+        "belowCrest": [
+          19.0,
+          29.0,
+          48.0
+        ],
+        "bottomOfFrame": [
+          19.0,
+          29.0,
+          48.0
+        ]
+      },
+      "after/portrait-en": {
+        "crestRow": 565,
+        "aboveCrest": [
+          197.1,
+          200.4,
+          200.0
+        ],
+        "belowCrest": [
+          18.8,
+          28.7,
+          47.3
+        ],
+        "bottomOfFrame": [
+          19.0,
+          29.0,
+          48.0
+        ]
+      }
+    }
+  }
+}

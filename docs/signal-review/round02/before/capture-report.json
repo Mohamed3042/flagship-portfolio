@@ -1,0 +1,472 @@
+{
+  "tag": "before",
+  "base_url": "http://127.0.0.1:4618",
+  "editions": {
+    "desktop-en": {
+      "1-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 748,
+          "y": 948,
+          "w": 620,
+          "h": 358
+        }
+      },
+      "2-aligned-form": {
+        "u": 0.15001302083333334,
+        "scrollY": 1911,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "3-separated-depth": {
+        "u": 0.2140407986111111,
+        "scrollY": 2372,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "4-automation-screen": {
+        "u": 0.35501302083333336,
+        "scrollY": 3387,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 1060,
+          "y": 282,
+          "w": 356,
+          "h": 197
+        }
+      },
+      "5-carton": {
+        "u": 0.5300130208333333,
+        "scrollY": 4647,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 1153,
+          "y": 387,
+          "w": 263,
+          "h": 149
+        }
+      },
+      "6-media-alignment": {
+        "u": 0.6550130208333333,
+        "scrollY": 5547,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "7-portal-threshold": {
+        "u": 0.7900130208333334,
+        "scrollY": 6519,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 748,
+          "y": 117,
+          "w": 620,
+          "h": 350
+        }
+      },
+      "8-project-rows": {
+        "u": 1,
+        "scrollY": 8859,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    },
+    "portrait-en": {
+      "1-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 16,
+          "y": 1529,
+          "w": 496,
+          "h": 287
+        }
+      },
+      "2-aligned-form": {
+        "u": 0.15006356141390206,
+        "scrollY": 2213,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "3-separated-depth": {
+        "u": 0.2140446040679305,
+        "scrollY": 2537,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "4-automation-screen": {
+        "u": 0.3550398647314376,
+        "scrollY": 3251,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 16,
+          "y": 76,
+          "w": 358,
+          "h": 227
+        }
+      },
+      "5-carton": {
+        "u": 0.5300003702606635,
+        "scrollY": 4137,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 16,
+          "y": 76,
+          "w": 358,
+          "h": 283
+        }
+      },
+      "6-media-alignment": {
+        "u": 0.6550003702606635,
+        "scrollY": 4770,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "7-portal-threshold": {
+        "u": 0.7900714603080569,
+        "scrollY": 5454,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 16,
+          "y": 76,
+          "w": 509,
+          "h": 287
+        }
+      },
+      "8-project-rows": {
+        "u": 1,
+        "scrollY": 7289,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    },
+    "desktop-ar": {
+      "1-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 72,
+          "y": 948,
+          "w": 620,
+          "h": 358
+        }
+      },
+      "2-aligned-form": {
+        "u": 0.15001302083333334,
+        "scrollY": 1911,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "3-separated-depth": {
+        "u": 0.2140407986111111,
+        "scrollY": 2372,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "4-automation-screen": {
+        "u": 0.35501302083333336,
+        "scrollY": 3387,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 736,
+          "y": 290,
+          "w": 269,
+          "h": 182
+        }
+      },
+      "5-carton": {
+        "u": 0.5300130208333333,
+        "scrollY": 4647,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 637,
+          "y": 425,
+          "w": 287,
+          "h": 180
+        }
+      },
+      "6-media-alignment": {
+        "u": 0.6550130208333333,
+        "scrollY": 5547,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "7-portal-threshold": {
+        "u": 0.7900130208333334,
+        "scrollY": 6519,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": 72,
+          "y": 117,
+          "w": 620,
+          "h": 350
+        }
+      },
+      "8-project-rows": {
+        "u": 1,
+        "scrollY": 8859,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "desktop",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    },
+    "portrait-ar": {
+      "1-entry": {
+        "u": 0,
+        "scrollY": 0,
+        "chapter": "horizon",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "horizon"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": -122,
+          "y": 1522,
+          "w": 496,
+          "h": 287
+        }
+      },
+      "2-aligned-form": {
+        "u": 0.14993397018167456,
+        "scrollY": 2205,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "3-separated-depth": {
+        "u": 0.213915012835703,
+        "scrollY": 2529,
+        "chapter": "forge",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "forge"
+        ],
+        "plate": null
+      },
+      "4-automation-screen": {
+        "u": 0.3549102734992101,
+        "scrollY": 3243,
+        "chapter": "system",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "system"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 16,
+          "y": 76,
+          "w": 358,
+          "h": 227
+        }
+      },
+      "5-carton": {
+        "u": 0.5300682513823065,
+        "scrollY": 4130,
+        "chapter": "matter",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "matter"
+        ],
+        "plate": {
+          "handoff": "html",
+          "x": 16,
+          "y": 76,
+          "w": 358,
+          "h": 283
+        }
+      },
+      "6-media-alignment": {
+        "u": 0.6550682513823065,
+        "scrollY": 4763,
+        "chapter": "signal",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "signal"
+        ],
+        "plate": null
+      },
+      "7-portal-threshold": {
+        "u": 0.7899418690758294,
+        "scrollY": 5446,
+        "chapter": "world",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "world"
+        ],
+        "plate": {
+          "handoff": "flow",
+          "x": -134,
+          "y": 76,
+          "w": 509,
+          "h": 287
+        }
+      },
+      "8-project-rows": {
+        "u": 1,
+        "scrollY": 7282,
+        "chapter": "archive",
+        "graphics": "webgl",
+        "tier": "phone",
+        "active": [
+          "archive"
+        ],
+        "plate": null
+      },
+      "_errors": []
+    }
+  },
+  "video": {},
+  "reduced": {
+    "graphics": "static",
+    "visible": 7,
+    "inert": 0
+  }
+}

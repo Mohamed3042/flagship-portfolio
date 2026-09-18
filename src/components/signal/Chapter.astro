@@ -1,0 +1,134 @@
+---
+import { pick, type Lang } from '../../i18n/utils';
+import type { EvidenceKind } from '../../lib/signal/types';
+
+/** An approved, privacy-reviewed still. Also the element the 3D surface hands off to. */
+export interface SignalPlate { src: string; alt: string; width: number; height: number }
+/** A real destination — a project story, a public repository. Never a second CTA group. */
+export interface SignalAction { href: string; label: string; external?: boolean }
+
+export interface SignalChapterCopy {
+  /** Chapter id from the shared contract: horizon, forge, system, matter, signal, world, archive. */
+  id: string;
+  /** The narration. It is the heading; nothing sits above it. */
+  line: string;
+  evidence: EvidenceKind;
+  /** Project facts, resolved from src/data by the route. Never restated here. */
+  title?: string | null;
+  status?: string | null;
+  blurb?: string | null;
+  stat?: string | null;
+  statNote?: string | null;
+  boundaryKicker?: string | null;
+  boundary?: string | null;
+  plate?: SignalPlate | null;
+  actions?: SignalAction[];
+}
+
+interface Props { lang: Lang; chapter: SignalChapterCopy; index: number }
+const { lang, chapter, index } = Astro.props;
+const {
+  id, line, evidence, title, status, blurb, stat, statNote,
+  boundaryKicker, boundary, plate, actions = [],
+} = chapter;
+
+/**
+ * The honesty label names what the dominant visual actually is. It is set as
+ * type, not as a coloured chip: solid for an approved capture, hairline for an
+ * authored illustration, hairline over a dashed ground for a synthetic replay.
+ * A status the visitor must trust should not depend on telling two hues apart.
+ */
+const EVIDENCE: Record<Exclude<EvidenceKind, 'none'>, { en: string; ar: string }> = {
+  screenshot: { en: 'Actual product screenshot.', ar: 'صورة فعلية من المنتج.' },
+  illustration: { en: 'Illustration. It explains the idea; it measures nothing.', ar: 'رسم توضيحي يشرح الفكرة ولا يقيس شيئًا.' },
+  synthetic: { en: 'Authored replay over synthetic data.', ar: 'إعادة تشغيل مُعدّة على بيانات اصطناعية.' },
+  media: { en: 'Authorized media from an existing World.', ar: 'وسائط مُصرَّح بها من عالم قائم.' },
+};
+const label = evidence === 'none' ? null : pick(lang, EVIDENCE[evidence]);
+
+// A chapter that names a project but carries no approved capture shows that gap
+// rather than filling it with something that only looks like proof.
+const gap = !plate && !!title;
+const ar = lang === 'ar';
+
+/**
+ * Split a limitation at a sentence end, so the reading stop can show a true,
+ * complete first statement and put the rest one control away.
+ *
+ * The split is computed from the project's own text: nothing is summarised,
+ * paraphrased or written for it here, because a shorter limitation that nobody
+ * wrote is a different claim. If the text has no sentence break, it is shown
+ * whole rather than cut.
+ */
+function splitLimit(text: string): [string, string | null] {
+  const min = 52;
+  const breaks = /([.!?\u061F\u06D4])(\s+)/g;
+  let match: RegExpExecArray | null;
+  while ((match = breaks.exec(text)) !== null) {
+    const end = match.index + match[1].length;
+    if (end >= min) {
+      const rest = text.slice(end + match[2].length).trim();
+      return rest ? [text.slice(0, end), rest] : [text, null];
+    }
+  }
+  return [text, null];
+}
+
+const [lede, rest] = boundary ? splitLimit(boundary) : ['', null];
+---
+<section class="signal__chapter" data-chapter={id} id={`signal-${id}`} aria-labelledby={`signal-${id}-line`}>
+  <div class="signal__copy" data-chapter-copy>
+    <h2 class="signal__line" id={`signal-${id}-line`}>{line}</h2>
+
+    {title && (
+      <p class="signal__project">
+        <span class="signal__project-name">{title}</span>
+        {status && <span class="signal__status">{status}</span>}
+      </p>
+    )}
+    {blurb && <p class="signal__blurb">{blurb}</p>}
+    {stat && <p class="signal__proof"><strong>{stat}</strong> <span>{statNote}</span></p>}
+    {boundary && (
+      <div class="signal__limit-block">
+        <p class="signal__limit">
+          {boundaryKicker && <strong>{boundaryKicker}</strong>} {lede}
+        </p>
+        {rest && (
+          <details class="signal__limit-more">
+            <summary>{ar ? 'النطاق كاملًا' : 'The full scope'}</summary>
+            <div>{rest}</div>
+          </details>
+        )}
+      </div>
+    )}
+
+    {label && <p class="signal__evidence" data-evidence={evidence}>{label}</p>}
+    {gap && (
+      <p class="signal__gap">
+        {ar ? 'لا توجد صورة معتمدة لهذا المشروع بعد. الآلية أعلاه رسم توضيحي.'
+            : 'No approved capture of this product yet. The mechanism above is an illustration.'}
+      </p>
+    )}
+
+    {actions.length > 0 && (
+      <div class="signal__actions" data-chapter-actions>
+        {actions.map(action => (
+          <a class="signal__action" href={action.href}
+             target={action.external ? '_blank' : undefined}
+             rel={action.external ? 'noreferrer' : undefined}>
+            {action.label}
+            {action.external && <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {plate && (
+    <figure class="signal__plate-frame">
+      <img class="signal__plate" data-plate src={plate.src} alt={plate.alt}
+           width={plate.width} height={plate.height} decoding="async"
+           loading={index === 0 ? 'eager' : 'lazy'} />
+    </figure>
+  )}
+</section>
