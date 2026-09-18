@@ -1,0 +1,209 @@
+{
+  "url": "https://6aadab9f6ac48df0e2d65dfb--mohamed-mahmoud-portfolio.netlify.app/en/",
+  "local": "http://127.0.0.1:4618/en",
+  "runs": 3,
+  "desktop": {
+    "median": {
+      "performance": 94,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69
+    },
+    "spread": {
+      "performance": [
+        92,
+        96
+      ],
+      "accessibility": [
+        100,
+        100
+      ],
+      "best-practices": [
+        100,
+        100
+      ],
+      "seo": [
+        69,
+        69
+      ]
+    },
+    "medianFcpMs": 528,
+    "medianLcpMs": 1163,
+    "medianTbtMs": 71,
+    "cls": 0,
+    "failingBinaryAudits": [
+      "is-crawlable",
+      "valid-source-maps"
+    ],
+    "runs": [
+      {
+        "scores": {
+          "performance": 92,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 69
+        },
+        "fcpMs": 617,
+        "lcpMs": 1207,
+        "tbtMs": 114,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "is-crawlable",
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "https://6aadab9f6ac48df0e2d65dfb--mohamed-mahmoud-portfolio.netlify.app/en/",
+        "cliNote": null
+      },
+      {
+        "scores": {
+          "performance": 94,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 69
+        },
+        "fcpMs": 528,
+        "lcpMs": 1163,
+        "tbtMs": 71,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "is-crawlable",
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "https://6aadab9f6ac48df0e2d65dfb--mohamed-mahmoud-portfolio.netlify.app/en/",
+        "cliNote": null
+      },
+      {
+        "scores": {
+          "performance": 96,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 69
+        },
+        "fcpMs": 520,
+        "lcpMs": 1115,
+        "tbtMs": 59,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "is-crawlable",
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "https://6aadab9f6ac48df0e2d65dfb--mohamed-mahmoud-portfolio.netlify.app/en/",
+        "cliNote": null
+      }
+    ]
+  },
+  "mobile": {
+    "median": {
+      "performance": 59,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 69
+    },
+    "spread": {
+      "performance": [
+        56,
+        64
+      ],
+      "accessibility": [
+        100,
+        100
+      ],
+      "best-practices": [
+        100,
+        100
+      ],
+      "seo": [
+        69,
+        69
+      ]
+    },
+    "medianFcpMs": 1884,
+    "medianLcpMs": 4658,
+    "medianTbtMs": 810,
+    "cls": 0.0010970848415478693,
+    "failingBinaryAudits": [
+      "is-crawlable",
+      "valid-source-maps"
+    ],
+    "runs": [
+      {
+        "scores": {
+          "performance": 59,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 69
+        },
+        "fcpMs": 1996,
+        "lcpMs": 4664,
+        "tbtMs": 810,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "is-crawlable",
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "https://6aadab9f6ac48df0e2d65dfb--mohamed-mahmoud-portfolio.netlify.app/en/",
+        "cliNote": "report written, CLI exited 1 in cleanup: Runtime error encountered: EPERM, Permission denied: \\\\?\\C:\\Users\\GAMING\\AppData\\Local\\Tem"
+      },
+      {
+        "scores": {
+          "performance": 64,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 69
+        },
+        "fcpMs": 1377,
+        "lcpMs": 4658,
+        "tbtMs": 701,
+        "cls": 0.0010970848415478693,
+        "failingBinaryAudits": [
+          "is-crawlable",
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "https://6aadab9f6ac48df0e2d65dfb--mohamed-mahmoud-portfolio.netlify.app/en/",
+        "cliNote": null
+      },
+      {
+        "scores": {
+          "performance": 56,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 69
+        },
+        "fcpMs": 1884,
+        "lcpMs": 4487,
+        "tbtMs": 1136,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "is-crawlable",
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "https://6aadab9f6ac48df0e2d65dfb--mohamed-mahmoud-portfolio.netlify.app/en/",
+        "cliNote": null
+      }
+    ]
+  },
+  "localNoPreviewHeader": {
+    "scores": {
+      "performance": 91,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "fcpMs": 992,
+    "lcpMs": 1760,
+    "tbtMs": 36,
+    "cls": 0,
+    "failingBinaryAudits": [
+      "valid-source-maps"
+    ],
+    "lighthouseVersion": "13.5.0",
+    "url": "http://127.0.0.1:4618/en",
+    "cliNote": null
+  }
+}
