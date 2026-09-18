@@ -482,12 +482,26 @@ body:has(.signal) #space{display:none}
   filter:none;animation:none;font-weight:850;
 }
 .sr-contact .cf-l1{color:color-mix(in srgb,var(--signal-ink) 70%,var(--signal-bg))}
+/* The close is the one band on this route that follows the theme rather than the
+   cinema: of the six, only `light` gives it a light ground, and the shared
+   component has no light-theme rule for the second heading line because that line
+   used to be gradient-filled. Removing the gradient means the line needs a colour
+   in every theme, and ink on a #EEF1FB ground is not one. Theme-scoped, route
+   scoped, and no other theme is touched. */
+[data-theme=light] .sr-contact .cf-l2{color:#0B0B14}
+[data-theme=light] .sr-contact .cf-l1{color:#3A3F5C}
 
 /* Metrics and card washes: ink plus the one signal accent, so a number never
-   invents a status out of a hue. */
+   invents a status out of a hue.
+
+   The ink here is the THEME's, not the cinema's. The archive follows the theme,
+   and one of the six gives it a light ground: a fixed #F0F3F6 would be a number
+   nobody can read on a white card, which is a worse defect than the coloured
+   accent this rule exists to remove. What the rule is actually for is the
+   absence of hue, and --ink has no hue in any theme. */
 .sr-projects .sr-proof strong,
 .sr-atlas .sr-proof strong,
-.sr-atlas__stat strong{color:var(--signal-ink)}
+.sr-atlas__stat strong{color:var(--ink)}
 .sr-projects .sr-card__media,
 .sr-atlas__grid>li .sr-atlas__art::after{background:none}
 .sr-projects .sr-card__media{
@@ -495,7 +509,7 @@ body:has(.signal) #space{display:none}
     color-mix(in srgb,var(--signal-accent) 10%,transparent),transparent 72%);
 }
 .sr-atlas__grid>li:hover{border-color:color-mix(in srgb,var(--signal-accent) 55%,transparent)}
-.sr-atlas__wordmark{color:var(--signal-ink-2)}
+.sr-atlas__wordmark{color:var(--ink-2)}
 .sr-card__shots button:hover,
 .sr-card__shots button[aria-pressed=true]{border-color:var(--signal-accent)}
 

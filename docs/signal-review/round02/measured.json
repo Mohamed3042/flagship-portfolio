@@ -233,5 +233,46 @@
         ]
       }
     }
+  },
+  "themeContrast": {
+    "method": "computed styles, WCAG 2.1 ratio, one card/band per theme at 1440x900",
+    "ratios": {
+      "light": {
+        "atlasStat": 14.32,
+        "atlasWordmark": 6.93,
+        "closeHeadline": 17.36,
+        "closeSubhead": 9.1
+      },
+      "dark": {
+        "atlasStat": 17.27,
+        "atlasWordmark": 7.07,
+        "closeHeadline": 17.13,
+        "closeSubhead": 8.39
+      },
+      "neon": {
+        "atlasStat": 16.02,
+        "atlasWordmark": 7.82,
+        "closeHeadline": 17.13,
+        "closeSubhead": 8.39
+      },
+      "cinema": {
+        "atlasStat": 16.84,
+        "atlasWordmark": 7.61,
+        "closeHeadline": 17.13,
+        "closeSubhead": 8.39
+      },
+      "storybook": {
+        "atlasStat": 13.22,
+        "atlasWordmark": 7.6,
+        "closeHeadline": 17.13,
+        "closeSubhead": 8.39
+      },
+      "wave": {
+        "atlasStat": 16.42,
+        "atlasWordmark": 7.22,
+        "closeHeadline": 17.13,
+        "closeSubhead": 8.39
+      }
+    }
   }
 }
