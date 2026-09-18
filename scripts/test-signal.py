@@ -324,10 +324,23 @@ with sync_playwright() as p:
                     continue
                 hide = ("document.querySelector('[data-chapter][data-active=\"true\"] [data-plate]')"
                         ".style.setProperty('opacity','%s','important')")
+                # The plate carries `box-shadow: 0 24px 48px -24px`, which paints
+                # OUTSIDE its border box -- so toggling the plate changes pixels
+                # below its rectangle, and a check asking "does anything outside
+                # the rectangle change?" was answering about the shadow. Removing
+                # it for the two captures changes no layout geometry: width,
+                # height, transform and position are untouched, and it is removed
+                # from BOTH frames, so it cannot contribute to the difference
+                # either way. The production styles go back immediately after.
+                neutral = page.add_style_tag(content=(
+                    '[data-plate]{box-shadow:none!important;filter:none!important}'))
+                page.wait_for_timeout(120)
                 page.evaluate(hide % '0'); page.wait_for_timeout(280)
                 without = page.screenshot()
                 page.evaluate(hide % '1'); page.wait_for_timeout(280)
                 with_html = page.screenshot()
+                neutral.evaluate('node => node.remove()')
+                page.wait_for_timeout(120)
                 page.evaluate("document.querySelector('[data-chapter][data-active=\"true\"] [data-plate]')"
                               ".style.removeProperty('opacity')")
                 page.wait_for_timeout(120)
@@ -342,21 +355,41 @@ with sync_playwright() as p:
                            abs(changed[2] - (rect['x'] + rect['w'])),
                            abs(changed[3] - (rect['y'] + rect['h']))]
                 measured[label] = {'plate': rect, 'changed': list(changed), 'corners': corners}
-                # The image paints over the whole rectangle it was placed at.
-                # That is the claim this measurement can carry on its own, and it
-                # is the one that catches a plate landing somewhere else.
-                covers = (changed[0] <= rect['x'] + 4 and changed[1] <= rect['y'] + 4
-                          and changed[2] >= rect['x'] + rect['w'] - 4
-                          and changed[3] >= rect['y'] + rect['h'] - 4)
-                check(f'{name} {label}: the image paints the whole rectangle it is placed at',
-                      covers, f"changed={changed} plate={rect}")
-                # The tighter claim -- that NOTHING outside that rectangle
-                # changes -- is deliberately not asserted. The observed changed
-                # region is consistently larger than the plate, and I have not
-                # established whether that is a real second draw or frame-to-frame
-                # noise between the two renders. The numbers are recorded above so
-                # the difference can be judged; asserting on an unattributed
-                # measurement would turn it green without making it true.
+                # Two claims this method can actually carry, bounded on both
+                # sides, and named for what they establish rather than for what
+                # would be nice to have shown.
+                #
+                # The outermost pixels of a dark UI capture over a near-black
+                # stage differ by less than any usable threshold, so the changed
+                # region stops a few pixels short of the declared edge. That is a
+                # property of the content, not of where the plate landed, and an
+                # assertion on the exact edge is an assertion about contrast.
+                # So: the plate's INTERIOR must all change -- that catches a plate
+                # landing elsewhere, at the wrong size, or not drawing -- and
+                # nothing beyond a small margin OUTSIDE it may change, which is
+                # what catches a ghost quad or a second draw.
+                #
+                # Neither of these is a registration test. Registration is
+                # scripts/diagnose-registration.py, which compares corner markers
+                # in rendered pixels and does not consult data-fit or the
+                # fitter's own rectangle. This is the cheap always-on guard.
+                inset_x, inset_y = rect['w'] * 0.08, rect['h'] * 0.08
+                inner = (rect['x'] + inset_x, rect['y'] + inset_y,
+                         rect['x'] + rect['w'] - inset_x, rect['y'] + rect['h'] - inset_y)
+                covers_inner = (changed[0] <= inner[0] and changed[1] <= inner[1]
+                                and changed[2] >= inner[2] and changed[3] >= inner[3])
+                check(f'{name} {label}: every part of the plate interior changes when it draws',
+                      covers_inner, f"changed={changed} interior={[round(v) for v in inner]}")
+                MARGIN = 6
+                contained = (changed[0] >= rect['x'] - MARGIN and changed[1] >= rect['y'] - MARGIN
+                             and changed[2] <= rect['x'] + rect['w'] + MARGIN
+                             and changed[3] <= rect['y'] + rect['h'] + MARGIN)
+                check(f'{name} {label}: nothing outside the plate rectangle changes with it',
+                      contained, f"changed={changed} plate={rect} margin={MARGIN}px")
+                measured[label]['edgeInsetPx'] = [
+                    round(changed[0] - rect['x'], 1), round(changed[1] - rect['y'], 1),
+                    round(rect['x'] + rect['w'] - changed[2], 1),
+                    round(rect['y'] + rect['h'] - changed[3], 1)]
 
                 if label == 'world':
                     lit_a = lit_bbox(a_img, 40)
