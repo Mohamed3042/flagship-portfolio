@@ -33,69 +33,166 @@ export interface TierBudget {
   pixelRatio: number;
 }
 
+/**
+ * Counts are higher than Round 1's because the geometry changed: a star now has
+ * a FIXED position in the world (that is what makes it stream past the eye), so
+ * a shell's box has to cover the frustum at its far plane and roughly three
+ * quarters of each shell sits outside the view at any moment. `stars` is the
+ * allocation; `__deepField.state().visible` reports how many are actually on
+ * screen, and that is the number the look depends on.
+ */
 export const TIERS: Record<Tier, TierBudget> = {
-  desktop: { stars: 80000, morph: 20000, hero: 12, pixelRatio: 1.5 },
-  phone: { stars: 25000, morph: 12000, hero: 8, pixelRatio: 1.5 },
-  light: { stars: 9000, morph: 6000, hero: 5, pixelRatio: 1 },
+  desktop: { stars: 168000, morph: 6000, hero: 12, pixelRatio: 1.5 },
+  phone: { stars: 58000, morph: 5000, hero: 8, pixelRatio: 1.5 },
+  light: { stars: 22000, morph: 3600, hero: 5, pixelRatio: 1 },
 };
 
 /** Lower bound the adaptive governor may reduce a tier's star count to. */
-export const STAR_FLOOR: Record<Tier, number> = { desktop: 26000, phone: 11000, light: 5000 };
+export const STAR_FLOOR: Record<Tier, number> = { desktop: 56000, phone: 24000, light: 12000 };
 
 /* --------------------------------------------------------------- the field */
 
 /**
- * The tunnel the field lives in, in scene units. A star's home is
- * (unit x, unit y, depth) and its world position is derived in the shader:
- * depth wraps, and x/y scale with depth, so every star travels along a ray
- * through the eye. That is exactly the parallax a straight dolly produces, and
- * it makes the field endless without a single stateful wrap.
+ * The tunnel the field lives in, in scene units.
+ *
+ * Round 1 put a star's home at (unit x, unit y, depth) and scaled x/y BY that
+ * depth, so every star rode a fixed ray through the eye. That is an elegant
+ * wrap and it is also why the field read flat: a point whose x/y scale with its
+ * own depth does not move on screen at all as the eye advances. It grew and
+ * brightened in place, and a thousand of those is a texture, not a flight.
+ *
+ * Now a star's world position is FIXED: (x, y) are metres, decided once. Its
+ * depth wraps, and the screen position is x/depth — so a near star sweeps
+ * outward and accelerates as it passes, a far star barely moves, and the
+ * parallax is the real thing rather than an impression of it.
  */
 export const TUNNEL = {
-  /** Depth of one wrap period. A star leaving the near plane re-enters here. */
-  depth: 190,
   /** Nearest a star may come to the eye before it wraps. */
   near: 1.6,
   /**
-   * Half-width of the field at one unit of depth. It has to EXCEED the frustum
-   * at every depth or the field's own boundary becomes a visible disc: the
-   * widest frustum this page uses is landscape at 44 degrees, half-width
-   * 0.404 * 1.78 = 0.72 per unit of depth, so 0.82 clears it with margin for
-   * the parallax rotation.
+   * Half-width of a shell's box, as a fraction of that shell's own depth. It
+   * has to EXCEED the frustum where the stars are still visible, or the box's
+   * own corner becomes a rectangle in the sky: the widest frustum this page
+   * uses is 0.646 per unit of depth (landscape, 44°, 16:10) and the tallest is
+   * 0.601 (portrait, 62°), and the far fade has taken everything out by 0.86 of
+   * the depth, so 0.75 × 0.70 clears both with room for the parallax rotation.
    */
-  spread: 0.82,
+  spreadX: 0.75,
+  spreadY: 0.7,
+  /** The deepest shell. Sets the camera's far plane and the bounding sphere. */
+  far: 190,
+};
+
+/**
+ * The three populations. They are one point cloud, one material and one draw:
+ * the class only decides which shell a star lives in and how big and bright it
+ * is. Sizes are CSS pixels at pixel ratio 1.
+ *
+ * Shell depth and class are deliberately tied. Each shell is a SCALED COPY of
+ * the others — box half-width and wrap period scale together — so all three
+ * have identical screen statistics and none of them shows an edge, while the
+ * shallow shell sweeps past the eye many times faster than the deep one. That
+ * is the depth hierarchy and the motion hierarchy in one decision.
+ */
+export type StarClass = 'dust' | 'mid' | 'bright';
+
+export interface ShellSpec {
+  /** Share of the population. */
+  share: number;
+  /** Depth of this shell's wrap period, scene units. */
+  depth: number;
+  /** Point size in CSS px: [at the far end, at the near end]. */
+  size: [number, number];
+  /** Alpha: [at the far end, at the near end]. */
+  alpha: [number, number];
+  /** How much halo the sprite carries around its core. */
+  halo: number;
+}
+
+export const SHELLS: Record<StarClass, ShellSpec> = {
+  dust: { share: 0.7, depth: 190, size: [0.9, 1.4], alpha: [0.25, 0.55], halo: 0.1 },
+  mid: { share: 0.25, depth: 76, size: [1.5, 2.5], alpha: [0.42, 0.78], halo: 0.34 },
+  bright: { share: 0.05, depth: 25, size: [3.0, 5.0], alpha: [0.62, 0.95], halo: 1.0 },
+};
+
+export const CLASS_ORDER: StarClass[] = ['dust', 'mid', 'bright'];
+
+/**
+ * The band — the milky way of this page — and the voids around it.
+ *
+ * It is defined in DIRECTION space (a star's world x,y divided by nothing: the
+ * pair that decides the ray it sits on), and a slab through the origin in that
+ * space projects to the same stripe on screen at every depth. So the band holds
+ * still across the whole flight while the clumps inside it stream past.
+ */
+export const BAND = {
+  /** Tilt of the band, degrees, measured in direction space. */
+  tilt: 27,
+  /** Half-width of the band's Gaussian, in direction units. */
+  width: 0.24,
+  /** Density in a void as a share of the band's crest. */
+  floor: 0.08,
+  /** Scale of the clumping noise along the band. */
+  grain: 1.9,
+  /** Scale of the clumping noise along the depth axis, per scene unit. */
+  grainZ: 0.02,
 };
 
 /* -------------------------------------------------------- constellations */
 
 /**
- * A constellation target set, in CAMERA-RELATIVE units: x right, y up,
- * z metres IN FRONT of the eye. Camera-relative is what keeps the figure framed
- * while the dolly is still running underneath it.
- *
- * Point identity is the array index and never changes: star i always plays
- * role i, in every constellation, for the life of the page.
+ * A figure, in NORMALIZED units: height 1, width `aspect`, z in [-0.5, 0.5].
+ * `weights` carries the per-point role — 0 is a star seated along a stroke, and
+ * the higher values are the anchors at the vertices, which come with a halo and
+ * (at the top of the range) a diffraction spike.
  */
-export interface ConstellationTarget {
+export interface Figure {
   /** length === count * 3. */
   positions: Float32Array;
-  /** How many of the morph budget this target actually uses. */
+  /** length === count. 0 for stroke stars, up to 1 for the brightest anchor. */
+  weights: Float32Array;
   count: number;
-  /** Optional per-point brightness in [0,1]; anchors carry the higher values. */
-  weights?: Float32Array;
+  aspect: number;
+  /** Hairline segments, as pairs of indices into `positions`. */
+  links: [number, number][];
+  /** Anchors that carry an HTML label, as { key, index }. */
+  labels?: { key: string; index: number }[];
+}
+
+/** Where a figure sits in front of the eye, in scene units. */
+export interface Seat {
+  /** Distance in front of the camera. */
+  distance: number;
+  /** The box the figure is fitted inside, preserving its own aspect. */
+  width: number;
+  height: number;
+  /** World-unit offset of the figure's centre from the view axis. */
+  offsetX?: number;
+  offsetY?: number;
+  /** Half-depth of the z scatter. Keeps the figure a cloud, not a decal. */
+  jitter?: number;
 }
 
 /**
- * How a chapter's constellation is sourced. Content is ground truth, always:
- * a `text` source names a string the PAGE supplies (the localized name or the
- * chapter's own title), never a string invented here, and an `image` source
- * names one of the site's existing key images.
+ * How a chapter's constellation is sourced.
+ *
+ * Round 1 sampled a project's key image. That is retired: a screenshot is a
+ * page of type and panels, and its luminance — or its edges — is a smeared
+ * rectangle nobody can read as anything. Every world now gets a figure DRAWN
+ * for it, from what the project actually is.
  */
 export type TargetSource =
   /** Real page copy, rendered to an offscreen canvas and sampled by glyph fill. */
   | { kind: 'text'; from: 'name' }
-  /** An existing key image, luminance-sampled to a point set with tiny z jitter. */
-  | { kind: 'image'; src: string };
+  /** A hand-authored figure from `figures.ts`, named by its key. */
+  | { kind: 'drawn'; figure: string };
+
+/** A field-wide move a chapter can ask for, on top of (or instead of) a figure. */
+export type EffectKind =
+  /** The stars part radially from the centre, clearing a plane. */
+  | 'part'
+  /** The field draws slightly inward, so one star can own the frame. */
+  | 'breath';
 
 /* ---------------------------------------------------------------- chapters */
 
@@ -127,12 +224,22 @@ export interface ChapterSpec {
   target: TargetSource | null;
   /** When they assemble, in local progress. Required when `target` is set. */
   morph?: MorphWindow;
+  /** A field-wide move, on the same four-point window. */
+  effect?: { kind: EffectKind; window: MorphWindow };
+  /** True when this figure has a second pose it opens into while it is read. */
+  folds?: boolean;
   /** Slug into the existing project data. Never duplicate project copy here. */
   project?: string;
   /** Where the camera rests and the copy is legible, in OVERALL progress. */
   reading: ReadingStop | null;
   /** Grouping for the page's own section rhythm. */
   act: 'hero' | 'worlds' | 'film' | 'public' | 'contact';
+  /**
+   * Which side the copy takes on a wide screen; the figure takes the other.
+   * `centre` is for the two beats where the figure is BEHIND the words — the
+   * name at the top of the page and the one star at the end of it.
+   */
+  side: 'start' | 'end' | 'centre';
 }
 
 /* ------------------------------------------------------------------- state */
@@ -148,6 +255,12 @@ export interface SceneState {
   local: number;
   /** How far the stars have left the field for this chapter's figure, 0..1. */
   morph: number;
+  /** How far a folding figure has opened into its second pose, 0..1. */
+  fold: number;
+  /** The radial parting, 0..1. */
+  part: number;
+  /** The inward breath, 0..1. */
+  breath: number;
   /** Distance the eye has travelled down the tunnel at this progress, scene units. */
   dolly: number;
   /** Copy opacity driver, 0..1. Text enters by opacity plus a small rise. */
