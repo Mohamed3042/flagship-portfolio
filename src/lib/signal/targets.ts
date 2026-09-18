@@ -11,32 +11,12 @@
  * `seatTarget` places that figure in front of the eye. A resize then re-places
  * an existing figure with a multiply instead of re-reading a canvas.
  *
- * Sources are the site's own content: the chapter's real title, rendered by the
- * browser in the page's own font, and the project's real key image. Nothing is
- * invented, and no brand asset is traced.
+ * Two sources, and only two. The page's own name, rendered by the browser in
+ * the page's own font and sampled by glyph fill, and the hand-drawn figures in
+ * `figures.ts`. Luminance sampling of product screenshots is retired: it
+ * returned a smeared rectangle of type, which is what a screenshot is.
  */
-
-/** A sampled figure in normalized units: x,y about the origin, z in [-.5,.5]. */
-export interface Figure {
-  /** length === count * 3. Height is 1; width is `aspect`. */
-  positions: Float32Array;
-  count: number;
-  aspect: number;
-}
-
-/** Where a figure sits in front of the eye, in scene units. */
-export interface Seat {
-  /** Distance in front of the camera. */
-  distance: number;
-  /** The box the figure is fitted inside, preserving its own aspect. */
-  width: number;
-  height: number;
-  /** World-unit offset of the figure's centre from the view axis. */
-  offsetX?: number;
-  offsetY?: number;
-  /** Half-depth of the z scatter. Keeps the figure a cloud, not a decal. */
-  jitter?: number;
-}
+import type { Figure, Seat } from './types';
 
 /** Deterministic PRNG, so a target is a pure function of its input. */
 function seeded(seed: number): () => number {
@@ -78,79 +58,6 @@ function inkPixels(data: ImageData, floor: number, seed: number): Lit[] {
 }
 
 /**
- * Collect the EDGES of an image.
- *
- * Brightness is the wrong signal for a screenshot. A light interface is lit
- * almost everywhere, so a luminance take returns a filled rectangle — which is
- * exactly what the first attempt drew. What makes a screen recognisable is its
- * structure: the type, the rules, the chart lines, the edges of its panels. So
- * the take is a Sobel magnitude, normalised against the image's own strong
- * edges rather than an absolute threshold, which makes it work on a dark UI and
- * a white one without a per-image constant.
- *
- * A small share of interior fill is kept as well, weighted by how far a pixel
- * is from the image's mean, so a solid block still reads as a block.
- */
-function edgePixels(data: ImageData, fill: number, cut: number, seed: number): Lit[] {
-  const { width, height, data: px } = data;
-  const gray = new Float32Array(width * height);
-  let mean = 0;
-  for (let i = 0, p = 0; i < gray.length; i++, p += 4) {
-    gray[i] = (0.2126 * px[p] + 0.7152 * px[p + 1] + 0.0722 * px[p + 2]) / 255;
-    mean += gray[i];
-  }
-  mean /= gray.length || 1;
-
-  const mag = new Float32Array(width * height);
-  const at = (x: number, y: number) => gray[Math.min(height - 1, Math.max(0, y)) * width + Math.min(width - 1, Math.max(0, x))];
-  let peak = 0;
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const gx = (at(x + 1, y - 1) + 2 * at(x + 1, y) + at(x + 1, y + 1))
-        - (at(x - 1, y - 1) + 2 * at(x - 1, y) + at(x - 1, y + 1));
-      const gy = (at(x - 1, y + 1) + 2 * at(x, y + 1) + at(x + 1, y + 1))
-        - (at(x - 1, y - 1) + 2 * at(x, y - 1) + at(x + 1, y - 1));
-      const m = Math.hypot(gx, gy);
-      mag[y * width + x] = m;
-      if (m > peak) peak = m;
-    }
-  }
-  if (peak <= 1e-6) return [];
-  // Normalise against the 97th percentile, not the maximum: one specular pixel
-  // must not decide the exposure of the whole figure.
-  const sorted = Float32Array.from(mag).sort();
-  const norm = Math.max(sorted[Math.floor(sorted.length * 0.97)], peak * 0.08);
-
-  const random = seeded(seed);
-  const out: Lit[] = [];
-  // A rectangular take has a rectangular EDGE, and a straight cut across the top
-  // and left of a constellation is the one line in this world that says a
-  // machine put it there. The outer twelfth of the sample is faded out, so the
-  // figure ends by thinning rather than by stopping.
-  const feather = (u: number) => {
-    const d = Math.min(u, 1 - u) / 0.12;
-    return d >= 1 ? 1 : d * d * (3 - 2 * d);
-  };
-  for (let y = 0; y < height; y++) {
-    const fy = feather((y + 0.5) / height);
-    for (let x = 0; x < width; x++) {
-      const i = y * width + x;
-      const soft = fy * feather((x + 0.5) / width);
-      const edge = Math.min(1, mag[i] / norm);
-      if (edge > cut && random() < Math.pow(edge, 0.85) * soft) {
-        out.push({ x: (x + 0.5) / width, y: (y + 0.5) / height });
-        continue;
-      }
-      // The body of the image, thinly: enough to say there is a surface there.
-      if (fill > 0 && random() < fill * soft * Math.min(1, Math.abs(gray[i] - mean) * 2.2 + 0.18)) {
-        out.push({ x: (x + 0.5) / width, y: (y + 0.5) / height });
-      }
-    }
-  }
-  return shuffle(out, random);
-}
-
-/**
  * Turn lit pixels into a normalized figure. Points are taken in shuffled order
  * and recycled with sub-pixel jitter when there are fewer lit pixels than
  * stars, so a small figure thickens rather than leaving stars in the field.
@@ -158,6 +65,7 @@ function edgePixels(data: ImageData, fill: number, cut: number, seed: number): L
 function figureFrom(lit: Lit[], count: number, aspect: number, seed: number): Figure | null {
   if (lit.length === 0 || count <= 0) return null;
   const positions = new Float32Array(count * 3);
+  const weights = new Float32Array(count);
   const random = seeded(seed ^ 0x51ed);
   const cell = 1 / Math.max(1, Math.sqrt(lit.length / Math.max(aspect, 0.05)));
   for (let i = 0; i < count; i++) {
@@ -167,24 +75,37 @@ function figureFrom(lit: Lit[], count: number, aspect: number, seed: number): Fi
     positions[i * 3 + 1] = (0.5 - source.y) + (random() - 0.5) * spread;
     positions[i * 3 + 2] = random() - 0.5;
   }
-  return { positions, count, aspect };
+  return { positions, weights, count, aspect, links: [] };
 }
 
-/** Place a normalized figure in front of the eye. Cheap: a resize re-seats it. */
+/** Place a normalized figure in front of the eye. Cheap: a resize re-seats it.
+ *  The destination is a vec4 per star: the seat, and the seat's own weight. */
 export function seatTarget(figure: Figure, seat: Seat, out?: Float32Array): Float32Array {
   const n = figure.count;
-  const dest = out && out.length >= n * 3 ? out : new Float32Array(n * 3);
+  const dest = out && out.length >= n * 4 ? out : new Float32Array(n * 4);
   // Fit inside the box while keeping the figure's own aspect.
   const scale = Math.min(seat.width / Math.max(figure.aspect, 1e-4), seat.height);
   const dx = seat.offsetX ?? 0;
   const dy = seat.offsetY ?? 0;
   const jitter = (seat.jitter ?? 0.6) * 2;
   for (let i = 0; i < n; i++) {
-    dest[i * 3] = dx + figure.positions[i * 3] * scale;
-    dest[i * 3 + 1] = dy + figure.positions[i * 3 + 1] * scale;
-    dest[i * 3 + 2] = seat.distance + figure.positions[i * 3 + 2] * jitter;
+    dest[i * 4] = dx + figure.positions[i * 3] * scale;
+    dest[i * 4 + 1] = dy + figure.positions[i * 3 + 1] * scale;
+    dest[i * 4 + 2] = seat.distance + figure.positions[i * 3 + 2] * jitter;
+    dest[i * 4 + 3] = figure.weights[i];
   }
   return dest;
+}
+
+/** The world position of one seated point, for hairlines and HTML labels. */
+export function seatPoint(figure: Figure, seat: Seat, index: number): [number, number, number] {
+  const scale = Math.min(seat.width / Math.max(figure.aspect, 1e-4), seat.height);
+  const jitter = (seat.jitter ?? 0.6) * 2;
+  return [
+    (seat.offsetX ?? 0) + figure.positions[index * 3] * scale,
+    (seat.offsetY ?? 0) + figure.positions[index * 3 + 1] * scale,
+    seat.distance + figure.positions[index * 3 + 2] * jitter,
+  ];
 }
 
 /** A canvas sized for sampling. Kept small: this runs once per chapter. */
@@ -197,7 +118,7 @@ function surface(width: number, height: number) {
 }
 
 /**
- * The chapter's own title, rendered to an offscreen canvas by the browser and
+ * The page's own name, rendered to an offscreen canvas by the browser and
  * sampled by glyph fill. The font comes from the page, so Arabic shapes and
  * joins exactly as it does in the DOM — nothing is re-implemented here.
  */
@@ -227,56 +148,4 @@ export function textFigure(text: string, font: string, count: number, rtl: boole
 
   const lit = inkPixels(ctx.getImageData(0, 0, canvas.width, canvas.height), 0.3, 0x7e37);
   return figureFrom(lit, count, canvas.width / canvas.height, 0x7e37);
-}
-
-/**
- * A project's existing key image, sampled at its edges. What a reader
- * recognises in a screen is its structure, so that is what the stars take: the
- * type, the rules, the chart lines, the panel boundaries, plus a thin sense of
- * the surface they sit on.
- */
-export function imageFigure(image: HTMLImageElement, count: number, seed = 0x1ce): Figure | null {
-  if (!image.complete || !image.naturalWidth) return null;
-  // Sampled at 600 rather than 300: at the lower resolution a stroke and the
-  // gap beside it fall in the same cell, so the take thickens into a slab
-  // instead of following a line.
-  const long = 600;
-  const scale = Math.min(1, long / Math.max(image.naturalWidth, image.naturalHeight));
-  const made = surface(image.naturalWidth * scale, image.naturalHeight * scale);
-  if (!made) return null;
-  const { canvas, ctx } = made;
-  try {
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-  } catch {
-    return null;
-  }
-  let data: ImageData;
-  try {
-    data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  } catch {
-    // A cross-origin image taints the canvas. Same-origin content only.
-    return null;
-  }
-  // No interior fill and a high edge cut: what is wanted is the wireframe of the
-  // screen — its type, rules and panel boundaries — not a lit rectangle. The
-  // first version took brightness, which returns a filled block for any light
-  // interface; the second took every edge, which returns the same block made of
-  // stars and reads as the brightest object on the page.
-  const lit = edgePixels(data, 0, 0.35, seed);
-  return figureFrom(lit, count, canvas.width / canvas.height, seed);
-}
-
-/**
- * Load an image for sampling. A target that silently fails is worse than one
- * that never starts, so a failure resolves to null and the chapter keeps the
- * field instead of assembling nothing.
- */
-export function loadImage(src: string): Promise<HTMLImageElement | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.decoding = 'async';
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
 }

@@ -11,7 +11,9 @@
  * is never repeated here — a chapter names a slug and the render layer reads
  * that project's own entry.
  */
-import type { ChapterSpec, Layout, MorphWindow, Progress, ReadingStop, SceneState } from './types';
+import type {
+  ChapterSpec, Layout, MorphWindow, Progress, ReadingStop, SceneState,
+} from './types';
 import { featured } from '../../data/featured';
 import type { Localized } from '../../data/projects';
 
@@ -29,24 +31,34 @@ const easeInQuad = (t: number) => clamp01(t) * clamp01(t);
 /* ----------------------------------------------------------------- the runway */
 
 /**
- * Scroll runway, in viewport heights. Twelve beats at a little over one
- * viewport each: long enough that no beat is a flick, short enough that the
- * archive is reachable.
+ * Scroll runway, in viewport heights.
+ *
+ * Round 1 ran twelve beats over sixteen viewport heights, which is 1.3 screens
+ * a chapter: enough to show a formation, not enough to WATCH one arrive. The
+ * director asked for an assembly that reads as motion on a real wheel — eight
+ * per cent of the page scroll, which at Round 1's length was 1,152 px at
+ * 1440x900. Twelve chapters cannot each own 13% of one page, so the DISTANCE is
+ * what is honoured and the runway grew to carry it: every chapter now spends
+ * about 1,160 px assembling, 420 holding and 710 releasing. The exact numbers
+ * are measured in the round's report, not asserted here.
  */
-export const SEGMENT_VH: Record<Layout, number> = { landscape: 16, portrait: 18 };
+export const SEGMENT_VH: Record<Layout, number> = { landscape: 32, portrait: 34 };
 
 /** Scene units the eye travels down the tunnel across the whole segment. */
-export const DOLLY_TOTAL = 150;
+export const DOLLY_TOTAL = 300;
 
-/** The default assembly window, in local progress. */
-const MORPH: MorphWindow = { in0: 0.06, in1: 0.42, out0: 0.76, out1: 0.97 };
+/**
+ * The default four-point window, in local progress. In and out are long, and
+ * the hold in the middle is where the chapter is read.
+ */
+const MORPH: MorphWindow = { in0: 0.03, in1: 0.52, out0: 0.7, out1: 1 };
 
 /* ---------------------------------------------------------------- the script */
 
-const HERO_TO = 0.095;
-const WORLDS_TO = 0.615;
-const FILM_TO = 0.745;
-const PUBLIC_TO = 0.875;
+const HERO_TO = 0.07;
+const WORLDS_TO = 0.745;
+const FILM_TO = 0.83;
+const PUBLIC_TO = 0.915;
 
 /** A reading stop stated as a fraction of the chapter it belongs to. */
 const stop = (from: Progress, to: Progress, a: number, b: number): ReadingStop =>
@@ -61,13 +73,16 @@ function worldChapters(): ChapterSpec[] {
       id: `world-${entry.slug}`,
       from,
       to,
-      // The figure is the project's own key image, luminance-sampled. Round 1
-      // ships the first one; the rest are Round 2 and carry the field only.
-      target: i === 0 ? { kind: 'image' as const, src: entry.shots[0].src } : null,
-      morph: i === 0 ? MORPH : undefined,
+      // Every world has a figure drawn for it, from what the project is. The
+      // figure key IS the project slug, so the two can never drift apart.
+      target: { kind: 'drawn' as const, figure: entry.slug },
+      morph: MORPH,
+      // One figure has a second pose and opens into it while it is read.
+      folds: entry.slug === 'medmac-box-studio',
       project: entry.slug,
-      reading: stop(from, to, 0.42, 0.74),
+      reading: stop(from, to, 0.54, 0.7),
       act: 'worlds' as const,
+      side: i % 2 === 0 ? ('start' as const) : ('end' as const),
     };
   });
 }
@@ -80,34 +95,43 @@ export const CHAPTERS: ChapterSpec[] = [
     // The name is already assembled when the page opens: the visitor arrives at
     // the held pose, and scrolling is what releases it back into the field.
     target: { kind: 'text', from: 'name' },
-    morph: { in0: -0.02, in1: 0, out0: 0.42, out1: 0.93 },
-    reading: stop(0, HERO_TO, 0, 0.38),
+    morph: { in0: -0.02, in1: 0, out0: 0.44, out1: 0.81 },
+    reading: stop(0, HERO_TO, 0, 0.4),
     act: 'hero',
+    side: 'centre',
   },
   ...worldChapters(),
   {
     id: 'film',
     from: WORLDS_TO,
     to: FILM_TO,
+    // No figure: the stars part and hand the middle of the frame to the reel.
     target: null,
-    reading: stop(WORLDS_TO, FILM_TO, 0.28, 0.78),
+    effect: { kind: 'part', window: { in0: 0.04, in1: 0.53, out0: 0.7, out1: 1 } },
+    reading: stop(WORLDS_TO, FILM_TO, 0.54, 0.7),
     act: 'film',
+    side: 'start',
   },
   {
     id: 'public',
     from: FILM_TO,
     to: PUBLIC_TO,
-    target: null,
-    reading: stop(FILM_TO, PUBLIC_TO, 0.3, 0.78),
+    target: { kind: 'drawn', figure: 'public' },
+    morph: MORPH,
+    reading: stop(FILM_TO, PUBLIC_TO, 0.54, 0.7),
     act: 'public',
+    side: 'end',
   },
   {
     id: 'contact',
     from: PUBLIC_TO,
     to: 1,
-    target: null,
-    reading: stop(PUBLIC_TO, 1, 0.26, 0.8),
+    target: { kind: 'drawn', figure: 'contact' },
+    morph: MORPH,
+    effect: { kind: 'breath', window: MORPH },
+    reading: stop(PUBLIC_TO, 1, 0.54, 0.7),
     act: 'contact',
+    side: 'centre',
   },
 ];
 
@@ -122,24 +146,40 @@ export function chapterAt(u: Progress): ChapterSpec {
 }
 
 /**
- * How far the stars have left the field for this chapter's figure.
- * Out of the field on an ease-out-quart, held, then released on an ease-in, so
- * both ends of the move have zero velocity and no boundary reads as a cut.
+ * How far along a four-point window the visitor is: out on an ease-out-quart,
+ * held, then released on an ease-in, so both ends of the move have zero
+ * velocity and no boundary reads as a cut.
  */
-export function morphAt(chapter: ChapterSpec, local: number): number {
-  const w = chapter.morph;
-  if (!chapter.target || !w) return 0;
+function windowAt(w: MorphWindow, local: number): number {
   if (local < w.out0) return easeOutQuart(ramp(local, w.in0, w.in1));
   return 1 - easeInQuad(ramp(local, w.out0, w.out1));
 }
 
+/** How far the stars have left the field for this chapter's figure. */
+export function morphAt(chapter: ChapterSpec, local: number): number {
+  const w = chapter.morph;
+  if (!chapter.target || !w) return 0;
+  return windowAt(w, local);
+}
+
 /**
- * Copy strength over a chapter. It arrives after the figure has started to
- * form and leaves before the next chapter's arrives, so two chapters' words are
- * never on screen together.
+ * How far a folding figure has opened into its second pose.
+ *
+ * It runs across the HOLD, not the assembly: the box arrives closed, and it is
+ * the reading that opens it into the dieline.
+ */
+export function foldAt(chapter: ChapterSpec, local: number): number {
+  if (!chapter.folds || !chapter.morph) return 0;
+  return smoothstep(ramp(local, chapter.morph.in1 + 0.02, chapter.morph.out0));
+}
+
+/**
+ * Copy strength over a chapter. It arrives as the figure lands and leaves
+ * before the next chapter's arrives, so two chapters' words are never on
+ * screen together.
  */
 function narrationAt(local: number): number {
-  return smoothstep(ramp(local, 0.08, 0.26)) * (1 - smoothstep(ramp(local, 0.84, 0.97)));
+  return smoothstep(ramp(local, 0.3, 0.48)) * (1 - smoothstep(ramp(local, 0.78, 0.92)));
 }
 
 /** The complete scene state at one progress value. Pure. */
@@ -150,11 +190,15 @@ export function evaluate(u: Progress, _layout: Layout): SceneState {
   const local = span > 0 ? clamp01((p - chapter.from) / span) : 0;
   const reading = chapter.reading;
   const resting = !!reading && p >= reading.from && p <= reading.to;
+  const effect = chapter.effect ? windowAt(chapter.effect.window, local) : 0;
   return {
     u: p,
     chapter,
     local,
     morph: morphAt(chapter, local),
+    fold: foldAt(chapter, local),
+    part: chapter.effect?.kind === 'part' ? effect : 0,
+    breath: chapter.effect?.kind === 'breath' ? effect : 0,
     dolly: p * DOLLY_TOTAL,
     // At a reading stop the words are at full strength whatever the ramp says:
     // where the visitor is meant to read, they can.
