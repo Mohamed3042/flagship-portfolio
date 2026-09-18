@@ -297,7 +297,13 @@ with sync_playwright() as p:
             a = Image.open(io.BytesIO(shot_a)).convert('L').crop(region)
             b = Image.open(io.BytesIO(shot_b)).convert('L').crop(region)
             diff = ImageChops.difference(a, b)
-            return diff.getbbox(), a, b
+            # `floor` was accepted here and never applied, so getbbox() answered
+            # on ANY non-zero difference — a single unit of dither anywhere in a
+            # 1440x900 frame widened the box. That is the whole reason the changed
+            # region read "consistently larger than the plate": the number was
+            # measuring encoder noise, not a second draw. Threshold first, then
+            # ask for the bounding box of what actually differs.
+            return diff.point(lambda v: 255 if v > floor else 0).getbbox(), a, b
 
         def lit_bbox(image, floor):
             return image.point(lambda v: 255 if v > floor else 0).getbbox()

@@ -1,5 +1,8 @@
 {
+  "name": "flagship-signal-typedeps",
+  "private": true,
+  "description": "Typecheck-only declarations, installed outside the shared node_modules junction. Exact, not a range: the declaration set must match the runtime three exactly.",
   "dependencies": {
-    "@types/three": "^0.180.0"
+    "@types/three": "0.180.0"
   }
 }

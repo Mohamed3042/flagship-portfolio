@@ -62,8 +62,12 @@ const OBJECT: Record<string, { scene: { en: string; ar: string }; plate: { en: s
   matter: {
     scene: { en: 'The carton is an illustration; it measures nothing.',
              ar: 'العلبة رسم توضيحي، ولا تقيس شيئًا.' },
-    plate: { en: 'The window beside it is an actual product screenshot.',
-             ar: 'النافذة بجانبها صورة فعلية من المنتج.' },
+    // Not "the window beside it". By this stop the carton has cleared and the
+    // capture holds the frame alone, so the sentence named a neighbour that is
+    // not there — in portrait, where the composition stacks, most obviously of
+    // all. The caption now states what the thing is and claims no position.
+    plate: { en: 'Actual application screenshot.',
+             ar: 'صورة فعلية من التطبيق.' },
   },
   world: {
     scene: { en: 'The room around it is an illustration; it measures nothing.',
@@ -80,7 +84,7 @@ const OBJECT: Record<string, { scene: { en: string; ar: string }; plate: { en: s
 
 /**
  * Some chapters have an interval where the capture is deliberately not on screen
- * at all. A caption that names "the window beside it" while the window is absent
+ * at all. A caption that names a screenshot while no screenshot is on screen
  * describes a different frame; both sentences ship, and the renderer shows the
  * one that is true. They are ordinary text, not a live region: this is a caption
  * matching its own picture, not an announcement.

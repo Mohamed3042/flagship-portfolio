@@ -591,6 +591,25 @@ body:has(.signal) #space{display:none}
 [dir=rtl] .signal__status{letter-spacing:0;text-transform:none;font-size:12px}
 
 
+/* ================================================= the header's own legibility
+   The header is glass: 72% of the theme background over a saturating blur. Below
+   the cinema this route scrolls full-bleed product screenshots directly under
+   it, the blur lifts the bar to mid-grey, and the secondary link colour lands at
+   3.74:1 in the dark theme — measured from rendered pixels by
+   scripts/measure-nav-contrast.py, not from computed styles, because a
+   backdrop-filtered background is not readable from the DOM at all.
+
+   Raising this route's share of its own background is the smallest fix that
+   works in every theme and in both directions, bright-under-dark and
+   dark-under-bright, without touching a colour, a size or the blur.
+
+   Deliberately route-local. Every other route shares this header and the same
+   latent defect wherever bright media passes beneath it; that is a shared-theme
+   defect, recorded in DESIGN.md, not something to fix from inside this film.
+   Specificity here (0,2,1) stays below the seam's (0,3,1), so over the cinema
+   the seam still wins. */
+body:has(.signal) .nav{background:color-mix(in srgb,var(--bg) 90%,transparent)}
+
 /* ===================================================== the seam above the cinema
    The fixed header is shared by every route and follows the selected theme. The
    stage under it is black in all six, so in the light theme a silver bar floated

@@ -167,6 +167,13 @@ export function initSignal(): void {
    */
   let sky = 0.27;
 
+  /**
+   * Height of the fixed header, in CSS pixels. Measured, never assumed, and
+   * declared here rather than beside freeBox because measure() runs during
+   * setup — a `let` further down the module would still be in its dead zone.
+   */
+  let headerBand = 0;
+
   function measure() {
     const rect = runway.getBoundingClientRect();
     runwayTop = rect.top + scrollY;
@@ -177,6 +184,11 @@ export function initSignal(): void {
     const declared = Number.parseFloat(getComputedStyle(root).getPropertyValue('--signal-sky'));
     sky = Number.isFinite(declared) ? THREE.MathUtils.clamp(declared, 0.1, 0.6) : 0.27;
     runway.style.setProperty('--signal-vh', String(SEGMENT_VH[layout]));
+    // The header is fixed and opaque, so the top of the viewport is not free
+    // space: anything the fit places there is behind it. Read rather than
+    // assumed, because the bar's height is a clamp on the shared layout.
+    const bar = document.querySelector('.nav');
+    headerBand = bar ? Math.max(0, bar.getBoundingClientRect().bottom) : 0;
   }
 
   function progress(): Progress {
@@ -815,13 +827,20 @@ export function initSignal(): void {
   const FIT_CLEAR = 26;
   function freeBox(panel: HTMLElement) {
     const band = copyBand(panel);
+    // Free space starts below the fixed header, not at the top of the viewport.
+    // It did not, and at the carton's reading stop the fit placed the plate at
+    // y=32 under a 54px bar: the top 22px of an "actual application screenshot"
+    // — its toolbar row — sat behind the site's own chrome, in both languages
+    // and both orientations. A capture that is 5% covered by the page furniture
+    // is not the readable proof this whole sequence is built to arrive at.
+    const top = headerBand + FIT_MARGIN;
     if (layout === 'portrait') {
-      const bottom = Math.max(FIT_MARGIN + 80, band.top - FIT_CLEAR);
+      const bottom = Math.max(top + 80, band.top - FIT_CLEAR);
       return {
         x: FIT_MARGIN,
-        y: FIT_MARGIN,
+        y: top,
         width: Math.max(120, viewportWidth - FIT_MARGIN * 2),
-        height: Math.max(80, bottom - FIT_MARGIN),
+        height: Math.max(80, bottom - top),
       };
     }
     const left = rtl ? FIT_MARGIN : Math.max(FIT_MARGIN, band.end + FIT_CLEAR);
@@ -830,9 +849,9 @@ export function initSignal(): void {
       : viewportWidth - FIT_MARGIN;
     return {
       x: left,
-      y: FIT_MARGIN,
+      y: top,
       width: Math.max(160, right - left),
-      height: Math.max(120, viewportHeight - FIT_MARGIN * 2),
+      height: Math.max(120, viewportHeight - FIT_MARGIN - top),
     };
   }
 

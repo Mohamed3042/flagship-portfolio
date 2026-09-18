@@ -1,0 +1,226 @@
+[
+ {
+  "u": 0.68,
+  "blend": 0,
+  "surface_opacity": 1,
+  "drawn": true,
+  "geom_resolved": 2,
+  "geom_unclipped": 1,
+  "span_ratio_html_over_geom": null,
+  "fit": "settling",
+  "plate": [
+   404,
+   193,
+   784,
+   537
+  ]
+ },
+ {
+  "u": 0.69,
+  "blend": 0,
+  "surface_opacity": 1,
+  "drawn": true,
+  "geom_resolved": 2,
+  "geom_unclipped": 1,
+  "span_ratio_html_over_geom": null,
+  "fit": "settling",
+  "plate": [
+   535,
+   274,
+   581,
+   391
+  ]
+ },
+ {
+  "u": 0.7,
+  "blend": 0,
+  "surface_opacity": 1,
+  "drawn": true,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "settling",
+  "plate": [
+   736,
+   393,
+   288,
+   190
+  ]
+ },
+ {
+  "u": 0.71,
+  "blend": 0,
+  "surface_opacity": 1,
+  "drawn": true,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "settling",
+  "plate": [
+   736,
+   386,
+   309,
+   196
+  ]
+ },
+ {
+  "u": 0.72,
+  "blend": 0,
+  "surface_opacity": 1,
+  "drawn": true,
+  "geom_resolved": 2,
+  "geom_unclipped": 1,
+  "span_ratio_html_over_geom": null,
+  "fit": "settling",
+  "plate": [
+   446,
+   235,
+   845,
+   491
+  ]
+ },
+ {
+  "u": 0.73,
+  "blend": 0,
+  "surface_opacity": 1,
+  "drawn": true,
+  "geom_resolved": 2,
+  "geom_unclipped": 1,
+  "span_ratio_html_over_geom": null,
+  "fit": "settling",
+  "plate": [
+   637,
+   272,
+   748,
+   428
+  ]
+ },
+ {
+  "u": 0.74,
+  "blend": 0.124,
+  "surface_opacity": 0.876,
+  "drawn": true,
+  "geom_resolved": 4,
+  "geom_unclipped": 3,
+  "span_ratio_html_over_geom": 1.027,
+  "fit": "exact",
+  "plate": [
+   661,
+   285,
+   709,
+   401
+  ]
+ },
+ {
+  "u": 0.75,
+  "blend": 0.865,
+  "surface_opacity": 0.135,
+  "drawn": true,
+  "geom_resolved": 3,
+  "geom_unclipped": 2,
+  "span_ratio_html_over_geom": null,
+  "fit": "exact",
+  "plate": [
+   652,
+   283,
+   709,
+   403
+  ]
+ },
+ {
+  "u": 0.76,
+  "blend": 1,
+  "surface_opacity": 0,
+  "drawn": false,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "exact",
+  "plate": [
+   650,
+   283,
+   709,
+   407
+  ]
+ },
+ {
+  "u": 0.77,
+  "blend": 1,
+  "surface_opacity": 0,
+  "drawn": false,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "exact",
+  "plate": [
+   650,
+   283,
+   709,
+   407
+  ]
+ },
+ {
+  "u": 0.78,
+  "blend": 1,
+  "surface_opacity": 0,
+  "drawn": false,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "exact",
+  "plate": [
+   650,
+   283,
+   709,
+   407
+  ]
+ },
+ {
+  "u": 0.79,
+  "blend": 1,
+  "surface_opacity": 0,
+  "drawn": false,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "exact",
+  "plate": [
+   650,
+   283,
+   709,
+   407
+  ]
+ },
+ {
+  "u": 0.8,
+  "blend": 1,
+  "surface_opacity": 0,
+  "drawn": false,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "exact",
+  "plate": [
+   650,
+   283,
+   709,
+   407
+  ]
+ },
+ {
+  "u": 0.81,
+  "blend": 1,
+  "surface_opacity": 0,
+  "drawn": false,
+  "geom_resolved": 1,
+  "geom_unclipped": 0,
+  "span_ratio_html_over_geom": null,
+  "fit": "exact",
+  "plate": [
+   650,
+   283,
+   709,
+   407
+  ]
+ }
+]
