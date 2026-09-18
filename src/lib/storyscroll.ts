@@ -24,6 +24,7 @@
    ===================================================================== */
 import { getST, clamp01 } from './motion';
 import { themeMotion } from './theme';
+import { flightState } from './sky/flight-state';
 
 const isRTL = (): boolean => document.documentElement.getAttribute('dir') === 'rtl';
 
@@ -141,6 +142,11 @@ export function renderStoryStatic(): void {
 /** Desktop: pin + scrub the Build and Proof beats (engine already loaded). */
 export function initStoryScroll(): void {
   resetPinned();
+  flightState.build = 0;
+  flightState.proof = 0;
+  flightState.buildActive = false;
+  flightState.proofActive = false;
+  flightState.layoutVersion++;
   if (!document.querySelector('[data-spine]')) return;
   const ST = getST();
   if (!ST) return;
@@ -166,8 +172,15 @@ export function initStoryScroll(): void {
       pin: sticky,
       scrub,
       invalidateOnRefresh: true,
-      onUpdate: (self: { progress: number }) => stepBuild(items, bar, clamp01(self.progress)),
-      onToggle: (self: { isActive: boolean }) => setPinned(self.isActive),
+      onUpdate: (self: { progress: number }) => {
+        const p = clamp01(self.progress);
+        stepBuild(items, bar, p);
+        flightState.build = p;
+      },
+      onToggle: (self: { isActive: boolean }) => {
+        setPinned(self.isActive);
+        flightState.buildActive = self.isActive;
+      },
     });
   });
 
@@ -184,8 +197,15 @@ export function initStoryScroll(): void {
       pin: sticky,
       scrub,
       invalidateOnRefresh: true,
-      onUpdate: (self: { progress: number }) => update(clamp01(self.progress)),
-      onToggle: (self: { isActive: boolean }) => setPinned(self.isActive),
+      onUpdate: (self: { progress: number }) => {
+        const q = clamp01(self.progress);
+        update(q);
+        flightState.proof = q;
+      },
+      onToggle: (self: { isActive: boolean }) => {
+        setPinned(self.isActive);
+        flightState.proofActive = self.isActive;
+      },
     });
   });
 }

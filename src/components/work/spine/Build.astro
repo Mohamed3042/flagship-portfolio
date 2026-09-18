@@ -1,7 +1,9 @@
 ---
-/** Beat 3 · Build — PINNED + SCRUBBED. The "what I ran / owned" items reveal
- *  one at a time as the pin scrubs (lib/storyscroll.ts steps [data-build-item]).
- *  data-mult sets the scroll length: pin distance = (mult-1) * 100vh. */
+/** Beat 3 · Build — PINNED + SCRUBBED. The gate run: one short line per step,
+ *  centred, drawn as particle text by the flight; only the gate the camera is
+ *  passing is assembled (lib/storyscroll.ts steps [data-build-item], the text
+ *  field reads its data-state). data-mult sets the scroll length:
+ *  pin distance = (mult-1) * 100vh. */
 import { pick, type Lang } from '../../../i18n/utils';
 
 interface BuildItem {
@@ -18,31 +20,21 @@ interface Props {
   mult?: number;
   items: BuildItem[];
 }
-const { lang, kicker, heading, intro, mult = 2.6, items } = Astro.props;
+const { lang, heading, mult = 2.6, items } = Astro.props;
 ---
 
-<section class="beat beat--build" data-build data-mult={mult.toString()}>
-  <div class="beat__sticky" data-build-sticky>
-    <div class="build__grid">
-      <div class="build__head reveal">
-        <span class="kicker">{pick(lang, kicker)}</span>
-        <h2>{pick(lang, heading)}</h2>
-        {intro && <p>{pick(lang, intro)}</p>}
-        <div class="build__bar"><i data-build-bar></i></div>
-      </div>
-      <div class="build__items">
-        {
-          items.map((it) => (
-            <div class="build__item" data-build-item>
-              <span class="n">{it.n}</span>
-              <div>
-                <h4>{pick(lang, it.title)}</h4>
-                <p>{pick(lang, it.body)}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
+<section class="beat beat--build" data-build data-mult={mult.toString()} data-flight-stop="build">
+  <div class="beat__sticky gates__sticky" data-build-sticky>
+    <h2 class="sr-only">{pick(lang, heading)}</h2>
+    <ol class="gates">
+      {
+        items.map((it, i) => (
+          <li class="gate" data-build-item data-state={i === 0 ? 'active' : 'future'}>
+            <span class="gate__line" data-ptext>{pick(lang, it.title)}</span>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="gates__bar"><i data-build-bar></i></div>
   </div>
 </section>

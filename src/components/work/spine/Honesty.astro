@@ -10,27 +10,32 @@ interface Props {
   kicker: { en: string; ar: string };
   note: { en: string; ar: string }; // HTML
 }
-const { lang, slug, kicker, note } = Astro.props;
+const { lang, slug, note } = Astro.props;
 const t = useTranslations(lang);
+const ar = lang === 'ar';
+// the one line the boundary opens with; the whole note stays under the fold
+const plain = pick(lang, note).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+const first = plain.match(/^(.{24,}?[.!?؟])(\s|$)/);
+const short = first ? first[1] : plain.length > 140 ? plain.slice(0, 137).trimEnd() + '…' : plain;
 
 const { next } = neighbours(slug);
-const nextNo = String(projects.findIndex((p) => p.slug === next.slug) + 1).padStart(2, '0');
-const nextEyebrow = `${t('work.next')} · ${nextNo} · ${pick(lang, next.tag)}`;
 ---
 
-<section class="beat beat--honesty" data-screen="honesty">
+<section class="beat beat--honesty" data-screen="honesty" data-flight-stop="honesty">
   <div class="sourcing reveal">
-    <span class="kicker">{pick(lang, kicker)}</span>
-    <p class="sourcing__quote" set:html={pick(lang, note)} data-px="0.03"></p>
-    <slot name="tools" />
+    <h2 class="sourcing__line" data-ptext>{short}</h2>
+    <details class="tx-more">
+      <summary>{ar ? 'الإرسال الكامل' : 'Full transmission'}</summary>
+      <p class="sourcing__quote" set:html={pick(lang, note)}></p>
+      <slot name="tools" />
+    </details>
   </div>
 
-  <a class="handoff reveal" href={workPath(lang, next.slug)} data-next={next.accent}>
+  <a class="handoff reveal" href={workPath(lang, next.slug)} data-next={next.accent} data-flight-stop="next">
     <span class="handoff__wash" aria-hidden="true" data-px="0.05"></span>
     <span class="handoff__row">
-      <span>
-        <span class="handoff__eyebrow">{nextEyebrow}</span>
-        <span class="handoff__label" data-px="0.04">{pick(lang, next.title)}</span>
+      <span class="handoff__copy">
+        <span class="handoff__label" data-ptext data-px="0.04">{pick(lang, next.title)}</span>
       </span>
       <span class="handoff__num" data-px="0.09">
         {pick(lang, next.stat)}

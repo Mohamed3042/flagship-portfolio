@@ -6,36 +6,69 @@
 > https://mohamed3042.github.io/flagship-portfolio/ (built with `npm run build:ghpages`, published
 > from the `gh-pages` branch of `Mohamed3042/flagship-portfolio`). Canonical tags still name
 > `mohamed-mahmoud-kuwait.netlify.app`. **Do not deploy unless the owner says "deploy".**
+> The universe build (2026-09-17, branch `feature/universe-3d`) is described in §0 and is NOT deployed yet.
 
-## 0. The home page is "One Sky" (branch `feature/sss-home`, 2026-09-17)
+## 0. The universe: One Sky home + "One flight, no cuts" story pages (2026-09-17)
 
-The pinned slogan biomes and the horizontal card strip were replaced by one continuous WebGL flight.
+The whole site is one continuous WebGL universe. The home is the One Sky flight; every one of the
+38 story pages is the next leg of that flight, on the same galaxy, from the same shaders. Owner
+directives that shape it (2026-09-17): **no reduced quality on phones** (no low tier, no pixel-ratio
+cap, identical scene at native DPR), **headlines are particle text drawn in the scene**, planets
+carry real detail (baked 4K surfaces), and density/motion are deliberately heavy. Browsers without
+WebGL keep the CSS spine unchanged.
 
-- **Structure** (`src/pages/[lang]/index.astro`): `SkyHero` → `SkyBeats` (five method beats, about 2
-  screens) → `#work`, the featured flight of eight `SkyStation`s (four public repositories, then four
-  private systems) → `SkyMap` `#sky`, where every story is a filterable star (`#lab` and `#foundation`
-  are anchors inside it and pre-set the filter) → `Contact`.
-- **Engine** (`src/lib/sky/`): `boot.ts` handles the capability gate (no WebGL, a software
-  rasteriser or Save-Data leave the CSS sky), the depth driver that writes `--p` / `--f` on DOM
-  layers, the map filters and star picking, and the Astro lifecycle. `engine.ts` holds the Three.js
-  scene: a 64k-star galaxy (22k on the low tier), nebula sheets, core glow, one procedural planet per
-  station, the lit route, map stars and constellation lines. `shaders.ts` is all GLSL, `palette.ts`
-  re-tints per theme. Camera stops come from `[data-sky-stop]` in the DOM, so layout changes need no
-  engine edits. `?sky=off` / `?sky=force` exist for testing.
-- **Data**: `src/data/featured.ts` lists the flight order and which screens to layer (`repo` only for
-  PUBLIC repositories). New stories live in `src/data/new-projects.ts` and are merged into
-  `automationProjects` in `system-projects.ts`.
-- **Screens**: `node scripts/build-sky-shots.mjs` rebuilds `public/img/sky/*.webp` from the proof
-  book's privacy-reviewed assets. Crops remove a hosting badge and a recipe panel; several book
-  images are deliberately NOT used (real farm name, employer artwork, brand + price pairs); see the
-  script header.
-- **Gotcha**: `src/lib/interactions.ts` animates EVERY `[data-count]` element and overwrites its
-  content. Never use `data-count` as a plain attribute.
-- **Gates**: `npm run build` → `node scripts/verify-portfolio.mjs` (story set, sky-map grouping,
-  private-repo link allowlist) → `python scripts/test-portfolio.py --base-url <static dist server>
-  --viewport desktop|mobile`. Run the browser test against the built `dist` served by
-  `scripts/serve-static.mjs`, not `astro dev`: the dev toolbar injects extra elements and a console
-  error.
+- **Home** (`src/pages/[lang]/index.astro`): unchanged DOM structure; `[data-sky-stop]` marks the
+  camera stops, `[data-ptext]` marks the headlines the scene draws (hero H1, beats, chapters, sky-map
+  title). `src/lib/sky/boot.ts` is the capability gate (WebGL present, not a software rasteriser,
+  `?sky=off|force`), `engine.ts` the home flight.
+- **Story pages** (`src/pages/[lang]/work/[slug].astro`): one fixed `[data-flight-canvas]` behind
+  the existing 5-beat spine. The spine components carry `[data-flight-stop="hook|brief|build|proof|
+  honesty|next"]` (SystemStory.astro + spine/*.astro); the Build/Proof pins publish their scrub
+  progress through `src/lib/sky/flight-state.ts`. `flight-boot.ts` mounts `story.ts` after first
+  paint. The page embeds `#flight-data` (planet spec, screens, next planet, optional GLB models).
+- **Shared universe** (`src/lib/sky/world.ts`): galaxy (220k stars), far shell, 12 nebula sheets +
+  dust lanes, core, comets, dust fields, and `buildSystem` = one planet per project: surface **baked
+  once** into two equirect textures by `bakeFrag` (`bakeSurface`, 2048 on the home, 4096 for a story's
+  own planet, progressive upgrade after the first frame), lit per frame by the small `planetFrag`.
+  `src/data/flight.ts` (`systemSpec`) gives every project one seat/kind/seed, so the planet met on
+  the home is the one the story lands on. All noise is the 256² texture noise in `NOISE3`
+  (`noiseTexture()`): hash noise made D3D shader compiles take seconds.
+- **Post stack** (`post.ts`): bloom + lens (chromatic edges, velocity streaks, vignette, grain), no
+  tone mapping. **Particle text** (`text.ts`): each `[data-ptext]` element is rasterised with its
+  computed font, sampled into points that assemble where the DOM box is (a dark lens sits behind
+  them in the scene); the DOM ink goes transparent via `tokens.css` (`html.sky-live/flight-live
+  [data-ptext]`). The words stay in the DOM for search, screen readers and the gates.
+- **Less text is the rule** (owner, 2026-09-17: "the less text the better"). A beat carries ONE short
+  line and folds the rest under `<details class="tx-more">` ("Full transmission"). The build beat is
+  the gate run (`spine/Build.astro`): one centred `[data-ptext]` line per step, `text.ts` assembles
+  only the step whose `data-state` is `active`. Brief = one display line; proof = the line plus the
+  metric captions; honesty = its first sentence as a line. Body copy that does show decodes as a
+  transmission (`src/lib/transmission.ts`, `[data-tx]`). No kickers, eyebrows or section numbers
+  anywhere. DESIGN.md (root) + `.impeccable/design.json` record the world; keep them in step.
+- **The reel** (story.ts / engine.ts / post.ts): every effect is a function of the flight
+  parameter `u` (scroll), never of wall time — dolly zoom (`camera.fov` vs distance to the
+  planet), terminator reveal (`setLight`), banking roll (`camera.up`), gate kick + flash gated by
+  scroll velocity, hyperspace warp/flash through the boundary (`post.setFx`), letterbox
+  (`.letterbox` `--lb`). The iris/shockwave live in rigs.ts (`spokeFrag`, `RigPulse`). The
+  Disney rule holds: scroll drives the sequencing; only twinkle/spin are ambient.
+- **Rigs** (`rigs.ts`): one part vocabulary, a recipe per `story.visual` (+ `legacy-<slug>` for the
+  nine foundation stories). Gates = the page's `[data-build-item]` count. Cake Studio loads its real
+  GLB cakes (Draco/KTX2 decoders from `public/worlds/cake-studio/`), falling back to tiers.
+- **Audit**: `python scripts/audit-flight.py --base-url <static dist server>` (console, overflow,
+  landmarks, names, touch targets, focus ring, DOM/heap/fps at 390@3, 768@2, 1440).
+- **Gates**: `npm run build` → `node scripts/verify-portfolio.mjs` → `node scripts/serve-static.mjs
+  dist 4332` → `python scripts/test-portfolio.py --base-url http://127.0.0.1:4332 --viewport
+  desktop|mobile` → `npm run verify:flight` / `verify:flight:mobile` (`scripts/test-flight.py`:
+  flight-live within 15 s, six stops, frame loop alive, camera reaches the boundary, canvas at native
+  DPR, zero console errors; `--shots DIR` captures every stop, `--hop` follows the handoff link).
+- **Gotcha (layout shift)**: layout that differs between the flight and the CSS spine is keyed to
+  `html.js` (present before first paint), never to `html.flight-live` (set about half a second
+  later): a rule that changes size or display on `flight-live` is a CLS regression. `html.flight-off`
+  (set by `flight-boot.ts` when WebGL is missing or the mount fails) restores the spine layout.
+- **Gotchas**: never rebuild `dist/` while a gate runs (the pages 404 mid-run). The desktop app's
+  browser pane pauses `requestAnimationFrame` while hidden, so verify WebGL with Playwright, not the
+  pane. `src/lib/interactions.ts` overwrites every `[data-count]`. Save-Data still keeps the CSS sky
+  unless `?sky=force`.
 
 Read this first. It explains what this project is, the two codebases involved, what has been
 done, the current live state, the active/pending work, and the non-obvious gotchas. Keep it

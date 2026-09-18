@@ -20,24 +20,23 @@ const { lang, badge, headline, lead, heroNumber, heroCaption, ghost } = Astro.pr
 const t = useTranslations(lang);
 ---
 
-<section class="beat beat--hook" data-screen="hook">
+<section class="beat beat--hook" data-screen="hook" data-flight-stop="hook">
   <Biome kind="nebula" class="biome--hook" />
   <span class="beat__glow" data-px="0.05" aria-hidden="true"></span>
   <span class="beat__ghost" data-px="0.12" data-ghost={ghost} aria-hidden="true"></span>
   <span class="beat__vignette" aria-hidden="true"></span>
 
   <div class="hook__content">
-    <span class="hook__eyebrow reveal"><i class="d"></i>{pick(lang, badge)}</span>
-    <h1 class="hook__title reveal d1" set:html={pick(lang, headline)}></h1>
+    <h1 class="hook__title reveal d1" data-ptext set:html={pick(lang, headline)}></h1>
     {
       heroNumber && (
         <div class="hook__num reveal d2">
-          <b>{heroNumber}</b>
+          <b data-ptext>{heroNumber}</b>
           {heroCaption && <span class="cap" set:html={pick(lang, heroCaption)} />}
         </div>
       )
     }
-    <p class="hook__lead reveal d3" set:html={pick(lang, lead)}></p>
+    <p class="hook__lead reveal d3" data-tx set:html={pick(lang, lead)}></p>
     <a class="hook__back reveal d3" href={homePath(lang) + '#work'}>
       <span aria-hidden="true">{lang === 'ar' ? '→' : '←'}</span>{t('work.all')}
     </a>
