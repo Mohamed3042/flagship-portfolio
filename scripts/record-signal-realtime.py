@@ -37,7 +37,7 @@ CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--base-url', default='http://127.0.0.1:4618')
-parser.add_argument('--out', default=str(ROOT / 'docs' / 'deep-field' / 'r01'))
+parser.add_argument('--out', default=str(ROOT / 'docs' / 'deep-field' / 'r02'))
 parser.add_argument('--lang', default='en')
 args = parser.parse_args()
 
@@ -47,17 +47,21 @@ OUT.mkdir(parents=True, exist_ok=True)
 # A pass a person could plausibly perform: read, continue, change your mind, go
 # back, stop, go on. Every entry is (wheel delta per tick, ticks, pause after).
 # A negative delta scrolls back up.
+# Round 2 doubled the runway — an assembly now takes about 1,150 px of scroll
+# rather than 580 — so the same pass needs about twice the wheel to cover the
+# same story. The tick spacing came down with it, which is also what a hand
+# does when a page is long.
 SCRIPT = [
-    ('hold', 0, 0, 1.5),        # the name, assembled, before anything moves
-    ('scroll', 140, 18, 1.2),   # release it back into the field
-    ('scroll', 140, 14, 1.5),   # into the first constellation, and read it
-    ('scroll', -140, 10, 1.0),  # change of direction: back over the assembly
-    ('scroll', 140, 20, 1.4),   # forward again, through the next worlds
-    ('hold', 0, 0, 1.2),        # a voluntary stop while reading
-    ('scroll', 140, 22, 1.3),
-    ('scroll', 140, 18, 1.2),   # the films and the public work
-    ('scroll', -140, 16, 1.0),  # back up again
-    ('scroll', 140, 24, 1.0),   # on to contact and out into the archive
+    ('hold', 0, 0, 1.4),        # the name, assembled, before anything moves
+    ('scroll', 140, 36, 1.0),   # release it back into the field
+    ('scroll', 140, 28, 1.3),   # into the first constellation, and read it
+    ('scroll', -140, 20, 0.9),  # change of direction: back over the assembly
+    ('scroll', 140, 40, 1.2),   # forward again, through the next worlds
+    ('hold', 0, 0, 1.1),        # a voluntary stop while reading
+    ('scroll', 140, 44, 1.1),
+    ('scroll', 140, 36, 1.0),   # the films and the public work
+    ('scroll', -140, 32, 0.9),  # back up again
+    ('scroll', 140, 60, 1.0),   # on to contact and out into the archive
 ]
 
 # One recording, at the size the owner reviews the film at. The phone gets its
@@ -113,7 +117,7 @@ with sync_playwright() as p:
             if kind == 'scroll':
                 for _ in range(ticks):
                     page.mouse.wheel(0, delta)
-                    page.wait_for_timeout(45)   # a hand, not a teleport
+                    page.wait_for_timeout(35)   # a hand, not a teleport
             t1 = time.time() - started
             page.wait_for_timeout(int(pause * 1000))
             steps.append({'kind': kind, 'moveFrom': round(t0, 3), 'moveTo': round(t1, 3),

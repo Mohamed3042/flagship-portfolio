@@ -53,7 +53,7 @@ CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--base-url', default='http://127.0.0.1:4618')
-parser.add_argument('--out', default=str(ROOT / 'docs' / 'deep-field' / 'r01' / 'budgets.json'))
+parser.add_argument('--out', default=str(ROOT / 'docs' / 'deep-field' / 'r02' / 'budgets.json'))
 parser.add_argument('--seconds', type=float, default=2.0)
 args = parser.parse_args()
 
@@ -277,12 +277,12 @@ with sync_playwright() as pw:
     # --------------------------------------------- first paint, CLS, overflow
     browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     scripts = []
-    for w, h in ((1440, 900), (390, 844)):
+    for w, h, lang in ((1440, 900, 'en'), (390, 844, 'en'), (1440, 900, 'ar')):
         ctx = browser.new_context(viewport={'width': w, 'height': h}, device_scale_factor=1,
                                   is_mobile=w < 700, has_touch=w < 700)
         page = ctx.new_page()
         page.on('response', lambda r: scripts.append(r.url) if r.url.endswith('.js') else None)
-        page.goto(f'{args.base_url}/en', wait_until='load')
+        page.goto(f'{args.base_url}/{lang}', wait_until='load')
         page.wait_for_timeout(3200)
         paint = page.evaluate('''() => Object.fromEntries(
           performance.getEntriesByType('paint').map(e => [e.name, Math.round(e.startTime)]))''')
@@ -300,7 +300,7 @@ with sync_playwright() as pw:
           await new Promise(r => setTimeout(r, 1000));
           return out;
         }''')
-        report[f'load-{w}x{h}'] = {
+        report[f'load-{w}x{h}-{lang}'] = {
             'paint': paint,
             'cls': round(sum(s['value'] for s in shifts), 5),
             'shifts': shifts,
@@ -335,10 +335,11 @@ print(json.dumps({
     'costControl': report['costControl'],
     'verdict': report['verdict'],
     'jsTotalGzipKB': report['js']['totalGzipKB'],
-    'cls1440': report['load-1440x900']['cls'],
-    'cls390': report['load-390x844']['cls'],
-    'overflow1440': report['load-1440x900']['overflow'],
-    'overflow390': report['load-390x844']['overflow'],
-    'fcp1440ms': report['load-1440x900']['paint'].get('first-contentful-paint'),
+    'cls1440': report['load-1440x900-en']['cls'],
+    'cls390': report['load-390x844-en']['cls'],
+    'cls1440ar': report['load-1440x900-ar']['cls'],
+    'overflow1440': report['load-1440x900-en']['overflow'],
+    'overflow390': report['load-390x844-en']['overflow'],
+    'fcp1440ms': report['load-1440x900-en']['paint'].get('first-contentful-paint'),
 }, indent=1))
 print(f'written {args.out}')
