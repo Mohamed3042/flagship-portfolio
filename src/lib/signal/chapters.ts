@@ -35,32 +35,55 @@ const easeInQuad = (t: number) => clamp01(t) * clamp01(t);
 /**
  * Scroll runway, in viewport heights.
  *
- * The director capped this round at 36 viewport heights on the desktop, and the
- * page grew from twelve beats to nineteen. Those two numbers decide everything
- * else: the sticky frame eats one viewport, so 36 vh is 35 screens of travel —
- * about 1,680 px a beat at 1440x900 — and the four-point window below spends
- * seven tenths of that on the assembly so it still arrives at Round 2's
- * distance. What the cap took is the RELEASE, which is now about 300 px instead
- * of 700. The exact measured numbers are in the round's report, not asserted
- * here; nineteen beats at Round 2's assembly AND Round 2's release would need
- * just over 40 viewport heights, which is not a page this round is allowed to
- * ship.
+ * The cap is 36 viewport heights on the desktop across nineteen beats. The
+ * sticky frame eats one viewport, so that is 35 screens of travel — 1,682.7 px
+ * a beat at 1440x900, the hero taking 0.72 of one — and the four-point window
+ * below divides it.
+ *
+ * ROUND 4 kept the cap. The director allowed 40 viewport heights if the hold
+ * and the release could not otherwise be paid for, and they could: at 36 the
+ * beat is long enough for a 471 px hold, a 421 px release and 791 px of
+ * assembly, which clears the 700 px floor. A longer page was not needed, so it
+ * was not taken.
  */
 export const SEGMENT_VH: Record<Layout, number> = { landscape: 36, portrait: 38 };
+
+/**
+ * The floors the split is measured against, in CSS pixels of scroll. They are
+ * exported because the harness checks the SHIPPED window against them rather
+ * than against a second copy of the numbers.
+ */
+export const BEAT_FLOORS = { holdPx: 450, releasePx: 400, assemblyPx: 700 };
 
 /** Scene units the eye travels down the tunnel across the whole segment. */
 export const DOLLY_TOTAL = 420;
 
 /**
- * The default four-point window, in local progress: out of the field over the
- * first seven tenths, held, then back into the field. In and out are both eased
- * to zero velocity, so no boundary reads as a cut.
+ * The default four-point window, in local progress: out of the field, held,
+ * then back into the field. In and out are both eased to zero velocity, so no
+ * boundary reads as a cut.
+ *
+ * ROUND 4 — THE SPLIT. Round 3 spent seven tenths of every beat assembling and
+ * left the HOLD at 202 px: a title, a line and a link arriving and leaving
+ * inside two notches of a wheel. Nobody reads in 202 px. The director set the
+ * floors — hold at least 450, release at least 400, assembly whatever is left
+ * as long as it clears 700 — and this window is those floors with a little
+ * air, measured against the beat the shipped runway actually produces at
+ * 1440x900: 1,682.7 px, of which 0.47 assembles (790.9), 0.28 holds (471.2)
+ * and 0.25 releases (420.7). Assembly clears 700 by ninety pixels, so the
+ * runway cap stays where it was at 36 viewport heights; it did not have to go
+ * to 40 to buy the hold.
+ *
+ * The fractions, not the pixels, are what ship: the beat is a share of a
+ * runway measured in viewport heights, so every distance here scales with the
+ * screen. The px above are this window on the review viewport, and the round's
+ * report states them for the phone too.
  */
-const MORPH: MorphWindow = { in0: 0, in1: 0.7, out0: 0.82, out1: 1 };
+const MORPH: MorphWindow = { in0: 0, in1: 0.47, out0: 0.75, out1: 1 };
 
-/** Where the camera rests, as a fraction of a beat: the end of the assembly,
- *  the hold, and the first of the release. */
-const REST: [number, number] = [0.66, 0.86];
+/** Where the camera rests, as a fraction of a beat: inside the hold, a sliver
+ *  in from each end of it, so a seek lands on a pose that is not still moving. */
+const REST: [number, number] = [0.5, 0.73];
 
 /* ---------------------------------------------------------------- the script */
 
@@ -181,12 +204,12 @@ export function foldAt(chapter: ChapterSpec, local: number): number {
 /**
  * Copy strength over a chapter. It arrives as the figure lands and leaves
  * before the next chapter's arrives, so two chapters' words are never on
- * screen together. Both ends moved with the window: the assembly now owns
- * seven tenths of the beat, so copy that still arrived at three tenths would
- * be words over an empty half-built figure for six hundred pixels.
+ * screen together. Both ends move with the window: with the assembly ending at
+ * 0.47 the words come up over the last quarter of it and are fully up before
+ * the hold starts, and they go during the release rather than at the boundary.
  */
 function narrationAt(local: number): number {
-  return smoothstep(ramp(local, 0.52, 0.68)) * (1 - smoothstep(ramp(local, 0.88, 0.97)));
+  return smoothstep(ramp(local, 0.36, 0.49)) * (1 - smoothstep(ramp(local, 0.83, 0.94)));
 }
 
 /**

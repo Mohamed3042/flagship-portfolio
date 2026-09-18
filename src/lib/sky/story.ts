@@ -714,14 +714,14 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
     columns.forEach((c, i) => {
       const k = easeOut(clamp01((q * (proofN + 0.6) - i * 0.85) / 1.2));
       c.mesh.scale.y = c.base + k * 9;
-      (c.mesh.material as { uniforms: { uHot: { value: number } } }).uniforms.uHot.value = k * (0.7 + 0.3 * Math.sin(elapsed * 3 + i));
+      (c.mesh.material as unknown as { uniforms: { uHot: { value: number } } }).uniforms.uHot.value = k * (0.7 + 0.3 * Math.sin(elapsed * 3 + i));
       c.cap.position.y = c.mesh.position.y + c.mesh.scale.y + 0.6;
-      (c.cap.material as { uniforms: { uOpacity: { value: number } } }).uniforms.uOpacity.value = k * 0.5;
+      (c.cap.material as unknown as { uniforms: { uOpacity: { value: number } } }).uniforms.uOpacity.value = k * 0.5;
     });
     satellites.forEach((s) => {
       const ang = s.phase + elapsed * s.speed;
       s.mesh.position.copy(C).addScaledVector(fwd, Math.cos(ang) * s.r).addScaledVector(side, Math.sin(ang) * s.r * 0.6).addScaledVector(up, Math.sin(ang * 1.7) * 1.5 + 2);
-      (s.mesh.material as { uniforms: { uHot: { value: number } } }).uniforms.uHot.value = q * 0.8;
+      (s.mesh.material as unknown as { uniforms: { uHot: { value: number } } }).uniforms.uHot.value = q * 0.8;
     });
     const plateIn = easeOut(clamp01((u - 2.9) * 1.6)) * (1 - easeOut(clamp01((u - 4.3) * 1.4)));
     plates.forEach(({ mesh, frame: fr, back, backing, k }) => {
@@ -729,7 +729,7 @@ export async function mountFlight(canvas: HTMLCanvasElement, data: FlightData, o
       (mesh.material as MeshBasicMaterial).opacity = kk;
       (backing.material as MeshBasicMaterial).opacity = kk * 0.8;
       (fr.material as LineBasicMaterial).opacity = kk * 0.9;
-      (back.material as { uniforms: { uOpacity: { value: number } } }).uniforms.uOpacity.value = kk * 0.07;
+      (back.material as unknown as { uniforms: { uOpacity: { value: number } } }).uniforms.uOpacity.value = kk * 0.07;
       const bob = Math.sin(elapsed * 0.7 + k) * 0.004;
       mesh.position.y += bob;
       backing.position.y += bob;

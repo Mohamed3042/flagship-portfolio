@@ -490,14 +490,36 @@ const contactStar: FigureSpec = {
  * A portal — the aperture the five worlds are entered through.
  *
  * It is not a drawing of anything: it is the hole the stars open in the field
- * so a world's own key frame can be seen through it. Slightly wider than it is
+ * so a world's own key frame can be seen THROUGH it. Slightly wider than it is
  * tall, with a shallow swing in z so the parallax reads the rim as a ring in
  * space rather than a circle painted on the frame, and eight short ticks
  * outside it — an iris, not a coin.
  *
  * No hairlines: a chord across this figure would be a line drawn over the
  * picture, which is the one thing an aperture must not do.
+ *
+ * ROUND 4. The ticks were 15% of the rim radius long, drawn at nearly twice
+ * the spacing of the rim itself, and each one began at a star heavy enough to
+ * carry a diffraction spike. Eight bright spikes on radial stalks read as
+ * LEGS — the aperture looked like a spider, not an iris. They are now a third
+ * of that length, a third of that density, and their anchors sit well under
+ * the spike threshold, so what the eye finds is the rim.
  */
+/** How far the iris ticks reach past the rim, as a multiple of the rim radius. */
+const PORTAL_TICK_OUT = 1.1;
+/**
+ * The rim's share of the portal figure's own fitted box.
+ *
+ * The figure is fitted to its whole extent, ticks included, so the rim is
+ * smaller than the box the renderer seats. The plate has to fill the RIM and
+ * not the box — this is the number that makes "edge to edge" exact, and it
+ * moves whenever the tick length does, which is why it is derived and not
+ * typed twice.
+ */
+export const PORTAL_RIM_SHARE = 1 / PORTAL_TICK_OUT;
+/** The aperture's own ratio: the rim, and therefore the plate, is this wide. */
+export const PORTAL_ASPECT = 1.12;
+
 const portal: FigureSpec = (() => {
   const rx = 0.56;
   const ry = 0.5;
@@ -511,19 +533,26 @@ const portal: FigureSpec = (() => {
     // clear the rim by more than the rim's own scatter or it reads as thickness.
     strokes.push({
       pts: [
-        { x: cx * rx * 1.09, y: sy * ry * 1.09, z: Math.sin(a + Math.PI / 2) * 0.12 },
-        { x: cx * rx * 1.24, y: sy * ry * 1.24, z: Math.sin(a + Math.PI / 2) * 0.12 },
+        { x: cx * rx * 1.045, y: sy * ry * 1.045, z: Math.sin(a + Math.PI / 2) * 0.12 },
+        { x: cx * rx * PORTAL_TICK_OUT, y: sy * ry * PORTAL_TICK_OUT,
+          z: Math.sin(a + Math.PI / 2) * 0.12 },
       ],
-      density: 1.8,
+      density: 0.55,
     });
+    // Under 0.86 by a wide margin: an anchor above that threshold grows a
+    // four-point diffraction spike, and eight of those around a rim are the
+    // legs the director saw. These are just the eight stars that hold the
+    // iris open.
     anchors.push({
       x: cx * rx, y: sy * ry, z: Math.sin(a + Math.PI / 2) * 0.12,
-      w: i % 2 === 0 ? 0.9 : 0.74,
+      w: i % 2 === 0 ? 0.42 : 0.3,
     });
   }
   // A ring is a very long stroke, and the spacing rule would seat a thousand
   // stars on it — a wire, not a gathering. Its own count, scaled by viewport.
-  return { aspect: rx / ry, points: 820, strokes, anchors, links: [] };
+  // Round 4 grew the ring by a sixth, and the count with it, so the spacing
+  // between two stars on the rim is what it was when the figure was accepted.
+  return { aspect: rx / ry, points: 950, strokes, anchors, links: [] };
 })();
 
 /**

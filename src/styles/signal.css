@@ -307,8 +307,13 @@ body:has(.signal) #space{display:none}
        pixels it computed from the projection — the same arithmetic in both
        directions, so the RTL route must not mirror it a second time. */
     transform-origin:0 0;
-    border-radius:2px;overflow:hidden;
-    box-shadow:0 0 0 1px color-mix(in srgb,var(--signal-ink) 26%,transparent);
+    /* ROUND 4: the plate IS the aperture. The renderer sizes this box to the
+       rim itself, the clip makes it the ellipse the stars are standing on, and
+       the picture covers it — so the world is seen THROUGH the hole and no
+       corner of the plate reaches past the rim. `overflow:hidden` alone would
+       only give a rectangle; the clip is what makes the rim the iris. */
+    clip-path:ellipse(50% 50% at 50% 50%);
+    border-radius:50%;overflow:hidden;
     background:#05070d;
     opacity:0;visibility:hidden;
   }
@@ -320,6 +325,15 @@ body:has(.signal) #space{display:none}
   }
   .signal[data-graphics=webgl] .signal__portal img{
     width:100%;height:100%;object-fit:cover;
+  }
+  /* The picture falls into the black at the rim instead of stopping at it: an
+     inner vignette, inside the same clip, so the stars on the rim are what the
+     eye reads as the edge. A hairline stroke would be a drawn circle over the
+     one figure that must not have a line drawn on it. */
+  .signal[data-graphics=webgl] .signal__portal::after{
+    content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--signal-ink) 14%,transparent),
+               inset 0 0 34px 12px rgb(0 0 0 / .62);
   }
 
   /* ----------------------------------------------------------- the labels */
@@ -347,16 +361,41 @@ body:has(.signal) #space{display:none}
     transform:translateY(calc(-50% + var(--label-y,0px)));
     display:inline-flex;align-items:center;min-height:44px;padding:10px 12px;
     white-space:nowrap;pointer-events:auto;
-    font-family:inherit;font-size:13px;font-weight:450;letter-spacing:.04em;
+    /* ROUND 4. These were 12–13 px, untracked, and the tool chips were set in
+       the secondary ink at 12 px, which on black at held pose was a grey smear
+       under a hairline that was brighter than they were. A name on a star is a
+       CAPTION: small, spaced, uppercase, and in the page's full ink, so it is
+       read rather than decoded. The leader carries the connection; the label
+       does not have to shout to be found. */
+    font-family:inherit;font-size:13.5px;font-weight:600;
+    letter-spacing:.13em;text-transform:uppercase;
     color:var(--signal-ink);
   }
 
   /* A tool's chip is not a control: none of those repositories are public, so
      there is nothing to click and nothing that owes a 44px target. It is the
-     star's name, set small enough that twelve of them can stand apart. */
+     star's name — the same caption as a repository's, one step smaller because
+     twelve of them share one ladder, and in the SAME ink, because the thing
+     that was wrong with it was the alpha. */
   .signal[data-graphics=webgl] .signal__label-box--plain{
-    min-height:0;padding:4px 8px;font-size:12px;
-    color:var(--signal-ink-2);
+    min-height:0;padding:5px 8px;font-size:13px;letter-spacing:.11em;
+    color:var(--signal-ink);
+  }
+
+  /* ------------------------------------------------------------ the leaders */
+  /* A chip that has slid down its own leader to clear the chip above it is a
+     chip nobody can attach to a star. The leader is drawn: one hairline from
+     the projected anchor to the chip's own edge, at the length and angle the
+     renderer measured in the same frame it placed the chip. It is a hairline
+     and it is dimmer than the caption — a leader that competes with its label
+     is the defect this round was asked to fix, in the other direction. */
+  .signal[data-graphics=webgl] .signal__label::before{
+    content:"";position:absolute;top:0;left:0;height:1px;
+    width:var(--leader-len,0px);
+    transform:rotate(var(--leader-angle,0rad));
+    transform-origin:0 50%;
+    background:color-mix(in srgb,var(--signal-ink) 30%,transparent);
+    pointer-events:none;
   }
 
   .signal[data-graphics=webgl] .signal__label:hover .signal__label-box{
@@ -462,11 +501,13 @@ body:has(.signal) #space{display:none}
   @media (max-width:899px){
     .signal[data-graphics=webgl] .signal__copy{width:min(100%,560px)}
     .signal[data-graphics=webgl] .signal__title{font-size:clamp(30px,8vw,40px)}
-    .signal[data-graphics=webgl] .signal__label-box{font-size:12px;padding:10px}
+    .signal[data-graphics=webgl] .signal__label-box{font-size:13px;padding:10px;letter-spacing:.1em}
     /* Twelve chips in a phone's figure block: the ladder is 30-odd pixels a rung
-       there, so the tool chips shed their padding rather than their legibility. */
+       there, so the tool chips shed their padding rather than their legibility.
+       The size holds at the bottom of the director's range; what gives is the
+       tracking and the box around it. */
     .signal[data-graphics=webgl] .signal__label-box--plain{
-      font-size:11px;padding:3px 6px;letter-spacing:.02em;
+      font-size:13px;padding:3px 5px;letter-spacing:.06em;
     }
     .signal[data-graphics=webgl] .signal__chapter{padding-block-end:clamp(74px,12vh,120px)}
     .signal[data-graphics=webgl] .signal__seek{

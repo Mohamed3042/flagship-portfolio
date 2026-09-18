@@ -39,11 +39,11 @@ export interface World {
 const FLOOR = 'https://mohamed3042.github.io/flagship-portfolio/worlds/';
 
 /**
- * The five the owner confirmed, in his order of pride. Four are on the live
- * worlds floor. The Academy is in the repository on `feature/academy-proven-
- * spells` and was live at the gh-pages commit before the September release
- * rebuilt that tree without it; until it is published again its portal leads to
- * the floor it belongs to rather than to a page that answers 404.
+ * The five the owner confirmed, in his order of pride. All five are on the live
+ * worlds floor. The Academy was 404 for most of September — the release on the
+ * 17th rebuilt the Pages tree from a source that no longer carried it — and was
+ * restored this round from the exact bytes it was last live with, so its portal
+ * leads to the world again rather than to the floor.
  */
 export const worlds: World[] = [
   {
@@ -56,7 +56,7 @@ export const worlds: World[] = [
       ar: 'خمسون لقطة مترابطة، ٤:١٠ — تصميم مرن، واعتماد مقاس، وتسليم جاهز للمطبخ.',
     },
     frame: cakeFrame,
-    aspect: 1.7771,
+    aspect: 1.7778,
     alt: {
       en: 'A carved sugar arch on a dark studio floor, with tiered cakes behind it.',
       ar: 'قوس سكّري منحوت على أرضية استوديو داكنة، وخلفه كعكات متدرّجة.',
@@ -72,7 +72,7 @@ export const worlds: World[] = [
       ar: 'عشرون لقطة تُفرَك بالتمرير: كتابٌ مذهّب يُفتح، ثم تُبقي الشيفرةُ المملكةَ تجري.',
     },
     frame: disneyFrame,
-    aspect: 2.1771,
+    aspect: 2.1769,
     alt: {
       en: 'A cut-paper gate between two lanterns, opening onto a lamplit storybook town.',
       ar: 'بوابة من الورق المقصوص بين فانوسين، تنفتح على مدينةِ حكايةٍ مضاءة بالقناديل.',
@@ -88,7 +88,7 @@ export const worlds: World[] = [
       ar: 'أربعون لقطة مقبولة في شريطٍ واحد بلا انقطاع. يدُك هي الساعة الوحيدة.',
     },
     frame: stringsFrame,
-    aspect: 1.7638,
+    aspect: 1.7648,
     alt: {
       en: 'Scissors cutting the threads above a wooden marionette on a workshop bench.',
       ar: 'مقصٌّ يقطع الخيوط فوق دميةٍ خشبية على منضدة ورشة.',
@@ -96,15 +96,15 @@ export const worlds: World[] = [
   },
   {
     slug: 'academy',
-    href: FLOOR,
-    live: false,
+    href: `${FLOOR}academy.html`,
+    live: true,
     title: { en: 'The Academy of Proven Spells', ar: 'أكاديمية التعاويذ المُثبتة' },
     line: {
       en: 'Nothing is magic until it survives the proof. Fourteen accepted shots, one scroll.',
       ar: 'لا يصبح شيءٌ سحرًا حتى ينجو من البرهان. أربع عشرة لقطة مقبولة، وتمريرة واحدة.',
     },
     frame: academyFrame,
-    aspect: 1.7771,
+    aspect: 1.7778,
     alt: {
       en: 'An owl carrying a sealed letter towards a moonlit castle gate.',
       ar: 'بومة تحمل رسالة مختومة نحو بوابة قلعة يضيئها القمر.',
@@ -120,7 +120,7 @@ export const worlds: World[] = [
       ar: 'الصمت يكتسب نبضة؛ والنبضة تصير استوديو؛ ويدٌ تقود الخافضَ الرئيس إلى الوحدة.',
     },
     frame: spotifyFrame,
-    aspect: 2.3887,
+    aspect: 2.3881,
     alt: {
       en: 'Records drifting as ringed planets through deep space.',
       ar: 'أسطوانات تسبح ككواكب ذات حلقات في عمق الفضاء.',

@@ -17,7 +17,10 @@ import type { ChapterSpec, Figure, Layout, Mode, Progress, Seat, Tier } from './
 import { BAND, STAR_FLOOR, TIERS, TUNNEL } from './types';
 import { CHAPTERS, DOLLY_TOTAL, SEGMENT_VH, evaluate } from './chapters';
 import { createField, type Field } from './field';
-import { FIGURES, drawnFigure, figureAspect, strokeLength, type FigureSpec } from './figures';
+import {
+  FIGURES, PORTAL_ASPECT, PORTAL_RIM_SHARE, drawnFigure, figureAspect, strokeLength,
+  type FigureSpec,
+} from './figures';
 import { seatTarget, seatPoint, textFigure } from './targets';
 
 /**
@@ -306,14 +309,20 @@ export function initSignal(): void {
     const px = (portalCentre.x * 0.5 + 0.5) * viewportWidth;
     const py = (-portalCentre.y * 0.5 + 0.5) * viewportHeight;
     const halfPx = Math.abs((-portalEdge.y * 0.5 + 0.5) * viewportHeight - py);
-    const ringW = halfPx * 2 * (figure ? figure.aspect : 1.12);
-    // The plate is the largest box of the frame's own ratio that sits INSIDE
-    // the ellipse with room to spare: 72% of the rim's width, and never more
-    // than 48% of its height. Both numbers are the AIR, not the fit — a 16:9
-    // frame at the geometric maximum has its corners on the rim, and an
-    // aperture whose picture touches it is a picture in a frame.
-    const width = Math.min(ringW * 0.72, halfPx * 2 * 0.48 * portal.aspect);
-    const height = width / portal.aspect;
+    // ROUND 4. The plate IS the aperture now. It was the largest rectangle of
+    // the frame's own ratio that fitted inside the ellipse with air around it,
+    // which on a 405 px ring made a 16:9 world into a 327x184 postage stamp
+    // floating in a hoop. A world is seen THROUGH the hole: the plate takes
+    // the rim's whole box, the stylesheet clips it to the ellipse, and the
+    // frame covers it. Nothing of the picture reaches past the rim, and
+    // nothing of the rim's inside is empty.
+    //
+    // The rim is NOT the figure's box: the figure is fitted to its full extent
+    // and the iris ticks stand outside the rim, so the box is a tick-length
+    // larger. PORTAL_RIM_SHARE is that ratio, exported by the figure itself so
+    // the two cannot drift apart.
+    const height = halfPx * 2 * PORTAL_RIM_SHARE;
+    const width = height * PORTAL_ASPECT;
     const box = `${width.toFixed(1)}x${height.toFixed(1)}`;
     if (box !== portal.box) {
       portal.box = box;
@@ -460,12 +469,18 @@ export function initSignal(): void {
     // wider than its own fit, and the first build of this composition hung the
     // Public constellation's leftmost anchor forty pixels off the screen.
     const away = chapter.side === 'start' ? 1 : -1;
+    // ROUND 4: a portal is the one figure the visitor is meant to look INTO,
+    // and the director asked for half the screen. The width answer has to move
+    // with it — at 0.4 of the frustum a 4:3 window would bind the ring on width
+    // and hand back 47% — so the portal's column is wide enough that the height
+    // is what decides the ring at every ordinary desktop shape.
+    const aperture = !!chapter.portal;
     return {
       distance,
-      width: width * 0.4,
-      height: height * 0.45,
+      width: width * (aperture ? 0.46 : 0.4),
+      height: height * (aperture ? 0.525 : 0.45),
       offsetX: (rtl ? -away : away) * width * 0.245,
-      jitter: 1.15,
+      jitter: aperture ? 1.05 : 1.15,
     };
   }
 
@@ -616,7 +631,7 @@ export function initSignal(): void {
    * the host is per chapter rather than per page. One shared host would have
    * put twelve tool chips inside the repositories' beat.
    */
-  interface LabelHost { host: HTMLElement; nodes: Map<string, HTMLElement> }
+  interface LabelHost { host: HTMLElement; nodes: Map<string, HTMLElement>; copy: HTMLElement | null }
   const labelHosts = new Map<string, LabelHost>();
   for (const panel of panels) {
     const host = panel.querySelector<HTMLElement>('[data-signal-labels]');
@@ -625,7 +640,8 @@ export function initSignal(): void {
     for (const el of Array.from(host.querySelectorAll<HTMLElement>('[data-label-key]'))) {
       nodes.set(el.dataset.labelKey ?? '', el);
     }
-    labelHosts.set(panel.dataset.chapter ?? '', { host, nodes });
+    labelHosts.set(panel.dataset.chapter ?? '',
+      { host, nodes, copy: panel.querySelector<HTMLElement>('[data-chapter-copy]') });
   }
   const projected: { key: string; x: number; y: number; side: 'left' | 'right' }[] = [];
   const scratch = new THREE.Vector3();
@@ -657,7 +673,7 @@ export function initSignal(): void {
       entry.host.style.setProperty('--signal-labels', '0');
     }
     if (!found) return;
-    const { host: labelHost, nodes: labelNodes } = found;
+    const { host: labelHost, nodes: labelNodes, copy: copyBlock } = found;
     const figure = figures.get(chapter.id);
     const on = !!figure?.labels?.length && morph > 0.55;
     labelHost.dataset.on = on ? 'true' : 'false';
@@ -670,6 +686,26 @@ export function initSignal(): void {
     const seat = seatFor(chapter);
     const cs = Math.cos(spin);
     const sn = Math.sin(spin);
+    /* The band a chip may stand in.
+     *
+     * A chip was free to run anywhere between the two gutters, and on the
+     * tools beat — figure on one side, display type on the other — the longest
+     * of the twelve ran straight under the headline. The words are not going
+     * to move, so the chips get a wall: in landscape, where the copy takes its
+     * own column, the band stops a clear margin short of it. In portrait the
+     * copy is BELOW the figure and there is nothing to avoid, so the band is
+     * the frame. */
+    let bandMin = 14;
+    let bandMax = viewportWidth - 14;
+    if (layout === 'landscape' && copyBlock && chapter.side !== 'centre') {
+      const copyRect = copyBlock.getBoundingClientRect();
+      if (copyRect.width > 0) {
+        // Which side of the copy the figure sits on is the seat's own offset,
+        // already mirrored for RTL by seatFor.
+        if ((seat.offsetX ?? 0) < 0) bandMax = Math.min(bandMax, copyRect.left - 20);
+        else bandMin = Math.max(bandMin, copyRect.right + 20);
+      }
+    }
     placed.length = 0;
     for (const label of figure.labels ?? []) {
       const [x, y, z] = seatPoint(figure, seat, label.index);
@@ -693,11 +729,11 @@ export function initSignal(): void {
         if (chip) labelWidths.set(label.key, chip);
         if (tall) labelHeights.set(label.key, tall);
       }
-      const side: 'left' | 'right' = px + 18 + chip > viewportWidth - 14 ? 'right' : 'left';
-      // ...and then it is clamped inside the frame, because at 390px a chip can
+      const side: 'left' | 'right' = px + 18 + chip > bandMax ? 'right' : 'left';
+      // ...and then it is clamped inside the band, because at 390px a chip can
       // overrun BOTH edges and a side alone cannot fix that.
       const want = side === 'left' ? px + 18 : px - 18 - chip;
-      const left = Math.min(Math.max(want, 14), Math.max(14, viewportWidth - 14 - chip));
+      const left = Math.min(Math.max(want, bandMin), Math.max(bandMin, bandMax - chip));
       projected.push({ key: label.key, x: px, y: py, side });
       if (el) placed.push({ el, key: label.key, px, py, left, side, chip, tall, dy: 0 });
     }
@@ -733,9 +769,20 @@ export function initSignal(): void {
     if (spill > 0) for (const row of rows) row.dy -= spill;
 
     for (const row of placed) {
+      const dx = row.left - row.px;
       row.el.dataset.side = row.side;
-      row.el.style.setProperty('--label-x', `${(row.left - row.px).toFixed(1)}px`);
+      row.el.style.setProperty('--label-x', `${dx.toFixed(1)}px`);
       row.el.style.setProperty('--label-y', `${row.dy.toFixed(1)}px`);
+      // The leader: from the star the camera projected to the edge of the chip
+      // wherever the de-collision pass put it. Both numbers come from the SAME
+      // frame that placed the chip, so the line cannot lag the thing it points
+      // at. The end point is the chip's near edge — its left when the chip
+      // hangs to the right of the star, its right when it hangs to the left —
+      // so the hairline stops at the caption instead of running under it.
+      const endX = row.side === 'left' ? dx : dx + row.chip;
+      const endY = row.dy;
+      row.el.style.setProperty('--leader-len', `${Math.hypot(endX, endY).toFixed(1)}px`);
+      row.el.style.setProperty('--leader-angle', `${Math.atan2(endY, endX).toFixed(4)}rad`);
       row.el.style.transform = `translate(${row.px.toFixed(1)}px, ${row.py.toFixed(1)}px)`;
     }
   }

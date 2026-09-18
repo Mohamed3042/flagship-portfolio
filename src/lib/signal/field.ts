@@ -603,7 +603,10 @@ export function createField(budget: TierBudget, tier: Tier): Field {
       uCamZ: uniforms.uCamZ,
       uSpin: uniforms.uSpin,
       uPivot: uniforms.uPivot,
-      uAlpha: { value: 0.35 },
+      // ROUND 4: a hairline is a LEADER. It was brighter than the captions it
+      // was leading to, which is what made the tools asterism read as a
+      // diagram with grey text on it instead of a set of named stars.
+      uAlpha: { value: 0.22 },
       uTint: { value: new THREE.Color(COOL) },
     },
   });
