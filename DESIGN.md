@@ -1,326 +1,342 @@
 ---
-name: From Signal to Systems
-description: Near-monochrome deep-space cinema where colour is evidence and status is carried in rule weight, never in hue
+name: Deep Field
+description: A pure-black scroll cosmos where the stars are the content, one accent carries every live path, and the still document is the base layer the cinema upgrades
 colors:
-  signal-bg: "#05070A"
-  signal-depth: "#0B1017"
+  signal-bg: "#000000"
+  signal-depth: "#04060c"
   signal-ink: "#F0F3F6"
-  signal-ink-2: "#98A5B1"
-  signal-accent: "#70B8FF"
-  signal-line: "color-mix(in srgb,#F0F3F6 13%,transparent)"
+  signal-ink-2: "#A7B2BF"
+  signal-accent: "#8AB4FF"
+  signal-line: "color-mix(in srgb,#F0F3F6 14%,transparent)"
   signal-hair: "color-mix(in srgb,#F0F3F6 8%,transparent)"
-  cta-ink: "#04121F"
-  mass-shipped: "rgb(0,1,2)"
-  scene-graphite: "#1A222A"
-  scene-card: "#C6CCD3"
-  scene-paperboard: "#B2ABA0"
-  scene-fold-edge: "#3C434B"
+  portal-ground: "#05070d"
+  seam-ground: "#05070B"
+  haze-blue: "#0b1a3a"
+  haze-violet: "#241048"
+  archive-ink-3: "#8D97A4"
+  archive-accent-2: "#B79BFF"
+  archive-star: "#dfe8ff"
+  archive-card: "#11151f"
 typography:
-  display:
+  name:
     fontFamily: "Inter Variable, -apple-system, Segoe UI, system-ui, sans-serif"
-    fontSize: "clamp(40px,5.3vw,76px)"
-    fontWeight: 850
-    lineHeight: 1.02
-    letterSpacing: "-0.04em"
-  display-ar:
-    fontFamily: "Al Rai Media, Inter Variable, Cairo Variable, sans-serif"
-    fontSize: "clamp(40px,5.3vw,76px)"
-    fontWeight: 850
-    lineHeight: 1.24
+    fontSize: "clamp(34px,5.4vw,66px)"
+    fontWeight: 200
+    lineHeight: 1.08
+    letterSpacing: "0.06em"
+  name-ar:
+    fontFamily: "Cairo Variable, Inter Variable, sans-serif"
+    fontSize: "clamp(34px,5.4vw,66px)"
+    fontWeight: 200
+    lineHeight: 1.28
     letterSpacing: "normal"
-  headline:
-    fontFamily: "Inter Variable, sans-serif"
-    fontSize: "clamp(30px,4.6vw,58px)"
-    fontWeight: 820
-    lineHeight: 1.05
-    letterSpacing: "-0.035em"
-  headline-cinema:
-    fontFamily: "Inter Variable, sans-serif"
-    fontSize: "clamp(26px,2.5vw,40px)"
-    fontWeight: 820
-    lineHeight: 1.05
-    letterSpacing: "-0.035em"
   title:
     fontFamily: "Inter Variable, sans-serif"
-    fontSize: "17px"
-    fontWeight: 700
-    letterSpacing: "-0.01em"
+    fontSize: "clamp(34px,4vw,56px)"
+    fontWeight: 200
+    lineHeight: 1.08
+    letterSpacing: "0.015em"
+  title-ar:
+    fontFamily: "Cairo Variable, Inter Variable, sans-serif"
+    fontSize: "clamp(34px,4vw,56px)"
+    fontWeight: 200
+    lineHeight: 1.28
+    letterSpacing: "normal"
   body:
-    fontFamily: "Inter Variable, Cairo Variable, sans-serif"
-    fontSize: "15px"
+    fontFamily: "Inter Variable, sans-serif"
+    fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.62
-  body-limit:
-    fontFamily: "Inter Variable, Cairo Variable, sans-serif"
+    letterSpacing: "0.01em"
+  body-ar:
+    fontFamily: "Cairo Variable, sans-serif"
+    fontSize: "17.5px"
+    fontWeight: 400
+    lineHeight: 1.85
+    letterSpacing: "normal"
+  action:
+    fontFamily: "Inter Variable, sans-serif"
+    fontSize: "14px"
+    fontWeight: 450
+    letterSpacing: "0.02em"
+  action-ar:
+    fontFamily: "Cairo Variable, sans-serif"
+    fontSize: "15.5px"
+    fontWeight: 450
+    letterSpacing: "normal"
+  role:
+    fontFamily: "Inter Variable, sans-serif"
     fontSize: "13px"
     fontWeight: 400
-    lineHeight: 1.6
-  label:
-    fontFamily: "Space Grotesk Variable, Cairo Variable, sans-serif"
-    fontSize: "12px"
-    fontWeight: 400
-    lineHeight: 1.55
-  label-status:
-    fontFamily: "Space Grotesk Variable, Cairo Variable, sans-serif"
-    fontSize: "11px"
+    letterSpacing: "0.14em"
+  star-caption:
+    fontFamily: "Inter Variable, sans-serif"
+    fontSize: "13.5px"
     fontWeight: 600
-    letterSpacing: "0.08em"
+    letterSpacing: "0.13em"
+  star-caption-plain:
+    fontFamily: "Inter Variable, sans-serif"
+    fontSize: "13px"
+    fontWeight: 600
+    letterSpacing: "0.11em"
+  seek:
+    fontFamily: "Inter Variable, sans-serif"
+    fontSize: "12px"
+    fontWeight: 500
+    letterSpacing: "0.16em"
 rounded:
-  hair: "2px"
-  plate-cinema: "6px"
-  control: "10px"
-  plate: "12px"
-  artifact: "14px"
-  pill: "99px"
+  ring: "2px"
+  chip: "8px"
+  skip: "0 0 10px 10px"
+  portal-still: "2px"
+  aperture: "50%"
 spacing:
   gutter: "clamp(16px,4.2vw,72px)"
-  stack: "14px"
-  chapter-gap: "clamp(18px,2.6vw,30px)"
-  chapter-block: "clamp(44px,7vw,92px)"
-  frame-block: "clamp(40px,6vw,88px)"
   measure: "1240px"
-  datum: "42%"
+  datum: "46%"
+  stack-still: "14px"
+  stack-cinema: "clamp(8px,1.3vh,14px)"
+  chapter-block: "clamp(36px,6vw,72px)"
+  chapter-block-cinema: "clamp(28px,7vh,76px)"
+  frame-block: "clamp(40px,6vw,88px)"
+  copy-inline-end: "clamp(18px,2.2vw,30px)"
 components:
-  cta-primary:
-    backgroundColor: "{colors.signal-accent}"
-    textColor: "{colors.cta-ink}"
-    rounded: "{rounded.control}"
-    padding: "12px 22px"
-    height: "48px"
-  cta-quiet:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-ink}"
-    rounded: "{rounded.control}"
-    padding: "12px 22px"
-    height: "48px"
-  cta-quiet-hover:
-    backgroundColor: "{colors.signal-depth}"
-    textColor: "{colors.signal-ink}"
-  evidence-screenshot:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-ink}"
-    typography: "{typography.label}"
-    padding: "9px 0 0"
-  evidence-illustration:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-ink-2}"
-    typography: "{typography.label}"
-    padding: "9px 0 0"
-  evidence-synthetic:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-ink-2}"
-    typography: "{typography.label}"
-    padding: "9px 0 0"
-  evidence-media:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-ink-2}"
-    typography: "{typography.label}"
-    padding: "9px 0 0"
-  evidence-gap:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-ink-2}"
-    padding: "9px 0 0"
-  plate:
-    backgroundColor: "{colors.signal-depth}"
-    rounded: "{rounded.plate}"
-    width: "min(46%,620px)"
-  status:
-    backgroundColor: "transparent"
-    textColor: "{colors.signal-ink-2}"
-    typography: "{typography.label-status}"
-    padding: "3px 0"
   action-link:
     backgroundColor: "transparent"
     textColor: "{colors.signal-ink}"
-    height: "48px"
-  action-link-secondary:
+    typography: "{typography.action}"
+    height: "44px"
+  action-link-hover:
+    backgroundColor: "transparent"
+    textColor: "{colors.signal-accent}"
+  star-caption:
+    backgroundColor: "transparent"
+    textColor: "{colors.signal-ink}"
+    typography: "{typography.star-caption}"
+    padding: "10px 12px"
+    height: "44px"
+  star-caption-plain:
+    backgroundColor: "transparent"
+    textColor: "{colors.signal-ink}"
+    typography: "{typography.star-caption-plain}"
+    padding: "5px 8px"
+  seek-control:
     backgroundColor: "transparent"
     textColor: "{colors.signal-ink-2}"
+    typography: "{typography.seek}"
+    rounded: "{rounded.chip}"
+    padding: "10px 12px"
     height: "44px"
+  seek-control-hover:
+    backgroundColor: "transparent"
+    textColor: "{colors.signal-ink}"
+    rounded: "{rounded.chip}"
+  seek-out:
+    backgroundColor: "transparent"
+    textColor: "{colors.signal-accent}"
+    typography: "{typography.seek}"
+    height: "44px"
+  skip-link:
+    backgroundColor: "{colors.signal-depth}"
+    textColor: "{colors.signal-ink}"
+    rounded: "{rounded.skip}"
+    padding: "12px 20px"
+    height: "48px"
+  portal-plate:
+    backgroundColor: "{colors.portal-ground}"
+    rounded: "{rounded.aperture}"
+    padding: "0"
+  portal-plate-still:
+    backgroundColor: "{colors.portal-ground}"
+    rounded: "{rounded.portal-still}"
+    width: "560px"
 ---
 
-# Design System: From Signal to Systems
+# Design System: Deep Field
 
 ## Overview
 
-**Creative North Star: "Night Sky, Lit Object"**
+**Creative North Star: "The Field Is The Content"**
 
-This world governs one thing: the landing route's first viewport and the seven-chapter cinematic segment that follows it. Everything in it is charcoal and silver until a real product capture enters the frame. The stage is dark in every one of the site's six themes, because the scene it frames is a night sky and a lit object — the stylesheet deliberately touches nothing on `:root`, so the theme system outside the stage survives untouched.
+This world governs the flagship portfolio's landing route (`src/pages/[lang]/index.astro`) and the archive that follows it on the same black. Its whole material is one particle starfield: nineteen beats in which the same stars leave the field, stand for a moment as a name, an aperture, a figure or an asterism, and are released back. There is no second population and no second illustration layer — the point cloud that is the sky is also the drawing.
 
-The density is low and the surfaces are few. There are two material families: the flat HTML layer (ground, reading scrims, hairlines, captures) and the rendered layer (graphite, satin, steel, paperboard, thin luminous edges). No glass, no rainbow nebula, no chrome. Depth is carried by tonal separation and one long soft drop under a capture; it is never carried by an outline that pretends to be light.
+The ground is pure black (`#000000`, relative luminance 0) and there is exactly one accent. Everything readable is HTML over the canvas; nothing legible is ever drawn into the canvas. Depth is carried by three scaled shells of stars with fixed world positions, by a faint band on its own 27° tilt with a painted haze that agrees with it, and by grain and a vignette — never by a card, a panel or a border box. The only rounded rectangle allowed to appear over the field is a chapter-navigation control, and only once a pointer or keyboard asks for it.
 
-The system's governing idea is that a visual makes a claim, so the claim is labelled in type. Four evidence kinds render as rule weight and font weight — never as a coloured chip — and a chapter that names a project with no approved capture draws the absence as a broken rule rather than filling it with something that merely looks like proof.
+The scoping is a load-bearing design decision, not an implementation detail. The tokens are declared on `.showroom:has(.signal)` and never on `:root`, so the cinema and the archive below it — which are siblings, not ancestor and descendant — both resolve them, while the site's six-theme system, the header, the dialog in the top layer and every other route are untouched. The one exception is a paint rule on `body:has(.signal)`, because the body owns the page ground and is not a descendant of `.showroom`; it paints the literal `#000000`, and the suite reads the painted body back and compares it to the token so the two cannot drift.
 
 **Key Characteristics:**
-- Near-monochrome ground with exactly one accent that only ever marks a real path.
-- Status carried in rule weight, dash and doubling; never in hue.
-- One registration datum at 42% that holds still across all seven chapters.
-- Every frame a pure function of scroll; no animation queue, no entrance motion.
-- The still document is the base layer, not the fallback.
+- Pure black ground, one accent (`#8AB4FF`), one ink and one secondary ink. Measured on the rendered page at 18.86:1 title, 9.76:1 body line, 18.86:1 actions and captions (`docs/deep-field/r04/report.md`).
+- One canvas, one renderer, one scroll number. Every frame is a pure function of progress `u`, so reverse scroll, a restored position, a deep link and Home/End all land on the frame forward scroll produces.
+- The still HTML document is the base layer, not a fallback: no JS, no WebGL context and reduced motion all land on a complete, readable list of work.
+- A beat is 47% assembly, 28% hold, 25% release — the reading is paid for in scroll distance, not in a dwell timer.
+- Type is one family per language, light and small, over a soft field with no edge.
 
 ## Colors
 
-A near-monochrome charcoal-and-silver environment with a single cool signal blue; colour that means anything arrives from a product screenshot.
+A black sky, two greys and one cool blue; the only saturated colour on the page arrives inside a world's own key frame.
 
 ### Primary
-- **Signal Blue** (`--signal-accent`): the one accent. In the rendered scene it marks only the path a record has actually travelled through the workflow and stops at the approval gate; in HTML it is the primary action fill, the focus ring, the selection highlight, the caret, and the hover colour of a chapter action. Verified at 9.59:1 on the ground and 9.08:1 on the reading surface.
-
-  **Correction, Round 03.** This entry previously claimed the primary action's own text read 8.99:1. It did not. `.signal a{color:inherit}` is (0,1,1) and `.signal__cta{color:#04121F}` was (0,1,0), so the button inherited the stage's ink and shipped WHITE on its own blue at **1.89:1** — measured on the rendered page, in all six themes and both languages, for the whole of the previous build. The rule is now `.signal .signal__cta` and the measured value is the intended one. A palette documented from intent rather than from the rendered page will do this again; measure the element, not the declaration.
+- **Signal Blue** (`--signal-accent`): the single accent. It marks the focus ring, the text selection, an action's hover, the route's 1px progress hairline, the leading edge of the hero's scroll-hint rule, the "View work" exit in the seek nav, and the archive's `--accent` below the cinema. Measured 9.85:1 on the ground as declared; the round's contrast pass reads it off the rendered page.
 
 ### Neutral
-- **Night Ground** (`--signal-bg`): the whole stage, the scrims, and the renderer's clear colour. Measured relative luminance 0.002061.
-- **Reading Surface** (`--signal-depth`): plates, the quiet action's hover, the skip control, and the satin family in the rendered scene.
-- **Primary Ink** (`--signal-ink`): display type, project names, an approved capture's caption. Verified 18.11:1 on the ground.
-- **Secondary Ink** (`--signal-ink-2`): body copy, limitations, status, role line, quiet second actions. Verified 8.02:1 on the ground and 7.59:1 on the reading surface — safe for body text at any size.
-- **Line and Hair** (`--signal-line` at 13% ink, `--signal-hair` at 8% ink): the only two border strengths. Line bounds an artifact; hair separates chapters and draws the datum.
+- **Night Ground** (`--signal-bg`): the stage, the renderer's clear colour, and the body's painted ground for the whole route. Pure black, luminance 0, in all six site themes — what the stage frames is a night sky, so it does not take a theme.
+- **Depth** (`--signal-depth`): the skip control, the archive's base surface, and the window chrome below the cinema. Near-black, not a lift.
+- **Primary Ink** (`--signal-ink`): every heading, every action, and every star caption. 18.86:1.
+- **Secondary Ink** (`--signal-ink-2`): the one body line per beat, the role line, the seek controls at rest, and the footer while the route is black. 9.56:1 as declared, 9.76:1 read off the body line on the page.
+- **Line and Hair** (`--signal-line` at 14% ink, `--signal-hair` at 8% ink): the only two edge strengths. Line bounds the aperture and the still portal; hair separates chapters in the still document.
+- **Tertiary Ink** (`--ink-3` = `#8D97A4`, archive only): held at 7.02:1 on black, above the level several of the site's own themes push their tertiary to.
 
-### Tertiary (rendered-scene materials only)
-- **Graphite**, **Steel** (the secondary ink value), **Card**, **Paperboard**, **Fold Edge**: the believable-object palette. Paperboard carries a deterministic fibre roughness map; nothing in this family is emissive.
-- **Opening Mass** (`rgb(0,1,2)`): the shipped value, measured in the finish review. It renders darker than the ground — a silhouette cut out of the sky, described only by its rim.
+### Tertiary (the sky's own materials)
+- **Haze Blue** (`#0b1a3a`) and **Haze Violet** (`#241048`): five radial fields laid along the band's own axis, each under 0.10 alpha, painted in CSS under the stars and dithered by the grain above them so they cannot band. They are visible because they agree with the star band, not because they are strong.
+- **Portal Ground** (`#05070d`): what an aperture holds before its frame has decoded.
+- **Archive Star** (`#dfe8ff`) and **Archive Accent 2** (`#B79BFF`): carried into the archive's inherited tokens below the seam.
 
 ### Named Rules
-**The Colour Is Evidence Rule.** Colour arrives from real product screenshots, never from the environment. If a surface is not a capture, it is charcoal, silver or ink.
+**The Colour Is Evidence Rule.** Colour arrives from a real product capture — a world's key frame inside its aperture, a screenshot in the archive. Every authored surface on this route is black, ink or the one accent.
 
-**The One Path Rule.** The accent marks one thing at a time and only a thing that is real: the travelled path, the matched clip, the focused control. It never invents a status, and a number never takes a hue to mean pass or fail.
+**The Nearest Ancestor Rule.** These tokens are declared on `.showroom:has(.signal)` and never on `:root`. A token on `:root` is the whole document and would follow the visitor into the header, the top-layer dialog and the next route; a token on `.signal` is invisible to the archive, which is its sibling, and an unresolvable `var()` computes to the guaranteed-invalid value and takes the whole declaration with it. Declare route tokens on the nearest common ancestor of everything that must read them.
+
+**The One Accent Rule.** One hue, one meaning: a live path the visitor can take. It never reports a status, a result or a quality. The only other hue that ships on this route is the availability dot in the closing band, which reports something true.
 
 ## Typography
 
-**Display Font:** Inter Variable (inherited from `tokens.css`)
-**Arabic Display Font:** Al Rai Media (self-hosted, weights 500–950; Arabic body stays on Cairo Variable, which has the regular weight Al Rai Media lacks)
-**Body Font:** Inter Variable, with Cairo Variable for Arabic
-**Label Font:** Space Grotesk Variable
+**Latin Face:** Inter Variable (inherited from the page; the route sets `font-family:inherit`, deliberately, rather than reaching for the site's label token)
+**Arabic Face:** Cairo Variable
+**Label/Mono Face:** none. One family per language is the rule, and a second family was also the late webfont swap that moved the seek group after first paint.
 
-**Character:** Very heavy, very tight Latin display against small, plain, wide-tracked technical labels. The display voice is the loudest element on any screen; everything below it is deliberately quiet so a single narration line can carry a chapter.
+**Character:** Very light, very large, widely-tracked headings over very small, quiet body copy. A beat is a heading, at most one line, and the links that let a reader check it. Weight 200 at up to 66px is the loudest thing on the page and it is still thin — the field behind it has to stay visible through the words.
 
 ### Hierarchy
-- **Display** (850, `clamp(40px,5.3vw,76px)`, 1.02, -0.04em): the first viewport headline only, at most 22ch, balanced. Its second line drops to 74% ink mixed toward the ground.
-- **Arabic Display** (850, same size, 1.24, letter-spacing 0): Al Rai Media. Arabic never inherits the Latin negative tracking; the RTL block resets it to zero and opens the leading.
-- **Headline** (820, `clamp(30px,4.6vw,58px)`, 1.05, -0.035em): the chapter narration line. It *is* the heading — nothing sits above it. Capped at 18ch in the document. Inside the cinema it drops to `clamp(26px,2.5vw,40px)` and the cap is released.
-- **Title** (700, 17px, -0.01em): project name. The proof figure shares this size in primary ink with tabular numerals.
-- **Body** (400, 15px, 1.62, secondary ink): the project blurb, capped at 56ch. Falls to 14px with the cap released inside the cinema.
-- **Limitation** (400, 13px, 1.6, secondary ink, 56ch): the boundary paragraph; its lead-in phrase sets 650 in primary ink inline, on the same line, never above the heading.
-- **Label** (400, 12px, 1.55, Space Grotesk): the evidence caption, capped at 54ch; 11px below 560px.
-- **Status Label** (600, 11px, 0.08em, uppercase): Public / Private. In Arabic the tracking goes to zero, the uppercasing is dropped and the size rises to 12px.
+- **Name** (200, `clamp(34px,5.4vw,66px)`, 1.08, 0.06em): the hero `<h1>`. Once a live context has drawn the name out of the stars, this element is visually hidden but stays in the document and the accessibility tree exactly where it was.
+- **Title** (200, `clamp(34px,4vw,56px)`, 1.08, 0.015em, balanced): every other beat's `<h2>`. It steps to `clamp(30px,8vw,40px)` in portrait and `clamp(28px,3.2vw,40px)` on a short frame.
+- **Body line** (400, 16px, 1.62, secondary ink, max 52ch): at most one per beat. It is dropped entirely below 620px of frame height — except the hero's, which is the page's one line of story.
+- **Action** (450, 14px, 0.02em, primary ink, min 44px): a real destination with a 15px inline SVG arrow that mirrors under RTL.
+- **Role** (400, 13px, 0.14em, uppercase, secondary ink): the hero's second line only.
+- **Star caption** (600, 13.5px, 0.13em, uppercase, full ink): the name of a repository hanging off its own star. The tools variant is one step down (13px, 0.11em) because twelve of them share one ladder.
+- **Seek control** (500, 12px, 0.16em, uppercase, secondary ink): the chapter navigation.
 
 ### Named Rules
-**The Line Is The Heading Rule.** A chapter's narration line is the `<h2>`. No eyebrow, no kicker, no label sits above it. Qualifying words go inline inside the paragraph they qualify.
+**The Caption Is Read, Not Decoded Rule.** A name on a star is a caption: 13–13.5px, uppercase, tracked 0.11–0.13em, in the page's *full* ink. It was 12px in the secondary ink under a hairline brighter than itself, which on black at held pose is a grey smear. The leader carries the connection so the caption does not have to shout; the hairline is dimmer than the caption it serves (0.30 alpha drawn, 0.22 in the WebGL links).
 
-**The Arabic Is Not Tracked Latin Rule.** Arabic display swaps the face to Al Rai Media and resets letter-spacing to 0 and line-height to 1.24. Never ship Arabic display type on the Latin metrics.
+**The Arabic Step Rule.** Arabic is not Latin at a smaller size. Every slot runs 1–2px larger with looser leading and no tracking: body 16/1.62 → 17.5/1.85, action 14 → 15.5, role 13 → 14.5, seek 12 → 13.5. These are steps on the existing clamps, so the responsive curve is shifted, not replaced. The uppercase transform is dropped, because Arabic has no case.
+
+**The Latin Exception Rule.** A star caption stays at the Latin size and keeps its tracking in both routes, because it is a repository or skill name and is marked `dir=ltr`. The site's global `[dir="rtl"] *{letter-spacing:normal !important}` reaches every descendant of the Arabic route, so this exception is stated for exactly the elements that declared themselves left-to-right, and it needs `!important` because the rule it answers has it.
 
 ## Layout
 
-The segment is a single centred measure of at most 1240px inside a gutter of `clamp(16px,4.2vw,72px)`.
+The route is one centred measure of at most 1240px inside a gutter of `clamp(16px,4.2vw,72px)`, on a scroll runway of **36 viewport heights** in landscape and 38 in portrait.
 
-**The registration datum** is one inline offset — 42% on desktop, 0 on portrait — declared once as `--signal-datum`. The copy column is exactly that width, the in-flow plate begins exactly there, the chapter grid's first track is exactly that, and the hairline rule is drawn at exactly that. It does not move between chapters, between breakpoints of the same class, or between representations: in the still document it is a visible 1px hair; in the cinema it becomes the scrim's falloff edge and the copy column's trailing rule at the same offset.
+**The still document** stacks all nineteen beats in document order at `clamp(36px,6vw,72px)` of block padding inside a frame padded `clamp(40px,6vw,88px)`, each separated from the next by an 8%-ink hairline, each carrying its real portal picture in flow. This is what the server ships: `data-graphics` is deliberately absent from the markup and the renderer adds `webgl` only once it holds a live context.
 
-**The still document** stacks seven chapters at `clamp(44px,7vw,92px)` block padding inside a frame padded `clamp(40px,6vw,88px)`, each separated from the next by a hairline. Above 900px the chapter becomes a two-track grid (`var(--signal-datum) 1fr`) with zero column gap; the copy pads `clamp(20px,2.6vw,38px)` toward the datum and the plate pads the same distance away from it.
+**The cinema** applies on `[data-graphics=webgl]` alone, and never on the motion query. Reduced motion here is a different composition, not a switched-off one — the visitor still gets the real field and the real constellations, held still at their poses. Gating the block on `no-preference` once produced a page laid out as a document while the renderer still treated it as a cinema. The haze, the canvas, the grade and the frame each stick to the top and are pulled back out of flow with a matching negative margin, so the runway owns the whole scroll length alone. All nineteen chapters share one grid cell; the inactive ones are `visibility:hidden` *and* `inert`, so they leave the tab order, the accessibility tree and find-in-page together, and the visibility switch is delayed 260ms so a boundary is a cross-dissolve rather than a cut.
 
-**The cinema** applies only when motion is accepted *and* a live WebGL context has drawn a matching frame (`[data-graphics=webgl]`). The canvas and the frame each stick to the top and are pulled back out of flow with a negative margin, so a runway of 9 viewport heights (7 in portrait) owns the entire scroll length alone. All seven chapters share one grid cell; the inactive ones are `visibility:hidden` and inert, so they leave the tab order, the accessibility tree and find-in-page together.
+**The two zones.** Above 900px the copy takes a column of `min(46%,620px)` and the figure takes the other, and the side alternates on every beat across the whole page, so two neighbours never share a column. `justify-self` is logical, so Arabic mirrors without a second rule. Two beats are centred with the figure *behind* the words: the name at the top and the one star at the end.
 
-**Portrait (≤899px)** is a different composition, not a crop. The datum collapses to 0, the intro goes to one column, the narration takes the full measure across the bottom under a bottom-up scrim, and the plate keeps the upper band and crops at full scale. The opening artifact crops inward to 5/4 at `min-width:150%` rather than scaling down. Below 560px the chapter block padding fixes at 38px and labels drop a point.
+**The beat split.** A four-point window in local progress: `in0 0, in1 0.47, out0 0.75, out1 1` — 47% assembly, 28% hold, 25% release. Measured on the shipped window (`docs/deep-field/r04/report.md`): at 1440×900 the beat is 1,683px, of which **791px assembles, 471px holds and 421px releases**; at 390×844 it is 1,668px / 784 / 467 / 417. The floors exported from `chapters.ts` and checked by the harness are 700 / 450 / 400. Assembly clears its floor by ninety pixels, so the runway cap stayed at 36 viewport heights (31,500px) rather than being extended to buy the hold. The fractions are what ship; the pixels are that window on the review viewport.
 
-**Breakpoints:** 900px (composition), 899px (portrait), 560px (compact).
+**Breakpoints:** 900px (composition), 899px (portrait), 700px of frame height (tighter setting), 620px of frame height (the body line goes). A 100svh frame with `overflow:clip` silently eats whatever does not fit, and what does not fit is the end of the block — the links — so a short frame gets a tighter setting, never a shorter chapter.
 
 ### Named Rules
-**The Datum Holds Rule.** Nothing floats free. Every copy column, in-flow plate and chapter rule registers against `--signal-datum`, and the datum holds still for the whole segment.
+**The Still Document Is The Base Layer Rule.** The composition the server ships is complete and worth reading on its own. The cinema is added on top of it and never supplies it. No JS, no context, a lost context and reduced motion all land on the same document.
 
-**The Crop, Don't Shrink Rule.** The opening artifact and the chapter plate cross the frame edge rather than scaling down to fit inside it. A smaller viewport gets less of the artifact at full size, never all of it at toy size.
+**The One Source Of Truth Rule.** One canvas, one renderer, one scroll number. Nothing in the scene reads a clock (except twinkle and drift), a random source or a previous frame, so every entry point evaluates to the same state.
+
+**The Reading Is Paid In Pixels Rule.** A hold is measured in scroll distance against a floor, not in a fraction that looks reasonable. 202px of hold is a title, a line and a link arriving and leaving inside two notches of a wheel.
 
 ## Elevation & Depth
 
-Tonal layering first, with exactly three soft downward shadows, all of them long and all of them pulled back by a large negative spread so they read as a lit object above a floor rather than as a raised card. There is no ambient hover shadow anywhere and no hard offset shadow. Borders do the rest of the work, at two strengths only: 13% and 8% ink.
+There are no cards and no raised surfaces on the cinema. Depth is entirely optical: three star shells at 190 / 76 / 25 scene units, each a scaled copy of the others so none of them shows an edge while the shallow one sweeps past many times faster; a star's world position is fixed and only its depth wraps, so the parallax is real rather than an impression of it; a band defined in direction space, which projects to the same stripe at every depth and therefore holds still while the clumps inside it stream past.
+
+Over that: a painted vignette (`radial-gradient(112% 92% at 50% 48%,transparent 52%,rgb(0 0 0 / .15) 100%)`) and an SVG fractal-noise grain at 0.028 opacity. No texture download, no light leak, no chromatic aberration.
+
+Text legibility is bought with a scrim that has no edge — a radial field behind the copy, inset `-48px -80px -56px -96px`, decaying to fully transparent on every free side. The centred beats get a lighter one (0.56 at the centre instead of 0.82), because what that scrim sits over is the single star the beat is about.
 
 ### Shadow Vocabulary
-- **Opening artifact** (`box-shadow: 0 34px 70px -30px rgb(0 0 0 / .85)`): the first viewport's named capture.
-- **In-flow plate** (`box-shadow: 0 30px 60px -28px rgb(0 0 0 / .8)`): a plate in the still document.
-- **Cinema plate** (`box-shadow: 0 24px 48px -24px rgb(0 0 0 / .9)`): the handed-off capture over the rendered scene.
-- **Doubled rule** (`box-shadow: 0 -4px 0 -3px color-mix(in srgb,#F0F3F6 14%,transparent)`): not elevation. This is the media evidence kind's second rule, drawn with `box-shadow` because it is a line, not a shadow.
+- **Aperture inner fall** (`box-shadow: inset 0 0 0 1px <14% ink>, inset 0 0 34px 12px rgb(0 0 0 / .62)`): the only shadow on the cinema. The picture falls into the black at the rim instead of stopping at it, so the stars standing on the rim are what the eye reads as the edge.
+- **Archive ambient** (`--shadow: 0 30px 80px -20px rgb(0 0 0 / .8)`): inherited by the archive below the seam. Long, soft, pulled back by a large negative spread.
 
 ### Named Rules
-**The Falloff, Not The Box Rule.** The copy in the cinema sits on a gradient scrim that decays to fully transparent on the reading-direction side (and upward in portrait). A scrim with a visible edge makes the rectangle the loudest shape on screen; it must fall off, never terminate.
+**The Scrim Has No Edge Rule.** Copy sits on a soft field, never on a box. A scrim that terminates makes the rectangle the loudest shape on screen.
+
+**The Rim Is The Only Line Rule.** The aperture's edge is made of stars and an inner vignette. A drawn hairline circle would be a line painted over the one figure that must not have a line drawn on it.
 
 ## Shapes
 
-Restrained rounded rectangles on a tight scale: 14px for the opening artifact, 12px for a plate, 10px for a control, 6px for the plate once the renderer owns its transform, 2px on the focus ring, 99px only on the scrollbar thumb. The skip control is square at the top and 10px at the bottom, because it hangs off the top edge.
+The form language is the ellipse and the point. A world's portal is clipped to `ellipse(50% 50% at 50% 50%)` with `border-radius:50%`, and the renderer sizes that box to the **rim** and not to the figure's fitted box — the eight iris ticks stand outside the rim, so `figures.ts` derives and exports `PORTAL_RIM_SHARE` rather than the ratio being typed twice. That is what makes "edge to edge" exact: nothing of the picture reaches past the rim and nothing inside the rim is empty. Measured, the desktop ring went 45.3% → 52.8% of viewport height and the plate 327×184 → 481×430 (3.2× the area).
 
-Above 900px the opening artifact drops its trailing radius and trailing border entirely and runs off the frame edge. Rules are 1px except an approved capture's, which is 2px; the synthetic kind's is 1px dashed; the gap rule is a repeating linear gradient of 5px marks and 6px voids drawn as a 1px background strip — an unwoven line.
+Rectangles are rare and quiet: a 2px radius on the focus ring and on the still document's portal, 8px on a seek control whose border is transparent until a pointer or keyboard asks for it, and `0 0 10px 10px` on the skip link because it hangs off the top edge. A label anchor has no shape at all — it is a zero-by-zero point on the projected star with its chip hanging off it, which is what makes registration checkable to the pixel (the harness holds it within 4px and plants a 6px drift that must be caught).
 
-The rendered scene's forms are ordered and physical: an aperture, an anamorphic emblem, a workflow lattice, a dieline and its folded carton, three media tracks, a portal and a constellation. Point identity is the array index and is stable across all of them, so a morph is an index-wise interpolation and never a reseed.
+Every hairline on this route is 1px. A drawn leader runs from the projected anchor to the chip's own edge at the length and angle measured in the same frame that placed it.
 
 ## Components
 
-### Buttons
-- **Shape:** softly rounded rectangle (10px), minimum 48px tall, padding 12px 22px.
-- **Primary:** signal-blue fill with near-black blue text, 700 weight, 15px, with an inline SVG arrow that mirrors under RTL. Hover mixes 18% white into the accent.
-- **Quiet:** transparent on a 13% ink border, primary ink. Hover fills to the reading surface and lifts the border to 26% ink.
-- **Focus:** a 2px accent outline at 4px offset with a 2px radius, applied to every focusable element in the stage.
+### Action link
+- **Character:** a real destination, never a second call-to-action group.
+- **Shape:** none — text and a 15px inline SVG arrow, 8px apart, 44px minimum height.
+- **Colour:** primary ink at rest; the accent plus an underline on hover.
+- **RTL:** the arrow mirrors with `scaleX(-1)`.
 
-### Evidence Caption (signature component)
+### Star caption (signature component)
+The defining component. Each is a POINT at a projected star with a chip hanging off it, positioned every frame from where the camera says that star is.
+- **Repository caption:** 13.5px, 600, 0.13em, uppercase, full ink, 10px 12px padding, 44px minimum — it is a link.
+- **Tool caption:** 13px, 0.11em, 5px 8px, no minimum height. None of those repositories are public, so the chip is not a control and owes no 44px target; it is the star's name.
+- **Leader:** one 1px hairline at 30% ink from the anchor to the chip edge, dimmer than the caption it serves.
+- **De-collision:** a chip slides down its own leader. The anchor never moves off its star — the anchor is what the camera projected and what the registration check reads. In landscape the chips' band stops 20px short of the copy column.
+- **Focus:** the ring belongs to the chip (2px accent, 3px offset, 2px radius), not to the zero-by-zero anchor.
+- **Still document:** hidden. Without the scene there is nothing to anchor to, and the same repositories are already links in the beat's own action row.
 
-The most important component in the system. The caption names what the dominant visual actually is, and the naming is done by weight and rule, not by colour:
+### Portal plate
+- **In the cinema:** the renderer projects the rim's centre and height with the frame's camera and writes the box and a physical `left`/`transform` in CSS pixels — deliberately physical, because the projection arithmetic is already correct in both directions and a logical property would mirror it a second time and put every world off the Arabic screen.
+- **Blend:** two gates multiplied. `--signal-portal` is the beat — the picture arrives *behind* the closing rim, a little after the ring is readable, and stays through the hold and the first of the release. `data-decoded` is the browser's: until `img.decode()` resolves the opacity is held at exactly 0, so an aperture never opens onto a blank rectangle that fills in afterwards.
+- **In the still document:** a plain picture in flow, max 560px, 2px radius, with the same 14%-ink hairline rim and its intrinsic width and height on the element so the space is reserved before the bytes arrive.
 
-- **Approved capture** (`screenshot`): 2px solid rule at 55% ink, primary ink, 600 weight.
-- **Authored illustration** (`illustration`): 1px hairline rule, secondary ink, 400.
-- **Synthetic replay** (`synthetic`): 1px dashed rule at 22% ink, secondary ink, 400.
-- **Authorized media** (`media`): 1px hairline plus a doubled rule 4px above it, 400.
-- **The gap** (no approved capture on a chapter that names a project): the unwoven rule — a repeating gradient of 5px marks and 6px voids — under a sentence that states the absence.
+### Seek navigation
+Labels, not buttons: 12px uppercase tracked secondary ink on a transparent border, 44px hit box, 8px radius that only appears on hover or focus. Three bordered pills over a starfield were the only rounded rectangles on the page. It lives inside the sticky frame but *outside* every inert-toggled chapter panel, so it is reachable at any progress. A scroll film that can only be advanced by scrolling is a film a keyboard cannot watch.
 
-All five sit at 12px Space Grotesk, 54ch, 9px above the rule.
+### Skip link
+Clipped and transparent until focused, then fixed at the gutter as a 48px depth-coloured control whose target is past the entire runway.
 
-### Plate (approved capture)
-- **Still document:** full width of its column, 12px radius, 13% ink border, reading-surface ground, in-flow plate shadow.
-- **In cinema, handed off from a 3D surface:** the renderer owns transform, width, height and opacity (`--plate-blend`), positioned absolutely from a measured rect in canvas pixels and therefore placed physically — it does not mirror with reading direction.
-- **In cinema, with no 3D surface to hand off from** (`data-handoff=flow`): still-composed beside the copy at `min(46%,620px)`, top `clamp(64px,13svh,140px)`, 12px radius, bordered. It reads as an artifact, never as a full-bleed background.
+### Focus ring
+2px solid accent at 4px offset with a 2px radius, on every focusable element in the stage; 3px offset on a star caption. Verified on the rendered page at `rgb(138,180,255)`, present under keyboard focus and absent otherwise.
 
-### Chapter Actions
-A real destination, never a second CTA group. First action: 15px, 650, primary ink, 48px minimum. Every subsequent action steps down to 14px, 550, secondary ink, 44px. Hover moves to the accent and underlines. External actions carry an inline 16px SVG arrow that mirrors under RTL.
-
-### Status
-A word, not a pill: uppercase 11px label type in secondary ink with a 13% ink rule above it and 3px of block padding. No fill, no border box, no colour coding.
-
-### Navigation
-The stage's only navigation control is the skip link — clipped and transparent until focused, then fixed at the gutter as a 48px reading-surface control that leaves the nine-viewport runway. A long runway without a way past it is a keyboard trap.
-
-### Datum
-A 1px hairline at the datum offset. In the cinema it is redrawn as a vertical gradient fading at both ends between 12svh and 88svh, then hidden once the copy scrim's own trailing rule takes over.
+### The seams
+- **Above:** while the header overlaps the stage it takes an 84%-black ground, an 11%-ink lower edge and light controls; the theme control is hidden (it offers six themes to a stage that is black in all six) and, while the hero is the live chapter, the wordmark gives up its ink and keeps its dot — it is still a real link in the accessibility tree the whole time. Everything returns the moment the header leaves the stage.
+- **Below:** the archive takes the Deep Field tokens through `.showroom:has(.signal)` so the cinema does not fade onto whichever of six themes the visitor chose. The light theme is the one that must be checked by instrument, because its rules paint light surfaces and dark ink with literal values a token swap cannot reach; those are answered one by one.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** let colour arrive only from a real product capture; keep every authored surface charcoal, silver or ink.
-- **Do** carry evidence status in rule weight, dash and doubling (2px solid / 1px hairline / 1px dashed / hairline plus doubled rule) so it never depends on telling two hues apart.
-- **Do** draw the absence: a chapter naming a project with no approved capture gets the unwoven rule and a sentence saying so.
-- **Do** register every column, plate and rule against `--signal-datum` (42% desktop, 0 portrait) and hold it still across all seven chapters.
-- **Do** make every frame a pure function of scroll progress, so reverse scroll, restored scroll, deep links and Home/End evaluate to exactly the same state.
-- **Do** let residual motion decay to zero at a reading stop; a reading stop that still drifts is not readable.
-- **Do** keep the same story at every tier — desktop 32000 morph points / 2200 stars at pixel ratio 1.5, phone 12000 / 900 at 1.25, light 6000 / 420 at 1.0 — rather than substituting static art for a smaller budget.
-- **Do** ship the still composition as the base layer: all seven chapters in document order with their real plates, which is what reduced motion, no WebGL, no JS and a lost context all land on.
-- **Do** swap the Arabic display face to Al Rai Media and reset its tracking to 0 and leading to 1.24.
-- **Do** crop the opening artifact and the plate past the frame edge instead of scaling them down.
-- **Do** keep colour scoped: this stylesheet touches nothing on `:root`, and its seam overrides apply to the landing route alone.
+- **Do** declare route tokens on the nearest common ancestor of everything that reads them (`.showroom:has(.signal)`), never on `:root`, and paint the body ground with a literal because the body sits above the declaring element.
+- **Do** ship the still document as the base layer: nineteen beats in document order with their real pictures, which is where no-JS, no-WebGL, a lost context and reduced motion all land.
+- **Do** gate the cinema on a live context alone, and give reduced motion the same composition held still rather than a switched-off one.
+- **Do** make every frame a pure function of one scroll number, so reverse scroll, a restored position and a deep link agree.
+- **Do** pay for reading in scroll distance: 0.47 assembly / 0.28 hold / 0.25 release, checked against floors of 700 / 450 / 400 px on the window that actually ships.
+- **Do** size a portal plate to the rim and clip it to the ellipse, and derive the rim's share of the figure's box rather than typing the ratio twice.
+- **Do** hold a picture's opacity at exactly 0 until `img.decode()` resolves.
+- **Do** anchor a label to a projected point and let the chip hang off it; de-collide by sliding the chip down a drawn leader, never by moving the anchor.
+- **Do** set a star caption at 13–13.5px, uppercase, tracked, in full ink, with a leader dimmer than the caption.
+- **Do** step every Arabic slot up 1–2px with looser leading and no tracking, and restate the tracking for Latin `dir=ltr` captions with `!important`, because the site's global RTL rule has it.
+- **Do** make a chapter's copy arrive on activation by opacity and a 4px rise, not scrubbed by scroll — scrubbed text parks at whatever fraction the visitor stopped at.
+- **Do** keep the composition alive on a short frame by tightening the setting, not by shortening the chapter.
 
 ### Don't:
-- **Don't** use hue to carry a status, a result or a quality judgement. The accent is not a success colour and secondary ink is not a warning.
-- **Don't** put an eyebrow, kicker or label above a narration line or a heading. Qualifiers go inline in the paragraph they qualify.
-- **Don't** use gradient-filled or shimmering text anywhere in this world; the close carries its weight in type.
-- **Don't** add a hard offset shadow or an ambient hover shadow; the only shadows are the three long soft drops above.
-- **Don't** give a scrim a visible edge. It falls off on every free side or it becomes the loudest rectangle on screen.
-- **Don't** add an entrance animation, a scroll-reveal or an animation queue to this segment. There is no queue; there is only scroll progress.
-- **Don't** render an evidence label as a coloured chip, pill or badge.
-- **Don't** let a plate become a full-bleed background behind the copy.
-- **Don't** move the datum per chapter, or let a plate or action float free of it.
-- **Don't** introduce glass, blur panels, rainbow nebulae, glyph-font icons or a system display face; icons are inline SVG and the display face is Inter Variable / Al Rai Media.
-- **Don't** extend these rules to the cinematic Worlds under `public/worlds/`, the 38 project story routes, or the shared `Contact.astro` component. They keep their own art direction; the landing route re-tones only the close, and only through route-scoped overrides.
+- **Don't** use hue to carry a status, a result or a quality. One accent, one meaning: a live path.
+- **Don't** draw anything readable into the canvas. Type is HTML over the field.
+- **Don't** put a card, a panel or a bordered pill over the field. A control's border appears on hover or focus and not before.
+- **Don't** give a scrim a visible edge, and don't let it cover the one star a beat is about.
+- **Don't** draw a hairline over an aperture; its rim is stars and an inner vignette.
+- **Don't** hide an inactive chapter with opacity alone — `visibility:hidden` plus `inert`, so it leaves the tab order, the accessibility tree and find-in-page together.
+- **Don't** use a logical property for a position the renderer already computed from the camera's projection; that arithmetic is physical and mirroring it twice puts the element off the Arabic screen.
+- **Don't** add a second type family to this route. One family per language, inherited from the page.
+- **Don't** introduce glass, blur panels, a hard offset shadow, a system display face, or a glyph icon font; icons are inline SVG.
+- **Don't** put a kicker, eyebrow or tracked label above a heading (see the carried defect below). The tracked uppercase caption form is native to this world *on a star, in a seek control and on the role line* — not above a title.
+- **Don't** extend these rules past this route. The cinematic Worlds under `public/worlds/`, the project story routes, the work pages and the shared `Contact.astro` keep their own art direction and the site's six-theme system is untouched; the landing only re-tones the close and the archive through route-scoped overrides.
 
 ## Known limitations carried by this build
 
-Recorded as defects the shipped artifact carries, by the owner's explicit decision to ship as it stands. **None of these is a design-system rule, and no future surface should inherit them.**
+Recorded as defects the shipped artifact carries. **None of these is a design-system rule, and no future surface should inherit them.**
 
-*Four of the five items recorded here were resolved in the director's Round 02 pass; each is kept, struck, with what it actually turned out to be. A limitation that is quietly deleted teaches nothing.*
-
-- ~~**The opening mass inverts.**~~ Resolved. The cause was not a blend: the mass sphere sat at `z = -5.0` while the rim arc it is the limb of sits at `z = -3.1`, so the sphere's silhouette overshot the arc and the lit rim was drawn *inside* the black body instead of along its edge. The renderer now reads `RIM` from `shapes.ts` for radius, centre **and** plane, so the two cannot drift again. Tone-mapped output is measured, not specified: the shipped `0x2A3446` renders at `rgb(19,29,48)` against a `rgb(5,7,10)` ground. ACES at exposure 0.82 crushes shadows hard, so a mass colour is chosen by measuring the composited frame, never by reading the hex.
-- ~~**The Email tile in the closing contact band still renders violet.**~~ Resolved, and the recorded mechanism was wrong. The `.sr-contact .cf` override *does* win the cascade. It failed because every `--signal-*` token was declared on `.signal`, and `.sr-contact` is a **sibling** of `.signal`, not a descendant — so `var(--signal-accent)` was unresolvable there, all five `--cf-*` overrides computed to the guaranteed-invalid value, and the tiles' `--acc` went with them. The tiles were not violet; they had no wash at all, over a canvas whose palette is a literal array in the shared component's script. The tokens now sit on `.showroom`, the nearest common ancestor. Measured after: `--signal-accent` resolves to `#70B8FF` inside `.sr-contact`, all three chips paint, and the live-status dot — invisible for the whole previous build — is back at `rgb(48,209,88)`.
-- ~~**The opening mass and its rim fall outside the frame at 390px.**~~ Resolved. The rim was never off-frame; it was behind the hero screenshot, which `min-width:150%` had enlarged over the band. The opening is now framed on the rim's real geometry against a protected region declared once as `--signal-sky`.
-- ~~**Limitation paragraphs clip on a line boundary.**~~ Resolved. The clamp is replaced by a true first sentence plus a native `<details>` holding the rest, split from the project's own text. No limitation copy was rewritten, shortened or invented for the cinema.
-- **The primary action's focus ring was its own fill.** `outline: 2px solid var(--signal-accent)` on a button already filled with `--signal-accent` is an invisible focus ring. The stage's focus ring is still the accent everywhere else; on the filled action it is now the ink.
-- **The close's kicker element is hidden, not removed.** `.cf-kicker` still exists in the inherited `Contact.astro` markup; the landing route sets it to `display:none` so no eyebrow renders above the closing heading. Other routes that mount that component still show it.
+- **The route ships an eyebrow above every heading.** `.signal__kicker` — 11px, weight 500, 0.24em, uppercase, secondary ink — renders above the title on all nineteen beats in the still document, fed by a per-act `kicker` in `chapters.ts`'s `COPY`. The cinema hides it (`.signal[data-graphics=webgl] .signal__kicker{display:none}`) and the stylesheet's own comment states the ban, so it is live precisely on the layer this system calls the base layer: no JS, no WebGL, and every crawler. The hero's scroll hint uses the same slot. It is documented here as a defect, not as a token or a component; the frontmatter carries no kicker role deliberately.
+- **`.cf-kicker` is hidden, not removed.** The inherited `Contact.astro` markup still contains its eyebrow element; this route sets `display:none`. Other routes that mount that component still show it.
+- **Mobile Lighthouse performance is 59** on the simulated slow-4G phone (LCP 4.7s, TBT 810ms), against a measured worst p95 frame interval of 8.4ms under a 4× CPU throttle. Diagnosed in `docs/deep-field/r04/report.md`; not a visual-system decision.
+- **`valid-source-maps` fails** in every Lighthouse run: the build ships no source maps.
