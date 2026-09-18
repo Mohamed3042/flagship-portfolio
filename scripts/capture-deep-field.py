@@ -8,7 +8,8 @@ Six images, and every one of them says where it came from:
   morph-strip.jpg          six frames through ONE constellation, 25% to 100%
   field-strip.jpg          five frames across a 400px scroll step, no figure on
                            screen, so the streaming depth reads as motion
-  figures-desktop-en.jpg   every chapter at its held pose, on one sheet
+  figures-desktop-en.jpg   every beat at its held pose, on one sheet
+  portals-desktop-en.jpg   the five portals at held pose, one row, full size
 
 Each cell is labelled with the progress it was taken at and the p95 interval
 between frames at that pose, in MILLISECONDS. Not a frame rate: the control in
@@ -46,7 +47,8 @@ parser.add_argument('--out', default=str(ROOT / 'docs' / 'deep-field' / 'r02'))
 parser.add_argument('--max-kb', type=int, default=600)
 # Re-cutting one sheet should not mean re-shooting all six: each of them takes a
 # browser and a couple of minutes, and most rounds only move one.
-parser.add_argument('--only', default='', help='comma-separated: desktop, phone, arabic, morph, field, figures')
+parser.add_argument('--only', default='',
+                    help='comma-separated: desktop, phone, arabic, morph, field, figures, portals')
 args = parser.parse_args()
 
 OUT = Path(args.out)
@@ -58,10 +60,10 @@ OUT.mkdir(parents=True, exist_ok=True)
 # required poses steps over, and the last cell is the reduced-motion composition.
 POSES = [0.0, 0.05, 0.12, 0.2, 0.3, 0.45, 0.6, 0.75, 0.9, 1.0]
 EXTRA_POSE = 0.87
-# The constellation the strip follows: the carton, which is also the one figure
-# with a second pose — the strip shows it arriving, and the figures sheet shows
-# it half open.
-STRIP_CHAPTER = 'world-medmac-box-studio'
+# The constellation the strip follows: a portal, which is Round 3's new
+# illusion — the stars gather into an aperture and a world appears inside it.
+# The strip is where "the assembly reads as motion" is actually checkable.
+STRIP_CHAPTER = 'world-strings'
 STRIP_MORPHS = [0.25, 0.4, 0.55, 0.7, 0.85, 1.0]
 # The field strip: five frames, 400 CSS px of scroll apart, at a beat where the
 # stars carry the frame alone.
@@ -330,7 +332,10 @@ def figures_sheet(pw):
     chapters = page.evaluate('() => window.__deepField.chapters')
     cells, states = [], []
     for c in chapters:
-        u = c['from'] + (c['to'] - c['from']) * 0.61
+        # The chapter's OWN reading stop. A fixed fraction of a beat was right
+        # when the assembly ended at half the beat; it now ends at seven tenths,
+        # and 0.61 of the way in would shoot every figure mid-flight.
+        u = c['hold']
         page.evaluate(SEEK, u)
         page.evaluate(SETTLE)
         state = page.evaluate('() => window.__deepField.state()')
@@ -347,10 +352,49 @@ def figures_sheet(pw):
 
     out = OUT / 'figures-desktop-en.jpg'
     quality, size = save(
-        sheet(cells, 4, 'DEEP FIELD — every chapter at its held pose, 1440x900, EN. '
-                        'Star count, hairlines and figure height per cell.', 470),
+        sheet(cells, 5, 'DEEP FIELD — every beat at its held pose, 1440x900, EN. '
+                        'Star count, hairlines and figure height per cell.', 372),
         out, args.max_kb)
     report['sheets']['figures'] = {'file': out.name, 'bytes': size, 'jpegQuality': quality,
+                                   'cells': states}
+    ctx.close()
+    browser.close()
+
+
+def portals_sheet(pw):
+    """The five portals at their held pose, in one row, at full cell size.
+
+    The figures sheet shows nineteen beats at 372 px a cell, which is enough to
+    judge a constellation and not enough to judge a picture. This is the sheet
+    where the world art is actually looked at, so the cells are wide and the
+    row is the owner's own order of pride.
+    """
+    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, device_scale_factor=1)
+    page = ctx.new_page()
+    page.goto(f'{args.base_url}/en', wait_until='networkidle')
+    page.wait_for_timeout(3000)
+
+    portals = [c for c in page.evaluate('() => window.__deepField.chapters') if c['portal']]
+    cells, states = [], []
+    for c in portals:
+        page.evaluate(SEEK, c['hold'])
+        page.evaluate(SETTLE)
+        plate = page.evaluate('(id) => window.__deepField.portalPlate(id)', c['id'])
+        box = page.evaluate('(id) => window.__deepField.figureBox(id)', c['id'])
+        cells.append((Image.open(io.BytesIO(page.screenshot())),
+                      f"{c['id'].replace('world-', '')}  ·  ring {plate['ringHeight']}px "
+                      f"({plate['ringShare'] * 100:.0f}% h)  ·  plate {plate['width']}x{plate['height']}"
+                      f"  ·  decoded {plate['decoded']}"))
+        states.append({'chapter': c['id'], 'u': round(c['hold'], 5), 'plate': plate,
+                       'ringPoints': box['points'] if box else 0})
+
+    out = OUT / 'portals-desktop-en.jpg'
+    quality, size = save(
+        sheet(cells, 2, 'DEEP FIELD — the five portals at their held pose, 1440x900, EN. '
+                        "Ring height, plate box and the browser's decode state per cell.", 700),
+        out, args.max_kb)
+    report['sheets']['portals'] = {'file': out.name, 'bytes': size, 'jpegQuality': quality,
                                    'cells': states}
     ctx.close()
     browser.close()
@@ -375,6 +419,8 @@ with sync_playwright() as pw:
         field_strip(pw)
     if run('figures'):
         figures_sheet(pw)
+    if run('portals'):
+        portals_sheet(pw)
 
 # A partial run must not erase what the other sheets recorded.
 existing = OUT / 'captures.json'

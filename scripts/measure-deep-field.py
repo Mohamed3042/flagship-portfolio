@@ -277,11 +277,30 @@ with sync_playwright() as pw:
     # --------------------------------------------- first paint, CLS, overflow
     browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     scripts = []
+    # Every picture the page actually fetches before anyone scrolls, and what it
+    # weighed on the wire. The five world key frames are the only images in the
+    # cinema, and the round's budget is 250 KB each; whether a `loading=lazy`
+    # image inside a STICKY frame is deferred at all is a question about this
+    # browser, so it is measured rather than assumed.
+    images = []
+
+    def note_image(response):
+        url = response.url
+        if not url.lower().endswith(('.avif', '.webp', '.jpg', '.jpeg', '.png')):
+            return
+        try:
+            images.append({'url': url.rsplit('/', 1)[-1], 'status': response.status,
+                           'bytes': len(response.body())})
+        except Exception:
+            images.append({'url': url.rsplit('/', 1)[-1], 'status': response.status, 'bytes': None})
+
     for w, h, lang in ((1440, 900, 'en'), (390, 844, 'en'), (1440, 900, 'ar')):
         ctx = browser.new_context(viewport={'width': w, 'height': h}, device_scale_factor=1,
                                   is_mobile=w < 700, has_touch=w < 700)
         page = ctx.new_page()
         page.on('response', lambda r: scripts.append(r.url) if r.url.endswith('.js') else None)
+        if (w, lang) == (1440, 'en'):
+            page.on('response', note_image)
         page.goto(f'{args.base_url}/{lang}', wait_until='load')
         page.wait_for_timeout(3200)
         paint = page.evaluate('''() => Object.fromEntries(
@@ -326,6 +345,16 @@ for url in sorted(set(scripts)):
 report['js'] = {'files': files, 'totalGzipBytes': total, 'totalGzipKB': round(total / 1024, 1),
                 'budgetKB': 350, 'passed': total <= 350 * 1024}
 
+worst_image = max((i['bytes'] or 0) for i in images) if images else 0
+report['images'] = {
+    'requestedAtFirstPaint': images,
+    'count': len(images),
+    'totalKB': round(sum(i['bytes'] or 0 for i in images) / 1024, 1),
+    'worstKB': round(worst_image / 1024, 1),
+    'budgetEachKB': 250,
+    'passed': worst_image <= 250 * 1024,
+}
+
 Path(args.out).parent.mkdir(parents=True, exist_ok=True)
 Path(args.out).write_text(json.dumps(report, indent=2), encoding='utf-8')
 
@@ -335,6 +364,7 @@ print(json.dumps({
     'costControl': report['costControl'],
     'verdict': report['verdict'],
     'jsTotalGzipKB': report['js']['totalGzipKB'],
+    'images': {k: report['images'][k] for k in ('count', 'totalKB', 'worstKB', 'passed')},
     'cls1440': report['load-1440x900-en']['cls'],
     'cls390': report['load-390x844-en']['cls'],
     'cls1440ar': report['load-1440x900-ar']['cls'],

@@ -228,12 +228,17 @@ export interface ChapterSpec {
   effect?: { kind: EffectKind; window: MorphWindow };
   /** True when this figure has a second pose it opens into while it is read. */
   folds?: boolean;
+  /**
+   * True when the figure is an APERTURE: the ring holds a world's own key frame
+   * inside it, and the renderer registers that plate to the ring every frame.
+   */
+  portal?: boolean;
   /** Slug into the existing project data. Never duplicate project copy here. */
   project?: string;
   /** Where the camera rests and the copy is legible, in OVERALL progress. */
   reading: ReadingStop | null;
   /** Grouping for the page's own section rhythm. */
-  act: 'hero' | 'worlds' | 'film' | 'public' | 'contact';
+  act: 'hero' | 'worlds' | 'games' | 'voice' | 'systems' | 'tools' | 'public' | 'contact';
   /**
    * Which side the copy takes on a wide screen; the figure takes the other.
    * `centre` is for the two beats where the figure is BEHIND the words — the
@@ -257,6 +262,8 @@ export interface SceneState {
   morph: number;
   /** How far a folding figure has opened into its second pose, 0..1. */
   fold: number;
+  /** How far a portal's own plate is up, 0..1. Behind the rim, not with it. */
+  portal: number;
   /** The radial parting, 0..1. */
   part: number;
   /** The inward breath, 0..1. */

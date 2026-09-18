@@ -1,20 +1,22 @@
 /**
  * DEEP FIELD — the scroll script.
  *
- * Twelve chapters and the pure evaluator that turns one scroll number into a
+ * Nineteen beats and the pure evaluator that turns one scroll number into a
  * scene state. Nothing here reads a clock, a random source or a previous frame,
  * so a reverse scroll, an anchor jump and a restored scroll position all land
  * on exactly the frame forward scroll produces.
  *
- * The chapter table is DERIVED from the site's own content: one beat per
- * featured project, in the order the site already features them. Project copy
- * is never repeated here — a chapter names a slug and the render layer reads
- * that project's own entry.
+ * The order is the owner's own order of pride: the worlds he confirmed, the
+ * games he built, the voice engine, the systems the site already features, the
+ * tools that do the repeating, the public repositories, and the reply. Project
+ * copy is never repeated here — a chapter names a slug or an id, and the render
+ * layer reads that entry's own words.
  */
 import type {
   ChapterSpec, Layout, MorphWindow, Progress, ReadingStop, SceneState,
 } from './types';
 import { featured } from '../../data/featured';
+import { games, tools, voice, worlds, SYSTEM_COUNT } from '../../data/deep-field';
 import type { Localized } from '../../data/projects';
 
 /* -------------------------------------------------------------------- maths */
@@ -33,107 +35,108 @@ const easeInQuad = (t: number) => clamp01(t) * clamp01(t);
 /**
  * Scroll runway, in viewport heights.
  *
- * Round 1 ran twelve beats over sixteen viewport heights, which is 1.3 screens
- * a chapter: enough to show a formation, not enough to WATCH one arrive. The
- * director asked for an assembly that reads as motion on a real wheel — eight
- * per cent of the page scroll, which at Round 1's length was 1,152 px at
- * 1440x900. Twelve chapters cannot each own 13% of one page, so the DISTANCE is
- * what is honoured and the runway grew to carry it: every chapter now spends
- * about 1,160 px assembling, 420 holding and 710 releasing. The exact numbers
- * are measured in the round's report, not asserted here.
+ * The director capped this round at 36 viewport heights on the desktop, and the
+ * page grew from twelve beats to nineteen. Those two numbers decide everything
+ * else: the sticky frame eats one viewport, so 36 vh is 35 screens of travel —
+ * about 1,680 px a beat at 1440x900 — and the four-point window below spends
+ * seven tenths of that on the assembly so it still arrives at Round 2's
+ * distance. What the cap took is the RELEASE, which is now about 300 px instead
+ * of 700. The exact measured numbers are in the round's report, not asserted
+ * here; nineteen beats at Round 2's assembly AND Round 2's release would need
+ * just over 40 viewport heights, which is not a page this round is allowed to
+ * ship.
  */
-export const SEGMENT_VH: Record<Layout, number> = { landscape: 32, portrait: 34 };
+export const SEGMENT_VH: Record<Layout, number> = { landscape: 36, portrait: 38 };
 
 /** Scene units the eye travels down the tunnel across the whole segment. */
-export const DOLLY_TOTAL = 300;
+export const DOLLY_TOTAL = 420;
 
 /**
- * The default four-point window, in local progress. In and out are long, and
- * the hold in the middle is where the chapter is read.
+ * The default four-point window, in local progress: out of the field over the
+ * first seven tenths, held, then back into the field. In and out are both eased
+ * to zero velocity, so no boundary reads as a cut.
  */
-const MORPH: MorphWindow = { in0: 0.03, in1: 0.52, out0: 0.7, out1: 1 };
+const MORPH: MorphWindow = { in0: 0, in1: 0.7, out0: 0.82, out1: 1 };
+
+/** Where the camera rests, as a fraction of a beat: the end of the assembly,
+ *  the hold, and the first of the release. */
+const REST: [number, number] = [0.66, 0.86];
 
 /* ---------------------------------------------------------------- the script */
 
-const HERO_TO = 0.07;
-const WORLDS_TO = 0.745;
-const FILM_TO = 0.83;
-const PUBLIC_TO = 0.915;
+/**
+ * Beat weights. Every beat that assembles a figure gets a full share, so every
+ * assembly is the same distance; the hero is shorter because it opens already
+ * formed and only has to let go.
+ */
+const HERO_WEIGHT = 0.72;
 
 /** A reading stop stated as a fraction of the chapter it belongs to. */
 const stop = (from: Progress, to: Progress, a: number, b: number): ReadingStop =>
   ({ from: from + (to - from) * a, to: from + (to - from) * b });
 
-function worldChapters(): ChapterSpec[] {
-  const span = (WORLDS_TO - HERO_TO) / featured.length;
-  return featured.map((entry, i) => {
-    const from = HERO_TO + span * i;
-    const to = from + span;
-    return {
-      id: `world-${entry.slug}`,
-      from,
-      to,
-      // Every world has a figure drawn for it, from what the project is. The
-      // figure key IS the project slug, so the two can never drift apart.
-      target: { kind: 'drawn' as const, figure: entry.slug },
-      morph: MORPH,
-      // One figure has a second pose and opens into it while it is read.
-      folds: entry.slug === 'medmac-box-studio',
-      project: entry.slug,
-      reading: stop(from, to, 0.54, 0.7),
-      act: 'worlds' as const,
-      side: i % 2 === 0 ? ('start' as const) : ('end' as const),
-    };
-  });
+/** The systems the landing keeps: the five the site's own order ranks first. */
+export const systemSlugs = featured.slice(0, SYSTEM_COUNT).map(f => f.slug);
+
+interface Beat {
+  id: string;
+  act: ChapterSpec['act'];
+  figure: string | null;
+  project?: string;
+  portal?: boolean;
+  weight?: number;
+  side?: ChapterSpec['side'];
 }
 
-export const CHAPTERS: ChapterSpec[] = [
-  {
-    id: 'hero',
-    from: 0,
-    to: HERO_TO,
-    // The name is already assembled when the page opens: the visitor arrives at
-    // the held pose, and scrolling is what releases it back into the field.
-    target: { kind: 'text', from: 'name' },
-    morph: { in0: -0.02, in1: 0, out0: 0.44, out1: 0.81 },
-    reading: stop(0, HERO_TO, 0, 0.4),
-    act: 'hero',
-    side: 'centre',
-  },
-  ...worldChapters(),
-  {
-    id: 'film',
-    from: WORLDS_TO,
-    to: FILM_TO,
-    // No figure: the stars part and hand the middle of the frame to the reel.
-    target: null,
-    effect: { kind: 'part', window: { in0: 0.04, in1: 0.53, out0: 0.7, out1: 1 } },
-    reading: stop(WORLDS_TO, FILM_TO, 0.54, 0.7),
-    act: 'film',
-    side: 'start',
-  },
-  {
-    id: 'public',
-    from: FILM_TO,
-    to: PUBLIC_TO,
-    target: { kind: 'drawn', figure: 'public' },
-    morph: MORPH,
-    reading: stop(FILM_TO, PUBLIC_TO, 0.54, 0.7),
-    act: 'public',
-    side: 'end',
-  },
-  {
-    id: 'contact',
-    from: PUBLIC_TO,
-    to: 1,
-    target: { kind: 'drawn', figure: 'contact' },
-    morph: MORPH,
-    effect: { kind: 'breath', window: MORPH },
-    reading: stop(PUBLIC_TO, 1, 0.54, 0.7),
-    act: 'contact',
-    side: 'centre',
-  },
+/**
+ * The flight, as a plain list. Sides alternate across the whole page rather
+ * than inside each act, so two neighbouring beats never take the same column.
+ */
+const BEATS: Beat[] = [
+  { id: 'hero', act: 'hero', figure: 'name', weight: HERO_WEIGHT, side: 'centre' },
+  ...worlds.map(world => ({
+    id: `world-${world.slug}`, act: 'worlds' as const, figure: 'portal', portal: true,
+  })),
+  ...games.map(game => ({ id: `game-${game.id}`, act: 'games' as const, figure: game.id })),
+  { id: 'mk-voice', act: 'voice', figure: 'mk-voice' },
+  ...systemSlugs.map(slug => ({
+    id: `system-${slug}`, act: 'systems' as const, figure: slug, project: slug,
+  })),
+  { id: 'tools', act: 'tools', figure: 'tools' },
+  { id: 'public', act: 'public', figure: 'public' },
+  { id: 'contact', act: 'contact', figure: 'contact', side: 'centre' },
 ];
+
+export const CHAPTERS: ChapterSpec[] = (() => {
+  const total = BEATS.reduce((sum, beat) => sum + (beat.weight ?? 1), 0);
+  let cursor = 0;
+  let column = 0;
+  return BEATS.map((beat) => {
+    const span = (beat.weight ?? 1) / total;
+    const from = cursor;
+    const to = beat === BEATS[BEATS.length - 1] ? 1 : cursor + span;
+    cursor = to;
+    const side = beat.side ?? (column++ % 2 === 0 ? ('start' as const) : ('end' as const));
+    const hero = beat.act === 'hero';
+    return {
+      id: beat.id,
+      from,
+      to,
+      target: beat.figure === 'name'
+        ? { kind: 'text' as const, from: 'name' as const }
+        : beat.figure ? { kind: 'drawn' as const, figure: beat.figure } : null,
+      // The name is already assembled when the page opens: the visitor arrives
+      // at the held pose, and scrolling is what releases it back into the field.
+      morph: hero ? { in0: -0.02, in1: 0, out0: 0.44, out1: 0.81 } : MORPH,
+      portal: beat.portal,
+      project: beat.project,
+      effect: beat.act === 'contact' ? { kind: 'breath' as const, window: MORPH } : undefined,
+      reading: hero ? stop(from, to, 0, 0.4) : stop(from, to, REST[0], REST[1]),
+      act: beat.act,
+      side,
+    };
+  });
+})();
 
 /* --------------------------------------------------------------- evaluation */
 
@@ -165,8 +168,10 @@ export function morphAt(chapter: ChapterSpec, local: number): number {
 /**
  * How far a folding figure has opened into its second pose.
  *
- * It runs across the HOLD, not the assembly: the box arrives closed, and it is
- * the reading that opens it into the dieline.
+ * It runs across the HOLD, not the assembly: a box arrives closed, and it is
+ * the reading that opens it into the dieline. No beat on the landing folds
+ * today — the carton is one of the three systems the five-beat cap left out —
+ * and the machinery stays, because the figure and its second pose still ship.
  */
 export function foldAt(chapter: ChapterSpec, local: number): number {
   if (!chapter.folds || !chapter.morph) return 0;
@@ -176,10 +181,28 @@ export function foldAt(chapter: ChapterSpec, local: number): number {
 /**
  * Copy strength over a chapter. It arrives as the figure lands and leaves
  * before the next chapter's arrives, so two chapters' words are never on
- * screen together.
+ * screen together. Both ends moved with the window: the assembly now owns
+ * seven tenths of the beat, so copy that still arrived at three tenths would
+ * be words over an empty half-built figure for six hundred pixels.
  */
 function narrationAt(local: number): number {
-  return smoothstep(ramp(local, 0.3, 0.48)) * (1 - smoothstep(ramp(local, 0.78, 0.92)));
+  return smoothstep(ramp(local, 0.52, 0.68)) * (1 - smoothstep(ramp(local, 0.88, 0.97)));
+}
+
+/**
+ * How far the portal's own plate is up, 0..1.
+ *
+ * It is NOT the morph: the picture arrives behind the closing rim, a little
+ * after the ring is readable, and it is still there through the hold and the
+ * first of the release. A plate keyed straight to the morph flickers on at the
+ * far end of every assembly, where the ring is still a scatter.
+ */
+export function portalAt(chapter: ChapterSpec, local: number): number {
+  if (!chapter.portal || !chapter.morph) return 0;
+  const w = chapter.morph;
+  const up = smoothstep(ramp(local, w.in0 + (w.in1 - w.in0) * 0.62, w.in1));
+  const down = smoothstep(ramp(local, w.out0 + (w.out1 - w.out0) * 0.3, w.out1));
+  return up * (1 - down);
 }
 
 /** The complete scene state at one progress value. Pure. */
@@ -197,6 +220,7 @@ export function evaluate(u: Progress, _layout: Layout): SceneState {
     local,
     morph: morphAt(chapter, local),
     fold: foldAt(chapter, local),
+    portal: portalAt(chapter, local),
     part: chapter.effect?.kind === 'part' ? effect : 0,
     breath: chapter.effect?.kind === 'breath' ? effect : 0,
     dolly: p * DOLLY_TOTAL,
@@ -212,9 +236,9 @@ export function evaluate(u: Progress, _layout: Layout): SceneState {
 
 /**
  * Narration only, and only the parts that are not already somewhere in the
- * data: a kicker per act, the one line of story, and the contact line. Every
- * project fact — title, tag, blurb, repository — is read from that project's
- * own entry by the render layer, so the two can never drift.
+ * data: a kicker per act, the one line of story, and the closing line. Every
+ * world, game, tool and system fact is read from its own entry by the render
+ * layer, so the two can never drift.
  */
 export interface ChapterCopy { kicker: Localized; title?: Localized; line?: Localized }
 
@@ -227,9 +251,15 @@ export const COPY: Record<string, ChapterCopy> = {
       ar: 'صوّب نحو العتمة وقتًا كافيًا، فتمتلئ بالعوالم.',
     },
   },
-  film: {
-    kicker: { en: 'The films', ar: 'الأفلام' },
-    title: { en: 'Earlier work, on film.', ar: 'أعمال سابقة، على فيلم.' },
+  worlds: { kicker: { en: 'Scroll film', ar: 'فيلم تمرير' } },
+  voice: { kicker: voice.kicker },
+  tools: {
+    kicker: { en: 'Tools', ar: 'أدوات' },
+    title: { en: 'Twelve tools that do the repeating.', ar: 'اثنتا عشرة أداةً تتولّى المتكرِّر.' },
+    line: {
+      en: 'Skills I wrote so the repeating half of the work runs itself.',
+      ar: 'مهاراتٌ كتبتُها كي يُنجز النصفُ المتكرِّر من العمل نفسَه.',
+    },
   },
   public: {
     kicker: { en: 'Public work', ar: 'عمل عام' },
@@ -246,4 +276,7 @@ export const COPY: Record<string, ChapterCopy> = {
 };
 
 /** The act each chapter belongs to, for the page's own section rhythm. */
-export const ACTS = ['hero', 'worlds', 'film', 'public', 'contact'] as const;
+export const ACTS = ['hero', 'worlds', 'games', 'voice', 'systems', 'tools', 'public', 'contact'] as const;
+
+/** Labels for the tools constellation, in the figure's own anchor order. */
+export const TOOL_KEYS = tools.map(t => t.key);

@@ -236,44 +236,91 @@ export function initSignal(): void {
     if (seekNext) seekNext.disabled = index >= CHAPTERS.length - 1;
   }
 
-  /* --------------------------------------------------------------- the reel */
-
-  const reel = root.querySelector<HTMLElement>('[data-signal-reel]');
-  const video = reel?.querySelector<HTMLVideoElement>('video') ?? null;
-  const reelToggle = reel?.querySelector<HTMLButtonElement>('[data-reel-toggle]') ?? null;
-  let wantPlaying = true;
-
-  function reelLabel(playing: boolean) {
-    if (!reelToggle) return;
-    const label = playing ? reelToggle.dataset.pause : reelToggle.dataset.play;
-    reelToggle.setAttribute('aria-label', label ?? '');
-    reelToggle.dataset.state = playing ? 'playing' : 'paused';
-    reelToggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
-  }
-
-  reelToggle?.addEventListener('click', () => {
-    if (!video) return;
-    wantPlaying = video.paused;
-    if (wantPlaying) void video.play().catch(() => { /* a refused play is not a crash */ });
-    else video.pause();
-    reelLabel(wantPlaying);
-  }, { signal });
-  video?.addEventListener('play', () => reelLabel(true), { signal });
-  video?.addEventListener('pause', () => reelLabel(false), { signal });
+  /* ------------------------------------------------------------- the portals */
 
   /**
-   * The reel runs when it is at least half revealed, and stops when it is not.
+   * A world's own key frame, held inside the aperture its stars open.
    *
-   * "Half visible" is measured as the plane's own reveal rather than with an
-   * IntersectionObserver: the reel lives inside a sticky, full-height frame, so
-   * its geometry says "on screen" for the whole runway and an observer would
-   * answer the wrong question. The reveal is the thing a visitor can see.
+   * The plate is HTML, not a texture: the frame is an image the browser decodes
+   * and colour-manages, and putting it through a WebGL upload would cost a
+   * texture per world and lose the browser's own lazy loading. What the renderer
+   * owns is where it goes — the ring's projected centre and the ring's projected
+   * height, read with the same camera in the same frame, so the picture cannot
+   * drift out of its own aperture when the pointer moves the world a third of a
+   * degree.
+   *
+   * THE PLATE TRAP: an image whose opacity is keyed straight to a scroll value
+   * appears the instant the value rises, decoded or not, and the aperture opens
+   * onto a blank rectangle that fills in a beat later. `data-decoded` is the
+   * gate. It is set from `img.decode()`, which resolves only when the frame is
+   * ready to paint, and the stylesheet keeps the blend at exactly 0 until then.
    */
-  function driveReel(revealed: number, active: boolean) {
-    if (!video) return;
-    const want = active && wantPlaying && revealed >= 0.5 && !document.hidden && !still;
-    if (want && video.paused) void video.play().catch(() => { /* ignore */ });
-    if (!want && !video.paused) video.pause();
+  interface Portal { host: HTMLElement; img: HTMLImageElement; aspect: number; box: string }
+  const portals = new Map<string, Portal>();
+  for (const panel of panels) {
+    const host = panel.querySelector<HTMLElement>('[data-signal-portal]');
+    const img = host?.querySelector('img') ?? null;
+    if (!host || !img) continue;
+    const id = panel.dataset.chapter ?? '';
+    portals.set(id, { host, img, aspect: Number(host.dataset.aspect) || 1.777, box: '' });
+    const ready = () => {
+      host.dataset.decoded = 'true';
+      request();
+    };
+    // decode() on an image that is already complete resolves immediately; on one
+    // that fails it rejects, and a portal that cannot decode simply never opens.
+    img.decode().then(ready, () => {
+      if (img.complete && img.naturalWidth > 0) ready();
+    });
+  }
+
+  let portalStep = -1;
+  function setPortalBlend(value: number) {
+    const step = Math.round(THREE.MathUtils.clamp(value, 0, 1) * 100);
+    if (step === portalStep) return;
+    portalStep = step;
+    root.style.setProperty('--signal-portal', (step / 100).toFixed(2));
+  }
+
+  const portalCentre = new THREE.Vector3();
+  const portalEdge = new THREE.Vector3();
+
+  /** Put the plate inside the ring, from where the camera says the ring is. */
+  function placePortal(chapter: ChapterSpec, blend: number) {
+    const portal = portals.get(chapter.id);
+    if (!portal) return;
+    if (blend <= 0) {
+      portal.host.style.opacity = '0';
+      return;
+    }
+    portal.host.style.opacity = '';
+    const seat = seatFor(chapter);
+    const figure = figures.get(chapter.id);
+    const ringHeight = fittedHeight(seat, figure ? figure.aspect : 1.12);
+    const cx = seat.offsetX ?? 0;
+    const cy = seat.offsetY ?? 0;
+    // Project the ring's centre and its own top edge: the difference IS the
+    // ring's height on screen, under whatever rotation the camera is carrying.
+    portalCentre.set(cx, cy, -seat.distance).project(camera);
+    portalEdge.set(cx, cy + ringHeight / 2, -seat.distance).project(camera);
+    const px = (portalCentre.x * 0.5 + 0.5) * viewportWidth;
+    const py = (-portalCentre.y * 0.5 + 0.5) * viewportHeight;
+    const halfPx = Math.abs((-portalEdge.y * 0.5 + 0.5) * viewportHeight - py);
+    const ringW = halfPx * 2 * (figure ? figure.aspect : 1.12);
+    // The plate is the largest box of the frame's own ratio that sits INSIDE
+    // the ellipse with room to spare: 72% of the rim's width, and never more
+    // than 48% of its height. Both numbers are the AIR, not the fit — a 16:9
+    // frame at the geometric maximum has its corners on the rim, and an
+    // aperture whose picture touches it is a picture in a frame.
+    const width = Math.min(ringW * 0.72, halfPx * 2 * 0.48 * portal.aspect);
+    const height = width / portal.aspect;
+    const box = `${width.toFixed(1)}x${height.toFixed(1)}`;
+    if (box !== portal.box) {
+      portal.box = box;
+      portal.host.style.width = `${width.toFixed(1)}px`;
+      portal.host.style.height = `${height.toFixed(1)}px`;
+    }
+    portal.host.style.transform = `translate(${(px - width / 2).toFixed(1)}px, ${(py - height / 2).toFixed(1)}px)`;
   }
 
   /* ------------------------- the static path: reduced motion / no WebGL */
@@ -377,14 +424,33 @@ export function initSignal(): void {
         jitter: 1.1,
       };
     }
+    // The tools are twelve labelled stars, and twelve HTML chips need height to
+    // stand apart in. The figure is authored as a tall ladder for the same
+    // reason; this is the other half of that decision.
+    const tall = chapter.act === 'tools';
     if (layout === 'portrait') {
-      // Portrait: the figure takes the block above the copy band.
+      // Portrait: the figure takes the block above the copy band. A portal is
+      // given the extra width because its ring is bound by it: at 390 px a ring
+      // at 45% of the viewport HEIGHT would be 1.02 screens across, so what the
+      // phone can show is a width answer and the round reports the share it
+      // actually reaches rather than the desktop number.
+      const portal = !!chapter.portal;
       return {
         distance,
-        width: width * 0.8,
-        height: height * 0.4,
-        offsetY: height * 0.17,
-        jitter: 1.2,
+        width: width * (portal ? 0.9 : 0.8),
+        height: height * (tall ? 0.52 : 0.4),
+        offsetY: height * (tall ? 0.13 : 0.17),
+        jitter: portal ? 0.9 : 1.2,
+      };
+    }
+    if (tall) {
+      const away = chapter.side === 'start' ? 1 : -1;
+      return {
+        distance,
+        width: width * 0.42,
+        height: height * 0.62,
+        offsetX: (rtl ? -away : away) * width * 0.235,
+        jitter: 0.9,
       };
     }
     // Landscape: the copy owns one column and the figure takes the other, and
@@ -473,6 +539,7 @@ export function initSignal(): void {
     if (key === seatKey) return;
     seatKey = key;
     labelWidths.clear();
+    labelHeights.clear();
     for (const chapter of CHAPTERS) {
       const figure = figures.get(chapter.id);
       if (figure) place(chapter, figure);
@@ -544,12 +611,21 @@ export function initSignal(): void {
 
   /* --------------------------------------------------- the anchored labels */
 
-  const labelHost = root.querySelector<HTMLElement>('[data-signal-labels]');
-  const labelNodes = new Map<string, HTMLElement>();
-  if (labelHost) {
-    for (const el of Array.from(labelHost.querySelectorAll<HTMLElement>('[data-label-key]'))) {
-      labelNodes.set(el.dataset.labelKey ?? '', el);
+  /**
+   * Two chapters hang labels now — the public repositories and the tools — so
+   * the host is per chapter rather than per page. One shared host would have
+   * put twelve tool chips inside the repositories' beat.
+   */
+  interface LabelHost { host: HTMLElement; nodes: Map<string, HTMLElement> }
+  const labelHosts = new Map<string, LabelHost>();
+  for (const panel of panels) {
+    const host = panel.querySelector<HTMLElement>('[data-signal-labels]');
+    if (!host) continue;
+    const nodes = new Map<string, HTMLElement>();
+    for (const el of Array.from(host.querySelectorAll<HTMLElement>('[data-label-key]'))) {
+      nodes.set(el.dataset.labelKey ?? '', el);
     }
+    labelHosts.set(panel.dataset.chapter ?? '', { host, nodes });
   }
   const projected: { key: string; x: number; y: number; side: 'left' | 'right' }[] = [];
   const scratch = new THREE.Vector3();
@@ -557,6 +633,10 @@ export function initSignal(): void {
    *  side, and reading offsetWidth every frame would lay the page out every
    *  frame. Cleared whenever the viewport changes. */
   const labelWidths = new Map<string, number>();
+  const labelHeights = new Map<string, number>();
+  /** The chips of the current frame, so they can be de-collided as a set. */
+  const placed: { el: HTMLElement; key: string; px: number; py: number; left: number;
+                  side: 'left' | 'right'; chip: number; tall: number; dy: number }[] = [];
 
   /**
    * Put each label where the camera says its star is.
@@ -567,11 +647,20 @@ export function initSignal(): void {
    * against a stale matrix and shipping a four-pixel drift.
    */
   function placeLabels(chapter: ChapterSpec, morph: number, spin: number, pivot: THREE.Vector3) {
-    if (!labelHost) return;
+    projected.length = 0;
+    const found = labelHosts.get(chapter.id);
+    // Whatever chapter the visitor left keeps its chips only until the next
+    // frame; clearing every other host here is one pass over at most two.
+    for (const [id, entry] of labelHosts) {
+      if (id === chapter.id) continue;
+      entry.host.dataset.on = 'false';
+      entry.host.style.setProperty('--signal-labels', '0');
+    }
+    if (!found) return;
+    const { host: labelHost, nodes: labelNodes } = found;
     const figure = figures.get(chapter.id);
     const on = !!figure?.labels?.length && morph > 0.55;
     labelHost.dataset.on = on ? 'true' : 'false';
-    projected.length = 0;
     if (!on || !figure) {
       labelHost.style.setProperty('--signal-labels', '0');
       return;
@@ -581,6 +670,7 @@ export function initSignal(): void {
     const seat = seatFor(chapter);
     const cs = Math.cos(spin);
     const sn = Math.sin(spin);
+    placed.length = 0;
     for (const label of figure.labels ?? []) {
       const [x, y, z] = seatPoint(figure, seat, label.index);
       // The same rotation the shader applies, about the same pivot.
@@ -594,11 +684,14 @@ export function initSignal(): void {
       // Which side the chip hangs on is decided by whether it FITS, measured,
       // not by a threshold: at 390px a label on the right of centre ran off the
       // screen with a threshold that was right at 1440.
-      const el0 = labelNodes.get(label.key);
+      const el = labelNodes.get(label.key);
       let chip = labelWidths.get(label.key) ?? 0;
-      if (!chip && el0?.firstElementChild instanceof HTMLElement) {
-        chip = el0.firstElementChild.offsetWidth;
+      let tall = labelHeights.get(label.key) ?? 0;
+      if ((!chip || !tall) && el?.firstElementChild instanceof HTMLElement) {
+        chip = el.firstElementChild.offsetWidth;
+        tall = el.firstElementChild.offsetHeight;
         if (chip) labelWidths.set(label.key, chip);
+        if (tall) labelHeights.set(label.key, tall);
       }
       const side: 'left' | 'right' = px + 18 + chip > viewportWidth - 14 ? 'right' : 'left';
       // ...and then it is clamped inside the frame, because at 390px a chip can
@@ -606,11 +699,44 @@ export function initSignal(): void {
       const want = side === 'left' ? px + 18 : px - 18 - chip;
       const left = Math.min(Math.max(want, 14), Math.max(14, viewportWidth - 14 - chip));
       projected.push({ key: label.key, x: px, y: py, side });
-      const el = labelNodes.get(label.key);
-      if (!el) continue;
-      el.dataset.side = side;
-      el.style.setProperty('--label-x', `${(left - px).toFixed(1)}px`);
-      el.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px)`;
+      if (el) placed.push({ el, key: label.key, px, py, left, side, chip, tall, dy: 0 });
+    }
+
+    /* Chips that overlap are chips nobody can read.
+     *
+     * Twelve of them on a phone's figure block is about thirty pixels a rung,
+     * and a chip is taller than that, so some of them HAVE to move. What moves
+     * is the chip, never the anchor: the anchor element is the point the camera
+     * projected, the registration check reads its rect, and a de-collision that
+     * moved it would be a drift the page had introduced on purpose. The chip
+     * slides down its own leader instead.
+     *
+     * One pass down, one pass back up. The first pushes each chip clear of the
+     * one above it; the second pulls the whole stack back inside the frame when
+     * the first ran it off the bottom.
+     */
+    const GAP = 3;
+    const rows = [...placed].sort((a, b) => (a.py - a.tall / 2) - (b.py - b.tall / 2));
+    const overlapping = (a: typeof placed[number], b: typeof placed[number]) =>
+      a.left < b.left + b.chip && a.left + a.chip > b.left;
+    let floor = 10;
+    for (const row of rows) {
+      let top = row.py - row.tall / 2;
+      const above = rows.filter((r) => r !== row && r.py < row.py && overlapping(r, row));
+      const bound = above.length ? Math.max(floor, ...above.map((r) => r.py + r.dy + r.tall / 2 + GAP)) : floor;
+      if (top < bound) top = bound;
+      row.dy = top - (row.py - row.tall / 2);
+    }
+    const bottom = rows.length
+      ? Math.max(...rows.map((r) => r.py + r.dy + r.tall / 2)) : 0;
+    const spill = bottom - (viewportHeight - 10);
+    if (spill > 0) for (const row of rows) row.dy -= spill;
+
+    for (const row of placed) {
+      row.el.dataset.side = row.side;
+      row.el.style.setProperty('--label-x', `${(row.left - row.px).toFixed(1)}px`);
+      row.el.style.setProperty('--label-y', `${row.dy.toFixed(1)}px`);
+      row.el.style.transform = `translate(${row.px.toFixed(1)}px, ${row.py.toFixed(1)}px)`;
     }
   }
 
@@ -806,7 +932,10 @@ export function initSignal(): void {
 
     setNarration(state.narration);
     setRest(state.resting ? 1 : 0);
-    driveReel(part * (1 - gone), state.chapter.act === 'film');
+    // The plate behind the rim. It fades with the page as well as with its own
+    // beat, so the last thing to leave the screen is never a photograph.
+    const portalBlend = (still ? (state.chapter.portal ? 1 : 0) : state.portal) * (1 - gone);
+    setPortalBlend(portalBlend);
 
     // Micro-parallax: a rotation of a fraction of a degree, damped, and off at
     // every reading stop so a held figure is never nudged under the eye.
@@ -827,6 +956,7 @@ export function initSignal(): void {
 
     camera.updateMatrixWorld();
     placeLabels(state.chapter, loadedTarget === state.chapter.id ? morph : 0, spin, pivot);
+    placePortal(state.chapter, portalBlend);
 
     renderer.render(scene, camera);
     request();
@@ -850,7 +980,6 @@ export function initSignal(): void {
   addEventListener('hashchange', goToAddress, { signal });
   document.addEventListener('visibilitychange', () => {
     lastTick = 0;
-    if (document.hidden) video?.pause();
     request();
   }, { signal });
   canvas.addEventListener('webglcontextlost', (event) => {
@@ -897,6 +1026,7 @@ export function initSignal(): void {
         local: Number(s.local.toFixed(5)),
         morph: Number(s.morph.toFixed(5)),
         fold: Number(s.fold.toFixed(5)),
+        portal: Number(s.portal.toFixed(5)),
         part: Number(s.part.toFixed(5)),
         breath: Number(s.breath.toFixed(5)),
         dolly: Number(s.dolly.toFixed(4)),
@@ -955,6 +1085,36 @@ export function initSignal(): void {
         links: figure.links.length,
       };
     },
+    /**
+     * The plate a portal holds, as the page has it right now: where it is, how
+     * big it is, whether the browser has DECODED it, and the blend the
+     * stylesheet is actually applying. The old plate trap — a picture whose
+     * opacity rises before it can be painted — is checkable from this alone.
+     */
+    portalPlate(id?: string) {
+      const chapter = CHAPTERS.find((c) => c.id === (id ?? shownChapter));
+      const portal = chapter ? portals.get(chapter.id) : null;
+      if (!chapter || !portal) return null;
+      const rect = portal.host.getBoundingClientRect();
+      const style = getComputedStyle(portal.host);
+      const figure = figures.get(chapter.id);
+      const seat = seatFor(chapter);
+      const ringPx = fittedHeight(seat, figure ? figure.aspect : 1.12) * pixelsPerUnit(seat.distance);
+      return {
+        chapter: chapter.id,
+        decoded: portal.host.dataset.decoded === 'true',
+        complete: portal.img.complete,
+        naturalWidth: portal.img.naturalWidth,
+        currentSrc: portal.img.currentSrc || portal.img.src,
+        opacity: Number(style.opacity),
+        blend: Number(getComputedStyle(root).getPropertyValue('--signal-portal')) || 0,
+        x: Math.round(rect.left), y: Math.round(rect.top),
+        width: Math.round(rect.width), height: Math.round(rect.height),
+        aspect: Number((rect.width / Math.max(1, rect.height)).toFixed(3)),
+        ringHeight: Math.round(ringPx),
+        ringShare: Number((ringPx / viewportHeight).toFixed(3)),
+      };
+    },
     /** Where the camera says each labelled anchor is, in CSS pixels. */
     labels() {
       return projected.map((p) => ({ ...p, x: Number(p.x.toFixed(2)), y: Number(p.y.toFixed(2)) }));
@@ -1011,12 +1171,23 @@ export function initSignal(): void {
       const s = evaluate(u, layout);
       return { u: s.u, chapter: s.chapter.id, act: s.chapter.act, local: s.local,
                morph: s.morph, part: s.part, breath: s.breath, fold: s.fold,
-               resting: s.resting, narration: s.narration };
+               portal: s.portal, resting: s.resting, narration: s.narration };
     },
     chapters: CHAPTERS.map((c) => ({ id: c.id, from: c.from, to: c.to, act: c.act, side: c.side,
                                      // The middle of this chapter's reading stop: where the
                                      // figure is held and the copy is meant to be read.
                                      hold: midpointOf(c),
+                                     portal: !!c.portal,
+                                     // The four points of this beat's window, as
+                                     // OVERALL progress, so a harness measures
+                                     // the shipped window instead of keeping a
+                                     // second copy of its fractions.
+                                     window: c.morph ? {
+                                       in0: c.from + (c.to - c.from) * c.morph.in0,
+                                       in1: c.from + (c.to - c.from) * c.morph.in1,
+                                       out0: c.from + (c.to - c.from) * c.morph.out0,
+                                       out1: c.from + (c.to - c.from) * c.morph.out1,
+                                     } : null,
                                      figure: c.target?.kind === 'drawn' ? c.target.figure
                                        : c.target?.kind === 'text' ? 'name' : null })),
     dollyTotal: DOLLY_TOTAL,
@@ -1028,7 +1199,6 @@ export function initSignal(): void {
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
     abort.abort();
-    video?.pause();
     field.dispose();
     renderer.dispose();
     delete (window as Window & { __deepField?: unknown }).__deepField;

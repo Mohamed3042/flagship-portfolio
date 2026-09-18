@@ -7,10 +7,11 @@
  * with no WebGL, or with reduced motion on, the whole page is still a readable
  * list of work. The scene upgrades this composition; it never supplies it.
  *
- * Two chapters carry something besides words. Film hangs a 16:9 plane in the
- * zone the stars part to clear, and Public hangs one label on each of its four
- * anchor stars — HTML, positioned every frame from where the camera says that
- * star is, because registration belongs to the camera and not to a guess.
+ * Two kinds of chapter carry something besides words. A world hangs its own key
+ * frame inside the aperture the stars open for it, and a constellation chapter
+ * hangs one label on each of its anchor stars — HTML, positioned every frame
+ * from where the camera says that star is, because registration belongs to the
+ * camera and not to a guess.
  */
 import type { Lang } from '../../i18n/utils';
 
@@ -22,25 +23,27 @@ export interface SignalAction {
   ltr?: boolean;
 }
 
-/** A label anchored to one star of the Public constellation. */
+/** A label anchored to one star of a constellation. A chip without an `href`
+ *  is not a control: it is the star's name, and nothing to click. */
 export interface SignalLabel {
   key: string;
   label: string;
-  href: string;
+  href?: string;
 }
 
-/** The career reel, when a rendered copy of the film exists in the assets. */
-export interface SignalReel {
+/** A world's own key frame, shown inside that world's portal. */
+export interface SignalPortal {
   src: string;
-  poster: string;
-  play: string;
-  pause: string;
-  title: string;
+  alt: string;
+  /** Intrinsic ratio, so the plate never has to guess its own shape. */
+  aspect: number;
+  width: number;
+  height: number;
 }
 
 export interface SignalChapterCopy {
   id: string;
-  act: 'hero' | 'worlds' | 'film' | 'public' | 'contact';
+  act: 'hero' | 'worlds' | 'games' | 'voice' | 'systems' | 'tools' | 'public' | 'contact';
   /** Which side the copy takes on a wide screen. The figure takes the other. */
   side: 'start' | 'end' | 'centre';
   kicker: string | null;
@@ -52,7 +55,7 @@ export interface SignalChapterCopy {
   role?: string | null;
   actions: SignalAction[];
   labels?: SignalLabel[];
-  reel?: SignalReel | null;
+  portal?: SignalPortal | null;
 }
 
 interface Props {
@@ -74,40 +77,23 @@ const titleId = `signal-${chapter.id}-title`;
   aria-labelledby={titleId}
   id={`signal-${chapter.id}`}
 >
-  {chapter.reel && (
-    <div class="signal__reel" data-signal-reel>
-      <div class="signal__reel-plane">
-        {/* preload="none": the reel is thirteen megabytes, and nothing is
-            fetched until the plane is actually revealed and asked to play.
-            No autoplay attribute — the renderer starts it, and only once the
-            plane is at least half revealed. */}
-        <video
-          src={chapter.reel.src}
-          poster={chapter.reel.poster}
-          muted
-          loop
-          playsinline
-          preload="none"
-          tabindex="-1"
-          aria-label={chapter.reel.title}
-        ></video>
-      </div>
-      <button
-        type="button"
-        class="signal__reel-toggle"
-        data-reel-toggle
-        data-play={chapter.reel.play}
-        data-pause={chapter.reel.pause}
-        aria-label={chapter.reel.pause}
-        aria-pressed="true"
-        data-state="playing"
-      >
-        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-          <path class="signal__reel-pause" d="M9 6v12M15 6v12" fill="none" stroke="currentColor" stroke-width="1.8" />
-          <path class="signal__reel-play" d="M9 6l10 6-10 6z" fill="currentColor" />
-        </svg>
-        <span>{chapter.reel.title}</span>
-      </button>
+  {chapter.portal && (
+    /* The plate the aperture holds. `data-decoded` is the gate: the renderer
+       only lets the blend rise once the browser says the frame is DECODED, so
+       the ring never opens onto a blank rectangle that fills in afterwards.
+       Width and height are the intrinsic ones — the stylesheet overrides both
+       with the ring's measured box, and they are here so a no-JS page reserves
+       the right space instead of shifting when the image lands. */
+    <div class="signal__portal" data-signal-portal data-decoded="false"
+         data-aspect={chapter.portal.aspect.toFixed(4)}>
+      <img
+        src={chapter.portal.src}
+        alt={chapter.portal.alt}
+        width={chapter.portal.width}
+        height={chapter.portal.height}
+        loading="lazy"
+        decoding="async"
+      />
     </div>
   )}
 
@@ -117,16 +103,24 @@ const titleId = `signal-${chapter.id}-title`;
        registration check has something exact to read. */
     <div class="signal__labels" data-signal-labels data-on="false">
       {chapter.labels.map((label) => (
-        <a
-          class="signal__label"
-          data-label-key={label.key}
-          data-side="left"
-          href={label.href}
-          target="_blank"
-          rel="noopener"
-        >
-          <span class="signal__label-box" dir="ltr">{label.label}</span>
-        </a>
+        label.href
+          ? (
+            <a
+              class="signal__label"
+              data-label-key={label.key}
+              data-side="left"
+              href={label.href}
+              target="_blank"
+              rel="noopener"
+            >
+              <span class="signal__label-box" dir="ltr">{label.label}</span>
+            </a>
+          )
+          : (
+            <span class="signal__label" data-label-key={label.key} data-side="left">
+              <span class="signal__label-box signal__label-box--plain" dir="ltr">{label.label}</span>
+            </span>
+          )
       ))}
     </div>
   )}

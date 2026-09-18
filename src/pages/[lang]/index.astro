@@ -2,11 +2,12 @@
 /**
  * The landing page: DEEP FIELD.
  *
- * Document order is the story order, and it is all real HTML: twelve chapters —
- * the name, the eight systems the site already features, the films, the public
- * work and contact — then selected work, the method, the private systems, the
- * full archive and contact again. The scroll-controlled cosmos upgrades the
- * chapters in place; it never supplies their only copy.
+ * Document order is the story order, and it is all real HTML: nineteen beats —
+ * the name, the five worlds, the four games, the voice engine, the five systems
+ * the site features first, the tools, the public work and contact — then
+ * selected work, the method, the private systems, the full archive and contact
+ * again. The scroll-controlled cosmos upgrades the beats in place; it never
+ * supplies their only copy.
  *
  * "Skip the cinematic" and "See the systems" both land on inspectable work,
  * because a cinematic default has to stay compatible with a fast route.
@@ -14,13 +15,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Contact from '../../components/Contact.astro';
 import Stage, { type SignalAction, type SignalChapterCopy, type SignalLabel } from '../../components/signal/Stage.astro';
-/* The career film, encoded for the web out of the 9,000-frame render in the
-   neighbouring `website` repo: 1280x720 H.264, 13.9 MB, no audio track — the
-   film has none, so the reel carries a play/pause control and not a sound one.
-   Imported rather than dropped in `public/`, which in this worktree is a
-   junction into another repository's tree. */
-import reelSrc from '../../assets/film/career-reel-720.mp4?url';
-import reelPoster from '../../assets/film/career-reel-poster.jpg?url';
 import ProjectCard from '../../components/showroom/ProjectCard.astro';
 import ProjectAtlas, { type MapGroup } from '../../components/showroom/ProjectAtlas.astro';
 import { useTranslations, workPath, pick, locales, type Lang } from '../../i18n/utils';
@@ -28,6 +22,7 @@ import { automationProjects, labProjects, publicAiProjects } from '../../data/sy
 import { legacyProjects, getProject, type ProjectMeta } from '../../data/projects';
 import { featured } from '../../data/featured';
 import { profile } from '../../data/profile';
+import { games, tools, voice, worlds } from '../../data/deep-field';
 import { CHAPTERS, COPY, SEGMENT_VH } from '../../lib/signal/chapters';
 import '../../styles/showroom.css';
 import '../../styles/signal.css';
@@ -49,10 +44,6 @@ const entries: { project: ProjectMeta; group: MapGroup }[] = [
   ...legacyProjects.map(project => ({ project, group: 'foundation' as const })),
 ];
 
-/** Earlier projects that carry a film. The count is read, never asserted. */
-const films = legacyProjects.filter(p => !!p.film);
-/** The career film: the CV told as one of them. */
-const careerFilm = films.find(p => p.slug === 'my-resume') ?? films[0];
 /** The repositories a reader can actually clone. `repo` is set only when public. */
 const repos = featured.filter(f => !!f.repo);
 /** The four repositories, labelled by their own names — LTR in both routes. */
@@ -61,18 +52,23 @@ const repoLabels: SignalLabel[] = repos.map(f => ({
   label: (f.repo as string).replace(/\/$/, '').split('/').pop() as string,
   href: f.repo as string,
 }));
+/** The tools, labelled by the name in each skill's own frontmatter. A chip
+ *  carries a link only where that tool's repository is public. */
+const toolLabels: SignalLabel[] = tools.map(tool => ({
+  key: tool.key, label: tool.label, ...(tool.repo ? { href: tool.repo } : {}),
+}));
+/** Every world's key frame ships at one width; the height is its own ratio. */
+const FRAME_WIDTH = 1180;
 const cv = `${base}/downloads/Mohamed-Mahmoud-AI-Automation-Engineer-Resume.pdf`;
 const github = 'https://github.com/Mohamed3042';
 
 /**
- * Resolve each chapter against the real project data here, so the stage
- * component and the scene script never hold a second, unsynchronised copy of a
- * project's facts.
+ * Resolve each chapter against the real data here, so the stage component and
+ * the scene script never hold a second, unsynchronised copy of a fact.
  */
 const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
-  const copy = COPY[chapter.id];
-  const project = chapter.project ? getProject(chapter.project) ?? null : null;
-  const feature = chapter.project ? featured.find(f => f.slug === chapter.project) ?? null : null;
+  const copy = COPY[chapter.id] ?? COPY[chapter.act];
+  const shared = { id: chapter.id, act: chapter.act, side: chapter.side };
   const actions: SignalAction[] = [];
 
   if (chapter.act === 'hero') {
@@ -81,9 +77,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     // a second button here is a block of text the contract does not want.
     actions.push({ href: '#work', label: ar ? 'استكشف الأنظمة' : 'See the systems' });
     return {
-      id: chapter.id,
-      act: chapter.act,
-      side: chapter.side,
+      ...shared,
       kicker: pick(lang, copy.kicker),
       title: pick(lang, profile.name),
       role: `${pick(lang, profile.title)} · ${pick(lang, profile.location)}`,
@@ -92,13 +86,70 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     };
   }
 
-  if (project) {
+  if (chapter.act === 'worlds') {
+    const world = worlds.find(w => `world-${w.slug}` === chapter.id)!;
+    actions.push({
+      href: world.href,
+      label: world.live
+        ? (ar ? 'ادخل العالم' : 'Enter the world')
+        : (ar ? 'شاهد طابق العوالم' : 'See the worlds floor'),
+      external: true,
+    });
+    return {
+      ...shared,
+      kicker: pick(lang, copy.kicker),
+      title: pick(lang, world.title),
+      line: pick(lang, world.line),
+      actions,
+      portal: {
+        src: world.frame,
+        alt: pick(lang, world.alt),
+        aspect: world.aspect,
+        width: FRAME_WIDTH,
+        height: Math.round(FRAME_WIDTH / world.aspect),
+      },
+    };
+  }
+
+  if (chapter.act === 'games') {
+    const game = games.find(g => `game-${g.id}` === chapter.id)!;
+    // The three with an archive entry lead to it; the one with a public
+    // repository leads to the repository. Every beat leads somewhere real.
+    if (game.slug) actions.push({ href: workPath(lang, game.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
+    if (game.repo) {
+      actions.push({ href: game.repo, label: ar ? 'المستودع العام' : 'Public repository', external: true });
+    }
+    return {
+      ...shared,
+      kicker: game.engine,
+      title: game.title,
+      line: pick(lang, game.line),
+      actions,
+    };
+  }
+
+  if (chapter.act === 'voice') {
+    actions.push({ href: workPath(lang, voice.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
+    actions.push({
+      href: `mailto:${profile.contact.email}`,
+      label: ar ? 'اطلب عرضًا' : 'Ask for a demo',
+    });
+    return {
+      ...shared,
+      kicker: pick(lang, copy.kicker),
+      title: voice.title,
+      line: pick(lang, voice.line),
+      actions,
+    };
+  }
+
+  if (chapter.act === 'systems') {
+    const project = getProject(chapter.project as string)!;
+    const feature = featured.find(f => f.slug === chapter.project) ?? null;
     actions.push({ href: workPath(lang, project.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
     if (feature?.repo) actions.push({ href: feature.repo, label: ar ? 'المستودع العام' : 'Public repository', external: true });
     return {
-      id: chapter.id,
-      act: chapter.act,
-      side: chapter.side,
+      ...shared,
       kicker: pick(lang, project.tag),
       title: pick(lang, project.title),
       line: pick(lang, project.blurb),
@@ -106,33 +157,17 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     };
   }
 
-  if (chapter.act === 'film') {
-    if (careerFilm) {
-      actions.push({
-        href: `${base}/films/${careerFilm.film}?lang=${lang}`,
-        label: ar ? 'شاهد فيلم المسيرة' : 'Watch the career film',
-        external: true,
-      });
-    }
-    actions.push({ href: '#foundation', label: ar ? `كل الأفلام` : `All ${films.length} films` });
+  if (chapter.act === 'tools') {
     return {
-      id: chapter.id,
-      act: chapter.act,
-      side: chapter.side,
+      ...shared,
       kicker: pick(lang, copy.kicker),
       title: copy.title ? pick(lang, copy.title) : '',
-      line: ar
-        ? `${films.length} مشاريع سابقة، لكلٍّ منها فيلمه الخاص.`
-        : `${films.length} earlier projects, each with a film of its own.`,
+      line: copy.line ? pick(lang, copy.line) : null,
       actions,
-      // The reel itself: the career film, muted and looping behind the copy.
-      reel: {
-        src: reelSrc,
-        poster: reelPoster,
-        title: ar ? 'فيلم المسيرة' : 'The career film',
-        play: ar ? 'شغّل الفيلم' : 'Play the reel',
-        pause: ar ? 'أوقف الفيلم' : 'Pause the reel',
-      },
+      // One label per anchor, keyed by the tool's own name. The renderer hangs
+      // each of these on the star the camera projects for that key; a key with
+      // no anchor simply never appears, which the harness checks for.
+      labels: toolLabels,
     };
   }
 
@@ -140,18 +175,13 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     actions.push({ href: '#work', label: ar ? 'افتح الأربعة' : 'Open the four' });
     actions.push({ href: github, label: 'GitHub', external: true, ltr: true });
     return {
-      id: chapter.id,
-      act: chapter.act,
-      side: chapter.side,
+      ...shared,
       kicker: pick(lang, copy.kicker),
       title: copy.title ? pick(lang, copy.title) : '',
       line: ar
         ? `${repos.length} مستودعات عامة، مع تكامل مستمر وحاويات.`
         : `${repos.length} public repositories, with continuous integration and containers.`,
       actions,
-      // One label per anchor star, keyed by slug. The renderer hangs each of
-      // these on the star the camera projects for that key; a slug with no
-      // anchor simply never appears, which the harness checks for.
       labels: repoLabels,
     };
   }
@@ -162,9 +192,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
   actions.push({ href: profile.contact.linkedin, label: 'LinkedIn', external: true, ltr: true });
   actions.push({ href: cv, label: ar ? 'السيرة الذاتية (PDF)' : 'CV (PDF)', external: true });
   return {
-    id: chapter.id,
-    act: chapter.act,
-    side: chapter.side,
+    ...shared,
     kicker: pick(lang, copy.kicker),
     title: copy.title ? pick(lang, copy.title) : '',
     line: copy.line ? pick(lang, copy.line) : null,

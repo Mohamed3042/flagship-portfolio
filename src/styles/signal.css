@@ -120,24 +120,14 @@ html:has(.signal){scrollbar-color:color-mix(in srgb,#F0F3F6 26%,transparent) tra
    to anchor them to, and the same four repositories are already links in the
    Public chapter's own action row. */
 .signal__labels{display:none}
-/* The reel, in the still document: a plain 16:9 video with its poster, in flow.
-   It carries no sound track — the film has none — so the control under it is a
-   play/pause and not a mute. */
-.signal__reel{margin-block:18px;max-width:560px}
-.signal__reel-plane{
-  position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:2px;
-  box-shadow:0 0 0 1px var(--signal-line);
+/* A world's key frame, in the still document: a plain picture in flow, with the
+   hairline rim it keeps in the cinema. Its intrinsic width and height are on the
+   element, so the space is reserved before the bytes arrive. */
+.signal__portal{
+  margin-block:18px;max-width:560px;
+  box-shadow:0 0 0 1px var(--signal-line);border-radius:2px;overflow:hidden;
 }
-.signal__reel-plane video{width:100%;height:100%;object-fit:cover;background:#000}
-.signal__reel-toggle{
-  display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 2px;
-  color:var(--signal-ink-2);font-family:inherit;font-size:12px;font-weight:500;
-  letter-spacing:.16em;text-transform:uppercase;background:none;border:0;cursor:pointer;
-}
-.signal__reel-toggle:hover{color:var(--signal-ink)}
-.signal__reel-toggle[data-state=playing] .signal__reel-play{display:none}
-.signal__reel-toggle[data-state=paused] .signal__reel-pause{display:none}
-[dir=rtl] .signal__reel-toggle{letter-spacing:.04em;text-transform:none}
+.signal__portal img{display:block;width:100%;height:auto;background:#05070d}
 body:has(.signal) #space{display:none}
 
 .signal__stage{position:relative;--signal-vh:16}
@@ -295,34 +285,41 @@ body:has(.signal) #space{display:none}
     }
   }
 
-  /* ------------------------------------------------------------- the reel */
-  /* A 16:9 plane with a hairline border, in the zone the stars part to clear.
-     Its opacity IS the parting: one number, published by the renderer as a
-     custom property, so the plane cannot appear before the field opens for it. */
-  .signal[data-graphics=webgl] .signal__reel{
-    position:absolute;inset:0;z-index:1;margin:0;max-width:none;pointer-events:none;
-    opacity:var(--signal-part,0);
-    visibility:hidden;
-  }
-  .signal[data-graphics=webgl] .signal__chapter[data-active=true] .signal__reel{visibility:visible}
-  .signal[data-graphics=webgl] .signal__reel-plane{
-    position:absolute;top:50%;inset-inline-start:76%;transform:translate(-50%,-50%);
-    height:40svh;width:auto;aspect-ratio:16/9;
+  /* ----------------------------------------------------------- the portals */
+  /* The picture a world is entered through. The renderer owns WHERE it is: it
+     projects the ring's own centre and the ring's own height with the frame's
+     camera and writes the box, so the plate cannot drift out of its aperture.
+
+     The blend is two gates multiplied, and both are needed. `--signal-portal`
+     is the beat — the plate arrives behind the closing rim, not with it. The
+     `data-decoded` attribute is the browser's: until `img.decode()` has
+     resolved, the rule below holds the opacity at exactly 0, so an aperture
+     never opens onto a blank rectangle that fills in afterwards. */
+  .signal[data-graphics=webgl] .signal__portal{
+    /* Physical `left`, deliberately, like the labels: the renderer computes the
+       plate's position in CSS pixels from the camera's own projection, which is
+       already correct in both directions. `inset-inline-start` would flip that
+       arithmetic again on the Arabic route and put every world off the screen —
+       which is exactly what the first build of this rule did. */
+    position:absolute;top:0;left:0;z-index:1;
+    margin:0;max-width:none;pointer-events:none;
+    /* The renderer writes `transform`, which is a physical translate in CSS
+       pixels it computed from the projection — the same arithmetic in both
+       directions, so the RTL route must not mirror it a second time. */
+    transform-origin:0 0;
     border-radius:2px;overflow:hidden;
-    box-shadow:0 0 0 1px color-mix(in srgb,var(--signal-ink) 24%,transparent);
-    background:#000;
+    box-shadow:0 0 0 1px color-mix(in srgb,var(--signal-ink) 26%,transparent);
+    background:#05070d;
+    opacity:0;visibility:hidden;
   }
-  [dir=rtl] .signal[data-graphics=webgl] .signal__reel-plane{transform:translate(50%,-50%)}
-  .signal[data-graphics=webgl] .signal__chapter[data-side=end] .signal__reel-plane{
-    inset-inline-start:24%;
+  .signal[data-graphics=webgl] .signal__chapter[data-active=true] .signal__portal{
+    visibility:visible;
   }
-  .signal[data-graphics=webgl] .signal__reel-toggle{
-    position:absolute;top:calc(50% + 20svh + 6px);inset-inline-start:76%;
-    transform:translateX(-50%);pointer-events:auto;
+  .signal[data-graphics=webgl] .signal__portal[data-decoded=true]{
+    opacity:var(--signal-portal,0);
   }
-  [dir=rtl] .signal[data-graphics=webgl] .signal__reel-toggle{transform:translateX(50%)}
-  .signal[data-graphics=webgl] .signal__chapter[data-side=end] .signal__reel-toggle{
-    inset-inline-start:24%;
+  .signal[data-graphics=webgl] .signal__portal img{
+    width:100%;height:100%;object-fit:cover;
   }
 
   /* ----------------------------------------------------------- the labels */
@@ -343,11 +340,23 @@ body:has(.signal) #space{display:none}
      time on the Arabic route. The chip's own text is a repository name, which
      is LTR in both. */
   .signal[data-graphics=webgl] .signal__label-box{
-    position:absolute;top:50%;left:var(--label-x,16px);transform:translateY(-50%);
+    position:absolute;top:50%;left:var(--label-x,16px);
+    /* --label-y is the de-collision offset. It moves the CHIP off its anchor,
+       never the anchor off its star: the anchor is what the camera projected
+       and what the registration check reads. */
+    transform:translateY(calc(-50% + var(--label-y,0px)));
     display:inline-flex;align-items:center;min-height:44px;padding:10px 12px;
     white-space:nowrap;pointer-events:auto;
     font-family:inherit;font-size:13px;font-weight:450;letter-spacing:.04em;
     color:var(--signal-ink);
+  }
+
+  /* A tool's chip is not a control: none of those repositories are public, so
+     there is nothing to click and nothing that owes a 44px target. It is the
+     star's name, set small enough that twelve of them can stand apart. */
+  .signal[data-graphics=webgl] .signal__label-box--plain{
+    min-height:0;padding:4px 8px;font-size:12px;
+    color:var(--signal-ink-2);
   }
 
   .signal[data-graphics=webgl] .signal__label:hover .signal__label-box{
@@ -453,17 +462,12 @@ body:has(.signal) #space{display:none}
   @media (max-width:899px){
     .signal[data-graphics=webgl] .signal__copy{width:min(100%,560px)}
     .signal[data-graphics=webgl] .signal__title{font-size:clamp(30px,8vw,40px)}
-    .signal[data-graphics=webgl] .signal__reel-plane{
-      top:30%;inset-inline-start:50%;height:auto;width:min(88vw,520px);
-    }
-    .signal[data-graphics=webgl] .signal__reel-toggle{
-      top:calc(30% + 28vw + 10px);inset-inline-start:50%;
-    }
-    .signal[data-graphics=webgl] .signal__chapter[data-side=end] .signal__reel-plane,
-    .signal[data-graphics=webgl] .signal__chapter[data-side=end] .signal__reel-toggle{
-      inset-inline-start:50%;
-    }
     .signal[data-graphics=webgl] .signal__label-box{font-size:12px;padding:10px}
+    /* Twelve chips in a phone's figure block: the ladder is 30-odd pixels a rung
+       there, so the tool chips shed their padding rather than their legibility. */
+    .signal[data-graphics=webgl] .signal__label-box--plain{
+      font-size:11px;padding:3px 6px;letter-spacing:.02em;
+    }
     .signal[data-graphics=webgl] .signal__chapter{padding-block-end:clamp(74px,12vh,120px)}
     .signal[data-graphics=webgl] .signal__seek{
       inset-inline:auto calc(var(--signal-gutter) + env(safe-area-inset-right,0px));

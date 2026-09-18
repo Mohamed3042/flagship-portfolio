@@ -483,7 +483,360 @@ const contactStar: FigureSpec = {
   links: [],
 };
 
+
+/* ====================================================== round three figures */
+
+/**
+ * A portal — the aperture the five worlds are entered through.
+ *
+ * It is not a drawing of anything: it is the hole the stars open in the field
+ * so a world's own key frame can be seen through it. Slightly wider than it is
+ * tall, with a shallow swing in z so the parallax reads the rim as a ring in
+ * space rather than a circle painted on the frame, and eight short ticks
+ * outside it — an iris, not a coin.
+ *
+ * No hairlines: a chord across this figure would be a line drawn over the
+ * picture, which is the one thing an aperture must not do.
+ */
+const portal: FigureSpec = (() => {
+  const rx = 0.56;
+  const ry = 0.5;
+  const strokes: Stroke[] = [ellipse(0, 0, rx, ry, 0, 0.12, 112)];
+  const anchors: Anchor[] = [];
+  for (let i = 0; i < 8; i++) {
+    const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
+    const cx = Math.cos(a);
+    const sy = Math.sin(a);
+    // The tick sits OUTSIDE the rim and points away from the middle. It has to
+    // clear the rim by more than the rim's own scatter or it reads as thickness.
+    strokes.push({
+      pts: [
+        { x: cx * rx * 1.09, y: sy * ry * 1.09, z: Math.sin(a + Math.PI / 2) * 0.12 },
+        { x: cx * rx * 1.24, y: sy * ry * 1.24, z: Math.sin(a + Math.PI / 2) * 0.12 },
+      ],
+      density: 1.8,
+    });
+    anchors.push({
+      x: cx * rx, y: sy * ry, z: Math.sin(a + Math.PI / 2) * 0.12,
+      w: i % 2 === 0 ? 0.9 : 0.74,
+    });
+  }
+  // A ring is a very long stroke, and the spacing rule would seat a thousand
+  // stars on it — a wire, not a gathering. Its own count, scaled by viewport.
+  return { aspect: rx / ry, points: 820, strokes, anchors, links: [] };
+})();
+
+/**
+ * WAR STRIKES — an arena, with a reticle over it.
+ * The product is an arena shooter: the bowl it is played in, seen at an angle,
+ * and the sight the player actually looks through.
+ */
+const warStrikes: FigureSpec = (() => {
+  const strokes: Stroke[] = [
+    // The bowl: a floor and a rim, with the stands between them.
+    ellipse(0, -0.26, 0.33, 0.15, 0, 0.2, 52),
+    ellipse(0, -0.03, 0.4, 0.185, 0, 0.24, 56),
+  ];
+  for (let i = 0; i < 10; i++) {
+    const a = (i / 10) * Math.PI * 2;
+    const c = Math.cos(a);
+    const s = Math.sin(a);
+    strokes.push({
+      pts: [
+        { x: c * 0.33, y: -0.26 + s * 0.15, z: Math.sin(a + Math.PI / 2) * 0.2 },
+        { x: c * 0.4, y: -0.03 + s * 0.185, z: Math.sin(a + Math.PI / 2) * 0.24 },
+      ],
+      density: 0.6,
+    });
+  }
+  // The reticle, in front of the bowl and centred ON it: four arcs with gaps at
+  // the compass points, and a tick standing in each gap. The first build put it
+  // above the bowl, where it read as a dome; a sight is something you look
+  // THROUGH, so it sits over the middle of the arena.
+  const cy = -0.03;
+  // Smaller than the arena floor, deliberately: at the floor's own radius the
+  // sight became a third nested ellipse and the figure read as rings.
+  const r = 0.2;
+  // Shallow, and it has to be. A seat's jitter carries a figure's own z into
+  // WORLD depth, so a point authored half a unit forward lands a fifth of the
+  // way nearer the eye and projects a quarter further from the view axis: the
+  // first build of this reticle pushed the arena thirty pixels off the screen.
+  const z = 0.24;
+  for (let q = 0; q < 4; q++) {
+    const from = q * (Math.PI / 2) + 0.3;
+    const to = (q + 1) * (Math.PI / 2) - 0.3;
+    const pts: Pt[] = [];
+    for (let i = 0; i <= 11; i++) {
+      const a = from + ((to - from) * i) / 11;
+      pts.push({ x: Math.cos(a) * r, y: cy + Math.sin(a) * r, z });
+    }
+    strokes.push({ pts, density: 2.4 });
+  }
+  const ticks: [number, number][] = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+  for (const [dx, dy] of ticks) {
+    strokes.push({
+      pts: [
+        { x: dx * r * 0.42, y: cy + dy * r * 0.42, z },
+        { x: dx * r * 0.86, y: cy + dy * r * 0.86, z },
+      ],
+      density: 1.8,
+    });
+  }
+  return {
+    aspect: 1.5,
+    strokes,
+    anchors: [
+      { x: -0.4, y: -0.03, z: 0, w: 0.56 },
+      { x: 0.4, y: -0.03, z: 0, w: 0.56 },
+      { x: 0, y: -0.41, z: -0.2, w: 0.62 },
+      { x: 0, y: 0.155, z: 0.24, w: 0.58 },
+      // The crosshair: the four tick ends and the pip in the middle. They are
+      // the ONLY hairlines on this figure — a line drawn across the bowl reads
+      // as a crack in the arena, which the first build shipped.
+      { x: -r * 0.95, y: cy, z, w: 0.86 },
+      { x: r * 0.95, y: cy, z, w: 0.86 },
+      { x: 0, y: cy + r * 0.95, z, w: 0.86 },
+      { x: 0, y: cy - r * 0.95, z, w: 0.86 },
+      { x: 0, y: cy, z, w: 0.95 },
+    ],
+    links: [[4, 8], [8, 5], [6, 8], [8, 7]],
+  };
+})();
+
+/**
+ * Cocolani 3D — an island under a sky.
+ * The remake's world is islands: a shore, the land rising out of it, one tree,
+ * and the sun the whole thing is played under.
+ */
+const cocolani: FigureSpec = (() => {
+  const strokes: Stroke[] = [
+    // The waterline, running past the island on both sides.
+    { pts: [{ x: -0.66, y: -0.3, z: -0.12 }, { x: -0.34, y: -0.3, z: -0.12 }], density: 0.55 },
+    { pts: [{ x: 0.3, y: -0.3, z: -0.12 }, { x: 0.66, y: -0.3, z: -0.12 }], density: 0.55 },
+    // The shore, and the land over it.
+    ellipse(-0.02, -0.3, 0.34, 0.075, 0.06, 0.16, 34),
+    {
+      pts: [
+        { x: -0.34, y: -0.3, z: 0.06 }, { x: -0.26, y: -0.18, z: 0.06 },
+        { x: -0.16, y: -0.07, z: 0.06 }, { x: -0.05, y: 0.02, z: 0.06 },
+        { x: 0.05, y: -0.02, z: 0.06 }, { x: 0.16, y: -0.12, z: 0.06 },
+        { x: 0.3, y: -0.3, z: 0.06 },
+      ],
+      density: 1.5,
+    },
+    // One tree on the crest: a trunk that leans, and three fronds.
+    { pts: [{ x: -0.05, y: 0.02, z: 0.1 }, { x: -0.02, y: 0.2, z: 0.1 }], density: 1.2 },
+  ];
+  const fronds: [number, number][] = [[-0.16, 0.06], [0.02, 0.12], [0.16, 0.02]];
+  for (const [dx, dy] of fronds) {
+    strokes.push({
+      pts: [{ x: -0.02, y: 0.2, z: 0.1 }, { x: -0.02 + dx, y: 0.2 + dy, z: 0.1 }],
+      density: 1.1,
+    });
+  }
+  // The sun, high and to one side.
+  strokes.push(ellipse(0.42, 0.42, 0.11, 0.11, -0.2, 0, 26));
+  return {
+    aspect: 1.55,
+    strokes,
+    anchors: [
+      { x: -0.66, y: -0.3, z: -0.12, w: 0.5 },
+      { x: 0.66, y: -0.3, z: -0.12, w: 0.5 },
+      { x: -0.34, y: -0.3, z: 0.06, w: 0.72 },
+      { x: 0.3, y: -0.3, z: 0.06, w: 0.72 },
+      { x: -0.05, y: 0.02, z: 0.06, w: 0.84 },
+      { x: -0.02, y: 0.2, z: 0.1, w: 0.78 },
+      { x: 0.42, y: 0.42, z: -0.2, w: 0.95 },
+    ],
+    // Only the waterline and the trunk. The island's own silhouette is DRAWN,
+    // and a hairline from shore to crest to shore turns that drawing into a
+    // tent — the straight line wins over the curve underneath it every time.
+    links: [[0, 2], [3, 1], [4, 5]],
+  };
+})();
+
+/**
+ * ARTILLERY3D — a shell on its arc.
+ * A turn-based artillery game is one decision and one parabola: the barrel it
+ * leaves, the apex it is judged at, and the ground it lands on.
+ */
+const artillery: FigureSpec = (() => {
+  const x0 = -0.56;
+  const x1 = 0.6;
+  const ground = -0.38;
+  const apexY = 0.5;
+  const arc: Pt[] = [];
+  for (let i = 0; i <= 30; i++) {
+    const t = i / 30;
+    const x = x0 + (x1 - x0) * t;
+    // A plain parabola through both ends, peaking in the middle.
+    arc.push({ x, y: ground + (apexY - ground) * (4 * t * (1 - t)), z: t * 0.28 - 0.14 });
+  }
+  const strokes: Stroke[] = [
+    { pts: arc, density: 0.85 },
+    // The ground it is fired from and lands on.
+    { pts: [{ x: -0.68, y: ground, z: 0 }, { x: 0.7, y: ground, z: 0 }], density: 0.5 },
+    // The barrel, aimed along the arc's first leg.
+    { pts: [{ x: x0 - 0.1, y: ground - 0.06, z: -0.14 }, { x: x0 + 0.1, y: ground + 0.14, z: -0.14 }], density: 1.6 },
+  ];
+  // The burst where it lands: three short rays, no circle.
+  for (const a of [0.9, 1.5708, 2.24]) {
+    strokes.push({
+      pts: [
+        { x: x1, y: ground, z: 0.14 },
+        { x: x1 + Math.cos(a) * 0.17, y: ground + Math.sin(a) * 0.17, z: 0.14 },
+      ],
+      density: 1.2,
+    });
+  }
+  return {
+    aspect: 1.6,
+    strokes,
+    anchors: [
+      { x: x0 - 0.1, y: ground - 0.06, z: -0.14, w: 0.66 },
+      { x: x0 + 0.1, y: ground + 0.14, z: -0.14, w: 0.8 },
+      { x: (x0 + x1) / 2, y: apexY, z: 0, w: 0.95 },
+      { x: x1, y: ground, z: 0.14, w: 0.9 },
+      { x: -0.68, y: ground, z: 0, w: 0.46 },
+      { x: 0.7, y: ground, z: 0, w: 0.46 },
+    ],
+    // The barrel and the ground it stands on. The chords from the muzzle to the
+    // apex and down to the impact were a triangle drawn across the parabola,
+    // and a straight line over a curve is the line you see.
+    links: [[0, 1], [4, 0], [3, 5]],
+  };
+})();
+
+/**
+ * Polyblast Arena — a low-poly arena.
+ * The original game is built out of faceted geometry, so the figure is the
+ * geometry: a hexagonal bowl, its facets, and the pit in the middle.
+ */
+const polyblast: FigureSpec = (() => {
+  const ring = (r: number, y: number, z: number) => {
+    const pts: Pt[] = [];
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2 + Math.PI / 6;
+      // 0.62, not a third: a hexagon squashed to a third of its width is an
+      // aspect of 2.4, and a figure that wide is bound by its seat's width and
+      // comes out a quarter of the viewport tall instead of nearly half.
+      pts.push({ x: Math.cos(a) * r, y: y + Math.sin(a) * r * 0.62, z: z + Math.sin(a) * 0.2 });
+    }
+    return pts;
+  };
+  const outer = ring(0.64, 0.02, 0);
+  const inner = ring(0.3, -0.12, 0);
+  const strokes: Stroke[] = [
+    { pts: outer, closed: true },
+    { pts: inner, closed: true, density: 0.9 },
+  ];
+  for (let i = 0; i < 6; i++) {
+    strokes.push({ pts: [outer[i], inner[i]], density: 0.7 });
+    // One diagonal per facet: that is what makes it read as triangulated.
+    strokes.push({ pts: [outer[i], inner[(i + 1) % 6]], density: 0.45 });
+  }
+  return {
+    aspect: 1.45,
+    strokes,
+    anchors: [
+      ...outer.map((p, i) => ({ ...p, w: i % 2 === 0 ? 0.88 : 0.68 })),
+      ...inner.filter((_, i) => i % 2 === 0).map(p => ({ ...p, w: 0.6 })),
+    ],
+    links: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0]],
+  };
+})();
+
+/**
+ * MK Voice — a waveform on a timeline, with a gate on it.
+ * The engine is not a voice: it is a run of training passes measured against a
+ * bar a version has to clear before it is kept.
+ */
+const mkVoice: FigureSpec = (() => {
+  const strokes: Stroke[] = [
+    { pts: [{ x: -0.74, y: 0, z: 0 }, { x: 0.74, y: 0, z: 0 }], density: 0.55 },
+  ];
+  // A settled envelope: it grows, wobbles, and holds. Authored, not random, so
+  // the same figure ships on every load.
+  const heights = [0.06, 0.13, 0.09, 0.22, 0.17, 0.31, 0.24, 0.38, 0.29, 0.42,
+                   0.34, 0.45, 0.37, 0.41, 0.33, 0.44, 0.36, 0.4, 0.3, 0.35];
+  heights.forEach((h, i) => {
+    const x = -0.68 + (i / (heights.length - 1)) * 1.3;
+    strokes.push({ pts: [{ x, y: -h, z: 0.06 }, { x, y: h, z: 0.06 }], density: 1.15 });
+  });
+  // The gate: a mark across the run, with a tick where a version clears it.
+  const gx = 0.34;
+  strokes.push({ pts: [{ x: gx, y: -0.56, z: 0.22 }, { x: gx, y: 0.56, z: 0.22 }], density: 0.8 });
+  strokes.push(shape(
+    { x: gx - 0.07, y: 0.46, z: 0.22 }, { x: gx, y: 0.53, z: 0.22 },
+    { x: gx + 0.07, y: 0.46, z: 0.22 }, { x: gx, y: 0.39, z: 0.22 },
+  ));
+  return {
+    aspect: 1.55,
+    strokes,
+    anchors: [
+      { x: -0.74, y: 0, z: 0, w: 0.5 },
+      { x: 0.74, y: 0, z: 0, w: 0.5 },
+      { x: 0.02, y: 0.45, z: 0.06, w: 0.78 },
+      { x: 0.02, y: -0.45, z: 0.06, w: 0.7 },
+      { x: gx, y: 0.56, z: 0.22, w: 0.94 },
+      { x: gx, y: -0.56, z: 0.22, w: 0.8 },
+    ],
+    links: [[0, 1], [4, 5], [2, 3]],
+  };
+})();
+
+/**
+ * The tools — twelve skills as twelve labelled stars.
+ *
+ * Nothing is drawn around them: like the public repositories, the asterism IS
+ * the chapter. The anchors are laid out with twelve DISTINCT heights, evenly
+ * spaced, because each one carries an HTML chip and two chips at the same
+ * height collide whatever the renderer does about which side they hang on. The
+ * figure is a little taller than it is wide for the same reason: in portrait a
+ * seat is bounded by its width, and a wide asterism would squeeze twelve rows
+ * into a third of the screen.
+ */
+const toolsFigure: FigureSpec = (() => {
+  const keys = [
+    'agent-brain', 'codebase-orientation', 'root-cause-debugging', 'edge-case-sweep',
+    'surgical-refactoring', 'security-reflexes', 'verify-ui-visually', 'stop-thrashing',
+    'leave-no-mess', 'impeccable', 'blender-assembly', 'auto-release-manager',
+  ];
+  // x wanders so the line through them reads as a constellation and not a list;
+  // y is a strict ladder so the labels never overlap.
+  const xs = [-0.06, 0.24, -0.2, 0.1, 0.38, -0.3, 0.02, 0.3, -0.34, -0.02, 0.26, -0.12];
+  const zs = [0.18, -0.14, 0.22, -0.2, 0.1, -0.06, 0.24, -0.18, 0.08, -0.22, 0.16, -0.1];
+  const ws = [0.95, 0.72, 0.86, 0.68, 0.8, 0.9, 0.7, 0.82, 0.74, 0.88, 0.66, 0.78];
+  const anchors: Anchor[] = keys.map((key, i) => ({
+    x: xs[i],
+    y: 0.48 - (i / (keys.length - 1)) * 0.96,
+    z: zs[i],
+    w: ws[i],
+    key,
+  }));
+  const links: [number, number][] = [];
+  for (let i = 0; i < anchors.length - 1; i++) links.push([i, i + 1]);
+  // Two cross members, so the figure is a shape and not a zig-zag.
+  links.push([0, 5], [5, 10]);
+  const strokes: Stroke[] = links.map(([a, b]) => ({
+    pts: [anchors[a], anchors[b]].map(p => ({ x: p.x, y: p.y, z: p.z })),
+    density: 0.34,
+  }));
+  return { aspect: 0.95, strokes, anchors, links };
+})();
+
 export const FIGURES: Record<string, FigureSpec> = {
+  // The worlds all open through the same aperture.
+  portal,
+  // The four games, each drawn from what it actually is.
+  'war-strikes': warStrikes,
+  'cocolani-3d': cocolani,
+  artillery3d: artillery,
+  'polyblast-arena': polyblast,
+  'mk-voice': mkVoice,
+  // The systems. Round 2 drew eight; the landing now flies past the five the
+  // site's own featured order ranks first, and the other three keep their
+  // figures here for the round that wants them back.
   'ask-repos': askRepos,
   'enterprise-ai-automation-templates': templates,
   relayops,
@@ -492,6 +845,7 @@ export const FIGURES: Record<string, FigureSpec> = {
   'medmac-box-studio': boxStudio,
   'sheep-business-management': sheep,
   'spaceframe-world': spaceframe,
+  tools: toolsFigure,
   public: publicWork,
   contact: contactStar,
 };
