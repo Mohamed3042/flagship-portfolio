@@ -1,34 +1,39 @@
 /**
  * "From Signal to Systems" — the timeline.
  *
- * The seven chapters and the pure evaluator that turns one scroll number into a
- * scene state. Nothing here reads a clock, a random source or a previous frame,
- * so a reverse scroll, an anchor jump and a restored scroll position all land on
+ * Six chapters and the pure evaluator that turns one scroll number into a scene
+ * state. Nothing here reads a clock, a random source or a previous frame, so a
+ * reverse scroll, an anchor jump and a restored scroll position all land on
  * exactly the same frame as forward scroll.
+ *
+ * Since Round 06 the object determines how the film unfolds: the rim of the
+ * opening mass fractures into fragments, the fragments are the aperture the
+ * camera flies through, the aperture's metal becomes the workflow's structure,
+ * one rail of that structure is a paper fold when looked at closely, the fold is
+ * a carton, and the carton's front opening is the threshold into the Cake
+ * Studio world. Every one of those is one scene graph (the `object` artifact),
+ * so no chapter boundary can cut between them.
  *
  * Scene scale: roughly 12 units wide and 7 tall around the origin, camera on +Z
  * looking toward -Z. Project copy is never repeated here — a chapter names a
  * slug and the render layer reads that project's own entry.
  */
-import type { CameraPath, CameraPose, ChapterSpec, EvidenceKind, Layout, Progress, ReadingStop, SceneState, ShapeId } from './types';
+import type { CameraPath, CameraPose, ChapterSpec, Layout, Progress, ReadingStop, SceneState, ShapeId } from './types';
 import { buildPath } from './camera';
-import { ALIGNMENT_CAMERA } from './shapes';
+import { ALIGNMENT_CAMERA, CARTON } from './shapes';
 import type { Localized } from '../../data/projects';
 
 /* -------------------------------------------------------------------- maths */
 
 const clamp01 = (v: number) => (v > 1 ? 1 : v > 0 ? v : 0); // NaN falls through to 0
 const at01 = (u: Progress) => (Number.isFinite(u) ? clamp01(u) : 0);
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const smoothstep = (t: number) => { const x = clamp01(t); return x * x * (3 - 2 * x); };
-/** Catmull-Rom, one component, so a three-point path has no corner at the middle key. */
-const spline = (a: number, b: number, c: number, d: number, t: number) =>
-  .5 * ((2 * b) + (c - a) * t + (2 * a - 5 * b + 4 * c - d) * t * t + (3 * b - 3 * c + d - a) * t * t * t);
+/** Eased sub-interval. */
+const ease = (v: number, a: number, b: number) => smoothstep((v - a) / (b - a));
 
 /**
  * The cloud is at rest for the last third of every chapter's moving part: the
  * morph finishes before the camera does, and long before any reading stop opens.
- * Residual motion therefore decays to zero rather than bleeding into the read.
  */
 const MORPH_LEAD = .62;
 
@@ -40,37 +45,6 @@ const from = (base: CameraPose, d: [number, number, number], look: [number, numb
   ({ position: [base.position[0] + d[0], base.position[1] + d[1], base.position[2] + d[2]], look, fov: base.fov + dfov });
 const last = (path: CameraPose[]) => path[path.length - 1];
 
-const blend = (a: CameraPose, b: CameraPose, t: number): CameraPose => ({
-  position: [lerp(a.position[0], b.position[0], t), lerp(a.position[1], b.position[1], t), lerp(a.position[2], b.position[2], t)],
-  look: [lerp(a.look[0], b.look[0], t), lerp(a.look[1], b.look[1], t), lerp(a.look[2], b.look[2], t)],
-  fov: lerp(a.fov, b.fov, t),
-});
-
-const key = (keys: CameraPose[], t: number): CameraPose => {
-  const n = keys.length - 1, x = clamp01(t) * n, i = Math.min(Math.floor(x), n - 1), f = x - i;
-  const p0 = keys[Math.max(i - 1, 0)], p1 = keys[i], p2 = keys[i + 1], p3 = keys[Math.min(i + 2, n)];
-  return {
-    position: [
-      spline(p0.position[0], p1.position[0], p2.position[0], p3.position[0], f),
-      spline(p0.position[1], p1.position[1], p2.position[1], p3.position[1], f),
-      spline(p0.position[2], p1.position[2], p2.position[2], p3.position[2], f),
-    ],
-    look: [
-      spline(p0.look[0], p1.look[0], p2.look[0], p3.look[0], f),
-      spline(p0.look[1], p1.look[1], p2.look[1], p3.look[1], f),
-      spline(p0.look[2], p1.look[2], p2.look[2], p3.look[2], f),
-    ],
-    fov: lerp(p1.fov, p2.fov, f),
-  };
-};
-
-const SAMPLES = 96;
-
-/**
- * Resample the keyframes by arc length, so uneven control-point spacing cannot
- * produce a speed spike nobody authored. All easing is applied to `t` by the
- * caller, where it is visible as a decision.
- */
 /** Pure memo. Paths are immutable once built and never depend on when they were built. */
 const built = new Map<string, CameraPath>();
 function pathFor(chapter: ChapterSpec, layout: Layout): CameraPath {
@@ -85,13 +59,13 @@ function pathFor(chapter: ChapterSpec, layout: Layout): CameraPath {
 /**
  * Portrait is a different composition, not a crop: it sits closer to the centred
  * depth axis, opens the field of view, shortens lateral travel and keeps the
- * artifact's edges inside the frame. Landscape carries the lateral move that
- * reveals the anamorphic depth.
+ * artifact's edges inside the frame.
  *
  * Every chapter starts on the pose the previous chapter ended on, so no boundary
- * is a cut. The horizon lands on ALIGNMENT_CAMERA and the forge leaves from it:
- * the emblem only reads flat from that exact pose, so it is imported rather than
- * copied, in both layouts, and the illusion cannot drift out of sync.
+ * is a cut. The horizon lands on ALIGNMENT_CAMERA and the fragments ring is
+ * sampled along its viewing rays, so the ring reads as one flat figure from that
+ * pose and from no other; the camera holds it until the ring has formed, then
+ * goes through.
  */
 const ALIGN = ALIGNMENT_CAMERA;
 
@@ -101,92 +75,101 @@ const horizonLandscape: CameraPose[] = [
   ALIGN,
 ];
 const horizonPortrait: CameraPose[] = [
-  from(ALIGN, [-.25, -1.9, 5.4], [0, -.6, 0], 13), // the horizon recentred above the artifact
+  from(ALIGN, [-.25, -1.9, 5.4], [0, -.6, 0], 13),
   from(ALIGN, [-.1, -.8, 2.3], [0, -.1, 0], 7),
-  ALIGN, // fov included: the alignment is the pose, not an approximation of it
+  ALIGN,
 ];
 
+/** Through the ring: the near fragments pass within a third of a unit of the eye. */
 const forgeLandscape: CameraPose[] = [
   ALIGN,
-  from(ALIGN, [1.7, .2, -.5], [.1, 0, -.6], 1),
-  from(ALIGN, [3.6, .5, -1.3], [.3, .05, -1.4], 3),
+  pose([0, .02, 6.6], [0, .06, -.6], 42),
+  pose([.15, .1, 4.6], [.3, .25, -1.6], 44),
 ];
 const forgePortrait: CameraPose[] = [
   ALIGN,
-  from(ALIGN, [.8, .25, -.3], [.05, .05, -.5], 6),
-  from(ALIGN, [1.7, .6, -.9], [.15, .1, -1.2], 10), // half the lateral travel, edges protected
+  pose([0, .02, 6.6], [0, .06, -.6], 52),
+  pose([.05, .08, 4.6], [.1, .2, -1.6], 54),
 ];
 
 const systemLandscape: CameraPose[] = [
   last(forgeLandscape),
-  pose([2.2, .9, 7.4], [0, .2, -.6], 38),
-  pose([.9, .55, 5.6], [-.2, .15, -.8], 40),
+  pose([.7, .6, 4.8], [-.1, .15, -.7], 41),
+  pose([1.2, .9, 4.8], [-.2, .1, -.6], 40),
 ];
 const systemPortrait: CameraPose[] = [
   last(forgePortrait),
-  pose([.6, 1, 7.8], [0, .3, -.5], 52),
-  pose([.15, .75, 6.2], [0, .45, -.7], 54),
-];
-
-const matterLandscape: CameraPose[] = [
-  last(systemLandscape),
-  pose([-1.6, 2.6, 5.4], [-.3, .1, -.4], 38), // down onto the flat layout
-  pose([-2.3, 1.9, 4.6], [-.5, 0, -.5], 38), // three-quarter and above: a lid seam has to be visible
-];
-const matterPortrait: CameraPose[] = [
-  last(systemPortrait),
-  pose([-.4, 2.6, 6.2], [0, .2, -.4], 52),
-  // Centred on the carton itself and far enough back to hold all of it: the
-  // object's own stop has no screenshot in it, so nothing else is competing for
-  // the band and there is no reason to crop the thing being recognised.
-  pose([-.66, 1.95, 6.6], [-.66, .1, -.4], 52),
-];
-
-const signalLandscape: CameraPose[] = [
-  last(matterLandscape),
-  pose([-3.4, .5, 5], [-.8, .1, -1.2], 34),
-  pose([-4.2, .2, 6.2], [-1, 0, -1.8], 32), // all three depths legible in one frame
-];
-const signalPortrait: CameraPose[] = [
-  last(matterPortrait),
-  pose([-1, .6, 6.4], [-.2, .15, -1], 52),
-  pose([-1.2, .35, 7.2], [-.25, .1, -1.6], 50),
+  pose([.25, .9, 5.6], [0, .35, -.7], 54),
+  pose([.15, .8, 5.4], [0, .45, -.7], 54),
 ];
 
 /**
- * The approach carries a bounded lateral segment: the camera crosses from one
- * side of the threshold's axis to the other before settling on it. It is the
- * depth test, authored into the deterministic path rather than handed to a
- * pointer — so reverse scroll reconstructs it exactly, and a visitor who cannot
- * drag still sees the near pilasters sweep across the far wall.
+ * Down onto the front rail until it fills the frame, then back out while the
+ * carton folds up around it. Keyframe 2 is the macro pose; the pace below creeps
+ * through it rather than passing at the path's constant speed.
+ */
+const matterLandscape: CameraPose[] = [
+  last(systemLandscape),
+  pose([.8, .25, 2.7], [.3, -.3, 1.3], 36),
+  pose([.5, -.18, 1.6], [.32, -.36, 1.3], 30),
+  pose([1.3, .05, 2.8], [-.1, -.7, .9], 38),
+  pose([2, .35, 3.5], [-.1, -.8, .7], 38),
+];
+const matterPortrait: CameraPose[] = [
+  last(systemPortrait),
+  pose([.3, .3, 2.9], [.2, -.3, 1.3], 44),
+  pose([.42, -.16, 1.66], [.3, -.36, 1.3], 40),
+  pose([.6, .05, 3], [0, -.7, .9], 50),
+  pose([.3, .4, 4.2], [0, -.85, .7], 52),
+];
+
+/** The box at rest, where the world chapter finds it. */
+const REST: [number, number, number] = [
+  CARTON.centre[0] + CARTON.rest[0], CARTON.centre[1] + CARTON.rest[1], CARTON.centre[2] + CARTON.rest[2],
+];
+const DOOR: [number, number, number] = [REST[0], REST[1], REST[2] + CARTON.d / 2];
+
+/**
+ * Turn to the box, approach with a bounded lateral swing across the opening's
+ * axis — the depth test, authored into the deterministic path rather than
+ * handed to a pointer — cross the sill, and rest inside.
  */
 const worldLandscape: CameraPose[] = [
-  last(signalLandscape),
-  pose([-2.5, .5, 4.6], [-.2, .2, -2], 40),
-  pose([1.15, .34, 3.3], [.05, .25, -2.7], 44), // the far side of the axis
-  pose([-.2, .3, 2.2], [0, .25, -3.2], 46), // resting just inside the aperture
+  last(matterLandscape),
+  pose([DOOR[0] + 3.2, DOOR[1] + .9, DOOR[2] + 3.6], [DOOR[0], DOOR[1] + .04, DOOR[2]], 40),
+  pose([DOOR[0] + 1.1, DOOR[1] + .3, DOOR[2] + 2.2], [DOOR[0], DOOR[1], DOOR[2] - .4], 42),
+  pose([DOOR[0] - .8, DOOR[1] + .2, DOOR[2] + 1.3], [DOOR[0], DOOR[1], DOOR[2] - 1.3], 44),
+  pose([DOOR[0], DOOR[1] + .1, DOOR[2] + .2], [DOOR[0], DOOR[1], DOOR[2] - 2.4], 46),
+  pose([DOOR[0], DOOR[1] + .15, DOOR[2] - 3.4], [DOOR[0], DOOR[1] - .06, DOOR[2] - 14], 46),
 ];
 const worldPortrait: CameraPose[] = [
-  last(signalPortrait),
-  pose([-1.15, .5, 5.2], [0, .3, -2], 56),
-  pose([.62, .38, 4.2], [.05, .32, -2.9], 58), // the same bounded swing, half the reach
-  pose([0, .35, 3.4], [0, .35, -3.4], 60), // further back: the aperture keeps its edges
+  last(matterPortrait),
+  pose([DOOR[0] + 1.8, DOOR[1] + 1.4, DOOR[2] + 4.4], [DOOR[0], DOOR[1] + .1, DOOR[2]], 54),
+  pose([DOOR[0] + .7, DOOR[1] + .3, DOOR[2] + 2.3], [DOOR[0], DOOR[1], DOOR[2] - .4], 56),
+  pose([DOOR[0] - .6, DOOR[1] + .2, DOOR[2] + 1.4], [DOOR[0], DOOR[1], DOOR[2] - 1.3], 58),
+  pose([DOOR[0], DOOR[1] + .1, DOOR[2] + .2], [DOOR[0], DOOR[1], DOOR[2] - 2.4], 60),
+  pose([DOOR[0], DOOR[1] + .15, DOOR[2] - 2], [DOOR[0], DOOR[1] - .06, DOOR[2] - 14], 60),
 ];
 
 const archiveLandscape: CameraPose[] = [
   last(worldLandscape),
   pose([.4, .6, 6.5], [0, .2, -.8], 42),
-  pose([0, .35, 6.6], [0, .1, 0], 40), // the whole grid, square to the archive below
+  pose([0, .35, 6.6], [0, .1, 0], 40),
 ];
 const archivePortrait: CameraPose[] = [
   last(worldPortrait),
   pose([.2, .9, 8.4], [0, .35, -.6], 56),
-  // Far enough back that the whole collection is inside a 0.46-aspect frame:
-  // a grid cropped by the viewport edge has not settled, it has overflowed.
   pose([0, .55, 9.3], [0, .2, 0], 54),
 ];
 
 /* ----------------------------------------------------------------- chapters */
+
+/**
+ * How quickly the page composition arrives after a held pose, and how quickly it
+ * leaves before one. Both sides of every boundary agree on the camera at the
+ * instant they meet, or the seam is a cut.
+ */
+const FRAME_RAMP = .26;
 
 const horizon: ChapterSpec = {
   id: 'horizon',
@@ -196,101 +179,112 @@ const horizon: ChapterSpec = {
   project: 'ask-repos',
   evidence: 'screenshot',
   reading: null,
+  frame: (local) => 1 - ease(local, 1 - FRAME_RAMP, 1),
+  cloud: () => 1,
   camera: { landscape: horizonLandscape, portrait: horizonPortrait },
 };
 
 /**
- * Deliberately non-verbal: no project, and the lateral move is the whole
- * argument. The hold is what makes that argument legible. The emblem is sampled
- * along ALIGNMENT_CAMERA's viewing rays, so it reads flat from that eye position
- * and from no other; the camera therefore stays there until the form has
- * finished arriving, and only then moves. Without the hold the figure is still
- * in flight for the whole first two thirds of the move, and the flat reading —
- * the thing the depth is a surprise against — never happens.
+ * Deliberately non-verbal on the page. The rim fractures, the fragments
+ * assemble into the ring while the camera holds the one pose the ring reads
+ * flat from, the chapter title takes physical depth inside it, and the camera
+ * goes through. The cloud is dust around the ring, thinning as the metal
+ * becomes the subject.
  */
-const FORGE_HOLD = .42;
+const FORGE_HOLD = .34;
 const forge: ChapterSpec = {
   id: 'forge',
-  from: .1, to: .22,
+  from: .1, to: .24,
   shape: 'emblem',
-  artifact: null,
+  artifact: 'object',
   hold: FORGE_HOLD,
   evidence: 'illustration',
-  recede: [0, .88],
+  recede: [0, 1],
   reading: null,
+  frame: () => 0,
+  cloud: (local) => 1 - .5 * ease(local, 0, .3) - .3 * ease(local, .6, 1),
   camera: { landscape: forgeLandscape, portrait: forgePortrait },
 };
 
 const system: ChapterSpec = {
   id: 'system',
-  from: .22, to: .4,
+  from: .24, to: .42,
   shape: 'structure',
-  artifact: 'workflow',
+  artifact: 'object',
   project: 'enterprise-ai-automation-templates',
   evidence: 'screenshot',
   // The lattice and the mechanism are drawn; only the screen is a capture.
   sceneEvidence: 'illustration',
-  // The first substantial proof stop, and the longest: half the chapter.
-  reading: { from: .31, to: .4 },
+  recede: [0, .5],
+  // The first substantial proof stop.
+  reading: { from: .35, to: .42 },
+  frame: (local) => ease(local, 0, .35),
+  cloud: (local) => .22 - .08 * ease(local, .1, .4),
   camera: { landscape: systemLandscape, portrait: systemPortrait },
+};
+
+/**
+ * The camera's travel to the macro pose and out again, retimed: fast into the
+ * approach, decelerating onto the rail, a creep while the material changes
+ * under the light, then the pull back that reveals the box. `anchors` are the
+ * path's own keyframe parameters, so the creep lands on the authored pose
+ * whatever the spline's arc lengths turned out to be.
+ */
+const macroPace = (travel: number, anchors: number[]): number => {
+  const macro = anchors[2] ?? .55;
+  const a = macro - .025, b = macro + .015;
+  const t = clamp01(travel);
+  if (t < .42) return a * (1 - Math.pow(1 - t / .42, 2.4));
+  if (t < .58) return a + (b - a) * ((t - .42) / .16);
+  return b + (1 - b) * smoothstep((t - .58) / .42);
 };
 
 /**
  * Two stops, because there are two things to look at and they must not be the
  * same picture. The first rests on the finished carton with no screenshot on
- * screen at all; the object then clears the frame, and the second rests on the
- * readable capture of the tool that produced it. A translucent screenshot lying
- * over a translucent box is neither claim.
+ * screen at all; the object then leaves the band, and the second rests on the
+ * readable capture of the tool that produced it.
  */
 const matter: ChapterSpec = {
   id: 'matter',
-  from: .4, to: .56,
+  from: .42, to: .6,
   shape: 'carton',
-  artifact: 'carton',
+  artifact: 'object',
   project: 'medmac-box-studio',
   evidence: 'screenshot',
   // The box is geometry. Only the window beside it is a capture.
   sceneEvidence: 'illustration',
-  recede: [0, .56],
-  reading: [{ from: .464, to: .483 }, { from: .512, to: .56 }],
+  recede: [0, .55],
+  reading: [{ from: .53, to: .545 }, { from: .575, to: .6 }],
+  pace: macroPace,
+  // The composition lets go as the camera dives, and returns for the stops.
+  frame: (local) => (local < .3 ? 1 - ease(local, 0, .12) : ease(local, .5, .6)),
+  cloud: (local) => .14 * (1 - ease(local, .02, .24)),
   camera: { landscape: matterLandscape, portrait: matterPortrait },
-};
-
-const signal: ChapterSpec = {
-  id: 'signal',
-  from: .56, to: .68,
-  shape: 'tracks',
-  artifact: 'tracks',
-  project: 'montage-pro',
-  // No approved screenshot exists for this project; the artifact explains the
-  // mechanism and says so on screen.
-  evidence: 'illustration',
-  reading: { from: .625, to: .68 },
-  camera: { landscape: signalLandscape, portrait: signalPortrait },
 };
 
 const world: ChapterSpec = {
   id: 'world',
-  from: .68, to: .82,
-  shape: 'portal',
-  artifact: 'portal',
+  from: .6, to: .82,
+  shape: 'carton',
+  artifact: 'object',
   project: 'cake-studio',
   evidence: 'media',
-  // The room is built geometry; the frame on its far wall is the authorized media.
+  // The box and the room it opens into are built geometry; the frame on the far wall is the authorized media.
   sceneEvidence: 'illustration',
-  // The interior owns the approach and the crossing; the full reading returns
+  // The opening owns the approach and the crossing; the full reading returns
   // for the stop, where the far wall becomes the readable frame.
-  recede: [0, .42],
-  reading: { from: .755, to: .82 },
-  // local 0.536: the crossing is over and the room is settled well before it.
+  recede: [0, .55],
+  reading: { from: .77, to: .82 },
+  frame: (local) => 1 - ease(local, 0, .12),
+  cloud: () => 0,
   camera: { landscape: worldLandscape, portrait: worldPortrait },
 };
 
 /**
  * Hands off to the whole collection, so it names no single project. It gets a
  * reading stop of its own: the grid has to be still and complete for a beat
- * before the scene releases, or the last thing the visitor sees of the cinema is
- * it still moving while the real project rows are already arriving underneath.
+ * before the scene releases.
  */
 const archive: ChapterSpec = {
   id: 'archive',
@@ -298,20 +292,20 @@ const archive: ChapterSpec = {
   shape: 'constellation',
   artifact: 'arrival',
   evidence: 'none',
-  // Four approved captures of the work immediately below, and the caption says
-  // so. The cloud describes the collection; these are four members of it.
   sceneEvidence: 'screenshot',
   recede: [0, .5],
   reading: { from: .93, to: 1 },
+  frame: (local) => ease(local, 0, .3),
+  cloud: (local) => .82 * ease(local, .05, .35),
   camera: { landscape: archiveLandscape, portrait: archivePortrait },
 };
 
-export const CHAPTERS: ChapterSpec[] = [horizon, forge, system, matter, signal, world, archive];
+export const CHAPTERS: ChapterSpec[] = [horizon, forge, system, matter, world, archive];
 
 /**
  * Scroll runway, in viewport heights. A composition budget — the plan proposes
  * eight to ten on desktop and six to eight on phones — not a measured usability
- * result. Retune after real reading tests with the final copy in place.
+ * result.
  */
 export const SEGMENT_VH: Record<Layout, number> = { landscape: 9, portrait: 7 };
 
@@ -320,13 +314,6 @@ export function chapterAt(u: Progress): ChapterSpec {
   for (const chapter of CHAPTERS) if (p < chapter.to) return chapter;
   return archive;
 }
-
-/**
- * How quickly the page composition arrives after a held pose, and how quickly it
- * leaves before one. Both sides of the horizon/forge boundary have to agree on
- * the camera at the instant they meet, or the seam is a cut.
- */
-const FRAME_RAMP = .26;
 
 export function evaluate(u: Progress, layout: Layout): SceneState {
   const p = at01(u);
@@ -341,7 +328,7 @@ export function evaluate(u: Progress, layout: Layout): SceneState {
   const settle = first ? clamp01((first.from - chapter.from) / span) : 1;
   const hold = clamp01(chapter.hold ?? 0);
   // With a hold the morph owns the held interval and the camera owns what is
-  // left; without one they share the run up to the settle, as before.
+  // left; without one they share the run up to the settle.
   const formed = hold > 0 ? hold : settle * MORPH_LEAD;
   const travel = hold > 0
     ? (settle > hold ? clamp01((local - hold) / (settle - hold)) : 1)
@@ -350,6 +337,8 @@ export function evaluate(u: Progress, layout: Layout): SceneState {
   // The opening chapter has nothing to morph from: the horizon must already be
   // formed in the first viewport, because it is what the page opens on.
   const opening: ShapeId = previous ? previous.shape : chapter.shape;
+  const path = pathFor(chapter, layout);
+  const resting = stops.some((s) => p >= s.from && p <= s.to);
   return {
     u: p,
     chapter,
@@ -357,13 +346,15 @@ export function evaluate(u: Progress, layout: Layout): SceneState {
     morph: formed > 0 ? smoothstep(clamp01(local / formed)) : 1,
     from: opening,
     to: chapter.shape,
-    // Eased in and out of every chapter's own move, then held: at travel 1 the
-    // camera is on its last keyframe, which is the pose it had when the stop
-    // opened, and it stays there while the visitor reads.
-    camera: pathFor(chapter, layout).at(smoothstep(travel)),
-    frame: framing(chapter, local, hold),
+    // Eased in and out of every chapter's own move — or retimed by the chapter's
+    // own pace — then held: at travel 1 the camera is on its last keyframe,
+    // which is the pose it had when the stop opened.
+    camera: path.at(chapter.pace ? chapter.pace(travel, path.anchors) : smoothstep(travel)),
+    frame: chapter.frame ? clamp01(chapter.frame(local)) : 1,
     narration: narration(chapter, local, hold),
-    resting: stops.some((s) => p >= s.from && p <= s.to),
+    cloud: chapter.cloud ? clamp01(chapter.cloud(local)) : 1,
+    resting,
+    mode: resting ? 'reading' : 'reveal',
   };
 }
 
@@ -372,20 +363,6 @@ export function readingStops(chapter: ChapterSpec): ReadingStop[] {
   const reading = chapter.reading;
   if (!reading) return [];
   return Array.isArray(reading) ? reading : [reading];
-}
-
-/**
- * The opening is framed around its protected copy and actions; the alignment
- * pose is not framed at all. Between them the framing has to travel, or the two
- * chapters hand over on different cameras and the seam reads as an edit.
- *
- * The horizon lets its framing go as it rises to the alignment pose; the forge
- * holds there and takes the framing back once the lateral move begins.
- */
-function framing(chapter: ChapterSpec, local: number, hold: number): number {
-  if (chapter.id === 'horizon') return 1 - smoothstep(clamp01((local - (1 - FRAME_RAMP)) / FRAME_RAMP));
-  if (hold > 0) return smoothstep(clamp01((local - hold) / FRAME_RAMP));
-  return 1;
 }
 
 /**
@@ -409,35 +386,27 @@ function narration(chapter: ChapterSpec, local: number, hold: number): number {
  *  single EvidenceKind -> label map; duplicating it here would let the two drift. */
 export interface ChapterCopy { kicker: Localized; line: Localized }
 
-/**
- * The honesty label, derived from the chapter's own evidence kind so the two can
- * never disagree. It is content, not decoration.
- */
-
-const narrate = (chapter: ChapterSpec, kicker: Localized, line: Localized): ChapterCopy => {
-  return { kicker, line };
-};
+const narrate = (_chapter: ChapterSpec, kicker: Localized, line: Localized): ChapterCopy => ({ kicker, line });
 
 /** Short by rule: no paragraph should compete with the most complex morph. */
 export const COPY: Record<string, ChapterCopy> = {
   horizon: narrate(horizon,
     { en: 'Signal', ar: 'إشارة' },
     { en: 'Everything starts as noise. Attention is the first engineering decision.', ar: 'كل شيء يبدأ ضجيجًا، والانتباه أول قرار هندسي.' }),
+  // The one typographic moment of the film: the scene draws this line as metal
+  // inside the ring, and the page keeps it as the chapter's own heading.
   forge: narrate(forge,
     { en: 'Structure', ar: 'بنية' },
-    { en: 'A form that reads flat from one seat, and deep from the next.', ar: 'شكل يبدو مسطحًا من مقعد، وعميقًا من المقعد التالي.' }),
+    { en: 'From signal to systems.', ar: 'من الإشارة إلى الأنظمة.' }),
   system: narrate(system,
     { en: 'Control', ar: 'تحكّم' },
     { en: 'Inside the structure, nothing moves until something approves it.', ar: 'داخل البنية، لا يتحرك شيء قبل أن توافق عليه جهة.' }),
   matter: narrate(matter,
     { en: 'Matter', ar: 'مادة' },
-    { en: 'The flat layout folds. Now the design has edges you can hold.', ar: 'ينطوي التخطيط المسطح، فتصير للتصميم حواف تُمسك باليد.' }),
-  signal: narrate(signal,
-    { en: 'Sync', ar: 'تزامن' },
-    { en: 'Separate recordings find each other by what they heard.', ar: 'تسجيلات منفصلة يجد بعضها بعضًا بما سمعته.' }),
+    { en: 'Close enough, the edge is a fold. The design has edges you can hold.', ar: 'عن قرب، الحافة طيّة. صار للتصميم حواف تُمسك باليد.' }),
   world: narrate(world,
     { en: 'World', ar: 'عالم' },
-    { en: 'A window widens until you are standing inside the work.', ar: 'تتسع النافذة حتى تصير واقفًا داخل العمل.' }),
+    { en: 'The box opens, and you are standing inside the work.', ar: 'تنفتح العلبة، فإذا بك واقفًا داخل العمل.' }),
   archive: narrate(archive,
     { en: 'Archive', ar: 'أرشيف' },
     { en: 'Every piece settles into its place, and stays open to inspection.', ar: 'يستقر كل جزء في مكانه، ويبقى مفتوحًا للفحص.' }),

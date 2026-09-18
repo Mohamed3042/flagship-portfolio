@@ -137,7 +137,7 @@ with sync_playwright() as p:
         check(f'{name} no second ambient star field', base['ambient'] in ('none', 'absent'), base['ambient'])
         check(f'{name} direction', base['direction'] == ('rtl' if lang == 'ar' else 'ltr'))
         check(f'{name} no audio element', base['audio'] == 0, base['audio'])
-        check(f'{name} seven chapters in the DOM', base['chapters'] == 7, base['chapters'])
+        check(f'{name} six chapters in the DOM', base['chapters'] == 6, base['chapters'])
         check(f'{name} work reachable from the first viewport', base['workLink'])
         check(f'{name} contact section present', base['contact'])
 
@@ -244,8 +244,8 @@ with sync_playwright() as p:
             };
           };
           const out = {};
-          for (const [name, u] of [['system', .355], ['object', .474], ['proof', .545],
-                                   ['tracks', .655], ['world', .79]]) {
+          for (const [name, u] of [['system', .385], ['object', .537], ['proof', .59],
+                                   ['world', .8]]) {
             seek(u); await settle(); out[name] = read();
           }
           seek(0); await settle();
@@ -310,7 +310,7 @@ with sync_playwright() as p:
 
         def registration_corners():
             measured = {}
-            for label, u in [('system', 0.33), ('matter', 0.545), ('world', 0.78)]:
+            for label, u in [('system', 0.385), ('matter', 0.59), ('world', 0.8)]:
                 scroll_to(page, u)
                 page.wait_for_timeout(400)
                 rect = page.evaluate("""() => {
@@ -416,7 +416,7 @@ with sync_playwright() as p:
               return out;
             }""")
 
-        scroll_to(page, 0.545)          # the carton's proof stop
+        scroll_to(page, 0.59)           # the carton's proof stop
         page.wait_for_timeout(250)
         evidence = visible_evidence()
         report['viewports'][name]['evidence'] = evidence
@@ -427,7 +427,7 @@ with sync_playwright() as p:
                   and any(l['kind'] == 'screenshot' or l['kind'] == 'media' for l in lines),
                   lines)
 
-        scroll_to(page, 0.474)          # the carton's own stop: no capture exists
+        scroll_to(page, 0.537)          # the carton's own stop: no capture exists
         page.wait_for_timeout(250)
         at_object = (visible_evidence().get('matter') or [])
         report['viewports'][name]['evidenceAtObject'] = at_object
@@ -454,7 +454,7 @@ with sync_playwright() as p:
         # did not drift only proves the scroll stopped; it says nothing about
         # whether the scene is still moving in front of someone reading it.
         def stillness():
-            for label, u in [('system', 0.34), ('matter', 0.52), ('world', 0.78)]:
+            for label, u in [('system', 0.39), ('matter', 0.59), ('world', 0.8)]:
                 scroll_to(page, u)
                 page.wait_for_timeout(1200)
                 first = page.screenshot()
@@ -472,7 +472,7 @@ with sync_playwright() as p:
         # middle of the cinema, Tab must not scroll the page or change the
         # chapter, and the live chapter's own controls must be reachable.
         def keyboard_hold():
-            scroll_to(page, 0.53)
+            scroll_to(page, 0.538)
             page.wait_for_timeout(300)
             before = page.evaluate('() => ({y: Math.round(scrollY), '
                                    "ch: document.querySelector('[data-signal]').dataset.signalChapter})")
@@ -518,8 +518,42 @@ with sync_playwright() as p:
 
         attempt(f'{name} keyboard holds its place mid-cinema', keyboard_hold)
 
+        # --- reveal and reading are two compositions -------------------------
+        # While the object is the argument the copy is the line, the name and the
+        # navigation; at a reading stop the explanation, the disclosure and the
+        # actions return. Read from the rendered page, in both compositions, so a
+        # paragraph that merely dimmed while reserving its space would fail here.
+        def compositions():
+            def read(u):
+                scroll_to(page, u)
+                page.wait_for_timeout(260)
+                return page.evaluate("""() => {
+                  const root = document.querySelector('[data-signal]');
+                  const live = root.querySelector('[data-chapter][data-active="true"]');
+                  // Any matching element that is displayed: a chapter carries two
+                  // captions and shows the one that is true of its phase.
+                  const shown = (sel) => [...live.querySelectorAll(sel)]
+                    .some(el => getComputedStyle(el).display !== 'none');
+                  return {mode: root.dataset.mode || '', chapter: live.dataset.chapter,
+                          line: shown('.signal__line'), blurb: shown('.signal__blurb'),
+                          actions: shown('[data-chapter-actions]'), evidence: shown('.signal__evidence')};
+                }""")
+            reveal = read(0.47)
+            check(f'{name} mid-transformation the page is in reveal', reveal['mode'] == 'reveal', reveal)
+            check(f'{name} reveal keeps the line', reveal['line'], reveal)
+            check(f'{name} reveal gives the frame to the object',
+                  not reveal['blurb'] and not reveal['actions'] and not reveal['evidence'], reveal)
+            reading = read(0.59)
+            check(f'{name} a reading stop is in reading', reading['mode'] == 'reading', reading)
+            check(f'{name} reading restores the explanation and the actions',
+                  reading['blurb'] and reading['actions'] and reading['evidence'], reading)
+            approach = read(0.68)
+            check(f'{name} the approach to the world is a reveal', approach['mode'] == 'reveal', approach)
+
+        attempt(f'{name} two compositions', compositions)
+
         def seek_controls():
-            scroll_to(page, 0.53)
+            scroll_to(page, 0.538)
             page.wait_for_timeout(250)
             page.click('[data-seek=next]')
             page.wait_for_timeout(600)
@@ -527,9 +561,9 @@ with sync_playwright() as p:
               const a = document.activeElement;
               return {ch: document.querySelector('[data-signal]').dataset.signalChapter, id: a.id};
             }""")
-            check(f'{name} Next advances the chapter', after['ch'] == 'signal', after['ch'])
+            check(f'{name} Next advances the chapter', after['ch'] == 'world', after['ch'])
             check(f'{name} Next lands focus on what it arrived at',
-                  after['id'] == 'signal-signal-line', after['id'])
+                  after['id'] == 'signal-world-line', after['id'])
             page.click('[data-seek=prev]')
             page.wait_for_timeout(600)
             back = page.evaluate("document.querySelector('[data-signal]').dataset.signalChapter")
@@ -620,8 +654,8 @@ with sync_playwright() as p:
             attempt(f'{name} mobile menu', mobile_menu)
 
         # --- captures --------------------------------------------------------
-        for label, u in [('open', 0.02), ('forge', 0.17), ('system', 0.34),
-                         ('matter', 0.50), ('signal', 0.63), ('world', 0.76), ('archive', 0.95)]:
+        for label, u in [('open', 0.02), ('forge', 0.17), ('system', 0.39),
+                         ('matter', 0.50), ('proof', 0.59), ('world', 0.8), ('archive', 0.95)]:
             scroll_to(page, u)
             page.wait_for_timeout(420)
             page.screenshot(path=str(OUT / f'{name}-{label}.png'))
@@ -647,7 +681,7 @@ with sync_playwright() as p:
       };
     }''')
     check('reduced motion uses the static path', rm['graphics'] == 'static', rm['graphics'])
-    check('reduced motion shows every chapter', rm['visible'] == 7, rm['visible'])
+    check('reduced motion shows every chapter', rm['visible'] == 6, rm['visible'])
     check('reduced motion leaves nothing inert', rm['inert'] == 0, rm['inert'])
     page.screenshot(path=str(OUT / 'reduced.png'), full_page=False)
     ctx.close()
@@ -658,7 +692,7 @@ with sync_playwright() as p:
     page.goto(f'{args.base_url}/en', wait_until='domcontentloaded')
     counts = page.locator('[data-chapter]').count()
     links = page.locator('[data-chapter] a[href]').count()
-    check('no-JS keeps every chapter in the document', counts == 7, counts)
+    check('no-JS keeps every chapter in the document', counts == 6, counts)
     check('no-JS keeps the project links', links > 0, links)
     # Migrated: the old suite asked the whole archive to survive without script,
     # not only the part the cinema replaced.

@@ -54,3 +54,7 @@ public/worlds/assets/strings/review/CTS-contact-sheet-portrait-[0-9][0-9].png
 # Isolated type declarations for the typecheck gate. The install is generated;
 # the manifest and lockfile that make it reproducible are not.
 .typedeps/node_modules/
+
+# Round 06 realtime desktop capture is 11 MB — over the 5 MB git budget.
+# Kept locally in docs/signal-review/round06/after/ only.
+docs/signal-review/round06/after/signal-realtime-desktop.mp4

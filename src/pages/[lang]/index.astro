@@ -132,8 +132,10 @@ const openingProject = getProject('ask-repos')!;
   <div class="showroom" data-showroom>
     {/* The cinema scope covers the intro and the stage only, so the archive
         and contact below keep the existing six-theme system. */}
+    {/* data-title: the one line the scene sets as metal inside the fragment
+        ring. It is the forge chapter's own heading, read from the same COPY. */}
     <div class="signal" data-signal data-nodes={entries.length} data-world-interior={WORLD_FRAME.src}
-         data-arrival={JSON.stringify(arrivalShots)}>
+         data-arrival={JSON.stringify(arrivalShots)} data-title={pick(lang, COPY.forge.line)}>
     {/* The scene is live behind the first viewport, not only inside the runway:
         the opening horizon is the thesis, so it cannot start below the fold. */}
     <canvas class="signal__canvas" data-signal-canvas aria-hidden="true"></canvas>

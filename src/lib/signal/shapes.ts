@@ -1,5 +1,6 @@
 /**
- * "From Signal to Systems" — the particle target sets.
+ * "From Signal to Systems" — the particle target sets, and the geometry every
+ * stage is built to.
  *
  * Point identity is the array index and is shared by every shape: index i plays
  * the same role everywhere (anchor, then principal edge, then interior detail),
@@ -9,11 +10,16 @@
  * Every builder reseeds its own stream from a fixed per-shape seed, so the same
  * count yields byte-identical arrays however the caller arrived: forward, back,
  * anchor jump or restored history.
+ *
+ * The constants published here — the rim, the ring, the seam, the deck and the
+ * carton — are the ONE description of where each object is. A stage that
+ * restated them would drift, and two copies of a number is how a bright rim
+ * ends up drawn inside the silhouette it is supposed to be the edge of.
  */
 import type { CameraPose, ShapeBuilder, ShapeContext, ShapeId, ShapeTarget } from './types';
 
 const TAU = Math.PI * 2;
-const DEG = Math.PI / 180;
+export const DEG = Math.PI / 180;
 const clamp = (v: number, lo: number, hi: number) => (v < lo ? lo : v > hi ? hi : v);
 
 /** mulberry32. Explicit state, no global entropy, never reseeded mid-shape. */
@@ -28,9 +34,8 @@ export function prng(seed: number): () => number {
 }
 
 const SEEDS: Record<ShapeId | 'paper', number> = {
-  field: 0x5f1e1d, aperture: 0xa9e70c, emblem: 0xe3b10a, structure: 0x57a0c7,
-  dieline: 0xd1e11e, carton: 0xca8701, tracks: 0x7ac05a, portal: 0x90a7a1,
-  constellation: 0xc057e1, paper: 0x9a9e80,
+  aperture: 0xa9e70c, emblem: 0xe3b10a, structure: 0x57a0c7,
+  carton: 0xca8701, constellation: 0xc057e1, paper: 0x9a9e80,
 };
 
 /* ---------------------------------------------------------------- partition */
@@ -61,7 +66,7 @@ function put(a: Float32Array, i: number, x: number, y: number, z: number): void 
   a[i * 3] = x; a[i * 3 + 1] = y; a[i * 3 + 2] = z;
 }
 
-type Vec3 = [number, number, number];
+export type Vec3 = [number, number, number];
 
 const cross = (a: Vec3, b: Vec3): Vec3 =>
   [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
@@ -134,102 +139,16 @@ function finish(count: number, positions: Float32Array, weights: Float32Array, r
   return { positions, weights, flow };
 }
 
-/* -------------------------------------------------------------- anamorphic */
+/* ------------------------------------------------------------- the geometry */
 
-/** The pose the emblem reads flat from. Half-height 3.45 at the emblem's depth. */
+/** The pose the ring reads flat from, and the pose the horizon lands on. */
 export const ALIGNMENT_CAMERA: CameraPose = { position: [0, 0, 9], look: [0, 0, 0], fov: 42 };
-
-/**
- * How far the figure is stretched along the alignment camera's view axis.
- *
- * This range IS the surprise. Every point projects back to the same flat figure
- * from ALIGNMENT_CAMERA whatever the range is, so widening it costs the first
- * reading nothing -- and it is the only thing that decides how far the bands
- * slide apart when the camera finally moves. At 6.6..10 the near and far bands
- * were within a third of each other's distance and the reveal was a caption
- * describing something the eye could not see.
- */
-const EMBLEM_DEPTH: [number, number] = [5.2, 13.6];
-const EMBLEM_BANDS = 8;
-/** Lifts the figure clear of the narration band without moving the eye. */
-const EMBLEM_OFFSET: [number, number] = [0, 0.085];
-
-/**
- * Sample a silhouette from one camera and distribute the points along its
- * viewing rays. Every point projects back to the same 2D figure from
- * ALIGNMENT_CAMERA; a lateral move separates them into concentric bands, so the
- * reveal is an ordered volume rather than a fog.
- *
- * `silhouette` returns normalised device space [-1,1]^2. `depth` is distance
- * along the alignment camera's forward axis.
- */
-export function anamorphic(
-  silhouette: (i: number, count: number, random: () => number) => [number, number],
-  count: number,
-  depth: [number, number],
-  ctx: ShapeContext,
-  offset: [number, number] = [0, 0],
-): Float32Array {
-  const eye = ALIGNMENT_CAMERA.position;
-  const fwd = unit([
-    ALIGNMENT_CAMERA.look[0] - eye[0], ALIGNMENT_CAMERA.look[1] - eye[1], ALIGNMENT_CAMERA.look[2] - eye[2],
-  ], [0, 0, -1]);
-  const right = unit(cross(fwd, [0, 1, 0]), [1, 0, 0]);
-  const up = unit(cross(right, fwd), [0, 1, 0]);
-  const tanHalf = Math.tan((ALIGNMENT_CAMERA.fov * DEG) / 2);
-  const aspect = Number.isFinite(ctx.aspect) && ctx.aspect > 0.05 ? ctx.aspect : 1;
-  const near = Math.min(depth[0], depth[1]), far = Math.max(depth[0], depth[1]);
-  const out = new Float32Array(count * 3);
-  for (let i = 0; i < count; i++) {
-    const [fx, fy] = silhouette(i, count, ctx.random);
-    // Aspect-corrected silhouette radius picks the band, so concentric rings of
-    // the figure land on distinct planes and radial spokes rake through them.
-    // The band comes from the figure's OWN radius, before the framing offset, or
-    // shifting the figure would tilt the depth ordering with it.
-    const ring = clamp(Math.hypot(fx * aspect, fy), 0, 1);
-    const band = Math.min(EMBLEM_BANDS - 1, Math.floor(ring * EMBLEM_BANDS));
-    const t = near + (far - near) * (band / (EMBLEM_BANDS - 1)) + (ctx.random() - 0.5) * 0.07;
-    const nx = fx + offset[0], ny = fy + offset[1];
-    const h = t * tanHalf, sx = nx * h * aspect, sy = ny * h;
-    put(
-      out, i,
-      eye[0] + fwd[0] * t + right[0] * sx + up[0] * sy,
-      eye[1] + fwd[1] * t + right[1] * sx + up[1] * sy,
-      eye[2] + fwd[2] * t + right[2] * sx + up[2] * sy,
-    );
-  }
-  return out;
-}
-
-/* ------------------------------------------------------------------ shapes */
-
-/** The scattered opening distribution: wide, sparse, stratified in depth. */
-export const field: ShapeBuilder = (count) => {
-  const random = prng(SEEDS.field);
-  const part = partition(count);
-  const positions = new Float32Array(count * 3);
-  const weights = new Float32Array(count);
-  for (let i = 0; i < count; i++) {
-    const anchor = i < part.anchors, edge = !anchor && i < part.anchors + part.edges;
-    const reach = anchor ? 0.62 : edge ? 0.86 : 1;
-    const r = Math.sqrt((i + 0.5) / count) * reach;
-    const a = i * 2.39996 + (anchor ? 0 : edge ? 1.1 : 2.3);
-    const x = clamp(Math.cos(a) * r * 5.6 + (random() - 0.5) * 0.5, -5.9, 5.9);
-    const y = clamp(Math.sin(a) * r * 3.1 + (random() - 0.5) * 0.35, -3.35, 3.35);
-    const z = anchor ? 1.9 - random() * 1.5 : edge ? 0.4 - random() * 2.9 : -2.5 - random() * 4.4;
-    put(positions, i, x, y, z);
-    weights[i] = ramp(i, part, random());
-  }
-  return finish(count, positions, weights, random);
-};
 
 const RIM_RADIUS = 15.4, RIM_CENTRE_Y = -14.6, RIM_Z = -3.1, RIM_SPAN = 7.4;
 
 /**
  * The opening limb, published so the renderer frames the camera on the real
- * geometry and stands the dark mass on the same plane as the lit edge. Two
- * copies of these numbers is how a bright rim ends up drawn inside the
- * silhouette it is supposed to be the edge of.
+ * geometry and stands the dark mass on the same plane as the lit edge.
  */
 export const RIM = {
   radius: RIM_RADIUS,
@@ -237,85 +156,205 @@ export const RIM = {
   z: RIM_Z,
   span: RIM_SPAN,
   /** Highest point of the arc, at x = 0. */
-  crest: [0, RIM_CENTRE_Y + RIM_RADIUS, RIM_Z] as [number, number, number],
+  crest: [0, RIM_CENTRE_Y + RIM_RADIUS, RIM_Z] as Vec3,
+  /** Height of the arc at x, in the rim's plane. */
+  arcY: (x: number) => RIM_CENTRE_Y + Math.sqrt(Math.max(RIM_RADIUS * RIM_RADIUS - x * x, 0)),
+  /**
+   * Where the light grazes the limb hardest and the flare sits: on the arc,
+   * toward the side the key comes from.
+   */
+  flare: [2.4, RIM_CENTRE_Y + Math.sqrt(RIM_RADIUS * RIM_RADIUS - 2.4 * 2.4), RIM_Z] as Vec3,
+  /** World direction TO the light that grazes the limb: behind and above the mass, from the flare's side. */
+  light: unit([3.2, 2.6, -4.4], [0, 1, 0]),
 };
 
-/** The rim-lit horizon: one thin bright arc running off-frame, sparse dark body below. */
+/**
+ * The workflow's floor. Its front edge is the seam the whole middle of the film
+ * turns on: the front rail lies along it in the workflow, and the carton's front
+ * wall stands on it once the rail has been looked at closely enough.
+ */
+export const DECK = { w: 6.4, t: 0.12, d: 2.6, y: -0.44, top: -0.38, front: 1.3 };
+
+/** The seam: one line in world space that is a rail, then a fold. */
+export const SEAM = { x: [-0.87, 0.87] as [number, number], y: DECK.top + 0.02, z: DECK.front };
+
+/**
+ * The cake carton, in scene units. Its top edge IS the seam, so the box hangs
+ * from the rail line rather than standing on a second, restated floor. A cake
+ * box opens at the front: the lid lifts and the front wall folds down, which is
+ * what later makes the opening a threshold the camera can cross.
+ */
+export const CARTON = {
+  w: 1.74, d: 1.2, h: 0.98,
+  /** Board thickness. */
+  t: 0.024,
+  /** The front wall's return, folded inward at its top: the fold the macro reveals. */
+  ret: 0.26,
+  /** The lid's front tuck flap. */
+  tuck: 0.3,
+  /** The side walls' dust flaps, folded in under the lid. */
+  dust: 0.3,
+  centre: [0, SEAM.y - 0.49, SEAM.z - 0.6] as Vec3,
+  /** Where the box rests once the evidence has the frame; it leaves the band, it is never dimmed. */
+  rest: [-2.6, -0.75, -2.6] as Vec3,
+};
+
+/* ------------------------------------------------------------- the fragments */
+
+/**
+ * The fragment ring: nine pieces of the rim, each an arc, distributed along the
+ * alignment camera's viewing rays so that from that one pose they project to
+ * one broken ring and from any other they are a tunnel. `ndc` is the ring's
+ * radius as a fraction of the frame's shorter half-extent, so it fits a phone
+ * as well as a wide screen.
+ */
+export const RING = { ndc: 0.56, centreNdcY: 0.06, depth: [1.6, 5.4] as [number, number] };
+export const SHARDS = 9;
+
+/** Angular slot, arc extent (degrees) and depth share of each fragment; where on the rim it breaks from. */
+const SHARD_SLOT = [
+  { angle: 12, extent: 38, depth: 0.62, rimX: -3.9 },
+  { angle: 58, extent: 26, depth: 0.18, rimX: -2.6 },
+  { angle: 96, extent: 44, depth: 0.86, rimX: -1.3 },
+  { angle: 143, extent: 30, depth: 0.35, rimX: -0.2 },
+  { angle: 176, extent: 22, depth: 0.05, rimX: 0.9 },
+  { angle: 214, extent: 40, depth: 0.72, rimX: 1.9 },
+  { angle: 252, extent: 28, depth: 0.48, rimX: 2.8 },
+  { angle: 292, extent: 46, depth: 0.95, rimX: 3.7 },
+  { angle: 338, extent: 24, depth: 0.26, rimX: 4.5 },
+];
+
+export interface ShardRing {
+  /** Centre of the arc's chord, world space. */
+  position: Vec3;
+  /** Angle of the fragment's centre around the ring, radians. */
+  angle: number;
+  /** Arc extent, radians. */
+  extent: number;
+  /** Radius of the ring at this fragment's depth. */
+  radius: number;
+  /** Distance from the alignment eye. */
+  depth: number;
+  /** Straight length, width and thickness the piece is built at. */
+  length: number;
+  width: number;
+  thick: number;
+}
+
+const tanHalf = (fov: number) => Math.tan((fov * DEG) / 2);
+
+/** Fragment i at the ring, for a frame of the given aspect. Pure. */
+export function shardRing(i: number, aspect: number): ShardRing {
+  const slot = SHARD_SLOT[i % SHARDS];
+  const a = Number.isFinite(aspect) && aspect > 0.05 ? aspect : 1;
+  const depth = RING.depth[0] + (RING.depth[1] - RING.depth[0]) * slot.depth;
+  const th = tanHalf(ALIGNMENT_CAMERA.fov);
+  const radius = RING.ndc * Math.min(a, 1) * th * depth;
+  const angle = slot.angle * DEG, extent = slot.extent * DEG;
+  const eye = ALIGNMENT_CAMERA.position;
+  const cy = RING.centreNdcY * th * depth;
+  const width = 0.028 + 0.012 * depth;
+  return {
+    position: [eye[0] + Math.cos(angle) * radius, eye[1] + cy + Math.sin(angle) * radius, eye[2] - depth],
+    angle, extent, radius, depth,
+    length: radius * extent,
+    width,
+    thick: width * 0.46,
+  };
+}
+
+/** Where fragment i sits on the rim before the fracture: tangent to the limb, in the rim's plane. */
+export function shardRim(i: number): { position: Vec3; roll: number } {
+  const x = SHARD_SLOT[i % SHARDS].rimX;
+  return { position: [x, RIM.arcY(x), RIM.z + 0.05], roll: Math.atan2(-x, Math.sqrt(RIM_RADIUS * RIM_RADIUS - x * x)) };
+}
+
+export type Axis = 'x' | 'y' | 'z';
+export interface ShardSlot { position: Vec3; axis: Axis; length: number; width: number; thick: number }
+
+/**
+ * The nine pieces of structure the fragments become: two rails, two gate posts,
+ * a gate header, four boundary stanchions. Assigned so the longest fragments
+ * take the longest members and none is stretched past recognition.
+ */
+export const STRUCTURE: ShardSlot[] = [
+  { position: [0, DECK.top + 0.03, DECK.front], axis: 'x', length: DECK.w, width: 0.07, thick: 0.06 },
+  { position: [0, DECK.top + 0.03, -DECK.front], axis: 'x', length: DECK.w, width: 0.07, thick: 0.06 },
+  { position: [0, -0.05, -0.46], axis: 'y', length: 0.78, width: 0.08, thick: 0.08 },
+  { position: [0, -0.05, 0.46], axis: 'y', length: 0.78, width: 0.08, thick: 0.08 },
+  { position: [0, 0.34, 0], axis: 'z', length: 1.0, width: 0.09, thick: 0.09 },
+  { position: [-3.05, -0.14, -1.15], axis: 'y', length: 0.5, width: 0.07, thick: 0.07 },
+  { position: [3.05, -0.14, -1.15], axis: 'y', length: 0.5, width: 0.07, thick: 0.07 },
+  { position: [-3.05, -0.14, 1.15], axis: 'y', length: 0.5, width: 0.07, thick: 0.07 },
+  { position: [3.05, -0.14, 1.15], axis: 'y', length: 0.5, width: 0.07, thick: 0.07 },
+];
+/** Fragment i takes structure slot SLOT_OF[i]. The two longest arcs become the rails. */
+export const SLOT_OF: number[] = [5, 6, 0, 7, 8, 2, 3, 1, 4];
+
+/* ------------------------------------------------------------------ shapes */
+
+/**
+ * The opening: a sparse sparkle along the lit limb, and scale dust in the volume
+ * in front of the mass. The limb itself is a surface now — the mass draws its
+ * own rim — so the points may only glint on it, never draw it.
+ */
 export const aperture: ShapeBuilder = (count) => {
   const random = prng(SEEDS.aperture);
   const part = partition(count);
   const positions = new Float32Array(count * 3);
   const weights = new Float32Array(count);
-  const rim = part.anchors + part.edges;
-  const arcY = (x: number) => RIM_CENTRE_Y + Math.sqrt(Math.max(RIM_RADIUS * RIM_RADIUS - x * x, 0));
   for (let i = 0; i < count; i++) {
-    if (i < rim) {
-      const anchor = i < part.anchors;
+    if (i < part.anchors) {
+      // Glints on the limb, tight to it.
       const x = (gold(i) * 2 - 1) * RIM_SPAN;
       const theta = Math.asin(clamp(x / RIM_RADIUS, -1, 1));
-      // Anchors hold the rim thin; edges carry a slight outward bloom above it.
-      const off = anchor ? (random() - 0.5) * 0.05 : (random() - 0.35) * 0.3;
-      put(positions, i, x + Math.sin(theta) * off, arcY(x) + Math.cos(theta) * off, RIM_Z + (random() - 0.5) * 0.12);
-      weights[i] = ramp(i, part, random());
+      const off = (random() - 0.4) * 0.05;
+      put(positions, i, x + Math.sin(theta) * off, RIM.arcY(x) + Math.cos(theta) * off, RIM_Z + 0.06 + (random() - 0.5) * 0.06);
+      weights[i] = 0.3 + random() * 0.3;
+    } else if (i < part.anchors + part.edges) {
+      // Scale dust above the limb, sparse: the light leaves the edge as one
+      // line, never as a bloom.
+      const x = (gold(i) * 2 - 1) * RIM_SPAN * 1.1;
+      const lift = 0.3 + Math.pow(random(), 1.4) * 3.2;
+      put(positions, i, x, RIM.arcY(x) + lift, RIM_Z + (random() - 0.5) * 1.6);
+      weights[i] = 0.03 + random() * 0.05;
     } else {
-      // The body below the limb. Dim, but not invisible: it is what tells the
-      // eye there is a surface under the lit edge rather than a line in a void,
-      // and it thins with depth into the mass so the limb stays the bright thing.
-      const x = (random() * 2 - 1) * RIM_SPAN * 1.04;
-      const top = arcY(x);
-      const drop = Math.pow(random(), 1.5) * (top + 4.2);
-      put(positions, i, x, top - drop, RIM_Z - 0.28 - random() * 1.5);
-      weights[i] = (0.1 + random() * 0.17) * (1 - Math.min(drop / (top + 4.2), 1) * 0.55);
+      // Scale dust between the eye and the mass, sparse and dim.
+      const x = (random() * 2 - 1) * 9;
+      const y = -2.4 + random() * 6.4;
+      const z = -2 + Math.pow(random(), 0.7) * 9.5;
+      put(positions, i, x, y, z);
+      weights[i] = 0.03 + random() * 0.07;
     }
   }
   return finish(count, positions, weights, random);
 };
 
 /**
- * The signature illusion. A nonverbal aperture: a broken ring of concentric arcs
- * with radial spokes and a detent tick ring, sampled flat from ALIGNMENT_CAMERA
- * and pushed out along its viewing rays into seven depth bands.
+ * Dust around the fragment ring, on the same viewing rays as the fragments, so
+ * it reads as one flat halo from the alignment pose and separates into depth
+ * exactly as the fragments do when the camera goes through.
  */
 export const emblem: ShapeBuilder = (count, ctx) => {
   const random = prng(SEEDS.emblem);
   const part = partition(count);
-  const aspect = Number.isFinite(ctx.aspect) && ctx.aspect > 0.05 ? ctx.aspect : 1;
-  const arc = (s: number, segs: number, gap: number, phase: number) => {
-    const slot = Math.floor(s * segs), u = s * segs - slot;
-    return ((slot + gap / 2 + u * (1 - gap)) / segs) * TAU + phase;
-  };
-  const figure = (i: number, _total: number, r: () => number): [number, number] => {
-    const s = gold(i);
-    let rho: number, angle: number;
-    if (i < part.anchors) {
-      const outer = i % 9 < 7;
-      rho = (outer ? 0.8 : 0.66) + (r() - 0.5) * 0.012;
-      angle = arc(s, outer ? 5 : 7, outer ? 0.13 : 0.19, outer ? 0 : 0.41);
-    } else if (i < part.anchors + part.edges) {
-      const k = i % 3;
-      rho = (k === 0 ? 0.66 : k === 1 ? 0.53 : 0.41) + (r() - 0.5) * 0.018;
-      angle = arc(s, 7 + k * 2, 0.19 + k * 0.03, 0.41 + k * 0.37);
-    } else {
-      const k = i % 5;
-      if (k < 3) {
-        rho = 0.22 + s * 0.66;
-        angle = Math.floor(gold2(i) * 6) * (TAU / 6) + 0.26 + (r() - 0.5) * 0.022;
-      } else if (k === 3) {
-        rho = 0.26 + (r() - 0.5) * 0.016;
-        angle = arc(s, 9, 0.24, 1.07);
-      } else {
-        rho = 0.855 + s * 0.045;
-        angle = Math.floor(gold2(i) * 24) * (TAU / 24) + (r() - 0.5) * 0.01;
-      }
-    }
-    // Scaled to sit inside the frame with its narration, rather than running to
-    // the frame edge where the first and last arcs are cropped off the figure.
-    const fit = 0.86;
-    return [(Math.cos(angle) * rho * fit) / aspect, Math.sin(angle) * rho * fit];
-  };
-  const positions = anamorphic(figure, count, EMBLEM_DEPTH, { ...ctx, random }, EMBLEM_OFFSET);
+  const positions = new Float32Array(count * 3);
   const weights = new Float32Array(count);
-  for (let i = 0; i < count; i++) weights[i] = ramp(i, part, random());
+  const aspect = Number.isFinite(ctx.aspect) && ctx.aspect > 0.05 ? ctx.aspect : 1;
+  const th = tanHalf(ALIGNMENT_CAMERA.fov);
+  const eye = ALIGNMENT_CAMERA.position;
+  const fit = Math.min(aspect, 1);
+  for (let i = 0; i < count; i++) {
+    const near = i < part.anchors;
+    const depth = RING.depth[0] + (RING.depth[1] - RING.depth[0]) * (near ? gold2(i) : random());
+    const rho = near
+      ? RING.ndc * (1 + (random() - 0.5) * 0.05)
+      : RING.ndc * (0.3 + random() * 1.5);
+    const a = gold(i) * TAU;
+    const r = rho * fit * th * depth;
+    put(positions, i, eye[0] + Math.cos(a) * r, eye[1] + RING.centreNdcY * th * depth + Math.sin(a) * r, eye[2] - depth);
+    weights[i] = near ? 0.18 + random() * 0.22 : 0.02 + random() * 0.04;
+  }
   return finish(count, positions, weights, random);
 };
 
@@ -338,10 +377,6 @@ export const structure: ShapeBuilder = (count) => {
     return [c[0] + Math.sin(b) * Math.cos(a) * d, c[1] + Math.cos(b) * d * 0.7, c[2] + Math.sin(b) * Math.sin(a) * d];
   };
   for (let i = 0; i < count; i++) {
-    // The gate is a frame around the path, drawn with a frame's worth of points.
-    // It used to take about a fifth of the whole cloud and fill its own plane
-    // solid; seen edge-on from the reading camera that is not a boundary, it is
-    // an opaque white rail standing through the middle of the chapter.
     if (i < part.anchors) {
       if (i % 8 < 7) {
         const s = STATIONS[i % 5];
@@ -366,7 +401,6 @@ export const structure: ShapeBuilder = (count) => {
       put(positions, i, x, y, z);
       weights[i] = ramp(i, part, random());
     } else {
-      // Loose material along the run, not a filled pane at the gate.
       const [x, y, z] = path(gold2(i));
       put(positions, i, x + (random() - 0.5) * 0.5, y + (random() - 0.5) * 1.5, z + (random() - 0.5) * 1.1);
       weights[i] = 0.06 + random() * 0.06;
@@ -375,226 +409,77 @@ export const structure: ShapeBuilder = (count) => {
   return finish(count, positions, weights, random);
 };
 
-/* ------------------------------------------------------- dieline and carton */
+/* ------------------------------------------------------------------ carton */
 
-/**
- * The carton, in scene units, published so the paperboard model is built to the
- * same box the points describe.
- *
- * They were two different boxes: the cloud drew a 2.75-unit cuboid and the model
- * folded a 1.05-unit one inside it, which is why the reading stop showed bright
- * construction lines around a small object rather than a piece of packaging.
- */
-export const CARTON = { w: 1.74, h: 1.48, d: 1.2, centre: [-0.66, 0, -0.14] as [number, number, number] };
-
-const CW = CARTON.w, CD = CARTON.d, CH = CARTON.h, CFLAP = 0.62, CTAB = 0.3, CFOOT = 0.34;
-const LIFT = 0.475, THICK = 0.016;
-const originX = -4.69;
-const flatAt = (offset: number, y: number): [number, number] => [originX + offset, y + LIFT];
+const CW = CARTON.w, CD = CARTON.d, CH = CARTON.h;
 
 interface PaperPanel {
   w: number;
   h: number;
-  flat: [number, number];
   normal: Vec3;
-  fold(u: number, v: number): Vec3;
+  /** (u, v) in [-.5, .5]² on the panel, to the closed box's local frame (centred on CARTON.centre). */
+  at(u: number, v: number): Vec3;
 }
 
-/**
- * One panel list, two mappings. The flat layout and the folded carton read the
- * same (panel, u, v) per index, so a fold hinges instead of teleporting.
- * Walls run front, right, back, left in wrap order; flaps hinge on their wall.
- */
+/** The closed cake box, panel by panel: base, four walls, lid, tuck, return, two dust flaps. */
 const PANELS: PaperPanel[] = [
-  { w: CW, h: CH, flat: flatAt(CW / 2, 0), normal: [0, 0, 1], fold: (u, v) => [u * CW, v * CH, CD / 2] },
-  { w: CD, h: CH, flat: flatAt(CW + CD / 2, 0), normal: [1, 0, 0], fold: (u, v) => [CW / 2, v * CH, -u * CD] },
-  { w: CW, h: CH, flat: flatAt(CW + CD + CW / 2, 0), normal: [0, 0, -1], fold: (u, v) => [-u * CW, v * CH, -CD / 2] },
-  { w: CD, h: CH, flat: flatAt(CW * 2 + CD + CD / 2, 0), normal: [-1, 0, 0], fold: (u, v) => [-CW / 2, v * CH, u * CD] },
-  {
-    w: CTAB, h: CH, flat: flatAt(CW * 2 + CD * 2 + CTAB / 2, 0), normal: [0, 0, 1],
-    fold: (u, v) => [-CW / 2 + (u + 0.5) * CTAB, v * CH, CD / 2 - 0.05],
-  },
-  {
-    w: CW, h: CFLAP, flat: flatAt(CW / 2, CH / 2 + CFLAP / 2), normal: [0, 1, 0],
-    fold: (u, v) => [u * CW, CH / 2, CD / 2 - (v + 0.5) * CFLAP],
-  },
-  {
-    w: CD, h: CFLAP, flat: flatAt(CW + CD / 2, CH / 2 + CFLAP / 2), normal: [0, 1, 0],
-    fold: (u, v) => [CW / 2 - (v + 0.5) * CFLAP, CH / 2, -u * CD],
-  },
-  {
-    w: CW, h: CFLAP, flat: flatAt(CW + CD + CW / 2, CH / 2 + CFLAP / 2), normal: [0, 1, 0],
-    fold: (u, v) => [-u * CW, CH / 2, -CD / 2 + (v + 0.5) * CFLAP],
-  },
-  {
-    w: CD, h: CFLAP, flat: flatAt(CW * 2 + CD + CD / 2, CH / 2 + CFLAP / 2), normal: [0, 1, 0],
-    fold: (u, v) => [-CW / 2 + (v + 0.5) * CFLAP, CH / 2, u * CD],
-  },
-  {
-    w: CW, h: CD, flat: flatAt(CW / 2, -CH / 2 - CD / 2), normal: [0, 1, 0],
-    fold: (u, v) => [u * CW, -CH / 2, CD / 2 - (0.5 - v) * CD],
-  },
-  {
-    w: CD, h: CFOOT, flat: flatAt(CW + CD / 2, -CH / 2 - CFOOT / 2), normal: [0, 1, 0],
-    fold: (u, v) => [CW / 2 - (0.5 - v) * CFOOT, -CH / 2, -u * CD],
-  },
-  {
-    w: CW, h: CFOOT, flat: flatAt(CW + CD + CW / 2, -CH / 2 - CFOOT / 2), normal: [0, 1, 0],
-    fold: (u, v) => [-u * CW, -CH / 2, -CD / 2 + (0.5 - v) * CFOOT],
-  },
-  {
-    w: CD, h: CFOOT, flat: flatAt(CW * 2 + CD + CD / 2, -CH / 2 - CFOOT / 2), normal: [0, 1, 0],
-    fold: (u, v) => [-CW / 2 + (0.5 - v) * CFOOT, -CH / 2, u * CD],
-  },
+  { w: CW, h: CD, normal: [0, -1, 0], at: (u, v) => [u * CW, -CH / 2, v * CD] },
+  { w: CW, h: CH, normal: [0, 0, 1], at: (u, v) => [u * CW, v * CH, CD / 2] },
+  { w: CW, h: CH, normal: [0, 0, -1], at: (u, v) => [u * CW, v * CH, -CD / 2] },
+  { w: CD, h: CH, normal: [-1, 0, 0], at: (u, v) => [-CW / 2, v * CH, u * CD] },
+  { w: CD, h: CH, normal: [1, 0, 0], at: (u, v) => [CW / 2, v * CH, u * CD] },
+  { w: CW, h: CD, normal: [0, 1, 0], at: (u, v) => [u * CW, CH / 2, v * CD] },
+  { w: CW, h: CARTON.tuck, normal: [0, 0, 1], at: (u, v) => [u * CW, CH / 2 - (v + 0.5) * CARTON.tuck, CD / 2 + 0.03] },
+  { w: CW, h: CARTON.ret, normal: [0, 0, -1], at: (u, v) => [u * CW, CH / 2 - (v + 0.5) * CARTON.ret, CD / 2 - 0.03] },
+  { w: CD, h: CARTON.dust, normal: [0, 1, 0], at: (u, v) => [-CW / 2 + (v + 0.5) * CARTON.dust, CH / 2 - 0.02, u * CD] },
+  { w: CD, h: CARTON.dust, normal: [0, 1, 0], at: (u, v) => [CW / 2 - (v + 0.5) * CARTON.dust, CH / 2 - 0.02, u * CD] },
 ];
 
-/**
- * Both packaging shapes sample one shared stream, so index i is the same
- * material point on the same panel in the flat layout and in the folded carton.
- * Edge points are doubled either side of the panel normal to suggest board.
- */
-function paperboard(count: number, folded: boolean): { positions: Float32Array; weights: Float32Array } {
+/** Points on the closed carton: creases and rims first, then panel perimeters, then the faces. */
+export const carton: ShapeBuilder = (count) => {
   const random = prng(SEEDS.paper);
   const part = partition(count);
   const positions = new Float32Array(count * 3);
   const weights = new Float32Array(count);
+  const lip = CARTON.t / 2;
   for (let i = 0; i < count; i++) {
-    let panel: PaperPanel, u: number, v: number, lip = 0;
+    let panel: PaperPanel, u: number, v: number;
     if (i < part.anchors) {
-      // Creases and rims of the four walls: the silhouette of the closed carton.
-      const wall = i % 4, lane = Math.floor(i / 4) % 8;
-      panel = PANELS[wall];
-      if (lane < 4) { u = -0.5; v = gold(i) - 0.5; } else if (lane < 6) { u = gold(i) - 0.5; v = 0.5; } else { u = gold(i) - 0.5; v = -0.5; }
-      lip = i % 2 === 0 ? THICK : -THICK;
+      // The silhouette of the closed box: the twelve edges, drawn on the six faces.
+      const face = i % 6, lane = Math.floor(i / 6) % 4;
+      panel = PANELS[face];
+      const s = gold(i) - 0.5;
+      if (lane === 0) { u = -0.5; v = s; } else if (lane === 1) { u = 0.5; v = s; } else if (lane === 2) { u = s; v = -0.5; } else { u = s; v = 0.5; }
     } else if (i < part.anchors + part.edges) {
       panel = PANELS[i % PANELS.length];
       [u, v] = onRect(gold(i), 0.5, 0.5);
-      lip = i % 2 === 0 ? THICK : -THICK;
     } else {
       panel = PANELS[i % PANELS.length];
       u = gold(i) - 0.5;
       v = random() - 0.5;
     }
-    if (folded) {
-      const [x, y, z] = panel.fold(u, v);
-      // Into the model's own frame: same box, same place, so the points sit ON
-      // the board instead of around it.
-      put(
-        positions, i,
-        x + panel.normal[0] * lip + CARTON.centre[0],
-        y + panel.normal[1] * lip + CARTON.centre[1],
-        z + panel.normal[2] * lip + CARTON.centre[2],
-      );
-    } else {
-      put(positions, i, panel.flat[0] + u * panel.w, panel.flat[1] + v * panel.h, lip);
-    }
+    const [x, y, z] = panel.at(u, v);
+    const side = i % 2 === 0 ? lip : -lip;
+    put(
+      positions, i,
+      x + panel.normal[0] * side + CARTON.centre[0],
+      y + panel.normal[1] * side + CARTON.centre[1],
+      z + panel.normal[2] * side + CARTON.centre[2],
+    );
     weights[i] = ramp(i, part, random());
   }
-  return { positions, weights };
-}
-
-/** The flat packaging layout: panels, score lines, flaps and the glue tab, in one plane. */
-export const dieline: ShapeBuilder = (count) => {
-  const { positions, weights } = paperboard(count, false);
-  return finish(count, positions, weights, prng(SEEDS.dieline));
-};
-
-/** The same board folded closed. Index correspondence with `dieline` is exact. */
-export const carton: ShapeBuilder = (count) => {
-  const { positions, weights } = paperboard(count, true);
   return finish(count, positions, weights, prng(SEEDS.carton));
 };
 
-/* ------------------------------------------------------------------ tracks */
-
-const TRACK_Y = [1.05, 0, -1.05];
-const TRACK_Z = [1.35, -0.25, -1.85];
-const TRACK_OFFSET = [-1.15, 0.65, -0.4];
-const TRACK_SPAN = 4.55, CLIP_HALF = 0.17, CLIPS = 8;
-
-/** Three media tracks at three depths, dashed into clips, offset out of sync along X. */
-export const tracks: ShapeBuilder = (count) => {
-  const random = prng(SEEDS.tracks);
-  const part = partition(count);
-  const positions = new Float32Array(count * 3);
-  const weights = new Float32Array(count);
-  const lanes = TRACK_Y.map((_, t) => {
-    const widths: number[] = [];
-    let used = 0;
-    for (let c = 0; c < CLIPS; c++) { const w = 0.55 + random() * 0.85; widths.push(w); used += w; }
-    const gap = 0.26;
-    const scale = (TRACK_SPAN * 2 - gap * (CLIPS - 1)) / used;
-    const clips: [number, number][] = [];
-    let x = -TRACK_SPAN + TRACK_OFFSET[t];
-    for (const w of widths) { clips.push([x, x + w * scale]); x += w * scale + gap; }
-    return clips;
-  });
-  for (let i = 0; i < count; i++) {
-    const t = i % 3, lane = lanes[t], y = TRACK_Y[t], z = TRACK_Z[t];
-    const clip = lane[Math.floor(gold(i) * CLIPS) % CLIPS];
-    const width = clip[1] - clip[0];
-    if (i < part.anchors) {
-      // The clip head is the sync point the three tracks are aligned on.
-      put(positions, i, clip[0], y + (gold2(i) - 0.5) * CLIP_HALF * 2, z + (random() - 0.5) * 0.03);
-      weights[i] = ramp(i, part, random());
-    } else if (i < part.anchors + part.edges) {
-      const [u, v] = onRect(gold2(i), width / 2, CLIP_HALF);
-      put(positions, i, clip[0] + width / 2 + u, y + v, z + (random() - 0.5) * 0.03);
-      weights[i] = ramp(i, part, random());
-    } else if (i % 5 < 4) {
-      put(positions, i, clip[0] + random() * width, y + (random() - 0.5) * CLIP_HALF * 1.7, z + (random() - 0.5) * 0.05);
-      weights[i] = ramp(i, part, random());
-    } else {
-      put(positions, i, (random() * 2 - 1) * TRACK_SPAN + TRACK_OFFSET[t], y, z);
-      weights[i] = 0.07 + random() * 0.06;
-    }
-  }
-  return finish(count, positions, weights, random);
-};
-
-const PORTAL_W = 2.35, PORTAL_H = 1.55;
-
-/** A rectangular frame aperture with a shallow interior implied behind it. */
-export const portal: ShapeBuilder = (count) => {
-  const random = prng(SEEDS.portal);
-  const part = partition(count);
-  const positions = new Float32Array(count * 3);
-  const weights = new Float32Array(count);
-  for (let i = 0; i < count; i++) {
-    if (i < part.anchors) {
-      const [x, y] = onRect(gold(i), PORTAL_W, PORTAL_H);
-      put(positions, i, x, y, (random() - 0.5) * 0.024);
-      weights[i] = ramp(i, part, random());
-    } else if (i < part.anchors + part.edges) {
-      const k = i % 3;
-      const inset = k === 0 ? 0.14 : k === 1 ? 0.07 + random() * 0.06 : -0.06;
-      const [x, y] = onRect(gold(i), PORTAL_W - inset, PORTAL_H - inset);
-      put(positions, i, x, y, (random() - 0.5) * 0.05);
-      weights[i] = ramp(i, part, random());
-    } else {
-      const k = i % 4;
-      const shrink = 1 - (k + 1) * 0.06;
-      const [x, y] = onRect(gold2(i), (PORTAL_W - 0.2) * shrink, (PORTAL_H - 0.2) * shrink);
-      put(positions, i, x, y, -0.45 - k * 0.42 + (random() - 0.5) * 0.06);
-      weights[i] = 0.1 + (3 - k) * 0.05 + random() * 0.06;
-    }
-  }
-  return finish(count, positions, weights, random);
-};
+/* --------------------------------------------------------------- archive */
 
 const NODE_COLUMNS = 4;
 /**
  * The settled collection is sized to the frame it is read in, not to the number
- * of projects. With one row's worth of gap per project the grid grew past the
- * viewport at 38 entries and the chapter read as wallpaper the camera happened
- * to be inside, with cards cut off at the top and bottom edges: a collection you
- * cannot see the edges of has not settled anywhere.
- *
- * Both layouts share one geometry, so it is sized for the narrower of the two.
+ * of projects. Both layouts share one geometry, so it is sized for the narrower.
  */
 const NODE_FIELD_W = 4.6, NODE_FIELD_H = 4.6;
 
-/** Particle index of project `node`. Nodes occupy the front of the anchor band. */
 /** Points each project node is drawn with. One point per project is not a node. */
 export function constellationStride(count: number, nodeCount: number): number {
   const part = partition(count);
@@ -610,10 +495,7 @@ export function constellationNodeIndex(node: number, stride = 1): number {
 /**
  * Project nodes on a card-shaped grid, everything else a decorative star: dimmer,
  * behind the card plane, off the grid. A star must never read as a hidden entry.
- *
- * Each node is drawn as a card OUTLINE rather than a single point: the chapter's
- * job is to show the collection settling into the browser that follows, and a
- * lone particle per project reads as empty space, not as a body of work.
+ * Each node is drawn as a card OUTLINE rather than a single point.
  */
 export const constellation: ShapeBuilder = (count, ctx) => {
   const random = prng(SEEDS.constellation);
@@ -639,7 +521,6 @@ export const constellation: ShapeBuilder = (count, ctx) => {
       const cx = (col - (NODE_COLUMNS - 1) / 2) * colGap;
       const cy = ((rows - 1) / 2 - row) * rowGap;
 
-      // Walk the card's perimeter, so the grid reads as cards, not as a cloud.
       const t = (seat + 0.5) / stride;
       const peri = 2 * (cardW + cardH);
       let d = t * peri, x = 0, y = 0;
@@ -673,15 +554,31 @@ export const constellation: ShapeBuilder = (count, ctx) => {
 /* ------------------------------------------------------------------ export */
 
 export const SHAPES: Record<ShapeId, ShapeBuilder> = {
-  field, aperture, emblem, structure, dieline, carton, tracks, portal, constellation,
+  aperture, emblem, structure, carton, constellation,
 };
 
-const SHAPE_IDS: ShapeId[] = [
-  'field', 'aperture', 'emblem', 'structure', 'dieline', 'carton', 'tracks', 'portal', 'constellation',
-];
+const SHAPE_IDS: ShapeId[] = ['aperture', 'emblem', 'structure', 'carton', 'constellation'];
 
 export function buildShapes(count: number, ctx: ShapeContext): Record<ShapeId, ShapeTarget> {
   const built = {} as Record<ShapeId, ShapeTarget>;
   for (const id of SHAPE_IDS) built[id] = SHAPES[id](count, { ...ctx, random: prng(SEEDS[id]) });
   return built;
+}
+
+/** Deterministic, DOM-free. Returns human-readable failures; empty means pass. */
+export function selfCheck(): string[] {
+  const fail: string[] = [];
+  const th = tanHalf(ALIGNMENT_CAMERA.fov);
+  for (let i = 0; i < SHARDS; i++) {
+    const s = shardRing(i, 1.6);
+    // Every fragment projects to the same ring from the alignment eye.
+    const ndc = Math.hypot(s.position[0], s.position[1] - RING.centreNdcY * th * s.depth) / (th * s.depth);
+    if (Math.abs(ndc - RING.ndc) > 1e-6) fail.push(`shardRing(${i}): projects to ${ndc.toFixed(4)}, want ${RING.ndc}`);
+    if (!(s.depth >= RING.depth[0] && s.depth <= RING.depth[1])) fail.push(`shardRing(${i}): depth ${s.depth} outside the band`);
+  }
+  const seen = new Set(SLOT_OF);
+  if (seen.size !== SHARDS || SLOT_OF.some(v => v < 0 || v >= STRUCTURE.length)) fail.push('SLOT_OF is not a permutation of the structure slots');
+  if (Math.abs(CARTON.centre[1] + CARTON.h / 2 - SEAM.y) > 1e-9) fail.push('the carton top does not sit on the seam');
+  if (Math.abs(CARTON.centre[2] + CARTON.d / 2 - SEAM.z) > 1e-9) fail.push('the carton front does not sit on the seam');
+  return fail;
 }

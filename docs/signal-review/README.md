@@ -111,6 +111,26 @@ The recorded "the opening mass inverts" discrepancy is also resolved: the mass s
 on a different plane from the rim it is the limb of, so the lit arc was drawn inside the
 silhouette. Both now read their radius, centre and plane from one exported constant.
 
+## Round 06 — the object determines the unfolding
+
+The owner's Round 06 brief re-directed the middle of the film around one principle: the
+3D object decides how the page unfolds, and every chapter is the visitor discovering that
+the thing already on screen has become something else. The Sync (Montage Pro) chapter left
+the cinema by the owner's decision; six chapters remain. Evidence, captures in both
+languages and orientations, a real-input recording and the notes are in
+[`round06/`](round06/README.md).
+
+What changed, in one paragraph: the opening mass is a lit, graded body with grazing
+relief and a razor Fresnel rim; that rim fractures into nine metal fragments that gather
+into an anamorphic ring, the chapter line takes physical depth inside it, the camera flies
+through, and the same nine fragments become the workflow's rails, posts and stanchions;
+the camera dives onto the front rail, which turns out to be the return fold of a cake
+carton under a raking warm light; the carton folds up around it, is read, leaves the band
+for the Box Studio capture, then opens at the front and the camera crosses its sill into a
+hall whose far wall is the published Cake Studio frame. One scene graph carries all of it,
+so no chapter boundary cuts. Every chapter now has two compositions, reveal and reading,
+switched by the reading stops.
+
 ## Screenshots
 
 [First viewport](desktop-intro.jpg) · [Star forge](desktop-forge.jpg) ·

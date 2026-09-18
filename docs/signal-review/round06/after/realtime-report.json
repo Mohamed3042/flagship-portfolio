@@ -1,0 +1,224 @@
+{
+  "base_url": "http://127.0.0.1:4618",
+  "lang": "en",
+  "views": {
+    "desktop": {
+      "file": "signal-realtime-desktop.mp4",
+      "bytes": 11370448,
+      "viewport": "1440x900",
+      "wallClockSeconds": 50.93,
+      "presentedFrames": 4244,
+      "observedFps": 83.33,
+      "medianFrameGapMs": 9.05,
+      "p95FrameGapMs": 15.06,
+      "longestFrameGapMs": 1080.68,
+      "gapsOver100ms": 20,
+      "longGaps": [
+        {
+          "atSeconds": 3.16,
+          "gapMs": 131.2,
+          "during": "input"
+        },
+        {
+          "atSeconds": 3.62,
+          "gapMs": 377.9,
+          "during": "input"
+        },
+        {
+          "atSeconds": 6.19,
+          "gapMs": 333.5,
+          "during": "input"
+        },
+        {
+          "atSeconds": 6.52,
+          "gapMs": 112.5,
+          "during": "input"
+        },
+        {
+          "atSeconds": 7.13,
+          "gapMs": 345.8,
+          "during": "input"
+        },
+        {
+          "atSeconds": 13.72,
+          "gapMs": 338.4,
+          "during": "input"
+        },
+        {
+          "atSeconds": 21.19,
+          "gapMs": 268.5,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 21.46,
+          "gapMs": 256.1,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 21.72,
+          "gapMs": 1080.7,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 24.29,
+          "gapMs": 100.4,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 24.47,
+          "gapMs": 183.9,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 24.66,
+          "gapMs": 249.7,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 27.53,
+          "gapMs": 270.4,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 27.8,
+          "gapMs": 526.2,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 30.43,
+          "gapMs": 140.8,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 30.57,
+          "gapMs": 227.9,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 44.94,
+          "gapMs": 263.2,
+          "during": "input"
+        },
+        {
+          "atSeconds": 47.55,
+          "gapMs": 142.1,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 47.7,
+          "gapMs": 528.6,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 50.07,
+          "gapMs": 142.4,
+          "during": "hold"
+        }
+      ],
+      "longGapsDuringHold": 13,
+      "longGapsDuringInput": 7,
+      "pageErrors": [],
+      "method": "CDP Page.startScreencast; real wheel input; encoded at the presented timestamps",
+      "notMeasured": "GPU frame time, input latency, physical touch scrolling, Safari, any real device"
+    },
+    "portrait": {
+      "file": "signal-realtime-portrait.mp4",
+      "bytes": 5003847,
+      "viewport": "390x844",
+      "wallClockSeconds": 48.92,
+      "presentedFrames": 3849,
+      "observedFps": 78.68,
+      "medianFrameGapMs": 9.43,
+      "p95FrameGapMs": 15.03,
+      "longestFrameGapMs": 3545.66,
+      "gapsOver100ms": 16,
+      "longGaps": [
+        {
+          "atSeconds": 3.75,
+          "gapMs": 138.2,
+          "during": "input"
+        },
+        {
+          "atSeconds": 13.57,
+          "gapMs": 273.5,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 13.84,
+          "gapMs": 3545.7,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 19.7,
+          "gapMs": 1507.4,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 22.82,
+          "gapMs": 186.5,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 23.01,
+          "gapMs": 255.1,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 25.71,
+          "gapMs": 100.7,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 25.89,
+          "gapMs": 738.9,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 31.06,
+          "gapMs": 273.9,
+          "during": "input"
+        },
+        {
+          "atSeconds": 31.34,
+          "gapMs": 201.0,
+          "during": "input"
+        },
+        {
+          "atSeconds": 43.03,
+          "gapMs": 254.4,
+          "during": "input"
+        },
+        {
+          "atSeconds": 45.6,
+          "gapMs": 140.7,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 45.74,
+          "gapMs": 249.9,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 45.99,
+          "gapMs": 255.1,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 48.13,
+          "gapMs": 271.5,
+          "during": "hold"
+        },
+        {
+          "atSeconds": 48.4,
+          "gapMs": 248.8,
+          "during": "hold"
+        }
+      ],
+      "longGapsDuringHold": 12,
+      "longGapsDuringInput": 4,
+      "pageErrors": [],
+      "method": "CDP Page.startScreencast; real wheel input; encoded at the presented timestamps",
+      "notMeasured": "GPU frame time, input latency, physical touch scrolling, Safari, any real device"
+    }
+  }
+}

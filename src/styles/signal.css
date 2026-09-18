@@ -400,6 +400,7 @@ body:has(.signal) #space{display:none}
      four sides or the rectangle itself becomes the loudest shape on screen. */
   .signal[data-graphics=webgl] .signal__chapter{grid-template-columns:1fr}
   .signal[data-graphics=webgl] .signal__copy{
+    position:relative;
     width:min(var(--signal-datum),520px);
     padding:clamp(18px,2.6vh,30px) clamp(22px,2.4vw,34px) clamp(18px,2.6vh,30px) 0;
     gap:10px;
@@ -411,11 +412,23 @@ body:has(.signal) #space{display:none}
        edge in Arabic, so RTL copy sat on the thin end of its own scrim and failed
        AA over the bright band behind it. The angle is a variable now, and the
        opaque part reaches further before it starts to fall off. */
-    --sc:calc(.42 + .58 * var(--signal-narration,1));
+    --sc:calc(.36 + .64 * var(--signal-narration,1));
     --sc-angle:100deg;
-    background:linear-gradient(var(--sc-angle),
-      rgb(5 7 10 / calc(.965 * var(--sc))) 0%,rgb(5 7 10 / calc(.94 * var(--sc))) 70%,
-      rgb(5 7 10 / calc(.62 * var(--sc))) 90%,rgb(5 7 10 / 0) 100%);
+    background:none;
+  }
+  /* The field is a pseudo-element, so it can start above the block and fade in
+     over its top edge as well as falling off on the reading-direction side. A
+     scrim with a visible edge makes the rectangle the loudest shape on screen;
+     this one has none. */
+  .signal[data-graphics=webgl] .signal__copy::before{
+    content:'';position:absolute;z-index:-1;pointer-events:none;
+    inset:-56px -72px -64px -96px;
+    /* An ellipse whose radii end inside its own box on the sides the frame can
+       show, so over a bright object it reads as the copy's own shadow and never
+       as a panel: centre at 34% / 55%, radii 66% / 45%. */
+    background:radial-gradient(ellipse 66% 45% at 34% 55%,
+      rgb(5 7 10 / calc(.96 * var(--sc))) 0%,rgb(5 7 10 / calc(.88 * var(--sc))) 58%,
+      rgb(5 7 10 / calc(.36 * var(--sc))) 84%,rgb(5 7 10 / 0) 100%);
   }
   [dir=rtl] .signal[data-graphics=webgl] .signal__copy{--sc-angle:260deg}
   /* The datum is drawn at reading stops, and only there. A rule that never
@@ -441,6 +454,19 @@ body:has(.signal) #space{display:none}
     opacity:calc(.62 + .38 * var(--signal-narration,1));
   }
   .signal[data-graphics=webgl] .signal__blurb{font-size:14px;max-width:none}
+  /* Reveal and reading are two compositions, not one dimmed. While the object is
+     the argument the copy is the line, the name and the navigation, and the
+     scene owns the rest of the frame; at a reading stop the explanation, the
+     disclosure and the actions return. The renderer names the state; nothing
+     here is reserved for a paragraph that is not being read. */
+  .signal[data-graphics=webgl][data-mode=reveal] .signal__copy>:not(.signal__line):not(.signal__project){display:none}
+  .signal[data-graphics=webgl][data-mode=reveal] .signal__copy{gap:6px}
+  /* The one typographic moment. Through the fragment ring the scene sets this
+     chapter's line as metal in physical depth; the page keeps the words for
+     search, a seek and a screen reader, and lends them no ink of its own. The
+     focus ring is the accent, not currentColor, so a seek still lands visibly. */
+  .signal[data-graphics=webgl][data-signal-chapter=forge] .signal__chapter[data-chapter=forge] .signal__line{color:transparent}
+  .signal[data-graphics=webgl][data-signal-chapter=forge] .signal__chapter[data-chapter=forge] .signal__copy{background:none}
   /* The full qualifier is one control away, and the control says so. A reading
      stop should not grow a README -- but the previous rule cut the sentence at
      three lines with nothing on screen indicating that it continued, and the
@@ -559,7 +585,7 @@ body:has(.signal) #space{display:none}
   .signal[data-graphics=webgl] .signal__line{font-size:clamp(24px,6.2vw,32px);max-width:18ch}
   /* The artifact keeps the upper band and crops at full scale. */
   .signal[data-graphics=webgl] .signal__plate[data-handoff=flow]{
-    inset-block-start:clamp(56px,9svh,104px);
+    inset-block-start:clamp(120px,27svh,260px);
     inset-inline:clamp(12px,4vw,24px);
     width:auto;height:min(34svh,300px);object-fit:cover;object-position:top left;
   }

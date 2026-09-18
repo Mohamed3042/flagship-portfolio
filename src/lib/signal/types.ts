@@ -55,15 +55,16 @@ export interface ShapeTarget {
   flow: Float32Array;
 }
 
+/**
+ * The cloud is scale, not subject. Since Round 06 the objects the story is
+ * about are surfaces — a lit mass, metal fragments, paperboard, a room — and the
+ * points only ever describe where a surface is about to be, or dust around it.
+ */
 export type ShapeId =
-  | 'field' // the scattered opening distribution
-  | 'aperture' // the rim-lit horizon the story starts against
-  | 'emblem' // the anamorphic form: flat from camera A, deep from camera B
+  | 'aperture' // a sparkle along the horizon's rim and dust for scale
+  | 'emblem' // dust around the fragment ring, anamorphic like the ring itself
   | 'structure' // the controlled workflow lattice
-  | 'dieline' // the flat packaging layout
-  | 'carton' // the folded carton
-  | 'tracks' // three media tracks at different depths
-  | 'portal' // the World portal aperture
+  | 'carton' // the closed cake carton
   | 'constellation'; // project nodes, laid out to match the archive grid
 
 /** Builds one target set for `count` points. Must be deterministic for a given count. */
@@ -94,6 +95,8 @@ export interface CameraPose {
 export interface CameraPath {
   /** Evaluate the pose at local progress [0,1] along this path. */
   at(t: number): CameraPose;
+  /** The t at which each authored pose is reached, in order. */
+  anchors: number[];
 }
 
 /* ---------------------------------------------------------------- chapters */
@@ -125,13 +128,35 @@ export interface ChapterSpec {
   /** Which artifact stage is active, if any. */
   artifact: ArtifactId | null;
   /**
-   * Local progress the camera holds its first keyframe for while the cloud
+   * Local progress the camera holds its first keyframe for while the scene
    * finishes forming. A chapter whose figure only reads from one exact pose has
-   * to complete the morph BEFORE the camera leaves that pose; without a hold the
-   * form is still in flight when the move that reveals it has already started.
+   * to complete the formation BEFORE the camera leaves that pose; without a hold
+   * the form is still in flight when the move that reveals it has already started.
    * 0 (the default) is the plain behaviour: morph and move share the interval.
    */
   hold?: Progress;
+  /**
+   * Re-times the camera's travel along its path. Arc-length evaluation makes
+   * every unit of path take the same scroll, which is right for a move and wrong
+   * for a moment: a macro approach needs to decelerate into its subject, creep,
+   * and then leave. This is that curve, monotone over [0,1], and it replaces the
+   * default ease so no two easings stack.
+   */
+  pace?: (travel: number, anchors: number[]) => number;
+  /**
+   * How much page composition the camera takes at a given local progress, 0..1.
+   * The authored pose frames the subject centred; the page wants it beside the
+   * copy. Defaults to always framed. An authored move that must land exactly —
+   * a fly-through, a macro, a crossing — declares 0 there, and both sides of a
+   * chapter boundary must agree at the instant they meet.
+   */
+  frame?: (local: number) => number;
+  /**
+   * Opacity of the point cloud over the chapter, 0..1. The cloud describes where
+   * a surface is about to be; once the surface is there it has nothing to say.
+   * Declared per chapter so a boundary never pops.
+   */
+  cloud?: (local: number) => number;
   /** Slug into the existing project data. Never duplicate project copy here. */
   project?: string;
   /** What the chapter's PLATE is — the HTML image the 3D surface hands off to. */
@@ -160,22 +185,54 @@ export interface ChapterSpec {
   camera: Record<Layout, CameraPose[]>;
 }
 
-export type ArtifactId = 'workflow' | 'carton' | 'tracks' | 'portal' | 'arrival';
+/**
+ * Since Round 06 one artifact carries the middle of the film: the fragments,
+ * the workflow, the carton and the World are one scene graph that keeps
+ * becoming the next thing, so no chapter boundary can cut between them.
+ */
+export type ArtifactId = 'object' | 'arrival';
 
 /* ------------------------------------------------------------------- stage */
 
-/** A Three.js artifact stage. `update` is a pure function of local progress. */
+/** What a stage is told about the film beyond its own local progress. */
+export interface StageContext {
+  /** Segment progress, 0..1. */
+  u: Progress;
+  /** The active chapter's id. */
+  chapter: string;
+  layout: Layout;
+}
+
+/** A Three.js artifact stage. `update` is a pure function of (local, ctx). */
 export interface ArtifactStage {
   /** The scene graph node. Added and removed by the orchestrator. */
   object: import('three').Object3D;
   /**
-   * @param local progress within this stage's interval, 0..1
+   * @param local progress within the active chapter, 0..1
    * @param time  seconds of *unpaused* motion, for ambient life only. The scene
    *              must be fully readable when this stops advancing.
+   * @param ctx   which chapter is active, and the global progress
    */
-  update(local: number, time: number): void;
+  update(local: number, time: number, ctx: StageContext): void;
   /** Screen-space rectangle of the surface that hands off to an HTML image, if any. */
   handoff?: () => HandoffRect | null;
+  /**
+   * Chapters, besides the one that names this artifact, during which it stays
+   * drawn and updated: a thing that is about to become the subject is already
+   * on screen, and a thing that has stopped being the subject leaves gradually.
+   */
+  linger?: string[];
+  /**
+   * How much of the World's own warm light has reached the shell, 0..1. The
+   * orchestrator dims the shared cool rim light against it, so the warmth is
+   * environmental rather than painted on one object.
+   */
+  warmth?: () => number;
+  /**
+   * How much paperboard is the subject right now, 0..1. The shared cool key
+   * steps back against it so the board's own warm key is what shapes it.
+   */
+  paper?: () => number;
   dispose(): void;
 }
 
@@ -200,6 +257,9 @@ export interface HandoffRect {
 }
 
 /* ------------------------------------------------------------------- state */
+
+/** Which composition the page is in. Reveal and reading are different compositions, not one dimmed. */
+export type Mode = 'reveal' | 'reading';
 
 /** The complete evaluated scene state for one progress value. */
 export interface SceneState {
@@ -229,6 +289,10 @@ export interface SceneState {
    * longer the largest thing on screen.
    */
   narration: number;
+  /** Point-cloud opacity for this frame, 0..1. */
+  cloud: number;
   /** True while the camera rests for a reading stop. */
   resting: boolean;
+  /** The composition in force: everything restored at a reading stop, the essentials elsewhere. */
+  mode: Mode;
 }

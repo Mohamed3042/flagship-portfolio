@@ -70,10 +70,10 @@ const OBJECT: Record<string, { scene: { en: string; ar: string }; plate: { en: s
              ar: 'صورة فعلية من التطبيق.' },
   },
   world: {
-    scene: { en: 'The room around it is an illustration; it measures nothing.',
-             ar: 'القاعة حولها رسم توضيحي، ولا تقيس شيئًا.' },
-    plate: { en: 'The frame on its far wall is authorized media from an existing World.',
-             ar: 'الإطار على جدارها البعيد وسائط مُصرَّح بها من عالم قائم.' },
+    scene: { en: 'The carton and the room it opens into are an illustration; they measure nothing.',
+             ar: 'العلبة والقاعة التي تنفتح عليها رسم توضيحي، ولا تقيسان شيئًا.' },
+    plate: { en: 'The frame on the far wall is authorized media from an existing World.',
+             ar: 'الإطار على الجدار البعيد وسائط مُصرَّح بها من عالم قائم.' },
   },
   archive: {
     scene: { en: 'Four actual product screenshots, of the four projects below.',
@@ -203,7 +203,7 @@ const [lede, rest] = boundary ? splitLimit(boundary) : ['', null];
     <figure class="signal__plate-frame">
       <img class="signal__plate" data-plate src={plate.src} alt={plate.alt}
            width={plate.width} height={plate.height} decoding="async"
-           loading={index === 0 ? 'eager' : 'lazy'} />
+           loading="eager" fetchpriority={index === 0 ? 'high' : 'low'} />
     </figure>
   )}
 </section>

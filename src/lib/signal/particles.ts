@@ -151,7 +151,9 @@ export function createCloud(
     blending: THREE.NormalBlending,
     uniforms: {
       uMorph: { value: 0 },
-      uSize: { value: tier === 'desktop' ? 2.6 : 3.1 },
+      // Scale, not subject: since the objects became surfaces the points only
+      // glint on them or dust the volume around them.
+      uSize: { value: tier === 'desktop' ? 2.1 : 2.6 },
       uPixelRatio: { value: budget.pixelRatio },
       uBreath: { value: 0 },
       uInk: { value: new THREE.Color('#f0f3f6') },

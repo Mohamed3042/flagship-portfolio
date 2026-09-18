@@ -43,7 +43,7 @@ export function buildPath(poses: CameraPose[]): CameraPath {
   if (poses.length === 0) throw new Error('buildPath: at least one pose');
   if (poses.length === 1) {
     const only = copy(poses[0]);
-    return { at: () => copy(only) };
+    return { anchors: [0], at: () => copy(only) };
   }
 
   const n = poses.length, segments = n + 1;
@@ -77,8 +77,20 @@ export function buildPath(poses: CameraPose[]): CameraPath {
     return (lo + (cell > 1e-12 ? (target - lengths[lo]) / cell : 0)) / SAMPLES;
   }
 
+  // Where each authored pose falls along the arc, as the t that reaches it: a
+  // chapter that must creep through one exact keyframe reads it from here rather
+  // than guessing the spline's arc lengths.
+  // The length table is sampled at sAt(i / SAMPLES), so authored pose j sits at
+  // sample j / (n - 1) * SAMPLES; its arc fraction is the t that reaches it.
+  const anchors: number[] = [];
+  for (let j = 0; j < n; j++) {
+    const k = Math.min(SAMPLES, Math.max(0, Math.round((j / (n - 1)) * SAMPLES)));
+    anchors.push(total > 1e-9 ? lengths[k] / total : j / (n - 1));
+  }
+
   const atP = new THREE.Vector3(), atL = new THREE.Vector3();
   return {
+    anchors,
     at(t: number): CameraPose {
       const s = sAt(arcInverse(unit(t)));
       position.getPoint(s, atP);
