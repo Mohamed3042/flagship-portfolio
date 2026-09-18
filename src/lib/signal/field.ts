@@ -17,7 +17,7 @@
  */
 import * as THREE from 'three';
 import { TUNNEL } from './types';
-import type { TierBudget } from './types';
+import type { Tier, TierBudget } from './types';
 
 /** Fraction of the morph a point may lag by. Anchors land first, detail last. */
 const STAGGER = 0.34;
@@ -181,7 +181,11 @@ const heroVertex = /* glsl */ `
     // The hero stars are the "few stars" of the opening: they are all in before
     // the field behind them is a third of the way up.
     vAlpha = uOpacity * far * near * twinkleOf() * smoothstep(0.0, 0.34, uReveal) * 0.82;
-    gl_PointSize = clamp(uSize * uPixelRatio * (34.0 / max(dist, 3.0)), 6.0, 46.0 * uPixelRatio);
+    // A 6 px sprite cannot carry a diffraction spike: the bars below are a few
+    // percent of the sprite's width, so at that size they are sub-pixel and the
+    // hero star is indistinguishable from any other point. The floor is what
+    // makes the shape exist at all.
+    gl_PointSize = clamp(uSize * uPixelRatio * (42.0 / max(dist, 3.0)), 15.0, 58.0 * uPixelRatio);
   }
 `;
 
@@ -194,14 +198,15 @@ const heroFragment = /* glsl */ `
     vec2 d = (gl_PointCoord - 0.5) * 2.0;
     float r = length(d);
     if (r > 1.0) discard;
-    float core = pow(smoothstep(1.0, 0.0, r), 6.0);
-    // Four points, not a starburst texture: two thin crossed slivers that fall
-    // off along their own length.
+    float core = pow(smoothstep(1.0, 0.0, r), 3.0);
+    // Four points, not a starburst texture: two crossed slivers that fall off
+    // along their own length. Wide enough to survive a pixel grid, faint enough
+    // that it reads as a bright star and not as a lens flare.
     float bar = max(
-      (1.0 - smoothstep(0.0, 0.055, abs(d.x))) * (1.0 - smoothstep(0.1, 1.0, abs(d.y))),
-      (1.0 - smoothstep(0.0, 0.055, abs(d.y))) * (1.0 - smoothstep(0.1, 1.0, abs(d.x)))
+      (1.0 - smoothstep(0.0, 0.10, abs(d.x))) * (1.0 - smoothstep(0.05, 1.0, abs(d.y))),
+      (1.0 - smoothstep(0.0, 0.10, abs(d.y))) * (1.0 - smoothstep(0.05, 1.0, abs(d.x)))
     );
-    float a = (core * 0.9 + bar * 0.32) * vAlpha;
+    float a = (core * 0.85 + bar * 0.5) * vAlpha;
     if (a <= 0.002) discard;
     gl_FragColor = vec4(vTint, min(a, 0.92));
   }
@@ -244,7 +249,7 @@ function seeded(seed: number): () => number {
   };
 }
 
-export function createField(budget: TierBudget): Field {
+export function createField(budget: TierBudget, tier: Tier): Field {
   const count = budget.stars;
   const recruits = Math.min(budget.morph, count);
   const random = seeded(0x0deef1e1);
@@ -291,7 +296,7 @@ export function createField(budget: TierBudget): Field {
     uTime: { value: 0 },
     uTwinkle: { value: 1 },
     uPixelRatio: { value: budget.pixelRatio },
-    uSize: { value: 1.35 },
+    uSize: { value: tier === 'desktop' ? 1.35 : 1.12 },
     uOpacity: { value: 1 },
     uReveal: { value: 0 },
     uCamZ: { value: 0 },
@@ -327,8 +332,11 @@ export function createField(budget: TierBudget): Field {
   for (let i = 0; i < heroCount; i++) {
     heroHome[i * 3] = (heroRandom() * 2 - 1) * 0.82;
     heroHome[i * 3 + 1] = (heroRandom() * 2 - 1) * 0.7;
-    // Spread them along the tunnel so one is always somewhere in the frame.
-    heroHome[i * 3 + 2] = (i / heroCount) * TUNNEL.depth + heroRandom() * 6;
+    // The NEAR half of the tunnel, spread evenly through it. Across the full
+    // depth most of them sit where a star is two pixels wide, and a two pixel
+    // star cannot carry a diffraction spike — so none of them ever announced
+    // themselves in a full-resolution still.
+    heroHome[i * 3 + 2] = (i / heroCount) * TUNNEL.depth * 0.5 + heroRandom() * 5;
     heroSeed[i * 4] = heroRandom();
     heroSeed[i * 4 + 1] = 0.35 + heroRandom() * 0.4;
     heroSeed[i * 4 + 2] = heroRandom();

@@ -63,8 +63,10 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
   const actions: SignalAction[] = [];
 
   if (chapter.act === 'hero') {
+    // One action on the hero. The fast route past the cinema has to exist;
+    // contact has its own chapter and its own band at the foot of the page, so
+    // a second button here is a block of text the contract does not want.
     actions.push({ href: '#work', label: ar ? 'استكشف الأنظمة' : 'See the systems' });
-    actions.push({ href: '#contact', label: ar ? 'تواصل معي' : 'Get in touch' });
     return {
       id: chapter.id,
       act: chapter.act,

@@ -1,0 +1,24 @@
+{
+  "base_url": "http://127.0.0.1:4618",
+  "lang": "en",
+  "views": {
+    "desktop": {
+      "file": "real-input.mp4",
+      "bytes": 5012202,
+      "viewport": "1440x900",
+      "wallClockSeconds": 21.53,
+      "presentedFrames": 2146,
+      "observedFps": 99.7,
+      "medianFrameGapMs": 10.55,
+      "p95FrameGapMs": 13.46,
+      "longestFrameGapMs": 63.79,
+      "gapsOver100ms": 0,
+      "longGaps": [],
+      "longGapsDuringHold": 0,
+      "longGapsDuringInput": 0,
+      "pageErrors": [],
+      "method": "CDP Page.startScreencast; real wheel input; encoded at the presented timestamps",
+      "notMeasured": "GPU frame time, input latency, physical touch scrolling, Safari, any real device"
+    }
+  }
+}

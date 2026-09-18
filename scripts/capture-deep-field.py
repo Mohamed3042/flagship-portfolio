@@ -123,7 +123,11 @@ def sheet(cells, columns, title, cell_width):
     height = head + pad + rows * (ch + label + gap)
     canvas = Image.new('RGB', (width, height), (8, 9, 12))
     draw = ImageDraw.Draw(canvas)
-    draw.text((pad, 14), title, font=font(19), fill=(230, 236, 244))
+    # A title that runs off the sheet is a title nobody can read the end of.
+    face = font(19)
+    while draw.textlength(title, font=face) > width - pad * 2 and len(title) > 24:
+        title = title[:-2] + '…'
+    draw.text((pad, 14), title, font=face, fill=(230, 236, 244))
     size = 15 if cw >= 400 else 12
     face = font(size)
     for i, (shot, text) in enumerate(cells):
@@ -228,11 +232,11 @@ def strip(pw):
 
 with sync_playwright() as pw:
     capture(pw, 'contact-desktop-en', 'en', 1440, 900, POSES, 4, 470,
-            'DEEP FIELD — desktop 1440x900, EN. Progress, chapter, and the p95 frame interval at that pose (55 fps is 18.2 ms).')
+            'DEEP FIELD — desktop 1440x900, EN. p95 frame interval at each pose; 55 fps is 18.2 ms.')
     capture(pw, 'contact-phone-en', 'en', 390, 844, POSES, 4, 235,
-            'DEEP FIELD — phone emulation 390x844, EN. Progress, chapter, p95 frame interval (30 fps is 33.3 ms). Desktop GPU, not a phone.')
+            'DEEP FIELD — phone emulation 390x844, EN. p95 frame interval; 30 fps is 33.3 ms. Desktop GPU, not a phone.')
     capture(pw, 'contact-phone-ar', 'ar', 390, 844, POSES, 4, 235,
-            'DEEP FIELD — phone emulation 390x844, AR (RTL). Progress, chapter, p95 frame interval. Desktop GPU, not a phone.')
+            'DEEP FIELD — phone emulation 390x844, AR (RTL). p95 frame interval. Desktop GPU, not a phone.')
     strip(pw)
 
 (OUT / 'captures.json').write_text(json.dumps(report, indent=2), encoding='utf-8')

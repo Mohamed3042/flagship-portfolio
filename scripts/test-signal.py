@@ -207,9 +207,13 @@ with sync_playwright() as p:
                   (state0['state'] or {}).get('stars'))
             check(f'{name} the hero constellation was built', state0['heroFigure'] == 'true',
                   state0['heroFigure'])
-            budget = 80000 if w >= 820 else 25000
-            check(f'{name} tier budget of stars', (state0['state'] or {}).get('stars') == budget,
-                  f"{(state0['state'] or {}).get('stars')} vs {budget}")
+            # The tier's count is a CAP, not a constant: the governor is allowed
+            # to come down off it on a slow machine, and asserting equality here
+            # would turn "the adaptive path worked" into a red suite.
+            budget, floor = (80000, 26000) if w >= 820 else (25000, 11000)
+            got = (state0['state'] or {}).get('stars', 0)
+            check(f'{name} star count within its tier', floor <= got <= budget,
+                  f'{got} outside [{floor}, {budget}]')
 
         # --- determinism: forward, then reverse, then a direct jump ----------
         forward = [scroll_to(page, u) for u in SAMPLES]

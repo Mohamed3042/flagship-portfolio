@@ -49,13 +49,22 @@
 .signal__line:focus{outline:none}
 .signal__line:focus-visible{outline:2px solid var(--signal-accent);outline-offset:6px}
 .signal ::selection{background:var(--signal-accent);color:var(--signal-bg)}
-.signal{scrollbar-color:color-mix(in srgb,var(--signal-ink) 26%,transparent) transparent;scrollbar-width:thin}
+/* The scrolling box is the ROOT element, not the stage. Declared on .signal
+   this rule can never apply, and an unstyled light-grey scrollbar runs down the
+   right edge of a black cinema for the whole runway. */
+html:has(.signal){scrollbar-color:color-mix(in srgb,#F0F3F6 26%,transparent) transparent;scrollbar-width:thin}
 
 /* ============================================================== typography */
 /* One family per language, light weight, wide tracking, small sizes. Type is
    always HTML over the field; nothing readable is ever drawn into the canvas. */
+/* `inherit`, deliberately, and not the site's --font-label: that token resolves
+   to Space Grotesk Variable, which is a SECOND family — against "one family" —
+   and it is the late webfont swap that was moving the seek group after first
+   paint. The stage takes the page's own face: Inter in English, Cairo in
+   Arabic, one family per language, which is the only way a bilingual page can
+   honour that rule. */
 .signal__kicker{
-  margin:0;font-family:var(--font-label,inherit);
+  margin:0;font-family:inherit;
   font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
   color:var(--signal-ink-2);
 }
@@ -89,7 +98,7 @@
    the moment the visitor starts. */
 .signal__hint{
   display:none;margin:0;align-items:center;gap:10px;
-  font-family:var(--font-label,inherit);
+  font-family:inherit;
   font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;
   color:var(--signal-ink-2);
 }
@@ -260,24 +269,32 @@ body:has(.signal) #space{display:none}
     inset-inline-end:calc(max(var(--signal-gutter),(100% - var(--signal-measure)) / 2)
       + env(safe-area-inset-right,0px));
   }
+  /* Labels, not buttons. Three bordered pills were the only rounded rectangles
+     on the page and they sat over the field on every beat; a boxed web control
+     in a starfield is the shape this world exists to avoid. The 44px hit box
+     stays, and the border comes back the moment a pointer or a keyboard asks
+     for it. */
   .signal[data-graphics=webgl] .signal__seek button,
   .signal[data-graphics=webgl] .signal__seek a{
     display:inline-flex;align-items:center;gap:6px;
-    min-height:44px;padding:10px 14px;
-    border:1px solid var(--signal-line);border-radius:10px;
-    background:color-mix(in srgb,var(--signal-bg) 78%,transparent);
-    color:var(--signal-ink);
-    font-family:var(--font-label,inherit);font-size:13px;font-weight:500;letter-spacing:.04em;
-    text-decoration:none;cursor:pointer;
+    min-height:44px;padding:10px 12px;
+    border:1px solid transparent;border-radius:8px;background:none;
+    color:var(--signal-ink-2);
+    font-family:inherit;font-size:12px;font-weight:500;letter-spacing:.16em;
+    text-transform:uppercase;text-decoration:none;cursor:pointer;
   }
   .signal[data-graphics=webgl] .signal__seek button:hover:not(:disabled),
   .signal[data-graphics=webgl] .signal__seek a:hover{
-    background:var(--signal-depth);border-color:color-mix(in srgb,var(--signal-ink) 26%,transparent);
+    color:var(--signal-ink);border-color:color-mix(in srgb,var(--signal-ink) 20%,transparent);
   }
   .signal[data-graphics=webgl] .signal__seek button:disabled{opacity:.42;cursor:default}
   .signal[data-graphics=webgl] .signal__seek .signal__seek-out{
-    margin-inline-start:6px;border-color:color-mix(in srgb,var(--signal-accent) 42%,transparent);
+    margin-inline-start:4px;color:var(--signal-accent);
   }
+  /* A chapter is a title and at most one line. The tracked eyebrow is a fourth
+     block, and an eyebrow above a heading is a ban on this route — it stays in
+     the still document, where it is the only thing separating the chapters. */
+  .signal[data-graphics=webgl] .signal__kicker{display:none}
   [dir=rtl] .signal__seek svg{transform:scaleX(-1)}
 
   /* Portrait: the copy owns the bottom, the figure the block above it. */
@@ -387,6 +404,21 @@ body:has(.signal[data-over=cinema]) .nav .pill{
   background:color-mix(in srgb,#F0F3F6 6%,transparent);
 }
 body:has(.signal[data-over=cinema]) .nav :focus-visible{outline:2px solid #8AB4FF;outline-offset:3px}
+/* Two things the shared header does that this route cannot afford.
+
+   The wordmark spells the name in the heaviest type on screen, directly above
+   the hero, whose entire payload is that name assembling out of the dark. While
+   the hero is the live chapter the brand keeps its dot and gives up its ink; it
+   comes back the moment the visitor scrolls on, and it is still a real link and
+   still in the accessibility tree the whole time.
+
+   The theme control offers six themes to a stage that is black in all six. It
+   governs the archive below, so it is hidden only while the header is over the
+   cinema, not removed. */
+body:has(.signal[data-graphics=webgl][data-signal-chapter=hero][data-over=cinema]) .nav__brand{
+  color:transparent;transition:color 240ms ease;
+}
+body:has(.signal[data-over=cinema]) .nav .theme-menu{display:none}
 /* An open menu is a surface, not a tint: it needs its own ground or it reads
    through onto the film behind it. */
 body:has(.signal[data-over=cinema]) .nav [open] > *:not(summary),

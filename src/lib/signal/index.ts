@@ -275,7 +275,7 @@ export function initSignal(): void {
   const FOV: Record<Layout, number> = { landscape: 44, portrait: 62 };
   const camera = new THREE.PerspectiveCamera(FOV[layout], viewportWidth / viewportHeight, 0.4, TUNNEL.depth + 24);
 
-  const field: Field = createField(budget);
+  const field: Field = createField(budget, tier);
   scene.add(field.object);
 
   // The eye never leaves the origin. The dolly is expressed in the field — a
@@ -303,7 +303,9 @@ export function initSignal(): void {
     if (chapter.act === 'hero') {
       return {
         distance,
-        width: width * (layout === 'portrait' ? 0.88 : 0.72),
+        // Portrait keeps a gutter: at 0.88 a long name ran to within ten pixels
+        // of the screen edge, which reads as a crop rather than a composition.
+        width: width * (layout === 'portrait' ? 0.8 : 0.72),
         height: height * (layout === 'portrait' ? 0.2 : 0.26),
         offsetY: height * (layout === 'portrait' ? 0.12 : 0.1),
         // Tiny, and it has to be: a figure this wide SHEARS in perspective, and
@@ -341,12 +343,22 @@ export function initSignal(): void {
    * the look constant instead.
    */
   const SEAT_DENSITY = 18;
-  function pointsFor(chapter: ChapterSpec): number {
+  /** Screen pixels per world unit at a seat's distance. */
+  function pixelsPerUnit(distance: number): number {
+    const frameHeight = 2 * distance * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+    return viewportHeight / Math.max(1e-3, frameHeight);
+  }
+  function pointsFor(chapter: ChapterSpec, aspect?: number, density = SEAT_DENSITY): number {
     const seat = seatFor(chapter);
-    const frameHeight = 2 * seat.distance * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
-    const perUnit = viewportHeight / Math.max(1e-3, frameHeight);
-    const area = seat.width * perUnit * seat.height * perUnit;
-    return Math.round(THREE.MathUtils.clamp(area / SEAT_DENSITY, 2500, field.recruits));
+    const perUnit = pixelsPerUnit(seat.distance);
+    // With a known aspect, measure the box the figure will ACTUALLY be fitted
+    // into rather than the box it was offered: a name is a wide, shallow figure
+    // inside a tall seat, and using the seat's own area over-counts it tenfold.
+    const scale = aspect ? Math.min(seat.width / aspect, seat.height) : 0;
+    const width = aspect ? scale * aspect : seat.width;
+    const height = aspect ? scale : seat.height;
+    const area = width * perUnit * height * perUnit;
+    return Math.round(THREE.MathUtils.clamp(area / density, 600, field.recruits));
   }
 
   /** Re-seat every figure for the current viewport. A multiply, not a re-read. */
@@ -374,13 +386,31 @@ export function initSignal(): void {
       if (disposed || !chapter.target) continue;
       let figure: Figure | null = null;
       if (chapter.target.kind === 'text') {
-        // A name is a constellation, not a filled letterform. Under half the
-        // budget: the rest of the recruits stay in the field, and the glyphs
-        // read as points with sky between them.
-        figure = textFigure(heroText, heroFont, Math.round(field.recruits * 0.42), rtl);
+        // A name is a constellation, not a filled letterform. Sampled twice: the
+        // first pass is only there to learn the glyphs' aspect, which is what
+        // decides how many stars this figure should have at THIS viewport. A
+        // fixed share of the budget drew a readable name on a desktop and a
+        // solid blue smear on a phone, where the same points land in a tenth of
+        // the area. Glyph ink is a fraction of its own box, so it takes a
+        // denser target than an image does.
+        // Glyph ink is a fraction of its own box, so text takes a denser target
+        // than an image — but not on a phone, where the name is a third of the
+        // width and points land closer together than a stem is wide.
+        const probe = textFigure(heroText, heroFont, 1, rtl);
+        if (probe) {
+          const density = layout === 'portrait' ? 9 : 5;
+          figure = textFigure(heroText, heroFont, pointsFor(chapter, probe.aspect, density), rtl);
+        }
       } else {
         const img = await loadImage(`${base}/img/sky/${chapter.target.src}.webp`);
-        if (img) figure = imageFigure(img, pointsFor(chapter));
+        // 40 px per point, not 18: a constellation is a formation you can see
+        // through. At 18 the same figure is a filled slab and the brightest
+        // object on a page whose whole direction is restraint. Portrait needs a
+        // denser target than that, because the same wireframe is a third of the
+        // width there and at 40 it thins out into scattered dust — and the
+        // owner reviews this on his phone.
+        const density = layout === 'portrait' ? 24 : 40;
+        if (img) figure = imageFigure(img, pointsFor(chapter, img.naturalWidth / img.naturalHeight, density));
       }
       if (!figure || disposed) continue;
       figures.set(chapter.id, figure);
@@ -427,21 +457,29 @@ export function initSignal(): void {
   let drawn = budget.stars;
   let lastGovern = 0;
   const FLOOR = STAR_FLOOR[tier];
-  const TARGET_FPS = layout === 'portrait' ? 30 : 55;
-  let measuredFps = 0;
+  /**
+   * The frame budget, in milliseconds: 55 fps on a desktop, 30 in portrait.
+   *
+   * The governor reads the INTERVAL between frames, not a frame rate. On a real
+   * device that loop is locked to the display and the two are the same thing;
+   * in a headless harness it is not, which is why the budget is stated in
+   * milliseconds everywhere and no rate is claimed from it.
+   */
+  const BUDGET_MS = layout === 'portrait' ? 1000 / 30 : 1000 / 55;
+  let frameMs = 0;
 
   function govern(now: number, dt: number) {
     if (dt <= 0) return;
-    samples.push(1 / dt);
+    samples.push(dt * 1000);
     if (samples.length > 90) samples.shift();
     if (samples.length < 45 || now - lastGovern < 1200) return;
     lastGovern = now;
     const sorted = [...samples].sort((a, b) => a - b);
-    measuredFps = sorted[Math.floor(sorted.length * 0.2)]; // the 20th percentile, not the mean
-    root.dataset.fps = measuredFps.toFixed(0);
-    if (measuredFps < TARGET_FPS * 0.92 && drawn > FLOOR) {
+    frameMs = sorted[Math.floor(sorted.length * 0.8)]; // the 80th percentile, not the mean
+    root.dataset.frameMs = frameMs.toFixed(1);
+    if (frameMs > BUDGET_MS * 1.08 && drawn > FLOOR) {
       drawn = Math.max(FLOOR, Math.round(drawn * 0.78));
-    } else if (measuredFps > TARGET_FPS * 1.25 && drawn < budget.stars) {
+    } else if (frameMs < BUDGET_MS * 0.8 && drawn < budget.stars) {
       drawn = Math.min(budget.stars, Math.round(drawn * 1.12));
     } else {
       return;
@@ -645,12 +683,12 @@ export function initSignal(): void {
         figures: figures.size,
         tier,
         layout,
-        fps: Number(measuredFps.toFixed(1)),
+        frameIntervalMs: Number(frameMs.toFixed(2)),
         reveal: Number(reveal.toFixed(3)),
       };
     },
-    fps() {
-      return measuredFps;
+    frameIntervalMs() {
+      return frameMs;
     },
     /**
      * The cost of a frame, in milliseconds: draw the CURRENT scene `frames`

@@ -91,7 +91,7 @@ function inkPixels(data: ImageData, floor: number, seed: number): Lit[] {
  * A small share of interior fill is kept as well, weighted by how far a pixel
  * is from the image's mean, so a solid block still reads as a block.
  */
-function edgePixels(data: ImageData, fill: number, seed: number): Lit[] {
+function edgePixels(data: ImageData, fill: number, cut: number, seed: number): Lit[] {
   const { width, height, data: px } = data;
   const gray = new Float32Array(width * height);
   let mean = 0;
@@ -123,16 +123,26 @@ function edgePixels(data: ImageData, fill: number, seed: number): Lit[] {
 
   const random = seeded(seed);
   const out: Lit[] = [];
+  // A rectangular take has a rectangular EDGE, and a straight cut across the top
+  // and left of a constellation is the one line in this world that says a
+  // machine put it there. The outer twelfth of the sample is faded out, so the
+  // figure ends by thinning rather than by stopping.
+  const feather = (u: number) => {
+    const d = Math.min(u, 1 - u) / 0.12;
+    return d >= 1 ? 1 : d * d * (3 - 2 * d);
+  };
   for (let y = 0; y < height; y++) {
+    const fy = feather((y + 0.5) / height);
     for (let x = 0; x < width; x++) {
       const i = y * width + x;
+      const soft = fy * feather((x + 0.5) / width);
       const edge = Math.min(1, mag[i] / norm);
-      if (edge > 0.12 && random() < Math.pow(edge, 0.85)) {
+      if (edge > cut && random() < Math.pow(edge, 0.85) * soft) {
         out.push({ x: (x + 0.5) / width, y: (y + 0.5) / height });
         continue;
       }
       // The body of the image, thinly: enough to say there is a surface there.
-      if (random() < fill * Math.min(1, Math.abs(gray[i] - mean) * 2.2 + 0.18)) {
+      if (fill > 0 && random() < fill * soft * Math.min(1, Math.abs(gray[i] - mean) * 2.2 + 0.18)) {
         out.push({ x: (x + 0.5) / width, y: (y + 0.5) / height });
       }
     }
@@ -227,7 +237,10 @@ export function textFigure(text: string, font: string, count: number, rtl: boole
  */
 export function imageFigure(image: HTMLImageElement, count: number, seed = 0x1ce): Figure | null {
   if (!image.complete || !image.naturalWidth) return null;
-  const long = 300;
+  // Sampled at 600 rather than 300: at the lower resolution a stroke and the
+  // gap beside it fall in the same cell, so the take thickens into a slab
+  // instead of following a line.
+  const long = 600;
   const scale = Math.min(1, long / Math.max(image.naturalWidth, image.naturalHeight));
   const made = surface(image.naturalWidth * scale, image.naturalHeight * scale);
   if (!made) return null;
@@ -244,7 +257,12 @@ export function imageFigure(image: HTMLImageElement, count: number, seed = 0x1ce
     // A cross-origin image taints the canvas. Same-origin content only.
     return null;
   }
-  const lit = edgePixels(data, 0.05, seed);
+  // No interior fill and a high edge cut: what is wanted is the wireframe of the
+  // screen — its type, rules and panel boundaries — not a lit rectangle. The
+  // first version took brightness, which returns a filled block for any light
+  // interface; the second took every edge, which returns the same block made of
+  // stars and reads as the brightest object on the page.
+  const lit = edgePixels(data, 0, 0.35, seed);
   return figureFrom(lit, count, canvas.width / canvas.height, seed);
 }
 
