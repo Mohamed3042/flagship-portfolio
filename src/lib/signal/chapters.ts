@@ -10,7 +10,7 @@
  * looking toward -Z. Project copy is never repeated here — a chapter names a
  * slug and the render layer reads that project's own entry.
  */
-import type { CameraPath, CameraPose, ChapterSpec, EvidenceKind, Layout, Progress, SceneState, ShapeId } from './types';
+import type { CameraPath, CameraPose, ChapterSpec, EvidenceKind, Layout, Progress, ReadingStop, SceneState, ShapeId } from './types';
 import { buildPath } from './camera';
 import { ALIGNMENT_CAMERA } from './shapes';
 import type { Localized } from '../../data/projects';
@@ -136,7 +136,10 @@ const matterLandscape: CameraPose[] = [
 const matterPortrait: CameraPose[] = [
   last(systemPortrait),
   pose([-.4, 2.6, 6.2], [0, .2, -.4], 52),
-  pose([-.8, 1.9, 5.6], [-.2, .2, -.5], 54),
+  // Centred on the carton itself and far enough back to hold all of it: the
+  // object's own stop has no screenshot in it, so nothing else is competing for
+  // the band and there is no reason to crop the thing being recognised.
+  pose([-.66, 1.95, 6.6], [-.66, .1, -.4], 52),
 ];
 
 const signalLandscape: CameraPose[] = [
@@ -150,14 +153,23 @@ const signalPortrait: CameraPose[] = [
   pose([-1.2, .35, 7.2], [-.25, .1, -1.6], 50),
 ];
 
+/**
+ * The approach carries a bounded lateral segment: the camera crosses from one
+ * side of the threshold's axis to the other before settling on it. It is the
+ * depth test, authored into the deterministic path rather than handed to a
+ * pointer — so reverse scroll reconstructs it exactly, and a visitor who cannot
+ * drag still sees the near pilasters sweep across the far wall.
+ */
 const worldLandscape: CameraPose[] = [
   last(signalLandscape),
-  pose([-1.8, .4, 4.2], [-.2, .2, -2], 40),
+  pose([-2.5, .5, 4.6], [-.2, .2, -2], 40),
+  pose([1.15, .34, 3.3], [.05, .25, -2.7], 44), // the far side of the axis
   pose([-.2, .3, 2.2], [0, .25, -3.2], 46), // resting just inside the aperture
 ];
 const worldPortrait: CameraPose[] = [
   last(signalPortrait),
-  pose([-.5, .5, 5.2], [0, .3, -2], 56),
+  pose([-1.15, .5, 5.2], [0, .3, -2], 56),
+  pose([.62, .38, 4.2], [.05, .32, -2.9], 58), // the same bounded swing, half the reach
   pose([0, .35, 3.4], [0, .35, -3.4], 60), // further back: the aperture keeps its edges
 ];
 
@@ -204,6 +216,7 @@ const forge: ChapterSpec = {
   artifact: null,
   hold: FORGE_HOLD,
   evidence: 'illustration',
+  recede: [0, .88],
   reading: null,
   camera: { landscape: forgeLandscape, portrait: forgePortrait },
 };
@@ -215,11 +228,20 @@ const system: ChapterSpec = {
   artifact: 'workflow',
   project: 'enterprise-ai-automation-templates',
   evidence: 'screenshot',
+  // The lattice and the mechanism are drawn; only the screen is a capture.
+  sceneEvidence: 'illustration',
   // The first substantial proof stop, and the longest: half the chapter.
   reading: { from: .31, to: .4 },
   camera: { landscape: systemLandscape, portrait: systemPortrait },
 };
 
+/**
+ * Two stops, because there are two things to look at and they must not be the
+ * same picture. The first rests on the finished carton with no screenshot on
+ * screen at all; the object then clears the frame, and the second rests on the
+ * readable capture of the tool that produced it. A translucent screenshot lying
+ * over a translucent box is neither claim.
+ */
 const matter: ChapterSpec = {
   id: 'matter',
   from: .4, to: .56,
@@ -227,7 +249,10 @@ const matter: ChapterSpec = {
   artifact: 'carton',
   project: 'medmac-box-studio',
   evidence: 'screenshot',
-  reading: { from: .49, to: .56 },
+  // The box is geometry. Only the window beside it is a capture.
+  sceneEvidence: 'illustration',
+  recede: [0, .56],
+  reading: [{ from: .464, to: .483 }, { from: .512, to: .56 }],
   camera: { landscape: matterLandscape, portrait: matterPortrait },
 };
 
@@ -251,6 +276,11 @@ const world: ChapterSpec = {
   artifact: 'portal',
   project: 'cake-studio',
   evidence: 'media',
+  // The room is built geometry; the frame on its far wall is the authorized media.
+  sceneEvidence: 'illustration',
+  // The interior owns the approach and the crossing; the full reading returns
+  // for the stop, where the far wall becomes the readable frame.
+  recede: [0, .42],
   reading: { from: .755, to: .82 },
   // local 0.536: the crossing is over and the room is settled well before it.
   camera: { landscape: worldLandscape, portrait: worldPortrait },
@@ -299,10 +329,12 @@ export function evaluate(u: Progress, layout: Layout): SceneState {
   const chapter = chapterAt(p);
   const span = chapter.to - chapter.from;
   const local = span > 0 ? clamp01((p - chapter.from) / span) : 0;
-  const stop = chapter.reading;
-  // Local progress at which all motion must be over: the reading stop, or the
-  // end of the chapter when there is none.
-  const settle = stop ? clamp01((stop.from - chapter.from) / span) : 1;
+  const stops = readingStops(chapter);
+  const first = stops.length > 0 ? stops[0] : null;
+  // Local progress at which the camera's travel is over: the FIRST reading stop,
+  // or the end of the chapter when there is none. Later stops rest the same
+  // camera while the scene rearranges in front of it.
+  const settle = first ? clamp01((first.from - chapter.from) / span) : 1;
   const hold = clamp01(chapter.hold ?? 0);
   // With a hold the morph owns the held interval and the camera owns what is
   // left; without one they share the run up to the settle, as before.
@@ -327,8 +359,15 @@ export function evaluate(u: Progress, layout: Layout): SceneState {
     camera: pathFor(chapter, layout).at(smoothstep(travel)),
     frame: framing(chapter, local, hold),
     narration: narration(chapter, local, hold),
-    resting: stop !== null && p >= stop.from && p <= stop.to,
+    resting: stops.some((s) => p >= s.from && p <= s.to),
   };
+}
+
+/** One stop, several stops or none, as a list. */
+export function readingStops(chapter: ChapterSpec): ReadingStop[] {
+  const reading = chapter.reading;
+  if (!reading) return [];
+  return Array.isArray(reading) ? reading : [reading];
 }
 
 /**
@@ -351,9 +390,12 @@ function framing(chapter: ChapterSpec, local: number, hold: number): number {
  * everywhere a visitor is meant to read.
  */
 function narration(chapter: ChapterSpec, local: number, hold: number): number {
-  if (hold <= 0) return 1;
-  const away = smoothstep(clamp01(local / (hold * .55)));
-  const back = smoothstep(clamp01((local - .86) / .14));
+  const window = chapter.recede ?? (hold > 0 ? ([0, hold] as [Progress, Progress]) : null);
+  if (!window) return 1;
+  const [from, to] = window;
+  const enter = Math.max(1e-4, (to - from) * .42);
+  const away = smoothstep(clamp01((local - from) / enter));
+  const back = smoothstep(clamp01((local - to) / .12));
   return 1 - away * (1 - back);
 }
 

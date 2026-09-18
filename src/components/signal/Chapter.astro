@@ -13,6 +13,8 @@ export interface SignalChapterCopy {
   /** The narration. It is the heading; nothing sits above it. */
   line: string;
   evidence: EvidenceKind;
+  /** What the chapter's own 3D artifact is, when it is not the same claim as the plate. */
+  sceneEvidence?: EvidenceKind | null;
   /** Project facts, resolved from src/data by the route. Never restated here. */
   title?: string | null;
   status?: string | null;
@@ -28,7 +30,7 @@ export interface SignalChapterCopy {
 interface Props { lang: Lang; chapter: SignalChapterCopy; index: number }
 const { lang, chapter, index } = Astro.props;
 const {
-  id, line, evidence, title, status, blurb, stat, statNote,
+  id, line, evidence, sceneEvidence, title, status, blurb, stat, statNote,
   boundaryKicker, boundary, plate, actions = [],
 } = chapter;
 
@@ -44,7 +46,42 @@ const EVIDENCE: Record<Exclude<EvidenceKind, 'none'>, { en: string; ar: string }
   synthetic: { en: 'Authored replay over synthetic data.', ar: 'إعادة تشغيل مُعدّة على بيانات اصطناعية.' },
   media: { en: 'Authorized media from an existing World.', ar: 'وسائط مُصرَّح بها من عالم قائم.' },
 };
-const label = evidence === 'none' ? null : pick(lang, EVIDENCE[evidence]);
+/**
+ * When a chapter draws an object AND shows a capture, one caption cannot describe
+ * both. "Actual product screenshot" is true of the window and false of the carton
+ * standing next to it, and a scene that contains one real screenshot does not
+ * become product evidence. So each claim names what it is about.
+ */
+const OBJECT: Record<string, { scene: { en: string; ar: string }; plate: { en: string; ar: string } }> = {
+  system: {
+    scene: { en: 'The mechanism on the stage is an illustration; it measures nothing.',
+             ar: 'الآلية المعروضة رسم توضيحي، ولا تقيس شيئًا.' },
+    plate: { en: 'The screen in it is an actual product screenshot.',
+             ar: 'الشاشة التي فيها صورة فعلية من المنتج.' },
+  },
+  matter: {
+    scene: { en: 'The carton is an illustration; it measures nothing.',
+             ar: 'العلبة رسم توضيحي، ولا تقيس شيئًا.' },
+    plate: { en: 'The window beside it is an actual product screenshot.',
+             ar: 'النافذة بجانبها صورة فعلية من المنتج.' },
+  },
+  world: {
+    scene: { en: 'The room around it is an illustration; it measures nothing.',
+             ar: 'القاعة حولها رسم توضيحي، ولا تقيس شيئًا.' },
+    plate: { en: 'The frame on its far wall is authorized media from an existing World.',
+             ar: 'الإطار على جدارها البعيد وسائط مُصرَّح بها من عالم قائم.' },
+  },
+};
+
+const scoped = sceneEvidence && sceneEvidence !== 'none' ? OBJECT[id] ?? null : null;
+const labels: { kind: EvidenceKind; text: string }[] = scoped
+  ? [
+      { kind: sceneEvidence as EvidenceKind, text: pick(lang, scoped.scene) },
+      { kind: evidence, text: pick(lang, scoped.plate) },
+    ]
+  : evidence === 'none'
+    ? []
+    : [{ kind: evidence, text: pick(lang, EVIDENCE[evidence]) }];
 
 // A chapter that names a project but carries no approved capture shows that gap
 // rather than filling it with something that only looks like proof.
@@ -102,7 +139,9 @@ const [lede, rest] = boundary ? splitLimit(boundary) : ['', null];
       </div>
     )}
 
-    {label && <p class="signal__evidence" data-evidence={evidence}>{label}</p>}
+    {labels.map(entry => (
+      <p class="signal__evidence" data-evidence={entry.kind}>{entry.text}</p>
+    ))}
     {gap && (
       <p class="signal__gap">
         {ar ? 'لا توجد صورة معتمدة لهذا المشروع بعد. الآلية أعلاه رسم توضيحي.'

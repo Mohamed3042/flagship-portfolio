@@ -1,0 +1,182 @@
+"""A real-time recording of the Signal landing route, driven by real scroll input.
+
+This is the counterpart to `capture-signal-round02.py`, which frame-steps a virtual
+clock and therefore proves composition and pacing but says nothing about how the
+page behaves while it is actually running.
+
+Here nothing is stepped. The page is scrolled with mouse-wheel events, the browser
+renders at whatever rate it manages, and Chrome's own screencast hands back the
+frames it presented, each stamped with the time it was presented. ffmpeg then
+encodes those frames at their real intervals, so the recording runs at the speed
+the session ran at — including any pause where the browser did not produce a frame.
+
+The same timestamps give an honest cadence report: observed frames per second,
+the longest gap between presented frames, and how many intervals exceeded 100 ms.
+
+What this is NOT: a GPU frame-time profile, a physical device, or Safari. It is
+headless Chromium on one Windows machine, and the numbers should be read as the
+cadence CDP observed there, not as a field performance measurement.
+
+    node scripts/serve-static.mjs dist 4618
+    python scripts/record-signal-realtime.py
+"""
+from pathlib import Path
+import argparse
+import base64
+import json
+import shutil
+import statistics
+import subprocess
+import sys
+import time
+
+from playwright.sync_api import sync_playwright
+
+ROOT = Path(__file__).resolve().parents[1]
+CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--base-url', default='http://127.0.0.1:4618')
+parser.add_argument('--out', default=str(ROOT / 'docs' / 'signal-review' / 'round03' / 'after'))
+parser.add_argument('--lang', default='en')
+args = parser.parse_args()
+
+OUT = Path(args.out)
+OUT.mkdir(parents=True, exist_ok=True)
+
+# A pass a person could plausibly perform: read, continue, change your mind, go
+# back, stop, go on. Every entry is (wheel delta per tick, ticks, pause after).
+# A negative delta scrolls back up.
+SCRIPT = [
+    ('hold', 0, 0, 2.2),        # look at the opening
+    ('scroll', 140, 26, 1.6),   # into the forge
+    ('scroll', 140, 16, 2.4),   # let the form settle, then read it
+    ('scroll', -140, 10, 1.8),  # change of direction: back up over the reveal
+    ('scroll', 140, 22, 2.6),   # forward again, into the workflow proof stop
+    ('hold', 0, 0, 2.0),        # a voluntary stop while reading
+    ('scroll', 140, 24, 2.4),   # the carton's own interval
+    ('scroll', 140, 12, 2.2),   # its proof stop
+    ('scroll', -140, 14, 1.6),  # back to the object
+    ('scroll', 140, 26, 2.0),   # forward through the tracks
+    ('scroll', 140, 22, 2.6),   # the portal approach and crossing
+    ('hold', 0, 0, 1.8),
+    ('scroll', 140, 26, 1.8),   # the archive, then the release
+    ('scroll', 140, 18, 2.6),   # the real project rows
+    ('scroll', -140, 30, 1.4),  # a long run back up
+    ('scroll', 140, 18, 1.6),
+]
+
+VIEWS = [
+    {'key': 'desktop', 'w': 1440, 'h': 900},
+    {'key': 'portrait', 'w': 390, 'h': 844},
+]
+
+report = {'base_url': args.base_url, 'lang': args.lang, 'views': {}}
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(executable_path=CHROME, headless=True)
+
+    for view in VIEWS:
+        ctx = browser.new_context(
+            viewport={'width': view['w'], 'height': view['h']},
+            device_scale_factor=1,
+            is_mobile=view['w'] < 700,
+            has_touch=view['w'] < 700,
+        )
+        page = ctx.new_page()
+        errors = []
+        page.on('pageerror', lambda e: errors.append(str(e)))
+        page.goto(f"{args.base_url}/{args.lang}", wait_until='networkidle')
+        page.wait_for_timeout(1800)
+
+        frames = []  # (presented_seconds, jpeg_bytes)
+        client = ctx.new_cdp_session(page)
+
+        def on_frame(params, _client=client, _frames=frames):
+            meta = params.get('metadata') or {}
+            _frames.append((meta.get('timestamp') or time.time(), base64.b64decode(params['data'])))
+            try:
+                _client.send('Page.screencastFrameAck', {'sessionId': params['sessionId']})
+            except Exception:
+                pass
+
+        client.on('Page.screencastFrame', on_frame)
+        client.send('Page.startScreencast', {
+            'format': 'jpeg', 'quality': 78, 'everyNthFrame': 1,
+            'maxWidth': view['w'], 'maxHeight': view['h'],
+        })
+
+        started = time.time()
+        page.mouse.move(view['w'] // 2, view['h'] // 2)
+        for kind, delta, ticks, pause in SCRIPT:
+            if kind == 'scroll':
+                for _ in range(ticks):
+                    page.mouse.wheel(0, delta)
+                    page.wait_for_timeout(45)   # a hand, not a teleport
+            page.wait_for_timeout(int(pause * 1000))
+        wall = time.time() - started
+
+        client.send('Page.stopScreencast')
+        page.wait_for_timeout(400)
+        ctx.close()
+
+        if not frames:
+            report['views'][view['key']] = {'error': 'no screencast frames were delivered'}
+            continue
+
+        base = frames[0][0]
+        times = [max(0.0, t - base) for t, _ in frames]
+        gaps = [b - a for a, b in zip(times, times[1:]) if b > a]
+
+        work = OUT / f"rt-frames-{view['key']}"
+        if work.exists():
+            shutil.rmtree(work, ignore_errors=True)
+        work.mkdir(parents=True)
+        listing = []
+        for i, (_, data) in enumerate(frames):
+            name = f'f{i:05d}.jpg'
+            (work / name).write_bytes(data)
+            listing.append(name)
+
+        # Concat demuxer with the real inter-frame durations: the encode inherits
+        # the session's own timing rather than imposing a frame rate on it.
+        concat = work / 'frames.txt'
+        with concat.open('w', encoding='utf-8') as fh:
+            for i, name in enumerate(listing):
+                fh.write(f"file '{name}'\n")
+                if i < len(listing) - 1:
+                    fh.write(f"duration {max(0.008, times[i + 1] - times[i]):.4f}\n")
+            fh.write(f"file '{listing[-1]}'\n")
+
+        mp4 = OUT / f"signal-realtime-{view['key']}.mp4"
+        subprocess.run(
+            ['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0',
+             '-i', str(concat), '-fps_mode', 'vfr', '-video_track_timescale', '1000',
+             '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '25',
+             '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+             '-movflags', '+faststart', str(mp4)],
+            check=True)
+        shutil.rmtree(work, ignore_errors=True)
+
+        report['views'][view['key']] = {
+            'file': mp4.name,
+            'bytes': mp4.stat().st_size,
+            'viewport': f"{view['w']}x{view['h']}",
+            'wallClockSeconds': round(wall, 2),
+            'presentedFrames': len(frames),
+            'observedFps': round(len(frames) / wall, 2) if wall > 0 else None,
+            'medianFrameGapMs': round(statistics.median(gaps) * 1000, 2) if gaps else None,
+            'p95FrameGapMs': round(sorted(gaps)[int(len(gaps) * 0.95)] * 1000, 2) if gaps else None,
+            'longestFrameGapMs': round(max(gaps) * 1000, 2) if gaps else None,
+            'gapsOver100ms': sum(1 for g in gaps if g > 0.1),
+            'pageErrors': errors[:5],
+            'method': 'CDP Page.startScreencast; real wheel input; encoded at the presented timestamps',
+            'notMeasured': 'GPU frame time, input latency, physical touch scrolling, Safari, any real device',
+        }
+        print(view['key'], json.dumps(report['views'][view['key']], indent=1))
+
+    browser.close()
+
+(OUT / 'realtime-report.json').write_text(json.dumps(report, indent=2), encoding='utf-8')
+bad = [k for k, v in report['views'].items() if 'error' in v or v.get('pageErrors')]
+sys.exit(1 if bad else 0)

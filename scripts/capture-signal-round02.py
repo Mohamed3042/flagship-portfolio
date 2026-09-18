@@ -10,9 +10,14 @@ into the page context; it changes no product code. Mid-transition frames are
 therefore comparable, not explained away as "breath".
 
     node scripts/serve-static.mjs dist 4618
-    python scripts/capture-signal-round02.py --tag after
+    python scripts/capture-signal-round02.py --round round03 --tag after
 
-Stills land in docs/signal-review/round02/<tag>/, the recording beside them.
+Stills land in docs/signal-review/<round>/<tag>/, the recording beside them.
+
+A chapter that rests twice is captured twice. The carton has an interval of its
+own before any screenshot exists, and a later stop where the capture is the
+subject; one frame of the two cannot show whether they were ever confused, which
+is the whole question about that chapter.
 """
 from pathlib import Path
 import argparse
@@ -29,11 +34,12 @@ CHROME = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
 parser = argparse.ArgumentParser()
 parser.add_argument('--base-url', default='http://127.0.0.1:4618')
 parser.add_argument('--tag', default='after', help='before | after')
+parser.add_argument('--round', dest='round_id', default='round03')
 parser.add_argument('--out', default=None)
 parser.add_argument('--skip-video', action='store_true')
 args = parser.parse_args()
 
-OUT = Path(args.out) if args.out else ROOT / 'docs' / 'signal-review' / 'round02' / args.tag
+OUT = Path(args.out) if args.out else ROOT / 'docs' / 'signal-review' / args.round_id / args.tag
 OUT.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------- time freeze
@@ -99,18 +105,22 @@ SEEK_SELECTOR = '''(sel) => {
 # The director's eight, in narrative order. `u` addresses the cinematic segment;
 # `sel` addresses real document content after the segment releases.
 POSES = [
-    {'key': '1-entry',             'mode': 'top'},
-    {'key': '2-aligned-form',      'mode': 'u', 'u': 0.150},
-    {'key': '3-separated-depth',   'mode': 'u', 'u': 0.214},
-    {'key': '4-automation-screen', 'mode': 'u', 'u': 0.355},
-    {'key': '5-carton',            'mode': 'u', 'u': 0.474},
-    {'key': '6-media-alignment',   'mode': 'u', 'u': 0.655},
-    {'key': '7-portal-threshold',  'mode': 'u', 'u': 0.790},
-    {'key': '8-project-rows',      'mode': 'sel', 'sel': '#work'},
-    # Beyond the director's eight: the seam below the cinema, where the route's
-    # own colour tokens were resolving to nothing.
-    {'key': '9-atlas',             'mode': 'sel', 'sel': '#sky'},
-    {'key': '10-close',            'mode': 'sel', 'sel': '#contact'},
+    {'key': '01-entry',             'mode': 'top'},
+    {'key': '02-aligned-form',      'mode': 'u', 'u': 0.150},
+    {'key': '03-separated-depth',   'mode': 'u', 'u': 0.214},
+    {'key': '04-automation-screen', 'mode': 'u', 'u': 0.355},
+    # The carton's own stop: the object, and no screenshot anywhere on screen.
+    {'key': '05-carton-object',     'mode': 'u', 'u': 0.474},
+    # Its proof stop: the capture is the subject and the object has cleared.
+    {'key': '06-carton-proof',      'mode': 'u', 'u': 0.545},
+    {'key': '07-media-alignment',   'mode': 'u', 'u': 0.655},
+    # The approach, where the near pilasters occlude the room and slide across it.
+    {'key': '08-portal-approach',   'mode': 'u', 'u': 0.715},
+    {'key': '09-portal-inside',     'mode': 'u', 'u': 0.790},
+    {'key': '10-project-rows',      'mode': 'sel', 'sel': '#work'},
+    # The seam below the cinema, where the route's own colour tokens live.
+    {'key': '11-atlas',             'mode': 'sel', 'sel': '#sky'},
+    {'key': '12-close',             'mode': 'sel', 'sel': '#contact'},
 ]
 
 EDITIONS = [
@@ -273,9 +283,11 @@ with sync_playwright() as p:
               const at = (u) => Math.round(top + range * u);
               const work = document.querySelector('#work');
               return {
-                forward: [0, at(.15), at(.214), at(.355), at(.474), at(.655), at(.79), at(1),
+                forward: [0, at(.15), at(.214), at(.355), at(.474), at(.545), at(.655),
+                          at(.715), at(.79), at(1),
                           Math.round(work.getBoundingClientRect().top + scrollY - 72)],
-                back: [at(1), at(.79), at(.655), at(.474), at(.355), at(.214), at(.15), 0],
+                back: [at(1), at(.79), at(.715), at(.655), at(.545), at(.474), at(.355),
+                       at(.214), at(.15), 0],
               };
             }""")
 

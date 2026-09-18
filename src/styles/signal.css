@@ -99,18 +99,26 @@
   display:flex;flex-wrap:wrap;gap:8px;
 }
 .signal__intro-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(22px,3vh,32px)}
-.signal__cta{
+/* `.signal a{color:inherit}` is (0,1,1) and this rule was (0,1,0), so the
+   primary action inherited the stage's ink and shipped as WHITE on its own blue:
+   1.89:1, measured on the rendered page, in all six themes and both languages.
+   The intended near-black reads 8.99:1. A design system that carries status in
+   type instead of hue still has to win its own cascade. */
+.signal .signal__cta{
   display:inline-flex;align-items:center;gap:10px;
   min-height:48px;padding:12px 22px;border-radius:10px;
-  background:var(--signal-accent);color:#04121f;
+  background:var(--signal-accent);color:#04121F;
   font-size:15px;font-weight:700;text-decoration:none;
 }
-.signal__cta:hover{background:color-mix(in srgb,var(--signal-accent) 82%,#fff)}
-.signal__cta--quiet{
+/* And the focus ring may not be the button's own fill, or it is invisible on it. */
+.signal .signal__cta:focus-visible{outline-color:var(--signal-ink)}
+.signal .signal__cta:hover{background:color-mix(in srgb,var(--signal-accent) 82%,#fff)}
+.signal .signal__cta--quiet{
   background:transparent;color:var(--signal-ink);
   border:1px solid var(--signal-line);
 }
-.signal__cta--quiet:hover{background:var(--signal-depth);border-color:color-mix(in srgb,var(--signal-ink) 26%,transparent)}
+.signal .signal__cta--quiet:focus-visible{outline-color:var(--signal-accent)}
+.signal .signal__cta--quiet:hover{background:var(--signal-depth);border-color:color-mix(in srgb,var(--signal-ink) 26%,transparent)}
 .signal__cta>svg{flex:none}
 [dir=rtl] .signal__cta>svg{transform:scaleX(-1)}
 
@@ -125,7 +133,10 @@
 .signal__intro-artifact{
   position:relative;min-width:0;
   --shot-w:1280;--shot-h:738;
-  --crop-x:155;--crop-y:14;--crop-w:750;--crop-h:636;
+  /* The crop ends on the answer panel, not inside a sentence: the previous box
+     sliced the demo-limits line and the suggestion chips mid-word, which reads as
+     a broken screenshot rather than a cropped one. */
+  --crop-x:150;--crop-y:14;--crop-w:985;--crop-h:660;
   justify-self:end;width:100%;max-width:clamp(300px,33vw,460px);
 }
 .signal__intro-artifact a{
@@ -193,9 +204,17 @@ body:has(.signal) #space{display:none}
 }
 @media (min-width:900px){
   .signal__chapter{grid-template-columns:var(--signal-datum) 1fr;column-gap:0}
+  /* `width:var(--signal-datum)` is a percentage of the GRID COLUMN here, which is
+     already the datum: 42% of 42%. The still composition was setting 58px display
+     type in a 219px measure and breaking it to one word a line. The column is the
+     constraint; the copy takes it. */
   .signal__copy{width:auto}
   .signal__plate-frame{margin-inline-start:0}
 }
+/* Reduced motion, no WebGL and no JavaScript all land on the still composition,
+   so it is a composition, not a dump. Its display size is set for its own
+   measure rather than inherited from the cinema's wider one. */
+.signal__chapter .signal__line{font-size:clamp(26px,3.1vw,40px)}
 .signal__chapter+.signal__chapter{border-block-start:1px solid var(--signal-hair)}
 .signal__copy{display:grid;gap:14px;min-width:0;width:var(--signal-datum);padding-inline-end:clamp(20px,2.6vw,38px)}
 .signal__line{
@@ -251,6 +270,7 @@ body:has(.signal) #space{display:none}
   font-family:var(--font-label);font-size:12px;line-height:1.55;
   color:var(--signal-ink-2);
 }
+.signal__evidence+.signal__evidence{margin-block-start:2px}
 .signal__evidence[data-evidence=screenshot]{
   border-block-start:2px solid color-mix(in srgb,var(--signal-ink) 55%,transparent);
   color:var(--signal-ink);font-weight:600;
@@ -332,12 +352,19 @@ body:has(.signal) #space{display:none}
     gap:10px;
     /* The field under the copy thins with the narration: at full strength it
        protects a reading stop, and during a transformation it stops being the
-       second-largest shape on screen. */
-    --sc:calc(.34 + .66 * var(--signal-narration,1));
-    background:linear-gradient(100deg,
-      rgb(5 7 10 / calc(.93 * var(--sc))) 0%,rgb(5 7 10 / calc(.86 * var(--sc))) 62%,
-      rgb(5 7 10 / calc(.55 * var(--sc))) 86%,rgb(5 7 10 / 0) 100%);
+       second-largest shape on screen.
+
+       It also has to MIRROR. At 100deg the falloff ran off the reading-direction
+       edge in Arabic, so RTL copy sat on the thin end of its own scrim and failed
+       AA over the bright band behind it. The angle is a variable now, and the
+       opaque part reaches further before it starts to fall off. */
+    --sc:calc(.42 + .58 * var(--signal-narration,1));
+    --sc-angle:100deg;
+    background:linear-gradient(var(--sc-angle),
+      rgb(5 7 10 / calc(.965 * var(--sc))) 0%,rgb(5 7 10 / calc(.94 * var(--sc))) 70%,
+      rgb(5 7 10 / calc(.62 * var(--sc))) 90%,rgb(5 7 10 / 0) 100%);
   }
+  [dir=rtl] .signal[data-graphics=webgl] .signal__copy{--sc-angle:260deg}
   /* The datum is drawn at reading stops, and only there. A rule that never
      leaves the screen is not continuity, it is furniture. */
   .signal[data-graphics=webgl] .signal__copy::after{
@@ -357,7 +384,7 @@ body:has(.signal) #space{display:none}
     transition:font-size 90ms linear;
   }
   .signal[data-graphics=webgl] .signal__copy>:not(.signal__line){
-    opacity:calc(.25 + .75 * var(--signal-narration,1));
+    opacity:calc(.62 + .38 * var(--signal-narration,1));
   }
   .signal[data-graphics=webgl] .signal__blurb{font-size:14px;max-width:none}
   /* The full qualifier is one control away, and the control says so. A reading
@@ -370,6 +397,31 @@ body:has(.signal) #space{display:none}
     overscroll-behavior:contain;
   }
   .signal[data-graphics=webgl] .signal__datum{display:none}
+  /* A 100svh frame with `overflow:clip` silently eats whatever does not fit, and
+     what does not fit is the end of the block: the evidence label and both
+     actions. Short frames get a tighter setting rather than a shorter chapter. */
+  @media (max-height:700px){
+    .signal[data-graphics=webgl] .signal__chapter{
+      padding-block:clamp(16px,3.4vh,34px);gap:8px;
+    }
+    .signal[data-graphics=webgl] .signal__line{
+      font-size:calc(clamp(22px,2vw,30px) * (.58 + .42 * var(--signal-narration,1)));
+    }
+    .signal[data-graphics=webgl] .signal__blurb{font-size:13px;line-height:1.5}
+    .signal[data-graphics=webgl] .signal__limit,
+    .signal[data-graphics=webgl] .signal__limit-more>div{font-size:12px;line-height:1.5}
+    .signal[data-graphics=webgl] .signal__limit-more>div{max-height:min(22svh,150px)}
+    .signal[data-graphics=webgl] .signal__copy{padding-block:clamp(10px,2vh,18px)}
+    .signal[data-graphics=webgl] .signal__action{min-height:40px;font-size:14px}
+    .signal[data-graphics=webgl] .signal__action+.signal__action{min-height:38px}
+  }
+  @media (max-height:560px){
+    .signal[data-graphics=webgl] .signal__blurb{display:none}
+    .signal[data-graphics=webgl] .signal__chapter{padding-block:12px;gap:6px}
+  }
+  /* A focused control inside the sticky frame must not sit under the fixed nav. */
+  .signal [data-chapter-actions] a,
+  .signal__limit-more>summary{scroll-margin-block:96px}
   /* The plate is placed from a measured HandoffRect in canvas pixels, so it is
      positioned physically — the rect does not mirror with reading direction.
      The renderer owns transform/width/height and the blend. */
@@ -482,6 +534,26 @@ body:has(.signal) #space{display:none}
   filter:none;animation:none;font-weight:850;
 }
 .sr-contact .cf-l1{color:color-mix(in srgb,var(--signal-ink) 70%,var(--signal-bg))}
+/* The channel and the status keep their own meaning; the decoration does not.
+   The availability dot stays green because it reports something true, and its
+   sentence stays beside it. Everything that is merely surface — the tile wash,
+   its drop, the hover border and glow — speaks the one shared accent, so the
+   band does not carry a second decorative palette. Overriding the consumers
+   rather than --acc leaves --cf-green intact for the dot that needs it. */
+.sr-contact .cf-card__ic{
+  background:linear-gradient(150deg,
+    color-mix(in srgb,var(--signal-accent) 58%,var(--signal-bg)),
+    color-mix(in srgb,var(--signal-accent) 22%,var(--signal-bg)));
+  box-shadow:0 8px 24px -12px color-mix(in srgb,var(--signal-accent) 70%,transparent);
+}
+.sr-contact .cf-card:hover,
+.sr-contact .cf-card:focus-visible{
+  border-color:color-mix(in srgb,var(--signal-accent) 60%,transparent);
+  box-shadow:
+    0 24px 60px -24px color-mix(in srgb,var(--signal-accent) 80%,transparent),
+    0 0 0 1px color-mix(in srgb,var(--signal-accent) 30%,transparent) inset;
+}
+
 /* The close is the one band on this route that follows the theme rather than the
    cinema: of the six, only `light` gives it a light ground, and the shared
    component has no light-theme rule for the second heading line because that line

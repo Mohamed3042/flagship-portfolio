@@ -85,6 +85,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     id: chapter.id,
     line: pick(lang, copy.line),
     evidence: chapter.evidence,
+    sceneEvidence: chapter.sceneEvidence ?? null,
     title: project ? pick(lang, project.title) : null,
     status: project ? (feature?.repo ? (ar ? 'عام' : 'Public') : (ar ? 'خاص' : 'Private')) : null,
     blurb: project ? pick(lang, project.blurb) : null,

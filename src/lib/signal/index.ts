@@ -16,6 +16,7 @@ import * as THREE from 'three';
 import type { ArtifactId, ArtifactStage, CameraPose, Layout, Progress, ShapeId, Tier } from './types';
 import { TIERS } from './types';
 import { RIM, buildShapes } from './shapes';
+import { projectSurface } from './artifacts';
 import { applyPose, blendPose, frameHeightAt, microParallax } from './camera';
 import { CHAPTERS, SEGMENT_VH, evaluate } from './chapters';
 import { STAGES } from './artifacts';
@@ -137,8 +138,12 @@ export function initSignal(): void {
    * reconstructs identically backwards.
    */
   function released(): number {
-    const past = scrollY - (runwayTop + runwayRange);
-    return THREE.MathUtils.clamp(past / Math.max(1, viewportHeight * 0.5), 0, 1);
+    // The fade STARTS before the runway ends. Beginning it at the end meant the
+    // constellation was still drawn over the next section's headline and controls
+    // for several hundred pixels, and then the canvas switched off in one frame.
+    // By the time the work scrolls in, the scene is already gone.
+    const past = scrollY - (runwayTop + runwayRange - viewportHeight * 0.55);
+    return THREE.MathUtils.clamp(past / Math.max(1, viewportHeight * 0.75), 0, 1);
   }
 
   /**
@@ -253,10 +258,15 @@ export function initSignal(): void {
   // INSIDE the silhouette instead of along its edge, which is the whole image.
   // The small bias sits the body just behind the lit points so they survive it.
   const massGeometry = new THREE.SphereGeometry(RIM.radius, 64, 40);
-  // A shade ABOVE the ground, not below it. The body has to be visible as a body:
-  // darker than the sky it occludes and the limb is a bright line in empty black,
-  // which is a line, not a mass. One tonal step is the whole difference.
-  const massMaterial = new THREE.MeshBasicMaterial({ color: 0x2a3446, transparent: true, opacity: 1 });
+  // Lit, not painted. An unlit fill is one value everywhere, which is why the
+  // body read as a flat navy semicircle with a bright line on top: a silhouette
+  // with a sticker for a horizon. Standing it in the SAME light as everything
+  // else gives it a terminator — the surface falls away from the limb because the
+  // normals turn away from the key, which is what a limb is. Very dark albedo, so
+  // what arrives is separation, not a grey planet.
+  const massMaterial = new THREE.MeshStandardMaterial({
+    color: 0x0b1119, roughness: .97, metalness: 0, transparent: true, opacity: 1,
+  });
   const mass = new THREE.Mesh(massGeometry, massMaterial);
   mass.position.set(0, RIM.centreY, RIM.z - 0.16);
   mass.renderOrder = -1;
@@ -448,6 +458,7 @@ export function initSignal(): void {
   let motionTime = 0;
   let lastTick = 0;
   let posterCleared = false;
+  let lastGone = -1;
 
   const smooth01 = (t: number) => {
     const x = t > 1 ? 1 : t > 0 ? t : 0;
@@ -514,12 +525,23 @@ export function initSignal(): void {
     const gone = released();
     cloud.setOpacity((state.chapter.id === 'horizon' ? 1 : 0.82) * (1 - surfaced) * (1 - gone));
     starfield.setOpacity(1 - gone);
-    canvas.style.visibility = gone > 0.995 ? 'hidden' : '';
+    // The whole canvas fades, not only its contents: the mass, the stages and the
+    // point cloud leave together, and `visibility` is only switched once there is
+    // nothing left to see. A binary flip at the end is a rendering fault, not a
+    // release.
+    if (gone !== lastGone) {
+      lastGone = gone;
+      canvas.style.opacity = gone > 0 ? (1 - gone).toFixed(3) : '';
+      canvas.style.visibility = gone > 0.995 ? 'hidden' : '';
+    }
 
     // The narration recedes where the artifact is the argument. It is a scale
     // and a weight, never a visibility: a visitor who stops mid-transformation
     // still has the sentence.
-    setNarration(state.narration);
+    // A reading stop holds a floor: the narration may give the stage to the
+    // artifact, but where the visitor is meant to READ it stays legible. Compact
+    // is a composition; faint is a defect.
+    setNarration(state.resting ? Math.max(state.narration, 0.72) : state.narration);
     // The datum organises reading stops, not every frame. It is drawn where the
     // visitor is reading and nowhere else, so continuity comes from the camera,
     // the recurring points and the shared light rather than from a rule that
@@ -539,10 +561,8 @@ export function initSignal(): void {
     // other, so a pointer nudge there is not a nudge, it is the illusion coming
     // apart under the pointer.
     const parallax = state.resting || state.frame < 0.02 ? 0 : 0.35;
-    applyPose(
-      camera,
-      microParallax(compose(state.camera, state.chapter.id, state.frame), pointerX, pointerY, parallax),
-    );
+    const composed = compose(state.camera, state.chapter.id, state.frame);
+    applyPose(camera, microParallax(composed, pointerX, pointerY, parallax));
 
     // Build the current chapter's stage and its immediate neighbours, then let
     // everything else go. Without the build step nothing is ever instantiated.
@@ -566,7 +586,21 @@ export function initSignal(): void {
       }
     }
 
-    alignPlate(state.chapter.id, state.local, resident.get(state.chapter.artifact as ArtifactId));
+    // Registration: once the stage says its surface is about to be handed over,
+    // the camera is fitted to it and re-applied, and the plate is then placed on
+    // the rectangle THIS camera produces. Both representations move together.
+    const live = resident.get(state.chapter.artifact as ArtifactId);
+    const panel = panels.find((p) => p.dataset.chapter === state.chapter.id);
+    const surface = (live as (BoundStage & { surface?: THREE.Object3D | null }) | undefined)?.surface;
+    const wanted = live?.handoff?.()?.fit ?? 0;
+    if (wanted > 0.001 && surface && panel) {
+      applyPose(
+        camera,
+        microParallax(fitSurface(composed, surface, freeBox(panel), wanted), pointerX, pointerY, parallax),
+      );
+    }
+
+    alignPlate(state.chapter.id, state.local, live);
 
     renderer.render(scene, camera);
 
@@ -597,8 +631,11 @@ export function initSignal(): void {
     }) | undefined;
     const mesh = owner?.surface as THREE.Mesh | undefined;
     // The housing goes with the plane. Left behind, it is a second empty screen
-    // standing next to the screenshot that replaced it.
-    if (owner?.chrome) owner.chrome.visible = blend < 0.995;
+    // standing next to the screenshot that replaced it -- and this may only ever
+    // HIDE it: the stage decides when its own screen arrives, and assigning
+    // `blend < .995` outright was switching an empty black panel back on through
+    // the whole interval the carton is supposed to have to itself.
+    if (owner?.chrome) owner.chrome.visible = owner.chrome.visible && blend < 0.995;
     if (!mesh?.material) return;
     const material = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material) as THREE.Material;
     material.transparent = true;
@@ -614,20 +651,160 @@ export function initSignal(): void {
    * otherwise all writes.
    */
   let guardKey = '';
-  let guardBand = { start: 0, end: 0 };
+  let guardBand = { start: 0, end: 0, top: 0, bottom: 0 };
   function copyBand(panel: HTMLElement) {
     const key = `${panel.dataset.chapter}:${viewportWidth}x${viewportHeight}`;
     if (key !== guardKey) {
       const box = panel.querySelector<HTMLElement>('[data-chapter-copy]')?.getBoundingClientRect();
-      guardBand = box ? { start: box.left, end: box.right } : { start: 0, end: 0 };
+      guardBand = box
+        ? { start: box.left, end: box.right, top: box.top, bottom: box.bottom }
+        : { start: 0, end: 0, top: viewportHeight, bottom: viewportHeight };
       guardKey = key;
     }
     return guardBand;
   }
 
+  /**
+   * The part of the frame the artifact may use: the whole viewport minus the
+   * band the copy and its actions own, minus a margin.
+   *
+   * Landscape takes the inline side beyond the copy column; portrait takes the
+   * block above it. Measured once per chapter and viewport and cached, so a
+   * visitor opening a disclosure does not move the camera: the box the camera
+   * was framed against stays the box it was framed against.
+   */
+  const FIT_MARGIN = 24;
+  const FIT_CLEAR = 26;
+  function freeBox(panel: HTMLElement) {
+    const band = copyBand(panel);
+    if (layout === 'portrait') {
+      const bottom = Math.max(FIT_MARGIN + 80, band.top - FIT_CLEAR);
+      return {
+        x: FIT_MARGIN,
+        y: FIT_MARGIN,
+        width: Math.max(120, viewportWidth - FIT_MARGIN * 2),
+        height: Math.max(80, bottom - FIT_MARGIN),
+      };
+    }
+    const left = rtl ? FIT_MARGIN : Math.max(FIT_MARGIN, band.end + FIT_CLEAR);
+    const right = rtl
+      ? Math.min(viewportWidth - FIT_MARGIN, band.start - FIT_CLEAR)
+      : viewportWidth - FIT_MARGIN;
+    return {
+      x: left,
+      y: FIT_MARGIN,
+      width: Math.max(160, right - left),
+      height: Math.max(120, viewportHeight - FIT_MARGIN * 2),
+    };
+  }
+
+  /**
+   * Move the camera until the surface the chapter is about to hand off projects
+   * inside the free box, and blend that correction in before the crossfade.
+   *
+   * Two passes: dolly back along the view axis until the projected rectangle
+   * fits, then re-centre it in the box. Because the HTML image is then placed on
+   * the rectangle this same camera produces, the two representations share four
+   * corners, an aspect ratio and a crop for the whole blend — which rescaling the
+   * image after the fact can never give.
+   */
+  const probe = new THREE.PerspectiveCamera(38, 1, 0.1, 140);
+  const CENTRE = new THREE.Vector3();
+  function projectWith(pose: CameraPose, surface: THREE.Object3D) {
+    probe.aspect = viewportWidth / Math.max(1, viewportHeight);
+    applyPose(probe, pose);
+    probe.updateMatrixWorld(true);
+    probe.updateProjectionMatrix();
+    return projectSurface(surface, probe, viewportWidth, viewportHeight);
+  }
+
+  function fitSurface(pose: CameraPose, surface: THREE.Object3D, box: ReturnType<typeof freeBox>, amount: number) {
+    if (amount <= 0.001) return pose;
+    surface.updateWorldMatrix(true, false);
+    CENTRE.setFromMatrixPosition(surface.matrixWorld);
+    const target: [number, number, number] = [CENTRE.x, CENTRE.y, CENTRE.z];
+    // Aim a little inside the band. The correction is computed at the surface's
+    // centre depth while its rectangle spans a range of depths, so each pass
+    // lands within a few pixels rather than exactly; aiming at the inset makes
+    // that residual fall on the safe side of the edge instead of across it.
+    const inset = 8;
+    const aim = {
+      x: box.x + inset, y: box.y + inset,
+      width: Math.max(40, box.width - inset * 2), height: Math.max(40, box.height - inset * 2),
+    };
+    let out = pose;
+    // Dolly AND shift in the same pass. Dollying alone, one pass at a time, spent
+    // the whole loop on scale and never corrected the position, so the rectangle
+    // was the right size in the wrong place and still outside the band.
+    for (let pass = 0; pass < 5; pass++) {
+      let rect = projectWith(out, surface);
+      if (!(rect.width > 1 && rect.height > 1)) return pose;
+
+      // Dolly only if it does not fit, and shift only by what is still outside.
+      // The authored composition is the intent; this is a correction, not a
+      // re-framing, so a surface that already sits in the free band is left
+      // exactly where the chapter put it.
+      // Fill the band, do not merely fit inside it. At the proof stop the capture
+      // IS the subject, and a 338px render of a 1280px product screen under a
+      // caption that says "Actual product screenshot" is a promise the frame does
+      // not keep. Scaling up is the same dolly as scaling down.
+      const scale = Math.min(aim.width / rect.width, aim.height / rect.height) * 0.94;
+      if (scale < 0.998 || scale > 1.002) {
+        // Dolly along the view axis by the surface's OWN depth, not by the
+        // distance to the look point. Scaling the look distance changes the
+        // projected size by some unrelated amount whenever the look target is not
+        // the surface -- which is every chapter here -- so the loop chased a
+        // number it was not moving and never converged.
+        FWD.set(
+          out.look[0] - out.position[0], out.look[1] - out.position[1], out.look[2] - out.position[2],
+        );
+        if (FWD.lengthSq() < 1e-12) return pose;
+        FWD.normalize();
+        const depth =
+          (target[0] - out.position[0]) * FWD.x +
+          (target[1] - out.position[1]) * FWD.y +
+          (target[2] - out.position[2]) * FWD.z;
+        if (depth > 0.6) {
+          const step = Math.max(-depth * 6, Math.min(depth - 0.9, depth * (1 - 1 / scale)));
+          out = {
+            position: [
+              out.position[0] + FWD.x * step,
+              out.position[1] + FWD.y * step,
+              out.position[2] + FWD.z * step,
+            ],
+            look: [out.look[0] + FWD.x * step, out.look[1] + FWD.y * step, out.look[2] + FWD.z * step],
+            fov: out.fov,
+          };
+          // Re-measure inside the pass. Deciding whether to re-centre from the
+          // rectangle taken BEFORE the dolly is deciding about a picture that no
+          // longer exists: the surface had been scaled 2.7x and the shift was
+          // computed against its old, already-inside-the-band position, so the
+          // loop congratulated itself and left the capture off the screen.
+          rect = projectWith(out, surface);
+          if (!(rect.width > 1 && rect.height > 1)) return pose;
+        }
+      }
+
+      const dx = rect.x < aim.x ? aim.x - rect.x
+        : rect.x + rect.width > aim.x + aim.width ? (aim.x + aim.width) - (rect.x + rect.width) : 0;
+      const dy = rect.y < aim.y ? aim.y - rect.y
+        : rect.y + rect.height > aim.y + aim.height ? (aim.y + aim.height) - (rect.y + rect.height) : 0;
+      if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) break;
+
+      const cx = rect.x + rect.width / 2 + dx, cy = rect.y + rect.height / 2 + dy;
+      out = frameOn(out, target, (cx / viewportWidth) * 2 - 1, 1 - (cy / viewportHeight) * 2);
+    }
+    return amount >= 0.999 ? out : blendPose(pose, out, amount);
+  }
+
   function alignPlate(chapterId: string, local: number, stage: BoundStage | undefined) {
+    // Guard the panel, not just the plate. `find` returns `HTMLElement |
+    // undefined`, and narrowing the plate never narrowed the panel that is passed
+    // on below -- the one error in this file that survives with or without the
+    // missing `three` declarations.
     const panel = panels.find((p) => p.dataset.chapter === chapterId);
-    const plate = panel?.querySelector<HTMLElement>('[data-plate]');
+    if (!panel) return;
+    const plate = panel.querySelector<HTMLElement>('[data-plate]');
     if (!plate) return;
 
     const rect = stage?.handoff?.() ?? null;
@@ -639,55 +816,29 @@ export function initSignal(): void {
       return;
     }
 
-    // The projected rectangle can fall partly outside the frame, and it can fall
-    // across the copy. A screenshot the visitor is meant to read may not be
-    // clipped by the viewport edge, and it may not cross the sentence that says
-    // what it is: the copy band is a composition constraint, so the plate is
-    // fitted into what is left of the frame beside it, scaled about its own
-    // centre so it stays attached to the surface it is taking over from.
-    const margin = 24;
-    const band = copyBand(panel);
-    const clear = 26;
-    const left = rtl ? margin : Math.max(margin, band.end + clear);
-    const right = rtl ? Math.min(viewportWidth - margin, band.start - clear) : viewportWidth - margin;
-    const availableW = Math.max(160, right - left);
-    const availableH = viewportHeight - margin * 2;
-    const scale = Math.min(
-      1,
-      availableW / Math.max(1, rect.width),
-      availableH / Math.max(1, rect.height),
-    );
-    const width = rect.width * scale;
-    const height = rect.height * scale;
-    const cx = rect.x + rect.width / 2;
-    const cy = rect.y + rect.height / 2;
-    const x = Math.min(Math.max(cx - width / 2, left), right - width);
-    const y = Math.min(Math.max(cy - height / 2, margin), viewportHeight - height - margin);
+    // The plate goes exactly where the surface projects. It is not re-scaled and
+    // not slid: both are the same camera's work, so the four corners, the aspect
+    // ratio and the crop agree for the whole crossfade. Keeping the rectangle
+    // inside the frame is the camera's job, done before this point.
+    //
+    // `data-fit` records whether that actually held. It is an assertion the
+    // browser suite reads, not a repair: a rectangle that still overflows means
+    // the camera fit failed, and a silently re-scaled image would hide it.
+    const box = freeBox(panel);
+    const slack = 1.5;
+    const fitted =
+      rect.x >= box.x - slack && rect.y >= box.y - slack &&
+      rect.x + rect.width <= box.x + box.width + slack &&
+      rect.y + rect.height <= box.y + box.height + slack;
 
     const blend = rect.blend;
-
-    // Portrait is authored, not projected: the narration owns the lower band, so
-    // the artifact takes the upper one. Same narrative state, different
-    // coordinates -- what portrait must never do is land on the reading copy.
-    if (layout === 'portrait') {
-      const gutter = 16;
-      const w = viewportWidth - gutter * 2;
-      const h = Math.min(viewportHeight * 0.34, (w * rect.height) / Math.max(1, rect.width));
-      plate.dataset.handoff = blend > 0.99 ? 'html' : 'aligning';
-      plate.style.setProperty('--plate-blend', blend.toFixed(3));
-      plate.style.width = `${w}px`;
-      plate.style.height = `${h}px`;
-      plate.style.transform = `translate3d(${gutter}px, ${Math.round(viewportHeight * 0.09)}px, 0)`;
-      fadeSurface(stage, blend);
-      return;
-    }
-
     fadeSurface(stage, blend);
     plate.dataset.handoff = blend > 0.99 ? 'html' : 'aligning';
+    plate.dataset.fit = rect.fit > 0.99 ? (fitted ? 'exact' : 'overflow') : 'settling';
     plate.style.setProperty('--plate-blend', blend.toFixed(3));
-    plate.style.width = `${width}px`;
-    plate.style.height = `${height}px`;
-    plate.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    plate.style.width = `${rect.width.toFixed(2)}px`;
+    plate.style.height = `${rect.height.toFixed(2)}px`;
+    plate.style.transform = `translate3d(${rect.x.toFixed(2)}px, ${rect.y.toFixed(2)}px, 0)`;
   }
 
   /* --------------------------------------------------------------- listeners */

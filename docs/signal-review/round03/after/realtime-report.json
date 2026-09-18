@@ -1,0 +1,36 @@
+{
+  "base_url": "http://127.0.0.1:4618",
+  "lang": "en",
+  "views": {
+    "desktop": {
+      "file": "signal-realtime-desktop.mp4",
+      "bytes": 11252005,
+      "viewport": "1440x900",
+      "wallClockSeconds": 50.23,
+      "presentedFrames": 4360,
+      "observedFps": 86.81,
+      "medianFrameGapMs": 10.57,
+      "p95FrameGapMs": 13.44,
+      "longestFrameGapMs": 1532.04,
+      "gapsOver100ms": 15,
+      "pageErrors": [],
+      "method": "CDP Page.startScreencast; real wheel input; encoded at the presented timestamps",
+      "notMeasured": "GPU frame time, input latency, physical touch scrolling, Safari, any real device"
+    },
+    "portrait": {
+      "file": "signal-realtime-portrait.mp4",
+      "bytes": 5200898,
+      "viewport": "390x844",
+      "wallClockSeconds": 49.56,
+      "presentedFrames": 3937,
+      "observedFps": 79.44,
+      "medianFrameGapMs": 10.67,
+      "p95FrameGapMs": 13.14,
+      "longestFrameGapMs": 3732.67,
+      "gapsOver100ms": 15,
+      "pageErrors": [],
+      "method": "CDP Page.startScreencast; real wheel input; encoded at the presented timestamps",
+      "notMeasured": "GPU frame time, input latency, physical touch scrolling, Safari, any real device"
+    }
+  }
+}

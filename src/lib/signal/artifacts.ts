@@ -72,6 +72,25 @@ function falloffTexture(size = 64, power = 2.4): THREE.DataTexture {
   return texture;
 }
 
+/**
+ * A soft rectangular vignette: clear through the middle, opaque at the edges.
+ * Generated rather than loaded, so the far wall's border can dissolve without
+ * shipping an asset for it.
+ */
+function vignetteTexture(size = 96, invert = false): THREE.DataTexture {
+  const data = new Uint8Array(size * size * 4);
+  for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+    const i = (y * size + x) * 4;
+    const dx = Math.abs(((x + .5) / size) * 2 - 1), dy = Math.abs(((y + .5) / size) * 2 - 1);
+    const edge = Math.max(dx / .96, dy / .94);
+    const a = Math.pow(Math.min(1, Math.max(0, (edge - .46) / .54)), 1.7);
+    data[i + 3] = Math.round((invert ? 1 - a : a) * 255);
+  }
+  const texture = new THREE.DataTexture(data, size, size);
+  texture.needsUpdate = true;
+  return texture;
+}
+
 /** Fibre noise for paperboard roughness, deterministic from a fixed seed. */
 function grainTexture(seed: number, size = 64): THREE.DataTexture {
   const random = mulberry32(seed), data = new Uint8Array(size * size * 4);
@@ -106,7 +125,7 @@ export function projectSurface(
   camera.updateMatrixWorld();
   VIEW.setFromMatrixPosition(object.matrixWorld).applyMatrix4(camera.matrixWorldInverse);
   // Behind the near plane the projection mirrors; report a degenerate rect, never a wrong one.
-  if (VIEW.z > -camera.near) return { x: width / 2, y: height / 2, width: 0, height: 0, blend: 0 };
+  if (VIEW.z > -camera.near) return { x: width / 2, y: height / 2, width: 0, height: 0, blend: 0, fit: 0 };
   const geometry = (object as Partial<THREE.Mesh>).geometry;
   if (geometry && !geometry.boundingBox) geometry.computeBoundingBox();
   const box = geometry?.boundingBox ?? UNIT;
@@ -117,7 +136,7 @@ export function projectSurface(
     const x = (CORNER.x * .5 + .5) * width, y = (.5 - CORNER.y * .5) * height;
     minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y);
   }
-  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY, blend: 0 };
+  return { x: minX, y: minY, width: maxX - minX, height: maxY - minY, blend: 0, fit: 0 };
 }
 
 export interface SurfaceSize { width: number; height: number }
@@ -140,14 +159,33 @@ export interface SurfaceStage extends ArtifactStage {
   handoff(): HandoffRect | null;
 }
 
+const ALIGN_Q = new THREE.Quaternion();
+
 function surfaceHandoff() {
   let camera: THREE.PerspectiveCamera | null = null, size: SurfaceSize = { width: 0, height: 0 };
   return {
     setCamera(next: THREE.PerspectiveCamera | null, nextSize: SurfaceSize) { camera = next; size = nextSize; },
-    rect(surface: THREE.Object3D | null, blend: number): HandoffRect | null {
+    /**
+     * Turn a surface to face the image plane as its handoff approaches.
+     *
+     * A plane at an angle projects to a quadrilateral, and its axis-aligned
+     * bounding rectangle is bigger than the plane. An HTML image is an axis-
+     * aligned rectangle and nothing else, so while the 3D surface is tilted the
+     * two CANNOT share four corners however the camera is placed. Rotating the
+     * surface into the image plane is what makes the crossfade a handoff rather
+     * than a dissolve between two different shapes.
+     */
+    align(object: THREE.Object3D, amount: number) {
+      if (!camera || amount <= 0) return;
+      camera.updateMatrixWorld();
+      ALIGN_Q.setFromRotationMatrix(camera.matrixWorld);
+      object.quaternion.slerp(ALIGN_Q, clamp(amount, 0, 1));
+    },
+    rect(surface: THREE.Object3D | null, blend: number, fit: number): HandoffRect | null {
       if (!camera || !surface || size.width <= 0 || size.height <= 0) return null;
       const projected = projectSurface(surface, camera, size.width, size.height);
       projected.blend = blend;
+      projected.fit = fit;
       return projected;
     },
   };
@@ -280,8 +318,9 @@ export function workflowStage(): SurfaceStage {
       const present = ramp(progress, .28, .47);
       screen.position.set(2.42, .58 + present * .06, present * .14);
       screen.rotation.set(0, (1 - present) * -.55, 0);
+      handoff.align(screen, ramp(progress, .19, .33));
     },
-    handoff: () => handoff.rect(surface, ramp(progress, .33, .49)),
+    handoff: () => handoff.rect(surface, ramp(progress, .33, .49), ramp(progress, .19, .33)),
     dispose() { object.clear(); res.dispose(); },
   };
 }
@@ -335,9 +374,10 @@ export function cartonStage(): SurfaceStage {
   const paperFill = new THREE.DirectionalLight(0xe8dcc8, .5);
   paperFill.position.set(3.4, 1.2, 3); object.add(paperFill);
 
-  const deck = new THREE.Mesh(res.geo(new THREE.BoxGeometry(3.3, .05, 2.4)), table);
-  deck.position.set(CARTON.centre[0] + .1, -.9, CARTON.centre[2]);
-  object.add(outline(res, deck, foldEdge));
+  // No deck. A lit slab with four straight edges floating in space is a block,
+  // not a table, and the object is grounded by its own contact shadow -- which
+  // falls off on every side instead of ending on a line.
+  table.transparent = true;
   const shadow = quad(W * 2.2, D * 2.4, contact);
   shadow.rotation.x = -Math.PI / 2;
   shadow.position.set(CARTON.centre[0], -.885, CARTON.centre[2]); object.add(shadow);
@@ -379,10 +419,10 @@ export function cartonStage(): SurfaceStage {
   const screen = new THREE.Group();
   screen.position.set(CARTON.centre[0] + W * .5 + 2.02, .5, -1.5);
   object.add(screen);
-  const surface = new THREE.Mesh(
-    res.geo(new THREE.PlaneGeometry(1.92, 1.2)),
-    res.mat(new THREE.MeshStandardMaterial({ color: DEPTH, roughness: .3, metalness: .4 })),
-  );
+  const screenMat = res.mat(new THREE.MeshStandardMaterial({
+    color: DEPTH, roughness: .3, metalness: .4, transparent: true, opacity: 0,
+  }));
+  const surface = new THREE.Mesh(res.geo(new THREE.PlaneGeometry(1.92, 1.2)), screenMat);
   screen.add(outline(res, surface, inkEdge));
   ([[0, .64, 2.06, .05], [0, -.64, 2.06, .05], [-.99, 0, .05, 1.33], [.99, 0, .05, 1.33]] as const)
     .forEach(([x, y, w, h]) => {
@@ -394,43 +434,72 @@ export function cartonStage(): SurfaceStage {
 
   const handoff = surfaceHandoff();
   let progress = 0;
+  // Portrait has one band, not two. On a phone the object and its evidence
+  // cannot share the frame, so the object leaves rather than lying under it.
+  let portrait = false;
+  const cartonHome: [number, number, number] = [
+    CARTON.centre[0], CARTON.centre[1] - H / 2, CARTON.centre[2],
+  ];
+  const fade = [board, cut, print, foldEdge] as THREE.Material[];
+  fade.forEach((m) => { m.transparent = true; });
 
   return {
     object,
     surface,
     chrome: screen,
-    setCamera: handoff.setCamera,
+    setCamera(next: THREE.PerspectiveCamera | null, size: SurfaceSize) {
+      portrait = size.width > 0 && (size.width < 820 || size.height > size.width);
+      handoff.setCamera(next, size);
+    },
     update(local) {
       progress = clamp(local, 0, 1);
       // The near lid stops just short of flush. A carton closed to a perfect
       // rectangle has no thickness on screen; one flap standing slightly proud
       // is what shows the board is board.
-      const fold = ramp(progress, .04, .24), dust = ramp(progress, .2, .32), lid = ramp(progress, .28, .4) * .93;
-      const present = ramp(progress, .28, .44);
+      const fold = ramp(progress, .04, .22), dust = ramp(progress, .18, .3), lid = ramp(progress, .26, .36) * .93;
+      const present = ramp(progress, .24, .38);
+      // The object's own interval is over, and it gets out of the way before the
+      // capture arrives. It is never dimmed UNDER the screenshot: by the time the
+      // image has any opacity at all, the box has left the band it is placed in.
+      const clear = ramp(progress, .5, .64);
 
       hinges.forEach(({ pivot, axis, sign, flap, front }) => {
         pivot.rotation[axis] = (1 - fold) * sign * Math.PI / 2;
         flap.rotation[axis] = -(front ? lid : dust) * sign * Math.PI / 2;
       });
-      wallCrease.opacity = fold * .5;
-      lidCrease.opacity = Math.max(lid, dust) * .45;
+      wallCrease.opacity = fold * .5 * (1 - clear);
+      lidCrease.opacity = Math.max(lid, dust) * .45 * (1 - clear);
 
       // Into a three-quarter pose, then still. Square-on, a closed carton is a
       // rectangle: the angle is what puts a lid seam, a flap edge, a side wall
       // and the board's thickness in the same frame, which is what the visitor
       // has to see to recognise packaging without reading the title.
-      carton.rotation.y = (1 - present) * -.55 + .62;
+      carton.rotation.y = (1 - present) * -.55 + .62 - clear * .5;
+      carton.position.set(
+        cartonHome[0] - clear * 1.15,
+        cartonHome[1] - clear * .28,
+        cartonHome[2] - clear * 2.3,
+      );
 
-      // The shadow tightens as the sheet becomes a box.
+      // A carton that is leaving takes its shadow, its deck and its board tone
+      // with it. On a phone it goes all the way out.
+      const held = 1 - clear * (portrait ? 1 : .62);
+      for (const material of fade) material.opacity = material === foldEdge ? .34 * held : held;
+      board.visible = cut.visible = held > .04;
+
       shadow.scale.setScalar(1.34 - fold * .38);
-      contact.opacity = .2 + fold * .18;
+      contact.opacity = (.2 + fold * .18) * (1 - clear);
 
-      // The screen arrives after the box is recognisable, so the object reads
-      // first and its evidence second.
-      screen.rotation.set(0, (1 - present) * .46 - .2, 0);
-      screen.position.y = .52 + (1 - present) * -.1;
+      // The screen arrives once the box has started to leave, so the object is
+      // read first and its evidence second, and neither is read through the other.
+      const arrive = ramp(progress, .52, .66);
+      screen.rotation.set(0, (1 - arrive) * .46 - .2, 0);
+      screen.position.y = .5 + (1 - arrive) * -.1;
+      handoff.align(screen, ramp(progress, .42, .56));
+      screenMat.opacity = arrive;
+      screen.visible = arrive > .01;
     },
-    handoff: () => handoff.rect(surface, ramp(progress, .4, .54)),
+    handoff: () => handoff.rect(surface, ramp(progress, .56, .7), ramp(progress, .42, .56)),
     dispose() { object.clear(); res.dispose(); },
   };
 }
@@ -584,43 +653,57 @@ export function portalStage(assets: StageAssets = {}): SurfaceStage {
     });
   }
 
-  const room = res.mat(new THREE.MeshStandardMaterial({ color: 0x0a1417, roughness: .78, metalness: .12 }));
-  const floorMaterial = res.mat(new THREE.MeshStandardMaterial({ color: 0x0b1013, roughness: .34, metalness: .42 }));
+  /**
+   * The room, in the World's own tones rather than the shell's blue.
+   *
+   * It was a ceiling slab, two side planes and two blocks: flat, hard-edged and
+   * lit like furniture, which reads as grey panels stuck around a photograph
+   * rather than as a space the photograph is the far end of. What replaces them
+   * is a floor that falls off, two pilasters near the threshold that actually
+   * occlude the far wall's edges and slide against it as the camera moves, and a
+   * vignette that dissolves the picture's rectangle into the dark instead of
+   * terminating it. No ceiling: there is nothing up there to light.
+   */
+  // The shell's blue rim light was painting cold bars across a warm room. This
+  // World keeps its own palette, so the stage brings the light that belongs to
+  // it and the shared rim stops describing someone else's geometry.
+  const warmKey = new THREE.DirectionalLight(0xffd9a8, 1.15);
+  warmKey.position.set(-2.4, 3.2, -1.6); object.add(warmKey);
+  const warmFill = new THREE.DirectionalLight(0x8fb6a8, .35);
+  warmFill.position.set(3.2, 1.4, 2.6); object.add(warmFill);
 
-  const floor = new THREE.Mesh(res.geo(new THREE.PlaneGeometry(ROOM_W, 6.2)), floorMaterial);
+  const stone = res.mat(new THREE.MeshStandardMaterial({ color: 0x0b1113, roughness: .42, metalness: .3 }));
+  const pillar = res.mat(new THREE.MeshStandardMaterial({ color: 0x090c0b, roughness: .62, metalness: .12 }));
+
+  const floorFade = res.mat(new THREE.MeshStandardMaterial({
+    color: 0x0b1113, roughness: .42, metalness: .3,
+    alphaMap: res.map(vignetteTexture(96, true)), transparent: true, depthWrite: false,
+  }));
+  const floor = new THREE.Mesh(res.geo(new THREE.PlaneGeometry(ROOM_W * 1.9, 8.6)), floorFade);
   floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, FLOOR_Y, BACK_Z + 3.1);
+  floor.position.set(0, FLOOR_Y, BACK_Z + 3.7);
   interior.add(floor);
 
-  const ceiling = new THREE.Mesh(res.geo(new THREE.PlaneGeometry(ROOM_W, 6.2)), room);
-  ceiling.rotation.x = Math.PI / 2;
-  ceiling.position.set(0, FLOOR_Y + ROOM_H, BACK_Z + 3.1);
-  interior.add(ceiling);
+  // The far wall's own edge, softened. A rectangle of photograph with a hard
+  // border is a picture; the same rectangle bled into the dark is a wall at the
+  // end of a room.
+  const vignette = new THREE.Mesh(
+    res.geo(new THREE.PlaneGeometry(ROOM_W * 2.1, ROOM_H * 2.3)),
+    res.mat(new THREE.MeshBasicMaterial({
+      color: 0x05070a, map: res.map(vignetteTexture()), transparent: true, opacity: .96, depthWrite: false,
+    })),
+  );
+  vignette.position.set(0, -.18, BACK_Z + .06);
+  interior.add(vignette);
 
-  const sides = [-1, 1].map(sign => {
-    const side = new THREE.Mesh(res.geo(new THREE.PlaneGeometry(6.2, ROOM_H)), room);
-    side.rotation.y = sign * Math.PI / 2;
-    side.position.set(sign * ROOM_W / 2, FLOOR_Y + ROOM_H / 2, BACK_Z + 3.1);
-    interior.add(side);
-    return side;
+  // Near-edge occlusion, and the reason the lateral segment reads as depth: they
+  // are 4 units in front of the wall, so they sweep across it as the camera moves.
+  const pillars = [-1, 1].map((sign) => {
+    const column = new THREE.Mesh(res.geo(new THREE.BoxGeometry(.5, 6.2, .5)), pillar);
+    column.position.set(sign * 2.62, FLOOR_Y + 3.1, BACK_Z + 4.6);
+    interior.add(column);
+    return column;
   });
-
-  // A counter running down each side at mid depth. Real geometry, tinted to the
-  // frame's own marble, so the room has something between the threshold and its
-  // back wall for the camera to move against.
-  const counter = res.mat(new THREE.MeshStandardMaterial({ color: 0x121a1d, roughness: .3, metalness: .5 }));
-  const benches = [-1, 1].map(sign => {
-    const bench = new THREE.Mesh(res.geo(new THREE.BoxGeometry(1.5, .9, 5)), counter);
-    bench.position.set(sign * (ROOM_W / 2 - .78), FLOOR_Y + .45, BACK_Z + 2.7);
-    interior.add(outline(res, bench, inkEdge));
-    return bench;
-  });
-
-  // The light that belongs beyond the opening, not in front of it.
-  const glowMat = res.mat(new THREE.MeshBasicMaterial({ color: 0xd8c8a8, transparent: true, opacity: .06 }));
-  const glow = new THREE.Mesh(res.geo(new THREE.PlaneGeometry(ROOM_W * 1.2, ROOM_H * .7)), glowMat);
-  glow.position.set(0, FLOOR_Y + ROOM_H * .62, BACK_Z + .12);
-  interior.add(glow);
 
   const handoff = surfaceHandoff();
   let progress = 0;
@@ -632,29 +715,27 @@ export function portalStage(assets: StageAssets = {}): SurfaceStage {
     update(local, time) {
       progress = clamp(local, 0, 1);
       // Approach, cross, arrive. The crossing has its own interval rather than
-      // sharing one with the reading stop, so the frame is gone by the time the
+      // sharing one with the reading stop, so the wall is gone by the time the
       // visitor is meant to be reading inside.
       const open = ramp(progress, .28, .48), breath = life(progress);
       const approach = ramp(progress, 0, .28);
 
-      // The room answers the camera before the crossing: the near counters slide
-      // more than the far wall, which is parallax from real depth rather than
-      // four cut-outs being translated.
-      const sway = (approach - .5) * .5 + breath * Math.sin(time * .16) * .012;
-      benches.forEach((bench, i) => { bench.position.x = (i === 0 ? -1 : 1) * (ROOM_W / 2 - .78) - sway * .5; });
-      sides.forEach((side, i) => { side.position.x = (i === 0 ? -1 : 1) * ROOM_W / 2 - sway * .3; });
-      surface.position.x = -sway * .12;
-      glow.position.x = -sway * .12;
-      glowMat.opacity = .06 + open * .05;
+      // The pilasters are near and the wall is far, so the same camera move
+      // slides one across the other. That difference IS the depth; it is not a
+      // claim the caption makes on the geometry's behalf.
+      const sway = (approach - .5) * .55 + breath * Math.sin(time * .16) * .012;
+      pillars.forEach((column, i) => { column.position.x = (i === 0 ? -1 : 1) * 2.62 - sway * .62; });
+      surface.position.x = -sway * .1;
+      vignette.position.x = -sway * .1;
 
       rim.opacity = .26 * (1 - open);
-      // The aperture grows past the frustum and keeps going; the room stays
-      // exactly where it was authored, so what changes is the wall, not the world.
+      // The wall grows past the frustum and keeps going; the room stays exactly
+      // where it was authored, so what changes is the wall, not the world.
       aperture.scale.setScalar(1 + open * 5.2);
       aperture.position.z = open * 1.1;
       aperture.visible = open < .995;
     },
-    handoff: () => handoff.rect(surface, ramp(progress, .4, .53)),
+    handoff: () => handoff.rect(surface, ramp(progress, .4, .53), ramp(progress, .26, .4)),
     dispose() { object.clear(); res.dispose(); },
   };
 }

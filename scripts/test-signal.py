@@ -189,6 +189,95 @@ with sync_playwright() as p:
         check(f'{name} scrolling past the portal does not navigate', page.url == before,
               f'{before} -> {page.url}')
 
+        # --- registration: the plate sits ON the surface, not near it --------
+        #
+        # The camera is fitted to the handoff surface before the crossfade, so the
+        # HTML image is placed on the rectangle that camera produces. `data-fit`
+        # reports whether that actually held. It is an assertion, not a repair: an
+        # image silently rescaled to fit would pass a screenshot and still be out
+        # of register with the surface it is replacing for the whole blend.
+        registration = page.evaluate("""async () => {
+          // Seek, then WAIT for the renderer. Progress is read from scrollY inside
+          // a rAF callback, so a synchronous read after scrollTo returns the frame
+          // before the seek -- every sample would carry the previous stop's state,
+          // and a suite that measures the wrong frame is worse than no suite.
+          const settle = () => new Promise((done) => {
+            requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(done, 90)));
+          });
+          const root = document.querySelector('[data-signal]');
+          const runway = root.querySelector('[data-signal-runway]');
+          const frame = root.querySelector('[data-signal-frame]');
+          const top = runway.getBoundingClientRect().top + scrollY;
+          const range = Math.max(1, runway.offsetHeight - frame.offsetHeight);
+          const seek = (u) => window.scrollTo({top: top + range * u, behavior: 'instant'});
+          const read = () => {
+            const live = root.querySelector('[data-chapter][data-active="true"]');
+            const plate = live && live.querySelector('[data-plate]');
+            const copy = live && live.querySelector('[data-chapter-copy]');
+            if (!plate) return null;
+            const p = plate.getBoundingClientRect(), c = copy.getBoundingClientRect();
+            const overlap = !(p.right <= c.left + 1 || p.left >= c.right - 1 ||
+                              p.bottom <= c.top + 1 || p.top >= c.bottom - 1);
+            return {
+              chapter: live.dataset.chapter,
+              fit: plate.dataset.fit || '',
+              handoff: plate.dataset.handoff || '',
+              opacity: Number(getComputedStyle(plate).opacity),
+              overlapsCopy: overlap,
+              inFrame: p.left >= -1 && p.top >= -1 &&
+                       p.right <= innerWidth + 1 && p.bottom <= innerHeight + 1,
+            };
+          };
+          const out = {};
+          for (const [name, u] of [['system', .355], ['object', .474], ['proof', .545],
+                                   ['tracks', .655], ['world', .79]]) {
+            seek(u); await settle(); out[name] = read();
+          }
+          seek(0); await settle();
+          return out;
+        }""")
+        page.wait_for_timeout(200)
+        report['viewports'][name]['registration'] = registration
+
+        for stop, state in (registration or {}).items():
+            if not state:
+                continue
+            if state['handoff'] == 'html':
+                check(f'{name} {stop}: plate is registered on its surface',
+                      state['fit'] == 'exact', f"data-fit={state['fit']}")
+                check(f'{name} {stop}: plate stays inside the frame', state['inFrame'], state)
+            # A plate at zero opacity is not on screen; only what is visible can
+            # cross the copy.
+            if state['opacity'] > 0.02:
+                check(f'{name} {stop}: plate never crosses the narration',
+                      not state['overlapsCopy'], state)
+
+        # The object gets its own interval: at the carton's recognition stop the
+        # screenshot has no opacity at all, and at its proof stop it has all of it.
+        object_stop = (registration or {}).get('object')
+        proof_stop = (registration or {}).get('proof')
+        if object_stop and proof_stop:
+            check(f'{name} the carton is read before any screenshot appears',
+                  object_stop['opacity'] < 0.02, object_stop['opacity'])
+            check(f'{name} the proof stop shows the capture outright',
+                  proof_stop['opacity'] > 0.98, proof_stop['opacity'])
+
+        # --- the evidence names the object, not the scene --------------------
+        evidence = page.evaluate("""() => {
+          const out = {};
+          for (const panel of document.querySelectorAll('[data-chapter]')) {
+            out[panel.dataset.chapter] = [...panel.querySelectorAll('.signal__evidence')]
+              .map(e => ({kind: e.dataset.evidence, text: e.textContent.trim()}));
+          }
+          return out;
+        }""")
+        report['viewports'][name]['evidence'] = evidence
+        for chapter in ('system', 'matter', 'world'):
+            lines = evidence.get(chapter) or []
+            check(f'{name} {chapter}: the drawn object and the capture are labelled separately',
+                  len(lines) == 2 and any(l['kind'] == 'illustration' for l in lines),
+                  lines)
+
         # --- captures --------------------------------------------------------
         for label, u in [('open', 0.02), ('forge', 0.17), ('system', 0.34),
                          ('matter', 0.50), ('signal', 0.63), ('world', 0.76), ('archive', 0.95)]:

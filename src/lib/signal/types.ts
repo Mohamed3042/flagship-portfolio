@@ -134,8 +134,29 @@ export interface ChapterSpec {
   hold?: Progress;
   /** Slug into the existing project data. Never duplicate project copy here. */
   project?: string;
+  /** What the chapter's PLATE is — the HTML image the 3D surface hands off to. */
   evidence: EvidenceKind;
-  reading: ReadingStop | null;
+  /**
+   * What the chapter's own 3D artifact is, when that is a different thing from
+   * its plate. A carton built out of geometry beside a real screenshot is two
+   * claims, not one, and "Actual product screenshot" is false about the carton.
+   */
+  sceneEvidence?: EvidenceKind;
+  /**
+   * Where the camera rests and the copy is legible.
+   *
+   * A chapter may rest more than once. An object has to be recognised before its
+   * evidence arrives, and those are two different things to look at: one stop for
+   * the object alone, a later one for the readable proof beside it. The camera's
+   * travel is measured to the FIRST stop; what moves between stops is the scene.
+   */
+  reading: ReadingStop | ReadingStop[] | null;
+  /**
+   * Local interval over which the narration gives the stage to the artifact, and
+   * after which it comes back. Outside it the copy is at full strength. It never
+   * goes away — at any reading stop it is held at a readable floor.
+   */
+  recede?: [Progress, Progress];
   camera: Record<Layout, CameraPose[]>;
 }
 
@@ -170,6 +191,12 @@ export interface HandoffRect {
   height: number;
   /** 0 while the 3D surface owns the pixels, 1 once the HTML image does. */
   blend: number;
+  /**
+   * How much the camera should already be fitted to this surface, 0..1. It
+   * reaches 1 before the crossfade starts, so the two representations share one
+   * projection for the whole of it.
+   */
+  fit: number;
 }
 
 /* ------------------------------------------------------------------- state */
