@@ -2,22 +2,23 @@
  * DEEP FIELD — the landing orchestrator.
  *
  * Native document scroll is the only source of progress. Every frame is a pure
- * evaluation of that one number, plus a clock that drives twinkle and drift and
- * nothing else: no animation queue, no played/unplayed flags, no one-way
- * transitions. Reverse scroll, a restored scroll position, a deep link,
- * Home/End and a fast swipe all land on exactly the state the same progress
- * produces going forward.
+ * evaluation of that one number, plus a clock that drives twinkle, drift and
+ * the figure's breathing rotation and nothing else: no animation queue, no
+ * played/unplayed flags, no one-way transitions. Reverse scroll, a restored
+ * scroll position, a deep link, Home/End and a fast swipe all land on exactly
+ * the state the same progress produces going forward.
  *
  * The page is useful before this file runs and if it never runs: every
  * chapter's heading, its one line and its links are real HTML in document
  * order. This module upgrades that composition; it does not supply it.
  */
 import * as THREE from 'three';
-import type { ChapterSpec, Layout, Mode, Progress, Tier } from './types';
-import { STAR_FLOOR, TIERS, TUNNEL } from './types';
+import type { ChapterSpec, Figure, Layout, Mode, Progress, Seat, Tier } from './types';
+import { BAND, STAR_FLOOR, TIERS, TUNNEL } from './types';
 import { CHAPTERS, DOLLY_TOTAL, SEGMENT_VH, evaluate } from './chapters';
 import { createField, type Field } from './field';
-import { imageFigure, loadImage, seatTarget, textFigure, type Figure, type Seat } from './targets';
+import { FIGURES, drawnFigure, figureAspect, strokeLength, type FigureSpec } from './figures';
+import { seatTarget, seatPoint, textFigure } from './targets';
 
 /**
  * Height change (CSS px) below which a resize is treated as a mobile browser
@@ -34,6 +35,10 @@ const DOLLY_SNAP = 0.002;
 const REVEAL_SECONDS = 2.4;
 /** Pointer micro-parallax, in degrees. The cap, not a starting point. */
 const PARALLAX_DEG = 0.3;
+/** The figure's breathing rotation. The cap, in degrees. */
+const SPIN_DEG = 3;
+/** Screen pixels between two stars seated along a stroke. */
+const STROKE_SPACING = 2.2;
 
 let teardown: (() => void) | null = null;
 
@@ -112,7 +117,9 @@ export function initSignal(): void {
    * the header actually overlaps, so it is right at any runway length.
    */
   const HEADER = 56;
-  let overStage = '';
+  // Seeded from what the parser already declared, so the first frame agrees with
+  // the first paint instead of correcting it.
+  let overStage = root.dataset.over ?? '';
   function updateHeader() {
     const bottom = root.getBoundingClientRect().bottom;
     const over = bottom > HEADER ? 'cinema' : 'released';
@@ -155,6 +162,11 @@ export function initSignal(): void {
     const bar = document.querySelector('.nav');
     const height = bar ? Math.round(bar.getBoundingClientRect().height) : 0;
     root.style.setProperty('--signal-nav', `${height || 54}px`);
+    // The nebula haze is anchored to the band the stars are drawn from. In CSS
+    // pixels the band's angle is exactly its tilt, because the frustum's aspect
+    // and the viewport's aspect are the same number and cancel; it is published
+    // here so the stylesheet and the harness read the shipped value.
+    root.style.setProperty('--signal-band', `${BAND.tilt}deg`);
   }
 
   function progress(): Progress {
@@ -224,6 +236,46 @@ export function initSignal(): void {
     if (seekNext) seekNext.disabled = index >= CHAPTERS.length - 1;
   }
 
+  /* --------------------------------------------------------------- the reel */
+
+  const reel = root.querySelector<HTMLElement>('[data-signal-reel]');
+  const video = reel?.querySelector<HTMLVideoElement>('video') ?? null;
+  const reelToggle = reel?.querySelector<HTMLButtonElement>('[data-reel-toggle]') ?? null;
+  let wantPlaying = true;
+
+  function reelLabel(playing: boolean) {
+    if (!reelToggle) return;
+    const label = playing ? reelToggle.dataset.pause : reelToggle.dataset.play;
+    reelToggle.setAttribute('aria-label', label ?? '');
+    reelToggle.dataset.state = playing ? 'playing' : 'paused';
+    reelToggle.setAttribute('aria-pressed', playing ? 'true' : 'false');
+  }
+
+  reelToggle?.addEventListener('click', () => {
+    if (!video) return;
+    wantPlaying = video.paused;
+    if (wantPlaying) void video.play().catch(() => { /* a refused play is not a crash */ });
+    else video.pause();
+    reelLabel(wantPlaying);
+  }, { signal });
+  video?.addEventListener('play', () => reelLabel(true), { signal });
+  video?.addEventListener('pause', () => reelLabel(false), { signal });
+
+  /**
+   * The reel runs when it is at least half revealed, and stops when it is not.
+   *
+   * "Half visible" is measured as the plane's own reveal rather than with an
+   * IntersectionObserver: the reel lives inside a sticky, full-height frame, so
+   * its geometry says "on screen" for the whole runway and an observer would
+   * answer the wrong question. The reveal is the thing a visitor can see.
+   */
+  function driveReel(revealed: number, active: boolean) {
+    if (!video) return;
+    const want = active && wantPlaying && revealed >= 0.5 && !document.hidden && !still;
+    if (want && video.paused) void video.play().catch(() => { /* ignore */ });
+    if (!want && !video.paused) video.pause();
+  }
+
   /* ------------------------- the static path: reduced motion / no WebGL */
 
   function staticPath(reason: 'reduced' | 'fallback') {
@@ -273,7 +325,7 @@ export function initSignal(): void {
 
   const scene = new THREE.Scene();
   const FOV: Record<Layout, number> = { landscape: 44, portrait: 62 };
-  const camera = new THREE.PerspectiveCamera(FOV[layout], viewportWidth / viewportHeight, 0.4, TUNNEL.depth + 24);
+  const camera = new THREE.PerspectiveCamera(FOV[layout], viewportWidth / viewportHeight, 0.4, TUNNEL.far + 24);
 
   const field: Field = createField(budget, tier);
   scene.add(field.object);
@@ -293,6 +345,7 @@ export function initSignal(): void {
    */
   const figures = new Map<string, Figure>();
   const seated = new Map<string, Float32Array>();
+  const linkBuffers = new Map<string, Float32Array>();
   let seatKey = '';
   let loadedTarget = '';
 
@@ -314,51 +367,104 @@ export function initSignal(): void {
         jitter: 0.09,
       };
     }
+    if (chapter.side === 'centre') {
+      // The star the last beat ends on sits BEHIND the words, a little high.
+      return {
+        distance,
+        width: width * 0.4,
+        height: height * 0.42,
+        offsetY: height * (layout === 'portrait' ? 0.15 : 0.11),
+        jitter: 1.1,
+      };
+    }
     if (layout === 'portrait') {
       // Portrait: the figure takes the block above the copy band.
       return {
         distance,
-        width: width * 0.84,
-        height: height * 0.36,
-        offsetY: height * 0.19,
-        jitter: 0.3,
+        width: width * 0.8,
+        height: height * 0.4,
+        offsetY: height * 0.17,
+        jitter: 1.2,
       };
     }
-    // Landscape: the copy owns one column, the figure takes the other side.
+    // Landscape: the copy owns one column and the figure takes the other, and
+    // they swap sides every chapter so the eye has somewhere new to go.
+    // The seat is sized for the NEAREST point the jitter can put a star at, not
+    // for the nominal plane: a figure a unit and a half deep projects up to 17%
+    // wider than its own fit, and the first build of this composition hung the
+    // Public constellation's leftmost anchor forty pixels off the screen.
+    const away = chapter.side === 'start' ? 1 : -1;
     return {
       distance,
-      width: width * 0.42,
-      height: height * 0.56,
-      offsetX: (rtl ? -1 : 1) * width * 0.22,
-      jitter: 0.32,
+      width: width * 0.4,
+      height: height * 0.45,
+      offsetX: (rtl ? -away : away) * width * 0.245,
+      jitter: 1.15,
     };
   }
 
-  /**
-   * How many stars a figure should use, from the area it will actually cover.
-   *
-   * A fixed count is a different picture at every viewport: the same 12,000
-   * points that read as a screen on the desktop read as a bright blob inside a
-   * phone's much smaller seat. One point per SEAT_DENSITY square pixels holds
-   * the look constant instead.
-   */
-  const SEAT_DENSITY = 18;
   /** Screen pixels per world unit at a seat's distance. */
   function pixelsPerUnit(distance: number): number {
     const frameHeight = 2 * distance * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
     return viewportHeight / Math.max(1e-3, frameHeight);
   }
-  function pointsFor(chapter: ChapterSpec, aspect?: number, density = SEAT_DENSITY): number {
+
+  /** The world height a figure of this aspect gets inside its seat. */
+  function fittedHeight(seat: Seat, aspect: number): number {
+    return Math.min(seat.width / Math.max(aspect, 1e-4), seat.height);
+  }
+
+  /**
+   * How many stars a glyph figure should use, from the area it will cover. A
+   * fixed count is a different picture at every viewport: the same points that
+   * read as a name on the desktop read as a smear inside a phone's smaller seat.
+   */
+  function textPoints(chapter: ChapterSpec, aspect: number, density: number): number {
     const seat = seatFor(chapter);
     const perUnit = pixelsPerUnit(seat.distance);
-    // With a known aspect, measure the box the figure will ACTUALLY be fitted
-    // into rather than the box it was offered: a name is a wide, shallow figure
-    // inside a tall seat, and using the seat's own area over-counts it tenfold.
-    const scale = aspect ? Math.min(seat.width / aspect, seat.height) : 0;
-    const width = aspect ? scale * aspect : seat.width;
-    const height = aspect ? scale : seat.height;
-    const area = width * perUnit * height * perUnit;
+    const scale = fittedHeight(seat, aspect);
+    const area = scale * aspect * perUnit * scale * perUnit;
     return Math.round(THREE.MathUtils.clamp(area / density, 600, field.recruits));
+  }
+
+  /**
+   * How many stars a drawn figure should use: one per STROKE_SPACING pixels of
+   * stroke, measured on the figure's own strokes.
+   *
+   * The brief asks for two to five thousand. That is right for a figure with a
+   * lot of line in it — the truss, the dieline — and wrong for a simple one: the
+   * magnifier over the folder has about 2,500 px of stroke at this size, and two
+   * thousand stars on it is one star every 1.3 px, which is a wire. Spacing is
+   * the constant that holds, and the counts it produces are in the report.
+   */
+  function strokePoints(spec: FigureSpec, chapter: ChapterSpec): number {
+    // A figure that is a point rather than a drawing states its own count, at a
+    // 900px-tall viewport, and it scales from there like everything else.
+    if (spec.points) return Math.round(spec.points * THREE.MathUtils.clamp(viewportHeight / 900, 0.6, 1.5));
+    const seat = seatFor(chapter);
+    const px = strokeLength(spec) * fittedHeight(seat, figureAspect(spec)) * pixelsPerUnit(seat.distance);
+    return Math.round(THREE.MathUtils.clamp(px / STROKE_SPACING, 900, Math.min(5000, field.recruits)));
+  }
+
+  /** The hairline endpoints for a seated figure, as pairs of world points. */
+  function linksFor(figure: Figure, seat: Seat, out?: Float32Array): Float32Array {
+    const n = figure.links.length;
+    const dest = out && out.length >= n * 6 ? out : new Float32Array(n * 6);
+    for (let i = 0; i < n; i++) {
+      const [a, b] = figure.links[i];
+      const pa = seatPoint(figure, seat, a);
+      const pb = seatPoint(figure, seat, b);
+      dest.set(pa, i * 6);
+      dest.set(pb, i * 6 + 3);
+    }
+    return dest;
+  }
+
+  function place(chapter: ChapterSpec, figure: Figure) {
+    const seat = seatFor(chapter);
+    figures.set(chapter.id, figure);
+    seated.set(chapter.id, seatTarget(figure, seat, seated.get(chapter.id)));
+    linkBuffers.set(chapter.id, linksFor(figure, seat, linkBuffers.get(chapter.id)));
   }
 
   /** Re-seat every figure for the current viewport. A multiply, not a re-read. */
@@ -366,15 +472,15 @@ export function initSignal(): void {
     const key = `${layout}:${viewportWidth}x${viewportHeight}`;
     if (key === seatKey) return;
     seatKey = key;
+    labelWidths.clear();
     for (const chapter of CHAPTERS) {
       const figure = figures.get(chapter.id);
-      if (!figure) continue;
-      seated.set(chapter.id, seatTarget(figure, seatFor(chapter), seated.get(chapter.id)));
+      if (figure) place(chapter, figure);
     }
     loadedTarget = '';
+    foldKey = -1;
   }
 
-  const base = (root.dataset.base ?? '').replace(/\/$/, '');
   const heroText = root.dataset.name ?? '';
   const heroFont = root.dataset.font ?? (rtl ? '300 190px "Cairo Variable"' : '300 190px "Inter Variable"');
 
@@ -388,33 +494,21 @@ export function initSignal(): void {
       if (chapter.target.kind === 'text') {
         // A name is a constellation, not a filled letterform. Sampled twice: the
         // first pass is only there to learn the glyphs' aspect, which is what
-        // decides how many stars this figure should have at THIS viewport. A
-        // fixed share of the budget drew a readable name on a desktop and a
-        // solid blue smear on a phone, where the same points land in a tenth of
-        // the area. Glyph ink is a fraction of its own box, so it takes a
-        // denser target than an image does.
+        // decides how many stars this figure should have at THIS viewport.
         // Glyph ink is a fraction of its own box, so text takes a denser target
-        // than an image — but not on a phone, where the name is a third of the
-        // width and points land closer together than a stem is wide.
+        // than a drawn figure — but not on a phone, where the name is a third of
+        // the width and points land closer together than a stem is wide.
         const probe = textFigure(heroText, heroFont, 1, rtl);
         if (probe) {
           const density = layout === 'portrait' ? 9 : 5;
-          figure = textFigure(heroText, heroFont, pointsFor(chapter, probe.aspect, density), rtl);
+          figure = textFigure(heroText, heroFont, textPoints(chapter, probe.aspect, density), rtl);
         }
       } else {
-        const img = await loadImage(`${base}/img/sky/${chapter.target.src}.webp`);
-        // 40 px per point, not 18: a constellation is a formation you can see
-        // through. At 18 the same figure is a filled slab and the brightest
-        // object on a page whose whole direction is restraint. Portrait needs a
-        // denser target than that, because the same wireframe is a third of the
-        // width there and at 40 it thins out into scattered dust — and the
-        // owner reviews this on his phone.
-        const density = layout === 'portrait' ? 24 : 40;
-        if (img) figure = imageFigure(img, pointsFor(chapter, img.naturalWidth / img.naturalHeight, density));
+        const spec = FIGURES[chapter.target.figure];
+        if (spec) figure = drawnFigure(spec, strokePoints(spec, chapter));
       }
       if (!figure || disposed) continue;
-      figures.set(chapter.id, figure);
-      seated.set(chapter.id, seatTarget(figure, seatFor(chapter)));
+      place(chapter, figure);
       loadedTarget = '';
       // The document's own h1 gives up its ink only once the stars have
       // somewhere to fly to. If the figure never arrives, the name stays HTML.
@@ -422,6 +516,102 @@ export function initSignal(): void {
       request();
     }
     root.dataset.figures = String(figures.size);
+  }
+
+  /* ------------------------------------------------------- the fold */
+
+  // The one figure that opens while it is read is re-sampled as it folds. The
+  // stroke shares are decided on the closed pose and never move, so a star
+  // keeps its own edge all the way open; only the geometry changes.
+  const folding = CHAPTERS.find((c) => c.folds) ?? null;
+  const foldSpec = folding?.target?.kind === 'drawn' ? FIGURES[folding.target.figure] : null;
+  let foldKey = -1;
+  let foldCount = 0;
+  function applyFold(value: number) {
+    if (!folding || !foldSpec) return;
+    // Quantised, so a slow scroll does not re-sample on every frame for a
+    // change nobody could see.
+    const step = Math.round(THREE.MathUtils.clamp(value, 0, 1) * 96);
+    if (step === foldKey) return;
+    foldKey = step;
+    if (!foldCount) foldCount = strokePoints(foldSpec, folding);
+    const figure = drawnFigure(foldSpec, foldCount, step / 96);
+    if (figure) {
+      place(folding, figure);
+      if (loadedTarget === folding.id) field.setTarget(seated.get(folding.id) ?? null);
+    }
+  }
+
+  /* --------------------------------------------------- the anchored labels */
+
+  const labelHost = root.querySelector<HTMLElement>('[data-signal-labels]');
+  const labelNodes = new Map<string, HTMLElement>();
+  if (labelHost) {
+    for (const el of Array.from(labelHost.querySelectorAll<HTMLElement>('[data-label-key]'))) {
+      labelNodes.set(el.dataset.labelKey ?? '', el);
+    }
+  }
+  const projected: { key: string; x: number; y: number; side: 'left' | 'right' }[] = [];
+  const scratch = new THREE.Vector3();
+  /** Chip widths, measured once: a label has to know its own size to choose a
+   *  side, and reading offsetWidth every frame would lay the page out every
+   *  frame. Cleared whenever the viewport changes. */
+  const labelWidths = new Map<string, number>();
+
+  /**
+   * Put each label where the camera says its star is.
+   *
+   * Registration belongs to the camera: the label is projected with the same
+   * matrices, in the same frame, AFTER the parallax rotation has been applied —
+   * an earlier round of this project learned that the hard way by registering
+   * against a stale matrix and shipping a four-pixel drift.
+   */
+  function placeLabels(chapter: ChapterSpec, morph: number, spin: number, pivot: THREE.Vector3) {
+    if (!labelHost) return;
+    const figure = figures.get(chapter.id);
+    const on = !!figure?.labels?.length && morph > 0.55;
+    labelHost.dataset.on = on ? 'true' : 'false';
+    projected.length = 0;
+    if (!on || !figure) {
+      labelHost.style.setProperty('--signal-labels', '0');
+      return;
+    }
+    labelHost.style.setProperty('--signal-labels',
+      THREE.MathUtils.clamp((morph - 0.6) / 0.25, 0, 1).toFixed(3));
+    const seat = seatFor(chapter);
+    const cs = Math.cos(spin);
+    const sn = Math.sin(spin);
+    for (const label of figure.labels ?? []) {
+      const [x, y, z] = seatPoint(figure, seat, label.index);
+      // The same rotation the shader applies, about the same pivot.
+      const rx = x - pivot.x;
+      const rz = z - pivot.z;
+      scratch.set(pivot.x + rx * cs + rz * sn, y, pivot.z - rx * sn + rz * cs);
+      scratch.z = -scratch.z;
+      scratch.project(camera);
+      const px = (scratch.x * 0.5 + 0.5) * viewportWidth;
+      const py = (-scratch.y * 0.5 + 0.5) * viewportHeight;
+      // Which side the chip hangs on is decided by whether it FITS, measured,
+      // not by a threshold: at 390px a label on the right of centre ran off the
+      // screen with a threshold that was right at 1440.
+      const el0 = labelNodes.get(label.key);
+      let chip = labelWidths.get(label.key) ?? 0;
+      if (!chip && el0?.firstElementChild instanceof HTMLElement) {
+        chip = el0.firstElementChild.offsetWidth;
+        if (chip) labelWidths.set(label.key, chip);
+      }
+      const side: 'left' | 'right' = px + 18 + chip > viewportWidth - 14 ? 'right' : 'left';
+      // ...and then it is clamped inside the frame, because at 390px a chip can
+      // overrun BOTH edges and a side alone cannot fix that.
+      const want = side === 'left' ? px + 18 : px - 18 - chip;
+      const left = Math.min(Math.max(want, 14), Math.max(14, viewportWidth - 14 - chip));
+      projected.push({ key: label.key, x: px, y: py, side });
+      const el = labelNodes.get(label.key);
+      if (!el) continue;
+      el.dataset.side = side;
+      el.style.setProperty('--label-x', `${(left - px).toFixed(1)}px`);
+      el.style.transform = `translate(${px.toFixed(1)}px, ${py.toFixed(1)}px)`;
+    }
   }
 
   /* -------------------------------------------------------- pointer parallax */
@@ -450,6 +640,7 @@ export function initSignal(): void {
   let reveal = 0;
   const still = reduced.matches;
   let pinned = still;
+  const pivot = new THREE.Vector3();
 
   /* ------------------------------------------------- the adaptive governor */
 
@@ -519,6 +710,14 @@ export function initSignal(): void {
     root.style.setProperty('--signal-rest', String(value));
   }
 
+  let partStep = -1;
+  function setPart(value: number) {
+    const step = Math.round(THREE.MathUtils.clamp(value, 0, 1) * 100);
+    if (step === partStep) return;
+    partStep = step;
+    root.style.setProperty('--signal-part', (step / 100).toFixed(2));
+  }
+
   function request() {
     if (!raf && !disposed && !contextLost && !document.hidden) raf = requestAnimationFrame(render);
   }
@@ -542,8 +741,9 @@ export function initSignal(): void {
     setHairline(u);
     root.dataset.signalChapter = state.chapter.id;
 
-    // Ambient motion. The twinkle and the drift are the only things a clock
-    // touches; everything the story does is a pure reading of scroll.
+    // Ambient motion. The twinkle, the drift and the figure's breathing are the
+    // only things a clock touches; everything the story does is a pure reading
+    // of scroll.
     if (!pinned) {
       motionTime += dt;
       reveal = Math.min(1, reveal + dt / REVEAL_SECONDS);
@@ -552,7 +752,7 @@ export function initSignal(): void {
     field.setReveal(reveal);
     // A constant slow creep keeps the sky alive when the visitor stops. It is a
     // separate term from the dolly, so stopping the scroll still stops the story.
-    field.setDrift(motionTime * 0.85);
+    field.setDrift(motionTime * 0.35);
 
     // The dolly damps toward the value scroll asks for, and SNAPS once it is
     // within a hair of it, so a settled frame is exactly the pure evaluation.
@@ -564,6 +764,21 @@ export function initSignal(): void {
     // Under reduced motion every morph sits at its held pose: the chapter is a
     // poster, not a paused animation.
     const morph = still ? (state.chapter.target ? 1 : 0) : state.morph;
+    const part = still ? (state.chapter.effect?.kind === 'part' ? 1 : 0) : state.part;
+    const breath = still ? (state.chapter.effect?.kind === 'breath' ? 1 : 0) : state.breath;
+    const fold = still ? (state.chapter.folds ? 0.5 : 0) : state.fold;
+    if (state.chapter.folds && morph > 0.01) applyFold(fold);
+    field.setPart(part);
+    field.setBreath(breath);
+    setPart(part);
+
+    // The figure breathes at rest: three degrees at the most, from the clock,
+    // and nothing at all when the visitor asked for less motion.
+    const seat = seatFor(state.chapter);
+    pivot.set(seat.offsetX ?? 0, seat.offsetY ?? 0, seat.distance);
+    const spin = still ? 0 : THREE.MathUtils.degToRad(SPIN_DEG) * Math.sin(motionTime * 0.21) * morph;
+    field.setSpin(spin, [pivot.x, pivot.y, pivot.z]);
+
     // The figure for this chapter, swapped only while nothing is assembled, so
     // a target arriving late can never pop a formation apart.
     const wantTarget = morph > 0.0005 ? state.chapter.id : '';
@@ -571,6 +786,8 @@ export function initSignal(): void {
       const next = wantTarget ? seated.get(wantTarget) ?? null : null;
       if (!wantTarget || next) {
         field.setTarget(next);
+        const buffer = wantTarget ? linkBuffers.get(wantTarget) ?? null : null;
+        field.setLinks(buffer, buffer ? (figures.get(wantTarget)?.links.length ?? 0) : 0);
         loadedTarget = wantTarget;
       }
     }
@@ -589,6 +806,7 @@ export function initSignal(): void {
 
     setNarration(state.narration);
     setRest(state.resting ? 1 : 0);
+    driveReel(part * (1 - gone), state.chapter.act === 'film');
 
     // Micro-parallax: a rotation of a fraction of a degree, damped, and off at
     // every reading stop so a held figure is never nudged under the eye.
@@ -606,6 +824,9 @@ export function initSignal(): void {
       renderer.setSize(viewportWidth, viewportHeight, false);
       reseat();
     }
+
+    camera.updateMatrixWorld();
+    placeLabels(state.chapter, loadedTarget === state.chapter.id ? morph : 0, spin, pivot);
 
     renderer.render(scene, camera);
     request();
@@ -629,6 +850,7 @@ export function initSignal(): void {
   addEventListener('hashchange', goToAddress, { signal });
   document.addEventListener('visibilitychange', () => {
     lastTick = 0;
+    if (document.hidden) video?.pause();
     request();
   }, { signal });
   canvas.addEventListener('webglcontextlost', (event) => {
@@ -666,12 +888,17 @@ export function initSignal(): void {
     },
     state() {
       const s = evaluate(progress(), layout);
+      const figure = figures.get(s.chapter.id);
       return {
         u: s.u,
         chapter: s.chapter.id,
         act: s.chapter.act,
+        side: s.chapter.side,
         local: Number(s.local.toFixed(5)),
         morph: Number(s.morph.toFixed(5)),
+        fold: Number(s.fold.toFixed(5)),
+        part: Number(s.part.toFixed(5)),
+        breath: Number(s.breath.toFixed(5)),
         dolly: Number(s.dolly.toFixed(4)),
         appliedDolly: Number(dolly.toFixed(4)),
         narration: Number(s.narration.toFixed(4)),
@@ -679,8 +906,15 @@ export function initSignal(): void {
         mode: s.mode,
         released: Number(released().toFixed(4)),
         stars: field.drawn,
+        // The tier's cap and the governor's floor, so a harness can check that
+        // the count is inside its tier without a second copy of the table.
+        starBudget: budget.stars,
+        starFloor: FLOOR,
+        visible: field.visible(camera, dolly, s.part, s.breath),
         recruits: field.recruits,
         figures: figures.size,
+        figurePoints: figure ? figure.count : 0,
+        figureLinks: figure ? figure.links.length : 0,
         tier,
         layout,
         frameIntervalMs: Number(frameMs.toFixed(2)),
@@ -689,6 +923,59 @@ export function initSignal(): void {
     },
     frameIntervalMs() {
       return frameMs;
+    },
+    /**
+     * The figure's box on screen, in CSS pixels, from the seated points the
+     * shader is actually reading. The composition brief asks for a figure at
+     * about 45% of the viewport height; this is how that claim is checked.
+     */
+    figureBox(id?: string) {
+      const chapter = CHAPTERS.find((c) => c.id === (id ?? shownChapter));
+      const figure = chapter ? figures.get(chapter.id) : null;
+      if (!chapter || !figure) return null;
+      const seat = seatFor(chapter);
+      const v = new THREE.Vector3();
+      let minX = Infinity; let minY = Infinity; let maxX = -Infinity; let maxY = -Infinity;
+      for (let i = 0; i < figure.count; i += Math.max(1, Math.floor(figure.count / 900))) {
+        const [x, y, z] = seatPoint(figure, seat, i);
+        v.set(x, y, -z).project(camera);
+        const px = (v.x * 0.5 + 0.5) * viewportWidth;
+        const py = (-v.y * 0.5 + 0.5) * viewportHeight;
+        if (px < minX) minX = px;
+        if (px > maxX) maxX = px;
+        if (py < minY) minY = py;
+        if (py > maxY) maxY = py;
+      }
+      return {
+        chapter: chapter.id,
+        x: Math.round(minX), y: Math.round(minY),
+        width: Math.round(maxX - minX), height: Math.round(maxY - minY),
+        heightShare: Number(((maxY - minY) / viewportHeight).toFixed(3)),
+        points: figure.count,
+        links: figure.links.length,
+      };
+    },
+    /** Where the camera says each labelled anchor is, in CSS pixels. */
+    labels() {
+      return projected.map((p) => ({ ...p, x: Number(p.x.toFixed(2)), y: Number(p.y.toFixed(2)) }));
+    },
+    /**
+     * The band's geometry in CSS pixels, so a haze measurement reads the shipped
+     * number instead of a guess. The stripe runs through the centre of the frame
+     * at the band's own tilt — in pixels the frustum's aspect and the viewport's
+     * aspect are the same number and cancel, which is why this is just the tilt.
+     */
+    band() {
+      const rad = (BAND.tilt * Math.PI) / 180;
+      return {
+        tiltDeg: BAND.tilt,
+        // Screen space: y grows downward, so the band rises to the right.
+        along: [Math.cos(rad), -Math.sin(rad)],
+        normal: [Math.sin(rad), Math.cos(rad)],
+        centre: [viewportWidth / 2, viewportHeight / 2],
+        width: BAND.width,
+        floor: BAND.floor,
+      };
     },
     /**
      * The cost of a frame, in milliseconds: draw the CURRENT scene `frames`
@@ -700,10 +987,6 @@ export function initSignal(): void {
      * GPU, which is why the first version of this probe reported 0.0 ms for
      * 80,000 points. A one-pixel `readPixels` is a real barrier: it cannot
      * return until every queued draw has actually happened.
-     *
-     * requestAnimationFrame cannot be used for this either: this harness runs
-     * it free of vsync and caps it near 230 Hz, so anything under ~4 ms a frame
-     * is invisible to it.
      */
     cost(frames = 60) {
       const gl = renderer.getContext();
@@ -727,10 +1010,17 @@ export function initSignal(): void {
     at(u: number) {
       const s = evaluate(u, layout);
       return { u: s.u, chapter: s.chapter.id, act: s.chapter.act, local: s.local,
-               morph: s.morph, resting: s.resting, narration: s.narration };
+               morph: s.morph, part: s.part, breath: s.breath, fold: s.fold,
+               resting: s.resting, narration: s.narration };
     },
-    chapters: CHAPTERS.map((c) => ({ id: c.id, from: c.from, to: c.to, act: c.act })),
+    chapters: CHAPTERS.map((c) => ({ id: c.id, from: c.from, to: c.to, act: c.act, side: c.side,
+                                     // The middle of this chapter's reading stop: where the
+                                     // figure is held and the copy is meant to be read.
+                                     hold: midpointOf(c),
+                                     figure: c.target?.kind === 'drawn' ? c.target.figure
+                                       : c.target?.kind === 'text' ? 'name' : null })),
     dollyTotal: DOLLY_TOTAL,
+    segmentVh: SEGMENT_VH,
   };
 
   teardown = () => {
@@ -738,6 +1028,7 @@ export function initSignal(): void {
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
     abort.abort();
+    video?.pause();
     field.dispose();
     renderer.dispose();
     delete (window as Window & { __deepField?: unknown }).__deepField;

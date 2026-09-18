@@ -13,7 +13,14 @@
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Contact from '../../components/Contact.astro';
-import Stage, { type SignalAction, type SignalChapterCopy } from '../../components/signal/Stage.astro';
+import Stage, { type SignalAction, type SignalChapterCopy, type SignalLabel } from '../../components/signal/Stage.astro';
+/* The career film, encoded for the web out of the 9,000-frame render in the
+   neighbouring `website` repo: 1280x720 H.264, 13.9 MB, no audio track — the
+   film has none, so the reel carries a play/pause control and not a sound one.
+   Imported rather than dropped in `public/`, which in this worktree is a
+   junction into another repository's tree. */
+import reelSrc from '../../assets/film/career-reel-720.mp4?url';
+import reelPoster from '../../assets/film/career-reel-poster.jpg?url';
 import ProjectCard from '../../components/showroom/ProjectCard.astro';
 import ProjectAtlas, { type MapGroup } from '../../components/showroom/ProjectAtlas.astro';
 import { useTranslations, workPath, pick, locales, type Lang } from '../../i18n/utils';
@@ -48,6 +55,12 @@ const films = legacyProjects.filter(p => !!p.film);
 const careerFilm = films.find(p => p.slug === 'my-resume') ?? films[0];
 /** The repositories a reader can actually clone. `repo` is set only when public. */
 const repos = featured.filter(f => !!f.repo);
+/** The four repositories, labelled by their own names — LTR in both routes. */
+const repoLabels: SignalLabel[] = repos.map(f => ({
+  key: f.slug,
+  label: (f.repo as string).replace(/\/$/, '').split('/').pop() as string,
+  href: f.repo as string,
+}));
 const cv = `${base}/downloads/Mohamed-Mahmoud-AI-Automation-Engineer-Resume.pdf`;
 const github = 'https://github.com/Mohamed3042';
 
@@ -70,6 +83,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     return {
       id: chapter.id,
       act: chapter.act,
+      side: chapter.side,
       kicker: pick(lang, copy.kicker),
       title: pick(lang, profile.name),
       role: `${pick(lang, profile.title)} · ${pick(lang, profile.location)}`,
@@ -84,6 +98,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     return {
       id: chapter.id,
       act: chapter.act,
+      side: chapter.side,
       kicker: pick(lang, project.tag),
       title: pick(lang, project.title),
       line: pick(lang, project.blurb),
@@ -103,12 +118,21 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     return {
       id: chapter.id,
       act: chapter.act,
+      side: chapter.side,
       kicker: pick(lang, copy.kicker),
       title: copy.title ? pick(lang, copy.title) : '',
       line: ar
         ? `${films.length} مشاريع سابقة، لكلٍّ منها فيلمه الخاص.`
         : `${films.length} earlier projects, each with a film of its own.`,
       actions,
+      // The reel itself: the career film, muted and looping behind the copy.
+      reel: {
+        src: reelSrc,
+        poster: reelPoster,
+        title: ar ? 'فيلم المسيرة' : 'The career film',
+        play: ar ? 'شغّل الفيلم' : 'Play the reel',
+        pause: ar ? 'أوقف الفيلم' : 'Pause the reel',
+      },
     };
   }
 
@@ -118,12 +142,17 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     return {
       id: chapter.id,
       act: chapter.act,
+      side: chapter.side,
       kicker: pick(lang, copy.kicker),
       title: copy.title ? pick(lang, copy.title) : '',
       line: ar
         ? `${repos.length} مستودعات عامة، مع تكامل مستمر وحاويات.`
         : `${repos.length} public repositories, with continuous integration and containers.`,
       actions,
+      // One label per anchor star, keyed by slug. The renderer hangs each of
+      // these on the star the camera projects for that key; a slug with no
+      // anchor simply never appears, which the harness checks for.
+      labels: repoLabels,
     };
   }
 
@@ -135,6 +164,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
   return {
     id: chapter.id,
     act: chapter.act,
+    side: chapter.side,
     kicker: pick(lang, copy.kicker),
     title: copy.title ? pick(lang, copy.title) : '',
     line: copy.line ? pick(lang, copy.line) : null,
@@ -178,8 +208,20 @@ const heroFont = ar ? '300 190px "Cairo Variable", sans-serif' : '300 190px "Int
             const probe = document.createElement('canvas');
             if (probe.getContext('webgl2') || probe.getContext('webgl')) stage.dataset.graphics = 'webgl';
           } catch { /* no context: the still composition is already correct */ }
+          // The header is over the cinema for the whole runway, and while it is,
+          // the stylesheet hides the theme control — six themes over a stage that
+          // is black in all six. That attribute used to arrive with the renderer,
+          // half a second after first paint, and the header lost 48px of controls
+          // in front of the visitor: the site's ONLY layout shift, 0.00031 of one,
+          // traced to DIV.nav__tools changing width at 496ms. Declaring it here
+          // makes the first paint the right one. If a restored scroll position
+          // puts the visitor past the runway, the renderer corrects it on frame one.
+          stage.dataset.over = 'cinema';
         })();
       </script>
+      {/* The nebula haze, under the stars and anchored to the same band they are
+          drawn from. A painted layer, not a texture download. */}
+      <div class="signal__haze" aria-hidden="true"></div>
       <canvas class="signal__canvas" data-signal-canvas aria-hidden="true"></canvas>
       {/* Grain and vignette sit above the field and below the type. Both are
           painted, never a texture download. */}

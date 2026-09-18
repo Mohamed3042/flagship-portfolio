@@ -6,6 +6,11 @@
  * check it. Everything here is real HTML in document order: with no JavaScript,
  * with no WebGL, or with reduced motion on, the whole page is still a readable
  * list of work. The scene upgrades this composition; it never supplies it.
+ *
+ * Two chapters carry something besides words. Film hangs a 16:9 plane in the
+ * zone the stars part to clear, and Public hangs one label on each of its four
+ * anchor stars — HTML, positioned every frame from where the camera says that
+ * star is, because registration belongs to the camera and not to a guess.
  */
 import type { Lang } from '../../i18n/utils';
 
@@ -17,9 +22,27 @@ export interface SignalAction {
   ltr?: boolean;
 }
 
+/** A label anchored to one star of the Public constellation. */
+export interface SignalLabel {
+  key: string;
+  label: string;
+  href: string;
+}
+
+/** The career reel, when a rendered copy of the film exists in the assets. */
+export interface SignalReel {
+  src: string;
+  poster: string;
+  play: string;
+  pause: string;
+  title: string;
+}
+
 export interface SignalChapterCopy {
   id: string;
   act: 'hero' | 'worlds' | 'film' | 'public' | 'contact';
+  /** Which side the copy takes on a wide screen. The figure takes the other. */
+  side: 'start' | 'end' | 'centre';
   kicker: string | null;
   /** The chapter heading. The hero's is the page's h1. */
   title: string;
@@ -28,6 +51,8 @@ export interface SignalChapterCopy {
   /** The hero's second line: the role, beneath the name. */
   role?: string | null;
   actions: SignalAction[];
+  labels?: SignalLabel[];
+  reel?: SignalReel | null;
 }
 
 interface Props {
@@ -44,10 +69,68 @@ const titleId = `signal-${chapter.id}-title`;
   class="signal__chapter"
   data-chapter={chapter.id}
   data-act={chapter.act}
+  data-side={chapter.side}
   data-index={index}
   aria-labelledby={titleId}
   id={`signal-${chapter.id}`}
 >
+  {chapter.reel && (
+    <div class="signal__reel" data-signal-reel>
+      <div class="signal__reel-plane">
+        {/* preload="none": the reel is thirteen megabytes, and nothing is
+            fetched until the plane is actually revealed and asked to play.
+            No autoplay attribute — the renderer starts it, and only once the
+            plane is at least half revealed. */}
+        <video
+          src={chapter.reel.src}
+          poster={chapter.reel.poster}
+          muted
+          loop
+          playsinline
+          preload="none"
+          tabindex="-1"
+          aria-label={chapter.reel.title}
+        ></video>
+      </div>
+      <button
+        type="button"
+        class="signal__reel-toggle"
+        data-reel-toggle
+        data-play={chapter.reel.play}
+        data-pause={chapter.reel.pause}
+        aria-label={chapter.reel.pause}
+        aria-pressed="true"
+        data-state="playing"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path class="signal__reel-pause" d="M9 6v12M15 6v12" fill="none" stroke="currentColor" stroke-width="1.8" />
+          <path class="signal__reel-play" d="M9 6l10 6-10 6z" fill="currentColor" />
+        </svg>
+        <span>{chapter.reel.title}</span>
+      </button>
+    </div>
+  )}
+
+  {chapter.labels && chapter.labels.length > 0 && (
+    /* Each label is a POINT at the projected star, with its chip hanging off
+       it: that makes the element's own rect the anchor, so the four-pixel
+       registration check has something exact to read. */
+    <div class="signal__labels" data-signal-labels data-on="false">
+      {chapter.labels.map((label) => (
+        <a
+          class="signal__label"
+          data-label-key={label.key}
+          data-side="left"
+          href={label.href}
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="signal__label-box" dir="ltr">{label.label}</span>
+        </a>
+      ))}
+    </div>
+  )}
+
   <div class="signal__copy" data-chapter-copy>
     {chapter.kicker && <p class="signal__kicker">{chapter.kicker}</p>}
 
