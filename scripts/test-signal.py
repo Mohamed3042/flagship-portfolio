@@ -185,8 +185,12 @@ PORTAL = """(id) => {
   host.dataset.decoded = 'false';
   const gated = Number(getComputedStyle(host).opacity);
   host.dataset.decoded = was;
+  const cs = getComputedStyle(host);
   return {...plate, gatedOpacity: gated,
           onScreen: r.top > -4 && r.bottom < innerHeight + 4 && r.left > -4 && r.right < innerWidth + 4,
+          // The clip and the fit are what make the picture the aperture rather
+          // than a rectangle standing in one. Read from the rendered page.
+          clip: cs.clipPath, fit: getComputedStyle(img).objectFit,
           src: img.getAttribute('src'), loading: img.getAttribute('loading'),
           alt: (img.getAttribute('alt') || '').length};
 }"""
@@ -245,17 +249,30 @@ def patch_means(img, centre, normal, blocked, step=24, size=24):
 
 
 def band_delta(img, centre, normal, blocked):
-    """Mean luma inside the band, in a void, and the two halves of the void."""
+    """Mean luma inside the band, in a void, and the two halves of the void.
+
+    A HALF WITH NO PATCHES IS NOT A HALF THAT MEASURED ZERO. The first build of
+    this returned 0.0 for an empty mean, so on a frame where the copy block
+    covered one side "the two halves disagree by 2.7" was really "one half has
+    a mean of 2.7 and the other has no samples at all" — a difference the page
+    had nothing to do with. Both counts are reported, and the difference is
+    None unless both halves were actually sampled.
+    """
     ps = patch_means(img, centre, normal, blocked)
     h = img.height
     inside = [p[2] for p in ps if abs(p[0]) < 0.16 * h]
     outside = [p for p in ps if abs(p[0]) > 0.5 * h]
-    mean = lambda v: sum(v) / len(v) if v else 0.0
-    a = mean([p[2] for p in outside if p[1] >= 0])
-    b = mean([p[2] for p in outside if p[1] < 0])
-    return {'band': round(mean(inside), 3), 'void': round(mean([p[2] for p in outside]), 3),
-            'delta': round(mean(inside) - mean([p[2] for p in outside]), 3),
-            'voidHalves': round(abs(a - b), 3), 'nBand': len(inside), 'nVoid': len(outside)}
+    mean = lambda v: sum(v) / len(v) if v else None
+    upper = [p[2] for p in outside if p[1] >= 0]
+    lower = [p[2] for p in outside if p[1] < 0]
+    a, b = mean(upper), mean(lower)
+    band, void = mean(inside), mean([p[2] for p in outside])
+    return {'band': round(band, 3) if band is not None else None,
+            'void': round(void, 3) if void is not None else None,
+            'delta': round(band - void, 3) if band is not None and void is not None else None,
+            'voidHalves': round(abs(a - b), 3) if a is not None and b is not None else None,
+            'nBand': len(inside), 'nVoid': len(outside),
+            'nVoidUpper': len(upper), 'nVoidLower': len(lower)}
 
 
 def planted(width, height, centre, normal, amount):
@@ -281,6 +298,21 @@ def planted(width, height, centre, normal, amount):
 # viewport and then held for the rest of the run, so this is the shipped number
 # and not a number from a brief.
 BEATS = 19
+
+# The aperture's own geometry, which the page exports from the figure that
+# draws it. Typed here once and read from nowhere else, so a change to the
+# tick length moves the figure and the check together.
+PORTAL_ASPECT = 1.12
+PORTAL_TICK_OUT = 1.1
+
+# The director's floors for a beat, in CSS pixels of scroll. src/lib/signal/
+# chapters.ts exports the same three as BEAT_FLOORS.
+HOLD_FLOOR, RELEASE_FLOOR, ASSEMBLY_FLOOR = 450, 400, 700
+
+# What the seek nav's three controls say, in both routes. The tab-order check
+# looks for one of them rather than for a selector, because what it is asserting
+# is that a KEYBOARD reaches the nav, not that a node exists.
+SEEK_WORDS = {'Previous', 'Next', 'View work', 'السابق', 'التالي', 'إلى الأعمال'}
 
 # Every off-site host the landing is allowed to point at. Each was requested
 # live while this round was built and its status is in the round's report; the
@@ -311,7 +343,13 @@ TEXT = ['.signal__chapter[data-active=true] .signal__title, .signal__chapter[dat
         '.signal__chapter[data-active=true] .signal__line',
         '.signal__chapter[data-active=true] .signal__kicker',
         '.signal__chapter[data-active=true] .signal__action',
-        '.signal__seek button']
+        '.signal__seek button',
+        '.signal__skip']
+# The star captions are read at their own beat, because they only exist while
+# their figure is held. Round 4 raised both from the secondary ink; the ratio
+# is what says whether that landed, and it is read off the rendered page.
+LABEL_TEXT = {'tools': '#signal-tools .signal__label-box--plain',
+              'public': '#signal-public .signal__label-box'}
 
 
 def scroll_to(page, u):
@@ -514,11 +552,13 @@ with sync_playwright() as p:
         # third as wide, so the same figure is smaller by construction; the
         # bound is stated for each composition rather than averaged into one
         # number that is true of neither.
-        # The portals are the beats whose height the composition states outright:
-        # an aperture of 40-48% of the viewport. Everything else is "about 45%"
-        # and is reported rather than gated.
+        # The portals are the beats whose height the composition states outright.
+        # ROUND 4 raised the desktop aperture to half the screen — the director
+        # asked for 50-55% — because the picture is now seen THROUGH it rather
+        # than floating inside it. The phone's 37% stands. Everything else is
+        # "about 45%" and is reported rather than gated.
         worlds = {k: v for k, v in shares.items() if k.startswith("world-")}
-        lo, hi = (0.40, 0.48) if w >= 820 else (0.32, 0.42)
+        lo, hi = (0.50, 0.55) if w >= 820 else (0.32, 0.42)
         outside = {k: v for k, v in worlds.items() if not lo <= v <= hi}
         check(f"{name} every portal ring is {lo:.0%}-{hi:.0%} of the viewport height",
               not outside, f"{outside} of {worlds}")
@@ -598,11 +638,33 @@ with sync_playwright() as p:
             # beat, with the decode gate turned off, must read exactly 0.
             check(f"{name} {c['id']}: an undecoded frame is held at zero",
                   plate["gatedOpacity"] == 0, plate["gatedOpacity"])
-            check(f"{name} {c['id']}: the plate is inside its ring and on screen",
-                  plate["onScreen"] and plate["width"] <= plate["ringHeight"] * 1.12 * 0.75
-                  and plate["height"] <= plate["ringHeight"] * 0.5, plate)
-            check(f"{name} {c['id']}: the plate keeps the frame's own ratio",
-                  abs(plate["aspect"] - plate["width"] / max(1, plate["height"])) < 0.02, plate)
+            # ROUND 4 inverted this pair. The plate used to have to be SMALL
+            # enough to sit inside the ellipse with air around it, which is what
+            # made every world a postage stamp. It now has to FILL the rim: its
+            # box is the rim's own box, it carries the aperture's ratio rather
+            # than the frame's, and the frame covers it. Three things are
+            # checked, and each of them could fail on its own.
+            rim = plate["ringHeight"] / PORTAL_TICK_OUT
+            check(f"{name} {c['id']}: the plate fills its rim edge to edge",
+                  plate["onScreen"] and abs(plate["height"] - rim) <= 2
+                  and abs(plate["width"] - rim * PORTAL_ASPECT) <= 2,
+                  f"plate {plate['width']}x{plate['height']} vs rim "
+                  f"{rim * PORTAL_ASPECT:.0f}x{rim:.0f}")
+            check(f"{name} {c['id']}: the plate carries the aperture's ratio",
+                  abs(plate["width"] / max(1, plate["height"]) - PORTAL_ASPECT) < 0.02,
+                  plate["width"] / max(1, plate["height"]))
+            # The clip is what makes the rim the iris. Without it the plate is a
+            # rectangle with the stars standing on its corners.
+            check(f"{name} {c['id']}: the plate is clipped to the ellipse",
+                  plate["clip"].startswith("ellipse") and plate["fit"] == "cover",
+                  f"{plate['clip']} / {plate['fit']}")
+            # And the frame has to have the pixels to fill it. DPR is capped at
+            # 1.5, so the plate needs that much of its own box; the source
+            # multiple against the director's 2x is reported, not gated,
+            # because four of the five masters are 1280x720 and cannot reach it.
+            check(f"{name} {c['id']}: the frame covers the plate at DPR 1.5",
+                  plate["naturalWidth"] >= plate["width"] * 1.5,
+                  f"{plate['naturalWidth']} for {plate['width'] * 1.5:.0f}")
             check(f"{name} {c['id']}: the frame is lazy and described",
                   plate["loading"] == "lazy" and plate["alt"] > 20, plate)
         report.setdefault("portals", {})[name] = plates
@@ -613,8 +675,197 @@ with sync_playwright() as p:
         report.setdefault("type", {})[name] = typo
         if w >= 820:
             check(f"{name} the chapter title is at display scale", typo["title"] >= 34, typo["title"])
-        check(f"{name} body type is 15-16px", 15 <= typo["body"] <= 16, typo["body"])
+        # Arabic is deliberately a step larger: the Round 4 pass moved every
+        # slot on this route up 1-2 px with looser leading, because the same
+        # point size reads smaller in an Arabic face. One bound for both would
+        # be a bound that is wrong for one of them.
+        lo_body, hi_body = (16.5, 18.0) if lang == 'ar' else (15.0, 16.0)
+        check(f"{name} body type is {lo_body}-{hi_body}px",
+              lo_body <= typo["body"] <= hi_body, typo["body"])
         check(f"{name} body lines stay under 60 characters", typo["perLine"] <= 60, typo)
+
+        # --- the star captions -----------------------------------------------
+        # Round 3 set these at 12px in the secondary ink and the director could
+        # not read them at held pose. The size, the case, the tracking and the
+        # alpha are all read off the rendered page, and so is the leader, which
+        # has to be dimmer than the caption it leads to rather than brighter.
+        for chapter_id, selector in LABEL_TEXT.items():
+            spec = next((c for c in chapters if c['id'] == chapter_id), None)
+            if not spec:
+                continue
+            scroll_to(page, spec['hold'])
+            got = page.evaluate(r'''(sel) => {
+              const box = document.querySelector(sel);
+              if (!box) return null;
+              const cs = getComputedStyle(box);
+              const anchor = box.closest('.signal__label');
+              const leader = anchor ? getComputedStyle(anchor, '::before') : null;
+              const alpha = (css) => {
+                const m = (css.match(/[\d.]+/g) || []).map(Number);
+                return m.length > 3 ? m[3] : 1;
+              };
+              return {size: parseFloat(cs.fontSize), transform: cs.textTransform,
+                      tracking: parseFloat(cs.letterSpacing) || 0,
+                      colour: cs.color, alpha: alpha(cs.color),
+                      leader: leader ? leader.backgroundColor : null,
+                      leaderAlpha: leader ? alpha(leader.backgroundColor) : null,
+                      leaderHeight: leader ? parseFloat(leader.height) : null};
+            }''', selector)
+            report.setdefault('captions', {}).setdefault(name, {})[chapter_id] = got
+            check(f'{name} {chapter_id}: the caption is 13-14px',
+                  bool(got) and 13 <= got['size'] <= 14, got and got['size'])
+            check(f'{name} {chapter_id}: the caption is uppercase and tracked',
+                  bool(got) and got['transform'] == 'uppercase' and got['tracking'] > 0.5,
+                  got and (got['transform'], got['tracking']))
+            check(f'{name} {chapter_id}: the caption ink is at full alpha',
+                  bool(got) and got['alpha'] >= 0.999, got and got['colour'])
+            check(f'{name} {chapter_id}: the leader is a hairline, dimmer than its caption',
+                  bool(got) and got['leaderHeight'] == 1 and 0 < got['leaderAlpha'] < got['alpha'],
+                  got and (got['leaderHeight'], got['leaderAlpha']))
+            ratio = page.evaluate(CONTRAST, [selector])[selector]
+            report.setdefault('captionContrast', {}).setdefault(name, {})[chapter_id] = ratio
+            check(f'{name} {chapter_id}: caption contrast >= 4.5:1',
+                  bool(ratio) and ratio['ratio'] >= 4.5,
+                  f"{ratio['ratio']:.2f}:1" if ratio else 'not found')
+
+        # --- accessibility ----------------------------------------------------
+        # Six claims, each read from the rendered page rather than from the
+        # markup's intentions.
+        scroll_to(page, chapters[6]['hold'])
+        a11y = page.evaluate('''() => {
+          const stage = document.querySelector('[data-signal-stage]');
+          const live = document.querySelector('[data-chapter][data-active=true]');
+          // 1. A link with no discernible name is a link a screen reader reads
+          //    as "link". Text, then aria-label, then the alt of an image
+          //    inside it, then a title — the same order the platform uses.
+          const named = (a) => (a.textContent || '').trim()
+            || a.getAttribute('aria-label') || ''
+            || [...a.querySelectorAll('img')].map(i => i.getAttribute('alt') || '').join('')
+            || a.getAttribute('title') || '';
+          const reachable = [...stage.querySelectorAll('a[href], button')]
+            .filter(n => !n.closest('[inert]') && !n.disabled
+                      && getComputedStyle(n).visibility !== 'hidden');
+          // 2. Headings: one h1, and every beat a heading, in document order.
+          const heads = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')]
+            .map(h => Number(h.tagName[1]));
+          const beatHeads = [...document.querySelectorAll('[data-chapter]')]
+            .map(p => {
+              const h = p.querySelector('h1, h2, h3, h4, h5, h6');
+              return h ? h.tagName : null;
+            });
+          return {
+            unnamed: reachable.filter(n => !named(n).trim())
+                              .map(n => n.outerHTML.slice(0, 90)),
+            reachable: reachable.length,
+            h1: document.querySelectorAll('h1').length,
+            headings: heads,
+            beatHeads,
+            canvasHidden: [...document.querySelectorAll('canvas')]
+              .every(c => c.getAttribute('aria-hidden') === 'true'),
+            skipHref: (stage.querySelector('.signal__skip') || {}).getAttribute
+              ? stage.querySelector('.signal__skip').getAttribute('href') : null,
+          };
+        }''')
+        report.setdefault('a11y', {})[name] = a11y
+        check(f'{name} every reachable link and button has a name',
+              not a11y['unnamed'], a11y['unnamed'][:3])
+        check(f'{name} exactly one h1 on the route', a11y['h1'] == 1, a11y['h1'])
+        check(f'{name} every beat carries a heading',
+              all(a11y['beatHeads']) and a11y['beatHeads'].count('H1') == 1,
+              a11y['beatHeads'])
+        check(f'{name} headings never skip a level',
+              all(b - a <= 1 for a, b in zip(a11y['headings'], a11y['headings'][1:])),
+              a11y['headings'][:24])
+        check(f'{name} no canvas is exposed to the accessibility tree',
+              a11y['canvasHidden'])
+
+        # 3. The skip link has to LAND past the runway, which is a measurement,
+        #    not an href: #work is only a skip if the work section is below the
+        #    whole cinema.
+        skip = page.evaluate('''() => {
+          const stage = document.querySelector('[data-signal-stage]');
+          const runway = stage.querySelector('[data-signal-runway]');
+          const target = document.querySelector(
+            stage.querySelector('.signal__skip').getAttribute('href'));
+          if (!target) return null;
+          const end = runway.getBoundingClientRect().bottom + scrollY;
+          return {target: target.id, top: target.getBoundingClientRect().top + scrollY,
+                  runwayEnd: end};
+        }''')
+        check(f'{name} the skip link lands past the end of the runway',
+              bool(skip) and skip['top'] >= skip['runwayEnd'] - 2, skip)
+
+        # 4. A focus ring that is not painted is not a focus ring. Read the
+        #    computed outline on a control that has focus, with a control:
+        #    the same element unfocused must NOT have one, or the check is
+        #    measuring a border that is always there.
+        rings = page.evaluate('''() => {
+          const read = (el) => {
+            const cs = getComputedStyle(el);
+            return {width: parseFloat(cs.outlineWidth) || 0, style: cs.outlineStyle,
+                    colour: cs.outlineColor, offset: parseFloat(cs.outlineOffset) || 0};
+          };
+          const out = {};
+          const pick = {
+            portal: '[data-chapter][data-active=true] .signal__action',
+            seek: '[data-signal-seek] [data-seek=next]',
+            skip: '.signal__skip',
+          };
+          for (const [key, sel] of Object.entries(pick)) {
+            const el = document.querySelector(sel);
+            if (!el) { out[key] = null; continue; }
+            const before = read(el);
+            el.focus({focusVisible: true});
+            out[key] = {focused: read(el), idle: before,
+                        isFocused: document.activeElement === el};
+            el.blur();
+          }
+          return out;
+        }''')
+        report.setdefault('focusRings', {})[name] = rings
+        for key, got in rings.items():
+            check(f'{name} {key}: focus paints a 2px accent ring with an offset',
+                  bool(got) and got['isFocused'] and got['focused']['width'] >= 2
+                  and got['focused']['style'] not in ('none', 'hidden')
+                  and got['focused']['offset'] >= 2, got)
+            check(f'{name} {key}: the ring is not there when it is not focused',
+                  bool(got) and (got['idle']['width'] < 2
+                                 or got['idle']['style'] in ('none', 'hidden')), got)
+
+        # 5. Tab order, walked for real. Every control the stage exposes has to
+        #    be reachable, in document order, and the tab sequence has to LEAVE
+        #    the stage — a sticky frame that never hands focus on is a trap.
+        page.evaluate('window.scrollTo({top: 0, behavior: "instant"})')
+        page.wait_for_timeout(300)
+        page.evaluate('() => document.body.focus()')
+        page.keyboard.press('Tab')
+        order, escaped = [], False
+        for _ in range(42):
+            where = page.evaluate('''() => {
+              const el = document.activeElement;
+              if (!el || el === document.body) return null;
+              const stage = document.querySelector('[data-signal-stage]');
+              return {tag: el.tagName,
+                      text: (el.textContent || '').trim().slice(0, 28),
+                      inStage: !!stage && stage.contains(el),
+                      inInert: !!el.closest('[inert]')};
+            }''')
+            if where is None:
+                break
+            order.append(where)
+            if order and order[0]['inStage'] and not where['inStage'] and len(order) > 1:
+                escaped = True
+                break
+            page.keyboard.press('Tab')
+        report.setdefault('tabOrder', {})[name] = order
+        check(f'{name} the tab order never enters an inert chapter',
+              not any(o['inInert'] for o in order),
+              [o['text'] for o in order if o['inInert']][:3])
+        check(f'{name} focus is not trapped inside the sticky stage', escaped,
+              [o['text'] for o in order][:12])
+        check(f'{name} the seek nav is in the tab order',
+              any(o['inStage'] and o['text'] in SEEK_WORDS for o in order),
+              [o['text'] for o in order][:12])
 
         # --- the morph is long enough to read as motion on a wheel -----------
         # Measured from the SHIPPED window rather than a second copy of its
@@ -658,11 +909,18 @@ with sync_playwright() as p:
             "assemblyVisiblePx": round((edges["vis1"] - edges["vis0"]) * span),
             "releaseVisiblePx": round((edges["visOut1"] - edges["visOut0"]) * span),
             "holdPx": round(px_chapter - assembly - release)}
-        # Round 2 measured 1,153px of assembly and the director asked for that
-        # minimum to stand. It does. The release is the budget's casualty and is
-        # reported as a number, not asserted as a pass.
-        check(f"{name} the assembly takes at least 1,152px of scroll", assembly >= 1152, round(assembly))
-        check(f"{name} the release takes at least 280px of scroll", release >= 280, round(release))
+        # ROUND 4 floors. A hold of 202 px is two notches of a wheel to read a
+        # title, a line and a link in, so the director set the hold and the
+        # release first and gave the assembly what was left, with 700 px under
+        # it. All three are asserted now — the release used to be reported
+        # because the runway could not pay for it, and at this split it can.
+        hold = px_chapter - assembly - release
+        check(f"{name} the hold takes at least {HOLD_FLOOR}px of scroll",
+              hold >= HOLD_FLOOR, round(hold))
+        check(f"{name} the release takes at least {RELEASE_FLOOR}px of scroll",
+              release >= RELEASE_FLOOR, round(release))
+        check(f"{name} the assembly takes at least {ASSEMBLY_FLOOR}px of scroll",
+              assembly >= ASSEMBLY_FLOOR, round(assembly))
 
         # --- no dead links ----------------------------------------------------
         # Internal targets have to exist in this build; external ones have to be
@@ -750,33 +1008,87 @@ with sync_playwright() as p:
     page = ctx.new_page()
     page.goto(f'{args.base_url}/en', wait_until='networkidle')
     page.wait_for_timeout(2600)
-    quiet = page.evaluate("""() => {
-      let best = null, run = null;
+    quiets = page.evaluate("""() => {
+      const runs = [];
+      let run = null;
       for (let i = 0; i <= 2000; i++) {
         const u = i / 2000;
         const s = window.__deepField.at(u);
         const still = s.morph < 0.002 && s.part < 0.002 && s.breath < 0.002 && s.portal < 0.002;
         if (still) run = run ? {from: run.from, to: u} : {from: u, to: u};
-        else { if (run && (!best || run.to - run.from > best.to - best.from)) best = run; run = null; }
+        else { if (run) runs.push(run); run = null; }
       }
-      if (run && (!best || run.to - run.from > best.to - best.from)) best = run;
-      return best;
+      if (run) runs.push(run);
+      return runs.sort((a, b) => (b.to - b.from) - (a.to - a.from)).slice(0, 6);
     }""")
-    check('the field is alone somewhere on the page', quiet is not None, quiet)
-    page.evaluate(SEEK, (quiet['from'] + quiet['to']) / 2)
-    page.evaluate(SETTLE)
-    band = page.evaluate('() => window.__deepField.band()')
-    blocked = page.evaluate("""() => {
+    check('the field is alone somewhere on the page', bool(quiets), quiets)
+
+    BLOCKED = """() => {
       const out = [];
       for (const sel of ['[data-chapter][data-active=true] .signal__copy', '.nav',
-                         '[data-signal-seek]', '[data-signal-portal]']) {
+                         '[data-signal-seek]', '[data-signal-portal]',
+                         '[data-chapter][data-active=true] .signal__hint',
+                         '[data-signal-labels][data-on=true]']) {
         for (const el of document.querySelectorAll(sel)) {
+          // ONLY WHAT IS ACTUALLY DRAWN. This selector list reaches every
+          // portal on the page, not the one on screen, and the other four keep
+          // the box the renderer last gave them behind `visibility:hidden`.
+          // With Round 4's plates at 481x430 and a 60px skirt, those four
+          // covered most of the frame and the instrument was excluding the
+          // void it was about to average — which is how one half of it came to
+          // have no samples at all. An element that paints nothing hides
+          // nothing.
+          const cs = getComputedStyle(el);
+          if (cs.visibility === 'hidden' || Number(cs.opacity) < 0.02) continue;
           const r = el.getBoundingClientRect();
           if (r.width && r.height) out.push([r.left - 60, r.top - 40, r.right + 60, r.bottom + 40]);
         }
       }
       return out;
-    }""")
+    }"""
+
+    # WHICH quiet window. The longest one is not the right answer: this round's
+    # split put it inside the hero, whose name block and scroll hint sit across
+    # the middle of the frame and leave the instrument three patches of void to
+    # average — one half of which had none at all. What the measurement needs is
+    # the quiet stretch with the most MEASURABLE frame, so each candidate is
+    # seated, its blocked rectangles are read, and the patches that survive them
+    # are counted before a single pixel is sampled.
+    def void_patches(blocked, band_geom, width=1440, height=900, step=24, size=24):
+        cx, cy = band_geom['centre']
+        nx, ny = band_geom['normal']
+        upper = lower = 0
+        for y in range(0, height - size, step):
+            for x in range(0, width - size, step):
+                if any(x < b[2] and x + size > b[0] and y < b[3] and y + size > b[1]
+                       for b in blocked):
+                    continue
+                mx, my = x + size / 2, y + size / 2
+                d = (mx - cx) * nx + (my - cy) * ny
+                if abs(d) <= 0.5 * height:
+                    continue
+                if (mx - cx) * -ny + (my - cy) * nx >= 0:
+                    upper += 1
+                else:
+                    lower += 1
+        return upper, lower
+
+    candidates = []
+    for window in quiets:
+        page.evaluate(SEEK, (window['from'] + window['to']) / 2)
+        page.evaluate(SETTLE)
+        geom = page.evaluate('() => window.__deepField.band()')
+        up, low = void_patches(page.evaluate(BLOCKED), geom)
+        candidates.append({'window': window, 'upper': up, 'lower': low,
+                           'both': min(up, low), 'chapter':
+                           page.evaluate('() => window.__deepField.state().chapter')})
+    candidates.sort(key=lambda c: (c['both'], c['upper'] + c['lower']), reverse=True)
+    report['hazeWindow'] = candidates
+    quiet = candidates[0]['window']
+    page.evaluate(SEEK, (quiet['from'] + quiet['to']) / 2)
+    page.evaluate(SETTLE)
+    band = page.evaluate('() => window.__deepField.band()')
+    blocked = page.evaluate(BLOCKED)
     state = page.evaluate('() => window.__deepField.state()')
     shot = Image.open(io.BytesIO(page.screenshot()))
     ctx.close()
@@ -795,8 +1107,15 @@ with sync_playwright() as p:
           control_flat)
     check('the instrument catches a planted band of 10', abs(control_plant['delta'] - 10) < 0.6,
           control_plant)
-    check('the band is at least 6/255 brighter than a void', real['delta'] >= 6, real)
-    check('the two halves of the void agree', real['voidHalves'] < 2, real)
+    check('the band is at least 6/255 brighter than a void',
+          real['delta'] is not None and real['delta'] >= 6, real)
+    # Both halves have to have been SAMPLED for this to mean anything, and the
+    # count is part of the assertion rather than a footnote under it.
+    check('the void was measured on both sides of the band',
+          real['nVoidUpper'] >= 4 and real['nVoidLower'] >= 4,
+          f"upper {real['nVoidUpper']} lower {real['nVoidLower']}")
+    check('the two halves of the void agree',
+          real['voidHalves'] is not None and real['voidHalves'] < 2, real)
     check('the same excess is not found across the band', control_rot['delta'] < 3, control_rot)
 
     # --------------------------------------------------------------- shift

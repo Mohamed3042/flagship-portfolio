@@ -368,7 +368,7 @@ body:has(.signal) #space{display:none}
        read rather than decoded. The leader carries the connection; the label
        does not have to shout to be found. */
     font-family:inherit;font-size:13.5px;font-weight:600;
-    letter-spacing:.13em;text-transform:uppercase;
+    --caption-track:.13em;letter-spacing:var(--caption-track);text-transform:uppercase;
     color:var(--signal-ink);
   }
 
@@ -378,7 +378,8 @@ body:has(.signal) #space{display:none}
      twelve of them share one ladder, and in the SAME ink, because the thing
      that was wrong with it was the alpha. */
   .signal[data-graphics=webgl] .signal__label-box--plain{
-    min-height:0;padding:5px 8px;font-size:13px;letter-spacing:.11em;
+    min-height:0;padding:5px 8px;font-size:13px;
+    --caption-track:.11em;letter-spacing:var(--caption-track);
     color:var(--signal-ink);
   }
 
@@ -501,13 +502,13 @@ body:has(.signal) #space{display:none}
   @media (max-width:899px){
     .signal[data-graphics=webgl] .signal__copy{width:min(100%,560px)}
     .signal[data-graphics=webgl] .signal__title{font-size:clamp(30px,8vw,40px)}
-    .signal[data-graphics=webgl] .signal__label-box{font-size:13px;padding:10px;letter-spacing:.1em}
+    .signal[data-graphics=webgl] .signal__label-box{font-size:13px;padding:10px;--caption-track:.1em}
     /* Twelve chips in a phone's figure block: the ladder is 30-odd pixels a rung
        there, so the tool chips shed their padding rather than their legibility.
        The size holds at the bottom of the director's range; what gives is the
        tracking and the box around it. */
     .signal[data-graphics=webgl] .signal__label-box--plain{
-      font-size:13px;padding:3px 5px;letter-spacing:.06em;
+      font-size:13px;padding:3px 5px;--caption-track:.06em;
     }
     .signal[data-graphics=webgl] .signal__chapter{padding-block-end:clamp(74px,12vh,120px)}
     .signal[data-graphics=webgl] .signal__seek{
@@ -601,7 +602,19 @@ body:has(.signal) #space{display:none}
   [dir=rtl] .signal[data-graphics=webgl] .signal__action{font-size:14.5px}
 }
 /* The star captions stay Latin — they are repository and skill names, set
-   `dir=ltr` in the markup — so they keep the Latin size in both routes. */
+   `dir=ltr` in the markup — so they keep the Latin size in both routes.
+
+   AND THEIR TRACKING. The site's own Arabic rule is
+   `[dir="rtl"] *{letter-spacing:normal !important}`, which is right: tracking
+   an Arabic word pulls its joins apart. But it reaches every descendant of the
+   Arabic route, including a Latin repository name that has declared itself
+   `dir=ltr`, and on the Arabic route it was silently taking the tracking back
+   off the captions this round had just given it. The exception is stated for
+   exactly the elements that declared themselves left-to-right, and it needs
+   `!important` because the rule it is answering has it. */
+[dir=rtl] .signal .signal__label-box[dir=ltr]{
+  letter-spacing:var(--caption-track,.13em)!important;
+}
 
 /* ============================================== the route's progress hairline
    The site already draws one: a shared 2px gradient bar with a 12px glow, fixed
