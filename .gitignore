@@ -58,3 +58,7 @@ public/worlds/assets/strings/review/CTS-contact-sheet-portrait-[0-9][0-9].png
 # Round 06 realtime desktop capture is 11 MB — over the 5 MB git budget.
 # Kept locally in docs/signal-review/round06/after/ only.
 docs/signal-review/round06/after/signal-realtime-desktop.mp4
+
+# Deep Field evidence: the real-input recordings stay local. The contact sheets
+# and the report are the packet; an mp4 is for the owner to watch, not for git.
+docs/deep-field/**/*.mp4

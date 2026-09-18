@@ -1,14 +1,15 @@
 ---
 /**
- * The landing page: "From Signal to Systems".
+ * The landing page: DEEP FIELD.
  *
- * Document order is the story order, and it is all real HTML: the first
- * viewport, then the seven cinematic chapters, then selected work, the method,
- * the private systems, the full archive and contact. The scroll-controlled
- * scene upgrades the chapters in place; it never supplies their only copy.
+ * Document order is the story order, and it is all real HTML: twelve chapters —
+ * the name, the eight systems the site already features, the films, the public
+ * work and contact — then selected work, the method, the private systems, the
+ * full archive and contact again. The scroll-controlled cosmos upgrades the
+ * chapters in place; it never supplies their only copy.
  *
- * "See the systems" skips the cinema entirely and lands on inspectable work,
- * because a cinematic default must stay compatible with a fast route.
+ * "Skip the cinematic" and "See the systems" both land on inspectable work,
+ * because a cinematic default has to stay compatible with a fast route.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Contact from '../../components/Contact.astro';
@@ -41,74 +42,100 @@ const entries: { project: ProjectMeta; group: MapGroup }[] = [
   ...legacyProjects.map(project => ({ project, group: 'foundation' as const })),
 ];
 
-/**
- * The portal chapter shows a real frame from the published Cake Studio world,
- * which is what its "authorized media" label promises. Anything else would make
- * that label false.
- */
-const WORLD_FRAME = {
-  src: `${base}/worlds/cake-studio/posters/CST-048.jpg`,
-  alt: ar
-    ? 'إطار من عالم Cake Studio السينمائي المنشور: قاعة عرض بجدران خضراء داكنة، منضدة رخامية تمتد يسارًا ورفوف زجاجية يمينًا، وفي وسطها فاترينة نحاسية.'
-    : 'A frame from the published Cake Studio world: a deep green display room, a marble counter running away to the left and glass shelving to the right, with a copper vitrine at its centre.',
-  width: 1280,
-  height: 720,
-};
+/** Earlier projects that carry a film. The count is read, never asserted. */
+const films = legacyProjects.filter(p => !!p.film);
+/** The career film: the CV told as one of them. */
+const careerFilm = films.find(p => p.slug === 'my-resume') ?? films[0];
+/** The repositories a reader can actually clone. `repo` is set only when public. */
+const repos = featured.filter(f => !!f.repo);
+const cv = `${base}/downloads/Mohamed-Mahmoud-AI-Automation-Engineer-Resume.pdf`;
+const github = 'https://github.com/Mohamed3042';
 
 /**
  * Resolve each chapter against the real project data here, so the stage
  * component and the scene script never hold a second, unsynchronised copy of a
- * project's facts. A chapter with no approved screenshot gets no plate — its
- * mechanism is labelled an illustration instead.
+ * project's facts.
  */
-/**
- * The four captures the cinema's last beat settles into place. They are the same
- * approved screenshots the four public cards carry a few hundred pixels below —
- * the arrival is those cards coming into focus, not a second set of art.
- */
-const arrivalShots = publicStations
-  .slice(0, 4)
-  .map(s => s.feature.shots[0])
-  .filter(Boolean)
-  .map(shot => `${base}/img/sky/${shot.src}.webp`);
-
 const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
+  const copy = COPY[chapter.id];
   const project = chapter.project ? getProject(chapter.project) ?? null : null;
   const feature = chapter.project ? featured.find(f => f.slug === chapter.project) ?? null : null;
-  const shot = feature?.shots[0] ?? null;
-  const copy = COPY[chapter.id];
-
   const actions: SignalAction[] = [];
-  if (project) actions.push({ href: workPath(lang, project.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
-  if (feature?.repo) actions.push({ href: feature.repo, label: ar ? 'المستودع العام' : 'Public repository', external: true });
-  // Entering a World is always an explicit action, never a scroll side effect.
-  if (chapter.id === 'world') actions.push({ href: `${base}/worlds/cake-studio.html`, label: ar ? 'ادخل العالم' : 'Enter the world', external: true });
-  // The scene releases into the selected work, which is the next section in the
-  // document; the whole archive is the second action, not the only one. Naming
-  // #sky alone sent the visitor three sections past everything they had just
-  // been shown settling into place.
-  if (chapter.id === 'archive') {
-    actions.push({ href: '#work', label: ar ? `ابدأ بالأربعة المفتوحة` : `Start with the four open ones` });
-    actions.push({ href: '#sky', label: ar ? `تصفح ${entries.length} مشروعًا` : `Browse all ${entries.length} projects` });
+
+  if (chapter.act === 'hero') {
+    actions.push({ href: '#work', label: ar ? 'استكشف الأنظمة' : 'See the systems' });
+    actions.push({ href: '#contact', label: ar ? 'تواصل معي' : 'Get in touch' });
+    return {
+      id: chapter.id,
+      act: chapter.act,
+      kicker: pick(lang, copy.kicker),
+      title: pick(lang, profile.name),
+      role: `${pick(lang, profile.title)} · ${pick(lang, profile.location)}`,
+      line: copy.line ? pick(lang, copy.line) : null,
+      actions,
+    };
   }
 
+  if (project) {
+    actions.push({ href: workPath(lang, project.slug), label: ar ? 'ادرس المشروع' : 'Explore the project' });
+    if (feature?.repo) actions.push({ href: feature.repo, label: ar ? 'المستودع العام' : 'Public repository', external: true });
+    return {
+      id: chapter.id,
+      act: chapter.act,
+      kicker: pick(lang, project.tag),
+      title: pick(lang, project.title),
+      line: pick(lang, project.blurb),
+      actions,
+    };
+  }
+
+  if (chapter.act === 'film') {
+    if (careerFilm) {
+      actions.push({
+        href: `${base}/films/${careerFilm.film}?lang=${lang}`,
+        label: ar ? 'شاهد فيلم المسيرة' : 'Watch the career film',
+        external: true,
+      });
+    }
+    actions.push({ href: '#foundation', label: ar ? `كل الأفلام` : `All ${films.length} films` });
+    return {
+      id: chapter.id,
+      act: chapter.act,
+      kicker: pick(lang, copy.kicker),
+      title: copy.title ? pick(lang, copy.title) : '',
+      line: ar
+        ? `${films.length} مشاريع سابقة، لكلٍّ منها فيلمه الخاص.`
+        : `${films.length} earlier projects, each with a film of its own.`,
+      actions,
+    };
+  }
+
+  if (chapter.act === 'public') {
+    actions.push({ href: '#work', label: ar ? 'افتح الأربعة' : 'Open the four' });
+    actions.push({ href: github, label: 'GitHub', external: true, ltr: true });
+    return {
+      id: chapter.id,
+      act: chapter.act,
+      kicker: pick(lang, copy.kicker),
+      title: copy.title ? pick(lang, copy.title) : '',
+      line: ar
+        ? `${repos.length} مستودعات عامة، مع تكامل مستمر وحاويات.`
+        : `${repos.length} public repositories, with continuous integration and containers.`,
+      actions,
+    };
+  }
+
+  // contact
+  actions.push({ href: `mailto:${profile.contact.email}`, label: profile.contact.email, ltr: true });
+  actions.push({ href: github, label: 'GitHub', external: true, ltr: true });
+  actions.push({ href: profile.contact.linkedin, label: 'LinkedIn', external: true, ltr: true });
+  actions.push({ href: cv, label: ar ? 'السيرة الذاتية (PDF)' : 'CV (PDF)', external: true });
   return {
     id: chapter.id,
-    line: pick(lang, copy.line),
-    evidence: chapter.evidence,
-    sceneEvidence: chapter.sceneEvidence ?? null,
-    title: project ? pick(lang, project.title) : null,
-    status: project ? (feature?.repo ? (ar ? 'عام' : 'Public') : (ar ? 'خاص' : 'Private')) : null,
-    blurb: project ? pick(lang, project.blurb) : null,
-    stat: project ? pick(lang, project.stat) : null,
-    statNote: project ? pick(lang, project.statNote) : null,
-    boundaryKicker: project?.story ? pick(lang, project.story.boundaryKicker) : null,
-    boundary: project?.story ? pick(lang, project.story.boundary) : null,
-    plate: chapter.id === 'world'
-      ? WORLD_FRAME
-      : shot
-        ? { src: `${base}/img/sky/${shot.src}.webp`, alt: pick(lang, shot.alt), width: shot.w, height: shot.h }
-        : null,
+    act: chapter.act,
+    kicker: pick(lang, copy.kicker),
+    title: copy.title ? pick(lang, copy.title) : '',
+    line: copy.line ? pick(lang, copy.line) : null,
     actions,
   };
 });
@@ -122,43 +149,41 @@ const method = [
   { title: ar ? 'تحقق من الدليل' : 'Verify the evidence', body: ar ? 'اربط الادعاءات بمصادرها، ولا تخفِ ما لم يُثبت.' : 'Trace claims to their sources. Keep unproven outcomes visible.', slug:'ask-repos' },
 ];
 
-
-// The opening artifact: a named piece of work, present and legible in the first
-// viewport rather than a screenshot floating behind a title.
-const openingShot = featured.find(f => f.slug === 'ask-repos')!.shots[1];
-const openingProject = getProject('ask-repos')!;
+/**
+ * The face the name is sampled in, so the constellation and the document's own
+ * h1 can never be two different words in two different typefaces.
+ */
+const heroFont = ar ? '300 190px "Cairo Variable", sans-serif' : '300 190px "Inter Variable", sans-serif';
 ---
 <BaseLayout lang={lang} title={t('site.title')} description={t('site.description')} path={`/${lang}`} accent="blue" home={true}>
   <div class="showroom" data-showroom>
-    {/* The cinema scope covers the intro and the stage only, so the archive
-        and contact below keep the existing six-theme system. */}
-    {/* data-title: the one line the scene sets as metal inside the fragment
-        ring. It is the forge chapter's own heading, read from the same COPY. */}
-    <div class="signal" data-signal data-nodes={entries.length} data-world-interior={WORLD_FRAME.src}
-         data-arrival={JSON.stringify(arrivalShots)} data-title={pick(lang, COPY.forge.line)}>
-    {/* The scene is live behind the first viewport, not only inside the runway:
-        the opening horizon is the thesis, so it cannot start below the fold. */}
-    <canvas class="signal__canvas" data-signal-canvas aria-hidden="true"></canvas>
-    <section class="signal__intro" id="intro" aria-labelledby="signal-title">
-      <div class="signal__intro-copy">
-        <h1 id="signal-title">{ar ? 'أحوّل العمل اليدوي' : 'I turn manual work'} <span>{ar ? 'إلى أنظمة تعمل.' : 'into systems that run.'}</span></h1>
-        <p class="signal__role">{pick(lang, profile.title)} <span aria-hidden="true">·</span> {pick(lang, profile.location)}</p>
-        <div class="signal__intro-actions">
-          <a class="signal__cta" href="#work">{ar ? 'استكشف الأنظمة' : 'See the systems'}
-            <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 10h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.7" /></svg>
-          </a>
-          <a class="signal__cta signal__cta--quiet" href="#contact">{ar ? 'تواصل معي' : 'Get in touch'}</a>
-        </div>
-      </div>
-      <div class="signal__intro-artifact">
-        <a href={workPath(lang, 'ask-repos')}>
-          <img src={`${base}/img/sky/${openingShot.src}.webp`} width={openingShot.w} height={openingShot.h} alt={pick(lang, openingShot.alt)} fetchpriority="high" decoding="async" />
-          <span>{pick(lang, openingProject.title)}</span>
-        </a>
-      </div>
-    </section>
+    {/* The cinema scope covers the stage only, so the archive and contact below
+        keep the existing six-theme system. */}
+    <div class="signal" data-signal data-nodes={entries.length}
+         data-base={base} data-name={pick(lang, profile.name)} data-font={heroFont}>
+      {/* The still composition and the cinema are different LAYOUTS, so
+          switching between them after the page has painted is a layout shift by
+          definition — and it measured 0.0158 of one. The only way to have no
+          shift is to decide before the first paint, which is what this does: a
+          1x1 probe context, run synchronously by the parser, before anything
+          inside the stage has been laid out. If the real renderer then fails,
+          initSignal() puts the attribute back and the still composition returns
+          — a shift in that case only, which is the rare one. */}
+      <script is:inline>
+        (() => {
+          const stage = document.currentScript.parentElement;
+          try {
+            const probe = document.createElement('canvas');
+            if (probe.getContext('webgl2') || probe.getContext('webgl')) stage.dataset.graphics = 'webgl';
+          } catch { /* no context: the still composition is already correct */ }
+        })();
+      </script>
+      <canvas class="signal__canvas" data-signal-canvas aria-hidden="true"></canvas>
+      {/* Grain and vignette sit above the field and below the type. Both are
+          painted, never a texture download. */}
+      <div class="signal__grade" aria-hidden="true"></div>
 
-    <Stage lang={lang} chapters={chapters} runway={SEGMENT_VH.landscape} />
+      <Stage lang={lang} chapters={chapters} runway={SEGMENT_VH.landscape} />
     </div>
 
     <div class="sr-container">

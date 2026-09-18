@@ -1,209 +1,96 @@
 ---
-import { pick, type Lang } from '../../i18n/utils';
-import type { EvidenceKind } from '../../lib/signal/types';
+/**
+ * One beat of DEEP FIELD.
+ *
+ * A chapter is a kicker, a heading, one line, and the links that let a reader
+ * check it. Everything here is real HTML in document order: with no JavaScript,
+ * with no WebGL, or with reduced motion on, the whole page is still a readable
+ * list of work. The scene upgrades this composition; it never supplies it.
+ */
+import type { Lang } from '../../i18n/utils';
 
-/** An approved, privacy-reviewed still. Also the element the 3D surface hands off to. */
-export interface SignalPlate { src: string; alt: string; width: number; height: number }
-/** A real destination — a project story, a public repository. Never a second CTA group. */
-export interface SignalAction { href: string; label: string; external?: boolean }
+export interface SignalAction {
+  href: string;
+  label: string;
+  external?: boolean;
+  /** Left-to-right content (an address, a handle) inside an RTL page. */
+  ltr?: boolean;
+}
 
 export interface SignalChapterCopy {
-  /** Chapter id from the shared contract: horizon, forge, system, matter, signal, world, archive. */
   id: string;
-  /** The narration. It is the heading; nothing sits above it. */
-  line: string;
-  evidence: EvidenceKind;
-  /** What the chapter's own 3D artifact is, when it is not the same claim as the plate. */
-  sceneEvidence?: EvidenceKind | null;
-  /** Project facts, resolved from src/data by the route. Never restated here. */
-  title?: string | null;
-  status?: string | null;
-  blurb?: string | null;
-  stat?: string | null;
-  statNote?: string | null;
-  boundaryKicker?: string | null;
-  boundary?: string | null;
-  plate?: SignalPlate | null;
-  actions?: SignalAction[];
+  act: 'hero' | 'worlds' | 'film' | 'public' | 'contact';
+  kicker: string | null;
+  /** The chapter heading. The hero's is the page's h1. */
+  title: string;
+  /** At most one line. */
+  line: string | null;
+  /** The hero's second line: the role, beneath the name. */
+  role?: string | null;
+  actions: SignalAction[];
 }
 
-interface Props { lang: Lang; chapter: SignalChapterCopy; index: number }
+interface Props {
+  lang: Lang;
+  chapter: SignalChapterCopy;
+  index: number;
+}
 const { lang, chapter, index } = Astro.props;
-const {
-  id, line, evidence, sceneEvidence, title, status, blurb, stat, statNote,
-  boundaryKicker, boundary, plate, actions = [],
-} = chapter;
-
-/**
- * The honesty label names what the dominant visual actually is. It is set as
- * type, not as a coloured chip: solid for an approved capture, hairline for an
- * authored illustration, hairline over a dashed ground for a synthetic replay.
- * A status the visitor must trust should not depend on telling two hues apart.
- */
-const EVIDENCE: Record<Exclude<EvidenceKind, 'none'>, { en: string; ar: string }> = {
-  screenshot: { en: 'Actual product screenshot.', ar: 'صورة فعلية من المنتج.' },
-  illustration: { en: 'Illustration. It explains the idea; it measures nothing.', ar: 'رسم توضيحي يشرح الفكرة ولا يقيس شيئًا.' },
-  synthetic: { en: 'Authored replay over synthetic data.', ar: 'إعادة تشغيل مُعدّة على بيانات اصطناعية.' },
-  media: { en: 'Authorized media from an existing World.', ar: 'وسائط مُصرَّح بها من عالم قائم.' },
-};
-/**
- * When a chapter draws an object AND shows a capture, one caption cannot describe
- * both. "Actual product screenshot" is true of the window and false of the carton
- * standing next to it, and a scene that contains one real screenshot does not
- * become product evidence. So each claim names what it is about.
- */
-const OBJECT: Record<string, { scene: { en: string; ar: string }; plate: { en: string; ar: string } }> = {
-  system: {
-    scene: { en: 'The mechanism on the stage is an illustration; it measures nothing.',
-             ar: 'الآلية المعروضة رسم توضيحي، ولا تقيس شيئًا.' },
-    plate: { en: 'The screen in it is an actual product screenshot.',
-             ar: 'الشاشة التي فيها صورة فعلية من المنتج.' },
-  },
-  matter: {
-    scene: { en: 'The carton is an illustration; it measures nothing.',
-             ar: 'العلبة رسم توضيحي، ولا تقيس شيئًا.' },
-    // Not "the window beside it". By this stop the carton has cleared and the
-    // capture holds the frame alone, so the sentence named a neighbour that is
-    // not there — in portrait, where the composition stacks, most obviously of
-    // all. The caption now states what the thing is and claims no position.
-    plate: { en: 'Actual application screenshot.',
-             ar: 'صورة فعلية من التطبيق.' },
-  },
-  world: {
-    scene: { en: 'The carton and the room it opens into are an illustration; they measure nothing.',
-             ar: 'العلبة والقاعة التي تنفتح عليها رسم توضيحي، ولا تقيسان شيئًا.' },
-    plate: { en: 'The frame on the far wall is authorized media from an existing World.',
-             ar: 'الإطار على الجدار البعيد وسائط مُصرَّح بها من عالم قائم.' },
-  },
-  archive: {
-    scene: { en: 'Four actual product screenshots, of the four projects below.',
-             ar: 'أربع صور فعلية من المنتجات، للمشاريع الأربعة أدناه.' },
-    plate: { en: '', ar: '' },
-  },
-};
-
-/**
- * Some chapters have an interval where the capture is deliberately not on screen
- * at all. A caption that names a screenshot while no screenshot is on screen
- * describes a different frame; both sentences ship, and the renderer shows the
- * one that is true. They are ordinary text, not a live region: this is a caption
- * matching its own picture, not an announcement.
- */
-const PHASED: Record<string, { en: string; ar: string }> = {
-  matter: {
-    en: 'Illustrative carton. The actual application capture follows.',
-    ar: 'علبة توضيحية. تأتي بعدها الصورة الفعلية من التطبيق.',
-  },
-};
-
-const phased = PHASED[id] ?? null;
-const scoped = sceneEvidence && sceneEvidence !== 'none' ? OBJECT[id] ?? null : null;
-// A chapter with no plate carries only the statement about what it draws.
-const labels: { kind: EvidenceKind; text: string }[] = scoped
-  ? [
-      { kind: sceneEvidence as EvidenceKind, text: pick(lang, scoped.scene) },
-      ...(plate && evidence !== 'none'
-        ? [{ kind: evidence, text: pick(lang, scoped.plate) }]
-        : []),
-    ]
-  : evidence === 'none'
-    ? []
-    : [{ kind: evidence, text: pick(lang, EVIDENCE[evidence]) }];
-
-// A chapter that names a project but carries no approved capture shows that gap
-// rather than filling it with something that only looks like proof.
-const gap = !plate && !!title;
 const ar = lang === 'ar';
-
-/**
- * Split a limitation at a sentence end, so the reading stop can show a true,
- * complete first statement and put the rest one control away.
- *
- * The split is computed from the project's own text: nothing is summarised,
- * paraphrased or written for it here, because a shorter limitation that nobody
- * wrote is a different claim. If the text has no sentence break, it is shown
- * whole rather than cut.
- */
-function splitLimit(text: string): [string, string | null] {
-  const min = 52;
-  const breaks = /([.!?\u061F\u06D4])(\s+)/g;
-  let match: RegExpExecArray | null;
-  while ((match = breaks.exec(text)) !== null) {
-    const end = match.index + match[1].length;
-    if (end >= min) {
-      const rest = text.slice(end + match[2].length).trim();
-      return rest ? [text.slice(0, end), rest] : [text, null];
-    }
-  }
-  return [text, null];
-}
-
-const [lede, rest] = boundary ? splitLimit(boundary) : ['', null];
+const hero = chapter.act === 'hero';
+const titleId = `signal-${chapter.id}-title`;
 ---
-<section class="signal__chapter" data-chapter={id} id={`signal-${id}`}
-         data-phase="proof" aria-labelledby={`signal-${id}-line`}>
+<article
+  class="signal__chapter"
+  data-chapter={chapter.id}
+  data-act={chapter.act}
+  data-index={index}
+  aria-labelledby={titleId}
+  id={`signal-${chapter.id}`}
+>
   <div class="signal__copy" data-chapter-copy>
-    {/* tabindex -1: a seek moves focus here so the visitor lands on what the
-        chapter says, not on whatever control they pressed. Not in the tab order. */}
-    <h2 class="signal__line" id={`signal-${id}-line`} tabindex="-1">{line}</h2>
+    {chapter.kicker && <p class="signal__kicker">{chapter.kicker}</p>}
 
-    {title && (
-      <p class="signal__project">
-        <span class="signal__project-name">{title}</span>
-        {status && <span class="signal__status">{status}</span>}
-      </p>
-    )}
-    {blurb && <p class="signal__blurb">{blurb}</p>}
-    {stat && <p class="signal__proof"><strong>{stat}</strong> <span>{statNote}</span></p>}
-    {boundary && (
-      <div class="signal__limit-block">
-        <p class="signal__limit">
-          {boundaryKicker && <strong>{boundaryKicker}</strong>} {lede}
-        </p>
-        {rest && (
-          <details class="signal__limit-more">
-            <summary>{ar ? 'النطاق كاملًا' : 'The full scope'}</summary>
-            <div>{rest}</div>
-          </details>
-        )}
-      </div>
-    )}
+    {hero
+      ? (
+        <>
+          {/* The name is the h1. When the scene is live the stars carry it, and
+              this keeps the document's own heading exactly where it was. */}
+          <h1 class="signal__name" id={titleId}>{chapter.title}</h1>
+          {chapter.role && <p class="signal__role">{chapter.role}</p>}
+          {chapter.line && <p class="signal__line" tabindex="-1">{chapter.line}</p>}
+        </>
+      )
+      : (
+        <>
+          <h2 class="signal__title" id={titleId}>{chapter.title}</h2>
+          {chapter.line && <p class="signal__line" tabindex="-1">{chapter.line}</p>}
+        </>
+      )}
 
-    {phased && (
-      <p class="signal__evidence" data-evidence="illustration" data-phase="object">
-        {pick(lang, phased)}
-      </p>
-    )}
-    {labels.map(entry => (
-      <p class="signal__evidence" data-evidence={entry.kind}
-         data-phase={phased ? 'proof' : undefined}>{entry.text}</p>
-    ))}
-    {gap && (
-      <p class="signal__gap">
-        {ar ? 'لا توجد صورة معتمدة لهذا المشروع بعد. الآلية أعلاه رسم توضيحي.'
-            : 'No approved capture of this product yet. The mechanism above is an illustration.'}
-      </p>
-    )}
-
-    {actions.length > 0 && (
-      <div class="signal__actions" data-chapter-actions>
-        {actions.map(action => (
-          <a class="signal__action" href={action.href}
-             target={action.external ? '_blank' : undefined}
-             rel={action.external ? 'noreferrer' : undefined}>
+    {chapter.actions.length > 0 && (
+      <div class="signal__actions">
+        {chapter.actions.map((action) => (
+          <a
+            class="signal__action"
+            href={action.href}
+            {...(action.external ? { target: '_blank', rel: 'noopener' } : {})}
+            {...(action.ltr ? { dir: 'ltr' } : {})}
+          >
             {action.label}
-            {action.external && <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M5 15 15 5M5 5h10v10" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>}
+            <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true">
+              <path d="M3 10h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" />
+            </svg>
           </a>
         ))}
       </div>
     )}
-  </div>
 
-  {plate && (
-    <figure class="signal__plate-frame">
-      <img class="signal__plate" data-plate src={plate.src} alt={plate.alt}
-           width={plate.width} height={plate.height} decoding="async"
-           loading="eager" fetchpriority={index === 0 ? 'high' : 'low'} />
-    </figure>
-  )}
-</section>
+    {hero && (
+      <p class="signal__hint" data-signal-hint>
+        <span class="signal__hint-rule" aria-hidden="true"></span>
+        {ar ? 'مرّر' : 'Scroll'}
+      </p>
+    )}
+  </div>
+</article>
