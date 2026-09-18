@@ -1,5 +1,16 @@
 ---
 import '../styles/tokens.css';
+/* The three faces the header is set in. They are already fetched by the CSS;
+   preloading them moves the fetch ahead of the first paint, so the swap lands
+   before anything is measured rather than after — which, with the metric-matched
+   fallbacks in tokens.css, is what takes this site's last layout shift to zero. */
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import groteskLatin from '@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2?url';
+import cairoArabic from '@fontsource-variable/cairo/files/cairo-arabic-wght-normal.woff2?url';
+/* Cairo's LATIN subset as well on the Arabic route: the language pill says
+   "EN", in Cairo, and that one 44px control arriving late moved the whole
+   header — 8.9e-05 of a layout shift, and the last one on this site. */
+import cairoLatin from '@fontsource-variable/cairo/files/cairo-latin-wght-normal.woff2?url';
 import { ClientRouter } from 'astro:transitions';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -109,6 +120,15 @@ const graph = [personSchema, ...(Array.isArray(jsonLd) ? jsonLd : jsonLd ? [json
         </>
       )
     }
+
+    <link rel="preload" as="font" type="font/woff2" href={interLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={groteskLatin} crossorigin />
+    {lang === 'ar' && (
+      <>
+        <link rel="preload" as="font" type="font/woff2" href={cairoArabic} crossorigin />
+        <link rel="preload" as="font" type="font/woff2" href={cairoLatin} crossorigin />
+      </>
+    )}
 
     <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)" />

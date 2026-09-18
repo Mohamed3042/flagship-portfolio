@@ -30,6 +30,37 @@
   font-weight:751 950;font-style:normal;font-display:swap;
 }
 
+/* ---------- Fallback faces, metric-matched ----------
+   The three webfonts above load with font-display:swap, so the first paint is
+   drawn in whatever the system supplies and the swap re-measures every line —
+   which is where this site's only layout shift came from: the header's links
+   and pills moved 0.00031 of a viewport when Inter and Space Grotesk landed.
+
+   Each rule below takes a face that is already on the machine and stretches it
+   to the WEBFONT's metrics: the average advance over a-zA-Z0-9 and space
+   (size-adjust), and the typographic ascent, descent and line gap. The numbers
+   were computed from the shipped woff2 files against Arial with fontTools, not
+   copied from a table. If none of the local faces exist the rule simply fails
+   and the stack falls through to the next family, exactly as before.
+
+   Arabic is measured on Arabic letters, because an Arabic fallback that matches
+   on Latin advances is matched on the wrong alphabet. */
+@font-face{
+  font-family:'Inter Fallback';
+  src:local('Arial'),local('Helvetica'),local('Liberation Sans');
+  size-adjust:104.68%;ascent-override:92.54%;descent-override:23.04%;line-gap-override:0%;
+}
+@font-face{
+  font-family:'Space Grotesk Fallback';
+  src:local('Arial'),local('Helvetica'),local('Liberation Sans');
+  size-adjust:101.77%;ascent-override:96.69%;descent-override:28.69%;line-gap-override:0%;
+}
+@font-face{
+  font-family:'Cairo Fallback';
+  src:local('Arial'),local('Helvetica'),local('Liberation Sans');
+  size-adjust:123.08%;ascent-override:105.87%;descent-override:46.39%;line-gap-override:0%;
+}
+
 /* ---------- Reset ---------- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
@@ -59,8 +90,8 @@ ul{list-style:none}
   --pad:clamp(20px,5vw,40px);
   --r:22px;
   --ease:cubic-bezier(.2,.7,.2,1);
-  --font: "Inter Variable",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;
-  --font-ar: "Cairo Variable","Noto Kufi Arabic",var(--font);
+  --font: "Inter Variable","Inter Fallback",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;
+  --font-ar: "Cairo Variable","Cairo Fallback","Noto Kufi Arabic",var(--font);
   /* Arabic DISPLAY face (big headings only) — Al Rai Media, falls back to Cairo. */
   --font-ar-display: "Al Rai Media","Cairo Variable",var(--font);
   --shadow: 0 30px 80px -20px rgba(0,0,0,.7);
@@ -73,7 +104,7 @@ ul{list-style:none}
   /* ----- Claude Design parallax package: wired once, reused everywhere ----- */
   /* Compact interface copy should feel engineered, not like terminal output.
      Keep the historical aliases so every existing story adopts the new face. */
-  --font-label:"Space Grotesk Variable","Cairo Variable",var(--font);
+  --font-label:"Space Grotesk Variable","Space Grotesk Fallback","Cairo Variable",var(--font);
   --font-mono:var(--font-label);
   --mono:var(--font-label);
   --font-code:"JetBrains Mono Variable","Cairo Variable",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
