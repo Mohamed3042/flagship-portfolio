@@ -9,7 +9,8 @@
     "branch": "gh-pages",
     "commit": "c6081c00f6384c753c21fcac5318eb8afb2d09dc",
     "url": "https://mohamed3042.github.io/flagship-portfolio-v2/",
-    "status": "prepared"
+    "status": "published and live verified",
+    "pagesBuildStatus": "built"
   },
   "firstSiteBefore": {
     "main": "123fafe74ef71b0edd63ba824ae4be648d97d91a",
@@ -19,5 +20,12 @@
   "html": {
     "en": "0fda6921d0b868c0865caf84af06e1bc04976177629acd797566e815a0098592",
     "ar": "046d595f68df2e8233c03ed8a0dc5237a3c4aaf0cd407e155bc0c3459d23ef3e"
-  }
+  },
+  "firstSiteAfter": {
+    "main": "123fafe74ef71b0edd63ba824ae4be648d97d91a",
+    "ghPages": "e9815425a7cf89737cdb17f7e1e04b10a641ea71"
+  },
+  "firstSiteUnchanged": true,
+  "packetCommit": "bb985ea",
+  "verifiedAt": "2026-09-19T13:55:35.617140+00:00"
 }

@@ -1,0 +1,184 @@
+{
+  "url": "https://mohamed3042.github.io/flagship-portfolio-v2",
+  "views": {
+    "en": {
+      "status": 200,
+      "chapters": 46,
+      "holograms": [
+        {
+          "loaded": [
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-war-strikes"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d"
+          ]
+        },
+        {
+          "loaded": [
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-war-strikes"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-polyblast-arena"
+          ]
+        },
+        {
+          "loaded": [
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-war-strikes"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-polyblast-arena"
+          ]
+        },
+        {
+          "loaded": [
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-war-strikes",
+            "game-polyblast-arena"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-polyblast-arena"
+          ]
+        }
+      ],
+      "daheeh": {
+        "ready": 4,
+        "policy": "scrub",
+        "muted": true,
+        "loop": false
+      },
+      "rawGameVideos": 0,
+      "overflow": 0,
+      "pageErrors": [],
+      "failedRequests": [],
+      "cancelledMediaRequests": [
+        {
+          "url": "https://mohamed3042.github.io/flagship-portfolio-v2/_astro/spotify.CKQktcFj.mp4",
+          "failure": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    "ar": {
+      "status": 200,
+      "chapters": 46,
+      "holograms": [
+        {
+          "loaded": [
+            "game-war-strikes"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d"
+          ]
+        },
+        {
+          "loaded": [
+            "game-war-strikes",
+            "game-cocolani-3d"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-polyblast-arena"
+          ]
+        },
+        {
+          "loaded": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-polyblast-arena"
+          ]
+        },
+        {
+          "loaded": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-polyblast-arena"
+          ],
+          "applied": 78,
+          "errors": {},
+          "requested": [
+            "game-war-strikes",
+            "game-cocolani-3d",
+            "game-artillery3d",
+            "game-polyblast-arena"
+          ]
+        }
+      ],
+      "daheeh": {
+        "ready": 4,
+        "policy": "loop",
+        "muted": true,
+        "loop": true
+      },
+      "rawGameVideos": 0,
+      "overflow": 0,
+      "pageErrors": [],
+      "failedRequests": [],
+      "cancelledMediaRequests": [
+        {
+          "url": "https://mohamed3042.github.io/flagship-portfolio-v2/_astro/spotify.CKQktcFj.mp4",
+          "failure": "net::ERR_ABORTED"
+        }
+      ]
+    }
+  },
+  "html": {
+    "en": {
+      "sha256": "0fda6921d0b868c0865caf84af06e1bc04976177629acd797566e815a0098592",
+      "matchesDeployBytes": true
+    },
+    "ar": {
+      "sha256": "046d595f68df2e8233c03ed8a0dc5237a3c4aaf0cd407e155bc0c3459d23ef3e",
+      "matchesDeployBytes": true
+    }
+  },
+  "cancelledAssetReadback": [
+    {
+      "url": "https://mohamed3042.github.io/flagship-portfolio-v2/_astro/spotify.CKQktcFj.mp4",
+      "bytes": 678872,
+      "matchesDeployBytes": true
+    }
+  ],
+  "passed": true
+}

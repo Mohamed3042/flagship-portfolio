@@ -25,3 +25,5 @@ The deferral comparison uses the same completed scene, three Lighthouse runs per
 Only the v2 Pages repository is a deployment target. The first site's `main`, `gh-pages`, public junction and world assets are preserved. World links remain absolute links to the existing published films.
 
 Visual inspection caught weak voice contrast after the structural suite passed. The local before image is retained in work/voice-before-visibility.jpg; the final voice sheet shows the repaired result. Full-screen pass-through duration is measured at all four viewport corners, above ten-percent plate opacity, in timing.json.
+
+Live verification: both language HTML files match the deployed bytes; every hologram decodes and Daheeh reaches a decoded frame. The initial cold probe read video metadata too early at 1.5 seconds; the final probe waits for a decoded frame. Native video range cancellations during rapid test jumps are retained separately; the cancelled Spotify asset was independently downloaded and matched the deployed bytes. No page errors or unresolved network failures remain.

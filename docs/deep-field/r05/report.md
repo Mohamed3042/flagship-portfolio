@@ -43,4 +43,4 @@ Round 4 Arabic retained; phone AR and reduced-motion sheets included.
 
 **Red:** four portraits/loops missing; Keeber/Lemby clone envelopes unavailable; two game fallbacks; mobile cold-load performance; no physical-phone/Safari acceptance. Optional game signatures are deferred. Hologram sampling is a stratified blue-noise approximation. No owner approval of raw games is implied.
 
-**Merge note:** V2 commit `c6081c0` is prepared from source `1220e24`; publication verification follows. No `main` merge or first-site deploy. `deployment.json` receipts source/v2 separately. Sheets, local clip review and uninterrupted wheel recording are delivered at the stop rule.
+**Merge note:** Published **v2 `c6081c0`**, source `1220e24`; live EN/AR verified. No `main` merge or first-site deploy. `deployment.json` receipts source/v2 separately. Sheets, local clip review and uninterrupted wheel recording are delivered at the stop rule.
