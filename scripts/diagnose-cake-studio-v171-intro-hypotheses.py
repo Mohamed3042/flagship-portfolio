@@ -45,6 +45,9 @@ VELOCITY_VARIANTS = {"velocity-debounce", "velocity-landing"}
 PRODUCT_SLOW_CADENCE_VARIANT = "product-slow-cadence"
 PRODUCT_SLOW_ATLAS_FALLBACK_VARIANT = "product-slow-atlas-fallback"
 SLOW_CADENCE_INTERVALS = (100, 120, 150, 180)
+PRODUCT_SLOW_MIN_FRESH = .80
+PRODUCT_SLOW_MAX_FRAME_AGE_MS = 250.0
+PRODUCT_SLOW_MAX_LAG_SEC = .50
 SPRITE_VARIANTS = {
     "sprite-atlas",
     "product-atlas",
@@ -1367,6 +1370,93 @@ def apply_variant(source: str, variant: str, *, preview_ms: int = 600) -> str:
     return patched
 
 
+def product_slow_atlas_contract(
+    atlas_commits: list[dict[str, Any]],
+    native_draws: list[dict[str, Any]],
+    high_velocity_video_seeks: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Classify the bounded cold-decode atlas fallback used by slow motion.
+
+    A cold phone master may need one or two atlas commits before Chromium
+    presents its first native frame. Once that first native paint exists, slow
+    motion must stay on video and must never issue a high-velocity video seek.
+    Missing or malformed timestamps fail closed when any atlas commit exists.
+    """
+
+    def timed(events: list[dict[str, Any]]) -> list[tuple[float, dict[str, Any]]]:
+        result: list[tuple[float, dict[str, Any]]] = []
+        for event in events:
+            try:
+                event_time = float(event["t"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            result.append((event_time, event))
+        return sorted(result, key=lambda item: item[0])
+
+    timed_commits = timed(atlas_commits)
+    timed_native = timed(
+        [
+            draw
+            for draw in native_draws
+            if str(draw.get("kind", "")).startswith("native-")
+        ]
+    )
+    first_native = timed_native[0] if timed_native else None
+    invalid_commit_count = len(atlas_commits) - len(timed_commits)
+    cold_commits = (
+        [event for event_time, event in timed_commits if event_time < first_native[0]]
+        if first_native is not None
+        else []
+    )
+    late_commits = (
+        [event for event_time, event in timed_commits if event_time >= first_native[0]]
+        if first_native is not None
+        else [event for _, event in timed_commits]
+    )
+    accepted = (
+        len(atlas_commits) <= 2
+        and invalid_commit_count == 0
+        and len(cold_commits) == len(atlas_commits)
+        and not late_commits
+        and not high_velocity_video_seeks
+    )
+    return {
+        "accepted": accepted,
+        "commitCount": len(atlas_commits),
+        "coldStartCommitCount": len(cold_commits),
+        "invalidCommitCount": invalid_commit_count,
+        "firstNativePaintMs": first_native[0] if first_native is not None else None,
+        "firstNativePaintKind": (
+            first_native[1].get("kind") if first_native is not None else None
+        ),
+        "coldStartCommits": cold_commits,
+        "lateCommits": late_commits,
+        "highVelocityVideoSeeks": high_velocity_video_seeks,
+    }
+
+
+def product_slow_quality_contract(base: dict[str, Any]) -> dict[str, Any]:
+    """Keep the settled slow-path quality limits explicit and fail capable."""
+    fresh = float(base.get("freshDecodedRatio") or 0)
+    frame_age = base.get("visibleFrameAgeP95Ms")
+    lag = base.get("desiredVsPaintedP95Sec")
+    fresh_pass = fresh >= PRODUCT_SLOW_MIN_FRESH
+    frame_age_pass = (
+        frame_age is not None
+        and float(frame_age) <= PRODUCT_SLOW_MAX_FRAME_AGE_MS
+    )
+    lag_pass = lag is not None and float(lag) <= PRODUCT_SLOW_MAX_LAG_SEC
+    return {
+        "accepted": fresh_pass and frame_age_pass and lag_pass,
+        "freshDecodedRatio": fresh,
+        "visibleFrameAgeP95Ms": frame_age,
+        "desiredVsPaintedP95Sec": lag,
+        "freshPass": fresh_pass,
+        "frameAgePass": frame_age_pass,
+        "lagPass": lag_pass,
+    }
+
+
 def analyze_velocity_recording(
     recording: dict[str, Any], track: str
 ) -> dict[str, Any]:
@@ -1469,6 +1559,11 @@ def analyze_velocity_recording(
         if event.get("kind") == "video-seek-issued"
         and event.get("highVelocity")
     ]
+    slow_atlas_contract = product_slow_atlas_contract(
+        atlas_commits,
+        list(recording.get("draws", [])),
+        high_velocity_video_seeks,
+    )
     issued_tokens = {
         int(event["token"]) for event in issued if event.get("token") is not None
     }
@@ -1617,6 +1712,7 @@ def analyze_velocity_recording(
             ),
             "surfaceAgeP95Ms": PERF.percentile(atlas_surface_ages, .95),
             "highVelocityVideoSeeks": high_velocity_video_seeks,
+            "slowPathContract": slow_atlas_contract,
             "terminalSeekSkipped": sum(
                 1
                 for event in events
@@ -2143,18 +2239,35 @@ class VariantGate(PERF.PhonePerformanceGate):
                     },
                 ]
             else:
+                slow_contract = atlas["slowPathContract"]
+                slow_quality = product_slow_quality_contract(base)
                 checks = [
                     {
-                        "name": "slow path never uses sprite atlas",
-                        "pass": atlas["commits"] == 0,
-                        "actual": atlas["commits"],
-                        "limit": "0 sprite commits",
+                        "name": "slow path atlas is bounded cold-start fallback only",
+                        "pass": slow_contract["accepted"],
+                        "actual": slow_contract,
+                        "limit": (
+                            "<= 2 commits strictly before first native video paint; "
+                            "zero later commits and zero high-velocity video seeks"
+                        ),
                     },
                     {
                         "name": "slow fresh coverage preserved",
-                        "pass": float(base.get("freshDecodedRatio") or 0) >= .776,
+                        "pass": slow_quality["freshPass"],
                         "actual": base.get("freshDecodedRatio"),
-                        "limit": ">= 0.776 (within five points of 0.826 baseline)",
+                        "limit": ">= 0.80",
+                    },
+                    {
+                        "name": "slow visible frame age remains bounded",
+                        "pass": slow_quality["frameAgePass"],
+                        "actual": base.get("visibleFrameAgeP95Ms"),
+                        "limit": "<= 250 ms",
+                    },
+                    {
+                        "name": "slow visible timeline lag remains bounded",
+                        "pass": slow_quality["lagPass"],
+                        "actual": base.get("desiredVsPaintedP95Sec"),
+                        "limit": "<= 0.5 sec",
                     },
                     {
                         "name": "zero visible source mutations",
@@ -3198,6 +3311,80 @@ def self_test() -> int:
         and "unit.phoneSlot.wantedExact = false" in patched_fallback
         and ") > .5" in patched_fallback,
         "slow atlas fallback suppresses chase and keeps exact settle available",
+    )
+    cold_contract = product_slow_atlas_contract(
+        [{"t": 100, "kind": "atlas-commit"}, {"t": 200, "kind": "atlas-commit"}],
+        [{"t": 300, "kind": "native-seeked"}],
+        [],
+    )
+    require(
+        cold_contract["accepted"]
+        and cold_contract["coldStartCommitCount"] == 2
+        and cold_contract["firstNativePaintMs"] == 300,
+        "two pre-native cold atlas commits are accepted",
+    )
+    require(
+        product_slow_atlas_contract([], [], [])["accepted"],
+        "zero-commit slow path is accepted without synthetic native evidence",
+    )
+    require(
+        not product_slow_atlas_contract(
+            [{"t": 100}, {"t": 150}, {"t": 200}],
+            [{"t": 300, "kind": "native-seeked"}],
+            [],
+        )["accepted"],
+        "third cold atlas commit is rejected",
+    )
+    require(
+        not product_slow_atlas_contract(
+            [{"t": 300}],
+            [{"t": 300, "kind": "native-seeked"}],
+            [],
+        )["accepted"]
+        and not product_slow_atlas_contract([{"t": 100}], [], [])["accepted"],
+        "late/equal or unwitnessed atlas commits are rejected",
+    )
+    require(
+        not product_slow_atlas_contract(
+            [{"t": 100}],
+            [{"t": 300, "kind": "native-seeked"}],
+            [{"t": 250, "kind": "video-seek-issued", "highVelocity": True}],
+        )["accepted"],
+        "high-velocity video seek remains fatal on slow path",
+    )
+    require(
+        product_slow_quality_contract(
+            {
+                "freshDecodedRatio": .80,
+                "visibleFrameAgeP95Ms": 250,
+                "desiredVsPaintedP95Sec": .5,
+            }
+        )["accepted"],
+        "slow quality boundaries remain inclusive",
+    )
+    measured_red = product_slow_quality_contract(
+        {
+            "freshDecodedRatio": .813953,
+            "visibleFrameAgeP95Ms": 300.25,
+            "desiredVsPaintedP95Sec": .6782,
+        }
+    )
+    require(
+        not measured_red["accepted"]
+        and measured_red["freshPass"]
+        and not measured_red["frameAgePass"]
+        and not measured_red["lagPass"],
+        "measured staged age and lag regression stays red",
+    )
+    require(
+        not product_slow_quality_contract(
+            {
+                "freshDecodedRatio": .799999,
+                "visibleFrameAgeP95Ms": 249,
+                "desiredVsPaintedP95Sec": .49,
+            }
+        )["accepted"],
+        "sub-80-percent slow freshness remains red",
     )
     print(f"CAKE_STUDIO_V172_INTRO_HYPOTHESES_SELF_TEST_OK tests={tests}")
     return 0
