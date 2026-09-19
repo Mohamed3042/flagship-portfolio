@@ -238,7 +238,9 @@ export interface ChapterSpec {
   /** Where the camera rests and the copy is legible, in OVERALL progress. */
   reading: ReadingStop | null;
   /** Grouping for the page's own section rhythm. */
-  act: 'hero' | 'worlds' | 'games' | 'voice' | 'systems' | 'tools' | 'public' | 'contact';
+  act: 'hero' | 'worlds' | 'games' | 'voice' | 'systems' | 'tools' | 'public' | 'contact' | 'road';
+  /** Reading beats stop; stations and road links do not. */
+  beatClass?: 'reading' | 'gate' | 'station' | 'road';
   /**
    * Which side the copy takes on a wide screen; the figure takes the other.
    * `centre` is for the two beats where the figure is BEHIND the words — the
@@ -270,6 +272,7 @@ export interface SceneState {
   breath: number;
   /** Distance the eye has travelled down the tunnel at this progress, scene units. */
   dolly: number;
+  bend: number;
   /** Copy opacity driver, 0..1. Text enters by opacity plus a small rise. */
   narration: number;
   /** True while the camera rests for a reading stop. */

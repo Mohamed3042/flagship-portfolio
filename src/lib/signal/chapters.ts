@@ -18,6 +18,7 @@ import type {
 import { featured } from '../../data/featured';
 import { games, tools, voice, worlds, SYSTEM_COUNT } from '../../data/deep-field';
 import type { Localized } from '../../data/projects';
+import { roadBend, roadDolly } from './road';
 
 /* -------------------------------------------------------------------- maths */
 
@@ -46,7 +47,7 @@ const easeInQuad = (t: number) => clamp01(t) * clamp01(t);
  * assembly, which clears the 700 px floor. A longer page was not needed, so it
  * was not taken.
  */
-export const SEGMENT_VH: Record<Layout, number> = { landscape: 36, portrait: 38 };
+export const SEGMENT_VH: Record<Layout, number> = { landscape: 44, portrait: 46 };
 
 /**
  * The floors the split is measured against, in CSS pixels of scroll. They are
@@ -56,7 +57,7 @@ export const SEGMENT_VH: Record<Layout, number> = { landscape: 36, portrait: 38 
 export const BEAT_FLOORS = { holdPx: 450, releasePx: 400, assemblyPx: 700 };
 
 /** Scene units the eye travels down the tunnel across the whole segment. */
-export const DOLLY_TOTAL = 420;
+export const DOLLY_TOTAL = 5300;
 
 /**
  * The default four-point window, in local progress: out of the field, held,
@@ -83,7 +84,7 @@ const MORPH: MorphWindow = { in0: 0, in1: 0.47, out0: 0.75, out1: 1 };
 
 /** Where the camera rests, as a fraction of a beat: inside the hold, a sliver
  *  in from each end of it, so a seek lands on a pose that is not still moving. */
-const REST: [number, number] = [0.5, 0.73];
+const REST: [number, number] = [MORPH.in1, MORPH.out0];
 
 /* ---------------------------------------------------------------- the script */
 
@@ -92,7 +93,7 @@ const REST: [number, number] = [0.5, 0.73];
  * assembly is the same distance; the hero is shorter because it opens already
  * formed and only has to let go.
  */
-const HERO_WEIGHT = 0.72;
+const HERO_WEIGHT = 1;
 
 /** A reading stop stated as a fraction of the chapter it belongs to. */
 const stop = (from: Progress, to: Progress, a: number, b: number): ReadingStop =>
@@ -109,6 +110,7 @@ interface Beat {
   portal?: boolean;
   weight?: number;
   side?: ChapterSpec['side'];
+  beatClass?: ChapterSpec['beatClass'];
 }
 
 /**
@@ -117,15 +119,21 @@ interface Beat {
  */
 const BEATS: Beat[] = [
   { id: 'hero', act: 'hero', figure: 'name', weight: HERO_WEIGHT, side: 'centre' },
+  { id: 'road-worlds', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   ...worlds.map(world => ({
     id: `world-${world.slug}`, act: 'worlds' as const, figure: 'portal', portal: true,
   })),
+  { id: 'road-games', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   ...games.map(game => ({ id: `game-${game.id}`, act: 'games' as const, figure: game.id })),
+  { id: 'road-voice', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   { id: 'mk-voice', act: 'voice', figure: 'mk-voice' },
+  { id: 'road-systems', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   ...systemSlugs.map(slug => ({
     id: `system-${slug}`, act: 'systems' as const, figure: slug, project: slug,
   })),
+  { id: 'road-workshop', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   { id: 'tools', act: 'tools', figure: 'tools' },
+  { id: 'road-public', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   { id: 'public', act: 'public', figure: 'public' },
   { id: 'contact', act: 'contact', figure: 'contact', side: 'centre' },
 ];
@@ -154,7 +162,8 @@ export const CHAPTERS: ChapterSpec[] = (() => {
       portal: beat.portal,
       project: beat.project,
       effect: beat.act === 'contact' ? { kind: 'breath' as const, window: MORPH } : undefined,
-      reading: hero ? stop(from, to, 0, 0.4) : stop(from, to, REST[0], REST[1]),
+      reading: beat.act === 'road' ? null : hero ? stop(from, to, 0, 0.4) : stop(from, to, REST[0], REST[1]),
+      beatClass: beat.act === 'road' ? 'road' : beat.portal ? 'gate' : 'reading',
       act: beat.act,
       side,
     };
@@ -246,7 +255,8 @@ export function evaluate(u: Progress, _layout: Layout): SceneState {
     portal: portalAt(chapter, local),
     part: chapter.effect?.kind === 'part' ? effect : 0,
     breath: chapter.effect?.kind === 'breath' ? effect : 0,
-    dolly: p * DOLLY_TOTAL,
+    dolly: roadDolly(p, CHAPTERS, DOLLY_TOTAL),
+    bend: roadBend(chapter, local),
     // At a reading stop the words are at full strength whatever the ramp says:
     // where the visitor is meant to read, they can.
     narration: resting ? 1 : narrationAt(local),

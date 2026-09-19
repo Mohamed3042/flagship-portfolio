@@ -304,8 +304,8 @@ export function initSignal(): void {
     const cy = seat.offsetY ?? 0;
     // Project the ring's centre and its own top edge: the difference IS the
     // ring's height on screen, under whatever rotation the camera is carrying.
-    portalCentre.set(cx, cy, -seat.distance).project(camera);
-    portalEdge.set(cx, cy + ringHeight / 2, -seat.distance).project(camera);
+    portalCentre.set(cx, cy, camera.position.z - seat.distance).project(camera);
+    portalEdge.set(cx, cy + ringHeight / 2, camera.position.z - seat.distance).project(camera);
     const px = (portalCentre.x * 0.5 + 0.5) * viewportWidth;
     const py = (-portalCentre.y * 0.5 + 0.5) * viewportHeight;
     const halfPx = Math.abs((-portalEdge.y * 0.5 + 0.5) * viewportHeight - py);
@@ -713,7 +713,7 @@ export function initSignal(): void {
       const rx = x - pivot.x;
       const rz = z - pivot.z;
       scratch.set(pivot.x + rx * cs + rz * sn, y, pivot.z - rx * sn + rz * cs);
-      scratch.z = -scratch.z;
+      scratch.z = camera.position.z - scratch.z;
       scratch.project(camera);
       const px = (scratch.x * 0.5 + 0.5) * viewportWidth;
       const py = (-scratch.y * 0.5 + 0.5) * viewportHeight;
@@ -930,9 +930,11 @@ export function initSignal(): void {
     // The dolly damps toward the value scroll asks for, and SNAPS once it is
     // within a hair of it, so a settled frame is exactly the pure evaluation.
     const wanted = state.dolly;
-    if (pinned || Math.abs(wanted - dolly) < DOLLY_SNAP) dolly = wanted;
-    else dolly += (wanted - dolly) * Math.min(1, DOLLY_DAMP * (dt * 60 || 1));
+    dolly = wanted;
     field.setDolly(dolly);
+    field.setCameraZ(-dolly);
+    field.setBend(state.bend);
+    camera.position.z = -dolly;
 
     // Under reduced motion every morph sits at its held pose: the chapter is a
     // poster, not a paused animation.
@@ -990,7 +992,7 @@ export function initSignal(): void {
     parallaxX += (pointerX * aim - parallaxX) * 0.05;
     parallaxY += (pointerY * aim - parallaxY) * 0.05;
     const rad = THREE.MathUtils.degToRad(PARALLAX_DEG);
-    camera.rotation.set(-parallaxY * rad, -parallaxX * rad, 0, 'YXZ');
+    camera.rotation.set(0, -state.bend * 22, 0, 'YXZ');
 
     if (viewportWidth !== innerWidth || Math.abs(viewportHeight - innerHeight) > BAR_TOLERANCE) {
       measure();
@@ -1078,6 +1080,7 @@ export function initSignal(): void {
         breath: Number(s.breath.toFixed(5)),
         dolly: Number(s.dolly.toFixed(4)),
         appliedDolly: Number(dolly.toFixed(4)),
+        bend: s.bend,
         narration: Number(s.narration.toFixed(4)),
         resting: s.resting,
         mode: s.mode,
@@ -1115,7 +1118,7 @@ export function initSignal(): void {
       let minX = Infinity; let minY = Infinity; let maxX = -Infinity; let maxY = -Infinity;
       for (let i = 0; i < figure.count; i += Math.max(1, Math.floor(figure.count / 900))) {
         const [x, y, z] = seatPoint(figure, seat, i);
-        v.set(x, y, -z).project(camera);
+        v.set(x, y, camera.position.z - z).project(camera);
         const px = (v.x * 0.5 + 0.5) * viewportWidth;
         const py = (-v.y * 0.5 + 0.5) * viewportHeight;
         if (px < minX) minX = px;
@@ -1218,9 +1221,11 @@ export function initSignal(): void {
       const s = evaluate(u, layout);
       return { u: s.u, chapter: s.chapter.id, act: s.chapter.act, local: s.local,
                morph: s.morph, part: s.part, breath: s.breath, fold: s.fold,
-               portal: s.portal, resting: s.resting, narration: s.narration };
+               portal: s.portal, resting: s.resting, narration: s.narration,
+               dolly: s.dolly, bend: s.bend };
     },
     chapters: CHAPTERS.map((c) => ({ id: c.id, from: c.from, to: c.to, act: c.act, side: c.side,
+                                     beatClass: c.beatClass,
                                      // The middle of this chapter's reading stop: where the
                                      // figure is held and the copy is meant to be read.
                                      hold: midpointOf(c),

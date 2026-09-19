@@ -275,7 +275,7 @@ def planted(width, height, centre, normal, amount):
 # How many beats the page ships. Read from the built page in the first
 # viewport and then held for the rest of the run, so this is the shipped number
 # and not a number from a brief.
-BEATS = 19
+BEATS = 25  # R05: nineteen content beats plus six explicit open-road milestones.
 
 # The aperture's own geometry, which the page exports from the figure that
 # draws it. Typed here once and read from nowhere else, so a change to the
@@ -429,6 +429,9 @@ with sync_playwright() as p:
                   f'{got} outside [{floor}, {budget}]')
 
         # --- determinism: forward, then reverse, then a direct jump ----------
+        # R05 has explicit road transitions. Sample every shipped chapter, not
+        # R04's twelve hard-coded fractions which missed whole new sectors.
+        SAMPLES = page.evaluate('window.__deepField.chapters.map(c => c.hold)')
         forward = [scroll_to(page, u) for u in SAMPLES]
         reverse = [scroll_to(page, u) for u in reversed(SAMPLES)][::-1]
 
@@ -448,7 +451,7 @@ with sync_playwright() as p:
 
         seen = {f['state']['act'] for f in forward}
         check(f'{name} the sweep visits every act',
-              seen == {'hero', 'worlds', 'games', 'voice', 'systems', 'tools', 'public', 'contact'},
+              seen == {'hero', 'worlds', 'games', 'voice', 'systems', 'tools', 'public', 'contact', 'road'},
               sorted(seen))
 
         # A direct jump must agree with the swept value at the same progress.
@@ -525,7 +528,7 @@ with sync_playwright() as p:
         # shader is using and from their projection through the live camera.
         chapters = page.evaluate("() => window.__deepField.chapters")
         figured = [c for c in chapters if c["figure"]]
-        check(f"{name} every beat declares a figure", len(figured) == BEATS, len(figured))
+        check(f"{name} every content beat declares a figure", len(figured) == BEATS - 6, len(figured))
         missing, offscreen, shares = [], [], {}
         for c in figured:
             # The middle of the chapter's own reading stop. The hero holds its
@@ -871,7 +874,7 @@ with sync_playwright() as p:
         # numbers: the distance between the progress where a figure is 1% formed
         # and the one where it is 99%, walked on the page's own evaluator.
         span = page.evaluate(PROBE)["range"]
-        world = chapters[1]
+        world = next(c for c in chapters if c['act'] == 'worlds')
         # TWO distances, because they answer different questions and Round 2
         # answered only the first. The WINDOW is the scroll the assembly owns —
         # the same basis Round 2 measured 1,153 px on, and the one the minimum

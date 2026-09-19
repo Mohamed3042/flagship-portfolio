@@ -151,6 +151,9 @@ body:has(.signal) #space{display:none}
   padding-block:clamp(36px,6vw,72px);scroll-margin-block-start:84px;
 }
 .signal__chapter+.signal__chapter{border-block-start:1px solid var(--signal-hair)}
+.signal__chapter[data-act=road] .signal__title{font-size:14px;font-weight:500;letter-spacing:.24em}
+.signal[data-graphics=webgl] .signal__chapter[data-act=road] .signal__copy{position:absolute;left:52%;top:49%;width:auto}
+.signal[data-graphics=webgl] .signal__chapter[data-act=road] .signal__title::before{content:'';display:inline-block;width:4px;height:4px;border-radius:50%;background:#d8b879;margin-inline-end:14px;box-shadow:0 0 10px #d8b879}
 .signal__copy{display:grid;gap:12px;min-width:0;max-width:640px}
 .signal__chapter[data-act=hero] .signal__hint{display:none}
 

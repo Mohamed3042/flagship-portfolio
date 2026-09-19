@@ -71,6 +71,15 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
   const shared = { id: chapter.id, act: chapter.act, side: chapter.side };
   const actions: SignalAction[] = [];
 
+  if (chapter.act === 'road') {
+    const milestones: Record<string, [string, string]> = {
+      worlds: ['WORLDS', 'العوالم'], games: ['GAMES', 'الألعاب'], voice: ['VOICE', 'الصوت'],
+      systems: ['SYSTEMS', 'الأنظمة'], workshop: ['WORKSHOP', 'الورشة'], public: ['PUBLIC', 'أعمال عامة'],
+    };
+    const name = milestones[chapter.id.slice(5)];
+    return { ...shared, kicker: null, title: name[ar ? 1 : 0], line: null, actions };
+  }
+
   if (chapter.act === 'hero') {
     // One action on the hero. The fast route past the cinema has to exist;
     // contact has its own chapter and its own band at the foot of the page, so

@@ -33,6 +33,7 @@
 import * as THREE from 'three';
 import { BAND, CLASS_ORDER, SHELLS, TUNNEL } from './types';
 import type { Tier, TierBudget } from './types';
+import { ROAD } from './road';
 
 /** Fraction of the morph a point may lag by. Anchors land first, detail last. */
 const STAGGER = 0.34;
@@ -58,6 +59,7 @@ const common = /* glsl */ `
   attribute float aRole;    // 1 if this star can be recruited
 
   uniform float uDolly;
+  uniform float uBend;
   uniform float uDrift;
   uniform float uMorph;
   uniform float uTime;
@@ -109,12 +111,14 @@ const common = /* glsl */ `
 
   void deepField(out vec3 pos, out float depth, out float lit, out float formed,
                  out float weight, out float wrapFade) {
-    float D = pick3(SHELL_D, aClass);
+    float road = step(2.5, aClass);
+    float D = mix(pick3(SHELL_D, aClass), ${ROAD.shell.toFixed(1)}, road);
     // The wrap. mod() is non-negative for a positive modulus, so a star that
     // passes the eye re-enters at the far plane with no branch and no state.
     float fieldDepth = mod(aHome.z - uDolly - uDrift, D) + NEAR;
     // Fixed metres, not a ray: THIS is what makes the near stars stream.
     vec2 home = vec2(aHome.x * SPREAD_X, aHome.y * SPREAD_Y) * D;
+    home = mix(home, aHome.xy, road);
     vec2 fieldRay = home / fieldDepth;
 
     // Two field-wide moves, both pure functions of scroll: the stars part
@@ -156,6 +160,7 @@ const common = /* glsl */ `
     vec2 ray = mix(fieldRay, seatRay, lateral);
     float z = mix(fieldDepth, max(seat.z, 0.001), approach);
     pos = vec3(ray * z, uCamZ - z);
+    pos.x += uBend * z * z;
     depth = z;
     // How near this star is inside ITS OWN shell, 0 at the far plane and 1 at
     // the eye. Size and brightness both read from this, which is why the three
@@ -174,6 +179,7 @@ const common = /* glsl */ `
     vec3 tint = uCool;
     if (aSeed.z > 0.90) tint = uWarm;
     if (aSeed.z > 0.98) tint = uBlue;
+    if (aClass > 2.5) tint = vec3(0.8471, 0.7216, 0.4745);
     return tint;
   }
 
@@ -228,7 +234,7 @@ const vertex = /* glsl */ `
   }
 `;
 
-const fragment = /* glsl */ `
+export const STAR_FRAGMENT = /* glsl */ `
   precision mediump float;
   varying float vAlpha;
   varying vec3 vTint;
@@ -347,6 +353,7 @@ export interface Field {
   setMorph(value: number): void;
   /** Distance the eye has travelled down the tunnel, scene units. */
   setDolly(value: number): void;
+  setBend(value: number): void;
   /** Ambient creep that keeps the sky alive when the scroll stops. */
   setDrift(value: number): void;
   setTime(seconds: number): void;
@@ -445,8 +452,8 @@ export function createField(budget: TierBudget, tier: Tier): Field {
   for (let i = 0; i < 20; i++) PATTERN.push(i === 7 ? 2 : i % 4 === 3 ? 1 : 0);
 
   for (let i = 0; i < count; i++) {
-    const c = PATTERN[i % PATTERN.length];
-    const shell = SHELLS[CLASS_ORDER[c]];
+    const c = i >= recruits && i % 5 === 0 ? 3 : PATTERN[i % PATTERN.length];
+    const shell = c === 3 ? { depth: ROAD.shell } : SHELLS[CLASS_ORDER[c]];
     // Rejection sampling against the density field. The depth stays UNIFORM in
     // the marginal, which is what keeps the sky from pulsing as the dolly runs:
     // Round 1 learned that lesson from a recruit band that thinned the whole
@@ -461,6 +468,12 @@ export function createField(budget: TierBudget, tier: Tier): Field {
     home[i * 3] = x;
     home[i * 3 + 1] = y;
     home[i * 3 + 2] = z;
+    if (c === 3) {
+      const edge = i % 3 !== 0;
+      home[i * 3] = edge ? (random() < 0.5 ? -1 : 1) * (ROAD.lane + (random() - 0.5) * 0.09)
+        : (random() - 0.5) * 22 * Math.pow(random(), 0.7);
+      home[i * 3 + 1] = ROAD.ground + (random() - 0.5) * 0.025;
+    }
 
     seed[i * 4] = random();                    // twinkle phase
     seed[i * 4 + 1] = random();                // size / rate
@@ -484,6 +497,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
 
   const uniforms = {
     uDolly: { value: 0 },
+    uBend: { value: 0 },
     uDrift: { value: 0 },
     uMorph: { value: 0 },
     uTime: { value: 0 },
@@ -504,7 +518,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
 
   const material = new THREE.ShaderMaterial({
     vertexShader: vertex,
-    fragmentShader: fragment,
+    fragmentShader: STAR_FRAGMENT,
     transparent: true,
     depthWrite: false,
     depthTest: false,
@@ -555,7 +569,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
   const heroUniforms = { ...uniforms, uSize: { value: 1 }, uMorph: { value: 0 } };
   const heroMaterial = new THREE.ShaderMaterial({
     vertexShader: heroVertex,
-    fragmentShader: fragment,
+    fragmentShader: STAR_FRAGMENT,
     transparent: true,
     depthWrite: false,
     depthTest: false,
@@ -665,6 +679,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
       uniforms.uMorph.value = value > 1 ? 1 : value > 0 ? value : 0;
     },
     setDolly(value) { uniforms.uDolly.value = value; },
+    setBend(value) { uniforms.uBend.value = value; },
     setDrift(value) { uniforms.uDrift.value = value; },
     setTime(seconds) { uniforms.uTime.value = seconds; },
     setTwinkle(on) { uniforms.uTwinkle.value = on ? 1 : 0; },
@@ -693,6 +708,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
       let seen = 0;
       const step = drawn > 24000 ? 8 : 1; // a sample, then scaled: this runs on demand
       for (let i = 0; i < drawn; i += step) {
+        if (klass[i] === 3) continue; // this legacy sky-density probe excludes the ground
         const shell = SHELLS[CLASS_ORDER[klass[i]]];
         const D = shell.depth;
         let depth = (home[i * 3 + 2] - dolly) % D;
