@@ -117,7 +117,7 @@ report = {
 }
 
 with sync_playwright() as pw:
-    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     ctx = browser.new_context(viewport=VIEW, device_scale_factor=DPR,
                               is_mobile=True, has_touch=True)
     page = ctx.new_page()

@@ -1,0 +1,86 @@
+[
+  {
+    "key": "polyblast-arena",
+    "source": "polyblast.avi",
+    "source_sha256": "14c4232860988e20d5152181e5ea6be42b0e99d8e604bcd61e1633fd9cba8756",
+    "kind": "runtime recording",
+    "raw_allowed": false,
+    "frames": 96,
+    "fps": 12,
+    "points": 4000,
+    "bytes_gzip": 125448,
+    "binary_sha256": "1eeedeeb2ec31e2e3cab30ef5db116d72721f3982c7a38b087d507b16663c810",
+    "pipeline": "Sobel / per-frame p97 / deterministic spatially stratified weighted sampling / Uint16 xy / gzip",
+    "capture_note": "Fresh Godot match capture, Foundry default match with five bots.",
+    "review_clip_sha256": "3e227661fad3cbcba718c57b07d46d38188f75b80427c7248c4c42c883721dac",
+    "review_clip_bytes": 105279
+  },
+  {
+    "key": "war-strikes",
+    "source": "warstrike-boot-flipbook.mp4",
+    "source_sha256": "05cc30888b855de99e721882361eace84bc537973062046e696a51d3a0c6a51c",
+    "kind": "fallback: two existing game boot screenshots, crossfade; no characters",
+    "raw_allowed": false,
+    "frames": 96,
+    "fps": 12,
+    "points": 4000,
+    "bytes_gzip": 51537,
+    "binary_sha256": "4bdfbb6a1e9ce21f59de7d673e870e38aadcf702f7749706a35f88cd9b0b0cd0",
+    "pipeline": "Sobel / per-frame p97 / deterministic spatially stratified weighted sampling / Uint16 xy / gzip",
+    "boot_shots": [
+      {
+        "file": "ScreenShot00120.png",
+        "sha256": "40940a97f90d0a775578c5c58c425b982ec81e4a6d9ebfd1c91428105a2a01cf"
+      },
+      {
+        "file": "ScreenShot00240.png",
+        "sha256": "232238df2b05a5bff6744b53d278113413b86c9d9cda494d277269fbcb67f211"
+      }
+    ],
+    "capture_note": "Packaged UE launch remained without a capturable window; stopped own process after bounded attempt. Existing CuberSpace and arena shots contain no holo character.",
+    "review_clip_sha256": "546fc608885702a85ecb65b0587e98ccb501d26d5a4e07f255ccc5b2af9d8476",
+    "review_clip_bytes": 96234
+  },
+  {
+    "key": "cocolani-3d",
+    "source": "cocolani-boot-flipbook.mp4",
+    "source_sha256": "f962ec4e3f0d13a796b07d81ee486dc6cc751109ee7c3967b9307a29e2f70219",
+    "kind": "fallback: two existing game boot screenshots, crossfade; no close-ups",
+    "raw_allowed": false,
+    "frames": 96,
+    "fps": 12,
+    "points": 4000,
+    "bytes_gzip": 54381,
+    "binary_sha256": "33064568c78b42cfa47f5e8a00313ba378780fce3af1bb0dd256a4f19eff5ddd",
+    "pipeline": "Sobel / per-frame p97 / deterministic spatially stratified weighted sampling / Uint16 xy / gzip",
+    "boot_shots": [
+      {
+        "file": "tutorial_wide.png",
+        "sha256": "749f635850eccfc4848c9df28355e300e42df847b84d50f342d94394108b7165"
+      },
+      {
+        "file": "world_en.png",
+        "sha256": "99d59e2e81de56a7c35505789aa132983c1382182514ea5afd88b4e7e96c5870"
+      }
+    ],
+    "capture_note": "Godot capture rejected: missing imported mesh/texture cache and unpopulated world. Existing tutorial-wide and world shots used.",
+    "review_clip_sha256": "507194b04b969d7184a47a642a4d36b1d3f66e48db22469bc9ecd55992dcfd82",
+    "review_clip_bytes": 146355
+  },
+  {
+    "key": "artillery3d",
+    "source": "artillery.avi",
+    "source_sha256": "3202a405f8010bea55edcc1630d9f2c19bac2aaee2762a17fdd0e3cb5eb888a2",
+    "kind": "fresh Godot battle recording, default Hazel character",
+    "raw_allowed": false,
+    "frames": 96,
+    "fps": 12,
+    "points": 4000,
+    "bytes_gzip": 229397,
+    "binary_sha256": "4a51e4f41eef847e7238aa4370748ab4a3c1e85ce11750d4d6bf7f43f8936a45",
+    "pipeline": "Sobel / per-frame p97 / deterministic spatially stratified weighted sampling / Uint16 xy / gzip",
+    "capture_note": "Fresh Godot battle capture with default Hazel. The brief-listed Mira clip was rejected as a face close-up. Shutdown resource warnings retained locally.",
+    "review_clip_sha256": "abb670540e8bb5476718bc4a2612143236ec12183cb56873fbd196b3a8d4707b",
+    "review_clip_bytes": 282933
+  }
+]

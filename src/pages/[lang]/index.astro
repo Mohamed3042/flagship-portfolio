@@ -23,6 +23,8 @@ import { legacyProjects, getProject, type ProjectMeta } from '../../data/project
 import { featured } from '../../data/featured';
 import { profile } from '../../data/profile';
 import { games, tools, voice, worlds, worldClips } from '../../data/deep-field';
+import { holograms } from '../../data/holograms';
+import { voices } from '../../data/voices';
 import { CHAPTERS, COPY, SEGMENT_VH } from '../../lib/signal/chapters';
 import '../../styles/showroom.css';
 import '../../styles/signal.css';
@@ -54,9 +56,6 @@ const repoLabels: SignalLabel[] = repos.map(f => ({
 }));
 /** The tools, labelled by the name in each skill's own frontmatter. A chip
  *  carries a link only where that tool's repository is public. */
-const toolLabels: SignalLabel[] = tools.map(tool => ({
-  key: tool.key, label: tool.label, ...(tool.repo ? { href: tool.repo } : {}),
-}));
 /** Every world's key frame ships at one width; the height is its own ratio. */
 const FRAME_WIDTH = 1180;
 const cv = `${base}/downloads/Mohamed-Mahmoud-AI-Automation-Engineer-Resume.pdf`;
@@ -133,9 +132,16 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
       ...shared,
       kicker: game.engine,
       title: game.title,
+      engine: game.engine,
+      hologram: holograms[game.id],
       line: pick(lang, game.line),
       actions,
     };
+  }
+
+  if (chapter.id.startsWith('voice-')) {
+    const v=voices.find(v=>`voice-${v.key}`===chapter.id)!;
+    return {...shared,kicker:null,title:`${v.en} · ${v.ar}`,line:null,actions,station:true,portrait:v.image ? {src:v.image,clip:v.clip,alt:`${v.en} · ${v.ar}`} : null};
   }
 
   if (chapter.act === 'voice') {
@@ -167,6 +173,11 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
     };
   }
 
+  if (chapter.id.startsWith('skill-')) {
+    const t=tools.find(t=>`skill-${t.key}`===chapter.id)!;
+    return {...shared,kicker:null,title:t.label,line:pick(lang,t.line),actions,station:true,labels:[{key:t.key,label:t.label}]};
+  }
+
   if (chapter.act === 'tools') {
     return {
       ...shared,
@@ -177,7 +188,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
       // One label per anchor, keyed by the tool's own name. The renderer hangs
       // each of these on the star the camera projects for that key; a key with
       // no anchor simply never appears, which the harness checks for.
-      labels: toolLabels,
+
     };
   }
 
@@ -291,8 +302,28 @@ const heroFont = ar ? '300 190px "Cairo Variable", sans-serif' : '300 190px "Int
   </div>
 </BaseLayout>
 <script>
-  import { initSignal, stopSignal } from '../../lib/signal';
   import { initShowroom, stopShowroom } from '../../lib/showroom';
-  document.addEventListener('astro:page-load', () => { initShowroom(); initSignal(); });
-  document.addEventListener('astro:before-swap', () => { stopSignal(); stopShowroom(); });
+  let scene: typeof import('../../lib/signal') | undefined;
+  let generation = 0;
+  document.addEventListener('astro:page-load', () => {
+    const current = ++generation;
+    initShowroom();
+    if (!document.querySelector('[data-signal]')) return;
+    // The native hero paints before the engine is requested. Two animation
+    // frames create a paint opportunity; the task then loads the scene chunk.
+    requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(async () => {
+      try {
+        scene = await import('../../lib/signal');
+        if (current === generation) scene.initSignal();
+      } catch {
+        const root = document.querySelector<HTMLElement>('[data-signal]');
+        if (root && current === generation) root.dataset.graphics = 'fallback';
+      }
+    }, 0)));
+  });
+  document.addEventListener('astro:before-swap', () => {
+    generation++;
+    scene?.stopSignal();
+    stopShowroom();
+  });
 </script>

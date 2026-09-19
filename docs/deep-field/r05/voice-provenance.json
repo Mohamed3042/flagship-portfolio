@@ -1,0 +1,24 @@
+{
+  "comparison": {
+    "scorecard_sha256": "2691831139c6d0817d418035ee5fb5dcb9e82934b7e3b344dd3ed265659cf526",
+    "reference_sha256": "4e25e22555cd16e90edb0a3b49fdcf1fe652b2a1250ab643634db33895c75b41",
+    "clone_sha256": "24ea41ad670dffdd3077baa38af82b630d057b4121aa5e7ee3e71baced5e891c",
+    "kind": "Real external held-out LibriSpeech fixture, public-374 model. Shape demonstration, not owner likeness acceptance."
+  },
+  "envelopes": {
+    "hazalqoum": "ad4583b2c146e319d98f7193a4b0a5c9ad131148de0814ec8a9860fe9b370a8a",
+    "daheeh": "24ff72d0357837848c89ea65b0e7fa6b0c5efb75d282e18844cf524b9cfe4345",
+    "bayoumi": "c4238124861c0b05450c084df734c0ac3b54631743cf60cc23eeb7c2655966c7"
+  },
+  "unavailable_clone_outputs": [
+    "keeber",
+    "lemby"
+  ],
+  "illustration": "Owner supplied char1.mp4, confirmed El Daheeh and public portfolio use on 2026-09-19; poster derived from first frame.",
+  "missing_illustrations": [
+    "keeber",
+    "hazalqoum",
+    "lemby",
+    "bayoumi"
+  ]
+}

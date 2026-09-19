@@ -13,8 +13,10 @@ export function initMedia(root: HTMLElement, chapters: ChapterSpec[], coarse: bo
     video.addEventListener('canplay', () => { video.dataset.ready = 'true'; });
     return { video, index };
   });
+  const images=[...root.querySelectorAll<HTMLImageElement>('[data-character-image]')].map(img=>({img,index:chapters.findIndex(c=>c.id===img.closest<HTMLElement>('[data-chapter]')?.dataset.chapter)}));
   return {
     frame(index: number, local: number, u: number) {
+      for(const {img,index:at} of images) if(!img.src && u>0 && Math.abs(at-index)<=CLIP.ahead) img.src=img.dataset.src!;
       for (const {video, index: at} of videos) {
         // No clip competes with initial HTML paint. Direct links and the first
         // actual scroll admit only the nearest two beats, in either direction.

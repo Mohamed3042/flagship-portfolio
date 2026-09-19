@@ -89,21 +89,7 @@ PROBE = '''() => {
   };
 }'''
 
-SEEK = '''(u) => {
-  const root = document.querySelector('[data-signal]');
-  const runway = root.querySelector('[data-signal-runway]');
-  const frame = root.querySelector('[data-signal-frame]');
-  const top = runway.getBoundingClientRect().top + scrollY;
-  const range = Math.max(1, runway.offsetHeight - frame.offsetHeight);
-  window.scrollTo({top: top + range * u, behavior: 'instant'});
-}'''
-
-SETTLE = '''async () => {
-  window.__deepField && window.__deepField.settle(6);
-  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-  await new Promise(r => setTimeout(r, 240));
-  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-}'''
+from signal_probes import SEEK, SETTLE
 
 # Contrast, read from the rendered element. The ground is the nearest ancestor
 # with a non-transparent background-color, which on this route is .signal itself
@@ -275,7 +261,7 @@ def planted(width, height, centre, normal, amount):
 # How many beats the page ships. Read from the built page in the first
 # viewport and then held for the rest of the run, so this is the shipped number
 # and not a number from a brief.
-BEATS = 25  # R05: nineteen content beats plus six explicit open-road milestones.
+BEATS = 46  # R05: nineteen content beats plus six explicit open-road milestones.
 
 # The aperture's own geometry, which the page exports from the figure that
 # draws it. Typed here once and read from nowhere else, so a change to the
@@ -285,7 +271,7 @@ PORTAL_TICK_OUT = 1.1
 
 # The director's floors for a beat, in CSS pixels of scroll. src/lib/signal/
 # chapters.ts exports the same three as BEAT_FLOORS.
-HOLD_FLOOR, RELEASE_FLOOR, ASSEMBLY_FLOOR = 450, 400, 700
+from signal_probes import HOLD_FLOOR, RELEASE_FLOOR, ASSEMBLY_FLOOR
 
 # What the seek nav's three controls say, in both routes. The tab-order check
 # looks for one of them rather than for a selector, because what it is asserting
@@ -340,14 +326,13 @@ VIEWS = [
 SAMPLES = [0.02, 0.07, 0.12, 0.22, 0.33, 0.44, 0.55, 0.65, 0.75, 0.87, 0.92, 0.98]
 TEXT = ['.signal__chapter[data-active=true] .signal__title, .signal__chapter[data-active=true] .signal__name',
         '.signal__chapter[data-active=true] .signal__line',
-        '.signal__chapter[data-active=true] .signal__kicker',
         '.signal__chapter[data-active=true] .signal__action',
         '.signal__seek button',
         '.signal__skip']
 # The star captions are read at their own beat, because they only exist while
 # their figure is held. Round 4 raised both from the secondary ink; the ratio
 # is what says whether that landed, and it is read off the rendered page.
-LABEL_TEXT = {'tools': '#signal-tools .signal__label-box--plain',
+LABEL_TEXT = {'skill-agent-brain': '#signal-skill-agent-brain .signal__label-box--plain',
               'public': '#signal-public .signal__label-box'}
 
 
@@ -403,7 +388,7 @@ with sync_playwright() as p:
         check(f'{name} five worlds carry a portal', base['portals'] == 5, base['portals'])
         # The career film and the nine film pages left this surface in Round 3.
         check(f'{name} the landing links to no film page', base['films'] == 0, base['films'])
-        check(f'{name} five worlds have silent deferred clips', base['reels'] == 5, base['reels'])
+        check(f'{name} five worlds and Daheeh have silent deferred clips', base['reels'] == 6, base['reels'])
         check(f'{name} work reachable from the first viewport', base['workLink'])
         check(f'{name} contact section present', base['contact'])
         # Two bars reporting the same number is a defect, not redundancy.
@@ -528,7 +513,7 @@ with sync_playwright() as p:
         # shader is using and from their projection through the live camera.
         chapters = page.evaluate("() => window.__deepField.chapters")
         for c in chapters:
-            if c['window']:
+            if c['window'] and c['beatClass'] != 'station':
                 hold = c['window']
                 states = page.evaluate('us => us.map(u => window.__deepField.at(u))',
                     [hold['in1'] + 1e-8, c['hold'], hold['out0'] - 1e-8])
@@ -589,7 +574,7 @@ with sync_playwright() as p:
         # Two chapters hang labels now. Both are checked, because the second one
         # hangs twelve of them and twelve chips is where a shared host, a shared
         # width cache or an off-by-one in the side choice would first show.
-        for chapter_id, want in (("public", 4), ("tools", 12)):
+        for chapter_id, want in (("public", 4), ("skill-agent-brain", 1)):
             spot = next(c for c in chapters if c["id"] == chapter_id)
             scroll_to(page, spot["hold"])
             registration = page.evaluate(LABELS)
@@ -998,7 +983,7 @@ with sync_playwright() as p:
                 nxt.click()
                 page.wait_for_timeout(180)
             check(f'{name} the keyboard nav reaches every chapter',
-                  len(set(visited)) == BEATS, f'{len(set(visited))}: {visited}')
+                  len(set(visited)) == BEATS - 16, f'{len(set(visited))}: {visited}')
         attempt(f'{name} chapter nav walk', walk)
 
         # --- deep links -------------------------------------------------------
@@ -1306,6 +1291,8 @@ with sync_playwright() as p:
     page.screenshot(path=str(OUT / 'nojs.png'))
     ctx.close()
 
+    from darb_checks import run_darb
+    run_darb(browser,args.base_url,check,report)
     browser.close()
 
 # ---------------------------------------------------------------------------

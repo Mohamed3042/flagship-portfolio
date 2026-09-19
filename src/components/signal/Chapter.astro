@@ -57,6 +57,10 @@ export interface SignalChapterCopy {
   actions: SignalAction[];
   labels?: SignalLabel[];
   portal?: SignalPortal | null;
+  station?: boolean;
+  engine?: string;
+  hologram?: {film:string;poster:string};
+  portrait?: {src:string;clip?:string;alt:string} | null;
 }
 
 interface Props {
@@ -73,6 +77,8 @@ const titleId = `signal-${chapter.id}-title`;
   class="signal__chapter"
   data-chapter={chapter.id}
   data-act={chapter.act}
+  data-hologram={chapter.hologram?.film}
+  data-station={chapter.station ? "true" : undefined}
   data-side={chapter.side}
   data-index={index}
   aria-labelledby={titleId}
@@ -98,6 +104,13 @@ const titleId = `signal-${chapter.id}-title`;
       {chapter.portal.clip && <video data-signal-clip data-src={chapter.portal.clip} preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>}
     </div>
   )}
+
+  {chapter.hologram && <img class="signal__game-poster" src={chapter.hologram.poster} width="960" height="540" loading="lazy" alt={ar ? `مشهد نقطي من ${chapter.title}` : `${chapter.title} as an edge-star hologram`} />}
+  {chapter.portrait && <div class="signal__character" data-signal-character>
+    <img data-character-image data-src={chapter.portrait.src} width="800" height="800" decoding="async" alt={chapter.portrait.alt} />
+    <noscript><img src={chapter.portrait.src} width="800" height="800" loading="lazy" alt={chapter.portrait.alt} /></noscript>
+    {chapter.portrait.clip && <video data-signal-clip data-src={chapter.portrait.clip} preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>}
+  </div>}
 
   {chapter.labels && chapter.labels.length > 0 && (
     /* Each label is a POINT at the projected star, with its chip hanging off
@@ -128,7 +141,7 @@ const titleId = `signal-${chapter.id}-title`;
   )}
 
   <div class="signal__copy" data-chapter-copy>
-    {chapter.kicker && <p class="signal__kicker">{chapter.kicker}</p>}
+
 
     {hero
       ? (
@@ -143,6 +156,7 @@ const titleId = `signal-${chapter.id}-title`;
       : (
         <>
           <h2 class="signal__title" id={titleId}>{chapter.title}</h2>
+          {chapter.engine && <p class="signal__engine" dir="ltr">{chapter.engine}</p>}
           {chapter.line && <p class="signal__line" tabindex="-1">{chapter.line}</p>}
         </>
       )}

@@ -39,4 +39,14 @@ with sync_playwright() as pw:
     if args.only in ('gate','all'):
         c=next(c for c in chapters if c['act']=='worlds')
         sheet('gate-strip.jpg',[(n,snap(c,u)) for n,u in [('approach',.32),('hold',.61),('pass-through',.85),('beyond',.99)]],4)
+    if args.only in ('voice','all'):
+        cells=[]
+        for c in chapters:
+            if c['act']!='voice':continue
+            for name,u in [('picture',.36),('edges',.6),('stars',.79)]:cells.append((c['id']+' / '+name,snap(c,u)))
+        sheet('voice-sheet.jpg',cells,3)
+    if args.only in ('workshop','all'):
+        sheet('workshop-strip.jpg',[(c['id']+' / '+name,snap(c,u)) for c in chapters if c['id'].startswith('skill-') for name,u in [('input',.18),('output',.82)]],4)
+    if args.only in ('games','all'):
+        sheet('holograms.jpg',[(c['id']+' / '+str(u),snap(c,u)) for c in chapters if c['act']=='games' for u in [.37,.61,.74]],3)
     browser.close()

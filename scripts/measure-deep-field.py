@@ -246,7 +246,7 @@ with sync_playwright() as pw:
         'allSlopesPositive': all(f['perFrameMs'] > 0 for f in fits),
         # The decisive control: 80,000 stars must cost more than 25,000 of them,
         # by roughly the ratio of the counts. Noise would read 1.0.
-        'starRatio': round(80000 / 25000, 3),
+        'starRatio': round(desktop_state['stars'] / phone_state['stars'], 3),
         'costRatio': round(desktop_slope / phone_slope, 3) if phone_slope else None,
         'passed': bool(
             all(f['perFrameMs'] > 0 for f in fits)

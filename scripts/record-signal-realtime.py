@@ -44,25 +44,8 @@ args = parser.parse_args()
 OUT = Path(args.out)
 OUT.mkdir(parents=True, exist_ok=True)
 
-# A pass a person could plausibly perform: read, continue, change your mind, go
-# back, stop, go on. Every entry is (wheel delta per tick, ticks, pause after).
-# A negative delta scrolls back up.
-# Round 2 doubled the runway — an assembly now takes about 1,150 px of scroll
-# rather than 580 — so the same pass needs about twice the wheel to cover the
-# same story. The tick spacing came down with it, which is also what a hand
-# does when a page is long.
-SCRIPT = [
-    ('hold', 0, 0, 1.4),        # the name, assembled, before anything moves
-    ('scroll', 140, 36, 1.0),   # release it back into the field
-    ('scroll', 140, 28, 1.3),   # into the first constellation, and read it
-    ('scroll', -140, 20, 0.9),  # change of direction: back over the assembly
-    ('scroll', 140, 40, 1.2),   # forward again, through the next worlds
-    ('hold', 0, 0, 1.1),        # a voluntary stop while reading
-    ('scroll', 140, 44, 1.1),
-    ('scroll', 140, 36, 1.0),   # the films and the public work
-    ('scroll', -140, 32, 0.9),  # back up again
-    ('scroll', 140, 60, 1.0),   # on to contact and out into the archive
-]
+# One uninterrupted forward pass, driven by wheel events at a fixed cadence.
+SCRIPT = []  # Filled from the measured runway below; one continuous forward pass.
 
 # One recording, at the size the owner reviews the film at. The phone gets its
 # own pass on a real device in Round 3; an emulated portrait recording here
@@ -112,12 +95,16 @@ with sync_playwright() as p:
         # to what the hand was actually doing. "The holds explain the gaps" is a
         # claim, and a claim needs the timestamps that support it.
         steps = []
+        distance=page.evaluate('()=>{const r=document.querySelector("[data-signal-runway]"),f=document.querySelector("[data-signal-frame]");return r.offsetHeight-f.offsetHeight+innerHeight}')
+        SCRIPT=[('hold',0,0,1.0),('scroll',80,int(distance/80)+2,1.0)]
+        visited=set()
         for kind, delta, ticks, pause in SCRIPT:
             t0 = time.time() - started
             if kind == 'scroll':
                 for _ in range(ticks):
                     page.mouse.wheel(0, delta)
-                    page.wait_for_timeout(35)   # a hand, not a teleport
+                    page.wait_for_timeout(75)
+                    visited.add(page.evaluate('window.__deepField.state().chapter'))   # a hand, not a teleport
             t1 = time.time() - started
             page.wait_for_timeout(int(pause * 1000))
             steps.append({'kind': kind, 'moveFrom': round(t0, 3), 'moveTo': round(t1, 3),
@@ -136,7 +123,9 @@ with sync_playwright() as p:
         times = [max(0.0, t - base) for t, _ in frames]
         gaps = [b - a for a, b in zip(times, times[1:]) if b > a]
 
-        work = OUT / f"rt-frames-{view['key']}"
+        work = (OUT / f"rt-frames-{view['key']}").resolve()
+        if not work.is_relative_to(OUT.resolve()) or work == OUT.resolve():
+            raise RuntimeError(f'Capture scratch escaped its output directory: {work}')
         if work.exists():
             shutil.rmtree(work, ignore_errors=True)
         work.mkdir(parents=True)
@@ -156,12 +145,12 @@ with sync_playwright() as p:
                     fh.write(f"duration {max(0.008, times[i + 1] - times[i]):.4f}\n")
             fh.write(f"file '{listing[-1]}'\n")
 
-        mp4 = OUT / 'real-input.mp4'
+        mp4 = OUT / 'real-input-720.mp4'
         subprocess.run(
             ['ffmpeg', '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0',
              '-i', str(concat), '-fps_mode', 'vfr', '-video_track_timescale', '1000',
              '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '25',
-             '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2',
+             '-vf', 'scale=-2:720',
              '-movflags', '+faststart', str(mp4)],
             check=True)
         shutil.rmtree(work, ignore_errors=True)
@@ -183,6 +172,8 @@ with sync_playwright() as p:
 
         report['views'][view['key']] = {
             'file': mp4.name,
+            'chapters_observed':sorted(visited),
+            'all_chapters_observed':len(visited)==46,
             'bytes': mp4.stat().st_size,
             'viewport': f"{view['w']}x{view['h']}",
             'wallClockSeconds': round(wall, 2),

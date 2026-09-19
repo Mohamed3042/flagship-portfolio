@@ -25,6 +25,8 @@ import { seatTarget, seatPoint, textFigure } from './targets';
 import { createConstellations, rayHomes } from './constellations';
 import { ROAD } from './road';
 import { clipTime, initMedia } from './media';
+import { createHolograms, hologramFrame } from './holograms';
+import voiceShapes from './voice-shapes.json';
 
 /**
  * Height change (CSS px) below which a resize is treated as a mobile browser
@@ -230,8 +232,13 @@ export function initSignal(): void {
     return CHAPTERS.findIndex((c) => c.id === shownChapter);
   }
 
-  seekPrev?.addEventListener('click', () => seekTo(currentIndex() - 1), { signal });
-  seekNext?.addEventListener('click', () => seekTo(currentIndex() + 1), { signal });
+  function nextStop(direction:number) {
+    let i=currentIndex()+direction;
+    while(i>0 && i<CHAPTERS.length-1 && CHAPTERS[i].id.startsWith('skill-')) i+=direction;
+    seekTo(i);
+  }
+  seekPrev?.addEventListener('click',()=>nextStop(-1),{signal});
+  seekNext?.addEventListener('click',()=>nextStop(1),{signal});
   seekWork?.addEventListener('click', () => {
     requestAnimationFrame(() => {
       document.querySelector<HTMLElement>('#public-title')?.focus({ preventScroll: true });
@@ -310,7 +317,7 @@ export function initSignal(): void {
     // ring's height on screen, under whatever rotation the camera is carrying.
     const depth = ROAD.depthFar;
     const scale = depth / seat.distance;
-    const z = -(alignment(chapter) + depth);
+    const z = Math.min(-(alignment(chapter) + depth), camera.position.z - 1);
     // The innermost ring and the plate share this fixed plane. The applied
     // camera matrix already contains this frame's dolly and heading.
     portalCentre.set(cx * scale, cy * scale, z).project(camera);
@@ -353,6 +360,7 @@ export function initSignal(): void {
       panel.setAttribute('aria-hidden', 'false');
       panel.dataset.active = 'true';
     }
+    for(const img of root.querySelectorAll<HTMLImageElement>('[data-character-image]')) img.src=img.dataset.src!;
     seek?.setAttribute('hidden', '');
     updateHeader();
     addEventListener('scroll', updateHeader, { passive: true, signal });
@@ -392,19 +400,24 @@ export function initSignal(): void {
 
   const scene = new THREE.Scene();
   const FOV: Record<Layout, number> = { landscape: 44, portrait: 62 };
-  const camera = new THREE.PerspectiveCamera(FOV[layout], viewportWidth / viewportHeight, 0.4, TUNNEL.far + 24);
+  const camera = new THREE.PerspectiveCamera(FOV[layout], viewportWidth / viewportHeight, 0.4, 600);
 
   const field: Field = createField(budget, tier);
   scene.add(field.object);
   const constellations = createConstellations(renderer.getPixelRatio());
   scene.add(constellations.object);
+  const hologram=createHolograms(root,CHAPTERS,renderer.getPixelRatio());
+  scene.add(hologram.object);
   const homes = new Map<string, Float32Array>();
-  const anamorphic = (c: ChapterSpec) => c.act === 'hero' || !!c.portal || c.act === 'systems' || c.act === 'public';
+  const anamorphic = (c: ChapterSpec) => c.act === 'hero' || !!c.portal || c.act === 'systems' || c.act === 'public' || c.id.startsWith('voice-') || c.act === 'games';
   const alignment = (c: ChapterSpec) => evaluate(midpointOf(c), layout).dolly;
   function refreshHomes() {
     constellations.set(CHAPTERS.flatMap((c, index) => {
       const data = homes.get(c.id);
-      return data ? [{ homes: data, index, gold: !!c.portal }] : [];
+      const entries = data ? [{ homes: data, index, gold: !!c.portal || c.act === 'games' || c.id.startsWith('voice-'),links:figures.get(c.id)?.links??[] }] : [];
+      const edge = homes.get(`${c.id}-edges`);
+      if (edge) entries.push({homes:edge,index,gold:false,links:[]});
+      return entries;
     }));
   }
 
@@ -458,7 +471,7 @@ export function initSignal(): void {
     // The tools are twelve labelled stars, and twelve HTML chips need height to
     // stand apart in. The figure is authored as a tall ladder for the same
     // reason; this is the other half of that decision.
-    const tall = chapter.act === 'tools';
+    const tall = false;
     if (layout === 'portrait') {
       // Portrait: the figure takes the block above the copy band. A portal is
       // given the extra width because its ring is bound by it: at 390 px a ring
@@ -569,7 +582,13 @@ export function initSignal(): void {
     seated.set(chapter.id, seatTarget(figure, seat, seated.get(chapter.id)));
     linkBuffers.set(chapter.id, linksFor(figure, seat, linkBuffers.get(chapter.id)));
     if (anamorphic(chapter)) {
-      homes.set(chapter.id, rayHomes(figure, seat, alignment(chapter), !!chapter.portal));
+      homes.set(chapter.id, rayHomes(figure, seat, alignment(chapter), !!chapter.portal || chapter.act==='games'));
+      if(chapter.id==='voice-daheeh') {
+        const pts=voiceShapes.daheehEdges; const positions=new Float32Array(pts.length*3);pts.forEach(([x,y],i)=>positions.set([x,y,0],i*3));
+        const edge:Figure={positions,weights:new Float32Array(pts.length).fill(.18),count:pts.length,aspect:.5625,links:[]};
+        const edgeSeat={...seat,width:seat.width*.8,height:seat.height*.8,offsetX:(seat.offsetX??0)+seat.width*.07};
+        homes.set(`${chapter.id}-edges`,rayHomes(edge,edgeSeat,alignment(chapter)));
+      }
       refreshHomes();
     }
   }
@@ -612,8 +631,8 @@ export function initSignal(): void {
           figure = textFigure(heroText, heroFont, textPoints(chapter, probe.aspect, density), rtl);
         }
       } else {
-        const spec = FIGURES[chapter.target.figure];
-        if (spec) figure = chapter.portal ? gateFigure(strokePoints(spec, chapter)) : drawnFigure(spec, strokePoints(spec, chapter));
+        const spec = FIGURES[chapter.act === "games" ? "portal" : chapter.target.figure];
+        if (spec) figure = chapter.portal || chapter.act === 'games' ? gateFigure(strokePoints(spec, chapter)) : drawnFigure(spec, strokePoints(spec, chapter));
       }
       if (!figure || disposed) continue;
       place(chapter, figure);
@@ -631,23 +650,17 @@ export function initSignal(): void {
   // The one figure that opens while it is read is re-sampled as it folds. The
   // stroke shares are decided on the closed pose and never move, so a star
   // keeps its own edge all the way open; only the geometry changes.
-  const folding = CHAPTERS.find((c) => c.folds) ?? null;
-  const foldSpec = folding?.target?.kind === 'drawn' ? FIGURES[folding.target.figure] : null;
   let foldKey = -1;
-  let foldCount = 0;
-  function applyFold(value: number) {
-    if (!folding || !foldSpec) return;
-    // Quantised, so a slow scroll does not re-sample on every frame for a
-    // change nobody could see.
-    const step = Math.round(THREE.MathUtils.clamp(value, 0, 1) * 96);
-    if (step === foldKey) return;
-    foldKey = step;
-    if (!foldCount) foldCount = strokePoints(foldSpec, folding);
-    const figure = drawnFigure(foldSpec, foldCount, step / 96);
-    if (figure) {
-      place(folding, figure);
-      if (loadedTarget === folding.id) field.setTarget(seated.get(folding.id) ?? null);
-    }
+  let foldChapter = '';
+  function applyFold(chapter: ChapterSpec, value: number) {
+    if(chapter.target?.kind !== 'drawn') return;
+    const spec=FIGURES[chapter.target.figure];
+    if(!spec?.open) return;
+    const step=Math.round(THREE.MathUtils.clamp(value,0,1)*96);
+    if(step===foldKey && foldChapter===chapter.id)return;
+    foldKey=step;foldChapter=chapter.id;
+    const figure=drawnFigure(spec,strokePoints(spec,chapter),step/96);
+    if(figure){place(chapter,figure);if(loadedTarget===chapter.id)field.setTarget(seated.get(chapter.id)??null);}
   }
 
   /* --------------------------------------------------- the anchored labels */
@@ -970,7 +983,9 @@ export function initSignal(): void {
     if (state.chapter.portal && !still) {
       const gateSeat = seatFor(state.chapter);
       const advance = Math.max(0, dolly - alignment(state.chapter));
-      const follow = Math.min(1, advance / ROAD.depthFar);
+      // Reach the aperture's centre before crossing its plane, leaving a
+      // readable interval fully inside the world during the release.
+      const follow = Math.min(1, advance / (ROAD.depthFar * .75));
       camera.position.x = (gateSeat.offsetX ?? 0) * ROAD.depthFar / gateSeat.distance * follow;
       camera.position.y = (gateSeat.offsetY ?? 0) * ROAD.depthFar / gateSeat.distance * follow;
     }
@@ -981,7 +996,7 @@ export function initSignal(): void {
     const part = still ? (state.chapter.effect?.kind === 'part' ? 1 : 0) : state.part;
     const breath = still ? (state.chapter.effect?.kind === 'breath' ? 1 : 0) : state.breath;
     const fold = still ? (state.chapter.folds ? 0.5 : 0) : state.fold;
-    if (state.chapter.folds && morph > 0.01) applyFold(fold);
+    if (state.chapter.folds && morph > 0.01) applyFold(state.chapter, fold);
     field.setPart(part);
     field.setBreath(breath);
     setPart(part);
@@ -1008,8 +1023,9 @@ export function initSignal(): void {
     field.setMorph(loadedTarget === state.chapter.id ? morph : 0);
 
     const gone = released();
-    constellations.frame(dolly, still ? 0 : state.bend, index, 1 - gone, reveal);
-    field.setOpacity(1 - gone);
+    constellations.frame(dolly, still ? 0 : state.bend, index, 1 - gone, reveal, morph);
+    field.setOpacity((1-gone)*(state.chapter.act==='games' ? 1-.7*morph : 1));
+    field.setBackgroundOpacity(state.chapter.act==='voice' ? 1-.65*morph : 1);
     root.style.setProperty('--signal-released', gone.toFixed(3));
     // The whole canvas fades, not only its contents; `visibility` is only
     // switched once there is nothing left to see.
@@ -1046,6 +1062,18 @@ export function initSignal(): void {
     camera.updateMatrixWorld();
     placeLabels(state.chapter, anamorphic(state.chapter) || loadedTarget === state.chapter.id ? morph : 0, spin, pivot);
     placePortal(state.chapter, portalBlend);
+    hologram.frame(state.chapter,index,state.local,u,seat,alignment(state.chapter),still);
+    const character=panels[index]?.querySelector<HTMLElement>('[data-signal-character]');
+    if(character) {
+      const depth=26,sc=depth/seat.distance,z=-(alignment(state.chapter)+depth);
+      const centre=new THREE.Vector3((seat.offsetX??0)*sc,(seat.offsetY??0)*sc,z).project(camera);
+      const top=new THREE.Vector3((seat.offsetX??0)*sc,((seat.offsetY??0)+seat.height*.4)*sc,z).project(camera);
+      const height=Math.abs(top.y-centre.y)*viewportHeight;
+      character.style.width=`${height}px`;character.style.height=`${height}px`;
+      character.style.transform=`translate(${(centre.x*.5+.5)*viewportWidth-height*.5}px,${(-centre.y*.5+.5)*viewportHeight-height*.5}px)`;
+      const t=state.local;
+      character.style.opacity=String(still?1:Math.max(0,Math.min(1,(t-.05)/.2,1-(t-.48)/.28)));
+    }
 
     renderer.render(scene, camera);
     request();
@@ -1121,7 +1149,7 @@ export function initSignal(): void {
         morph: still && s.chapter.target ? 1 : Number(s.morph.toFixed(5)),
         fold: Number(s.fold.toFixed(5)),
         portal: Number(s.portal.toFixed(5)),
-        clipTime: clipTime(s.local),
+        hologramFrame: hologramFrame(s.local), clipTime: clipTime(s.local),
         part: Number(s.part.toFixed(5)),
         breath: Number(s.breath.toFixed(5)),
         dolly: Number(s.dolly.toFixed(4)),
@@ -1219,10 +1247,11 @@ export function initSignal(): void {
     labels() {
       return projected.map((p) => ({ ...p, x: Number(p.x.toFixed(2)), y: Number(p.y.toFixed(2)) }));
     },
+    hologram: ()=>hologram.state(),
     registration() {
       const c = CHAPTERS.find(c => c.id === shownChapter), portal = portals.get(shownChapter);
       const data = homes.get(shownChapter);
-      if (!c || !portal || !data) return null;
+      if (!c || !portal || !data || alignment(c)+ROAD.depthFar-dolly<1) return null;
       // Read the far ring's actual uploaded homes, excluding its inherited iris
       // ticks, instead of calculating the same placement formula a second time.
       let top = Infinity, bottom = -Infinity;
@@ -1315,7 +1344,7 @@ export function initSignal(): void {
       return { u: s.u, chapter: s.chapter.id, act: s.chapter.act, local: s.local,
                morph: s.morph, part: s.part, breath: s.breath, fold: s.fold,
                portal: s.portal, resting: s.resting, narration: s.narration,
-               dolly: s.dolly, bend: s.bend, clipTime: clipTime(s.local) };
+               dolly: s.dolly, bend: s.bend, hologramFrame: hologramFrame(s.local), clipTime: clipTime(s.local) };
     },
     chapters: CHAPTERS.map((c) => ({ id: c.id, from: c.from, to: c.to, act: c.act, side: c.side,
                                      beatClass: c.beatClass,
@@ -1347,6 +1376,7 @@ export function initSignal(): void {
     field.dispose();
     media.dispose();
     constellations.dispose();
+    hologram.dispose();
     renderer.dispose();
     delete (window as Window & { __deepField?: unknown }).__deepField;
   };

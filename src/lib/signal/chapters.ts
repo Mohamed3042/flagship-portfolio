@@ -1,7 +1,7 @@
 /**
  * DEEP FIELD — the scroll script.
  *
- * Nineteen beats and the pure evaluator that turns one scroll number into a
+ * Forty-six beats and the pure evaluator that turns one scroll number into a
  * scene state. Nothing here reads a clock, a random source or a previous frame,
  * so a reverse scroll, an anchor jump and a restored scroll position all land
  * on exactly the frame forward scroll produces.
@@ -18,6 +18,7 @@ import type {
 import { featured } from '../../data/featured';
 import { games, tools, voice, worlds, SYSTEM_COUNT } from '../../data/deep-field';
 import type { Localized } from '../../data/projects';
+import { voices } from '../../data/voices';
 import { roadBend, roadDolly } from './road';
 
 /* -------------------------------------------------------------------- maths */
@@ -36,16 +37,10 @@ const easeInQuad = (t: number) => clamp01(t) * clamp01(t);
 /**
  * Scroll runway, in viewport heights.
  *
- * The cap is 36 viewport heights on the desktop across nineteen beats. The
- * sticky frame eats one viewport, so that is 35 screens of travel — 1,682.7 px
- * a beat at 1440x900, the hero taking 0.72 of one — and the four-point window
- * below divides it.
- *
- * ROUND 4 kept the cap. The director allowed 40 viewport heights if the hold
- * and the release could not otherwise be paid for, and they could: at 36 the
- * beat is long enough for a 471 px hold, a 421 px release and 791 px of
- * assembly, which clears the 700 px floor. A longer page was not needed, so it
- * was not taken.
+ * Round 5 pays for nineteen reading/gate beats, twenty-one short stations,
+ * and six road bends. The sticky frame consumes one viewport of this height.
+ * Actual pixel distances and the unchanged reading floors are measured by
+ * the browser harness at the review viewports.
  */
 export const SEGMENT_VH: Record<Layout, number> = { landscape: 44, portrait: 46 };
 
@@ -64,21 +59,9 @@ export const DOLLY_TOTAL = 5300;
  * then back into the field. In and out are both eased to zero velocity, so no
  * boundary reads as a cut.
  *
- * ROUND 4 — THE SPLIT. Round 3 spent seven tenths of every beat assembling and
- * left the HOLD at 202 px: a title, a line and a link arriving and leaving
- * inside two notches of a wheel. Nobody reads in 202 px. The director set the
- * floors — hold at least 450, release at least 400, assembly whatever is left
- * as long as it clears 700 — and this window is those floors with a little
- * air, measured against the beat the shipped runway actually produces at
- * 1440x900: 1,682.7 px, of which 0.47 assembles (790.9), 0.28 holds (471.2)
- * and 0.25 releases (420.7). Assembly clears 700 by ninety pixels, so the
- * runway cap stays where it was at 36 viewport heights; it did not have to go
- * to 40 to buy the hold.
- *
- * The fractions, not the pixels, are what ship: the beat is a share of a
- * runway measured in viewport heights, so every distance here scales with the
- * screen. The px above are this window on the review viewport, and the round's
- * report states them for the phone too.
+ * Round 4's 47/28/25 split remains for reading and gate beats. Stations keep
+ * moving and use their own action window. Pixel floors are tested against the
+ * rendered runway; a fraction alone cannot establish a readable hold.
  */
 const MORPH: MorphWindow = { in0: 0, in1: 0.47, out0: 0.75, out1: 1 };
 
@@ -89,9 +72,7 @@ const REST: [number, number] = [MORPH.in1, MORPH.out0];
 /* ---------------------------------------------------------------- the script */
 
 /**
- * Beat weights. Every beat that assembles a figure gets a full share, so every
- * assembly is the same distance; the hero is shorter because it opens already
- * formed and only has to let go.
+ * The hero now drives into alignment and gets the same full share as a gate.
  */
 const HERO_WEIGHT = 1;
 
@@ -124,15 +105,17 @@ const BEATS: Beat[] = [
     id: `world-${world.slug}`, act: 'worlds' as const, figure: 'portal', portal: true,
   })),
   { id: 'road-games', act: 'road', figure: null, weight: 0.112, side: 'centre' },
-  ...games.map(game => ({ id: `game-${game.id}`, act: 'games' as const, figure: game.id })),
+  ...games.map(game => ({ id: `game-${game.id}`, act: 'games' as const, figure: game.id, beatClass:'gate' as const })),
   { id: 'road-voice', act: 'road', figure: null, weight: 0.112, side: 'centre' },
-  { id: 'mk-voice', act: 'voice', figure: 'mk-voice' },
+  { id: 'mk-voice', act: 'voice', figure: 'mk-voice', beatClass:'gate' },
+  ...voices.map(v=>({id:`voice-${v.key}`,act:'voice' as const,figure:`voice-${v.key}`,weight:300/1608,beatClass:'station' as const})),
   { id: 'road-systems', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   ...systemSlugs.map(slug => ({
     id: `system-${slug}`, act: 'systems' as const, figure: slug, project: slug,
   })),
   { id: 'road-workshop', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   { id: 'tools', act: 'tools', figure: 'tools' },
+  ...tools.map(t=>({id:`skill-${t.key}`,act:'tools' as const,figure:`skill-${t.key}`,weight:300/1608,beatClass:'station' as const})),
   { id: 'road-public', act: 'road', figure: null, weight: 0.112, side: 'centre' },
   { id: 'public', act: 'public', figure: 'public' },
   { id: 'contact', act: 'contact', figure: 'contact', side: 'centre' },
@@ -158,12 +141,13 @@ export const CHAPTERS: ChapterSpec[] = (() => {
         : beat.figure ? { kind: 'drawn' as const, figure: beat.figure } : null,
       // The name is already assembled when the page opens: the visitor arrives
       // at the held pose, and scrolling is what releases it back into the field.
-      morph: beat.act === 'road' ? undefined : MORPH,
+      morph: beat.act === 'road' ? undefined : beat.beatClass === 'station' ? {in0:0,in1:.12,out0:.88,out1:1} : MORPH,
+      folds: beat.id.startsWith('skill-') || beat.id === 'mk-voice',
       portal: beat.portal,
       project: beat.project,
       effect: beat.act === 'contact' ? { kind: 'breath' as const, window: MORPH } : undefined,
-      reading: beat.act === 'road' ? null : stop(from, to, REST[0], REST[1]),
-      beatClass: beat.act === 'road' ? 'road' : beat.portal ? 'gate' : 'reading',
+      reading: beat.act === 'road' || beat.beatClass === 'station' ? null : stop(from, to, REST[0], REST[1]),
+      beatClass: beat.beatClass ?? (beat.act === 'road' ? 'road' : beat.portal ? 'gate' : 'reading'),
       act: beat.act,
       side,
     };
@@ -207,7 +191,7 @@ export function morphAt(chapter: ChapterSpec, local: number): number {
  */
 export function foldAt(chapter: ChapterSpec, local: number): number {
   if (!chapter.folds || !chapter.morph) return 0;
-  return smoothstep(ramp(local, chapter.morph.in1 + 0.02, chapter.morph.out0));
+  return smoothstep(ramp(local, chapter.beatClass === 'station' ? .18 : chapter.morph.in1 + .02, chapter.beatClass === 'station' ? .82 : chapter.morph.out0));
 }
 
 /**
@@ -288,10 +272,10 @@ export const COPY: Record<string, ChapterCopy> = {
   voice: { kicker: voice.kicker },
   tools: {
     kicker: { en: 'Tools', ar: 'أدوات' },
-    title: { en: 'Twelve tools that do the repeating.', ar: 'اثنتا عشرة أداةً تتولّى المتكرِّر.' },
+    title: { en: 'The Workshop', ar: 'الورشة' },
     line: {
-      en: 'Skills I wrote so the repeating half of the work runs itself.',
-      ar: 'مهاراتٌ كتبتُها كي يُنجِزَ النصفُ المتكرِّر من العمل نفسَه.',
+      en: 'Sixteen skills I wrote to carry the work from a first reference to a verified result.',
+      ar: 'ست عشرة مهارة كتبتُها لترافق العمل من المرجع الأول إلى نتيجة متحقق منها.',
     },
   },
   public: {

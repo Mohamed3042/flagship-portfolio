@@ -126,7 +126,7 @@ def sheet(cells, columns, title, cell_width):
 report = {'baseUrl': args.base_url}
 
 with sync_playwright() as pw:
-    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
 
     # ------------------------------------------------------------ the rings
     ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, device_scale_factor=2)

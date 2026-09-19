@@ -17,6 +17,8 @@
  * the eye, so a resize is a multiply and never a re-authoring.
  */
 import type { Figure } from './types';
+import voiceShapes from './voice-shapes.json';
+import { workshop } from '../../data/workshop';
 
 /* --------------------------------------------------------------- the DSL */
 
@@ -839,35 +841,68 @@ const mkVoice: FigureSpec = (() => {
  * seat is bounded by its width, and a wide asterism would squeeze twelve rows
  * into a third of the screen.
  */
-const toolsFigure: FigureSpec = (() => {
-  const keys = [
-    'agent-brain', 'codebase-orientation', 'root-cause-debugging', 'edge-case-sweep',
-    'surgical-refactoring', 'security-reflexes', 'verify-ui-visually', 'stop-thrashing',
-    'leave-no-mess', 'impeccable', 'blender-assembly', 'auto-release-manager',
-  ];
-  // x wanders so the line through them reads as a constellation and not a list;
-  // y is a strict ladder so the labels never overlap.
-  const xs = [-0.06, 0.24, -0.2, 0.1, 0.38, -0.3, 0.02, 0.3, -0.34, -0.02, 0.26, -0.12];
-  const zs = [0.18, -0.14, 0.22, -0.2, 0.1, -0.06, 0.24, -0.18, 0.08, -0.22, 0.16, -0.1];
-  const ws = [0.95, 0.72, 0.86, 0.68, 0.8, 0.9, 0.7, 0.82, 0.74, 0.88, 0.66, 0.78];
-  const anchors: Anchor[] = keys.map((key, i) => ({
-    x: xs[i],
-    y: 0.48 - (i / (keys.length - 1)) * 0.96,
-    z: zs[i],
-    w: ws[i],
-    key,
-  }));
-  const links: [number, number][] = [];
-  for (let i = 0; i < anchors.length - 1; i++) links.push([i, i + 1]);
-  // Two cross members, so the figure is a shape and not a zig-zag.
-  links.push([0, 5], [5, 10]);
-  const strokes: Stroke[] = links.map(([a, b]) => ({
-    pts: [anchors[a], anchors[b]].map(p => ({ x: p.x, y: p.y, z: p.z })),
-    density: 0.34,
-  }));
-  return { aspect: 0.95, strokes, anchors, links };
-})();
 
+// Workshop input/output strokes share topology after deterministic resampling.
+const xy = (pairs:number[][]):Stroke => line(...pairs.map(([x,y])=>({x,y})));
+const rect = (x:number,y:number,w:number,h:number):Stroke => xy([[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]]);
+const head = () => ellipse(0,.12,.25,.34);
+const body = (posed=false):Stroke[] => [node(0,.35,.09),xy([[0,.26],[0,-.12]]),xy(posed?[[-.32,.22],[0,.1],[.3,.35]]:[[-.3,.15],[0,.12],[.3,.15]]),xy(posed?[[-.3,-.4],[0,-.12],[.18,-.46]]:[[-.18,-.46],[0,-.12],[.18,-.46]])];
+const grid=(tick=false):Stroke[]=>Array.from({length:6},(_,i)=>{const x=(i%3-1)*.3,y=(Math.floor(i/3)-.5)*.4;return tick?xy([[x-.09,y],[x-.02,y-.07],[x+.12,y+.1]]):rect(x-.1,y-.12,.2,.24)});
+const gear=(cx:number,cy:number,r:number)=>({closed:true,pts:Array.from({length:48},(_,i)=>{const a=i/48*Math.PI*2,rr=r*(i%4<2?1:.78);return{x:cx+Math.cos(a)*rr,y:cy+Math.sin(a)*rr}})});
+const uv=()=>xy([[0,.42],[-.4,.36],[-.25,.08],[-.48,-.28],[0,-.38],[.48,-.28],[.25,.08],[.4,.36],[0,.42]]);
+const poses:[Stroke[],Stroke[]][] = [
+ [[rect(-.42,.12,.22,.28),rect(.16,-.35,.22,.28),rect(-.2,-.24,.2,.25)],[xy([[-.38,.25],[0,.4],[.35,.12],[.22,-.35],[-.3,-.2],[-.38,.25]]),xy([[0,.4],[-.3,-.2],[.35,.12]])]],
+ [[rect(-.35,-.44,.7,.88)],[head(),ellipse(0,.12,.12,.34),ellipse(0,.12,.25,.12)]],
+ [[rect(-.45,-.4,.26,.8),rect(-.13,-.4,.26,.8),rect(.19,-.4,.26,.8)],body()],
+ [[head(),xy([[-.15,.15],[.15,.15]]),xy([[0,.1],[0,-.05],[.06,-.05]])],[uv(),xy([[-.4,.36],[.48,-.28]]),xy([[.4,.36],[-.48,-.28]])]],
+ [[rect(-.35,-.35,.7,.7),xy([[-.35,0],[.35,0]])],[head(),ellipse(0,.12,.25,.12)]],
+ [[xy([[-.4,.35],[.3,.35],[.4,-.3],[-.3,-.3],[-.4,.35]])],[xy([[-.15,.35],[-.4,.22],[-.3,0],[-.2,.04],[-.22,-.4],[.22,-.4],[.2,.04],[.3,0],[.4,.22],[.15,.35],[0,.25],[-.15,.35]])]],
+ [body(),body(true)],
+ [[rect(-.4,-.3,.8,.6),xy([[-.4,0],[.4,0]]),xy([[0,-.3],[0,.3]])],[xy([[-.4,0],[0,.25],[.4,0],[0,-.25],[-.4,0]]),xy([[0,.25],[0,.5],[.4,.25],[.4,0]]),xy([[0,-.25],[0,0],[.4,.25]])]],
+ [[rect(-.35,-.3,.3,.4),rect(-.12,-.2,.35,.35),rect(.1,-.35,.3,.5)],grid()],
+ [[gear(-.2,.1,.2),gear(.3,-.22,.1)],[gear(-.23,.1,.25),gear(.24,-.12,.3)]],
+ [[rect(-.4,-.35,.8,.7),xy([[-.3,-.25],[0,.2],[.3,-.25]])],[xy([[-.5,-.4],[-.5,.45],[-.3,.5]]),xy([[.5,-.4],[.5,.45],[.3,.5]]),xy([[-.3,-.25],[0,.2],[.3,-.25]])]],
+ [[rect(-.28,-.44,.56,.88),...Array.from({length:5},(_,i)=>xy([[-.2,.3-i*.14],[.2,.3-i*.14]]))],[rect(-.45,-.25,.9,.5),...Array.from({length:5},(_,i)=>rect(-.4+i*.17,-.18,.1,.36))]],
+ [[...grid(),xy([[-.4,0],[.4,0]])],[xy([[-.35,.25],[.35,.25]]),xy([[-.35,0],[.25,0]]),xy([[-.35,-.25],[.12,-.25]])]],
+ [grid(),[...grid(),...Array.from({length:6},(_,i)=>xy([[(i%3-1)*.3-.07,(Math.floor(i/3)-.5)*.4],[(i%3-1)*.3+.04,(Math.floor(i/3)-.5)*.4+.07]]))]],
+ [[rect(-.35,.2,.15,.15),rect(-.35,-.07,.15,.15),rect(-.35,-.34,.15,.15)],[xy([[-.35,.26],[-.28,.2],[-.17,.36]]),xy([[-.35,-.01],[-.28,-.07],[-.17,.09]]),xy([[-.35,-.28],[-.28,-.34],[-.17,-.18]])]],
+ [[node(0,0,.15)],[node(-.3,0,.1),node(.3,.34,.07),node(.3,0,.07),node(.3,-.34,.07),xy([[-.2,0],[.23,.34]]),xy([[-.2,0],[.23,0]]),xy([[-.2,0],[.23,-.34]])]],
+ ];
+function twoPose(a:Stroke[],b:Stroke[],key?:string):FigureSpec {
+  const count=Math.max(a.length,b.length);
+  const sample=(strokes:Stroke[])=>Array.from({length:count},(_,i)=>{
+    const s=strokes[i%strokes.length],pts=s.closed?[...s.pts,s.pts[0]]:s.pts;
+    return {pts:Array.from({length:49},(_,j)=>{const f=j/48*(pts.length-1),at=Math.min(pts.length-2,Math.floor(f)),t=f-at;return{x:pts[at].x*(1-t)+pts[at+1].x*t,y:pts[at].y*(1-t)+pts[at+1].y*t,z:0}})};
+  });
+  const anchors:Anchor[]=key?[{x:0,y:-.48,w:.9,key}]:[];
+  return {aspect:1,points:1100,strokes:sample(a),anchors,links:[],open:{strokes:sample(b),anchors}};
+}
+const workshopFigures=Object.fromEntries(workshop.map((t,i)=>[`skill-${t.key}`,twoPose(poses[i][0],poses[i][1],t.key)]));
+const toolsFigure=twoPose(poses[0][1],poses[0][1]);
+
+// The contour face is drawn geometry, not an invented character likeness.
+// Each contour carries a time slice of a real held-out spectral comparison.
+function ringFace(spec:number[][],dx:number):Stroke[] {
+  const rings:Stroke[]=spec.map((row,k)=>({closed:true,pts:Array.from({length:96},(_,i)=>{
+    const a=i/96*Math.PI*2,r=.12+k*.026,energy=row[Math.floor(i/4)]*.035;
+    return {x:dx+Math.cos(a)*(r+energy)*.7,y:.04+Math.sin(a)*(r+energy),z:Math.cos(a)*.05};
+  })}));
+  rings.push(xy(Array.from({length:96},(_,i)=>[dx+(i/95-.5)*.6,-.13+Math.sin(i*.55)*spec[7][Math.floor(i/4)]*.045])));
+  rings.push(ellipse(dx-.1,.14,.05,.022),ellipse(dx+.1,.14,.05,.022),xy([[dx,.13],[dx-.025,-.015],[dx+.03,-.015]]));
+  return rings;
+}
+const referenceFace=ringFace(voiceShapes.reference,-.15),cloneFace=ringFace(voiceShapes.clone,.22);
+const voiceStudio=twoPose([...referenceFace,...cloneFace],[...referenceFace,...ringFace(voiceShapes.clone,-.15)]);
+voiceStudio.points=5000;
+// An unscaled dial, ending at the stored comparison's measured angle.
+const dial=(angle:number)=>xy(Array.from({length:49},(_,i)=>[Math.cos(i/48*angle)*.48,Math.sin(i/48*angle)*.48]));
+voiceStudio.strokes.push(dial(Math.PI*.25));voiceStudio.open!.strokes.push(dial(voiceShapes.dialRadians));
+const capsuleFigures=Object.fromEntries(['keeber','hazalqoum','lemby','bayoumi','daheeh'].map(key=>{
+  const envelope=(voiceShapes.envelopes as Record<string,number[]>)[key];
+  const ring=(y:number,r:number)=>({closed:true,pts:Array.from({length:96},(_,i)=>{const a=i/96*Math.PI*2,rr=r*(1+(envelope?.[i]??0)*.12);return{x:Math.cos(a)*rr,y:y+Math.sin(a)*rr*.22,z:Math.sin(a)*.2}})});
+  const strokes:Stroke[]=[ring(.43,.3),ring(-.4,.3),ring(-.47,.37),...Array.from({length:10},(_,i)=>{const x=Math.cos(i/10*Math.PI*2)*.3;return{...xy([[x,.43],[x,-.4]]),density:.15}})];
+  return [`voice-${key}`,{aspect:.78,points:1300,strokes,anchors:[],links:[]}] as [string,FigureSpec];
+}));
 export const FIGURES: Record<string, FigureSpec> = {
   // The worlds all open through the same aperture.
   portal,
@@ -876,7 +911,9 @@ export const FIGURES: Record<string, FigureSpec> = {
   'cocolani-3d': cocolani,
   artillery3d: artillery,
   'polyblast-arena': polyblast,
-  'mk-voice': mkVoice,
+  'mk-voice': voiceStudio,
+  ...workshopFigures,
+  ...capsuleFigures,
   // The systems. Round 2 drew eight; the landing now flies past the five the
   // site's own featured order ranks first, and the other three keep their
   // figures here for the round that wants them back.

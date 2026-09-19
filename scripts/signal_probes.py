@@ -8,6 +8,7 @@ and the suite both have to agree about belongs here.
 ALIGNMENT_PX = 1.5
 ALIGNMENT_SHARE = 0.97
 REGISTRATION_PX = 3
+HOLD_FLOOR, RELEASE_FLOOR, ASSEMBLY_FLOOR = 450, 400, 700
 
 # Samples actual rendered frames during real wheel input. The lag control feeds
 # each frame the plate half-height from two frames earlier through the SAME bar.
@@ -80,4 +81,20 @@ CONTRAST = r'''(selectors) => {
                 ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)};
   }
   return out;
+}'''
+
+SEEK = '''(u) => {
+  const root = document.querySelector('[data-signal]');
+  const runway = root.querySelector('[data-signal-runway]');
+  const frame = root.querySelector('[data-signal-frame]');
+  const top = runway.getBoundingClientRect().top + scrollY;
+  const range = Math.max(1, runway.offsetHeight - frame.offsetHeight);
+  window.scrollTo({top: top + range * u, behavior: 'instant'});
+}'''
+
+SETTLE = '''async () => {
+  window.__deepField && window.__deepField.settle(6);
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  await new Promise(r => setTimeout(r, 240));
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 }'''

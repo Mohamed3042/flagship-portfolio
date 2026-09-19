@@ -160,7 +160,7 @@ report = {'baseUrl': args.base_url, 'sheets': {}}
 
 
 def capture(pw, name, lang, width, height, poses, columns, cell_width, title):
-    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     ctx = browser.new_context(viewport={'width': width, 'height': height}, device_scale_factor=1,
                               is_mobile=width < 700, has_touch=width < 700)
     page = ctx.new_page()
@@ -208,7 +208,7 @@ def capture(pw, name, lang, width, height, poses, columns, cell_width, title):
 
 def strip(pw):
     """Six frames through one constellation, found from the SHIPPED easing."""
-    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, device_scale_factor=1)
     page = ctx.new_page()
     page.goto(f'{args.base_url}/en', wait_until='networkidle')
@@ -257,7 +257,7 @@ def field_strip(pw):
     window is now located by asking the page's own evaluator where nothing is
     assembling, and the strip is laid across that.
     """
-    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, device_scale_factor=1)
     page = ctx.new_page()
     page.goto(f'{args.base_url}/en', wait_until='networkidle')
@@ -323,7 +323,7 @@ def field_strip(pw):
 
 def figures_sheet(pw):
     """Every chapter at its held pose, on one sheet, so the set is judged at once."""
-    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, device_scale_factor=1)
     page = ctx.new_page()
     page.goto(f'{args.base_url}/en', wait_until='networkidle')
@@ -369,7 +369,7 @@ def portals_sheet(pw):
     where the world art is actually looked at, so the cells are wide and the
     row is the owner's own order of pride.
     """
-    browser = pw.chromium.launch(executable_path=CHROME, headless=False)
+    browser = pw.chromium.launch(executable_path=CHROME, headless=True)
     ctx = browser.new_context(viewport={'width': 1440, 'height': 900}, device_scale_factor=1)
     page = ctx.new_page()
     page.goto(f'{args.base_url}/en', wait_until='networkidle')

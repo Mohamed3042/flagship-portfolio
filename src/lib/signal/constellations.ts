@@ -42,12 +42,12 @@ void main() {
   float show = step(uIndex - 1.1, aMeta.x) * step(aMeta.x, uIndex + 3.1);
   float nearFade = smoothstep(0.4, 1.2, depth);
   float farFade = 1.0 - smoothstep(140.0, 480.0, depth);
-  vAlpha = show * nearFade * farFade * uOpacity * uReveal * mix(0.66, 1.0, aWeight);
+  vAlpha = show * nearFade * farFade * uOpacity * uReveal * mix(mix(0.66, 0.95, aMeta.y), 1.0, aWeight);
   vTint = mix(vec3(0.8745, 0.9098, 1.0), vec3(0.9137, 0.5922, 0.3882), aMeta.y);
   vHalo = 0.45 + aWeight * 0.4;
   vSpike = smoothstep(0.86, 1.0, aWeight);
   vCore = 1.0 / (1.0 + vSpike * 1.9);
-  gl_PointSize = clamp((2.1 + aWeight * aWeight * 6.0) * uPixelRatio * (1.0 + vSpike * 1.9), 0.8, 26.0);
+  gl_PointSize = clamp((mix(2.1, 2.9, aMeta.y) + aWeight * aWeight * 6.0) * uPixelRatio * (1.0 + vSpike * 1.9), 0.8, 26.0);
   if (depth < 0.4) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);
 }`;
 
@@ -56,15 +56,25 @@ export function createConstellations(pixelRatio: number) {
   const uniforms = {
     uDolly: { value: 0 }, uBend: { value: 0 }, uIndex: { value: 0 },
     uOpacity: { value: 1 }, uReveal: { value: 1 }, uPixelRatio: { value: pixelRatio },
+    uMorph: { value: 0 },
   };
   const material = new THREE.ShaderMaterial({ vertexShader: vertex, fragmentShader: STAR_FRAGMENT,
     uniforms, transparent: true, depthWrite: false, depthTest: false, blending: THREE.NormalBlending });
   const object = new THREE.Points(geometry, material);
   object.frustumCulled = false;
   object.renderOrder = 2;
+  const linesGeometry = new THREE.BufferGeometry();
+  const linesMaterial = new THREE.ShaderMaterial({uniforms,transparent:true,depthTest:false,depthWrite:false,
+    vertexShader:`attribute float aIndex;uniform float uDolly,uBend,uIndex,uOpacity,uReveal,uMorph;varying float alpha;
+      void main(){float depth=-position.z-uDolly;vec3 p=position;p.x+=uBend*depth*depth;
+        gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);
+        alpha=(1.0-step(.1,abs(aIndex-uIndex)))*smoothstep(.9,1.0,uMorph)*uOpacity*uReveal*.22;}`,
+    fragmentShader:`varying float alpha;void main(){gl_FragColor=vec4(.8745,.9098,1.0,alpha);}`});
+  const lines=new THREE.LineSegments(linesGeometry,linesMaterial);
+  lines.frustumCulled=false;lines.renderOrder=2;object.add(lines);
   return {
     object,
-    set(entries: { homes: Float32Array; index: number; gold: boolean }[]) {
+    set(entries: { homes: Float32Array; index: number; gold: boolean; links?: [number,number][] }[]) {
       const count = entries.reduce((n, e) => n + e.homes.length / 4, 0);
       const positions = new Float32Array(count * 3), weights = new Float32Array(count), meta = new Float32Array(count * 2);
       let n = 0;
@@ -77,11 +87,19 @@ export function createConstellations(pixelRatio: number) {
       geometry.setAttribute('aWeight', new THREE.BufferAttribute(weights, 1));
       geometry.setAttribute('aMeta', new THREE.BufferAttribute(meta, 2));
       geometry.setDrawRange(0, count);
+      const linePoints:number[]=[],lineIndices:number[]=[];
+      for(const e of entries)for(const pair of e.links??[])for(const i of pair){
+        linePoints.push(e.homes[i*4],e.homes[i*4+1],-e.homes[i*4+2]);lineIndices.push(e.index);
+      }
+      linesGeometry.setAttribute('position',new THREE.Float32BufferAttribute(linePoints,3));
+      linesGeometry.setAttribute('aIndex',new THREE.Float32BufferAttribute(lineIndices,1));
+      linesGeometry.setDrawRange(0,lineIndices.length);
     },
-    frame(dolly: number, bend: number, index: number, opacity: number, reveal: number) {
+    frame(dolly: number, bend: number, index: number, opacity: number, reveal: number, morph:number) {
       uniforms.uDolly.value = dolly; uniforms.uBend.value = bend; uniforms.uIndex.value = index;
       uniforms.uOpacity.value = opacity; uniforms.uReveal.value = reveal;
+      uniforms.uMorph.value = morph;
     },
-    dispose() { geometry.dispose(); material.dispose(); },
+    dispose() { geometry.dispose(); material.dispose(); linesGeometry.dispose();linesMaterial.dispose(); },
   };
 }

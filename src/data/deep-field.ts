@@ -220,32 +220,7 @@ export const voice = {
 
 /* --------------------------------------------------------------- the tools */
 
-/**
- * Twelve of the skills in `~/.claude/skills`, named and described from their own
- * frontmatter. The ones about job hunting, personal machines and private client
- * work are left out on purpose. `repo` is set only where the repository is
- * public — none of these are, today, so the labels are chips and not links.
- */
-export interface Tool {
-  key: string;
-  label: string;
-  repo?: string;
-}
-
-export const tools: Tool[] = [
-  { key: 'agent-brain', label: 'agent-brain' },
-  { key: 'codebase-orientation', label: 'codebase-orientation' },
-  { key: 'root-cause-debugging', label: 'root-cause-debugging' },
-  { key: 'edge-case-sweep', label: 'edge-case-sweep' },
-  { key: 'surgical-refactoring', label: 'surgical-refactoring' },
-  { key: 'security-reflexes', label: 'security-reflexes' },
-  { key: 'verify-ui-visually', label: 'verify-ui-visually' },
-  { key: 'stop-thrashing', label: 'stop-thrashing' },
-  { key: 'leave-no-mess', label: 'leave-no-mess' },
-  { key: 'impeccable', label: 'impeccable' },
-  { key: 'blender-assembly', label: 'blender-assembly' },
-  { key: 'auto-release-manager', label: 'auto-release-manager' },
-];
+export { workshop as tools } from './workshop';
 
 /** The systems the landing keeps: the five the site's own order ranks first. */
 export const SYSTEM_COUNT = 5;

@@ -70,6 +70,7 @@ const common = /* glsl */ `
   uniform float uReveal;
   uniform float uRoadOpacity;
   uniform float uCamZ;
+  uniform float uBackgroundOpacity;
   uniform float uSpin;      // the figure's slow breathing rotation, radians
   uniform vec3 uPivot;      // what that rotation turns about
   uniform float uPart;      // the radial parting, 0..1
@@ -233,7 +234,7 @@ const vertex = /* glsl */ `
     vHalo = mix(pick3(HALO, aClass), mix(0.45, 1.0, weight), formed);
     vCore = 1.0 / sprite;
     vSpike = spike;
-    vAlpha = uOpacity * wrapFade * classAlpha * twinkleOf() * revealOf();
+    vAlpha = uOpacity * mix(uBackgroundOpacity, 1.0, formed) * wrapFade * classAlpha * twinkleOf() * revealOf();
     if (aClass > 2.5) vAlpha *= uRoadOpacity;
 
     gl_PointSize = clamp(size * uSize * uPixelRatio * sprite, 0.8, 26.0 * uPixelRatio);
@@ -366,6 +367,7 @@ export interface Field {
   setTime(seconds: number): void;
   setTwinkle(on: boolean): void;
   setOpacity(value: number): void;
+  setBackgroundOpacity(value: number): void;
   /** The opening: 0 is an empty sky, 1 is the whole field. */
   setReveal(value: number): void;
   setCameraZ(z: number): void;
@@ -515,6 +517,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
     uOpacity: { value: 1 },
     uReveal: { value: 0 },
     uCamZ: { value: 0 },
+    uBackgroundOpacity: { value: 1 },
     uSpin: { value: 0 },
     uPivot: { value: new THREE.Vector3(0, 0, 9) },
     uPart: { value: 0 },
@@ -693,6 +696,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
     setTime(seconds) { uniforms.uTime.value = seconds; },
     setTwinkle(on) { uniforms.uTwinkle.value = on ? 1 : 0; },
     setOpacity(value) { uniforms.uOpacity.value = value > 1 ? 1 : value > 0 ? value : 0; },
+    setBackgroundOpacity(value) { uniforms.uBackgroundOpacity.value = THREE.MathUtils.clamp(value,0,1); },
     setReveal(value) { uniforms.uReveal.value = value > 1 ? 1 : value > 0 ? value : 0; },
     setCameraZ(z) { uniforms.uCamZ.value = z; },
     setSpin(radians, pivot) {
