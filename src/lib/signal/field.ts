@@ -68,6 +68,7 @@ const common = /* glsl */ `
   uniform float uSize;
   uniform float uOpacity;
   uniform float uReveal;
+  uniform float uRoadOpacity;
   uniform float uCamZ;
   uniform float uSpin;      // the figure's slow breathing rotation, radians
   uniform vec3 uPivot;      // what that rotation turns about
@@ -179,7 +180,7 @@ const common = /* glsl */ `
     vec3 tint = uCool;
     if (aSeed.z > 0.90) tint = uWarm;
     if (aSeed.z > 0.98) tint = uBlue;
-    if (aClass > 2.5) tint = vec3(0.8471, 0.7216, 0.4745);
+    if (aClass > 2.5) tint = vec3(0.9137, 0.5922, 0.3882);
     return tint;
   }
 
@@ -204,6 +205,10 @@ const vertex = /* glsl */ `
     float ease = lit * lit * (3.0 - 2.0 * lit);
     float classSize = mix(pick3(SIZE_FAR, aClass), pick3(SIZE_NEAR, aClass), ease);
     float classAlpha = mix(pick3(ALPHA_FAR, aClass), pick3(ALPHA_NEAR, aClass), lit);
+    if (aClass > 2.5) {
+      classSize = mix(0.55, 1.6, lit);
+      classAlpha = mix(0.10, 0.85, lit);
+    }
 
     // Seated, a star takes the figure's own hierarchy: a stroke star is a fine
     // point, an anchor grows and brightens, and the brightest anchors carry a
@@ -229,6 +234,7 @@ const vertex = /* glsl */ `
     vCore = 1.0 / sprite;
     vSpike = spike;
     vAlpha = uOpacity * wrapFade * classAlpha * twinkleOf() * revealOf();
+    if (aClass > 2.5) vAlpha *= uRoadOpacity;
 
     gl_PointSize = clamp(size * uSize * uPixelRatio * sprite, 0.8, 26.0 * uPixelRatio);
   }
@@ -354,6 +360,7 @@ export interface Field {
   /** Distance the eye has travelled down the tunnel, scene units. */
   setDolly(value: number): void;
   setBend(value: number): void;
+  setRoadOpacity(value: number): void;
   /** Ambient creep that keeps the sky alive when the scroll stops. */
   setDrift(value: number): void;
   setTime(seconds: number): void;
@@ -498,6 +505,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
   const uniforms = {
     uDolly: { value: 0 },
     uBend: { value: 0 },
+    uRoadOpacity: { value: 1 },
     uDrift: { value: 0 },
     uMorph: { value: 0 },
     uTime: { value: 0 },
@@ -680,6 +688,7 @@ export function createField(budget: TierBudget, tier: Tier): Field {
     },
     setDolly(value) { uniforms.uDolly.value = value; },
     setBend(value) { uniforms.uBend.value = value; },
+    setRoadOpacity(value) { uniforms.uRoadOpacity.value = value; },
     setDrift(value) { uniforms.uDrift.value = value; },
     setTime(seconds) { uniforms.uTime.value = seconds; },
     setTwinkle(on) { uniforms.uTwinkle.value = on ? 1 : 0; },

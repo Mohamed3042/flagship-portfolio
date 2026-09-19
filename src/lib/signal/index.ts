@@ -18,10 +18,13 @@ import { BAND, STAR_FLOOR, TIERS, TUNNEL } from './types';
 import { CHAPTERS, DOLLY_TOTAL, SEGMENT_VH, evaluate } from './chapters';
 import { createField, type Field } from './field';
 import {
-  FIGURES, PORTAL_ASPECT, PORTAL_RIM_SHARE, drawnFigure, figureAspect, strokeLength,
+  FIGURES, PORTAL_ASPECT, PORTAL_RIM_SHARE, drawnFigure, gateFigure, figureAspect, strokeLength,
   type FigureSpec,
 } from './figures';
 import { seatTarget, seatPoint, textFigure } from './targets';
+import { createConstellations, rayHomes } from './constellations';
+import { ROAD } from './road';
+import { clipTime, initMedia } from './media';
 
 /**
  * Height change (CSS px) below which a resize is treated as a mobile browser
@@ -85,6 +88,7 @@ export function initSignal(): void {
   const nativeMedia = (window as Window & { __mmNativeMatchMedia?: typeof window.matchMedia })
     .__mmNativeMatchMedia ?? window.matchMedia.bind(window);
   const reduced = nativeMedia('(prefers-reduced-motion: reduce)');
+  const media = initMedia(root, CHAPTERS, nativeMedia('(pointer:coarse)').matches, reduced.matches);
 
   /* ---------------------------------------------------------- chapter DOM */
 
@@ -304,8 +308,13 @@ export function initSignal(): void {
     const cy = seat.offsetY ?? 0;
     // Project the ring's centre and its own top edge: the difference IS the
     // ring's height on screen, under whatever rotation the camera is carrying.
-    portalCentre.set(cx, cy, camera.position.z - seat.distance).project(camera);
-    portalEdge.set(cx, cy + ringHeight / 2, camera.position.z - seat.distance).project(camera);
+    const depth = ROAD.depthFar;
+    const scale = depth / seat.distance;
+    const z = -(alignment(chapter) + depth);
+    // The innermost ring and the plate share this fixed plane. The applied
+    // camera matrix already contains this frame's dolly and heading.
+    portalCentre.set(cx * scale, cy * scale, z).project(camera);
+    portalEdge.set(cx * scale, (cy + ringHeight / 2) * scale, z).project(camera);
     const px = (portalCentre.x * 0.5 + 0.5) * viewportWidth;
     const py = (-portalCentre.y * 0.5 + 0.5) * viewportHeight;
     const halfPx = Math.abs((-portalEdge.y * 0.5 + 0.5) * viewportHeight - py);
@@ -330,6 +339,8 @@ export function initSignal(): void {
       portal.host.style.height = `${height.toFixed(1)}px`;
     }
     portal.host.style.transform = `translate(${(px - width / 2).toFixed(1)}px, ${(py - height / 2).toFixed(1)}px)`;
+    portal.host.style.setProperty('--window-x', `${Math.max(-2, Math.min(2, pointerX * 2 - camera.rotation.y * 50))}%`);
+    portal.host.style.setProperty('--window-y', `${Math.max(-2, Math.min(2, pointerY * 2))}%`);
   }
 
   /* ------------------------- the static path: reduced motion / no WebGL */
@@ -385,6 +396,17 @@ export function initSignal(): void {
 
   const field: Field = createField(budget, tier);
   scene.add(field.object);
+  const constellations = createConstellations(renderer.getPixelRatio());
+  scene.add(constellations.object);
+  const homes = new Map<string, Float32Array>();
+  const anamorphic = (c: ChapterSpec) => c.act === 'hero' || !!c.portal || c.act === 'systems' || c.act === 'public';
+  const alignment = (c: ChapterSpec) => evaluate(midpointOf(c), layout).dolly;
+  function refreshHomes() {
+    constellations.set(CHAPTERS.flatMap((c, index) => {
+      const data = homes.get(c.id);
+      return data ? [{ homes: data, index, gold: !!c.portal }] : [];
+    }));
+  }
 
   // The eye never leaves the origin. The dolly is expressed in the field — a
   // star's depth is `mod(home - dolly)` — which is the same picture as moving
@@ -478,7 +500,7 @@ export function initSignal(): void {
     return {
       distance,
       width: width * (aperture ? 0.46 : 0.4),
-      height: height * (aperture ? 0.525 : 0.45),
+      height: height * (aperture ? 0.572 : 0.45),
       offsetX: (rtl ? -away : away) * width * 0.245,
       jitter: aperture ? 1.05 : 1.15,
     };
@@ -546,6 +568,10 @@ export function initSignal(): void {
     figures.set(chapter.id, figure);
     seated.set(chapter.id, seatTarget(figure, seat, seated.get(chapter.id)));
     linkBuffers.set(chapter.id, linksFor(figure, seat, linkBuffers.get(chapter.id)));
+    if (anamorphic(chapter)) {
+      homes.set(chapter.id, rayHomes(figure, seat, alignment(chapter), !!chapter.portal));
+      refreshHomes();
+    }
   }
 
   /** Re-seat every figure for the current viewport. A multiply, not a re-read. */
@@ -587,7 +613,7 @@ export function initSignal(): void {
         }
       } else {
         const spec = FIGURES[chapter.target.figure];
-        if (spec) figure = drawnFigure(spec, strokePoints(spec, chapter));
+        if (spec) figure = chapter.portal ? gateFigure(strokePoints(spec, chapter)) : drawnFigure(spec, strokePoints(spec, chapter));
       }
       if (!figure || disposed) continue;
       place(chapter, figure);
@@ -708,7 +734,10 @@ export function initSignal(): void {
     }
     placed.length = 0;
     for (const label of figure.labels ?? []) {
-      const [x, y, z] = seatPoint(figure, seat, label.index);
+      const fixed = homes.get(chapter.id);
+      const [x, y, z] = fixed
+        ? [fixed[label.index * 4], fixed[label.index * 4 + 1], fixed[label.index * 4 + 2] - dolly]
+        : seatPoint(figure, seat, label.index);
       // The same rotation the shader applies, about the same pivot.
       const rx = x - pivot.x;
       const rz = z - pivot.z;
@@ -906,6 +935,7 @@ export function initSignal(): void {
     const u = progress();
     const state = evaluate(u, layout);
     const index = CHAPTERS.indexOf(state.chapter);
+    media.frame(index, state.local, u);
 
     showChapter(state.chapter.id);
     updateSeek(index);
@@ -930,11 +960,20 @@ export function initSignal(): void {
     // The dolly damps toward the value scroll asks for, and SNAPS once it is
     // within a hair of it, so a settled frame is exactly the pure evaluation.
     const wanted = state.dolly;
-    dolly = wanted;
+    dolly = still && anamorphic(state.chapter) ? alignment(state.chapter) : wanted;
     field.setDolly(dolly);
     field.setCameraZ(-dolly);
     field.setBend(state.bend);
     camera.position.z = -dolly;
+    camera.position.x = 0;
+    camera.position.y = 0;
+    if (state.chapter.portal && !still) {
+      const gateSeat = seatFor(state.chapter);
+      const advance = Math.max(0, dolly - alignment(state.chapter));
+      const follow = Math.min(1, advance / ROAD.depthFar);
+      camera.position.x = (gateSeat.offsetX ?? 0) * ROAD.depthFar / gateSeat.distance * follow;
+      camera.position.y = (gateSeat.offsetY ?? 0) * ROAD.depthFar / gateSeat.distance * follow;
+    }
 
     // Under reduced motion every morph sits at its held pose: the chapter is a
     // poster, not a paused animation.
@@ -951,12 +990,12 @@ export function initSignal(): void {
     // and nothing at all when the visitor asked for less motion.
     const seat = seatFor(state.chapter);
     pivot.set(seat.offsetX ?? 0, seat.offsetY ?? 0, seat.distance);
-    const spin = still ? 0 : THREE.MathUtils.degToRad(SPIN_DEG) * Math.sin(motionTime * 0.21) * morph;
+    const spin = still || anamorphic(state.chapter) ? 0 : THREE.MathUtils.degToRad(SPIN_DEG) * Math.sin(motionTime * 0.21) * morph;
     field.setSpin(spin, [pivot.x, pivot.y, pivot.z]);
 
     // The figure for this chapter, swapped only while nothing is assembled, so
     // a target arriving late can never pop a formation apart.
-    const wantTarget = morph > 0.0005 ? state.chapter.id : '';
+    const wantTarget = !anamorphic(state.chapter) && morph > 0.0005 ? state.chapter.id : '';
     if (wantTarget !== loadedTarget) {
       const next = wantTarget ? seated.get(wantTarget) ?? null : null;
       if (!wantTarget || next) {
@@ -969,6 +1008,7 @@ export function initSignal(): void {
     field.setMorph(loadedTarget === state.chapter.id ? morph : 0);
 
     const gone = released();
+    constellations.frame(dolly, still ? 0 : state.bend, index, 1 - gone, reveal);
     field.setOpacity(1 - gone);
     root.style.setProperty('--signal-released', gone.toFixed(3));
     // The whole canvas fades, not only its contents; `visibility` is only
@@ -1004,7 +1044,7 @@ export function initSignal(): void {
     }
 
     camera.updateMatrixWorld();
-    placeLabels(state.chapter, loadedTarget === state.chapter.id ? morph : 0, spin, pivot);
+    placeLabels(state.chapter, anamorphic(state.chapter) || loadedTarget === state.chapter.id ? morph : 0, spin, pivot);
     placePortal(state.chapter, portalBlend);
 
     renderer.render(scene, camera);
@@ -1053,6 +1093,11 @@ export function initSignal(): void {
    * a headless capture reads the settled, pure state instead of a transient.
    */
   (window as Window & { __deepField?: unknown }).__deepField = {
+    skyOnly(on: boolean) {
+      field.setRoadOpacity(on ? 0 : 1);
+      constellations.object.visible = !on;
+      request();
+    },
     settle(time = 6) {
       pinned = true;
       reveal = 1;
@@ -1073,9 +1118,10 @@ export function initSignal(): void {
         act: s.chapter.act,
         side: s.chapter.side,
         local: Number(s.local.toFixed(5)),
-        morph: Number(s.morph.toFixed(5)),
+        morph: still && s.chapter.target ? 1 : Number(s.morph.toFixed(5)),
         fold: Number(s.fold.toFixed(5)),
         portal: Number(s.portal.toFixed(5)),
+        clipTime: clipTime(s.local),
         part: Number(s.part.toFixed(5)),
         breath: Number(s.breath.toFixed(5)),
         dolly: Number(s.dolly.toFixed(4)),
@@ -1117,8 +1163,12 @@ export function initSignal(): void {
       const v = new THREE.Vector3();
       let minX = Infinity; let minY = Infinity; let maxX = -Infinity; let maxY = -Infinity;
       for (let i = 0; i < figure.count; i += Math.max(1, Math.floor(figure.count / 900))) {
-        const [x, y, z] = seatPoint(figure, seat, i);
-        v.set(x, y, camera.position.z - z).project(camera);
+        const data = homes.get(chapter.id);
+        if (data) v.set(data[i * 4], data[i * 4 + 1], -data[i * 4 + 2]).project(camera);
+        else {
+          const [x, y, z] = seatPoint(figure, seat, i);
+          v.set(x, y, camera.position.z - z).project(camera);
+        }
         const px = (v.x * 0.5 + 0.5) * viewportWidth;
         const py = (-v.y * 0.5 + 0.5) * viewportHeight;
         if (px < minX) minX = px;
@@ -1168,6 +1218,49 @@ export function initSignal(): void {
     /** Where the camera says each labelled anchor is, in CSS pixels. */
     labels() {
       return projected.map((p) => ({ ...p, x: Number(p.x.toFixed(2)), y: Number(p.y.toFixed(2)) }));
+    },
+    registration() {
+      const c = CHAPTERS.find(c => c.id === shownChapter), portal = portals.get(shownChapter);
+      const data = homes.get(shownChapter);
+      if (!c || !portal || !data) return null;
+      // Read the far ring's actual uploaded homes, excluding its inherited iris
+      // ticks, instead of calculating the same placement formula a second time.
+      let top = Infinity, bottom = -Infinity;
+      const v = new THREE.Vector3();
+      for (let i = 48; i < data.length / 4; i++) {
+        if (i % 5 !== 4) continue;
+        v.set(data[i*4], data[i*4+1], -data[i*4+2]).project(camera);
+        const py = (-v.y*.5+.5)*viewportHeight;
+        top = Math.min(top,py); bottom = Math.max(bottom,py);
+      }
+      const r=portal.host.getBoundingClientRect();
+      return {rimHalf:(bottom-top)/2,plateHalf:r.height/2,gap:Math.abs((bottom-top-r.height)/2),
+        visible: getComputedStyle(portal.host).visibility==='visible' && Number(getComputedStyle(portal.host).opacity)>.1,
+        local:evaluate(progress(),layout).local};
+    },
+    /** Independent projection of the actual uploaded homes, with a flat-depth plant. */
+    alignment(id: string, delta = 0, flat = false) {
+      const c = CHAPTERS.find(c => c.id === id);
+      const data = homes.get(id), fig = figures.get(id);
+      if (!c || !data || !fig) return null;
+      const seat = seatFor(c), scale = fittedHeight(seat, fig.aspect), eye = alignment(c);
+      const perUnit = pixelsPerUnit(seat.distance);
+      let good = 0, worst = 0, minDepth = Infinity, maxDepth = 0;
+      const depths: number[] = [];
+      for (let i = 0; i < fig.count; i++) {
+        const original = data[i * 4 + 2] - eye;
+        const depth = flat ? 26.5 : original;
+        depths.push(depth); minDepth = Math.min(minDepth, depth); maxDepth = Math.max(maxDepth, depth);
+        const x = data[i * 4] * (flat ? depth / original : 1);
+        const y = data[i * 4 + 1] * (flat ? depth / original : 1);
+        const wantX = (seat.offsetX ?? 0) + fig.positions[i * 3] * scale;
+        const wantY = (seat.offsetY ?? 0) + fig.positions[i * 3 + 1] * scale;
+        const z = depth - delta;
+        const gap = z <= 0 ? 1e6 : Math.hypot(x * seat.distance / z - wantX, y * seat.distance / z - wantY) * perUnit;
+        worst = Math.max(worst, gap); if (gap <= 1.5) good++;
+      }
+      return { fraction: good / fig.count, worstPx: worst, depthSpan: maxDepth - minDepth,
+        depthBins: new Set(depths.map(d => Math.floor(d / 5))).size, count: fig.count };
     },
     /**
      * The band's geometry in CSS pixels, so a haze measurement reads the shipped
@@ -1222,7 +1315,7 @@ export function initSignal(): void {
       return { u: s.u, chapter: s.chapter.id, act: s.chapter.act, local: s.local,
                morph: s.morph, part: s.part, breath: s.breath, fold: s.fold,
                portal: s.portal, resting: s.resting, narration: s.narration,
-               dolly: s.dolly, bend: s.bend };
+               dolly: s.dolly, bend: s.bend, clipTime: clipTime(s.local) };
     },
     chapters: CHAPTERS.map((c) => ({ id: c.id, from: c.from, to: c.to, act: c.act, side: c.side,
                                      beatClass: c.beatClass,
@@ -1252,6 +1345,8 @@ export function initSignal(): void {
     raf = 0;
     abort.abort();
     field.dispose();
+    media.dispose();
+    constellations.dispose();
     renderer.dispose();
     delete (window as Window & { __deepField?: unknown }).__deepField;
   };

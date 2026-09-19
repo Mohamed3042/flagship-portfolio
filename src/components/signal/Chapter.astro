@@ -39,6 +39,7 @@ export interface SignalPortal {
   aspect: number;
   width: number;
   height: number;
+  clip?: string;
 }
 
 export interface SignalChapterCopy {
@@ -94,6 +95,7 @@ const titleId = `signal-${chapter.id}-title`;
         loading="lazy"
         decoding="async"
       />
+      {chapter.portal.clip && <video data-signal-clip data-src={chapter.portal.clip} preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>}
     </div>
   )}
 

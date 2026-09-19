@@ -158,11 +158,11 @@ export const CHAPTERS: ChapterSpec[] = (() => {
         : beat.figure ? { kind: 'drawn' as const, figure: beat.figure } : null,
       // The name is already assembled when the page opens: the visitor arrives
       // at the held pose, and scrolling is what releases it back into the field.
-      morph: hero ? { in0: -0.02, in1: 0, out0: 0.44, out1: 0.81 } : MORPH,
+      morph: beat.act === 'road' ? undefined : MORPH,
       portal: beat.portal,
       project: beat.project,
       effect: beat.act === 'contact' ? { kind: 'breath' as const, window: MORPH } : undefined,
-      reading: beat.act === 'road' ? null : hero ? stop(from, to, 0, 0.4) : stop(from, to, REST[0], REST[1]),
+      reading: beat.act === 'road' ? null : stop(from, to, REST[0], REST[1]),
       beatClass: beat.act === 'road' ? 'road' : beat.portal ? 'gate' : 'reading',
       act: beat.act,
       side,
@@ -233,7 +233,7 @@ export function portalAt(chapter: ChapterSpec, local: number): number {
   if (!chapter.portal || !chapter.morph) return 0;
   const w = chapter.morph;
   const up = smoothstep(ramp(local, w.in0 + (w.in1 - w.in0) * 0.62, w.in1));
-  const down = smoothstep(ramp(local, w.out0 + (w.out1 - w.out0) * 0.3, w.out1));
+  const down = smoothstep(ramp(local, 0.94, 0.998));
   return up * (1 - down);
 }
 

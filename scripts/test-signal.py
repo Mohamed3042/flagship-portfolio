@@ -26,7 +26,7 @@ sys.path.insert(0, str(_P(__file__).resolve().parent))
 # The contrast reader lives beside this file: the suite and the capture
 # scripts have to agree about what a ratio is, and two copies of it drifted
 # into being wrong in the same way once already.
-from signal_probes import CONTRAST  # noqa: E402
+from signal_probes import CONTRAST, aligned_3d  # noqa: E402
 
 # A failing check must be able to print itself. Arabic copy in a failure detail
 # was crashing the reporter on a cp1252 console, which turns a red suite into a
@@ -403,7 +403,7 @@ with sync_playwright() as p:
         check(f'{name} five worlds carry a portal', base['portals'] == 5, base['portals'])
         # The career film and the nine film pages left this surface in Round 3.
         check(f'{name} the landing links to no film page', base['films'] == 0, base['films'])
-        check(f'{name} no video on the landing', base['reels'] == 0, base['reels'])
+        check(f'{name} five worlds have silent deferred clips', base['reels'] == 5, base['reels'])
         check(f'{name} work reachable from the first viewport', base['workLink'])
         check(f'{name} contact section present', base['contact'])
         # Two bars reporting the same number is a defect, not redundancy.
@@ -489,7 +489,7 @@ with sync_playwright() as p:
 
         # --- the morph is a held pose, not a flicker -------------------------
         hero = scroll_to(page, 0.0)['state']
-        check(f'{name} the name is assembled when the page opens', hero['morph'] > 0.99, hero['morph'])
+        check(f'{name} the name begins before its alignment', hero['morph'] < 0.01, hero['morph'])
         # Read from the chapter table, not from a constant: the runway changed
         # length in Round 2 and a hard-coded 0.09 quietly started measuring the
         # NEXT chapter's morph instead of the hero's release.
@@ -527,6 +527,21 @@ with sync_playwright() as p:
         # is a property of the frame, so it is read from the seated points the
         # shader is using and from their projection through the live camera.
         chapters = page.evaluate("() => window.__deepField.chapters")
+        for c in chapters:
+            if c['window']:
+                hold = c['window']
+                states = page.evaluate('us => us.map(u => window.__deepField.at(u))',
+                    [hold['in1'] + 1e-8, c['hold'], hold['out0'] - 1e-8])
+                check(f"{name} {c['id']} camera stops and bend is zero throughout hold",
+                      all(s['bend'] == 0 for s in states)
+                      and max(s['dolly'] for s in states) - min(s['dolly'] for s in states) < 1e-6, states)
+            held3d = page.evaluate('id => window.__deepField.alignment(id)', c['id'])
+            if held3d:
+                before3d = page.evaluate('id => window.__deepField.alignment(id, -20)', c['id'])
+                after3d = page.evaluate('id => window.__deepField.alignment(id, 20)', c['id'])
+                check(f"{name} {c['id']} aligns only at its 3D eye", aligned_3d(held3d, before3d, after3d), held3d)
+                plant = page.evaluate('id => window.__deepField.alignment(id, 0, true)', c['id'])
+                check(f"{name} {c['id']} flat-figure plant is rejected", not aligned_3d(plant, before3d, after3d), plant)
         figured = [c for c in chapters if c["figure"]]
         check(f"{name} every content beat declares a figure", len(figured) == BEATS - 6, len(figured))
         missing, offscreen, shares = [], [], {}
@@ -1092,7 +1107,7 @@ with sync_playwright() as p:
       for (let i = 0; i <= 2000; i++) {
         const u = i / 2000;
         const s = window.__deepField.at(u);
-        const still = s.morph < 0.002 && s.part < 0.002 && s.breath < 0.002 && s.portal < 0.002;
+        const still = s.act !== 'road' && s.morph < 0.002 && s.part < 0.002 && s.breath < 0.002 && s.portal < 0.002;
         if (still) run = run ? {from: run.from, to: u} : {from: u, to: u};
         else { if (run) runs.push(run); run = null; }
       }
@@ -1100,6 +1115,9 @@ with sync_playwright() as p:
       return runs.sort((a, b) => (b.to - b.from) - (a.to - a.from)).slice(0, 6);
     }""")
     check('the field is alone somewhere on the page', bool(quiets), quiets)
+    # R05 adds a gold ground shell and fixed homes. Measure the original sky
+    # component with those two layers ablated; the road has its own captures.
+    page.evaluate('window.__deepField.skyOnly(true)')
 
     BLOCKED = """() => {
       const out = [];

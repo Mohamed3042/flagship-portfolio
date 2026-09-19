@@ -2,7 +2,7 @@
 import type { ChapterSpec } from './types';
 
 export const ROAD = {
-  gold: '#D8B879', // sampled from the owner's road/capsule boards; light, never UI
+  gold: '#E99763', // median warm pixels, gate-tunnel-cake top ring crop; light, never UI
   ground: -3.2,
   lane: 2.8,
   shell: 190,

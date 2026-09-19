@@ -1,0 +1,62 @@
+[
+  {
+    "key": "cake-studio",
+    "source": "public/worlds/cake-studio/clips/CST-047.mp4",
+    "ledger": "public/worlds/cake-studio/manifest.json",
+    "source_sha256": "12e180f3e278d7e52b44aa333d7f6f3a27a9de1ea494c7efb0aa98af6f780c53",
+    "output": "src\\assets\\darb\\cake-studio.mp4",
+    "bytes": 806221,
+    "sha256": "783d6da4adcf42713fe1e71f95876f95566302516457399d6d59b3695eed6993",
+    "selection": "exact existing poster/clip pair"
+  },
+  {
+    "key": "disney",
+    "source": "public/worlds/disney2/clips/DSN2-019.mp4",
+    "ledger": "public/worlds/disney.html",
+    "source_sha256": "a9b480876ebba862ccb17c2d3db4085792a433c33b26c47cdbd5eceaaabf7db6",
+    "output": "src\\assets\\darb\\disney.mp4",
+    "bytes": 875861,
+    "sha256": "6044b8e7e160bdf8e1a0193365242aca45a1489dcf68ee9bee9c19e12ffce124",
+    "selection": "exact existing poster/clip pair"
+  },
+  {
+    "key": "strings",
+    "source": "public/worlds/assets/strings/wan-production/accepted/CTS-A-022.mp4",
+    "ledger": "public/worlds/strings.html",
+    "source_sha256": "7cffd4fff44436173bea453d3b092f0e2d5f0cbe02061fe21f27b977596489c4",
+    "output": "src\\assets\\darb\\strings.mp4",
+    "bytes": 684825,
+    "sha256": "21aa5b22e7d23a4d823907bbbbcd605761217ecbe32b2619a708a28d847d0028",
+    "selection": "exact existing poster/clip pair"
+  },
+  {
+    "key": "academy",
+    "source": "public/worlds/academy/clips/ACA-001.mp4",
+    "ledger": "public/worlds/academy/manifest.json",
+    "source_sha256": "3ebf62f905f712a76fd50f2ce650068c7435d7d89fc93e900d1359b17170f840",
+    "output": "src\\assets\\darb\\academy.mp4",
+    "bytes": 406728,
+    "sha256": "3dca83f5f4381a3005bcf900743c244e63164304f327fb16237a6a422db3dcfb",
+    "selection": "exact existing poster/clip pair"
+  },
+  {
+    "key": "spotify",
+    "source": "public/worlds/spotify/live/j09-pupil.mp4",
+    "ledger": "public/worlds/spotify.html",
+    "source_sha256": "899eb093c42a43bb5fcbdb3c708a9e7697d36a8ac5fb824a86bdaf96b7fdd597",
+    "output": "src\\assets\\darb\\spotify.mp4",
+    "bytes": 678872,
+    "sha256": "9e23a9bbc9e544d750f6e7bba5dc8dd480d3190cbcdf0261f90decfddcbd3563",
+    "selection": "exact existing poster/clip pair"
+  },
+  {
+    "key": "daheeh",
+    "source": "owner-supplied char1.mp4",
+    "source_sha256": "dbe271050e88343f462d75df2452f8979a3b60f8cb1baa7746b1bf0fa77bb135",
+    "output": "src\\assets\\darb\\daheeh.mp4",
+    "sha256": "3c4c7ca30d04ac58ad7436807aeec785f7d5f7a13a66372b0b78df7cf3c4c3b5",
+    "bytes": 231809,
+    "provenance": "Owner confirmed El Daheeh and public portfolio use in this task, 2026-09-19.",
+    "edit": "Audio removed. First 2.5 seconds followed by reverse, 5 seconds total."
+  }
+]

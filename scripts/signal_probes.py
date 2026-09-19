@@ -5,6 +5,34 @@ wrong in both and only one of them was being looked at. Anything a script
 and the suite both have to agree about belongs here.
 """
 
+ALIGNMENT_PX = 1.5
+ALIGNMENT_SHARE = 0.97
+REGISTRATION_PX = 3
+
+# Samples actual rendered frames during real wheel input. The lag control feeds
+# each frame the plate half-height from two frames earlier through the SAME bar.
+REGISTRATION_RECORD = r'''() => {
+  window.__darbRegistration = [];
+  window.__darbRecording = true;
+  const tick = () => {
+    if (!window.__darbRecording) return;
+    const s = window.__deepField.registration();
+    if (s && s.visible && s.local > .30 && s.local < .90) window.__darbRegistration.push({...s, at:performance.now()});
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}'''
+
+def registration_result(frames):
+    good = [f['gap'] for f in frames]
+    lag = [abs(f['rimHalf'] - frames[i-2]['plateHalf']) for i, f in enumerate(frames) if i >= 2]
+    return {'frames':len(frames), 'worstPx':max(good, default=1e6), 'lagWorstPx':max(lag, default=0)}
+
+def aligned_3d(held, before, after):
+    return (held['fraction'] >= ALIGNMENT_SHARE and held['depthSpan'] >= 30
+            and held['depthBins'] >= 5 and before['fraction'] < ALIGNMENT_SHARE
+            and after['fraction'] < ALIGNMENT_SHARE)
+
 CONTRAST = r'''(selectors) => {
   // A computed colour arrives in one of two shapes in this browser, and they
   // are on DIFFERENT SCALES: `rgb(240, 243, 246)` is 0..255, while anything

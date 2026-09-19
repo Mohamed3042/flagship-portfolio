@@ -63,3 +63,6 @@ docs/signal-review/round06/after/signal-realtime-desktop.mp4
 # and the report are the packet; an mp4 is for the owner to watch, not for git.
 docs/deep-field/**/*.mp4
 dist-v2/
+
+/work/
+/dist-v2/

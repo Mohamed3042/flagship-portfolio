@@ -22,7 +22,7 @@ import { automationProjects, labProjects, publicAiProjects } from '../../data/sy
 import { legacyProjects, getProject, type ProjectMeta } from '../../data/projects';
 import { featured } from '../../data/featured';
 import { profile } from '../../data/profile';
-import { games, tools, voice, worlds } from '../../data/deep-field';
+import { games, tools, voice, worlds, worldClips } from '../../data/deep-field';
 import { CHAPTERS, COPY, SEGMENT_VH } from '../../lib/signal/chapters';
 import '../../styles/showroom.css';
 import '../../styles/signal.css';
@@ -112,6 +112,7 @@ const chapters: SignalChapterCopy[] = CHAPTERS.map(chapter => {
       actions,
       portal: {
         src: world.frame,
+        clip: worldClips[world.slug],
         alt: pick(lang, world.alt),
         aspect: world.aspect,
         width: FRAME_WIDTH,

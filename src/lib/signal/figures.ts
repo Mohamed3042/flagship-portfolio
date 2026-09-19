@@ -520,6 +520,20 @@ export const PORTAL_RIM_SHARE = 1 / PORTAL_TICK_OUT;
 /** The aperture's own ratio: the rim, and therefore the plate, is this wide. */
 export const PORTAL_ASPECT = 1.12;
 
+/** Exact ellipse and the eight inherited ticks. No x/y jitter at alignment. */
+export function gateFigure(count: number): Figure {
+  const n = Math.max(500, count), positions = new Float32Array(n * 3), weights = new Float32Array(n);
+  for (let i = 0; i < n; i++) {
+    const tick = i < 48;
+    const angle = tick ? Math.floor(i / 6) * Math.PI / 4 + Math.PI / 8 : (i - 48) / (n - 48) * Math.PI * 2;
+    const radius = tick ? 1.045 + (i % 6) / 5 * (PORTAL_TICK_OUT - 1.045) : 1;
+    positions[i * 3] = Math.cos(angle) * .56 * radius / PORTAL_TICK_OUT;
+    positions[i * 3 + 1] = Math.sin(angle) * .5 * radius / PORTAL_TICK_OUT;
+    weights[i] = tick ? (Math.floor(i / 6) % 2 ? .30 : .42) : .08;
+  }
+  return { positions, weights, count: n, aspect: PORTAL_ASPECT, links: [] };
+}
+
 const portal: FigureSpec = (() => {
   const rx = 0.56;
   const ry = 0.5;

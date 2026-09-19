@@ -17,6 +17,15 @@ import disneyFrame from '../assets/worlds/disney.avif?url';
 import stringsFrame from '../assets/worlds/strings.avif?url';
 import academyFrame from '../assets/worlds/academy.avif?url';
 import spotifyFrame from '../assets/worlds/spotify.avif?url';
+import cakeClip from '../assets/darb/cake-studio.mp4?url';
+import disneyClip from '../assets/darb/disney.mp4?url';
+import stringsClip from '../assets/darb/strings.mp4?url';
+import academyClip from '../assets/darb/academy.mp4?url';
+import spotifyClip from '../assets/darb/spotify.mp4?url';
+
+export const worldClips: Record<string, string> = {
+  'cake-studio': cakeClip, disney: disneyClip, strings: stringsClip, academy: academyClip, spotify: spotifyClip,
+};
 
 /* ------------------------------------------------------------------ worlds */
 
