@@ -1,0 +1,380 @@
+{
+  "dark": {
+    "contrast": {
+      "section heading": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "section lede": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.721325415794078
+      },
+      "card title": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 17.142488979910777
+      },
+      "card body": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 8.837889073518149
+      },
+      "text link": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "status chip": {
+        "color": "rgb(154, 242, 190)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 14.38088363714771
+      },
+      "method summary": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "contact line": {
+        "color": "color(srgb 0.658824 0.667059 0.675294)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.019613613395967
+      },
+      "contact lead": {
+        "color": "rgb(167, 178, 191)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.763573446529742
+      },
+      "contact card": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      }
+    },
+    "bodyBackground": "rgb(0, 0, 0)",
+    "archiveBackground": "rgba(0, 0, 0, 0)",
+    "tokens": {
+      "--bg": "#000000",
+      "--ink": "#F0F3F6",
+      "--ink-2": "#A7B2BF",
+      "--ink-3": "#8D97A4",
+      "--accent": "#8AB4FF"
+    }
+  },
+  "light": {
+    "contrast": {
+      "section heading": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "section lede": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.721325415794078
+      },
+      "card title": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 17.142488979910777
+      },
+      "card body": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 8.837889073518149
+      },
+      "text link": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "status chip": {
+        "color": "rgb(95, 208, 138)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 9.887563046515432
+      },
+      "method summary": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "contact line": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "contact lead": {
+        "color": "rgb(167, 178, 191)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.763573446529742
+      },
+      "contact card": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      }
+    },
+    "bodyBackground": "rgb(0, 0, 0)",
+    "archiveBackground": "rgba(0, 0, 0, 0)",
+    "tokens": {
+      "--bg": "#000000",
+      "--ink": "#F0F3F6",
+      "--ink-2": "#A7B2BF",
+      "--ink-3": "#8D97A4",
+      "--accent": "#8AB4FF"
+    }
+  },
+  "neon": {
+    "contrast": {
+      "section heading": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "section lede": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.721325415794078
+      },
+      "card title": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 17.142488979910777
+      },
+      "card body": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 8.837889073518149
+      },
+      "text link": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "status chip": {
+        "color": "rgb(154, 242, 190)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 14.38088363714771
+      },
+      "method summary": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "contact line": {
+        "color": "color(srgb 0.658824 0.667059 0.675294)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.019613613395967
+      },
+      "contact lead": {
+        "color": "rgb(167, 178, 191)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.763573446529742
+      },
+      "contact card": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      }
+    },
+    "bodyBackground": "rgb(0, 0, 0)",
+    "archiveBackground": "rgba(0, 0, 0, 0)",
+    "tokens": {
+      "--bg": "#000000",
+      "--ink": "#F0F3F6",
+      "--ink-2": "#A7B2BF",
+      "--ink-3": "#8D97A4",
+      "--accent": "#8AB4FF"
+    }
+  },
+  "cinema": {
+    "contrast": {
+      "section heading": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "section lede": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.721325415794078
+      },
+      "card title": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 17.142488979910777
+      },
+      "card body": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 8.837889073518149
+      },
+      "text link": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "status chip": {
+        "color": "rgb(154, 242, 190)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 14.38088363714771
+      },
+      "method summary": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "contact line": {
+        "color": "color(srgb 0.658824 0.667059 0.675294)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.019613613395967
+      },
+      "contact lead": {
+        "color": "rgb(167, 178, 191)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.763573446529742
+      },
+      "contact card": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      }
+    },
+    "bodyBackground": "rgb(0, 0, 0)",
+    "archiveBackground": "rgba(0, 0, 0, 0)",
+    "tokens": {
+      "--bg": "#000000",
+      "--ink": "#F0F3F6",
+      "--ink-2": "#A7B2BF",
+      "--ink-3": "#8D97A4",
+      "--accent": "#8AB4FF"
+    }
+  },
+  "storybook": {
+    "contrast": {
+      "section heading": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "section lede": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.721325415794078
+      },
+      "card title": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 17.142488979910777
+      },
+      "card body": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 8.837889073518149
+      },
+      "text link": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "status chip": {
+        "color": "rgb(154, 242, 190)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 14.38088363714771
+      },
+      "method summary": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "contact line": {
+        "color": "color(srgb 0.658824 0.667059 0.675294)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.019613613395967
+      },
+      "contact lead": {
+        "color": "rgb(167, 178, 191)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.763573446529742
+      },
+      "contact card": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      }
+    },
+    "bodyBackground": "rgb(0, 0, 0)",
+    "archiveBackground": "rgba(0, 0, 0, 0)",
+    "tokens": {
+      "--bg": "#000000",
+      "--ink": "#F0F3F6",
+      "--ink-2": "#A7B2BF",
+      "--ink-3": "#8D97A4",
+      "--accent": "#8AB4FF"
+    }
+  },
+  "wave": {
+    "contrast": {
+      "section heading": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "section lede": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.721325415794078
+      },
+      "card title": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 17.142488979910777
+      },
+      "card body": {
+        "color": "color(srgb 0.682039 0.692706 0.707765)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 8.837889073518149
+      },
+      "text link": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "status chip": {
+        "color": "rgb(154, 242, 190)",
+        "ground": "color(srgb 0.0527059 0.0607059 0.0837647)",
+        "ratio": 14.38088363714771
+      },
+      "method summary": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      },
+      "contact line": {
+        "color": "color(srgb 0.658824 0.667059 0.675294)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.019613613395967
+      },
+      "contact lead": {
+        "color": "rgb(167, 178, 191)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 9.763573446529742
+      },
+      "contact card": {
+        "color": "rgb(240, 243, 246)",
+        "ground": "rgb(0, 0, 0)",
+        "ratio": 18.856054021963207
+      }
+    },
+    "bodyBackground": "rgb(0, 0, 0)",
+    "archiveBackground": "rgba(0, 0, 0, 0)",
+    "tokens": {
+      "--bg": "#000000",
+      "--ink": "#F0F3F6",
+      "--ink-2": "#A7B2BF",
+      "--ink-3": "#8D97A4",
+      "--accent": "#8AB4FF"
+    }
+  }
+}

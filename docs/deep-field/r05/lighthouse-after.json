@@ -1,0 +1,201 @@
+{
+  "url": "http://127.0.0.1:4618/en",
+  "local": "http://127.0.0.1:4618/en",
+  "runs": 3,
+  "desktop": {
+    "median": {
+      "performance": 91,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "spread": {
+      "performance": [
+        91,
+        92
+      ],
+      "accessibility": [
+        100,
+        100
+      ],
+      "best-practices": [
+        100,
+        100
+      ],
+      "seo": [
+        100,
+        100
+      ]
+    },
+    "medianFcpMs": 727,
+    "medianLcpMs": 1839,
+    "medianTbtMs": 75,
+    "cls": 0,
+    "failingBinaryAudits": [
+      "valid-source-maps"
+    ],
+    "runs": [
+      {
+        "scores": {
+          "performance": 91,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "fcpMs": 727,
+        "lcpMs": 1851,
+        "tbtMs": 75,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "http://127.0.0.1:4618/en",
+        "cliNote": null
+      },
+      {
+        "scores": {
+          "performance": 91,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "fcpMs": 733,
+        "lcpMs": 1839,
+        "tbtMs": 76,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "http://127.0.0.1:4618/en",
+        "cliNote": "report written, CLI exited 1 in cleanup: Runtime error encountered: EPERM, Permission denied: \\\\?\\C:\\Users\\GAMING\\AppData\\Local\\Tem"
+      },
+      {
+        "scores": {
+          "performance": 92,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "fcpMs": 713,
+        "lcpMs": 1797,
+        "tbtMs": 49,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "http://127.0.0.1:4618/en",
+        "cliNote": null
+      }
+    ]
+  },
+  "mobile": {
+    "median": {
+      "performance": 57,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "spread": {
+      "performance": [
+        56,
+        59
+      ],
+      "accessibility": [
+        100,
+        100
+      ],
+      "best-practices": [
+        100,
+        100
+      ],
+      "seo": [
+        100,
+        100
+      ]
+    },
+    "medianFcpMs": 3563,
+    "medianLcpMs": 10176,
+    "medianTbtMs": 405,
+    "cls": 0,
+    "failingBinaryAudits": [
+      "valid-source-maps"
+    ],
+    "runs": [
+      {
+        "scores": {
+          "performance": 59,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "fcpMs": 3534,
+        "lcpMs": 9995,
+        "tbtMs": 346,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "http://127.0.0.1:4618/en",
+        "cliNote": "report written, CLI exited 1 in cleanup: Runtime error encountered: EPERM, Permission denied: \\\\?\\C:\\Users\\GAMING\\AppData\\Local\\Tem"
+      },
+      {
+        "scores": {
+          "performance": 56,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "fcpMs": 3574,
+        "lcpMs": 10216,
+        "tbtMs": 454,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "http://127.0.0.1:4618/en",
+        "cliNote": "report written, CLI exited 1 in cleanup: Runtime error encountered: EPERM, Permission denied: \\\\?\\C:\\Users\\GAMING\\AppData\\Local\\Tem"
+      },
+      {
+        "scores": {
+          "performance": 57,
+          "accessibility": 100,
+          "best-practices": 100,
+          "seo": 100
+        },
+        "fcpMs": 3563,
+        "lcpMs": 10176,
+        "tbtMs": 405,
+        "cls": 0,
+        "failingBinaryAudits": [
+          "valid-source-maps"
+        ],
+        "lighthouseVersion": "13.5.0",
+        "url": "http://127.0.0.1:4618/en",
+        "cliNote": "report written, CLI exited 1 in cleanup: Runtime error encountered: EPERM, Permission denied: \\\\?\\C:\\Users\\GAMING\\AppData\\Local\\Tem"
+      }
+    ]
+  },
+  "localNoPreviewHeader": {
+    "scores": {
+      "performance": 91,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "fcpMs": 714,
+    "lcpMs": 1865,
+    "tbtMs": 52,
+    "cls": 0,
+    "failingBinaryAudits": [
+      "valid-source-maps"
+    ],
+    "lighthouseVersion": "13.5.0",
+    "url": "http://127.0.0.1:4618/en",
+    "cliNote": null
+  }
+}

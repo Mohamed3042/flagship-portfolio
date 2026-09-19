@@ -1,0 +1,23 @@
+{
+  "source": {
+    "repository": "Mohamed3042/flagship-portfolio",
+    "branch": "feature/deep-field",
+    "implementationCommit": "1220e24ca11a9eafad21b32e14741e51a2b66c04"
+  },
+  "v2": {
+    "repository": "Mohamed3042/flagship-portfolio-v2",
+    "branch": "gh-pages",
+    "commit": "c6081c00f6384c753c21fcac5318eb8afb2d09dc",
+    "url": "https://mohamed3042.github.io/flagship-portfolio-v2/",
+    "status": "prepared"
+  },
+  "firstSiteBefore": {
+    "main": "123fafe74ef71b0edd63ba824ae4be648d97d91a",
+    "ghPages": "e9815425a7cf89737cdb17f7e1e04b10a641ea71"
+  },
+  "buildCommand": "node scripts/build-ghpages.mjs --base flagship-portfolio-v2 --outDir dist-v2",
+  "html": {
+    "en": "0fda6921d0b868c0865caf84af06e1bc04976177629acd797566e815a0098592",
+    "ar": "046d595f68df2e8233c03ed8a0dc5237a3c4aaf0cd407e155bc0c3459d23ef3e"
+  }
+}

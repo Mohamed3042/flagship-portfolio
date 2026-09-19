@@ -1,0 +1,185 @@
+{
+  "baseUrl": "http://127.0.0.1:4618",
+  "lang": "en",
+  "viewport": "390x844",
+  "deviceScaleFactor": 3,
+  "cpuThrottleRate": 4.0,
+  "frameBudgetMs": 33.33,
+  "notMeasured": "any physical device, any phone GPU, Safari, a cold network, touch latency",
+  "pixelRatio": {
+    "devicePixelRatio": 3,
+    "backingRatio": 1.5,
+    "cssBox": "390x844",
+    "drawingBuffer": "585x1266",
+    "fragmentsPerFrame": 740610,
+    "fragmentsAtDeviceRatio": 2962440
+  },
+  "poses": {
+    "0.00": {
+      "chapter": "hero",
+      "stars": 58000,
+      "visible": 6520,
+      "tier": "phone",
+      "governorFrameMs": 4.3,
+      "medianMs": 4.2,
+      "p95Ms": 8.4,
+      "frames": 465
+    },
+    "0.08": {
+      "chapter": "world-cake-studio",
+      "stars": 58000,
+      "visible": 6528,
+      "tier": "phone",
+      "governorFrameMs": 4.3,
+      "medianMs": 4.2,
+      "p95Ms": 8.4,
+      "frames": 486
+    },
+    "0.20": {
+      "chapter": "world-academy",
+      "stars": 58000,
+      "visible": 6432,
+      "tier": "phone",
+      "governorFrameMs": 4.3,
+      "medianMs": 4.2,
+      "p95Ms": 8.4,
+      "frames": 479
+    },
+    "0.45": {
+      "chapter": "mk-voice",
+      "stars": 58000,
+      "visible": 6504,
+      "tier": "phone",
+      "governorFrameMs": 4.3,
+      "medianMs": 4.2,
+      "p95Ms": 8.4,
+      "frames": 497
+    },
+    "0.70": {
+      "chapter": "system-cake-studio",
+      "stars": 58000,
+      "visible": 6568,
+      "tier": "phone",
+      "governorFrameMs": 4.3,
+      "medianMs": 4.2,
+      "p95Ms": 8.4,
+      "frames": 483
+    },
+    "0.95": {
+      "chapter": "public",
+      "stars": 58000,
+      "visible": 6488,
+      "tier": "phone",
+      "governorFrameMs": 4.2,
+      "medianMs": 4.2,
+      "p95Ms": 8.4,
+      "frames": 516
+    }
+  },
+  "verdict": {
+    "worstP95Ms": 8.4,
+    "budgetMs": 33.33,
+    "passed": true
+  },
+  "adaptive": {
+    "floor": 24000,
+    "budget": 58000,
+    "before": {
+      "stars": 58000,
+      "frameMs": 8.3
+    },
+    "control": {
+      "stars": 58000,
+      "frameMs": 8.3,
+      "moved": false
+    },
+    "underPlantedLoad": {
+      "plantedMs": 45,
+      "stars": 24000,
+      "frameMs": 50
+    },
+    "afterLoadRemoved": {
+      "stars": 58000,
+      "frameMs": 8.3
+    },
+    "fell": true,
+    "climbedBack": true,
+    "controlHeld": true
+  },
+  "touch": {
+    "listeners": {
+      "window": [
+        "hashchange (non-passive)  <- index.CIQ4yO80.js",
+        "hashchange (non-passive)  <- index.astro_astro_type_script_index_0_lang.B-0918en.js",
+        "load  <- ScrollTrigger.7Zy99s9Q.js",
+        "load (non-passive)  <- BaseLayout.astro_astro_type_script_index_0_lang.B-vFDYB6.js",
+        "load (non-passive)  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "pointerdown (non-passive)  <- lenis.C7bIl90M.js",
+        "popstate (non-passive)  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "resize  <- BaseLayout.astro_astro_type_script_index_0_lang.B-vFDYB6.js",
+        "resize  <- ScrollTrigger.7Zy99s9Q.js",
+        "resize  <- index.CIQ4yO80.js",
+        "resize (non-passive)  <- en",
+        "resize (non-passive)  <- lenis.C7bIl90M.js",
+        "scroll  <- BaseLayout.astro_astro_type_script_index_0_lang.B-vFDYB6.js",
+        "scroll  <- index.CIQ4yO80.js",
+        "scroll (non-passive)  <- lenis.C7bIl90M.js",
+        "scrollend (non-passive)  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "scrollend (non-passive)  <- lenis.C7bIl90M.js",
+        "touchend (non-passive)  <- lenis.C7bIl90M.js",
+        "touchmove (non-passive)  <- lenis.C7bIl90M.js",
+        "touchstart (non-passive)  <- lenis.C7bIl90M.js",
+        "wheel  <- ScrollTrigger.7Zy99s9Q.js",
+        "wheel (non-passive)  <- lenis.C7bIl90M.js"
+      ],
+      "document": [
+        "DOMContentLoaded  <- ScrollTrigger.7Zy99s9Q.js",
+        "astro:after-swap (non-passive)  <- en",
+        "astro:before-swap (non-passive)  <- en",
+        "astro:before-swap (non-passive)  <- index.astro_astro_type_script_index_0_lang.B-0918en.js",
+        "astro:page-load (non-passive)  <- BaseLayout.astro_astro_type_script_index_0_lang.B-vFDYB6.js",
+        "astro:page-load (non-passive)  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "astro:page-load (non-passive)  <- en",
+        "astro:page-load (non-passive)  <- index.astro_astro_type_script_index_0_lang.B-0918en.js",
+        "click (non-passive)  <- BaseLayout.astro_astro_type_script_index_0_lang.B-vFDYB6.js",
+        "click (non-passive)  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "click (non-passive)  <- en",
+        "click (non-passive)  <- index.astro_astro_type_script_index_0_lang.B-0918en.js",
+        "keydown (non-passive)  <- BaseLayout.astro_astro_type_script_index_0_lang.B-vFDYB6.js",
+        "keydown (non-passive)  <- en",
+        "mm:themechange (non-passive)  <- BaseLayout.astro_astro_type_script_index_0_lang.B-vFDYB6.js",
+        "mousedown  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "mousedown  <- ScrollTrigger.7Zy99s9Q.js",
+        "mouseup  <- ScrollTrigger.7Zy99s9Q.js",
+        "pointerdown  <- ScrollTrigger.7Zy99s9Q.js",
+        "pointerup  <- ScrollTrigger.7Zy99s9Q.js",
+        "scroll  <- ScrollTrigger.7Zy99s9Q.js",
+        "submit (non-passive)  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "touchcancel  <- ScrollTrigger.7Zy99s9Q.js",
+        "touchend  <- ScrollTrigger.7Zy99s9Q.js",
+        "touchstart  <- ClientRouter.astro_astro_type_script_index_0_lang.CDGfc0hd.js",
+        "touchstart  <- ScrollTrigger.7Zy99s9Q.js",
+        "visibilitychange  <- ScrollTrigger.7Zy99s9Q.js",
+        "visibilitychange (non-passive)  <- index.CIQ4yO80.js"
+      ],
+      "runway": [],
+      "frame": []
+    },
+    "cinemaScrollHandlers": [],
+    "wheelHandlers": [
+      "wheel  <- ScrollTrigger.7Zy99s9Q.js",
+      "wheel (non-passive)  <- lenis.C7bIl90M.js"
+    ],
+    "touchMoveHandlers": [
+      "touchmove (non-passive)  <- lenis.C7bIl90M.js"
+    ],
+    "swipeMovedPx": 425,
+    "nativeScroll": true
+  },
+  "layout": {
+    "overflowPx": 0,
+    "controls": 4,
+    "small": []
+  },
+  "pageErrors": []
+}

@@ -1,0 +1,2096 @@
+{
+  "1440x900": {
+    "viewport": [
+      1440,
+      900
+    ],
+    "runwayViewportHeights": 44,
+    "rangePx": 38700,
+    "beats": [
+      {
+        "id": "hero",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924122,
+        "holdPx": 459.348924786969,
+        "releasePx": 410.13296855979377
+      },
+      {
+        "id": "road-worlds",
+        "beatClass": "road",
+        "totalPx": 183.73956991478772,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "world-cake-studio",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924125,
+        "holdPx": 459.3489247869687,
+        "releasePx": 410.13296855979377
+      },
+      {
+        "id": "world-disney",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924125,
+        "holdPx": 459.3489247869687,
+        "releasePx": 410.13296855979377
+      },
+      {
+        "id": "world-strings",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924125,
+        "holdPx": 459.3489247869687,
+        "releasePx": 410.13296855979377
+      },
+      {
+        "id": "world-academy",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924125,
+        "holdPx": 459.3489247869687,
+        "releasePx": 410.13296855979377
+      },
+      {
+        "id": "world-spotify",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239174,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869687,
+        "releasePx": 410.13296855979377
+      },
+      {
+        "id": "road-games",
+        "beatClass": "road",
+        "totalPx": 183.73956991478664,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "game-war-strikes",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "game-cocolani-3d",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "game-artillery3d",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "game-polyblast-arena",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "road-voice",
+        "beatClass": "road",
+        "totalPx": 183.73956991478664,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "mk-voice",
+        "beatClass": "gate",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "voice-keeber",
+        "beatClass": "station",
+        "totalPx": 306.069379522234,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "voice-hazalqoum",
+        "beatClass": "station",
+        "totalPx": 306.069379522234,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "voice-lemby",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "voice-bayoumi",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "voice-daheeh",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "road-systems",
+        "beatClass": "road",
+        "totalPx": 183.73956991478664,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "system-ask-repos",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "system-enterprise-ai-automation-templates",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "system-relayops",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "system-petpoint-ops-hub",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "system-cake-studio",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "road-workshop",
+        "beatClass": "road",
+        "totalPx": 183.73956991478664,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "tools",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "skill-agent-brain",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-metahuman-cloner",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-mh-oneshot",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-head-texture-pipeline",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-photo-to-metahuman-skin",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-garment-clone",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-blender-character-forge",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-map-reimagine",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-asset-library",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-superblender",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-scroll-world",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-prompt-king",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-calm-ui",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-review-sheet",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-checklist-board",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "skill-dispatch",
+        "beatClass": "station",
+        "totalPx": 306.06937952223615,
+        "assemblyPx": 36.728325542669026,
+        "holdPx": 0,
+        "releasePx": 36.728325542669026
+      },
+      {
+        "id": "road-public",
+        "beatClass": "road",
+        "totalPx": 183.73956991478664,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "public",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      },
+      {
+        "id": "contact",
+        "beatClass": "reading",
+        "totalPx": 1640.531874239175,
+        "assemblyPx": 771.0499808924114,
+        "holdPx": 459.3489247869709,
+        "releasePx": 410.1329685597927
+      }
+    ],
+    "classes": {
+      "reading": {
+        "count": 9,
+        "totalPx": 14764.786868152576,
+        "minimums": {
+          "totalPx": 1640.531874239175,
+          "assemblyPx": 771.0499808924114,
+          "holdPx": 459.348924786969,
+          "releasePx": 410.1329685597927
+        }
+      },
+      "gate": {
+        "count": 10,
+        "totalPx": 16405.318742391748,
+        "minimums": {
+          "totalPx": 1640.531874239174,
+          "assemblyPx": 771.0499808924114,
+          "holdPx": 459.3489247869687,
+          "releasePx": 410.1329685597927
+        }
+      },
+      "station": {
+        "count": 21,
+        "totalPx": 6427.456969966955,
+        "minimums": {
+          "totalPx": 306.069379522234,
+          "assemblyPx": 36.728325542669026,
+          "holdPx": 0,
+          "releasePx": 36.728325542669026
+        }
+      },
+      "road": {
+        "count": 6,
+        "totalPx": 1102.437419488721,
+        "minimums": {
+          "totalPx": 183.73956991478664,
+          "assemblyPx": 0,
+          "holdPx": 0,
+          "releasePx": 0
+        }
+      }
+    },
+    "readingFloorsPassed": true,
+    "insideWorld": {
+      "samplingLocalStep": 0.005,
+      "samples": [
+        {
+          "local": 0.38,
+          "opacity": 0.5,
+          "covers": false
+        },
+        {
+          "local": 0.385,
+          "opacity": 0.54,
+          "covers": false
+        },
+        {
+          "local": 0.39,
+          "opacity": 0.58,
+          "covers": false
+        },
+        {
+          "local": 0.395,
+          "opacity": 0.62,
+          "covers": false
+        },
+        {
+          "local": 0.4,
+          "opacity": 0.66,
+          "covers": false
+        },
+        {
+          "local": 0.405,
+          "opacity": 0.7,
+          "covers": false
+        },
+        {
+          "local": 0.41,
+          "opacity": 0.74,
+          "covers": false
+        },
+        {
+          "local": 0.415,
+          "opacity": 0.77,
+          "covers": false
+        },
+        {
+          "local": 0.42,
+          "opacity": 0.81,
+          "covers": false
+        },
+        {
+          "local": 0.425,
+          "opacity": 0.84,
+          "covers": false
+        },
+        {
+          "local": 0.43,
+          "opacity": 0.87,
+          "covers": false
+        },
+        {
+          "local": 0.435,
+          "opacity": 0.9,
+          "covers": false
+        },
+        {
+          "local": 0.44,
+          "opacity": 0.92,
+          "covers": false
+        },
+        {
+          "local": 0.445,
+          "opacity": 0.95,
+          "covers": false
+        },
+        {
+          "local": 0.45,
+          "opacity": 0.97,
+          "covers": false
+        },
+        {
+          "local": 0.455,
+          "opacity": 0.98,
+          "covers": false
+        },
+        {
+          "local": 0.46,
+          "opacity": 0.99,
+          "covers": false
+        },
+        {
+          "local": 0.465,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.47,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.475,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.48,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.485,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.49,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.495,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.5,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.505,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.51,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.515,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.52,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.525,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.53,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.535,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.54,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.545,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.55,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.555,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.56,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.565,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.57,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.575,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.58,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.585,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.59,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.595,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.6,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.605,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.61,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.615,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.62,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.625,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.63,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.635,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.64,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.645,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.65,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.655,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.66,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.665,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.67,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.675,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.68,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.685,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.69,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.695,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.7,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.705,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.71,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.715,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.72,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.725,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.73,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.735,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.74,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.745,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.75,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.755,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.76,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.765,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.77,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.775,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.78,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.785,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.79,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.795,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.8,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.805,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.81,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.815,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.82,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.825,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.83,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.835,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.84,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.845,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.85,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.855,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.86,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.865,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.87,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.875,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.88,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.885,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.89,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.895,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.9,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.905,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.91,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.915,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.92,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.925,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.93,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.935,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.94,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.945,
+          "opacity": 0.98,
+          "covers": true
+        },
+        {
+          "local": 0.95,
+          "opacity": 0.92,
+          "covers": true
+        },
+        {
+          "local": 0.955,
+          "opacity": 0.83,
+          "covers": true
+        },
+        {
+          "local": 0.96,
+          "opacity": 0.73,
+          "covers": true
+        },
+        {
+          "local": 0.965,
+          "opacity": 0.61,
+          "covers": true
+        },
+        {
+          "local": 0.97,
+          "opacity": 0.47,
+          "covers": true
+        },
+        {
+          "local": 0.975,
+          "opacity": 0.34,
+          "covers": true
+        },
+        {
+          "local": 0.98,
+          "opacity": 0.23,
+          "covers": true
+        },
+        {
+          "local": 0.985,
+          "opacity": 0.13,
+          "covers": true
+        },
+        {
+          "local": 0.99,
+          "opacity": 0.05,
+          "covers": true
+        },
+        {
+          "local": 0.995,
+          "opacity": 0.01,
+          "covers": true
+        }
+      ],
+      "coversAllFourViewportCornersAbove10PercentOpacityPx": 147.6478686815257
+    }
+  },
+  "390x844": {
+    "viewport": [
+      390,
+      844
+    ],
+    "runwayViewportHeights": 46,
+    "rangePx": 37980,
+    "beats": [
+      {
+        "id": "hero",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688325,
+        "holdPx": 450.8028982793045,
+        "releasePx": 402.50258774937896
+      },
+      {
+        "id": "road-worlds",
+        "beatClass": "road",
+        "totalPx": 180.32115931172189,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "world-cake-studio",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688328,
+        "holdPx": 450.8028982793042,
+        "releasePx": 402.50258774937896
+      },
+      {
+        "id": "world-disney",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688328,
+        "holdPx": 450.8028982793042,
+        "releasePx": 402.50258774937896
+      },
+      {
+        "id": "world-strings",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688328,
+        "holdPx": 450.8028982793042,
+        "releasePx": 402.50258774937896
+      },
+      {
+        "id": "world-academy",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688328,
+        "holdPx": 450.8028982793042,
+        "releasePx": 402.50258774937896
+      },
+      {
+        "id": "world-spotify",
+        "beatClass": "gate",
+        "totalPx": 1610.010350997515,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793042,
+        "releasePx": 402.50258774937896
+      },
+      {
+        "id": "road-games",
+        "beatClass": "road",
+        "totalPx": 180.32115931172083,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "game-war-strikes",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "game-cocolani-3d",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "game-artillery3d",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "game-polyblast-arena",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "road-voice",
+        "beatClass": "road",
+        "totalPx": 180.32115931172083,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "mk-voice",
+        "beatClass": "gate",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "voice-keeber",
+        "beatClass": "station",
+        "totalPx": 300.37506548461107,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "voice-hazalqoum",
+        "beatClass": "station",
+        "totalPx": 300.37506548461107,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "voice-lemby",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "voice-bayoumi",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "voice-daheeh",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "road-systems",
+        "beatClass": "road",
+        "totalPx": 180.32115931172083,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "system-ask-repos",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "system-enterprise-ai-automation-templates",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "system-relayops",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "system-petpoint-ops-hub",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "system-cake-studio",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "road-workshop",
+        "beatClass": "road",
+        "totalPx": 180.32115931172083,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "tools",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "skill-agent-brain",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-metahuman-cloner",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-mh-oneshot",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-head-texture-pipeline",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-photo-to-metahuman-skin",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-garment-clone",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-blender-character-forge",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-map-reimagine",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-asset-library",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-superblender",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-scroll-world",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-prompt-king",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-calm-ui",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-review-sheet",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-checklist-board",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "skill-dispatch",
+        "beatClass": "station",
+        "totalPx": 300.3750654846132,
+        "assemblyPx": 36.04500785815426,
+        "holdPx": 0,
+        "releasePx": 36.04500785815426
+      },
+      {
+        "id": "road-public",
+        "beatClass": "road",
+        "totalPx": 180.32115931172083,
+        "assemblyPx": 0,
+        "holdPx": 0,
+        "releasePx": 0
+      },
+      {
+        "id": "public",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      },
+      {
+        "id": "contact",
+        "beatClass": "reading",
+        "totalPx": 1610.0103509975158,
+        "assemblyPx": 756.7048649688317,
+        "holdPx": 450.8028982793063,
+        "releasePx": 402.50258774937794
+      }
+    ],
+    "classes": {
+      "reading": {
+        "count": 9,
+        "totalPx": 14490.093158977643,
+        "minimums": {
+          "totalPx": 1610.0103509975158,
+          "assemblyPx": 756.7048649688317,
+          "holdPx": 450.8028982793045,
+          "releasePx": 402.50258774937794
+        }
+      },
+      "gate": {
+        "count": 10,
+        "totalPx": 16100.103509975157,
+        "minimums": {
+          "totalPx": 1610.010350997515,
+          "assemblyPx": 756.7048649688317,
+          "holdPx": 450.8028982793042,
+          "releasePx": 402.50258774937794
+        }
+      },
+      "station": {
+        "count": 21,
+        "totalPx": 6307.876375176873,
+        "minimums": {
+          "totalPx": 300.37506548461107,
+          "assemblyPx": 36.04500785815426,
+          "holdPx": 0,
+          "releasePx": 36.04500785815426
+        }
+      },
+      "road": {
+        "count": 6,
+        "totalPx": 1081.926955870326,
+        "minimums": {
+          "totalPx": 180.32115931172083,
+          "assemblyPx": 0,
+          "holdPx": 0,
+          "releasePx": 0
+        }
+      }
+    },
+    "readingFloorsPassed": true,
+    "insideWorld": {
+      "samplingLocalStep": 0.005,
+      "samples": [
+        {
+          "local": 0.38,
+          "opacity": 0.49,
+          "covers": false
+        },
+        {
+          "local": 0.385,
+          "opacity": 0.54,
+          "covers": false
+        },
+        {
+          "local": 0.39,
+          "opacity": 0.58,
+          "covers": false
+        },
+        {
+          "local": 0.395,
+          "opacity": 0.62,
+          "covers": false
+        },
+        {
+          "local": 0.4,
+          "opacity": 0.66,
+          "covers": false
+        },
+        {
+          "local": 0.405,
+          "opacity": 0.7,
+          "covers": false
+        },
+        {
+          "local": 0.41,
+          "opacity": 0.74,
+          "covers": false
+        },
+        {
+          "local": 0.415,
+          "opacity": 0.77,
+          "covers": false
+        },
+        {
+          "local": 0.42,
+          "opacity": 0.81,
+          "covers": false
+        },
+        {
+          "local": 0.425,
+          "opacity": 0.84,
+          "covers": false
+        },
+        {
+          "local": 0.43,
+          "opacity": 0.87,
+          "covers": false
+        },
+        {
+          "local": 0.435,
+          "opacity": 0.9,
+          "covers": false
+        },
+        {
+          "local": 0.44,
+          "opacity": 0.93,
+          "covers": false
+        },
+        {
+          "local": 0.445,
+          "opacity": 0.95,
+          "covers": false
+        },
+        {
+          "local": 0.45,
+          "opacity": 0.97,
+          "covers": false
+        },
+        {
+          "local": 0.455,
+          "opacity": 0.98,
+          "covers": false
+        },
+        {
+          "local": 0.46,
+          "opacity": 0.99,
+          "covers": false
+        },
+        {
+          "local": 0.465,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.47,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.475,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.48,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.485,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.49,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.495,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.5,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.505,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.51,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.515,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.52,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.525,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.53,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.535,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.54,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.545,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.55,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.555,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.56,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.565,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.57,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.575,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.58,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.585,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.59,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.595,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.6,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.605,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.61,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.615,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.62,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.625,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.63,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.635,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.64,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.645,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.65,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.655,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.66,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.665,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.67,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.675,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.68,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.685,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.69,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.695,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.7,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.705,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.71,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.715,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.72,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.725,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.73,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.735,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.74,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.745,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.75,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.755,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.76,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.765,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.77,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.775,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.78,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.785,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.79,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.795,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.8,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.805,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.81,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.815,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.82,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.825,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.83,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.835,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.84,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.845,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.85,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.855,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.86,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.865,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.87,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.875,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.88,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.885,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.89,
+          "opacity": 1,
+          "covers": false
+        },
+        {
+          "local": 0.895,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.9,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.905,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.91,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.915,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.92,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.925,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.93,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.935,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.94,
+          "opacity": 1,
+          "covers": true
+        },
+        {
+          "local": 0.945,
+          "opacity": 0.98,
+          "covers": true
+        },
+        {
+          "local": 0.95,
+          "opacity": 0.92,
+          "covers": true
+        },
+        {
+          "local": 0.955,
+          "opacity": 0.83,
+          "covers": true
+        },
+        {
+          "local": 0.96,
+          "opacity": 0.72,
+          "covers": true
+        },
+        {
+          "local": 0.965,
+          "opacity": 0.6,
+          "covers": true
+        },
+        {
+          "local": 0.97,
+          "opacity": 0.47,
+          "covers": true
+        },
+        {
+          "local": 0.975,
+          "opacity": 0.35,
+          "covers": true
+        },
+        {
+          "local": 0.98,
+          "opacity": 0.23,
+          "covers": true
+        },
+        {
+          "local": 0.985,
+          "opacity": 0.13,
+          "covers": true
+        },
+        {
+          "local": 0.99,
+          "opacity": 0.05,
+          "covers": true
+        },
+        {
+          "local": 0.995,
+          "opacity": 0.01,
+          "covers": true
+        }
+      ],
+      "coversAllFourViewportCornersAbove10PercentOpacityPx": 144.90093158977638
+    }
+  }
+}
