@@ -9,6 +9,7 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: auto; }
+html.settings-open { overflow: hidden; }
 body { margin: 0; background: var(--ink); color: var(--paper); font: 14px/1.6 var(--body); }
 [hidden] { display: none !important; }
 a, button { color: inherit; -webkit-tap-highlight-color: rgba(53, 224, 161, .15); }
@@ -36,10 +37,12 @@ img { display: block; }
 .film-header nav { display: flex; align-items: center; gap: clamp(16px, 3vw, 38px); font-size: 12px; }
 .film-header nav a, .film-header button { display: inline-flex; align-items: center; min-height: 44px; }
 .film-header button { background: transparent; border: 1px solid var(--rule); border-radius: 4px; padding: 7px 12px; font-size: 12px; }
+.film-header #settings-toggle { justify-content: center; width: 44px; padding: 8px; flex-shrink: 0; }
 #language-link { font-family: "Cairo", Arial, sans-serif; }
 .film-picture { position: relative; min-height: 0; min-width: 0; display: grid; place-items: center; }
 #film { display: block; width: 100%; height: 100%; min-height: 0; object-fit: contain; background: var(--ink); }
 .scroll-mode #film { pointer-events: none; }
+.film-stage[data-fit="fill"] #film { object-fit: cover; }
 .opening-cue { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: radial-gradient(ellipse, rgba(9,17,22,.92), rgba(9,17,22,.15) 70%); text-align: center; pointer-events: none; padding: 24px; }
 .opening-title { font: clamp(36px, 5vw, 76px)/1.1 var(--display); }
 .opening-instruction { color: var(--muted); font-size: clamp(13px, 1.3vw, 17px); }
@@ -74,6 +77,17 @@ img { display: block; }
 .primary-link:hover { background: var(--paper); color: var(--ink); }
 .small { font-size: 11px; }
 .download { margin-top: 28px; min-height: 44px; display: inline-flex; align-items: center; font-size: 11px; color: var(--muted); }
+#film-settings { width: min(460px, calc(100% - 32px)); max-height: calc(100svh - 32px); margin: auto; padding: 24px; color: var(--paper); background: var(--ink); border: 1px solid var(--rule); border-radius: 8px; overflow: auto; }
+#film-settings::backdrop { background: rgb(2 8 11 / .85); }
+.settings-heading { display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+.settings-heading h2 { margin: 0; font: 30px/1.2 var(--display); }
+#film-settings button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--rule); border-radius: 4px; background: transparent; }
+#settings-note, .setting-help { margin: 12px 0; color: var(--muted); font-size: 12px; }
+.setting-field { display: grid; gap: 8px; margin-top: 20px; font-size: 13px; }
+.setting-field select { width: 100%; min-width: 0; min-height: 44px; padding: 8px 10px; color: var(--paper); background: var(--ink); border: 1px solid var(--rule); border-radius: 4px; font: inherit; }
+.setting-field select:focus-visible { outline: 2px solid var(--mint); outline-offset: 3px; }
+#reset-settings { margin-top: 8px; }
+#settings-status { min-height: 1.6em; margin: 12px 0 0; font-size: 12px; color: var(--mint); }
 html[dir="rtl"] { --body: "Cairo", Arial, sans-serif; --display: "Cairo", Arial, sans-serif; }
 html[dir="rtl"] .opening-title, html[dir="rtl"] .after-film h2 { line-height: 1.45; }
 @media (max-width: 600px) {
@@ -88,5 +102,6 @@ html[dir="rtl"] .opening-title, html[dir="rtl"] .after-film h2 { line-height: 1.
   .opening-cue { gap: 16px; }
 }
 @media (max-height: 500px) { .film-header { min-height: 46px; padding-block: 0; } .film-controls { padding-block: 0; } .scrub-control { height: 22px; } }
+@media (max-width: 380px) { .film-header { padding-inline: 10px; gap: 6px; } .film-header nav { gap: 8px; } .brand { font-size: 20px; gap: 5px; } .film-header #settings-toggle { width: 36px; } #film-settings { padding: 18px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
 @media (forced-colors: active) { :root { scrollbar-color: auto; } .primary-link { border: 1px solid ButtonText; } a:focus-visible, button:focus-visible, input:focus-visible, video:focus-visible { outline-color: Highlight; } }

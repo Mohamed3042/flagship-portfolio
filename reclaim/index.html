@@ -19,8 +19,8 @@
     <meta property="og:image:alt" content="The Heavy Drive opens inside a layered paper storybook." />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/icon.png" />
-    <link rel="stylesheet" href="styles.css?v=loading-3" />
-    <script defer src="story.js?v=loading-3"></script>
+    <link rel="stylesheet" href="styles.css?v=settings-4" />
+    <script defer src="story.js?v=settings-4"></script>
   </head>
   <body>
     <a class="skip-link" href="#after-film" data-copy="skip">Skip the film</a>
@@ -31,6 +31,7 @@
             <a class="brand" href="../en/work/reclaim" data-portfolio aria-label="Reclaim portfolio page" data-label="portfolioLabel"><img src="assets/icon.png" width="30" height="30" alt="" /><span>Reclaim</span></a>
             <nav aria-label="Film navigation" data-label="navigation">
               <button id="mode-toggle" type="button" disabled hidden data-copy="watch">Watch with sound</button>
+              <button id="settings-toggle" type="button" disabled hidden aria-label="Film settings" data-label="settings" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="currentColor" stroke="none"/><circle cx="15" cy="17" r="3" fill="currentColor" stroke="none"/></svg></button>
               <a href="?lang=ar" lang="ar" hreflang="ar" id="language-link">العربية</a>
             </nav>
           </header>
@@ -76,5 +77,16 @@
         <a class="download" href="assets/reclaim-tale.mp4" download data-copy="download">Download the original film · 1080p / 60 fps</a>
       </section>
     </main>
+    <dialog id="film-settings" aria-labelledby="settings-title" aria-describedby="settings-note">
+      <div class="settings-heading"><h2 id="settings-title" data-copy="settings">Film settings</h2><form method="dialog" novalidate><button type="submit" data-copy="close">Close</button></form></div>
+      <p id="settings-note" data-copy="settingsNote">Make the film comfortable to explore. Choices are saved on this device.</p>
+      <label class="setting-field" for="film-fit"><span data-copy="screenFit">Screen fit</span><select id="film-fit" aria-describedby="fit-help"><option value="fit" data-copy="fitWhole">Fit the whole film</option><option value="fill" data-copy="fillScreen">Fill the screen</option></select></label>
+      <p id="fit-help" class="setting-help" data-copy="fitHelp">Fit keeps every caption visible. Fill crops the edges to cover the screen.</p>
+      <label class="setting-field" for="film-pace"><span data-copy="scrollSpeed">Scroll speed</span><select id="film-pace"><option value="slow" data-copy="paceSlow">Slow — more scrolling, finer control</option><option value="normal" data-copy="paceNormal" selected>Normal</option><option value="fast" data-copy="paceFast">Fast — less scrolling</option></select></label>
+      <label class="setting-field" for="film-playback"><span data-copy="playback">Playback</span><select id="film-playback"><option value="scroll" data-copy="playbackScroll">Control with scrolling</option><option value="native" data-copy="playbackNative">Play with sound</option></select></label>
+      <p class="setting-help" data-copy="paceHelp">Scroll speed applies when scrolling controls the film.</p>
+      <button id="reset-settings" type="button" disabled data-copy="resetSettings">Restore defaults</button>
+      <p id="settings-status" role="status" aria-live="polite"></p>
+    </dialog>
   </body>
 </html>

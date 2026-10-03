@@ -10,6 +10,13 @@
     scrollHint: 'مرّر لأسفل للتقدم، ولأعلى للرجوع.', nativeHint: 'شغّل الفيلم كاملًا مع الصوت.',
     loading: 'جارٍ تحميل الفيلم…', failed: 'تعذّر تحميل نسخة التمرير. اختر «شاهد مع الصوت» لفتح الفيلم الأصلي.',
     buffered: 'تم تحميله من الفيلم', bufferedDescription: 'النسبة المتاحة للمشاهدة من مدة الفيلم بعد تحميلها.',
+    settings: 'إعدادات الفيلم', close: 'إغلاق', settingsNote: 'اضبط طريقة مشاهدة الفيلم. تُحفظ اختياراتك على هذا الجهاز.',
+    screenFit: 'حجم العرض', fitWhole: 'عرض الفيلم كاملًا', fillScreen: 'ملء الشاشة',
+    fitHelp: 'العرض الكامل يُظهر كل النصوص. ملء الشاشة يقتطع الأطراف.',
+    scrollSpeed: 'سرعة التمرير', paceSlow: 'بطيء — تمرير أكثر وتحكّم أدق', paceNormal: 'عادي', paceFast: 'سريع — تمرير أقل',
+    playback: 'طريقة المشاهدة', playbackScroll: 'التحكّم بالتمرير', playbackNative: 'التشغيل مع الصوت',
+    paceHelp: 'تُطبّق سرعة التمرير عند التحكّم بالفيلم عبر التمرير.', resetSettings: 'استعادة الإعدادات الافتراضية',
+    saved: 'تم الحفظ على هذا الجهاز.', restored: 'تمت استعادة الإعدادات الافتراضية.', sessionOnly: 'تُطبّق هذه الاختيارات خلال هذه الزيارة فقط.',
     nativeFailed: 'تعذّر تحميل الفيلم. يمكنك فتح النسخة الأصلية من رابط التنزيل أدناه.',
     position: 'موضع الفيلم', openFilm: 'افتح الفيلم', endTitle: 'مساحة لفصل جديد.',
     endBody: 'اعرف ما يملأ قرصك. وقرر ما يستحق البقاء.', preview: 'استكشف Reclaim',
@@ -20,6 +27,7 @@
     scrollHint: 'Scroll down to advance. Scroll up to rewind.', nativeHint: 'Play the complete film with sound.',
     loading: 'Loading film…', failed: 'The scroll version could not load. Choose “Watch with sound” for the original film.',
     buffered: 'Film buffered', bufferedDescription: 'Percentage of the film currently loaded and available to view.',
+    saved: 'Saved on this device.', restored: 'Defaults restored.', sessionOnly: 'These choices apply for this visit only.',
     nativeFailed: 'The film could not load. You can open the original using the download link below.'
   };
 
@@ -54,6 +62,26 @@
   const instruction = document.querySelector('#instruction');
   const clock = document.querySelector('#film-time');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const settingsToggle = document.querySelector('#settings-toggle');
+  const settingsDialog = document.querySelector('#film-settings');
+  const fitSelect = document.querySelector('#film-fit');
+  const paceSelect = document.querySelector('#film-pace');
+  const playbackSelect = document.querySelector('#film-playback');
+  const resetSettings = document.querySelector('#reset-settings');
+  const settingsStatus = document.querySelector('#settings-status');
+  const storageKey = 'reclaim-film-settings-v1';
+  const distances = { slow: 30000, normal: 18000, fast: 10000 };
+  const defaults = () => ({ fit: 'fit', pace: 'normal', playback: null });
+  let preferences = defaults();
+  let storageAvailable = true;
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    if (saved && typeof saved === 'object') {
+      if (['fit', 'fill'].includes(saved.fit)) preferences.fit = saved.fit;
+      if (Object.hasOwn(distances, saved.pace)) preferences.pace = saved.pace;
+      if (['scroll', 'native'].includes(saved.playback)) preferences.playback = saved.playback;
+    }
+  } catch { /* Invalid or unavailable storage must not prevent the film from loading. */ }
   const frameDuration = 1 / 30;
   let scrolling = false;
   let target = 0;
@@ -70,6 +98,35 @@
   const duration = () => Number.isFinite(film.duration) ? film.duration : 90;
   const lastFrame = () => Math.max(0, duration() - frameDuration);
   const timecode = (time) => `${Math.floor(time / 60)}:${String(Math.floor(time % 60)).padStart(2, '0')}`;
+
+  function savePreferences() {
+    try { localStorage.setItem(storageKey, JSON.stringify(preferences)); storageAvailable = true; }
+    catch { storageAvailable = false; }
+    settingsStatus.textContent = storageAvailable ? copy.saved : copy.sessionOnly;
+  }
+
+  function updateSettings() {
+    stage.dataset.fit = preferences.fit;
+    fitSelect.value = preferences.fit;
+    paceSelect.value = preferences.pace;
+    paceSelect.disabled = !scrolling;
+    playbackSelect.value = scrolling ? 'scroll' : 'native';
+  }
+
+  function preservePositionWhileMeasuring() {
+    const keepTime = target;
+    measure();
+    if (scrolling) {
+      window.scrollTo({ top: trackStart + clamp(keepTime / lastFrame(), 0, 1) * travel, behavior: 'instant' });
+      updateFromScroll();
+    }
+  }
+
+  function choosePlayback(scroll) {
+    preferences.playback = scroll ? 'scroll' : 'native';
+    savePreferences();
+    if (scrolling !== scroll) useMode(scroll, !scroll);
+  }
 
   function updateLoading() {
     let seconds = 0;
@@ -98,7 +155,7 @@
 
   function measure() {
     // A fixed document distance avoids mobile browser-chrome changes shifting the film.
-    track.style.setProperty('--scroll-distance', '18000px');
+    track.style.setProperty('--scroll-distance', `${distances[preferences.pace]}px`);
     trackStart = track.getBoundingClientRect().top + window.scrollY;
     travel = Math.max(1, track.offsetHeight - stage.offsetHeight);
   }
@@ -145,6 +202,7 @@
     film.muted = scroll;
     film.preload = scroll ? 'auto' : 'metadata';
     rangeWrap.hidden = !scroll;
+    updateSettings();
     toggle.textContent = scroll ? copy.watch : copy.scrollMode;
     instruction.textContent = scroll ? copy.scrollHint : copy.nativeHint;
     cue.hidden = !scroll || keepTime > 0.3;
@@ -193,7 +251,38 @@
     cue.hidden = true;
   });
   film.addEventListener('play', () => { if (scrolling) film.pause(); });
-  toggle.addEventListener('click', () => useMode(!scrolling, scrolling));
+  toggle.addEventListener('click', () => choosePlayback(!scrolling));
+  settingsToggle.addEventListener('click', () => {
+    settingsStatus.textContent = '';
+    settingsDialog.showModal();
+    document.documentElement.classList.add('settings-open');
+    fitSelect.focus();
+  });
+  settingsDialog.addEventListener('close', () => {
+    document.documentElement.classList.remove('settings-open');
+    settingsToggle.focus({ preventScroll: true });
+  });
+  fitSelect.addEventListener('change', () => {
+    preferences.fit = fitSelect.value;
+    updateSettings();
+    savePreferences();
+  });
+  paceSelect.addEventListener('change', () => {
+    preferences.pace = paceSelect.value;
+    preservePositionWhileMeasuring();
+    updateSettings();
+    savePreferences();
+  });
+  playbackSelect.addEventListener('change', () => choosePlayback(playbackSelect.value === 'scroll'));
+  resetSettings.addEventListener('click', () => {
+    preferences = defaults();
+    try { localStorage.removeItem(storageKey); storageAvailable = true; } catch { storageAvailable = false; }
+    const defaultScroll = !motion.matches;
+    if (defaultScroll !== scrolling) useMode(defaultScroll);
+    else preservePositionWhileMeasuring();
+    updateSettings();
+    settingsStatus.textContent = storageAvailable ? copy.restored : copy.sessionOnly;
+  });
   range.addEventListener('input', () => {
     if (!scrolling) return;
     window.scrollTo({ top: trackStart + Number(range.value) / lastFrame() * travel, behavior: 'instant' });
@@ -205,9 +294,11 @@
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', () => { measure(); schedule(); }, { passive: true });
   window.addEventListener('pageshow', () => { measure(); schedule(); });
-  motion.addEventListener('change', () => useMode(!motion.matches));
+  motion.addEventListener('change', () => { if (preferences.playback === null) useMode(!motion.matches); });
   toggle.disabled = false;
   toggle.hidden = false;
   loading.hidden = false;
-  useMode(!motion.matches);
+  settingsToggle.disabled = resetSettings.disabled = false;
+  settingsToggle.hidden = false;
+  useMode(preferences.playback === null ? !motion.matches : preferences.playback === 'scroll');
 })();
