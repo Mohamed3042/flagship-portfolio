@@ -25,7 +25,7 @@
     document.querySelectorAll('[data-copy]').forEach(el=>{if(copy[el.dataset.copy])el.textContent=copy[el.dataset.copy]});
     document.querySelectorAll('[data-label]').forEach(el=>{if(copy[el.dataset.label])el.setAttribute('aria-label',copy[el.dataset.label])});
     document.querySelectorAll('[data-portfolio]').forEach(el=>el.href='../ar/#sky');
-    const lang=$('[data-language]');lang.textContent='English';lang.href='?lang=en&v=4';lang.lang='en';lang.hreflang='en';
+    const lang=$('[data-language]');lang.textContent='English';lang.href='?lang=en&v=5';lang.lang='en';lang.hreflang='en';
     story.setAttribute('aria-label','فيلم MK Downloader بالتمرير');video.setAttribute('aria-label','فيلم MK Downloader مدته ٢٤ ثانية');
   }
   const names = chapterButtons.map(el=>el.textContent.trim());

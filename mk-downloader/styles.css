@@ -24,6 +24,7 @@ html.scroll-active{scrollbar-width:none}html.scroll-active::-webkit-scrollbar{di
 .scroll-active.film-fill:not(.controls-visible) .film-header,.scroll-active.film-fill:not(.controls-visible) .film-controls{opacity:0;pointer-events:none}
 .scroll-active.film-fill:not(.controls-visible) .film-header{transform:translateY(-8px)}.scroll-active.film-fill:not(.controls-visible) .film-controls{transform:translateY(8px)}
 .scroll-active.film-fill:not(.controls-visible) .film-screen{cursor:none}
+.scroll-active.film-fill #scroll-film{object-position:left center}
 @media(max-width:760px){.scroll-active.film-fill .film-header{height:calc(54px + env(safe-area-inset-top))}}
 @media(max-aspect-ratio:4/5){.scroll-active.film-fill #scroll-film{object-position:30% center}}
 @media(prefers-reduced-motion:reduce){.scroll-active.film-fill .film-header,.scroll-active.film-fill .film-controls{transition:none}}
