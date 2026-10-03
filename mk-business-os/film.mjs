@@ -12,16 +12,19 @@ $('#language').href=`?lang=${ar?'en':'ar'}`;$('#language').lang=ar?'en':'ar';$('
 const stage=$('#stage'),runway=$('#runway'),video=$('#decoder'),picture=$('#picture'),ambient=$('#ambient'),ctx=picture.getContext('2d'),bg=ambient.getContext('2d'),timeline=$('#timeline'),loading=$('#loading'),form=$('#view-form'),watch=$('#watch-video');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let storage;try{storage=localStorage;}catch{storage={getItem:()=>null,setItem:()=>{}};}
-let settings=readSettings(storage,params,reduced.matches),target=0,decoded=0,ready=false,interacted=false,seekBusy=false,seekTimer=0,frameCallback=0;
+let settings=readSettings(storage,params,reduced.matches),target=0,decoded=0,ready=false,interacted=false,seekBusy=false,seekTimer=0;
 let width=0,height=0,scrollRange=1,quietTimer=0,scrollRaf=0,resizeRaf=0,controller,blobUrl='',loadGeneration=0,modalScroll=0,modalOpener,modalActive=false,keyboardInput=false,resizing=false;
 const save=()=>{try{storage.setItem('mk-business-film-v1',JSON.stringify(settings));}catch{}};
 const roundTime=t=>Math.min(DURATION-1/30,Math.round(clamp(t,0,DURATION)*30)/30);
 function cue(t){let index=0;for(let i=1;i<chapters.length;i++)if(t>=chapters[i][0])index=i;return index;}
 function updateUI(t){const index=cue(t);$('#scene-name').textContent=chapters[index][ar?2:1];$('#time').innerHTML=`${clock(t)} <span>/ 01:48</span>`;timeline.value=String(t);timeline.style.setProperty('--played',`${t/DURATION*100}%`);timeline.setAttribute('aria-valuetext',`${clock(t)} / 01:48`);$('#edge-progress').style.transform=`scaleX(${t/DURATION})`;$('#opening').hidden=t>3||settings.manual;document.querySelectorAll('[data-jump]').forEach((el,i)=>el.setAttribute('aria-current',String(index===i)));stage.dataset.time=t.toFixed(3);}
 function paint(t=decoded){if(!ready||video.readyState<2||!width||!height)return;ctx.clearRect(0,0,picture.width,picture.height);const rect=pictureRect(video.videoWidth,video.videoHeight,picture.width,picture.height,settings);ctx.drawImage(video,rect.x,rect.y,rect.w,rect.h);if(settings.framing==='fit'){const back=pictureRect(video.videoWidth,video.videoHeight,ambient.width,ambient.height,defaults());bg.drawImage(video,back.x,back.y,back.w,back.h);}stage.dataset.revealed=String(interacted);stage.dataset.decodedTime=t.toFixed(3);}
-function finishSeek(t){clearTimeout(seekTimer);if(frameCallback&&video.cancelVideoFrameCallback)video.cancelVideoFrameCallback(frameCallback);frameCallback=0;decoded=Number.isFinite(t)?t:video.currentTime;paint(decoded);seekBusy=false;if(Math.abs(roundTime(target)-video.currentTime)>1/60)requestAnimationFrame(pump);}
-function pump(){if(!ready||seekBusy||video.seeking)return;const next=roundTime(target);if(Math.abs(video.currentTime-next)<1/60){paint(decoded);return;}seekBusy=true;if(video.requestVideoFrameCallback)frameCallback=video.requestVideoFrameCallback((_,meta)=>finishSeek(meta.mediaTime));video.currentTime=next;seekTimer=setTimeout(()=>{if(!video.seeking&&video.readyState>=2)finishSeek(video.currentTime);else{seekBusy=false;pump();}},350);}
-video.addEventListener('seeked',()=>{if(!video.requestVideoFrameCallback)finishSeek(video.currentTime);});
+// A paused, hidden video need not produce compositor frame callbacks. Native
+// seek completion is the reliable signal that its pixels are ready to paint.
+function finishSeek(){if(!ready||video.seeking||video.readyState<2)return;clearTimeout(seekTimer);decoded=video.currentTime;paint(decoded);seekBusy=false;stage.dataset.seekState='complete';if(Math.abs(roundTime(target)-video.currentTime)>1/60)requestAnimationFrame(pump);}
+function checkSeek(){if(!ready)return;if(video.seeking||video.readyState<2){seekTimer=setTimeout(checkSeek,350);return;}finishSeek();}
+function pump(){if(!ready||seekBusy||video.seeking)return;const next=roundTime(target);if(Math.abs(video.currentTime-next)<1/60){paint(video.currentTime);return;}seekBusy=true;stage.dataset.seekState='seeking';video.currentTime=next;clearTimeout(seekTimer);seekTimer=setTimeout(checkSeek,350);}
+video.addEventListener('seeked',finishSeek);
 function setTarget(t){target=clamp(t,0,DURATION);interacted=true;updateUI(target);pump();}
 function goTo(t){setTarget(t);if(!settings.manual)window.scrollTo({top:scrollAtTime(target,scrollRange),behavior:'instant'});}
 function onScroll(){if(scrollRaf||settings.manual||modalActive||resizing||width!==stage.clientWidth||height!==stage.clientHeight)return;scrollRaf=requestAnimationFrame(()=>{scrollRaf=0;if(modalActive||settings.manual||resizing)return;setTarget(timeAtScroll(window.scrollY,scrollRange));if(settings.controls==='auto'&&!stage.contains(document.activeElement))stage.dataset.quiet='true';});}
