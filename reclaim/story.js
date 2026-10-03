@@ -9,6 +9,7 @@
     watch: 'شاهد مع الصوت', scrollMode: 'تحكّم بالتمرير',
     scrollHint: 'مرّر لأسفل للتقدم، ولأعلى للرجوع.', nativeHint: 'شغّل الفيلم كاملًا مع الصوت.',
     loading: 'جارٍ تحميل الفيلم…', failed: 'تعذّر تحميل نسخة التمرير. اختر «شاهد مع الصوت» لفتح الفيلم الأصلي.',
+    buffered: 'تم تحميله من الفيلم', bufferedDescription: 'النسبة المتاحة للمشاهدة من مدة الفيلم بعد تحميلها.',
     nativeFailed: 'تعذّر تحميل الفيلم. يمكنك فتح النسخة الأصلية من رابط التنزيل أدناه.',
     position: 'موضع الفيلم', openFilm: 'افتح الفيلم', endTitle: 'مساحة لفصل جديد.',
     endBody: 'اعرف ما يملأ قرصك. وقرر ما يستحق البقاء.', preview: 'استكشف Reclaim',
@@ -18,6 +19,7 @@
     watch: 'Watch with sound', scrollMode: 'Use scroll controls',
     scrollHint: 'Scroll down to advance. Scroll up to rewind.', nativeHint: 'Play the complete film with sound.',
     loading: 'Loading film…', failed: 'The scroll version could not load. Choose “Watch with sound” for the original film.',
+    buffered: 'Film buffered', bufferedDescription: 'Percentage of the film currently loaded and available to view.',
     nativeFailed: 'The film could not load. You can open the original using the download link below.'
   };
 
@@ -46,6 +48,9 @@
   const rangeWrap = document.querySelector('.scrub-control');
   const cue = document.querySelector('.opening-cue');
   const status = document.querySelector('#film-status');
+  const loading = document.querySelector('.film-loading');
+  const loadingProgress = document.querySelector('#film-loading-progress');
+  const loadingPercent = document.querySelector('#film-loading-percent');
   const instruction = document.querySelector('#instruction');
   const clock = document.querySelector('#film-time');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -65,6 +70,23 @@
   const duration = () => Number.isFinite(film.duration) ? film.duration : 90;
   const lastFrame = () => Math.max(0, duration() - frameDuration);
   const timecode = (time) => `${Math.floor(time / 60)}:${String(Math.floor(time % 60)).padStart(2, '0')}`;
+
+  function updateLoading() {
+    let seconds = 0;
+    const length = film.duration;
+    if (metadataReady && Number.isFinite(length) && length > 0) {
+      // Buffered ranges can be disconnected after a seek. Count only loaded parts,
+      // not the last endpoint, which could imply a fully loaded movie after a jump.
+      const ranges = film.buffered;
+      for (let i = 0; i < ranges.length; i += 1) {
+        seconds += Math.max(0, Math.min(length, ranges.end(i)) - Math.max(0, ranges.start(i)));
+      }
+    }
+    const percent = seconds > 0 ? Math.floor(clamp(seconds / length, 0, 1) * 100) : 0;
+    loadingProgress.value = percent;
+    loadingProgress.textContent = `${percent}%`;
+    loadingPercent.textContent = `${percent}%`;
+  }
 
   function updateReadout(time) {
     clock.textContent = timecode(time);
@@ -117,6 +139,7 @@
     scrolling = scroll;
     scheduled = false;
     metadataReady = false;
+    updateLoading();
     document.documentElement.classList.toggle('scroll-mode', scroll);
     film.controls = !scroll;
     film.muted = scroll;
@@ -142,6 +165,7 @@
 
   film.addEventListener('loadedmetadata', () => {
     metadataReady = true;
+    updateLoading();
     if (scrolling) updateFromScroll();
     else if (restoreTime !== null) {
       film.currentTime = clamp(restoreTime, 0, lastFrame());
@@ -150,6 +174,9 @@
   });
   film.addEventListener('loadeddata', () => { status.textContent = ''; seekLatest(); });
   film.addEventListener('canplay', () => { status.textContent = ''; seekLatest(); });
+  for (const event of ['progress', 'durationchange', 'loadeddata', 'canplay', 'seeked', 'suspend', 'stalled', 'emptied']) {
+    film.addEventListener(event, updateLoading);
+  }
   film.addEventListener('seeked', () => {
     // Decoding completes before presentation. Give the paused frame a paint before
     // draining the latest target, including targets received during rapid reversals.
@@ -181,5 +208,6 @@
   motion.addEventListener('change', () => useMode(!motion.matches));
   toggle.disabled = false;
   toggle.hidden = false;
+  loading.hidden = false;
   useMode(!motion.matches);
 })();

@@ -19,8 +19,8 @@
     <meta property="og:image:alt" content="The Heavy Drive opens inside a layered paper storybook." />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/icon.png" />
-    <link rel="stylesheet" href="styles.css?v=scroll-film-2" />
-    <script defer src="story.js?v=scroll-film-2"></script>
+    <link rel="stylesheet" href="styles.css?v=loading-3" />
+    <script defer src="story.js?v=loading-3"></script>
   </head>
   <body>
     <a class="skip-link" href="#after-film" data-copy="skip">Skip the film</a>
@@ -55,6 +55,11 @@
               <input id="film-position" type="range" min="0" max="90" step="0.033333" value="0" aria-valuetext="0:00 of 1:30" />
             </div>
             <p id="film-status" role="status" aria-live="polite"></p>
+            <div class="film-loading" hidden>
+              <div class="loading-readout"><label for="film-loading-progress" data-copy="buffered">Film buffered</label><span id="film-loading-percent" dir="ltr">0%</span></div>
+              <progress id="film-loading-progress" max="100" value="0" aria-describedby="film-loading-description">0%</progress>
+              <span id="film-loading-description" class="sr-only" data-copy="bufferedDescription">Percentage of the film currently loaded and available to view.</span>
+            </div>
           </footer>
         </div>
       </section>
