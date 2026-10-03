@@ -25,19 +25,32 @@
     document.querySelectorAll('[data-copy]').forEach(el=>{if(copy[el.dataset.copy])el.textContent=copy[el.dataset.copy]});
     document.querySelectorAll('[data-label]').forEach(el=>{if(copy[el.dataset.label])el.setAttribute('aria-label',copy[el.dataset.label])});
     document.querySelectorAll('[data-portfolio]').forEach(el=>el.href='../ar/#sky');
-    const lang=$('[data-language]');lang.textContent='English';lang.href='?lang=en';lang.lang='en';lang.hreflang='en';
+    const lang=$('[data-language]');lang.textContent='English';lang.href='?lang=en&v=4';lang.lang='en';lang.hreflang='en';
     story.setAttribute('aria-label','فيلم MK Downloader بالتمرير');video.setAttribute('aria-label','فيلم MK Downloader مدته ٢٤ ثانية');
   }
   const names = chapterButtons.map(el=>el.textContent.trim());
   let enabled=false,ready=false,target=0,raf=0,format='',loadTimer=0,lastChapter=-1;
   let start=0,distance=0,resizeTimer=0,cinemaScroll=0;
   let download=null,mediaURL='';
-  const preferencesKey='mk-downloader-view-v1',paceFactors={slow:1.5,normal:1,fast:0.65};
-  let preferences={fill:false,pace:'normal'},settingsProgress=0,settingsScroll=0;
-  try{const saved=JSON.parse(localStorage.getItem(preferencesKey)||'null');if(saved&&typeof saved.fill==='boolean'&&Object.hasOwn(paceFactors,saved.pace))preferences={fill:saved.fill,pace:saved.pace}}catch{}
+  const preferencesKey='mk-downloader-view-v2',paceFactors={slow:1.5,normal:1,fast:0.65};
+  let preferences={fill:true,pace:'normal'},settingsProgress=0,settingsScroll=0,chromeTimer=0,keyboardControls=false;
+  try{
+    const saved=JSON.parse(localStorage.getItem(preferencesKey)||'null');
+    if(saved&&typeof saved.fill==='boolean'&&Object.hasOwn(paceFactors,saved.pace))preferences={fill:saved.fill,pace:saved.pace};
+    else {const previous=JSON.parse(localStorage.getItem('mk-downloader-view-v1')||'null');if(previous&&Object.hasOwn(paceFactors,previous.pace))preferences.pace=previous.pace}
+  }catch{}
   const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n));
   const stamp=t=>`00:${String(Math.floor(t)).padStart(2,'0')}`;
   const currentFormat=()=>portrait.matches?'portrait':'wide';
+
+  function revealControls(){
+    document.documentElement.classList.add('controls-visible');clearTimeout(chromeTimer);
+    if(!enabled||!preferences.fill||!ready)return;
+    chromeTimer=setTimeout(()=>{
+      if(dialog.open||viewDialog.open||(keyboardControls&&document.activeElement?.closest('.film-header,.film-controls')))return;
+      document.documentElement.classList.remove('controls-visible');
+    },2400);
+  }
 
   function ui(t){
     const n=Math.max(0,times.findLastIndex(time=>t>=time));
@@ -52,7 +65,7 @@
     const next=clamp(target,0,lastTime);
     if(Math.abs(video.currentTime-next)>1/10000){try{video.currentTime=next}catch{fallback(ar?'تعذّر تحريك الفيلم. استخدم أدوات التشغيل.':'The film could not seek. Use the playback controls.')}}
   }
-  function scroll(){if(!enabled||viewDialog.open)return;target=clamp((window.scrollY-start)/distance)*lastTime;ui(target);schedule()}
+  function scroll(){if(!enabled||viewDialog.open)return;target=clamp((window.scrollY-start)/distance)*lastTime;ui(target);schedule();revealControls()}
   function layout(){
     const progress=distance?clamp((scrollY-start)/distance):0;
     const h=Math.round(window.innerHeight);
@@ -64,7 +77,8 @@
   function applyView(save=false){
     document.documentElement.classList.toggle('film-fill',preferences.fill);
     fillControl.checked=preferences.fill;paceControl.value=preferences.pace;
-    $('#view-status').textContent=preferences.fill?(ar?'ملء الشاشة — قد تُقتطع بعض الحواف.':'Fill — some edges may be cropped.'):(ar?'ملاءمة — يظهر الإطار كاملًا.':'Fit — the full frame stays visible.');
+    $('#view-status').textContent=preferences.fill?(ar?'عرض كامل — الفيلم يملأ الشاشة.':'Full bleed — the film fills the screen.'):(ar?'ملاءمة — يظهر الإطار كاملًا.':'Fit — the full frame stays visible.');
+    revealControls();
     if(enabled){
       const p=viewDialog.open?settingsProgress:clamp(target/lastTime);
       layout();settingsScroll=Math.ceil(start+p*distance);window.scrollTo({top:settingsScroll,behavior:'instant'});scroll();
@@ -149,7 +163,7 @@
   $('#view-settings').addEventListener('click',()=>{settingsProgress=clamp(target/lastTime);settingsScroll=scrollY;viewDialog.showModal();document.body.classList.add('cinema-open')});
   fillControl.addEventListener('change',()=>{preferences.fill=fillControl.checked;applyView(true)});
   paceControl.addEventListener('change',()=>{preferences.pace=paceControl.value;applyView(true)});
-  $('#reset-settings').addEventListener('click',()=>{preferences={fill:false,pace:'normal'};applyView(true)});
+  $('#reset-settings').addEventListener('click',()=>{preferences={fill:true,pace:'normal'};applyView(true)});
   $('#close-settings').addEventListener('click',()=>viewDialog.close());
   $('#done-settings').addEventListener('click',()=>viewDialog.close());
   viewDialog.addEventListener('close',()=>{
@@ -162,5 +176,14 @@
   });
   $('#close-cinema').addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{sound.pause();sound.removeAttribute('src');sound.load();document.body.classList.remove('cinema-open');$('#watch-film').focus({preventScroll:true});window.scrollTo({top:cinemaScroll,behavior:'instant'});scroll();requestAnimationFrame(()=>{window.scrollTo({top:cinemaScroll,behavior:'instant'});scroll()})});
+  window.addEventListener('pointermove',event=>{if(event.pointerType==='mouse')revealControls()},{passive:true});
+  window.addEventListener('pointerdown',event=>{keyboardControls=false;if(!event.target.closest?.('.film-screen'))revealControls()},{passive:true});
+  window.addEventListener('keydown',()=>{keyboardControls=true;revealControls()});
+  document.addEventListener('focusin',event=>{if(event.target.closest?.('.film-header,.film-controls'))revealControls()});
+  $('.film-screen').addEventListener('click',()=>{
+    if(!enabled||!ready||!preferences.fill)return;
+    if(document.documentElement.classList.contains('controls-visible')){clearTimeout(chromeTimer);document.documentElement.classList.remove('controls-visible')}
+    else revealControls();
+  });
   applyView();if(reduced.matches)fallback();else enable();
 })();

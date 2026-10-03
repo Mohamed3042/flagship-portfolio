@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" class="film-fill controls-visible">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06111f">
@@ -13,7 +13,7 @@
   <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/mk-downloader/assets/social.jpg">
   <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="assets/icon.png">
   <link rel="preload" href="fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=3"><script defer src="scroll-film.js?v=3"></script>
+  <link rel="stylesheet" href="styles.css?v=4"><script defer src="scroll-film.js?v=4"></script>
 </head>
 <body>
   <a class="skip" href="#details" data-copy="skip">Skip to product details</a>
@@ -23,7 +23,7 @@
         <header class="film-header">
           <a class="back-link" data-portfolio href="../en/#sky"><span aria-hidden="true">↗</span><span data-copy="portfolio">Portfolio</span></a>
           <span class="film-name" dir="ltr"><b>MK</b> DOWNLOADER</span>
-          <a class="language" href="?lang=ar" lang="ar" hreflang="ar" data-language>العربية</a>
+          <a class="language" href="?lang=ar&v=4" lang="ar" hreflang="ar" data-language>العربية</a>
         </header>
         <div class="film-screen">
           <video id="scroll-film" width="1920" height="1080" controls playsinline preload="none" poster="assets/poster-wide.jpg" src="assets/film-wide.mp4" aria-label="MK Downloader, a 24-second film">
@@ -85,9 +85,9 @@
     <div class="settings-top"><h2 id="settings-title" data-copy="settings">Viewing settings</h2><button id="close-settings" aria-label="Close settings" data-label="closeSettings">×</button></div>
     <label class="fill-option" for="fill-screen">
       <span><strong data-copy="fill">Fill screen</strong><small id="fill-note" data-copy="fillNote">Fill the window. Some edges may be cropped.</small></span>
-      <input type="checkbox" id="fill-screen" aria-describedby="fill-note">
+      <input type="checkbox" id="fill-screen" aria-describedby="fill-note" checked>
     </label>
-    <p class="view-status" id="view-status" role="status">Fit — the full frame stays visible.</p>
+    <p class="view-status" id="view-status" role="status">Full bleed — the film fills the screen.</p>
     <label class="pace-label" for="scroll-pace" data-copy="pace">Scroll pace</label>
     <select id="scroll-pace" aria-describedby="pace-note">
       <option value="slow" data-copy="slow">Slow · more precise</option>
