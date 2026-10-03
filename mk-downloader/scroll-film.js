@@ -5,6 +5,7 @@
   const slider = $('#playhead'), timecode = $('#timecode'), sceneLabel = $('#scene-label');
   const loading = $('#load-state'), motionChoice = $('#motion-choice'), dialog = $('#cinema'), sound = $('#sound-film');
   const loadLabel=$('#load-label'), loadPercent=$('#load-percent'), loadProgress=$('#load-progress'), loadBytes=$('#load-bytes');
+  const viewDialog=$('#view-options'), fillControl=$('#fill-screen'), paceControl=$('#scroll-pace');
   const chapterButtons = [...document.querySelectorAll('[data-time]')];
   const times = [0,3,6,10,14,18,21], duration = 24, lastTime = duration - 1/60;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -16,7 +17,8 @@
     scroll:'مرّر لتحريك الفيلم. عد للأعلى لإرجاعه.',watch:'شاهد مع الصوت ↗',reduced:'تقليل الحركة مفعّل. شغّل الفيلم أو فعّل التحكم بالتمرير.',enable:'فعّل التحكم بالتمرير',
     eyebrow:'روابط عامة. ملفات على جهازك.',title1:'رابط. ملف.',title2:'لك.',lead:'اختر فيديو أو صوتًا. نظّم تنزيلاتك. واحفظ الملفات على جهازك.',
     feature1:'فيديو MP4 وصوت MP3',feature2:'نقل الملفات باتصالات متوازية',feature3:'إيقاف التنزيلات المدعومة واستئنافها',explore:'استكشف MK Downloader ↗',replay:'مرّر الفيلم مجددًا ↑',
-    note:'توفّر الصيغ والاتصالات المتوازية والاستئناف يعتمد على المصدر. حركة نقل الملفات في الفيلم توضيحية.',filmLanguage:'فيلم مدته ٢٤ ثانية · نصوص الفيلم بالإنجليزية · موسيقى أصلية',back:'عد إلى معرض الأعمال',filmTitle:'رابط. ملف. لك.',close:'إغلاق ×'
+    note:'توفّر الصيغ والاتصالات المتوازية والاستئناف يعتمد على المصدر. حركة نقل الملفات في الفيلم توضيحية.',filmLanguage:'فيلم مدته ٢٤ ثانية · نصوص الفيلم بالإنجليزية · موسيقى أصلية',back:'عد إلى معرض الأعمال',filmTitle:'رابط. ملف. لك.',close:'إغلاق ×',
+    settings:'إعدادات العرض',closeSettings:'إغلاق الإعدادات',fill:'ملء الشاشة',fillNote:'املأ النافذة. قد تُقتطع بعض الحواف.',pace:'سرعة التمرير',slow:'بطيء · تحكم أدق',normal:'عادي',fast:'سريع · تمرير أقل',paceNote:'اختر مقدار التمرير اللازم للتنقل خلال الفيلم.',saved:'تُحفظ اختياراتك على هذا الجهاز.',reset:'إعادة الضبط',done:'تم'
   };
   if(ar){
     document.documentElement.lang='ar';document.documentElement.dir='rtl';document.title='MK Downloader — رابط. ملف. لك.';
@@ -30,6 +32,9 @@
   let enabled=false,ready=false,target=0,raf=0,format='',loadTimer=0,lastChapter=-1;
   let start=0,distance=0,resizeTimer=0,cinemaScroll=0;
   let download=null,mediaURL='';
+  const preferencesKey='mk-downloader-view-v1',paceFactors={slow:1.5,normal:1,fast:0.65};
+  let preferences={fill:false,pace:'normal'},settingsProgress=0,settingsScroll=0;
+  try{const saved=JSON.parse(localStorage.getItem(preferencesKey)||'null');if(saved&&typeof saved.fill==='boolean'&&Object.hasOwn(paceFactors,saved.pace))preferences={fill:saved.fill,pace:saved.pace}}catch{}
   const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n));
   const stamp=t=>`00:${String(Math.floor(t)).padStart(2,'0')}`;
   const currentFormat=()=>portrait.matches?'portrait':'wide';
@@ -41,20 +46,30 @@
     timecode.textContent=`${stamp(t)} / 00:24`;
     if(n!==lastChapter){lastChapter=n;sceneLabel.textContent=`${String(n+1).padStart(2,'0')} / ${names[n]}`;chapterButtons.forEach((b,i)=>i===n?b.setAttribute('aria-current','step'):b.removeAttribute('aria-current'))}
   }
-  function schedule(){if(!raf&&enabled&&!dialog.open)raf=requestAnimationFrame(seek)}
+  function schedule(){if(!raf&&enabled&&!dialog.open&&!viewDialog.open)raf=requestAnimationFrame(seek)}
   function seek(){
-    raf=0;if(!enabled||!ready||dialog.open||video.seeking)return;
+    raf=0;if(!enabled||!ready||dialog.open||viewDialog.open||video.seeking)return;
     const next=clamp(target,0,lastTime);
     if(Math.abs(video.currentTime-next)>1/10000){try{video.currentTime=next}catch{fallback(ar?'تعذّر تحريك الفيلم. استخدم أدوات التشغيل.':'The film could not seek. Use the playback controls.')}}
   }
-  function scroll(){if(!enabled)return;target=clamp((window.scrollY-start)/distance)*lastTime;ui(target);schedule()}
+  function scroll(){if(!enabled||viewDialog.open)return;target=clamp((window.scrollY-start)/distance)*lastTime;ui(target);schedule()}
   function layout(){
     const progress=distance?clamp((scrollY-start)/distance):0;
     const h=Math.round(window.innerHeight);
     document.documentElement.style.setProperty('--screen-height',`${h}px`);
-    document.documentElement.style.setProperty('--scroll-distance',`${Math.max(7200,h*13)}px`);
+    document.documentElement.style.setProperty('--scroll-distance',`${Math.round(Math.max(7200,h*13)*paceFactors[preferences.pace])}px`);
     start=story.getBoundingClientRect().top+scrollY;distance=Math.max(1,story.offsetHeight-h);
     return progress;
+  }
+  function applyView(save=false){
+    document.documentElement.classList.toggle('film-fill',preferences.fill);
+    fillControl.checked=preferences.fill;paceControl.value=preferences.pace;
+    $('#view-status').textContent=preferences.fill?(ar?'ملء الشاشة — قد تُقتطع بعض الحواف.':'Fill — some edges may be cropped.'):(ar?'ملاءمة — يظهر الإطار كاملًا.':'Fit — the full frame stays visible.');
+    if(enabled){
+      const p=viewDialog.open?settingsProgress:clamp(target/lastTime);
+      layout();settingsScroll=Math.ceil(start+p*distance);window.scrollTo({top:settingsScroll,behavior:'instant'});scroll();
+    }
+    if(save){try{localStorage.setItem(preferencesKey,JSON.stringify(preferences));$('#save-note').textContent=ar?copy.saved:'Your choices are saved on this device.'}catch{$('#save-note').textContent=ar?'تُطبّق اختياراتك خلال هذه الزيارة.':'Your choices apply to this visit.'}}
   }
   function downloadProgress(loaded,total,complete=false){
     const mb=n=>(n/1e6).toFixed(2);
@@ -123,7 +138,7 @@
   video.addEventListener('error',()=>{if(enabled&&mediaURL&&video.getAttribute('src')===mediaURL)fallback(ar?'تعذّر تحميل نسخة التمرير. شغّل الفيلم أدناه.':'The scroll version could not load. Play the film below.')});
   video.addEventListener('play',()=>{if(enabled)video.pause()});
   window.addEventListener('scroll',scroll,{passive:true});
-  window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(!enabled)return;const p=distance?clamp((scrollY-start)/distance):0;layout();source();window.scrollTo({top:start+p*distance,behavior:'instant'});scroll()},150)},{passive:true});
+  window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(!enabled)return;const p=viewDialog.open?settingsProgress:(distance?clamp((scrollY-start)/distance):0);layout();source();const y=Math.ceil(start+p*distance);if(viewDialog.open)settingsScroll=y;window.scrollTo({top:y,behavior:'instant'});scroll()},150)},{passive:true});
   window.addEventListener('pageshow',()=>{if(enabled){layout();scroll()}});
   portrait.addEventListener('change',()=>{if(enabled)source()});
   reduced.addEventListener('change',()=>{if(reduced.matches&&enabled)fallback();else if(!reduced.matches&&!enabled)enable()});
@@ -131,10 +146,21 @@
   chapterButtons.forEach(b=>b.addEventListener('click',()=>jump(Number(b.dataset.time))));
   $('#replay-scroll').addEventListener('click',()=>jump(0));
   $('#enable-scroll').addEventListener('click',enable);
+  $('#view-settings').addEventListener('click',()=>{settingsProgress=clamp(target/lastTime);settingsScroll=scrollY;viewDialog.showModal();document.body.classList.add('cinema-open')});
+  fillControl.addEventListener('change',()=>{preferences.fill=fillControl.checked;applyView(true)});
+  paceControl.addEventListener('change',()=>{preferences.pace=paceControl.value;applyView(true)});
+  $('#reset-settings').addEventListener('click',()=>{preferences={fill:false,pace:'normal'};applyView(true)});
+  $('#close-settings').addEventListener('click',()=>viewDialog.close());
+  $('#done-settings').addEventListener('click',()=>viewDialog.close());
+  viewDialog.addEventListener('close',()=>{
+    document.body.classList.remove('cinema-open');$('#view-settings').focus({preventScroll:true});
+    window.scrollTo({top:enabled?settingsScroll:story.offsetTop,behavior:'instant'});scroll();
+    requestAnimationFrame(()=>{window.scrollTo({top:enabled?settingsScroll:story.offsetTop,behavior:'instant'});scroll()});
+  });
   $('#watch-film').addEventListener('click',()=>{
     cinemaScroll=scrollY;sound.src=`assets/film-${currentFormat()}.mp4`;sound.muted=false;dialog.showModal();document.body.classList.add('cinema-open');sound.play().catch(()=>{});
   });
   $('#close-cinema').addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{sound.pause();sound.removeAttribute('src');sound.load();document.body.classList.remove('cinema-open');$('#watch-film').focus({preventScroll:true});window.scrollTo({top:cinemaScroll,behavior:'instant'});scroll();requestAnimationFrame(()=>{window.scrollTo({top:cinemaScroll,behavior:'instant'});scroll()})});
-  if(reduced.matches)fallback();else enable();
+  applyView();if(reduced.matches)fallback();else enable();
 })();

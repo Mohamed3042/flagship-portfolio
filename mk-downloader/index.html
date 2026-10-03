@@ -13,7 +13,7 @@
   <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/mk-downloader/assets/social.jpg">
   <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="assets/icon.png">
   <link rel="preload" href="fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=2"><script defer src="scroll-film.js?v=2"></script>
+  <link rel="stylesheet" href="styles.css?v=3"><script defer src="scroll-film.js?v=3"></script>
 </head>
 <body>
   <a class="skip" href="#details" data-copy="skip">Skip to product details</a>
@@ -56,7 +56,10 @@
           </nav>
           <div class="bottom-row">
             <span id="scroll-hint" data-copy="scroll">Scroll to move. Scroll back to rewind.</span>
-            <button class="watch-button" id="watch-film" data-copy="watch">Watch with sound <span aria-hidden="true">↗</span></button>
+            <div class="viewer-actions">
+              <button class="settings-button" id="view-settings" aria-haspopup="dialog" aria-controls="view-options"><span aria-hidden="true">⚙</span> <span data-copy="settings">Viewing settings</span></button>
+              <button class="watch-button" id="watch-film" data-copy="watch">Watch with sound <span aria-hidden="true">↗</span></button>
+            </div>
           </div>
         </div>
         <div id="motion-choice" class="motion-choice" hidden>
@@ -78,6 +81,23 @@
       <footer><a data-portfolio href="../en/#sky" data-copy="back">Back to the portfolio</a><span dir="ltr">MK Downloader</span></footer>
     </section>
   </main>
+  <dialog id="view-options" aria-labelledby="settings-title">
+    <div class="settings-top"><h2 id="settings-title" data-copy="settings">Viewing settings</h2><button id="close-settings" aria-label="Close settings" data-label="closeSettings">×</button></div>
+    <label class="fill-option" for="fill-screen">
+      <span><strong data-copy="fill">Fill screen</strong><small id="fill-note" data-copy="fillNote">Fill the window. Some edges may be cropped.</small></span>
+      <input type="checkbox" id="fill-screen" aria-describedby="fill-note">
+    </label>
+    <p class="view-status" id="view-status" role="status">Fit — the full frame stays visible.</p>
+    <label class="pace-label" for="scroll-pace" data-copy="pace">Scroll pace</label>
+    <select id="scroll-pace" aria-describedby="pace-note">
+      <option value="slow" data-copy="slow">Slow · more precise</option>
+      <option value="normal" data-copy="normal" selected>Standard</option>
+      <option value="fast" data-copy="fast">Fast · less scrolling</option>
+    </select>
+    <p class="settings-note" id="pace-note" data-copy="paceNote">Choose how much scrolling moves you through the film.</p>
+    <p class="settings-note" id="save-note" data-copy="saved">Your choices are saved on this device.</p>
+    <div class="settings-footer"><button id="reset-settings" data-copy="reset">Reset settings</button><button id="done-settings" data-copy="done">Done</button></div>
+  </dialog>
   <dialog id="cinema" aria-labelledby="cinema-title">
     <div class="cinema-top"><h2 id="cinema-title" data-copy="filmTitle">A link. A file. Yours.</h2><button id="close-cinema" data-copy="close">Close ×</button></div>
     <video id="sound-film" controls playsinline preload="none" aria-label="MK Downloader film with sound"></video>
