@@ -197,11 +197,23 @@
   <header class="lede">
     <p class="marquee"><span class="bulbs" aria-hidden="true"></span><b><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></b><s><span class="L en">Fifth edition · 70 WAN shots</span><span class="L ar">الإصدار الخامس · ٧٠ لقطة WAN</span></s></p>
     <h1><span class="L en">The Worlds</span><span class="L ar">العوالم</span></h1>
-    <p><span class="L en">Ten motion studies, including the Engineering Smart System AI Intelligence update, cut as scroll-controlled films. Cake Studio's new directed cut links 50 real WAN 2.7 First &amp; Last Frame shots into a 4:10 argument: the cake is made twice, first as a flexible decision in software and then as a physical object in the kitchen. The Disney Storybook world contributes another 20-shot chain; seven further worlds render their mechanisms live in code. Explore the films in English or Arabic. Scroll each one like a reel.</span><span class="L ar">عشر دراسات حركية، منها تحديث النظام الهندسي الذكي، مقصوصة كأفلام يقودها التمرير. يربط القصّ الموجّه الجديد لعالم «استوديو الكعك» ٥٠ لقطة حقيقية من WAN 2.7 بإطار أول وأخير في حجة مدتها ٤:١٠: تُصنع الكعكة مرتين، أولًا كقرار مرن في البرمجيات ثم كشيء مادي في المطبخ. ويضيف عالم الحكاية المصورة سلسلةً أخرى من ٢٠ لقطة، بينما تعرض سبعة عوالم أخرى آلياتها حيّة بالشيفرة. استكشف الأفلام بالإنجليزية أو العربية. مرِّر في كل واحد كأنه شريط فيلم.</span></p>
+    <p><span class="L en">Eleven motion studies, including the Engineering Smart System AI Intelligence update, cut as scroll-controlled films. Cake Studio's new directed cut links 50 real WAN 2.7 First &amp; Last Frame shots into a 4:10 argument: the cake is made twice, first as a flexible decision in software and then as a physical object in the kitchen. The Disney Storybook world contributes another 20-shot chain; seven further worlds render their mechanisms live in code. Explore the films in English or Arabic. Scroll each one like a reel.</span><span class="L ar">إحدى عشرة دراسة حركية، منها تحديث النظام الهندسي الذكي، مقصوصة كأفلام يقودها التمرير. يربط القصّ الموجّه الجديد لعالم «استوديو الكعك» ٥٠ لقطة حقيقية من WAN 2.7 بإطار أول وأخير في حجة مدتها ٤:١٠: تُصنع الكعكة مرتين، أولًا كقرار مرن في البرمجيات ثم كشيء مادي في المطبخ. ويضيف عالم الحكاية المصورة سلسلةً أخرى من ٢٠ لقطة، بينما تعرض سبعة عوالم أخرى آلياتها حيّة بالشيفرة. استكشف الأفلام بالإنجليزية أو العربية. مرِّر في كل واحد كأنه شريط فيلم.</span></p>
     <p class="note"><span class="L en">Original studies · no third-party marks · all real numbers live on the story pages · ← → move through the films</span><span class="L ar">دراسات أصلية · بلا علامات لأطراف ثالثة · الأرقام الحقيقية كلها في صفحات القصص · السهمان ← و→ للتنقل داخل الأفلام</span></p>
   </header>
 
   <div class="grid">
+<!-- MK Educate film entry: public campaign media only. -->
+    <a class="card feature" href="../en/work/mk-educate" data-educate-world style="--wc:#E8B64A">
+      <span class="badge"><span class="L en">Scroll the film · MK Educate</span><span class="L ar">حرّك الفيلم بالتمرير · MK Educate</span></span>
+      <div class="art"><img src="../media/mk-educate/poster-desktop.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="pal"><i style="background:#111B34"></i><i style="background:#24355B"></i><i style="background:#796AC7"></i><i style="background:#E8B64A"></i><i style="background:#F8F4EB"></i></div>
+      <div class="meta">
+        <h2><span class="L en">From pages to a lesson.</span><span class="L ar">من صفحات كثيرة إلى درس واضح.</span></h2>
+        <p><span class="L en">An Arabic-first teaching workspace. Scroll the actual film forward and back, with a dedicated cut for desktop and phone.</span><span class="L ar">مساحة عمل عربية للمعلّم. حرّك الفيلم للأمام والخلف بالتمرير، بنسخة مخصّصة للكمبيوتر وأخرى للهاتف.</span></p>
+        <p class="spec"><span><i>00:28</i></span><span><span class="L en">product film · demonstration data</span><span class="L ar">فيلم منتج · بيانات توضيحية</span></span></p>
+      </div>
+    </a>
+    <!-- End MK Educate film entry. -->
     <a class="card feature" href="../en/work/engineering-smart-system" data-ess-world style="--wc:#81ECD0">
       <span class="badge"><span class="L en">90-second scroll film</span><span class="L ar">فيلم بالتمرير · ٩٠ ثانية</span></span>
       <div class="art"><img src="../media/ess-ai/poster.webp" alt="" loading="eager" decoding="async"><div class="shade"></div></div>
@@ -415,5 +427,6 @@
       ? '../ar/work/engineering-smart-system' : '../en/work/engineering-smart-system';
   });
 </script>
+<script id="educate-world-language">document.querySelector('[data-educate-world]').addEventListener('click',function(){this.href=document.documentElement.lang==='ar'||document.body.classList.contains('lang-ar')?'../ar/work/mk-educate':'../en/work/mk-educate'});</script>
 </body>
 </html>
