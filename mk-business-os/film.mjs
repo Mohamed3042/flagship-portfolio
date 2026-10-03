@@ -51,7 +51,43 @@ reduced.addEventListener('change',event=>{if(event.matches)apply({...settings,ma
 document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(quietTimer);watch.pause();}else paint();});
 function waitFor(event,timeout=20000){return new Promise((resolve,reject)=>{const timer=setTimeout(()=>done(new Error('Media timeout')),timeout);function done(error){clearTimeout(timer);video.removeEventListener(event,onReady);video.removeEventListener('error',onError);error?reject(error):resolve();}function onReady(){done();}function onError(){done(new Error('Media decoding failed'));}video.addEventListener(event,onReady,{once:true});video.addEventListener('error',onError,{once:true});});}
 function loadProgress(bytes,total,complete=false){const percent=total?Math.min(complete?100:99,Math.floor(bytes/total*100)):null;$('#load-percent').textContent=percent===null?'…':`${percent}%`;if(percent===null)$('#load-progress').removeAttribute('value');else $('#load-progress').value=percent;$('#load-bytes').textContent=`${(bytes/1e6).toFixed(1)}${total?` / ${(total/1e6).toFixed(1)}`:''} MB`;}
-async function loadFilm(){const generation=++loadGeneration;controller?.abort();controller=new AbortController();ready=false;stage.dataset.ready='false';seekBusy=false;clearTimeout(seekTimer);loading.hidden=false;loading.classList.remove('error');$('#load-actions').hidden=true;$('#load-label').textContent=text.loading;loadProgress(0,0);let downloadTimeout=setTimeout(()=>controller.abort(),60000);try{const manifest=await fetch('media/manifest.json',{signal:controller.signal}).then(r=>r.ok?r.json():null).catch(()=>null);const response=await fetch('media/scroll.mp4',{signal:controller.signal});if(!response.ok)throw new Error('Film unavailable');const total=Number(response.headers.get('content-length'))||manifest?.scroll?.bytes||0;const chunks=[];let bytes=0;if(response.body){const reader=response.body.getReader();while(true){const {done,value}=await reader.read();if(done)break;chunks.push(value);bytes+=value.length;loadProgress(bytes,total);}}else{const buffer=await response.arrayBuffer();chunks.push(buffer);bytes=buffer.byteLength;}clearTimeout(downloadTimeout);if(generation!==loadGeneration)return;loadProgress(bytes,total||bytes,true);$('#load-label').textContent=text.preparing;if(blobUrl)URL.revokeObjectURL(blobUrl);blobUrl=URL.createObjectURL(new Blob(chunks,{type:'video/mp4'}));const loaded=waitFor('loadeddata');video.src=blobUrl;video.load();await loaded;if(generation!==loadGeneration)return;ready=true;stage.dataset.ready='true';decoded=0;loading.hidden=true;size(false);updateUI(target);if(target>0)pump();else paint(0);keepVisible();}catch(error){clearTimeout(downloadTimeout);if(generation!==loadGeneration)return;loading.classList.add('error');$('#load-label').textContent=text.failed;$('#load-actions').hidden=false;stage.dataset.ready='error';}}
+async function loadFilm(){
+  const generation=++loadGeneration;
+  controller?.abort();controller=new AbortController();
+  const activeController=controller;
+  ready=false;stage.dataset.ready='false';seekBusy=false;clearTimeout(seekTimer);
+  loading.hidden=false;loading.classList.remove('error');$('#load-actions').hidden=true;
+  $('#load-label').textContent=text.loading;loadProgress(0,0);
+  let downloadTimeout;
+  // A large film may take minutes on a slow connection. Abort only a stalled
+  // transfer; every received chunk renews the inactivity deadline.
+  const received=()=>{clearTimeout(downloadTimeout);downloadTimeout=setTimeout(()=>activeController.abort(),30000);};
+  received();
+  try{
+    const manifest=await fetch('media/manifest.json',{signal:activeController.signal}).then(r=>r.ok?r.json():null).catch(()=>null);
+    received();
+    const response=await fetch('media/scroll.mp4',{signal:activeController.signal});
+    if(!response.ok)throw new Error('Film unavailable');
+    received();
+    const total=Number(response.headers.get('content-length'))||manifest?.scroll?.bytes||0;
+    const chunks=[];let bytes=0;
+    if(response.body){
+      const reader=response.body.getReader();
+      while(true){const {done,value}=await reader.read();if(done)break;received();chunks.push(value);bytes+=value.length;loadProgress(bytes,total);}
+    }else{const buffer=await response.arrayBuffer();chunks.push(buffer);bytes=buffer.byteLength;}
+    clearTimeout(downloadTimeout);if(generation!==loadGeneration)return;
+    loadProgress(bytes,total||bytes,true);$('#load-label').textContent=text.preparing;
+    if(blobUrl)URL.revokeObjectURL(blobUrl);
+    blobUrl=URL.createObjectURL(new Blob(chunks,{type:'video/mp4'}));
+    const loaded=waitFor('loadeddata');video.src=blobUrl;video.load();await loaded;
+    if(generation!==loadGeneration)return;
+    ready=true;stage.dataset.ready='true';decoded=0;loading.hidden=true;size(false);updateUI(target);
+    if(target>0)pump();else paint(0);keepVisible();
+  }catch(error){
+    clearTimeout(downloadTimeout);if(generation!==loadGeneration)return;
+    loading.classList.add('error');$('#load-label').textContent=text.failed;$('#load-actions').hidden=false;stage.dataset.ready='error';
+  }
+}
 $('#retry').addEventListener('click',loadFilm);
 window.addEventListener('pagehide',()=>{controller?.abort();clearTimeout(quietTimer);clearTimeout(seekTimer);watch.pause();});
 window.addEventListener('pageshow',event=>{if(event.persisted&&!ready)loadFilm();});
