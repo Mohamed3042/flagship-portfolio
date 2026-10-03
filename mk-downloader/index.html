@@ -4,7 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#06111f">
   <title>MK Downloader — A link. A file. Yours.</title>
-  <meta name="description" content="Move through MK Downloader's launch film with your scroll. Choose your format, control your transfers, and keep your files close.">
+  <meta name="description" content="Explore MK Downloader in a 90-second scroll film, composed for your phone or desktop. Choose your format, control your transfers, and keep your files close.">
   <link rel="canonical" href="https://mohamed3042.github.io/flagship-portfolio/mk-downloader/">
   <link rel="alternate" hreflang="en" href="https://mohamed3042.github.io/flagship-portfolio/mk-downloader/">
   <link rel="alternate" hreflang="ar" href="https://mohamed3042.github.io/flagship-portfolio/mk-downloader/?lang=ar">
@@ -13,7 +13,7 @@
   <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/mk-downloader/assets/social.jpg">
   <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="assets/icon.png">
   <link rel="preload" href="fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=5"><script defer src="scroll-film.js?v=5"></script>
+  <link rel="stylesheet" href="styles.css?v=6"><script defer src="scroll-film.js?v=6"></script>
 </head>
 <body>
   <a class="skip" href="#details" data-copy="skip">Skip to product details</a>
@@ -23,11 +23,13 @@
         <header class="film-header">
           <a class="back-link" data-portfolio href="../en/#sky"><span aria-hidden="true">↗</span><span data-copy="portfolio">Portfolio</span></a>
           <span class="film-name" dir="ltr"><b>MK</b> DOWNLOADER</span>
-          <a class="language" href="?lang=ar&v=5" lang="ar" hreflang="ar" data-language>العربية</a>
+          <a class="language" href="?lang=ar&v=6" lang="ar" hreflang="ar" data-language>العربية</a>
         </header>
         <div class="film-screen">
-          <video id="scroll-film" width="1920" height="1080" controls playsinline preload="none" poster="assets/poster-wide.jpg" src="assets/film-wide.mp4" aria-label="MK Downloader, a 24-second film">
-            <p><a href="assets/film-wide.mp4">Download the MK Downloader film</a></p>
+          <video id="scroll-film" width="1920" height="1080" controls playsinline preload="none" poster="assets/poster-wide-90-v1.jpg" aria-label="MK Downloader, a 90-second film">
+            <source src="assets/film-portrait-90-v1.mp4" media="(max-aspect-ratio: 4/5)" type="video/mp4">
+            <source src="assets/film-wide-90-v1.mp4" type="video/mp4">
+            <p>Download the film for <a href="assets/film-portrait-90-v1.mp4">phone</a> or <a href="assets/film-wide-90-v1.mp4">desktop</a>.</p>
           </video>
           <div class="loading" id="load-state" hidden>
             <div class="loading-card">
@@ -42,17 +44,22 @@
           <div class="playhead-row">
             <span class="scene-label" id="scene-label">01 / Yours.</span>
             <label class="sr-only" for="playhead" data-copy="scrub">Move through the film</label>
-            <input id="playhead" type="range" min="0" max="24" step="0.05" value="0" aria-valuetext="0 seconds">
-            <output id="timecode" for="playhead" dir="ltr">00:00 / 00:24</output>
+            <input id="playhead" type="range" min="0" max="90" step="0.05" value="0" aria-valuetext="0 seconds">
+            <output id="timecode" for="playhead" dir="ltr">00:00 / 01:30</output>
           </div>
           <nav class="chapters" aria-label="Film chapters" data-label="chapters">
             <button data-time="0" data-copy="c0" aria-current="step">Yours.</button>
-            <button data-time="3" data-copy="c1">Workspace</button>
-            <button data-time="6" data-copy="c2">Your format</button>
-            <button data-time="10" data-copy="c3">Parallel</button>
-            <button data-time="14" data-copy="c4">Pause &amp; resume</button>
-            <button data-time="18" data-copy="c5">Saved</button>
-            <button data-time="21" data-copy="c6">MK Downloader</button>
+            <button data-time="6" data-copy="c1">The link</button>
+            <button data-time="13" data-copy="c2">Your format</button>
+            <button data-time="20" data-copy="c3">Media Studio</button>
+            <button data-time="27" data-copy="c4">Workspace</button>
+            <button data-time="34" data-copy="c5">Parallel</button>
+            <button data-time="42" data-copy="c6">Pause &amp; resume</button>
+            <button data-time="50" data-copy="c7">The queue</button>
+            <button data-time="58" data-copy="c8">Find your file</button>
+            <button data-time="66" data-copy="c9">Saved</button>
+            <button data-time="74" data-copy="c10">Link to local</button>
+            <button data-time="82" data-copy="c11">MK Downloader</button>
           </nav>
           <div class="bottom-row">
             <span id="scroll-hint" data-copy="scroll">Scroll to move. Scroll back to rewind.</span>
@@ -76,7 +83,7 @@
         <ul class="features"><li data-copy="feature1">MP4 video and MP3 audio</li><li data-copy="feature2">Parallel file transfers</li><li data-copy="feature3">Pause and resume supported downloads</li></ul>
         <div class="closing-links"><a class="primary" href="https://mohamed3042.github.io/mk-downloader-site/" data-copy="explore">Explore MK Downloader <span aria-hidden="true">↗</span></a><button class="replay" id="replay-scroll" hidden data-copy="replay">Scroll it again ↑</button></div>
         <p class="fine-print" data-copy="note">Format availability, parallel connections and resume depend on the source. The film's transfer animations are illustrative.</p>
-        <p class="film-language" data-copy="filmLanguage">24-second film · English on-screen text · Original music</p>
+        <p class="film-language" data-copy="filmLanguage">90-second film · Dedicated phone and desktop editions · Original music</p>
       </div>
       <footer><a data-portfolio href="../en/#sky" data-copy="back">Back to the portfolio</a><span dir="ltr">MK Downloader</span></footer>
     </section>
