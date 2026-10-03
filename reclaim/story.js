@@ -1,151 +1,185 @@
 (() => {
   'use strict';
 
-  const translations = {
-    skip: 'انتقل إلى القصة', home: 'الرئيسية — Reclaim', nav: 'التنقل الرئيسي',
-    portfolio: 'معرض الأعمال', eyebrow: 'قصة المساحة وما يستحق البقاء',
-    titleOne: 'قليل من الضوء.', titleTwo: 'قرص أخف.',
-    intro: 'اعرف ما يملأ قرصك. قرر ما يستحق البقاء. وافسح مساحة مع Reclaim.',
-    watch: 'شاهد الفيلم', read: 'اقلب الصفحات', filmTitle: 'القرص الثقيل',
-    filmFormat: 'حكاية ورقية في تسعة فصول', scroll: 'مرّر الصفحة واتبع الضوء',
-    chapterCount: 'تسعة فصول · وقرص أخف', story: 'فصول حكاية Reclaim التسعة',
-    heroArt: 'كتاب ورقي مفتوح في غابة داكنة', heroAlt: 'تبدأ حكاية القرص الثقيل داخل كتاب مصنوع من طبقات الورق.',
-    c0Label: 'البداية', c0Title: 'يمكن لقرص واحد أن يحمل عالمًا كاملًا.',
-    c0Body: 'مشروعات وصور وأشياء صغيرة تحتفظ بها لوقت لاحق. حتى لا تبقى مساحة لما يأتي بعدها.',
-    c0Alt: 'يفتح حارس ورقي حكاية قرص مزدحم.',
-    c1Label: 'الثقل', c1Title: 'ابدأ بفهم هذا الثقل.',
-    c1Body: 'القرص الممتلئ سؤال قبل أن يكون مهمة. يساعدك Reclaim على رؤية ما يشغل المساحة.',
-    c1Alt: 'يحمل الحارس قرصًا ثقيلًا عبر الغابة الورقية.',
-    c2Label: 'الفانوس', c2Title: 'قليل من الضوء يكشف المزيد.',
-    c2Body: 'في Windows، يمكن للفحص بصلاحية المسؤول قراءة جدول الملفات الرئيسي MFT. ويتوفر فحص المجلدات عندما يتعذر ذلك.',
-    c2Alt: 'يكشف فانوس بلون النعناع محتويات القرص.',
-    c3Label: 'السجل', c3Title: 'اقرأ سجل القرص.',
-    c3Body: 'تمنحك رؤية أوضح للملفات والمجلدات نقطة بداية لكل قرار.',
-    c3Alt: 'يكشف السجل الورقي خريطة ملفات القرص.',
-    c4Label: 'الأشياء الأثقل', c4Title: 'اعثر على الأشياء الأثقل.',
-    c4Body: 'شاهد أكبر الملفات أينما كانت على القرص، أو تصفح شجرة المجلدات. وافتح مكان الملف في مجلده لتعرف أين ينتمي.',
-    c4Alt: 'يعثر الحارس على أكبر الملفات ويتصفح المجلدات.',
-    windowsNote: 'التنظيف الذكي متاح على Windows.',
-    c5Label: 'المسارات الثلاثة', c5Title: 'احتفظ بما يهمك.',
-    c5Body: 'تبقى نسخة محفوظة من الملفات المكررة المتحقق منها. وتبقى المصادر عند إزالة الملفات التي يمكن إعادة بنائها. أما العمل القديم، فالقرار لك بعد مراجعته.',
-    c5Alt: 'تفصل ثلاثة مسارات ورقية الملفات المكررة والملفات القابلة لإعادة البناء والعمل القديم لمراجعتها.',
-    c6Label: 'الختم', c6Title: 'قرارك يستحق مراجعة أخرى.',
-    c6Body: 'راجع الخطة قبل ختمها. يتحقق Reclaim مرة أخرى قبل التنظيف، ويحتفظ بالملفات التي تغيرت.',
-    c6Alt: 'يراجع الحارس خطة التنظيف ويختمها قبل إعادة التحقق منها.',
-    deleteNote: 'التنظيف المُدار يحذف الملفات التي توافق عليها حذفًا نهائيًا.',
-    c7Label: 'الذاكرة', c7Title: 'اترك سجلًا واضحًا.',
-    c7Body: 'يساعدك سجل العمليات وعرض «ما الذي تغير» على تتبع العمل. تبدأ القواعد معطّلة، وتقترح فقط قرارات لاحقة لمراجعتها بنفسك.',
-    c7Alt: 'يتذكر السجل ما تغير، وتكون قواعد الاقتراح معطلة افتراضيًا.',
-    c8Label: 'الفجر', c8Title: 'مساحة لفصل جديد.',
-    c8Body: 'قرص أخف. وأشياء تستحق البقاء. ومساحة إضافية لتبدأ من جديد.',
-    c8Alt: 'تضيء الغابة الورقية حين يصل الحارس إلى الفجر ومعه قرص أخف.',
-    watchFull: 'شاهد الحكاية كاملة', filmEyebrow: 'خذ لحظة لمشاهدة الحكاية',
-    filmDetail: '٩٠ ثانية. تسعة فصول. موسيقى أصلية وقليل من ضوء النعناع.',
-    player: 'القرص الثقيل، فيلم Reclaim كاملًا باللغة الإنجليزية ومدته ٩٠ ثانية',
-    filmLanguage: 'نصوص على الشاشة بالإنجليزية · موسيقى · بلا حوار صوتي',
-    videoFallback: 'لا يستطيع متصفحك تشغيل هذا الفيديو.', downloadFilm: 'تنزيل الفيلم',
-    closingEyebrow: 'مساحتك. قرارك.', closingTitle: 'افسح مساحة لما يهمك.',
-    preview: 'استكشف المعاينة التفاعلية', caseStudy: 'شاهد المشروع في معرض الأعمال',
-    previewNote: 'تستخدم معاينة المتصفح ملفات تجريبية. أما تطبيق سطح المكتب فيعمل مع قرصك.',
-    backTop: 'عد إلى البداية ↑'
+  const arabic = new URLSearchParams(location.search).get('lang') === 'ar';
+  const copy = arabic ? {
+    skip: 'تجاوز الفيلم', portfolioLabel: 'مشروع Reclaim في معرض الأعمال', navigation: 'التنقل في الفيلم',
+    title: 'القرص الثقيل — فيلم Reclaim', filmLabel: 'فيلم Reclaim كاملًا، مدته ٩٠ ثانية',
+    filmName: 'القرص الثقيل', start: 'مرّر الصفحة لتحريك الفيلم',
+    watch: 'شاهد مع الصوت', scrollMode: 'تحكّم بالتمرير',
+    scrollHint: 'مرّر لأسفل للتقدم، ولأعلى للرجوع.', nativeHint: 'شغّل الفيلم كاملًا مع الصوت.',
+    loading: 'جارٍ تحميل الفيلم…', failed: 'تعذّر تحميل نسخة التمرير. اختر «شاهد مع الصوت» لفتح الفيلم الأصلي.',
+    nativeFailed: 'تعذّر تحميل الفيلم. يمكنك فتح النسخة الأصلية من رابط التنزيل أدناه.',
+    position: 'موضع الفيلم', openFilm: 'افتح الفيلم', endTitle: 'مساحة لفصل جديد.',
+    endBody: 'اعرف ما يملأ قرصك. وقرر ما يستحق البقاء.', preview: 'استكشف Reclaim',
+    portfolio: 'المشروع في معرض الأعمال ↗', restart: 'عد إلى البداية ↑',
+    previewNote: 'تستخدم معاينة المتصفح ملفات تجريبية.', download: 'نزّل الفيلم الأصلي · 1080p / 60 fps'
+  } : {
+    watch: 'Watch with sound', scrollMode: 'Use scroll controls',
+    scrollHint: 'Scroll down to advance. Scroll up to rewind.', nativeHint: 'Play the complete film with sound.',
+    loading: 'Loading film…', failed: 'The scroll version could not load. Choose “Watch with sound” for the original film.',
+    nativeFailed: 'The film could not load. You can open the original using the download link below.'
   };
 
-  const isArabic = new URLSearchParams(window.location.search).get('lang') === 'ar';
-  if (isArabic) {
+  if (arabic) {
     document.documentElement.lang = 'ar';
     document.documentElement.dir = 'rtl';
-    document.title = 'Reclaim — القرص الثقيل';
-    document.querySelectorAll('[data-copy]').forEach((element) => {
-      const text = translations[element.dataset.copy];
-      if (text) element.textContent = text;
-    });
-    document.querySelectorAll('[data-label]').forEach((element) => {
-      const text = translations[element.dataset.label];
-      if (text) element.setAttribute('aria-label', text);
-    });
-    document.querySelectorAll('[data-alt]').forEach((element) => {
-      const text = translations[element.dataset.alt];
-      if (text) element.alt = text;
-    });
-    document.querySelectorAll('[data-portfolio]').forEach((element) => {
-      element.href = '../ar/work/reclaim';
-    });
-    const switchLink = document.querySelector('[data-language]');
-    switchLink.textContent = 'English';
-    switchLink.lang = 'en';
-    switchLink.hreflang = 'en';
-    switchLink.href = '?lang=en';
-    document.querySelector('.duration').textContent = '٩٠ ث';
+    document.title = 'Reclaim — تحكّم في الفيلم بالتمرير';
+    for (const element of document.querySelectorAll('[data-copy]')) {
+      if (copy[element.dataset.copy]) element.textContent = copy[element.dataset.copy];
+    }
+    for (const element of document.querySelectorAll('[data-label]')) {
+      if (copy[element.dataset.label]) element.setAttribute('aria-label', copy[element.dataset.label]);
+    }
+    for (const link of document.querySelectorAll('[data-portfolio]')) link.href = '../ar/work/reclaim';
+    const language = document.querySelector('#language-link');
+    language.textContent = 'English';
+    language.href = '?lang=en';
+    language.lang = language.hreflang = 'en';
   }
 
-  const story = document.querySelector('.story');
-  const chapters = Array.from(document.querySelectorAll('[data-chapter]'));
-  const images = Array.from(document.querySelectorAll('.scene-image'));
-  const number = document.querySelector('[data-page-number]');
-  const hero = document.querySelector('.hero');
-  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let currentChapter = -1;
+  const track = document.querySelector('.film-track');
+  const stage = document.querySelector('.film-stage');
+  const film = document.querySelector('#film');
+  const toggle = document.querySelector('#mode-toggle');
+  const range = document.querySelector('#film-position');
+  const rangeWrap = document.querySelector('.scrub-control');
+  const cue = document.querySelector('.opening-cue');
+  const status = document.querySelector('#film-status');
+  const instruction = document.querySelector('#instruction');
+  const clock = document.querySelector('#film-time');
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const frameDuration = 1 / 30;
+  let scrolling = false;
+  let target = 0;
+  let trackStart = 0;
+  let travel = 18000;
   let scheduled = false;
+  let restoreTime = null;
+  let metadataReady = false;
+  let initialized = false;
+  let seekPending = false;
+  let modeVersion = 0;
 
-  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
+  const duration = () => Number.isFinite(film.duration) ? film.duration : 90;
+  const lastFrame = () => Math.max(0, duration() - frameDuration);
+  const timecode = (time) => `${Math.floor(time / 60)}:${String(Math.floor(time % 60)).padStart(2, '0')}`;
 
-  function update() {
-    scheduled = false;
-    if (motionQuery.matches) return;
-    const viewport = window.innerHeight;
-    const small = window.innerWidth <= 700;
-    const focalPoint = viewport * (small ? 0.70 : 0.50);
-    let nearest = 0;
-    let closestDistance = Infinity;
-    let local = 0;
+  function updateReadout(time) {
+    clock.textContent = timecode(time);
+    range.max = String(lastFrame());
+    range.value = String(time);
+    range.style.setProperty('--position', `${time / duration() * 100}%`);
+    range.setAttribute('aria-valuetext', arabic ? `${timecode(time)} من 1:30` : `${timecode(time)} of 1:30`);
+  }
 
-    chapters.forEach((chapter, index) => {
-      const bounds = chapter.getBoundingClientRect();
-      const centre = bounds.top + bounds.height / 2;
-      const distance = Math.abs(centre - focalPoint);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        nearest = index;
-        local = clamp((focalPoint - centre) / (bounds.height / 2), -1, 1);
-      }
-    });
+  function measure() {
+    // A fixed document distance avoids mobile browser-chrome changes shifting the film.
+    track.style.setProperty('--scroll-distance', '18000px');
+    trackStart = track.getBoundingClientRect().top + window.scrollY;
+    travel = Math.max(1, track.offsetHeight - stage.offsetHeight);
+  }
 
-    if (nearest !== currentChapter) {
-      images.forEach((image, index) => {
-        image.classList.toggle('is-active', index === nearest);
-        if (Math.abs(index - nearest) <= 1) image.loading = 'eager';
-      });
-      number.textContent = String(nearest + 1).padStart(2, '0');
-      currentChapter = nearest;
+  function seekLatest() {
+    // Only one seek at a time. The next seek always uses the newest scroll position.
+    if (!scrolling || !metadataReady || film.seeking || seekPending) return;
+    if (Math.abs(film.currentTime - target) >= frameDuration / 2) {
+      seekPending = true;
+      film.currentTime = target;
     }
-    story.style.setProperty('--local-progress', local.toFixed(4));
-    const storyBounds = story.getBoundingClientRect();
-    const total = clamp(-storyBounds.top / Math.max(1, storyBounds.height - viewport), 0, 1);
-    story.style.setProperty('--story-progress', total.toFixed(4));
-    const heroBounds = hero.getBoundingClientRect();
-    hero.style.setProperty('--hero-progress', clamp(-heroBounds.top / viewport, 0, 1).toFixed(4));
+  }
+
+  function updateFromScroll() {
+    scheduled = false;
+    if (!scrolling) return;
+    const position = clamp((window.scrollY - trackStart) / travel, 0, 1) * lastFrame();
+    target = Math.round(position / frameDuration) * frameDuration;
+    updateReadout(target);
+    cue.hidden = target > 0.3;
+    seekLatest();
   }
 
   function schedule() {
-    if (!scheduled && !motionQuery.matches) {
+    if (!scheduled && scrolling) {
       scheduled = true;
-      window.requestAnimationFrame(update);
+      requestAnimationFrame(updateFromScroll);
     }
   }
 
-  function setMotionMode() {
-    story.classList.toggle('is-enhanced', !motionQuery.matches);
-    if (motionQuery.matches) {
-      story.style.removeProperty('--local-progress');
-      hero.style.removeProperty('--hero-progress');
+  function useMode(scroll, play = false) {
+    const firstMount = !initialized;
+    initialized = true;
+    const keepTime = scrolling ? target : restoreTime ?? film.currentTime ?? 0;
+    modeVersion += 1;
+    seekPending = false;
+    film.pause();
+    scrolling = scroll;
+    scheduled = false;
+    metadataReady = false;
+    document.documentElement.classList.toggle('scroll-mode', scroll);
+    film.controls = !scroll;
+    film.muted = scroll;
+    film.preload = scroll ? 'auto' : 'metadata';
+    rangeWrap.hidden = !scroll;
+    toggle.textContent = scroll ? copy.watch : copy.scrollMode;
+    instruction.textContent = scroll ? copy.scrollHint : copy.nativeHint;
+    cue.hidden = !scroll || keepTime > 0.3;
+    status.textContent = copy.loading;
+    restoreTime = scroll ? null : keepTime;
+    film.src = scroll ? film.dataset.scrollSrc : film.dataset.fullSrc;
+    film.load();
+    measure();
+    if (scroll) {
+      if (!firstMount) window.scrollTo({ top: trackStart + clamp(keepTime / lastFrame(), 0, 1) * travel, behavior: 'instant' });
+      updateFromScroll();
     } else {
-      schedule();
+      if (!firstMount) window.scrollTo({ top: trackStart, behavior: 'instant' });
+      updateReadout(keepTime);
     }
+    if (play) film.play().catch(() => { /* Native play remains available if the browser requires it. */ });
   }
 
-  setMotionMode();
+  film.addEventListener('loadedmetadata', () => {
+    metadataReady = true;
+    if (scrolling) updateFromScroll();
+    else if (restoreTime !== null) {
+      film.currentTime = clamp(restoreTime, 0, lastFrame());
+      restoreTime = null;
+    }
+  });
+  film.addEventListener('loadeddata', () => { status.textContent = ''; seekLatest(); });
+  film.addEventListener('canplay', () => { status.textContent = ''; seekLatest(); });
+  film.addEventListener('seeked', () => {
+    // Decoding completes before presentation. Give the paused frame a paint before
+    // draining the latest target, including targets received during rapid reversals.
+    const version = modeVersion;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (version !== modeVersion) return;
+      seekPending = false;
+      seekLatest();
+    }));
+  });
+  film.addEventListener('timeupdate', () => { if (!scrolling) updateReadout(film.currentTime); });
+  film.addEventListener('error', () => {
+    status.textContent = scrolling ? copy.failed : copy.nativeFailed;
+    cue.hidden = true;
+  });
+  film.addEventListener('play', () => { if (scrolling) film.pause(); });
+  toggle.addEventListener('click', () => useMode(!scrolling, scrolling));
+  range.addEventListener('input', () => {
+    if (!scrolling) return;
+    window.scrollTo({ top: trackStart + Number(range.value) / lastFrame() * travel, behavior: 'instant' });
+    updateFromScroll();
+  });
+  document.querySelector('#restart').addEventListener('click', () => {
+    if (!scrolling) { restoreTime = null; film.pause(); film.currentTime = 0; updateReadout(0); }
+  });
   window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule, { passive: true });
-  if (motionQuery.addEventListener) motionQuery.addEventListener('change', setMotionMode);
-  else motionQuery.addListener(setMotionMode);
+  window.addEventListener('resize', () => { measure(); schedule(); }, { passive: true });
+  window.addEventListener('pageshow', () => { measure(); schedule(); });
+  motion.addEventListener('change', () => useMode(!motion.matches));
+  toggle.disabled = false;
+  toggle.hidden = false;
+  useMode(!motion.matches);
 })();

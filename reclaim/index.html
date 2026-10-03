@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#101820" />
-    <meta name="description" content="Reclaim, told as a dark paper story. Follow a little mint light through a heavy drive, then watch the complete 90-second film." />
-    <title>Reclaim — The Heavy Drive</title>
+    <meta name="theme-color" content="#091116" />
+    <meta name="description" content="Scroll through the complete Reclaim film. Move down to advance the story and up to rewind." />
+    <title>Reclaim — Scroll the film</title>
     <link rel="canonical" href="https://mohamed3042.github.io/flagship-portfolio/reclaim/" />
     <link rel="alternate" hreflang="en" href="https://mohamed3042.github.io/flagship-portfolio/reclaim/" />
     <link rel="alternate" hreflang="ar" href="https://mohamed3042.github.io/flagship-portfolio/reclaim/?lang=ar" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Reclaim — The Heavy Drive" />
-    <meta property="og:description" content="A little light. A lighter drive. Explore Reclaim's nine-chapter paper story and watch the complete 90-second film." />
+    <meta property="og:title" content="Reclaim — Scroll the film" />
+    <meta property="og:description" content="Your scroll moves the film. Follow the complete 90-second paper tale forwards and backwards." />
     <meta property="og:url" content="https://mohamed3042.github.io/flagship-portfolio/reclaim/" />
     <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/reclaim/assets/hero.webp" />
     <meta property="og:image:width" content="1920" />
@@ -19,122 +19,57 @@
     <meta property="og:image:alt" content="The Heavy Drive opens inside a layered paper storybook." />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/icon.png" />
-    <link rel="preload" href="fonts/IMFellEnglish-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="fonts/Inter-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="styles.css" />
-    <script defer src="story.js"></script>
+    <link rel="stylesheet" href="styles.css?v=scroll-film-2" />
+    <script defer src="story.js?v=scroll-film-2"></script>
   </head>
   <body>
-    <a class="skip-link" href="#main" data-copy="skip">Skip to the story</a>
-    <header class="site-header">
-      <a class="brand" href="#main" aria-label="Reclaim home" data-label="home"><img src="assets/icon.png" width="34" height="34" alt="" /><span>Reclaim</span></a>
-      <nav class="top-nav" aria-label="Main navigation" data-label="nav">
-        <a class="portfolio-link" href="../en/work/reclaim" data-portfolio data-copy="portfolio">Portfolio</a>
-        <a class="language-link" href="?lang=ar" lang="ar" hreflang="ar" data-language>العربية</a>
-      </nav>
-    </header>
-
-    <main id="main">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-haze" aria-hidden="true"></div>
-        <div class="hero-copy">
-          <p class="eyebrow" data-copy="eyebrow">A story of space, and what matters</p>
-          <h1 id="hero-title"><span data-copy="titleOne">A little light.</span><br /><em data-copy="titleTwo">A lighter drive.</em></h1>
-          <p class="hero-description" data-copy="intro">See what fills your disk. Decide what deserves to stay. Make room with Reclaim.</p>
-          <div class="hero-actions">
-            <a class="film-link" href="#film"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="m10 8 6 4-6 4Z" /></svg><span data-copy="watch">Watch the film</span><span class="duration">90s</span></a>
-            <a class="text-link" href="#story"><span data-copy="read">Turn the pages</span><span aria-hidden="true">↓</span></a>
-          </div>
-        </div>
-        <figure class="hero-book" aria-label="An open paper storybook in a dark forest" data-label="heroArt">
-          <div class="book-edge" aria-hidden="true"></div>
-          <img class="hero-art" src="assets/hero.webp" width="1920" height="1080" fetchpriority="high" alt="The Heavy Drive opens inside a layered paper storybook." data-alt="heroAlt" />
-          <div class="book-ribbon" aria-hidden="true"></div>
-          <figcaption><span data-copy="filmTitle">The Heavy Drive</span><span data-copy="filmFormat">A paper tale in nine chapters</span></figcaption>
-        </figure>
-        <div class="hero-bottom"><span data-copy="scroll">Scroll to follow the light</span><span class="scroll-line" aria-hidden="true"></span><span data-copy="chapterCount">Nine chapters · one lighter drive</span></div>
-      </section>
-
-      <section class="story" id="story" aria-label="The nine chapters of Reclaim" data-label="story">
-        <div class="story-stage" aria-hidden="true">
-          <div class="stage-aura"></div>
-          <div class="stage-mist stage-mist-back"></div>
-          <div class="story-book">
-            <div class="paper-stack"></div>
-            <div class="scene-images">
-              <img class="scene-image is-active" src="assets/prologue.webp" width="1920" height="1080" alt="" />
-              <img class="scene-image" src="assets/heavy.webp" width="1920" height="1080" alt="" loading="lazy" />
-              <img class="scene-image" src="assets/lantern.webp" width="1920" height="1080" alt="" loading="lazy" />
-              <img class="scene-image" src="assets/ledger.webp" width="1920" height="1080" alt="" loading="lazy" />
-              <img class="scene-image" src="assets/heaviest.webp" width="1920" height="1080" alt="" loading="lazy" />
-              <img class="scene-image" src="assets/paths.webp" width="1920" height="1080" alt="" loading="lazy" />
-              <img class="scene-image" src="assets/seal.webp" width="1920" height="1080" alt="" loading="lazy" />
-              <img class="scene-image" src="assets/memory.webp" width="1920" height="1080" alt="" loading="lazy" />
-              <img class="scene-image" src="assets/dawn.webp" width="1920" height="1080" alt="" loading="lazy" />
+    <a class="skip-link" href="#after-film" data-copy="skip">Skip the film</a>
+    <main>
+      <section class="film-track" id="story" aria-labelledby="film-title">
+        <div class="film-stage">
+          <header class="film-header">
+            <a class="brand" href="../en/work/reclaim" data-portfolio aria-label="Reclaim portfolio page" data-label="portfolioLabel"><img src="assets/icon.png" width="30" height="30" alt="" /><span>Reclaim</span></a>
+            <nav aria-label="Film navigation" data-label="navigation">
+              <button id="mode-toggle" type="button" disabled hidden data-copy="watch">Watch with sound</button>
+              <a href="?lang=ar" lang="ar" hreflang="ar" id="language-link">العربية</a>
+            </nav>
+          </header>
+          <div class="film-picture">
+            <h1 id="film-title" class="sr-only" data-copy="title">The Heavy Drive — a Reclaim film</h1>
+            <video id="film" controls playsinline preload="none" poster="assets/prologue.webp" width="1920" height="1080" src="assets/reclaim-tale.mp4" data-scroll-src="assets/reclaim-scroll.mp4" data-full-src="assets/reclaim-tale.mp4" aria-label="The complete 90-second Reclaim film" data-label="filmLabel">
+              <a href="assets/reclaim-tale.mp4" data-copy="openFilm">Open the film</a>
+            </video>
+            <div class="opening-cue" hidden aria-hidden="true">
+              <span class="opening-title" data-copy="filmName">The Heavy Drive</span>
+              <span class="opening-instruction" data-copy="start">Scroll to move the film</span>
+              <span class="opening-arrow">↓</span>
             </div>
           </div>
-          <svg class="paper-branch paper-branch-left" viewBox="0 0 250 660" preserveAspectRatio="xMinYMax meet"><path d="M0 660V0l37 66-9 91 37-47-19 105 54-73-31 111 88-60-67 87 101-15-86 53 116 26-99 16 92 67-102-31 76 83-95-53 20 83-52-70 3 119 57 86Z" /><path d="m6 508 46-92-13 92 74-22-70 43 89 49-91-20 22 102H0Z" /></svg>
-          <svg class="paper-branch paper-branch-right" viewBox="0 0 250 660" preserveAspectRatio="xMinYMax meet"><path d="M0 660V0l37 66-9 91 37-47-19 105 54-73-31 111 88-60-67 87 101-15-86 53 116 26-99 16 92 67-102-31 76 83-95-53 20 83-52-70 3 119 57 86Z" /></svg>
-          <div class="stage-mist stage-mist-front"></div>
-          <svg class="paper-lantern" viewBox="0 0 90 145"><path class="lantern-handle" d="M31 30V17a14 14 0 0 1 28 0v13" /><path class="lantern-frame" d="m19 31 26-11 26 11-6 16 9 62-29 18-29-18 9-62Z" /><path class="lantern-window" d="m31 48 14-6 14 6 5 54-19 12-19-12Z" /><path class="lantern-base" d="m14 112 31 18 31-18-5 18-26 12-26-12Z" /></svg>
-          <div class="stage-caption"><span data-copy="filmTitle">The Heavy Drive</span><span class="page-marker"><span data-page-number>01</span><span class="page-marker-divider">/</span>09</span></div>
-        </div>
-
-        <div class="chapters">
-          <article class="chapter" id="prologue" data-chapter="0">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">01</span><span data-copy="c0Label">Prologue</span></p><h2 data-copy="c0Title">A drive can carry a whole world.</h2><p data-copy="c0Body">Projects, pictures, little things kept for later. Until there is no room left for what comes next.</p></div>
-            <img class="chapter-fallback" src="assets/prologue.webp" width="1920" height="1080" alt="A paper keeper opens the story of a crowded drive." data-alt="c0Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="heavy" data-chapter="1">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">02</span><span data-copy="c1Label">The weight</span></p><h2 data-copy="c1Title">First, understand the weight.</h2><p data-copy="c1Body">A full disk is a question before it is a task. Reclaim helps you see what is taking up space.</p></div>
-            <img class="chapter-fallback" src="assets/heavy.webp" width="1920" height="1080" alt="The keeper carries a heavy drive through the paper forest." data-alt="c1Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="lantern" data-chapter="2">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">03</span><span data-copy="c2Label">The lantern</span></p><h2 data-copy="c2Title">A little light sees further.</h2><p data-copy="c2Body">On Windows, an administrator scan can read the MFT. A folder walk is there when that route is unavailable.</p></div>
-            <img class="chapter-fallback" src="assets/lantern.webp" width="1920" height="1080" alt="A mint lantern reveals the contents of the drive." data-alt="c2Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="ledger" data-chapter="3">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">04</span><span data-copy="c3Label">The ledger</span></p><h2 data-copy="c3Title">Read the drive's ledger.</h2><p data-copy="c3Body">A clearer view of your files and folders gives every decision a place to begin.</p></div>
-            <img class="chapter-fallback" src="assets/ledger.webp" width="1920" height="1080" alt="The paper ledger reveals a map of the drive's files." data-alt="c3Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="heaviest" data-chapter="4">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">05</span><span data-copy="c4Label">The heaviest things</span></p><h2 data-copy="c4Title">Find the heaviest things.</h2><p data-copy="c4Body">See the biggest files anywhere on the drive, or browse the folder tree. Reveal a file in its folder to see where it belongs.</p></div>
-            <img class="chapter-fallback" src="assets/heaviest.webp" width="1920" height="1080" alt="The keeper finds the biggest files and browses folders." data-alt="c4Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="paths" data-chapter="5">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">06</span><span data-copy="c5Label">The three paths</span></p><h2 data-copy="c5Title">Keep the things that matter.</h2><p data-copy="c5Body">Verified duplicates keep a keeper. Rebuildable clutter leaves its sources intact. Old work is yours to review.</p><p class="scope-note" data-copy="windowsNote">Smart Cleaning is available on Windows.</p></div>
-            <img class="chapter-fallback" src="assets/paths.webp" width="1920" height="1080" alt="Three paper paths separate duplicates, rebuildable clutter, and old work for review." data-alt="c5Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="seal" data-chapter="6">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">07</span><span data-copy="c6Label">The seal</span></p><h2 data-copy="c6Title">A decision deserves a second look.</h2><p data-copy="c6Body">Review the plan before it is sealed. Reclaim checks again before cleaning and keeps files that have changed.</p><p class="scope-note" data-copy="deleteNote">Managed cleaning permanently removes the files you approve.</p></div>
-            <img class="chapter-fallback" src="assets/seal.webp" width="1920" height="1080" alt="The keeper reviews and seals a cleaning plan before it is checked again." data-alt="c6Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="memory" data-chapter="7">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">08</span><span data-copy="c7Label">The memory</span></p><h2 data-copy="c7Title">Leave a record, not a mystery.</h2><p data-copy="c7Body">The journal and What changed view help you retrace the work. Rules start off and only suggest future decisions for your review.</p></div>
-            <img class="chapter-fallback" src="assets/memory.webp" width="1920" height="1080" alt="A journal remembers what changed, with suggestion rules turned off by default." data-alt="c7Alt" loading="lazy" />
-          </article>
-          <article class="chapter" id="dawn" data-chapter="8">
-            <div class="chapter-copy"><p class="chapter-label"><span class="chapter-number">09</span><span data-copy="c8Label">The dawn</span></p><h2 data-copy="c8Title">Room for the next chapter.</h2><p data-copy="c8Body">A lighter drive. The things worth keeping. And a little more space to begin again.</p><a class="text-link" href="#film"><span data-copy="watchFull">Watch the complete tale</span><span aria-hidden="true">↓</span></a></div>
-            <img class="chapter-fallback" src="assets/dawn.webp" width="1920" height="1080" alt="The paper forest brightens as the keeper reaches dawn with a lighter drive." data-alt="c8Alt" loading="lazy" />
-          </article>
+          <footer class="film-controls">
+            <div class="film-information">
+              <p id="instruction" data-copy="nativeHint">Play the complete film with sound.</p>
+              <span class="timecode" dir="ltr"><output id="film-time">0:00</output><span aria-hidden="true"> / </span><span>1:30</span></span>
+            </div>
+            <div class="scrub-control" hidden>
+              <label for="film-position" class="sr-only" data-copy="position">Film position</label>
+              <input id="film-position" type="range" min="0" max="90" step="0.033333" value="0" aria-valuetext="0:00 of 1:30" />
+            </div>
+            <p id="film-status" role="status" aria-live="polite"></p>
+          </footer>
         </div>
       </section>
-
-      <section class="film-section" id="film" aria-labelledby="film-heading">
-        <div class="film-heading"><div><p class="eyebrow" data-copy="filmEyebrow">Settle in for a little while</p><h2 id="film-heading" data-copy="filmTitle">The Heavy Drive</h2></div><p data-copy="filmDetail">90 seconds. Nine chapters.<br />An original score, and a little mint light.</p></div>
-        <video class="film-player" controls playsinline preload="metadata" poster="assets/hero.webp" width="1920" height="1080" aria-label="The Heavy Drive, the complete 90-second Reclaim film in English" data-label="player"><source src="assets/reclaim-tale.mp4" type="video/mp4" /><p data-copy="videoFallback">Your browser cannot play this video.</p><a href="assets/reclaim-tale.mp4" data-copy="downloadFilm">Open the film</a></video>
-        <div class="film-footnote"><p data-copy="filmLanguage">English on-screen narration · music · no spoken dialogue</p><a class="text-link" href="assets/reclaim-tale.mp4" download><span data-copy="downloadFilm">Download the film</span><span aria-hidden="true">↙</span></a></div>
-      </section>
-
-      <section class="closing" aria-labelledby="closing-title">
-        <img src="assets/icon.png" width="64" height="64" alt="" />
-        <p class="eyebrow" data-copy="closingEyebrow">Your space. Your decision.</p>
-        <h2 id="closing-title" data-copy="closingTitle">Make room for what matters.</h2>
-        <div class="closing-actions"><a class="primary-link" href="https://mohamed3042.github.io/reclaim-demo/" data-copy="preview">Explore the interactive preview</a><a class="text-link" href="../en/work/reclaim" data-portfolio><span data-copy="caseStudy">View the portfolio case study</span><span aria-hidden="true">↗</span></a></div>
-        <p class="closing-note" data-copy="previewNote">The browser preview uses sample files. The desktop app works with your drive.</p>
+      <section class="after-film" id="after-film" aria-labelledby="end-title">
+        <img src="assets/icon.png" width="52" height="52" alt="" />
+        <h2 id="end-title" data-copy="endTitle">Room for the next chapter.</h2>
+        <p data-copy="endBody">See what fills your drive. Decide what deserves to stay.</p>
+        <div class="end-actions">
+          <a class="primary-link" href="https://mohamed3042.github.io/reclaim-demo/" data-copy="preview">Explore Reclaim</a>
+          <a href="../en/work/reclaim" data-portfolio data-copy="portfolio">Portfolio case study ↗</a>
+          <a href="#story" id="restart" data-copy="restart">Back to the beginning ↑</a>
+        </div>
+        <p class="small" data-copy="previewNote">The browser preview uses sample files.</p>
+        <a class="download" href="assets/reclaim-tale.mp4" download data-copy="download">Download the original film · 1080p / 60 fps</a>
       </section>
     </main>
-
-    <footer class="site-footer"><span>Reclaim <span aria-hidden="true">·</span> <span data-copy="filmTitle">The Heavy Drive</span></span><a href="#main" data-copy="backTop">Back to the beginning ↑</a></footer>
   </body>
 </html>
