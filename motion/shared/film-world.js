@@ -81,6 +81,7 @@ export function createFilmWorld(data, scope = document) {
   for (const link of all('[data-gallery-link]')) link.href = new URL(data.gallery?.[lang] || data.gallery?.en || '../../',location.href).href;
   const setPoster = chapter => {
     poster.src = posterFor(chapter);
+    stage.style.setProperty('--film-ar', String(data.profiles[profile].width / data.profiles[profile].height)); // film.css: cover, capped by --film-overscan
     poster.alt = tr(chapter.title);
     poster.width = data.profiles[profile].width;
     poster.height = data.profiles[profile].height;
@@ -352,6 +353,18 @@ export function createFilmWorld(data, scope = document) {
     dialog.addEventListener('click',event=>{if(event.target===dialog){const b=dialog.getBoundingClientRect();if(event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)dialog.close();}});
   }
   addEventListener('scroll',schedule,{passive:true});addEventListener('resize',resize,{passive:true});
+  // Cinema chrome: header and dock clear the frame while the film is scrolled, then fade back after a pause.
+  // They stay while a menu or dialog is open, while the scrubber is held, and while keyboard focus is inside them.
+  let chromeTimer=0,holding=false;
+  const showChrome=()=>{clearTimeout(chromeTimer);root.classList.remove('film-chrome-hidden');};
+  slider.addEventListener('pointerdown',()=>{holding=true;showChrome();});
+  addEventListener('pointerup',()=>{holding=false;},{passive:true});
+  addEventListener('scroll',()=>{
+    if(!filmMode||!started||holding||document.querySelector('dialog[open],.film-header details[open],.film-controls details[open],.film-header :focus-visible,.film-controls :focus-visible'))return;
+    root.classList.add('film-chrome-hidden');clearTimeout(chromeTimer);chromeTimer=setTimeout(showChrome,1400);
+  },{passive:true});
+  addEventListener('pointermove',event=>{if(event.pointerType==='mouse'&&Math.abs(event.movementX)+Math.abs(event.movementY)>3)showChrome();},{passive:true}); // still-mouse moves fired by scrolling don't count
+  for(const type of ['pointerdown','keydown','focusin'])addEventListener(type,showChrome,{passive:true});
   addEventListener('hashchange',()=>{if(redirectLegacyHash())return;const time=hashTime();if(time!==null)go(time,false);});
   reduced.addEventListener('change',()=>changeMode(!reduced.matches,true));
   addEventListener('pagehide',()=>{watchVideo?.pause();for(const job of jobs.values())job.controller.abort();});
