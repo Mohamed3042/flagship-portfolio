@@ -1,0 +1,129 @@
+{
+  "sourceFile": "ess-ai-update.mp4",
+  "sourceBytes": 67548040,
+  "sourceSHA256": "004f3f7e4a69602636d5b148eb2cc964044d735cb976ba3c7239b64c50fae62f",
+  "sourceDurationSeconds": 90.005,
+  "sourceDimensions": "1920x1080",
+  "sourceFPS": 60,
+  "description": "Owner-provided AI Intelligence update-preview film; concept scenes and sample data",
+  "reel": {
+    "clips": 18,
+    "secondsPerClip": 5,
+    "dimensions": "1280x720",
+    "fps": 30,
+    "audio": false,
+    "maxLoadedClips": 2
+  },
+  "assets": [
+    {
+      "file": "ess-ai-update.mp4",
+      "bytes": 37023013,
+      "sha256": "d00475fd5f6a739c6bab63fe152be3d7986550ae9b36fdb4bb1c0f6b44471f0c"
+    },
+    {
+      "file": "poster.webp",
+      "bytes": 13520,
+      "sha256": "60072bd5166c0e9c6252beea0e13053dddfb9c57c736711ee16049f2fba050b3"
+    },
+    {
+      "file": "reel/shot-00.mp4",
+      "bytes": 629626,
+      "sha256": "44d66333026a77a06dfa12942b85a932f976dc656d48114f65b29131f8b8e3a0"
+    },
+    {
+      "file": "reel/shot-01.mp4",
+      "bytes": 1182287,
+      "sha256": "e2d2f3b26fe1f9c28163c7c97aefc92c07e091ec84312fa9ef77df28067bb262"
+    },
+    {
+      "file": "reel/shot-02.mp4",
+      "bytes": 938959,
+      "sha256": "703bd48224da9aa94243201b2d944a196edffcd6a784c2bcfb90f15a35488e2f"
+    },
+    {
+      "file": "reel/shot-03.mp4",
+      "bytes": 693611,
+      "sha256": "bbe374d7a25e4d3b7a2e708bc06141d98d552227b3074fdea3486115971464f5"
+    },
+    {
+      "file": "reel/shot-04.mp4",
+      "bytes": 699854,
+      "sha256": "6e57afcf1ceb529633db1b4b356a0960649db0d3009d2b1220ddc700d6c67127"
+    },
+    {
+      "file": "reel/shot-05.mp4",
+      "bytes": 841924,
+      "sha256": "42c89fe38cb7e2a29fa9c3676f3ca98e1d96117c15fcf300b938168d59bf4d9d"
+    },
+    {
+      "file": "reel/shot-06.mp4",
+      "bytes": 892505,
+      "sha256": "6f3cd84c881698d4cdb07612704d8daf0949d2538afabe94edd2de7294259cbe"
+    },
+    {
+      "file": "reel/shot-07.mp4",
+      "bytes": 819132,
+      "sha256": "30536880e2a2bf3126e86b3f8389a92551107d836e99d99a0a4ee1ed983bb2ee"
+    },
+    {
+      "file": "reel/shot-08.mp4",
+      "bytes": 1040004,
+      "sha256": "dae641227550114e54454aacd59f7dfd15e2722723474f985a39de17bf9eced9"
+    },
+    {
+      "file": "reel/shot-09.mp4",
+      "bytes": 738114,
+      "sha256": "e56857f18043af7e0d939d10cea6e10e9f839ee5e19d2e629634f357d3cb9aec"
+    },
+    {
+      "file": "reel/shot-10.mp4",
+      "bytes": 936825,
+      "sha256": "ac515cdc519ab932c8a0aad1c6bc7c5ba013fbfcd2b6e36df444b81435baf97e"
+    },
+    {
+      "file": "reel/shot-11.mp4",
+      "bytes": 1008454,
+      "sha256": "8cb94ae2e357d44a44d587f70556a4c758fecdbe3b1a45c77bd34642a58a4618"
+    },
+    {
+      "file": "reel/shot-12.mp4",
+      "bytes": 663773,
+      "sha256": "12b613f5fd47c21b62656c089e76af1bfdeafaa885683c8604c7225eba56b5d7"
+    },
+    {
+      "file": "reel/shot-13.mp4",
+      "bytes": 708071,
+      "sha256": "3a76d80cc9896948f8379df9682e18f64236407862c5a35b808dfc50c68a8122"
+    },
+    {
+      "file": "reel/shot-14.mp4",
+      "bytes": 1090149,
+      "sha256": "11953830191bf97cbb57ff440bab1013c96e220c76d7952dfd4002ca0f389e5a"
+    },
+    {
+      "file": "reel/shot-15.mp4",
+      "bytes": 974390,
+      "sha256": "dadd71445540037977de56a9ab94fc8d074932c7a97e6324543824f86b3bae81"
+    },
+    {
+      "file": "reel/shot-16.mp4",
+      "bytes": 990876,
+      "sha256": "23e011d8185cc032d3ad4650f2107396b48db70e4d8fc5a4cf2353e5d2173c1e"
+    },
+    {
+      "file": "reel/shot-17.mp4",
+      "bytes": 437480,
+      "sha256": "43c992b2253965b9ad480a6df305197b067dcb6cfcec8f5b205535056bdfd48a"
+    },
+    {
+      "file": "scenes-ar.vtt",
+      "bytes": 1437,
+      "sha256": "dc678c5490bb11b93682c8738f0cb59f80d9a6a20751a6a6ad9c38385fd6f0f6"
+    },
+    {
+      "file": "scenes-en.vtt",
+      "bytes": 995,
+      "sha256": "3a999367899bc61768cac5a58cbf32d322efe2fb22d64a42712104e4011ba4d3"
+    }
+  ]
+}
