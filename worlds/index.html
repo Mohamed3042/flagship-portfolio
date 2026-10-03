@@ -178,6 +178,7 @@
   @media (max-width:640px){ .filmo a.entry{ grid-template-columns:40px 1fr; } .filmo .arrow{ display:none; } }
 
   footer.disclosure{ max-width:900px; margin:0 auto; }
+.card.featured{border-color:#bfb3e552}.card.featured:first-child{grid-column:span 2}.card.featured .meta h2{font-size:clamp(24px,3vw,40px)}@media(max-width:650px){.card.featured:first-child{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -194,6 +195,7 @@
 </nav>
 
 <main class="lobby">
+<p style="padding-top:24px"><a href="../en/motion/" data-motion-home style="color:#bfb3e5"><span class="L en">Software in Motion ↗</span><span class="L ar">البرمجيات في حركة ↖</span></a></p>
   <header class="lede">
     <p class="marquee"><span class="bulbs" aria-hidden="true"></span><b><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></b><s><span class="L en">Fifth edition · 70 WAN shots</span><span class="L ar">الإصدار الخامس · ٧٠ لقطة WAN</span></s></p>
     <h1><span class="L en">The Worlds</span><span class="L ar">العوالم</span></h1>
@@ -202,36 +204,7 @@
   </header>
 
   <div class="grid">
-    <a class="card feature" href="../mk-business-os/" data-business-world style="--wc:#edb15d">
-      <span class="badge"><span class="L en">Scroll the film · MK Business OS</span><span class="L ar">حرّك الفيلم بالتمرير · MK Business OS</span></span>
-      <div class="art"><img src="../mk-business-os/media/poster.jpg" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
-      <div class="pal"><i style="background:#070c12"></i><i style="background:#17212b"></i><i style="background:#edb15d"></i><i style="background:#80d6ca"></i><i style="background:#edf1f3"></i></div>
-      <div class="meta"><h2><span class="L en">From signal to strategy.</span><span class="L ar">من الإشارة إلى الاستراتيجية.</span></h2><p><span class="L en">Eight worlds of business research. Edge-to-edge picture, saved view settings and a film controlled by your scroll.</span><span class="L ar">ثمانية عوالم للبحث التجاري. صورة تملأ الشاشة وإعدادات عرض محفوظة وفيلم يتحرك بتمريرك.</span></p><p class="spec"><span><i>01:48</i></span><span><span class="L en">8 worlds · illustrative workflows</span><span class="L ar">٨ عوالم · مسارات عمل توضيحية</span></span></p></div>
-    </a>
-    <!-- MK Educate film entry: public campaign media only. -->
-    <a class="card feature" href="../en/work/mk-educate" data-educate-world style="--wc:#E8B64A">
-      <span class="badge"><span class="L en">Scroll the film · MK Educate</span><span class="L ar">حرّك الفيلم بالتمرير · MK Educate</span></span>
-      <div class="art"><img src="../media/mk-educate/v2/poster-desktop.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
-      <div class="pal"><i style="background:#111B34"></i><i style="background:#24355B"></i><i style="background:#796AC7"></i><i style="background:#E8B64A"></i><i style="background:#F8F4EB"></i></div>
-      <div class="meta">
-        <h2><span class="L en">A little more room to teach.</span><span class="L ar">مساحة لكل درس يستحق.</span></h2>
-        <p><span class="L en">A longer story with a cleaner, reimagined teaching interface. Scroll the film forward and back, composed separately for desktop and phone.</span><span class="L ar">قصة أطول بواجهة تدريس مُعاد تصوّرها. حرّك الفيلم للأمام والخلف بالتمرير، بتكوين مخصّص لكل من الكمبيوتر والهاتف.</span></p>
-        <p class="spec"><span><i>01:00</i></span><span><span class="L en">reimagined interface · illustrative content</span><span class="L ar">واجهة مُعاد تصوّرها · محتوى توضيحي</span></span></p>
-      </div>
-    </a>
-    <!-- End MK Educate film entry. -->
-    <a class="card feature" href="../en/work/engineering-smart-system" data-ess-world style="--wc:#81ECD0">
-      <span class="badge"><span class="L en">90-second scroll film</span><span class="L ar">فيلم بالتمرير · ٩٠ ثانية</span></span>
-      <div class="art"><img src="../media/ess-ai/poster.webp" alt="" loading="eager" decoding="async"><div class="shade"></div></div>
-      <div class="pal"><i style="background:#071416"></i><i style="background:#0E2023"></i><i style="background:#81ECD0"></i><i style="background:#90C9E8"></i><i style="background:#E4C477"></i></div>
-      <div class="meta">
-        <p class="no">10 · ENGINEERING SMART SYSTEM</p>
-        <h2><span class="L en">AI prepares. People decide.</span><span class="L ar">الذكاء يجهّز والإنسان يقرّر.</span></h2>
-        <p><span class="L en">The AI Intelligence update is the film. Scroll through its nine floors, forward and back, with the picture filling the screen.</span><span class="L ar">تحديث الذكاء الاصطناعي هو الفيلم نفسه. مرّر عبر طوابقه التسعة، للأمام والخلف، والصورة تملأ الشاشة.</span></p>
-        <p class="spec"><span><i>9</i> <span class="L en">floors</span><span class="L ar">طوابق</span></span><span><i>1:30</i></span><span><span class="L en">concept film · sample data</span><span class="L ar">فيلم تصوّري · بيانات توضيحية</span></span></p>
-      </div>
-    </a>
-    <a class="card feature" href="cake-studio.html" style="--wc:#D9A38F">
+    <a class="card featured feature" href="cake-studio.html" style="--wc:#D9A38F">
       <span class="badge"><span class="L en">50 real WAN shots</span><span class="L ar">٥٠ لقطة WAN حقيقية</span></span>
       <div class="art">
         <img src="cake-studio/posters/CST-047.jpg" alt="" loading="eager" decoding="async">
@@ -246,7 +219,9 @@
       </div>
     </a>
 
-    <a class="card feature" href="disney.html" style="--wc:#F2BC3B">
+<a class="card featured" href="strings.html" style="--wc:#bfb3e5"><div class="art"><img src="../motion/previews/strings.webp" alt="" loading="lazy" width="800" height="450" style="width:100%;height:100%;object-fit:cover"></div><div class="meta"><span class="no"><span class="L en">SELECTED WORLD</span><span class="L ar">عالم مختار</span></span><h2><span class="L en">Strings</span><span class="L ar">الخيوط</span></h2><p><span class="L en">Pull one thread. Change the whole picture.</span><span class="L ar">اسحب خيطًا، تتغير الصورة كلها.</span></p><div class="spec"><span class="L en">Enter the world ↗</span><span class="L ar">ادخل العالم ↖</span></div></div></a>
+
+<a class="card featured feature" href="disney.html" style="--wc:#F2BC3B">
       <span class="badge"><span class="L en">20 real WAN shots</span><span class="L ar">٢٠ لقطة WAN حقيقية</span></span>
       <div class="art">
         <img src="disney2/posters/kf-19.jpg" alt="" loading="eager" decoding="async">
@@ -261,55 +236,9 @@
       </div>
     </a>
 
-    <a class="card" href="astronomy.html" style="--wc:#43D9D1">
-      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
-      <div class="art"><div class="a-astro"></div></div>
-      <div class="pal"><i style="background:#070B18"></i><i style="background:#43D9D1"></i><i style="background:#7667D8"></i><i style="background:#B88E3E"></i><i style="background:#E9A23B"></i></div>
-      <div class="meta">
-        <p class="no">01 · ASTRONOMY</p>
-        <h2><span class="L en">The Observatory</span><span class="L ar">المرصد</span></h2>
-        <p><span class="L en">A desert-ridge station finds order inside cosmic noise — and one decision no machine may make.</span><span class="L ar">محطة على حافة الصحراء تجد نظامًا داخل الضجيج الكوني — وقرارًا واحدًا لا يملكه أي جهاز.</span></p>
-        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
-      </div>
-    </a>
+<a class="card featured" href="academy.html" style="--wc:#bfb3e5"><div class="art"><img src="../motion/previews/academy.webp" alt="" loading="lazy" width="800" height="450" style="width:100%;height:100%;object-fit:cover"></div><div class="meta"><span class="no"><span class="L en">SELECTED WORLD</span><span class="L ar">عالم مختار</span></span><h2><span class="L en">Academy of Proven Spells</span><span class="L ar">أكاديمية التعاويذ المُثبتة</span></h2><p><span class="L en">Nothing is magic until it survives the proof.</span><span class="L ar">لا يصبح الشيء سحرًا حتى يجتاز البرهان.</span></p><div class="spec"><span class="L en">Enter the world ↗</span><span class="L ar">ادخل العالم ↖</span></div></div></a>
 
-    <a class="card" href="razer.html" style="--wc:#44D62C">
-      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
-      <div class="art"><div class="a-razer"></div></div>
-      <div class="pal"><i style="background:#000000"></i><i style="background:#44D62C"></i><i style="background:#101214"></i><i style="background:#00D9FF"></i><i style="background:#FF3344"></i></div>
-      <div class="meta">
-        <p class="no">02 · RAZER CHROMA</p>
-        <h2><span class="L en">System Ascension</span><span class="L ar">صعود المنظومة</span></h2>
-        <p><span class="L en">One keypress starts a controlled cascade: key, board, rig, room — halted by a red gate until a hand allows it.</span><span class="L ar">ضغطة واحدة تبدأ تتابعًا منضبطًا: زرّ، فلوحة، فجهاز، فغرفة — توقفه بوابة حمراء حتى تأذن يد.</span></p>
-        <p class="spec"><span><i>2</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
-      </div>
-    </a>
-
-    <a class="card" href="cod.html" style="--wc:#E5A13A">
-      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
-      <div class="art"><div class="a-cod"></div></div>
-      <div class="pal"><i style="background:#171A1C"></i><i style="background:#454938"></i><i style="background:#78D96B"></i><i style="background:#E5A13A"></i><i style="background:#D97843"></i></div>
-      <div class="meta">
-        <p class="no">04 · COD TACTICAL</p>
-        <h2><span class="L en">Operation Clockwork</span><span class="L ar">عملية عقارب الساعة</span></h2>
-        <p><span class="L en">02:00. A specialist team versus entropy itself — dead process, broken routing — resolved by dawn.</span><span class="L ar">الثانية فجرًا. فريق متخصص في مواجهة الفوضى نفسها — إجراءات ميتة ومسارات مقطوعة — حتى يحسمها الفجر.</span></p>
-        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
-      </div>
-    </a>
-
-    <a class="card" href="netflix.html" style="--wc:#D81F2A">
-      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
-      <div class="art"><div class="a-netflix"></div></div>
-      <div class="pal"><i style="background:#030303"></i><i style="background:#D81F2A"></i><i style="background:#EEE9DF"></i><i style="background:#D5A34B"></i><i style="background:#0a0a0a"></i></div>
-      <div class="meta">
-        <p class="no">05 · NETFLIX CINEMA</p>
-        <h2><span class="L en">The Anthology</span><span class="L ar">الأنطولوجيا</span></h2>
-        <p><span class="L en">A red filament powers a projection room; genre portals arrive — all frozen at one human release.</span><span class="L ar">فتيلٌ أحمر يوقظ غرفة عرض؛ بواباتُ أنواعٍ تتوالى — وتتجمّد كلها عند إذنِ إنسانٍ واحد.</span></p>
-        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
-      </div>
-    </a>
-
-    <a class="card" href="spotify.html" style="--wc:#1ED760">
+<a class="card featured" href="spotify.html" style="--wc:#1ED760">
       <span class="badge"><span class="L en">15 Cycles shots</span><span class="L ar">١٥ لقطة Cycles</span></span>
       <div class="art"><div class="a-spotify"></div></div>
       <div class="pal"><i style="background:#191414"></i><i style="background:#1ED760"></i><i style="background:#FF4FA3"></i><i style="background:#7B5CFF"></i><i style="background:#FF7A18"></i></div>
@@ -321,7 +250,85 @@
       </div>
     </a>
 
-    <a class="card" href="apple.html" style="--wc:#B9BBB8">
+<a class="card feature" href="../mk-business-os/" data-business-world style="--wc:#edb15d">
+      <span class="badge"><span class="L en">Scroll the film · MK Business OS</span><span class="L ar">حرّك الفيلم بالتمرير · MK Business OS</span></span>
+      <div class="art"><img src="../mk-business-os/media/poster.jpg" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="pal"><i style="background:#070c12"></i><i style="background:#17212b"></i><i style="background:#edb15d"></i><i style="background:#80d6ca"></i><i style="background:#edf1f3"></i></div>
+      <div class="meta"><h2><span class="L en">From signal to strategy.</span><span class="L ar">من الإشارة إلى الاستراتيجية.</span></h2><p><span class="L en">Eight worlds of business research. Edge-to-edge picture, saved view settings and a film controlled by your scroll.</span><span class="L ar">ثمانية عوالم للبحث التجاري. صورة تملأ الشاشة وإعدادات عرض محفوظة وفيلم يتحرك بتمريرك.</span></p><p class="spec"><span><i>01:48</i></span><span><span class="L en">8 worlds · illustrative workflows</span><span class="L ar">٨ عوالم · مسارات عمل توضيحية</span></span></p></div>
+    </a>
+
+<a class="card feature" href="../en/work/mk-educate" data-educate-world style="--wc:#E8B64A">
+      <span class="badge"><span class="L en">Scroll the film · MK Educate</span><span class="L ar">حرّك الفيلم بالتمرير · MK Educate</span></span>
+      <div class="art"><img src="../media/mk-educate/v2/poster-desktop.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="pal"><i style="background:#111B34"></i><i style="background:#24355B"></i><i style="background:#796AC7"></i><i style="background:#E8B64A"></i><i style="background:#F8F4EB"></i></div>
+      <div class="meta">
+        <h2><span class="L en">A little more room to teach.</span><span class="L ar">مساحة لكل درس يستحق.</span></h2>
+        <p><span class="L en">A longer story with a cleaner, reimagined teaching interface. Scroll the film forward and back, composed separately for desktop and phone.</span><span class="L ar">قصة أطول بواجهة تدريس مُعاد تصوّرها. حرّك الفيلم للأمام والخلف بالتمرير، بتكوين مخصّص لكل من الكمبيوتر والهاتف.</span></p>
+        <p class="spec"><span><i>01:00</i></span><span><span class="L en">reimagined interface · illustrative content</span><span class="L ar">واجهة مُعاد تصوّرها · محتوى توضيحي</span></span></p>
+      </div>
+    </a>
+
+<a class="card feature" href="../en/work/engineering-smart-system" data-ess-world style="--wc:#81ECD0">
+      <span class="badge"><span class="L en">90-second scroll film</span><span class="L ar">فيلم بالتمرير · ٩٠ ثانية</span></span>
+      <div class="art"><img src="../media/ess-ai/poster.webp" alt="" loading="eager" decoding="async"><div class="shade"></div></div>
+      <div class="pal"><i style="background:#071416"></i><i style="background:#0E2023"></i><i style="background:#81ECD0"></i><i style="background:#90C9E8"></i><i style="background:#E4C477"></i></div>
+      <div class="meta">
+        <p class="no">10 · ENGINEERING SMART SYSTEM</p>
+        <h2><span class="L en">AI prepares. People decide.</span><span class="L ar">الذكاء يجهّز والإنسان يقرّر.</span></h2>
+        <p><span class="L en">The AI Intelligence update is the film. Scroll through its nine floors, forward and back, with the picture filling the screen.</span><span class="L ar">تحديث الذكاء الاصطناعي هو الفيلم نفسه. مرّر عبر طوابقه التسعة، للأمام والخلف، والصورة تملأ الشاشة.</span></p>
+        <p class="spec"><span><i>9</i> <span class="L en">floors</span><span class="L ar">طوابق</span></span><span><i>1:30</i></span><span><span class="L en">concept film · sample data</span><span class="L ar">فيلم تصوّري · بيانات توضيحية</span></span></p>
+      </div>
+    </a>
+
+<a class="card" href="astronomy.html" style="--wc:#43D9D1">
+      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
+      <div class="art"><div class="a-astro"></div></div>
+      <div class="pal"><i style="background:#070B18"></i><i style="background:#43D9D1"></i><i style="background:#7667D8"></i><i style="background:#B88E3E"></i><i style="background:#E9A23B"></i></div>
+      <div class="meta">
+        <p class="no">01 · ASTRONOMY</p>
+        <h2><span class="L en">The Observatory</span><span class="L ar">المرصد</span></h2>
+        <p><span class="L en">A desert-ridge station finds order inside cosmic noise — and one decision no machine may make.</span><span class="L ar">محطة على حافة الصحراء تجد نظامًا داخل الضجيج الكوني — وقرارًا واحدًا لا يملكه أي جهاز.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
+      </div>
+    </a>
+
+<a class="card" href="razer.html" style="--wc:#44D62C">
+      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
+      <div class="art"><div class="a-razer"></div></div>
+      <div class="pal"><i style="background:#000000"></i><i style="background:#44D62C"></i><i style="background:#101214"></i><i style="background:#00D9FF"></i><i style="background:#FF3344"></i></div>
+      <div class="meta">
+        <p class="no">02 · RAZER CHROMA</p>
+        <h2><span class="L en">System Ascension</span><span class="L ar">صعود المنظومة</span></h2>
+        <p><span class="L en">One keypress starts a controlled cascade: key, board, rig, room — halted by a red gate until a hand allows it.</span><span class="L ar">ضغطة واحدة تبدأ تتابعًا منضبطًا: زرّ، فلوحة، فجهاز، فغرفة — توقفه بوابة حمراء حتى تأذن يد.</span></p>
+        <p class="spec"><span><i>2</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
+      </div>
+    </a>
+
+<a class="card" href="cod.html" style="--wc:#E5A13A">
+      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
+      <div class="art"><div class="a-cod"></div></div>
+      <div class="pal"><i style="background:#171A1C"></i><i style="background:#454938"></i><i style="background:#78D96B"></i><i style="background:#E5A13A"></i><i style="background:#D97843"></i></div>
+      <div class="meta">
+        <p class="no">04 · COD TACTICAL</p>
+        <h2><span class="L en">Operation Clockwork</span><span class="L ar">عملية عقارب الساعة</span></h2>
+        <p><span class="L en">02:00. A specialist team versus entropy itself — dead process, broken routing — resolved by dawn.</span><span class="L ar">الثانية فجرًا. فريق متخصص في مواجهة الفوضى نفسها — إجراءات ميتة ومسارات مقطوعة — حتى يحسمها الفجر.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
+      </div>
+    </a>
+
+<a class="card" href="netflix.html" style="--wc:#D81F2A">
+      <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
+      <div class="art"><div class="a-netflix"></div></div>
+      <div class="pal"><i style="background:#030303"></i><i style="background:#D81F2A"></i><i style="background:#EEE9DF"></i><i style="background:#D5A34B"></i><i style="background:#0a0a0a"></i></div>
+      <div class="meta">
+        <p class="no">05 · NETFLIX CINEMA</p>
+        <h2><span class="L en">The Anthology</span><span class="L ar">الأنطولوجيا</span></h2>
+        <p><span class="L en">A red filament powers a projection room; genre portals arrive — all frozen at one human release.</span><span class="L ar">فتيلٌ أحمر يوقظ غرفة عرض؛ بواباتُ أنواعٍ تتوالى — وتتجمّد كلها عند إذنِ إنسانٍ واحد.</span></p>
+        <p class="spec"><span><i>4</i> <span class="L en">live canvases</span><span class="L ar">لوحات حيّة</span></span><span><span class="L en">render</span><span class="L ar">العرض</span>: <i class="L en">code</i><i class="L ar">شيفرة</i></span></p>
+      </div>
+    </a>
+
+<a class="card" href="apple.html" style="--wc:#B9BBB8">
       <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
       <div class="art"><div class="a-apple"></div></div>
       <div class="pal"><i style="background:#F5F5F7"></i><i style="background:#0B0B0C"></i><i style="background:#B9BBB8"></i><i style="background:#D8C5A4"></i><i style="background:#B8D4E8"></i></div>
@@ -333,7 +340,7 @@
       </div>
     </a>
 
-    <a class="card" href="samsung.html" style="--wc:#6D5BDB">
+<a class="card" href="samsung.html" style="--wc:#6D5BDB">
       <span class="badge ghost"><span class="L en">Live code</span><span class="L ar">شيفرة حيّة</span></span>
       <div class="art"><div class="a-samsung"></div></div>
       <div class="pal"><i style="background:#070912"></i><i style="background:#6D5BDB"></i><i style="background:#8CCBFF"></i><i style="background:#A9AFBB"></i><i style="background:#D7AAA2"></i></div>
@@ -440,6 +447,6 @@
       ? '../ar/work/engineering-smart-system' : '../en/work/engineering-smart-system';
   });
 </script>
-<script id="educate-world-language">document.querySelector('[data-educate-world]').addEventListener('click',function(){this.href=document.documentElement.lang==='ar'||document.body.classList.contains('lang-ar')?'../ar/work/mk-educate':'../en/work/mk-educate'});</script>
+<script>document.querySelector('[data-motion-home]').addEventListener('click',function(){this.href='../'+(document.documentElement.lang==='ar'?'ar':'en')+'/motion/'});</script>
 </body>
 </html>

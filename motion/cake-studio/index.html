@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7fb">
+  <meta name="description" content="A little idea. A big celebration. Explore the MK Cake film with your scroll.">
+  <title>MK Cake — From idea to celebration</title>
+  <meta property="og:title" content="Cake Studio — From idea to another world">
+  <meta property="og:description" content="Scroll the 28-second Cake Studio film, then step through its final frame into Cake World.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/motion/cake-studio/media/poster-landscape.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="675">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%234f6e8d'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='31' font-family='Georgia' fill='white'%3Emk%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./portal.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#calm" data-copy="skip">Skip to the film and world links</a>
+  <nav class="portfolio-nav" aria-label="Portfolio navigation">
+    <a id="motion-home" href="../../en/motion/" data-copy="motion">← Motion</a>
+    <div><a id="view-toggle" href="?view=calm" data-copy="calmView">Calm view</a><a id="language" href="?lang=ar" lang="ar">العربية</a></div>
+  </nav>
+  <main>
+    <h1 class="sr-only">MK Cake. From idea to celebration — a scroll film.</h1>
+    <section class="runway" id="runway" aria-label="Scroll to explore the MK Cake film">
+      <div class="stage">
+        <header class="header">
+          <a class="wordmark" href="#start" id="restart" aria-label="MK Cake — return to the beginning"><span>mk</span><b>CAKE</b></a>
+          <p class="edition">FROM IDEA TO CELEBRATION</p>
+          <button class="watch" id="watch" type="button" disabled><span aria-hidden="true">▶</span> Watch with sound</button>
+        </header>
+
+        <div class="picture" id="picture">
+          <canvas id="film" role="img" aria-label="MK Cake film. Big days start small."></canvas>
+          <video id="decoder" class="decoder" muted playsinline preload="none" tabindex="-1" aria-hidden="true"></video>
+          <div class="loader" id="loader">
+            <div class="loading-copy">
+              <p class="eyebrow">A LITTLE IDEA. A BIG DAY.</p>
+              <h2>A little patience.<br><em>A little magic.</em></h2>
+              <div class="download-number"><span id="percent">0</span><span class="percent-sign">%</span></div>
+              <div class="download-track" id="download" role="progressbar" aria-label="Film downloaded" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="download-fill"></i></div>
+              <div class="download-info"><span id="loading-label">Loading your film</span><span id="bytes">0.0 MB</span></div>
+              <p class="loader-note" id="loader-note">Then scroll to bring it to life.</p>
+              <div class="recovery" id="recovery" hidden><button type="button" id="retry">Try again</button><a id="fallback" href="./media/watch-landscape.mp4">Open the film</a></div>
+            </div>
+          </div>
+          <p class="scroll-cue" id="cue" hidden>Scroll to bring it to life <span aria-hidden="true">↓</span></p>
+        </div>
+
+        <footer class="transport" aria-label="Film controls">
+          <div class="transport-heading"><span><b id="chapter-number">01</b><span id="chapter-title">Big days start small</span></span><span class="time"><span id="elapsed">0:00</span><span class="divider"> / </span>0:28</span></div>
+          <label class="sr-only" for="scrubber">Film position. Use the arrow keys or drag to explore.</label>
+          <input id="scrubber" type="range" min="0" max="1000" value="0" disabled aria-valuetext="0 seconds of 28 seconds">
+          <nav class="chapters" id="chapters" aria-label="Film chapters">
+            <button type="button" data-time="0" aria-label="Chapter 1: Big days start small" aria-current="step">01 <span>The idea</span></button>
+            <button type="button" data-time="4" aria-label="Chapter 2: Give your idea shape">02 <span>The shape</span></button>
+            <button type="button" data-time="8" aria-label="Chapter 3: Make it yours">03 <span>The colour</span></button>
+            <button type="button" data-time="12" aria-label="Chapter 4: Say it beautifully">04 <span>The words</span></button>
+            <button type="button" data-time="16" aria-label="Chapter 5: Design, approve, produce">05 <span>The flow</span></button>
+            <button type="button" data-time="20" aria-label="Chapter 6: Your whole cake studio">06 <span>The studio</span></button>
+            <button type="button" data-time="24" aria-label="Chapter 7: From idea to celebration">07 <span>The celebration</span></button>
+          </nav>
+        </footer>
+        <div class="portal-layer" id="portal-layer" aria-hidden="true">
+          <div class="portal-aperture" id="portal-aperture">
+            <img class="portal-poster" src="../../worlds/cake-studio/v17/stills/CST17-I00-edge-in-darkness.webp" alt="" loading="lazy">
+            <iframe id="cake-world" title="Cake World — The Cake Is Made Twice" tabindex="-1" loading="lazy" allow="fullscreen"></iframe>
+          </div>
+          <div class="portal-copy" id="portal-copy"><p data-copy="portalEyebrow">THE LAST FRAME IS A DOOR</p><h2 data-copy="portalTitle">Your idea has<br>another world.</h2><p data-copy="portalHint">Keep scrolling to step inside. Scroll back to return.</p><a id="enter-world" href="#world" data-copy="enter">Enter Cake World ↓</a></div>
+        </div>
+        <a class="portal-invitation" id="portal-invitation" href="#portal" hidden data-copy="invitation">There is more beyond the frame ↓</a>
+      </div>
+    </section>
+    <section class="calm" id="calm" tabindex="-1" aria-labelledby="calm-title">
+      <div class="calm-copy"><p class="eyebrow" data-copy="calmEyebrow">CAKE STUDIO · 28 SECONDS</p><h2 id="calm-title" data-copy="calmTitle">A little idea.<br>A big celebration.</h2><p data-copy="calmDescription">Shape a cake, make it yours, and carry the design into production. Play a short glimpse, watch the full film, or explore the world at your own pace.</p><div class="calm-actions"><button id="calm-watch" type="button" data-copy="fullFilm">Watch the full film</button><a id="calm-world" href="../../worlds/cake-studio.html" data-copy="worldLink">Explore Cake World →</a></div></div>
+      <div class="calm-player"><img id="calm-poster" src="./media/poster-landscape.jpg" alt="Cake Studio — From idea to celebration" loading="lazy"><button id="preview-button" type="button" data-copy="preview">▶ Play a 4-second glimpse</button><video id="calm-video" controls playsinline preload="none" aria-label="Four-second Cake Studio preview" hidden></video></div>
+      <p class="calm-note" data-copy="calmNote">A quiet version of the experience. Motion begins only when you press play.</p>
+    </section>
+  </main>
+  <div class="world-controls" id="world-controls" hidden><button id="back-to-film" type="button" data-copy="back">↑ Back through the frame</button><a id="standalone-world" href="../../worlds/cake-studio.html" data-copy="standalone">Open world on its own ↗</a></div>
+
+  <dialog id="watch-dialog" aria-labelledby="watch-title">
+    <div class="dialog-top"><h2 id="watch-title">From idea to celebration</h2><button id="close-dialog" type="button" aria-label="Close film">Close <span aria-hidden="true">×</span></button></div>
+    <video id="watch-video" controls playsinline preload="none"></video>
+    <p id="watch-status" role="status">MK Cake · 28 seconds · Original soundtrack</p>
+  </dialog>
+  <p class="sr-only" id="status" role="status" aria-live="polite"></p>
+  <noscript><style>.runway,.portfolio-nav{display:none}.calm{display:grid}</style><div class="no-script"><a href="./media/watch-landscape.mp4">Watch the Cake Studio film</a> · <a href="../../worlds/cake-studio.html">Explore Cake World</a></div></noscript>
+</body>
+</html>

@@ -648,9 +648,9 @@
     const cueStory = document.getElementById('cue-story');
     const N = caps.length;
     if (!N || vids.length < 2) return;
-    const MEDIA_BASE = location.hostname === 'mohamed3042.github.io'
-      ? new URL('/flagship-disney-media/disney2/', location.origin)
-      : new URL('disney2/', location.href);
+    // This edition's complete 100-shot library is already published separately.
+    // Only 20 legacy clips are retained locally; the same URL works in preview.
+    const MEDIA_BASE = new URL('https://mohamed3042.github.io/flagship-disney-media/disney2/');
     const mediaUrl = path => new URL(path.replace(/^disney2\//, ''), MEDIA_BASE).href;
     scene.dataset.mediaBase = MEDIA_BASE.href;
     const openingPoster = mediaUrl('disney2/posters/kf-01.jpg');

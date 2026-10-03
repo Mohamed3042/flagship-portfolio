@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050706">
+  <meta name="description" content="Nine worlds. One voice. A 90-second MK Voice film you can explore forwards and backwards, with a separately composed portrait edition.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MK Voice — Nine Worlds">
+  <meta property="og:description" content="Explore the voice studio through nine visual worlds. Scroll the film, or step through its chapters.">
+  <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/motion/mk-voice/media/og.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://mohamed3042.github.io/flagship-portfolio/motion/mk-voice/">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>MK Voice — Nine Worlds</title>
+  <link rel="stylesheet" href="../shared/film.css">
+  <link rel="preload" as="image" href="./media/desktop/poster-intro.jpg" media="(min-aspect-ratio: 4/5)">
+  <link rel="preload" as="image" href="./media/mobile/poster-intro.jpg" media="(max-aspect-ratio: 4/5)">
+</head>
+<body>
+  <a class="film-skip" data-film-skip href="#chapters" data-i18n="skip">Skip to the chapters</a>
+  <header class="film-header">
+    <a class="film-brand" data-gallery-link href="../../en/motion/" aria-label="MK Voice · Software in Motion">
+      <svg viewBox="0 0 36 36" aria-hidden="true"><rect x="1" y="13" width="3" height="10" rx="1.5"/><rect x="6" y="9" width="3" height="18" rx="1.5"/><rect x="11" y="5" width="3" height="26" rx="1.5"/><rect x="16" y="1" width="4" height="34" rx="2"/><rect x="22" y="5" width="3" height="26" rx="1.5"/><rect x="27" y="9" width="3" height="18" rx="1.5"/><rect x="32" y="13" width="3" height="10" rx="1.5"/></svg>
+      <span>MK Voice<small data-i18n="edition">Nine Worlds · A motion study</small></span>
+    </a>
+    <div class="film-lens" role="group" aria-label="Explore MK Voice" data-i18n-label="lensLabel">
+      <span aria-current="page" data-i18n="product">Product</span>
+      <a data-world-link href="../../worlds/spotify.html?from=mk-voice&amp;chapter=intro&amp;lang=en" data-i18n="world">World</a>
+    </div>
+    <nav aria-label="Film navigation" data-i18n-label="navigation">
+      <a class="gallery-header" data-gallery-link href="../../en/motion/" data-i18n="gallery">All motion</a>
+      <a data-language-link href="?lang=ar" lang="ar" hreflang="ar">العربية</a>
+    </nav>
+  </header>
+
+  <main class="film-story" data-film-story aria-label="MK Voice scroll film" hidden>
+    <div class="film-stage" data-film-stage>
+      <div class="film-screen" aria-hidden="true">
+        <img class="film-poster" data-film-poster src="./media/desktop/poster-intro.jpg" width="1600" height="900" alt="MK Voice Nine Worlds" fetchpriority="high">
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+      </div>
+    </div>
+    <div class="film-caption">
+      <div class="eyebrow" data-i18n="filmLabel">MK Voice · Nine Worlds</div>
+      <h1 data-chapter-title>Nine worlds. One voice.</h1>
+      <p data-chapter-summary>A journey through a local voice studio.</p>
+    </div>
+    <div class="film-loading" data-film-loading role="status" hidden>
+      <span data-load-message>Opening the first world…</span>
+      <button type="button" data-retry data-i18n="retry" hidden>Try again</button>
+    </div>
+    <footer class="film-controls">
+      <nav class="film-chapter-rail" data-chapter-rail aria-label="Film chapters" data-i18n-label="chapters"></nav>
+      <div class="film-track">
+        <div class="film-progress" data-film-progress></div>
+        <input class="film-scrubber" data-film-scrubber type="range" min="0" max="89.9667" step="0.033333" value="0" aria-label="Film position">
+      </div>
+      <div class="film-control-row">
+        <div class="film-control-group">
+          <button type="button" data-open-chapters data-i18n="chapters">Chapters</button>
+          <button type="button" data-mode-toggle>View chapters</button>
+        </div>
+        <span class="film-hint" data-i18n="hint">Scroll to explore · Reverse to return</span>
+        <span class="film-clock" data-clock>00:00 / 01:30</span>
+      </div>
+    </footer>
+  </main>
+
+  <section class="calm-story" id="chapters" data-calm-story tabindex="-1" aria-label="MK Voice chapter posters">
+    <div class="calm-intro">
+      <div class="eyebrow" data-i18n="edition">Nine Worlds · A motion study</div>
+      <h1 data-i18n="calmTitle">Every voice starts somewhere.</h1>
+      <p data-i18n="calmSummary">Explore nine sides of MK Voice at your own pace. Each chapter has a still image and a short scene you can choose to play.</p>
+      <button type="button" data-mode-toggle>Scroll the film</button>
+    </div>
+    <div class="calm-grid">
+      <article class="chapter-card" id="intro" data-poster-chapter="intro"><figure><img src="./media/desktop/poster-intro.jpg" alt="The spectrum tunnel opens" width="960" height="540" loading="lazy"></figure><h2>Nine worlds. One voice.</h2><p>A journey through a local voice studio.</p><button data-play-chapter="intro">Play a short scene</button></article>
+      <article class="chapter-card" id="my-voice" data-poster-chapter="my-voice"><figure><img src="./media/desktop/poster-my-voice.jpg" alt="My Voice" width="960" height="540" loading="lazy"></figure><h2>My Voice</h2><p>A place for your profiles, recordings and comparisons.</p><button data-play-chapter="my-voice">Play a short scene</button></article>
+      <article class="chapter-card" id="clone-lab" data-poster-chapter="clone-lab"><figure><img src="./media/desktop/poster-clone-lab.jpg" alt="Clone Lab" width="960" height="540" loading="lazy"></figure><h2>Clone Lab</h2><p>Set up, record, calibrate and train. One step at a time.</p><button data-play-chapter="clone-lab">Play a short scene</button></article>
+      <article class="chapter-card" id="live" data-poster-chapter="live"><figure><img src="./media/desktop/poster-live.jpg" alt="Live voice signal path" width="960" height="540" loading="lazy"></figure><h2>Go live</h2><p>Follow the signal from microphone to voice to output.</p><button data-play-chapter="live">Play a short scene</button></article>
+      <article class="chapter-card" id="text-to-speech" data-poster-chapter="text-to-speech"><figure><img src="./media/desktop/poster-text-to-speech.jpg" alt="Text to speech" width="960" height="540" loading="lazy"></figure><h2>Words become voice.</h2><p>Bring a script into the studio and shape its delivery.</p><button data-play-chapter="text-to-speech">Play a short scene</button></article>
+      <article class="chapter-card" id="training" data-poster-chapter="training"><figure><img src="./media/desktop/poster-training.jpg" alt="Voice training" width="960" height="540" loading="lazy"></figure><h2>Make room to grow.</h2><p>Prepare a dataset and follow the training journey.</p><button data-play-chapter="training">Play a short scene</button></article>
+      <article class="chapter-card" id="voice-arcade" data-poster-chapter="voice-arcade"><figure><img src="./media/desktop/poster-voice-arcade.jpg" alt="Voice Arcade" width="960" height="540" loading="lazy"></figure><h2>Voice Arcade</h2><p>Try a stage, make a selection, approve or reset.</p><button data-play-chapter="voice-arcade">Play a short scene</button></article>
+      <article class="chapter-card" id="evolution" data-poster-chapter="evolution"><figure><img src="./media/desktop/poster-evolution.jpg" alt="Evolution experiments" width="960" height="540" loading="lazy"></figure><h2>Hear what changed.</h2><p>Compare an original with a candidate. Keep the results.</p><button data-play-chapter="evolution">Play a short scene</button></article>
+      <article class="chapter-card" id="settings" data-poster-chapter="settings"><figure><img src="./media/desktop/poster-settings.jpg" alt="MK Voice settings" width="960" height="540" loading="lazy"></figure><h2>Your studio, in balance.</h2><p>Audio tools, storage and the status your engine reports.</p><button data-play-chapter="settings">Play a short scene</button></article>
+      <article class="chapter-card" id="guide" data-poster-chapter="guide"><figure><img src="./media/desktop/poster-guide.jpg" alt="MK Voice guide" width="960" height="540" loading="lazy"></figure><h2>A guide beside you.</h2><p>An illustrated guide and searchable answers.</p><button data-play-chapter="guide">Play a short scene</button></article>
+      <article class="chapter-card" id="finale" data-poster-chapter="finale"><figure><img src="./media/desktop/poster-finale.jpg" alt="MK Voice Nine Worlds finale" width="960" height="540" loading="lazy"></figure><h2>Nine worlds. Yours to explore.</h2><p>Return to a chapter, or step through to the music world.</p><button data-play-chapter="finale">Play a short scene</button></article>
+    </div>
+    <footer class="calm-footer"><a data-gallery-link href="../../en/motion/" data-i18n="gallery">All motion</a><a href="../../worlds/spotify.html?from=mk-voice&amp;chapter=finale&amp;lang=en" data-i18n="enterWorld">Enter Spotify World ↗</a></footer>
+  </section>
+
+  <dialog class="film-dialog" data-chapter-dialog aria-labelledby="chapter-dialog-title">
+    <header><h2 id="chapter-dialog-title" data-i18n="chapters">Chapters</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <ol data-chapter-list></ol>
+  </dialog>
+  <dialog class="film-dialog film-watch" data-watch-dialog aria-labelledby="watch-title">
+    <header><h2 id="watch-title" data-watch-title>MK Voice</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <video data-watch-video controls playsinline preload="none"></video>
+    <p data-i18n="shortScene">A short, silent scene from the film. Close it to continue exploring.</p>
+  </dialog>
+  <script id="film-data" type="application/json">
+  {
+    "schemaVersion":1,"id":"mk-voice","duration":90,"fps":30,"clipSeconds":5,"clipCount":18,"accent":"#1ed760",
+    "title":{"en":"MK Voice — Nine Worlds","ar":"MK Voice — تسعة عوالم"},
+    "gallery":{"en":"../../en/motion/","ar":"../../ar/motion/"},
+    "world":{"href":"../../worlds/spotify.html","label":{"en":"Step into Spotify World; your chapter is remembered","ar":"ادخل عالم Spotify مع حفظ موضع الفصل"}},
+    "profiles":{
+      "desktop":{"clips":"./media/desktop/clip-{index}.mp4","poster":"./media/desktop/poster-intro.jpg","width":1600,"height":900},
+      "mobile":{"clips":"./media/mobile/clip-{index}.mp4","poster":"./media/mobile/poster-intro.jpg","width":720,"height":1280}
+    },
+    "copy":{
+      "skip":{"en":"Skip to the chapters","ar":"انتقل إلى الفصول"},
+      "edition":{"en":"Nine Worlds · A motion study","ar":"تسعة عوالم · رحلة بصرية"},
+      "filmLabel":{"en":"MK Voice · Nine Worlds","ar":"MK Voice · تسعة عوالم"},
+      "product":{"en":"Product","ar":"البرنامج"},"world":{"en":"World","ar":"العالم"},
+      "lensLabel":{"en":"Explore MK Voice","ar":"استكشف MK Voice"},"navigation":{"en":"Film navigation","ar":"التنقل في الفيلم"},
+      "gallery":{"en":"All motion","ar":"كل الأفلام"},"retry":{"en":"Try again","ar":"أعد المحاولة"},
+      "chapters":{"en":"Chapters","ar":"الفصول"},"close":{"en":"Close","ar":"إغلاق"},
+      "hint":{"en":"Scroll to explore · Reverse to return","ar":"مرّر لتستكشف · اعكس التمرير للرجوع"},
+      "calmTitle":{"en":"Every voice starts somewhere.","ar":"لكل صوت بداية."},
+      "calmSummary":{"en":"Explore nine sides of MK Voice at your own pace. Each chapter has a still image and a short scene you can choose to play.","ar":"استكشف عوالم MK Voice التسعة بالوتيرة التي تناسبك. لكل فصل صورة ثابتة ومشهد قصير يمكنك تشغيله."},
+      "shortScene":{"en":"A short, silent scene from the film. Close it to continue exploring.","ar":"مشهد قصير من الفيلم دون صوت. أغلقه لتواصل الاستكشاف."},
+      "enterWorld":{"en":"Enter Spotify World ↗","ar":"ادخل عالم Spotify ↗"}
+    },
+    "chapters":[
+      {"id":"intro","start":0,"previewAt":4,"title":{"en":"Nine worlds. One voice.","ar":"تسعة عوالم. صوت واحد."},"summary":{"en":"A journey through a local voice studio.","ar":"رحلة داخل استوديو صوت يعمل محلياً."},"accent":"#1ed760","posters":{"desktop":"./media/desktop/poster-intro.jpg","mobile":"./media/mobile/poster-intro.jpg"}},
+      {"id":"my-voice","start":6,"previewAt":10,"title":{"en":"My Voice","ar":"صوتي"},"summary":{"en":"A place for your profiles, recordings and comparisons.","ar":"مساحة لملفاتك الصوتية وتسجيلاتك ومقارناتك."},"accent":"#1ed760","posters":{"desktop":"./media/desktop/poster-my-voice.jpg","mobile":"./media/mobile/poster-my-voice.jpg"}},
+      {"id":"clone-lab","start":14,"previewAt":18,"title":{"en":"Clone Lab","ar":"مختبر الاستنساخ"},"summary":{"en":"Set up, record, calibrate and train. One step at a time.","ar":"إعداد، تسجيل، معايرة، ثم تدريب. خطوة بخطوة."},"accent":"#42dfee","posters":{"desktop":"./media/desktop/poster-clone-lab.jpg","mobile":"./media/mobile/poster-clone-lab.jpg"}},
+      {"id":"live","start":22,"previewAt":26,"title":{"en":"Go live","ar":"صوتك، مباشرةً"},"summary":{"en":"Follow the signal from microphone to voice to output.","ar":"تتبّع الإشارة من الميكروفون إلى الصوت ثم المخرج."},"accent":"#fb609d","posters":{"desktop":"./media/desktop/poster-live.jpg","mobile":"./media/mobile/poster-live.jpg"}},
+      {"id":"text-to-speech","start":30,"previewAt":34,"title":{"en":"Words become voice.","ar":"الكلمات تصبح صوتاً."},"summary":{"en":"Bring a script into the studio and shape its delivery.","ar":"أدخل نصاً إلى الاستوديو وصغ طريقة إلقائه."},"accent":"#f1bf60","posters":{"desktop":"./media/desktop/poster-text-to-speech.jpg","mobile":"./media/mobile/poster-text-to-speech.jpg"}},
+      {"id":"training","start":38,"previewAt":42,"title":{"en":"Make room to grow.","ar":"مساحة للتطوّر."},"summary":{"en":"Prepare a dataset and follow the training journey.","ar":"جهّز مجموعة بيانات وتابع رحلة التدريب."},"accent":"#bb82f5","posters":{"desktop":"./media/desktop/poster-training.jpg","mobile":"./media/mobile/poster-training.jpg"}},
+      {"id":"voice-arcade","start":46,"previewAt":50,"title":{"en":"Voice Arcade","ar":"ساحة الصوت"},"summary":{"en":"Try a stage, make a selection, approve or reset.","ar":"جرّب مرحلة، اختر نتيجة، اعتمدها أو ابدأ من جديد."},"accent":"#a8ef63","posters":{"desktop":"./media/desktop/poster-voice-arcade.jpg","mobile":"./media/mobile/poster-voice-arcade.jpg"}},
+      {"id":"evolution","start":54,"previewAt":58,"title":{"en":"Hear what changed.","ar":"اسمع الفرق."},"summary":{"en":"Compare an original with a candidate. Keep the results.","ar":"قارن الأصل بالنتيجة الجديدة واحفظ تجاربك."},"accent":"#f08a53","posters":{"desktop":"./media/desktop/poster-evolution.jpg","mobile":"./media/mobile/poster-evolution.jpg"}},
+      {"id":"settings","start":62,"previewAt":66,"title":{"en":"Your studio, in balance.","ar":"استوديوك، بتناغم."},"summary":{"en":"Audio tools, storage and the status your engine reports.","ar":"أدوات الصوت والتخزين والحالة التي يعرضها المحرك."},"accent":"#d5e7e9","posters":{"desktop":"./media/desktop/poster-settings.jpg","mobile":"./media/mobile/poster-settings.jpg"}},
+      {"id":"guide","start":70,"previewAt":73,"title":{"en":"A guide beside you.","ar":"دليل يرافقك."},"summary":{"en":"An illustrated guide and searchable answers.","ar":"دليل مصوّر وإجابات قابلة للبحث."},"accent":"#61e3bc","posters":{"desktop":"./media/desktop/poster-guide.jpg","mobile":"./media/mobile/poster-guide.jpg"}},
+      {"id":"finale","start":77,"previewAt":84,"title":{"en":"Nine worlds. Yours to explore.","ar":"تسعة عوالم تنتظر استكشافك."},"summary":{"en":"Return to a chapter, or step through to the music world.","ar":"عُد إلى أحد الفصول أو انتقل إلى عالم الموسيقى."},"accent":"#1ed760","posters":{"desktop":"./media/desktop/poster-finale.jpg","mobile":"./media/mobile/poster-finale.jpg"}}
+    ]
+  }
+  </script>
+  <script type="module" src="../shared/film-world.js"></script>
+</body>
+</html>
