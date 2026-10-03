@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Worlds — Ten Scroll-Cinema Films · Mohamed Mahmoud</title>
+<title>The Worlds — Scroll-Cinema Films · Mohamed Mahmoud</title>
 <meta name="description" content="Ten original scroll-cinema films: the Engineering Smart System AI Intelligence update, Cake Studio's 50-shot edible compiler, Disney Edition II's 20-shot storybook chain, and seven worlds rendered live in code. A Mohamed Mahmoud portfolio production.">
 <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%23090B10"/><circle cx="16" cy="16" r="9" fill="none" stroke="%23D9A83E" stroke-width="2"/><circle cx="16" cy="16" r="3" fill="%23D9A83E"/></svg>'>
 <link rel="stylesheet" href="cinema.css?v=4">
@@ -202,7 +202,13 @@
   </header>
 
   <div class="grid">
-<!-- MK Educate film entry: public campaign media only. -->
+    <a class="card feature" href="../mk-business-os/" data-business-world style="--wc:#edb15d">
+      <span class="badge"><span class="L en">Scroll the film · MK Business OS</span><span class="L ar">حرّك الفيلم بالتمرير · MK Business OS</span></span>
+      <div class="art"><img src="../mk-business-os/media/poster.jpg" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="pal"><i style="background:#070c12"></i><i style="background:#17212b"></i><i style="background:#edb15d"></i><i style="background:#80d6ca"></i><i style="background:#edf1f3"></i></div>
+      <div class="meta"><h2><span class="L en">From signal to strategy.</span><span class="L ar">من الإشارة إلى الاستراتيجية.</span></h2><p><span class="L en">Eight worlds of business research. Edge-to-edge picture, saved view settings and a film controlled by your scroll.</span><span class="L ar">ثمانية عوالم للبحث التجاري. صورة تملأ الشاشة وإعدادات عرض محفوظة وفيلم يتحرك بتمريرك.</span></p><p class="spec"><span><i>01:48</i></span><span><span class="L en">8 worlds · illustrative workflows</span><span class="L ar">٨ عوالم · مسارات عمل توضيحية</span></span></p></div>
+    </a>
+    <!-- MK Educate film entry: public campaign media only. -->
     <a class="card feature" href="../en/work/mk-educate" data-educate-world style="--wc:#E8B64A">
       <span class="badge"><span class="L en">Scroll the film · MK Educate</span><span class="L ar">حرّك الفيلم بالتمرير · MK Educate</span></span>
       <div class="art"><img src="../media/mk-educate/poster-desktop.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
@@ -422,11 +428,17 @@
 
 <script src="cinema.js?v=6"></script>
 <script>
+  document.querySelector('[data-business-world]').addEventListener('click', function () {
+    this.href = '../mk-business-os/?lang=' + (document.documentElement.lang === 'ar' || document.body.classList.contains('lang-ar') ? 'ar' : 'en');
+  });
+  document.querySelector('[data-educate-world]').addEventListener('click', function () {
+    this.href = document.documentElement.lang === 'ar' || document.body.classList.contains('lang-ar')
+      ? '../ar/work/mk-educate' : '../en/work/mk-educate';
+  });
   document.querySelector('[data-ess-world]').addEventListener('click', function () {
     this.href = document.documentElement.lang === 'ar' || document.body.classList.contains('lang-ar')
       ? '../ar/work/engineering-smart-system' : '../en/work/engineering-smart-system';
   });
 </script>
-<script id="educate-world-language">document.querySelector('[data-educate-world]').addEventListener('click',function(){this.href=document.documentElement.lang==='ar'||document.body.classList.contains('lang-ar')?'../ar/work/mk-educate':'../en/work/mk-educate'});</script>
 </body>
 </html>

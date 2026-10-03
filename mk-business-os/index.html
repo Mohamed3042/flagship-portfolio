@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#070c12">
+  <title>MK Business OS — From signal to strategy</title>
+  <meta name="description" content="An immersive scroll film for MK Business OS. Explore eight worlds of discovery, evidence, knowledge and strategy. Your scroll moves the film.">
+  <link rel="canonical" href="https://mohamed3042.github.io/flagship-portfolio/mk-business-os/">
+  <meta property="og:title" content="MK Business OS — From signal to strategy">
+  <meta property="og:description" content="Eight worlds. One clear direction. Scroll to explore MK Business OS.">
+  <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/mk-business-os/media/poster.jpg">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" as="image" href="media/poster.jpg">
+</head>
+<body>
+  <h1 class="sr-only">MK Business OS — From signal to strategy</h1>
+  <main id="runway" aria-label="Scroll to explore MK Business OS">
+    <section class="stage" id="stage" aria-label="Business OS scroll film">
+      <img class="poster" src="media/poster.jpg" width="1920" height="1080" alt="" fetchpriority="high">
+      <canvas id="ambient" aria-hidden="true"></canvas>
+      <canvas id="picture" role="img" aria-label="MK Business OS feature film, controlled by your scroll"></canvas>
+      <video id="decoder" muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      <header class="chrome topbar">
+        <a data-home class="back" href="../en/#work"><span aria-hidden="true">↗</span> <span data-copy="portfolio">Portfolio</span></a>
+        <a class="wordmark" href="#" id="restart" aria-label="Back to the beginning" data-label="start" dir="ltr">MK <span>BUSINESS OS</span></a>
+        <button class="control view-button" id="open-view" type="button" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6"/></svg><span data-copy="view">View</span></button>
+      </header>
+      <div id="loading" class="loading" role="status" aria-live="polite">
+        <div class="load-top"><span id="load-label" data-copy="loading">Loading your world</span><output id="load-percent" dir="ltr">0%</output></div>
+        <progress id="load-progress" max="100" value="0" aria-label="Film download" data-label="progress"></progress>
+        <div class="load-bottom"><span id="load-bytes" dir="ltr">0.0 MB</span><span>MK BUSINESS OS</span></div>
+        <div class="load-actions" id="load-actions" hidden><button class="control" type="button" id="retry" data-copy="retry">Try again</button><a class="control" href="media/film.mp4" data-copy="direct">Open video</a></div>
+      </div>
+      <p class="opening chrome" id="opening"><span data-copy="hint">Scroll to move. Stop to explore.</span><span aria-hidden="true">↓</span></p>
+      <div class="transport chrome">
+        <div class="transport-label"><span id="scene-name">From signal to strategy</span><output id="time" dir="ltr">00:00 <span>/ 01:48</span></output></div>
+        <label class="sr-only" for="timeline" data-copy="timeline">Film timeline</label>
+        <input id="timeline" type="range" min="0" max="108" step="0.033333" value="0" dir="ltr" aria-valuetext="00:00 / 01:48">
+        <div class="transport-actions"><button class="text-button" id="open-chapters" type="button" aria-haspopup="dialog"><span class="chapter-icon" aria-hidden="true">▥</span><span data-copy="chapters">Chapters</span></button><span class="film-meta" dir="ltr">01:48 · 8 WORLDS</span><button class="text-button" id="watch" type="button"><span aria-hidden="true">▶</span><span data-copy="watch">Watch with sound</span></button></div>
+      </div>
+      <div class="edge-progress" aria-hidden="true"><i id="edge-progress"></i></div>
+    </section>
+  </main>
+  <footer>
+    <span class="wordmark" dir="ltr">MK <span>BUSINESS OS</span></span>
+    <h2 data-copy="credits">Build what comes next.</h2>
+    <a class="portfolio-link" data-home href="../en/#work"><span data-copy="explore">Explore the portfolio</span> ↗</a>
+    <nav class="more" aria-label="More portfolio films"><a data-work="montage-pro" href="../en/work/montage-pro/" data-copy="montage">Montage Pro</a><a data-work="cake-studio" href="../en/work/cake-studio/" data-copy="cake">Cake Studio</a><a href="../worlds/" data-copy="more">More worlds</a><a href="media/film.mp4" download data-copy="download">Download film</a></nav>
+    <p class="note" data-copy="note">An illustrated tour of Business OS. Company names and examples are fictional.</p>
+  </footer>
+
+  <dialog id="view-dialog" class="sheet" aria-labelledby="view-title">
+    <div class="sheet-head"><h2 id="view-title" data-copy="settings">Make it your view.</h2><button type="button" class="close" data-close aria-label="Close" data-label="close">×</button></div>
+    <form id="view-form">
+      <fieldset><legend data-copy="framing">Picture</legend><div class="framing-options">
+        <label><input name="framing" value="fill" type="radio" checked><span><strong data-copy="fill">Fill screen</strong><small data-copy="fillNote">Edge to edge. The edges of the film may be cropped.</small></span><svg viewBox="0 0 32 24" aria-hidden="true"><rect x="1" y="1" width="30" height="22"/><path d="M1 8h30m-30 8h30"/></svg></label>
+        <label><input name="framing" value="fit" type="radio"><span><strong data-copy="fit">Whole film</strong><small data-copy="fitNote">See every detail of the original composition.</small></span><svg viewBox="0 0 32 24" aria-hidden="true"><rect x="1" y="1" width="30" height="22"/><rect x="5" y="6" width="22" height="12"/></svg></label>
+      </div></fieldset>
+      <fieldset id="crop-settings" class="sliders"><legend class="sr-only">Crop</legend>
+        <label for="zoom"><span data-copy="zoom">Zoom</span><output id="zoom-value" dir="ltr">100%</output></label><input id="zoom" name="zoom" type="range" min="1" max="1.6" step="0.01" value="1" dir="ltr">
+        <label for="focus-x"><span data-copy="horizontal">Horizontal focus</span><output id="x-value" dir="ltr">50%</output></label><input id="focus-x" name="x" type="range" min="0" max="100" value="50" dir="ltr">
+        <label for="focus-y"><span data-copy="vertical">Vertical focus</span><output id="y-value" dir="ltr">50%</output></label><input id="focus-y" name="y" type="range" min="0" max="100" value="50" dir="ltr">
+      </fieldset>
+      <fieldset><legend data-copy="pace">Scroll pace</legend><div class="segments"><label><input name="pace" value="30" type="radio"><span data-copy="leisurely">Leisurely</span></label><label><input name="pace" value="20" type="radio" checked><span data-copy="balanced">Balanced</span></label><label><input name="pace" value="12" type="radio"><span data-copy="quick">Quick</span></label></div></fieldset>
+      <label class="toggle-row"><span><strong data-copy="manual">Manual controls</strong><small data-copy="manualNote">Move with the timeline and chapters instead of scrolling.</small></span><input id="manual" name="manual" type="checkbox" role="switch"></label>
+      <div class="select-row"><label for="controls" data-copy="chrome">Controls</label><select id="controls" name="controls"><option value="auto" data-copy="auto">Fade away</option><option value="always" data-copy="always">Always visible</option></select></div>
+      <fieldset><legend data-copy="accent">Controls color</legend><div class="swatches"><label style="--swatch:#edb15d"><input name="accent" value="amber" type="radio" checked><span data-copy="amber">Amber</span></label><label style="--swatch:#80d6ca"><input name="accent" value="teal" type="radio"><span data-copy="teal">Teal</span></label><label style="--swatch:#edf1f3"><input name="accent" value="white" type="radio"><span data-copy="white">White</span></label></div></fieldset>
+    </form>
+    <div class="sheet-footer"><p data-copy="saved">Saved on this device.</p><div><button type="button" id="share-view" class="control" data-copy="share">Copy this view</button><button type="button" id="reset" class="text-button" data-copy="reset">Restore defaults</button></div><p id="share-status" role="status"></p><input id="share-link" readonly aria-label="Shareable view address" hidden></div>
+  </dialog>
+  <dialog id="chapter-dialog" class="sheet chapter-sheet" aria-labelledby="chapter-title"><div class="sheet-head"><h2 id="chapter-title" data-copy="chapterTitle">Eight worlds. One direction.</h2><button type="button" class="close" data-close aria-label="Close" data-label="close">×</button></div><ol id="chapter-list"></ol><div class="chapter-footer"><a id="language" href="?lang=ar" lang="ar">العربية</a><a href="../worlds/" data-copy="more">More worlds</a></div></dialog>
+  <dialog id="watch-dialog" class="watch-dialog" aria-label="Watch MK Business OS with original music"><div class="watch-head"><span class="wordmark" dir="ltr">MK <span>BUSINESS OS</span></span><button type="button" class="close" data-close aria-label="Close" data-label="close">×</button></div><video id="watch-video" controls playsinline preload="none" poster="media/poster.jpg" aria-label="MK Business OS with original music"></video><p data-copy="return">Close to continue from this moment.</p></dialog>
+  <noscript><style>#runway{height:100svh}.loading,.transport,.opening,.view-button{display:none}.poster{visibility:visible!important}</style><p class="no-js"><a href="media/film.mp4">Watch the film · شاهد الفيلم</a></p></noscript>
+  <script type="module" src="film.mjs"></script>
+</body>
+</html>
