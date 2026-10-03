@@ -1,0 +1,23 @@
+{
+  "film": {
+    "file": "assets/reclaim-tale.mp4",
+    "sha256": "f14df6127248d5a3373e68de48ffe88d4599d711983bd5e7dd0a1ef099653808",
+    "durationSeconds": 90,
+    "width": 1920,
+    "height": 1080,
+    "fps": 60
+  },
+  "frames": {
+    "prologue": 110,
+    "heavy": 910,
+    "lantern": 1540,
+    "ledger": 2270,
+    "heaviest": 2875,
+    "paths": 3420,
+    "seal": 4315,
+    "memory": 4805,
+    "dawn": 5100,
+    "hero": 225
+  },
+  "notes": "Frames extracted from the finished film. No private application data is included."
+}
