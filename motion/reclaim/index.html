@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8"><script src="../shared/arcade-loader.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101513">
+  <meta name="description" content="A 165-second tour of Reclaim 1.5.0 for Windows: direct file-table scans, evidence-first cleanup, verified copies, sealed plans and local AI-storage planning, rebuilt from the real graphite and mint interface.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Reclaim — Eleven rooms">
+  <meta property="og:description" content="Every tool in Reclaim 1.5, one room each.">
+  <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/motion/reclaim/media/og.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://mohamed3042.github.io/flagship-portfolio/motion/reclaim/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://mohamed3042.github.io/flagship-portfolio/motion/reclaim/">
+  <title>Reclaim — Eleven rooms</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20fill%3D%22%238CE3BE%22%20color%3D%22%238CE3BE%22%20viewBox%3D%220%200%2036%2036%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill%3D%22currentColor%22%20fill-rule%3D%22evenodd%22%20d%3D%22M18%202.5%2031.4%2010.25v15.5L18%2033.5%204.6%2025.75v-15.5Zm0%204.6L8.6%2012.55v10.9L18%2028.9l9.4-5.45v-10.9Z%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M18%2012.2%2023%2015.1v5.8L18%2023.8%2013%2020.9v-5.8Z%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="../shared/film.css">
+  <style>:root{--accent:#8CE3BE;--film-bg:#101513;--film-deep:#090c0a;--film-surface:#1c2522;--film-raised:#222e29;--film-button:#161f1c;--film-hover:#2c3e36;--film-line:#3a5147;--film-line-soft:#2e3f38;--film-line-faint:#1e2c26;--film-text:#eef2ee;--film-soft:#a8b5ae;--film-dim:#74857c;--muted:#a6afa9;--film-on-accent:#14201b;--glass:rgba(16,21,19,.42)}</style>
+  <link rel="preload" as="image" href="./media/desktop/poster-scan.jpg" media="(min-aspect-ratio: 4/5)">
+  <link rel="preload" as="image" href="./media/mobile/poster-scan.jpg" media="(max-aspect-ratio: 4/5)">
+</head>
+<body>
+  <a class="film-skip" data-film-skip href="#chapters" data-i18n="skip">Skip to the chapters</a>
+  <header class="film-header">
+    <a class="film-brand" data-gallery-link href="../../en/motion/" aria-label="Reclaim · Software in Motion">
+      <svg aria-hidden="true" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" d="M18 2.5 31.4 10.25v15.5L18 33.5 4.6 25.75v-15.5Zm0 4.6L8.6 12.55v10.9L18 28.9l9.4-5.45v-10.9Z"/><path fill="currentColor" d="M18 12.2 23 15.1v5.8L18 23.8 13 20.9v-5.8Z"/></svg>
+      <span>Reclaim<small data-i18n="edition">Eleven rooms · A motion study</small></span>
+    </a>
+    <nav aria-label="Film navigation" data-i18n-label="navigation">
+      <a class="gallery-header" data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a>
+      <a class="case-header" data-case-link href="../../en/work/reclaim/" data-i18n="caseStudy">Case study</a>
+      <a data-language-link href="?lang=ar" lang="ar" hreflang="ar">العربية</a>
+    </nav>
+  </header>
+
+  <main class="film-story" data-film-story aria-label="Reclaim scroll film" hidden>
+    <div class="film-stage" data-film-stage>
+      <div class="film-screen" aria-hidden="true">
+        <img class="film-poster" data-film-poster src="./media/desktop/poster-scan.jpg" width="1600" height="900" alt="Reclaim" fetchpriority="high">
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+      </div>
+    </div>
+    <div class="film-caption">
+      <div class="eyebrow" data-i18n="filmLabel">Reclaim · Eleven rooms</div>
+      <h1 data-chapter-title>A whole drive in seconds.</h1>
+      <p data-chapter-summary>Reclaim reads the NTFS master file table directly, then rolls every size up the folder tree.</p>
+      <a class="film-chapter-action" data-chapter-action href="#" hidden></a>
+    </div>
+    <div class="film-loading" data-film-loading role="status" hidden>
+      <span data-load-message>Opening the film…</span>
+      <button type="button" data-retry data-i18n="retry" hidden>Try again</button>
+    </div>
+    <footer class="film-controls">
+      <nav class="film-chapter-rail" data-chapter-rail aria-label="Film chapters" data-i18n-label="chapters"></nav>
+      <div class="film-track">
+        <div class="film-progress" data-film-progress></div>
+        <input class="film-scrubber" data-film-scrubber type="range" min="0" max="164.9667" step="0.033333" value="0" aria-label="Film position">
+      </div>
+      <div class="film-control-row">
+        <div class="film-control-group">
+          <button type="button" data-open-chapters data-i18n="chapters">Chapters</button>
+          <button type="button" data-mode-toggle>View chapters</button>
+        </div>
+        <span class="film-hint" data-i18n="hint">Scroll to explore · Reverse to return</span>
+        <span class="film-clock" data-clock>00:00 / 02:45</span>
+      </div>
+    </footer>
+  </main>
+
+  <section class="calm-story" id="chapters" data-calm-story tabindex="-1" aria-label="Reclaim chapter posters">
+    <div class="calm-intro">
+      <div class="eyebrow" data-i18n="edition">Eleven rooms · A motion study</div>
+      <h1 data-i18n="calmTitle">A whole drive in seconds.</h1>
+      <p data-i18n="calmSummary">A 165-second tour of Reclaim 1.5.0 for Windows: direct file-table scans, evidence-first cleanup, verified copies, sealed plans and local AI-storage planning, rebuilt from the real graphite and mint interface.</p>
+      <button type="button" data-mode-toggle>Scroll the film</button>
+    </div>
+    <div class="calm-grid">
+      <article class="chapter-card" id="scan" data-poster-chapter="scan"><figure><img src="./media/desktop/poster-scan.jpg" alt="A whole drive in seconds." width="960" height="540" loading="lazy"></figure><h2>A whole drive in seconds.</h2><p>Reclaim reads the NTFS master file table directly, then rolls every size up the folder tree.</p><button data-play-chapter="scan">Play a short scene</button></article>
+      <article class="chapter-card" id="browser" data-poster-chapter="browser"><figure><img src="./media/desktop/poster-browser.jpg" alt="The heaviest things, first." width="960" height="540" loading="lazy"></figure><h2>The heaviest things, first.</h2><p>Biggest anywhere ranks the drive, says what each item is and passes through protected parents.</p><button data-play-chapter="browser">Play a short scene</button></article>
+      <article class="chapter-card" id="history" data-poster-chapter="history"><figure><img src="./media/desktop/poster-history.jpg" alt="See where space changed." width="960" height="540" loading="lazy"></figure><h2>See where space changed.</h2><p>Two saved scans are compared folder by folder, and uncertain results are marked as uncertain.</p><button data-play-chapter="history">Play a short scene</button></article>
+      <article class="chapter-card" id="review" data-poster-chapter="review"><figure><img src="./media/desktop/poster-review.jpg" alt="Evidence first. You decide." width="960" height="540" loading="lazy"></figure><h2>Evidence first. You decide.</h2><p>Smart Review builds an explained shortlist in three groups and selects nothing for you.</p><button data-play-chapter="review">Play a short scene</button></article>
+      <article class="chapter-card" id="copies" data-poster-chapter="copies"><figure><img src="./media/desktop/poster-copies.jpg" alt="Identical, byte for byte." width="960" height="540" loading="lazy"></figure><h2>Identical, byte for byte.</h2><p>Copies are proven with full SHA-256 reads, hardlinks are not counted, and you choose the keeper.</p><button data-play-chapter="copies">Play a short scene</button></article>
+      <article class="chapter-card" id="rebuild" data-poster-chapter="rebuild"><figure><img src="./media/desktop/poster-rebuild.jpg" alt="Rebuildable, with proof." width="960" height="540" loading="lazy"></figure><h2>Rebuildable, with proof.</h2><p>Generated output qualifies only with producer, scope and source evidence; unexpected files stay.</p><button data-play-chapter="rebuild">Play a short scene</button></article>
+      <article class="chapter-card" id="rules" data-poster-chapter="rules"><figure><img src="./media/desktop/poster-rules.jpg" alt="Your rules, exact folders." width="960" height="540" loading="lazy"></figure><h2>Your rules, exact folders.</h2><p>A saved rule covers one recipe and one exact folder, starts off and never runs on its own.</p><button data-play-chapter="rules">Play a short scene</button></article>
+      <article class="chapter-card" id="guard" data-poster-chapter="guard"><figure><img src="./media/desktop/poster-guard.jpg" alt="Some doors never open." width="960" height="540" loading="lazy"></figure><h2>Some doors never open.</h2><p>Every path is judged again on its resolved location before deletion, and system areas stay locked.</p><button data-play-chapter="guard">Play a short scene</button></article>
+      <article class="chapter-card" id="plan" data-poster-chapter="plan"><figure><img src="./media/desktop/poster-plan.jpg" alt="A plan that rechecks itself." width="960" height="540" loading="lazy"></figure><h2>A plan that rechecks itself.</h2><p>Selections become an immutable plan that rechecks each file, keeps a journal and measures free space.</p><button data-play-chapter="plan">Play a short scene</button></article>
+      <article class="chapter-card" id="intelligence" data-poster-chapter="intelligence"><figure><img src="./media/desktop/poster-intelligence.jpg" alt="Room to think." width="960" height="540" loading="lazy"></figure><h2>Room to think.</h2><p>A local, read-only inventory of AI-tool storage and a headroom plan for your next job.</p><button data-play-chapter="intelligence">Play a short scene</button></article>
+      <article class="chapter-card" id="local" data-poster-chapter="local"><figure><img src="./media/desktop/poster-local.jpg" alt="On this device." width="960" height="540" loading="lazy"></figure><h2>On this device.</h2><p>One graphite and mint workspace, where scans and analysis stay on your PC.</p><button data-play-chapter="local">Play a short scene</button></article>
+    </div>
+    <footer class="calm-footer"><a data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a><a href="../montage-pro/" data-i18n="nextFilm">Next film: Montage Pro ↗</a></footer>
+  </section>
+
+  <dialog class="film-dialog" data-chapter-dialog aria-labelledby="chapter-dialog-title">
+    <header><h2 id="chapter-dialog-title" data-i18n="chapters">Chapters</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <ol data-chapter-list></ol>
+  </dialog>
+  <dialog class="film-dialog film-watch" data-watch-dialog aria-labelledby="watch-title">
+    <header><h2 id="watch-title" data-watch-title>Reclaim</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <video data-watch-video controls playsinline preload="none"></video>
+    <p data-i18n="shortScene">A short, silent scene from the film. Close it to continue exploring.</p>
+  </dialog>
+  <script id="film-data" type="application/json">{"schemaVersion":1,"id":"reclaim","duration":165,"fps":30,"clipSeconds":5,"clipCount":33,"accent":"#8CE3BE","title":{"en":"Reclaim — Eleven rooms","ar":"Reclaim — إحدى عشرة غرفة"},"gallery":{"en":"../../en/motion/","ar":"../../ar/motion/"},"pixelsPerSecond":{"desktop":88,"mobile":72},"profiles":{"desktop":{"clips":"./media/desktop/clip-{index}.mp4","poster":"./media/desktop/poster-scan.jpg","width":1600,"height":900},"mobile":{"clips":"./media/mobile/clip-{index}.mp4","poster":"./media/mobile/poster-scan.jpg","width":720,"height":1280}},"copy":{"skip":{"en":"Skip to the chapters","ar":"انتقل إلى الفصول"},"edition":{"en":"Eleven rooms · A motion study","ar":"إحدى عشرة غرفة · دراسة في الحركة"},"filmLabel":{"en":"Reclaim · Eleven rooms","ar":"Reclaim · إحدى عشرة غرفة"},"product":{"en":"Product","ar":"البرنامج"},"world":{"en":"World","ar":"العالم"},"lensLabel":{"en":"Explore Reclaim","ar":"استكشف Reclaim"},"navigation":{"en":"Film navigation","ar":"التنقل في الفيلم"},"gallery":{"en":"All films","ar":"كل الأفلام"},"caseStudy":{"en":"Case study","ar":"دراسة الحالة"},"retry":{"en":"Try again","ar":"أعد المحاولة"},"chapters":{"en":"Chapters","ar":"الفصول"},"close":{"en":"Close","ar":"إغلاق"},"hint":{"en":"Scroll to explore · Reverse to return","ar":"مرّر لتستكشف · اعكس التمرير للرجوع"},"calmTitle":{"en":"A whole drive in seconds.","ar":"قرص كامل في ثوانٍ."},"calmSummary":{"en":"A 165-second tour of Reclaim 1.5.0 for Windows: direct file-table scans, evidence-first cleanup, verified copies, sealed plans and local AI-storage planning, rebuilt from the real graphite and mint interface.","ar":"جولة مدتها 165 ثانية في Reclaim 1.5.0 لنظام ويندوز: فحص مباشر لجدول الملفات، وتنظيف يبدأ بالدليل، ونسخ مُتحقَّق منها، وخطط مختومة، وتخطيط محلي لمساحة أدوات الذكاء الاصطناعي، أُعيد بناؤها من الواجهة الحقيقية بالرمادي والنعناعي."},"shortScene":{"en":"A short, silent scene from the film. Close it to continue exploring.","ar":"مشهد قصير من الفيلم دون صوت. أغلقه لتواصل الاستكشاف."},"nextFilm":{"en":"Next film: Montage Pro ↗","ar":"الفيلم التالي: Montage Pro ↗"}},"chapters":[{"id":"scan","start":0,"previewAt":4,"title":{"en":"A whole drive in seconds.","ar":"قرص كامل في ثوانٍ."},"summary":{"en":"Reclaim reads the NTFS master file table directly, then rolls every size up the folder tree.","ar":"يقرأ Reclaim جدول الملفات الرئيسي في NTFS مباشرةً، ثم يجمع الأحجام صعوداً عبر شجرة المجلدات."},"accent":"#8CE3BE","posters":{"desktop":"./media/desktop/poster-scan.jpg","mobile":"./media/mobile/poster-scan.jpg"},"action":{"href":{"en":"../../en/work/reclaim/","ar":"../../ar/work/reclaim/"},"label":{"en":"Read the case study","ar":"اقرأ دراسة الحالة"}}},{"id":"browser","start":15,"previewAt":25,"title":{"en":"The heaviest things, first.","ar":"الأثقل أولاً."},"summary":{"en":"Biggest anywhere ranks the drive, says what each item is and passes through protected parents.","ar":"يرتّب «الأكبر في أي مكان» محتوى القرص، ويشرح ماهية كل عنصر، ويتجاوز المجلدات الأم المحمية."},"accent":"#FFB87A","posters":{"desktop":"./media/desktop/poster-browser.jpg","mobile":"./media/mobile/poster-browser.jpg"}},{"id":"history","start":30,"previewAt":39,"title":{"en":"See where space changed.","ar":"اعرف أين تغيّرت المساحة."},"summary":{"en":"Two saved scans are compared folder by folder, and uncertain results are marked as uncertain.","ar":"يقارن البرنامج آخر فحصين محفوظين مجلداً مجلداً، ويَسِم النتائج غير المؤكدة بأنها غير مؤكدة."},"accent":"#9EBFFF","posters":{"desktop":"./media/desktop/poster-history.jpg","mobile":"./media/mobile/poster-history.jpg"}},{"id":"review","start":44,"previewAt":51,"title":{"en":"Evidence first. You decide.","ar":"الدليل أولاً، والقرار لك."},"summary":{"en":"Smart Review builds an explained shortlist in three groups and selects nothing for you.","ar":"تبني «المراجعة الذكية» قائمة مختصرة مشروحة في ثلاث مجموعات، ولا تختار شيئاً نيابةً عنك."},"accent":"#F1BC60","posters":{"desktop":"./media/desktop/poster-review.jpg","mobile":"./media/mobile/poster-review.jpg"}},{"id":"copies","start":59,"previewAt":65,"title":{"en":"Identical, byte for byte.","ar":"متطابقان حتى آخر بايت."},"summary":{"en":"Copies are proven with full SHA-256 reads, hardlinks are not counted, and you choose the keeper.","ar":"تُثبَت النسخ بقراءة SHA-256 كاملة، ولا تُحتسب الروابط الصلبة نسخاً، وأنت من يختار النسخة الباقية."},"accent":"#6DBAFF","posters":{"desktop":"./media/desktop/poster-copies.jpg","mobile":"./media/mobile/poster-copies.jpg"}},{"id":"rebuild","start":75,"previewAt":81,"title":{"en":"Rebuildable, with proof.","ar":"قابل لإعادة البناء، بالدليل."},"summary":{"en":"Generated output qualifies only with producer, scope and source evidence; unexpected files stay.","ar":"لا يُقبل الناتج المولَّد إلا بدليل على المنتِج والنطاق والمصدر، وتبقى الملفات غير المتوقعة في مكانها."},"accent":"#B094F3","posters":{"desktop":"./media/desktop/poster-rebuild.jpg","mobile":"./media/mobile/poster-rebuild.jpg"}},{"id":"rules","start":90,"previewAt":95,"title":{"en":"Your rules, exact folders.","ar":"قواعدك لمجلدات محددة بدقة."},"summary":{"en":"A saved rule covers one recipe and one exact folder, starts off and never runs on its own.","ar":"تغطي القاعدة المحفوظة وصفة واحدة ومجلداً محدداً، وتبدأ معطّلة ولا تعمل من تلقاء نفسها."},"accent":"#DCE5E0","posters":{"desktop":"./media/desktop/poster-rules.jpg","mobile":"./media/mobile/poster-rules.jpg"}},{"id":"guard","start":104,"previewAt":110,"title":{"en":"Some doors never open.","ar":"أبواب لا تُفتح أبداً."},"summary":{"en":"Every path is judged again on its resolved location before deletion, and system areas stay locked.","ar":"يُعاد الحكم على كل مسار وفق موقعه الفعلي قبل الحذف، وتبقى مناطق النظام مقفلة."},"accent":"#FF8F8F","posters":{"desktop":"./media/desktop/poster-guard.jpg","mobile":"./media/mobile/poster-guard.jpg"}},{"id":"plan","start":119,"previewAt":133,"title":{"en":"A plan that rechecks itself.","ar":"خطة تعيد التحقق بنفسها."},"summary":{"en":"Selections become an immutable plan that rechecks each file, keeps a journal and measures free space.","ar":"تتحول الاختيارات إلى خطة ثابتة تعيد فحص كل ملف، وتحتفظ بسجل، وتقيس المساحة الحرة بعد التنفيذ."},"accent":"#FFD479","posters":{"desktop":"./media/desktop/poster-plan.jpg","mobile":"./media/mobile/poster-plan.jpg"}},{"id":"intelligence","start":135,"previewAt":139,"title":{"en":"Room to think.","ar":"مساحة للتفكير."},"summary":{"en":"A local, read-only inventory of AI-tool storage and a headroom plan for your next job.","ar":"جرد محلي للقراءة فقط لمساحة أدوات الذكاء الاصطناعي، وخطة للمساحة اللازمة لمهمتك القادمة."},"accent":"#FFA8D8","posters":{"desktop":"./media/desktop/poster-intelligence.jpg","mobile":"./media/mobile/poster-intelligence.jpg"}},{"id":"local","start":151,"previewAt":162,"title":{"en":"On this device.","ar":"على هذا الجهاز."},"summary":{"en":"One graphite and mint workspace, where scans and analysis stay on your PC.","ar":"مساحة عمل واحدة بالرمادي والنعناعي، يبقى فيها الفحص والتحليل على حاسوبك."},"accent":"#8CE3BE","posters":{"desktop":"./media/desktop/poster-local.jpg","mobile":"./media/mobile/poster-local.jpg"},"action":{"href":{"en":"../montage-pro/?lang=en","ar":"../montage-pro/?lang=ar"},"label":{"en":"Next film: Montage Pro","ar":"الفيلم التالي: Montage Pro"}}}]}</script>
+  <script type="module" src="../shared/film-world.js"></script>
+  <script>
+    // Case-study link follows the page language (film-world.js translates everything else).
+    if (new URLSearchParams(location.search).get('lang') === 'ar') for (const a of document.querySelectorAll('[data-case-link]')) a.href = a.href.replace('/en/', '/ar/');
+  </script>
+</body>
+</html>
