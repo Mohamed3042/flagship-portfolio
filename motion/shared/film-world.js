@@ -118,7 +118,8 @@ export function createFilmWorld(data, scope = document) {
         chapterAction.hidden=!chapter.action;
         if(chapter.action){chapterAction.textContent=tr(chapter.action.label);chapterAction.href=new URL(tr(chapter.action.href),location.href).href;}
       }
-      stage.style.setProperty('--chapter-accent',chapter.accent||data.accent||'#1ed760');
+      // On the root so the glass header, dock and caption take on each world's colour too (film.css transitions it).
+      root.style.setProperty('--chapter-accent',chapter.accent||data.accent||'#1ed760');
       for (const link of all('[data-chapter]')) {
         if (link.dataset.chapter === chapter.id) link.setAttribute('aria-current','step'); else link.removeAttribute('aria-current');
       }

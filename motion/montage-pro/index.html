@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="film-caption-desktop">
+<head>
+  <meta charset="utf-8"><script src="../shared/arcade-loader.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0f0e">
+  <meta name="description" content="Montage Pro is a video studio for the whole life of a film: ingest, sync, review, captions, sound, picture, library and the edit, in eleven worlds you can scroll through.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Montage Pro — Eleven worlds">
+  <meta property="og:description" content="Follow a film from the first clip to the final handoff.">
+  <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/motion/montage-pro/media/og.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://mohamed3042.github.io/flagship-portfolio/motion/montage-pro/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://mohamed3042.github.io/flagship-portfolio/motion/montage-pro/">
+  <title>Montage Pro — Eleven worlds</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20fill%3D%22%23edb654%22%20color%3D%22%23edb654%22%20viewBox%3D%220%200%2036%2036%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20x%3D%222.5%22%20y%3D%227.5%22%20width%3D%2231%22%20height%3D%2221%22%20rx%3D%225%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%222.6%22%2F%3E%3Cpath%20d%3D%22M14.5%2012.8v10.4l9-5.2z%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="../shared/film.css">
+  <style>:root{--accent:#edb654;--film-bg:#0d0f0e;--film-deep:#070808;--film-surface:#1f1e17;--film-raised:#28251b;--film-button:#181712;--film-hover:#393121;--film-line:#4e422c;--film-line-soft:#3b3424;--film-line-faint:#262116;--film-text:#f3f0e9;--film-soft:#b6ae9f;--film-dim:#877c67;--muted:#b0aa9f;--film-on-accent:#21190c;--glass:rgba(13,15,14,.42)}</style>
+  <link rel="preload" as="image" href="./media/desktop/poster-intro.jpg" media="(min-aspect-ratio: 4/5)">
+  <link rel="preload" as="image" href="./media/mobile/poster-intro.jpg" media="(max-aspect-ratio: 4/5)">
+</head>
+<body>
+  <a class="film-skip" data-film-skip href="#chapters" data-i18n="skip">Skip to the chapters</a>
+  <header class="film-header">
+    <a class="film-brand" data-gallery-link href="../../en/motion/" aria-label="Montage Pro · Software in Motion">
+      <svg aria-hidden="true" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect x="2.5" y="7.5" width="31" height="21" rx="5" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M14.5 12.8v10.4l9-5.2z"/></svg>
+      <span>Montage Pro<small data-i18n="edition">Eleven worlds · A motion study</small></span>
+    </a>
+    <nav aria-label="Film navigation" data-i18n-label="navigation">
+      <a class="gallery-header" data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a>
+      <a data-language-link href="?lang=ar" lang="ar" hreflang="ar">العربية</a>
+    </nav>
+  </header>
+
+  <main class="film-story" data-film-story aria-label="Montage Pro scroll film" hidden>
+    <div class="film-stage" data-film-stage>
+      <div class="film-screen" aria-hidden="true">
+        <img class="film-poster" data-film-poster src="./media/desktop/poster-intro.jpg" width="1600" height="900" alt="Montage Pro" fetchpriority="high">
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+      </div>
+    </div>
+    <div class="film-caption">
+      <div class="eyebrow" data-i18n="filmLabel">Montage Pro · Eleven worlds</div>
+      <h1 data-chapter-title>Eleven worlds. One studio.</h1>
+      <p data-chapter-summary>A video studio for the whole journey of a film.</p>
+      <a class="film-chapter-action" data-chapter-action href="#" hidden></a>
+    </div>
+    <div class="film-loading" data-film-loading role="status" hidden>
+      <span data-load-message>Opening the film…</span>
+      <button type="button" data-retry data-i18n="retry" hidden>Try again</button>
+    </div>
+    <footer class="film-controls">
+      <nav class="film-chapter-rail" data-chapter-rail aria-label="Film chapters" data-i18n-label="chapters"></nav>
+      <div class="film-track">
+        <div class="film-progress" data-film-progress></div>
+        <input class="film-scrubber" data-film-scrubber type="range" min="0" max="163.9667" step="0.033333" value="0" aria-label="Film position">
+      </div>
+      <div class="film-control-row">
+        <div class="film-control-group">
+          <button type="button" data-open-chapters data-i18n="chapters">Chapters</button>
+          <button type="button" data-mode-toggle>View chapters</button>
+        </div>
+        <span class="film-hint" data-i18n="hint">Scroll to explore · Reverse to return</span>
+        <span class="film-clock" data-clock>00:00 / 02:44</span>
+      </div>
+    </footer>
+  </main>
+
+  <section class="calm-story" id="chapters" data-calm-story tabindex="-1" aria-label="Montage Pro chapter posters">
+    <div class="calm-intro">
+      <div class="eyebrow" data-i18n="edition">Eleven worlds · A motion study</div>
+      <h1 data-i18n="calmTitle">Eleven worlds. One studio.</h1>
+      <p data-i18n="calmSummary">Montage Pro is a video studio for the whole life of a film: ingest, sync, review, captions, sound, picture, library and the edit, in eleven worlds you can scroll through.</p>
+      <button type="button" data-mode-toggle>Scroll the film</button>
+    </div>
+    <div class="calm-grid">
+      <article class="chapter-card" id="intro" data-poster-chapter="intro"><figure><img src="./media/desktop/poster-intro.jpg" alt="Eleven worlds. One studio." width="960" height="540" loading="lazy"></figure><h2>Eleven worlds. One studio.</h2><p>A video studio for the whole journey of a film.</p><button data-play-chapter="intro">Play a short scene</button></article>
+      <article class="chapter-card" id="ingest" data-poster-chapter="ingest"><figure><img src="./media/desktop/poster-ingest.jpg" alt="Ingest" width="960" height="540" loading="lazy"></figure><h2>Ingest</h2><p>Bring cards, cameras and folders into one project.</p><button data-play-chapter="ingest">Play a short scene</button></article>
+      <article class="chapter-card" id="sync" data-poster-chapter="sync"><figure><img src="./media/desktop/poster-sync.jpg" alt="Sync" width="960" height="540" loading="lazy"></figure><h2>Sync</h2><p>Line up cameras and sound on one timeline.</p><button data-play-chapter="sync">Play a short scene</button></article>
+      <article class="chapter-card" id="review" data-poster-chapter="review"><figure><img src="./media/desktop/poster-review.jpg" alt="Multicamera review" width="960" height="540" loading="lazy"></figure><h2>Multicamera review</h2><p>Watch every angle together and choose the moment.</p><button data-play-chapter="review">Play a short scene</button></article>
+      <article class="chapter-card" id="captions" data-poster-chapter="captions"><figure><img src="./media/desktop/poster-captions.jpg" alt="Captions" width="960" height="540" loading="lazy"></figure><h2>Captions</h2><p>Turn speech into captions you can review.</p><button data-play-chapter="captions">Play a short scene</button></article>
+      <article class="chapter-card" id="handoff" data-poster-chapter="handoff"><figure><img src="./media/desktop/poster-handoff.jpg" alt="Handoff" width="960" height="540" loading="lazy"></figure><h2>Handoff</h2><p>Package the work for the next person in the chain.</p><button data-play-chapter="handoff">Play a short scene</button></article>
+      <article class="chapter-card" id="sound" data-poster-chapter="sound"><figure><img src="./media/desktop/poster-sound.jpg" alt="Sound Lab" width="960" height="540" loading="lazy"></figure><h2>Sound Lab</h2><p>Shape and check the sound of every scene.</p><button data-play-chapter="sound">Play a short scene</button></article>
+      <article class="chapter-card" id="picture" data-poster-chapter="picture"><figure><img src="./media/desktop/poster-picture.jpg" alt="Picture Lab" width="960" height="540" loading="lazy"></figure><h2>Picture Lab</h2><p>Look closely at colour, exposure and the frame.</p><button data-play-chapter="picture">Play a short scene</button></article>
+      <article class="chapter-card" id="library" data-poster-chapter="library"><figure><img src="./media/desktop/poster-library.jpg" alt="Library" width="960" height="540" loading="lazy"></figure><h2>Library</h2><p>Find any clip, take or project again.</p><button data-play-chapter="library">Play a short scene</button></article>
+      <article class="chapter-card" id="edit" data-poster-chapter="edit"><figure><img src="./media/desktop/poster-edit.jpg" alt="Edit Room" width="960" height="540" loading="lazy"></figure><h2>Edit Room</h2><p>Cut the story together.</p><button data-play-chapter="edit">Play a short scene</button></article>
+      <article class="chapter-card" id="profile" data-poster-chapter="profile"><figure><img src="./media/desktop/poster-profile.jpg" alt="Creative profile" width="960" height="540" loading="lazy"></figure><h2>Creative profile</h2><p>Keep the choices that make your work yours.</p><button data-play-chapter="profile">Play a short scene</button></article>
+      <article class="chapter-card" id="anywhere" data-poster-chapter="anywhere"><figure><img src="./media/desktop/poster-anywhere.jpg" alt="Anywhere" width="960" height="540" loading="lazy"></figure><h2>Anywhere</h2><p>Follow the project from another screen.</p><button data-play-chapter="anywhere">Play a short scene</button></article>
+      <article class="chapter-card" id="finale" data-poster-chapter="finale"><figure><img src="./media/desktop/poster-finale.jpg" alt="Make the next cut yours." width="960" height="540" loading="lazy"></figure><h2>Make the next cut yours.</h2><p>Return to a world, or start the next film.</p><button data-play-chapter="finale">Play a short scene</button></article>
+    </div>
+    <footer class="calm-footer"><a data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a><a href="../job-orbit/" data-i18n="nextFilm">Next film: Job Orbit ↗</a></footer>
+  </section>
+
+  <dialog class="film-dialog" data-chapter-dialog aria-labelledby="chapter-dialog-title">
+    <header><h2 id="chapter-dialog-title" data-i18n="chapters">Chapters</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <ol data-chapter-list></ol>
+  </dialog>
+  <dialog class="film-dialog film-watch" data-watch-dialog aria-labelledby="watch-title">
+    <header><h2 id="watch-title" data-watch-title>Montage Pro</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <video data-watch-video controls playsinline preload="none"></video>
+    <p data-i18n="shortScene">A short, silent scene from the film. Close it to continue exploring.</p>
+  </dialog>
+  <script id="film-data" type="application/json">{"schemaVersion":1,"id":"montage-pro","duration":164,"fps":30,"clipSeconds":5,"clipCount":33,"accent":"#edb654","title":{"en":"Montage Pro — Eleven worlds","ar":"Montage Pro — أحد عشر عالماً"},"gallery":{"en":"../../en/motion/","ar":"../../ar/motion/"},"pixelsPerSecond":{"desktop":88,"mobile":72},"profiles":{"desktop":{"clips":"./media/desktop/clip-{index}.mp4","poster":"./media/desktop/poster-intro.jpg","width":1600,"height":900},"mobile":{"clips":"./media/mobile/clip-{index}.mp4","poster":"./media/mobile/poster-intro.jpg","width":720,"height":1280}},"copy":{"skip":{"en":"Skip to the chapters","ar":"انتقل إلى الفصول"},"edition":{"en":"Eleven worlds · A motion study","ar":"أحد عشر عالماً · رحلة بصرية"},"filmLabel":{"en":"Montage Pro · Eleven worlds","ar":"Montage Pro · أحد عشر عالماً"},"product":{"en":"Product","ar":"البرنامج"},"world":{"en":"World","ar":"العالم"},"lensLabel":{"en":"Explore Montage Pro","ar":"استكشف Montage Pro"},"navigation":{"en":"Film navigation","ar":"التنقل في الفيلم"},"gallery":{"en":"All films","ar":"كل الأفلام"},"caseStudy":{"en":"Case study","ar":"دراسة الحالة"},"retry":{"en":"Try again","ar":"أعد المحاولة"},"chapters":{"en":"Chapters","ar":"الفصول"},"close":{"en":"Close","ar":"إغلاق"},"hint":{"en":"Scroll to explore · Reverse to return","ar":"مرّر لتستكشف · اعكس التمرير للرجوع"},"calmTitle":{"en":"Eleven worlds. One studio.","ar":"أحد عشر عالماً. استوديو واحد."},"calmSummary":{"en":"Montage Pro is a video studio for the whole life of a film: ingest, sync, review, captions, sound, picture, library and the edit, in eleven worlds you can scroll through.","ar":"Montage Pro استوديو فيديو يرافق الفيلم في رحلته كاملة: الاستيراد والمزامنة والمراجعة والترجمة والصوت والصورة والمكتبة والمونتاج، في أحد عشر عالماً تتصفحها بالتمرير."},"shortScene":{"en":"A short, silent scene from the film. Close it to continue exploring.","ar":"مشهد قصير من الفيلم دون صوت. أغلقه لتواصل الاستكشاف."},"nextFilm":{"en":"Next film: Job Orbit ↗","ar":"الفيلم التالي: Job Orbit ↗"}},"chapters":[{"id":"intro","start":0,"previewAt":4,"title":{"en":"Eleven worlds. One studio.","ar":"أحد عشر عالماً. استوديو واحد."},"summary":{"en":"A video studio for the whole journey of a film.","ar":"استوديو فيديو يرافق الفيلم في رحلته كاملة."},"accent":"#edb654","posters":{"desktop":"./media/desktop/poster-intro.jpg","mobile":"./media/mobile/poster-intro.jpg"}},{"id":"ingest","start":8,"previewAt":12,"title":{"en":"Ingest","ar":"الاستيراد"},"summary":{"en":"Bring cards, cameras and folders into one project.","ar":"اجمع البطاقات والكاميرات والمجلدات في مشروع واحد."},"accent":"#d9c7a1","posters":{"desktop":"./media/desktop/poster-ingest.jpg","mobile":"./media/mobile/poster-ingest.jpg"}},{"id":"sync","start":18,"previewAt":25,"title":{"en":"Sync","ar":"المزامنة"},"summary":{"en":"Line up cameras and sound on one timeline.","ar":"زامن الكاميرات والصوت على خط زمني واحد."},"accent":"#edb654","posters":{"desktop":"./media/desktop/poster-sync.jpg","mobile":"./media/mobile/poster-sync.jpg"}},{"id":"review","start":34,"previewAt":38,"title":{"en":"Multicamera review","ar":"مراجعة متعددة الكاميرات"},"summary":{"en":"Watch every angle together and choose the moment.","ar":"شاهد كل الزوايا معاً واختر اللحظة."},"accent":"#8fc1d4","posters":{"desktop":"./media/desktop/poster-review.jpg","mobile":"./media/mobile/poster-review.jpg"}},{"id":"captions","start":44,"previewAt":49,"title":{"en":"Captions","ar":"الترجمة النصية"},"summary":{"en":"Turn speech into captions you can review.","ar":"حوّل الكلام إلى ترجمة نصية يمكنك مراجعتها."},"accent":"#f2efe6","posters":{"desktop":"./media/desktop/poster-captions.jpg","mobile":"./media/mobile/poster-captions.jpg"}},{"id":"handoff","start":56,"previewAt":60,"title":{"en":"Handoff","ar":"التسليم"},"summary":{"en":"Package the work for the next person in the chain.","ar":"جهّز العمل لمن يتسلّمه بعدك."},"accent":"#f0a35e","posters":{"desktop":"./media/desktop/poster-handoff.jpg","mobile":"./media/mobile/poster-handoff.jpg"}},{"id":"sound","start":66,"previewAt":74,"title":{"en":"Sound Lab","ar":"مختبر الصوت"},"summary":{"en":"Shape and check the sound of every scene.","ar":"اضبط صوت كل مشهد وافحصه."},"accent":"#a5c9ad","posters":{"desktop":"./media/desktop/poster-sound.jpg","mobile":"./media/mobile/poster-sound.jpg"}},{"id":"picture","start":84,"previewAt":92,"title":{"en":"Picture Lab","ar":"مختبر الصورة"},"summary":{"en":"Look closely at colour, exposure and the frame.","ar":"تمعّن في اللون والإضاءة والكادر."},"accent":"#c79bf2","posters":{"desktop":"./media/desktop/poster-picture.jpg","mobile":"./media/mobile/poster-picture.jpg"}},{"id":"library","start":102,"previewAt":108,"title":{"en":"Library","ar":"المكتبة"},"summary":{"en":"Find any clip, take or project again.","ar":"اعثر من جديد على أي مقطع أو لقطة أو مشروع."},"accent":"#7fd1c7","posters":{"desktop":"./media/desktop/poster-library.jpg","mobile":"./media/mobile/poster-library.jpg"}},{"id":"edit","start":116,"previewAt":122,"title":{"en":"Edit Room","ar":"غرفة المونتاج"},"summary":{"en":"Cut the story together.","ar":"اصنع القصة بالمونتاج."},"accent":"#ed9690","posters":{"desktop":"./media/desktop/poster-edit.jpg","mobile":"./media/mobile/poster-edit.jpg"}},{"id":"profile","start":130,"previewAt":135,"title":{"en":"Creative profile","ar":"الملف الإبداعي"},"summary":{"en":"Keep the choices that make your work yours.","ar":"احتفظ بالاختيارات التي تمنح عملك طابعه."},"accent":"#f8ce81","posters":{"desktop":"./media/desktop/poster-profile.jpg","mobile":"./media/mobile/poster-profile.jpg"}},{"id":"anywhere","start":142,"previewAt":146,"title":{"en":"Anywhere","ar":"أينما كنت"},"summary":{"en":"Follow the project from another screen.","ar":"تابع المشروع من شاشة أخرى."},"accent":"#edb654","posters":{"desktop":"./media/desktop/poster-anywhere.jpg","mobile":"./media/mobile/poster-anywhere.jpg"}},{"id":"finale","start":150,"previewAt":156,"title":{"en":"Make the next cut yours.","ar":"اجعل القصّة التالية بأسلوبك."},"summary":{"en":"Return to a world, or start the next film.","ar":"عُد إلى أحد العوالم، أو ابدأ الفيلم التالي."},"accent":"#edb654","posters":{"desktop":"./media/desktop/poster-finale.jpg","mobile":"./media/mobile/poster-finale.jpg"},"action":{"href":{"en":"../job-orbit/?lang=en","ar":"../job-orbit/?lang=ar"},"label":{"en":"Next film: Job Orbit","ar":"الفيلم التالي: Job Orbit"}}}]}</script>
+  <script type="module" src="../shared/film-world.js"></script>
+  <script>
+    // Case-study link follows the page language (film-world.js translates everything else).
+    if (new URLSearchParams(location.search).get('lang') === 'ar') for (const a of document.querySelectorAll('[data-case-link]')) a.href = a.href.replace('/en/', '/ar/');
+  </script>
+</body>
+</html>
