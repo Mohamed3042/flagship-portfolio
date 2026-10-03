@@ -13,7 +13,7 @@
   <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/mk-downloader/assets/social.jpg">
   <meta name="twitter:card" content="summary_large_image"><link rel="icon" href="assets/icon.png">
   <link rel="preload" href="fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css"><script defer src="scroll-film.js"></script>
+  <link rel="stylesheet" href="styles.css?v=2"><script defer src="scroll-film.js?v=2"></script>
 </head>
 <body>
   <a class="skip" href="#details" data-copy="skip">Skip to product details</a>
@@ -26,10 +26,17 @@
           <a class="language" href="?lang=ar" lang="ar" hreflang="ar" data-language>العربية</a>
         </header>
         <div class="film-screen">
-          <video id="scroll-film" width="1920" height="1080" controls playsinline preload="metadata" poster="assets/poster-wide.jpg" src="assets/film-wide.mp4" aria-label="MK Downloader, a 24-second film">
+          <video id="scroll-film" width="1920" height="1080" controls playsinline preload="none" poster="assets/poster-wide.jpg" src="assets/film-wide.mp4" aria-label="MK Downloader, a 24-second film">
             <p><a href="assets/film-wide.mp4">Download the MK Downloader film</a></p>
           </video>
-          <div class="loading" id="load-state" hidden><i aria-hidden="true"></i><span data-copy="loading">Loading the film…</span></div>
+          <div class="loading" id="load-state" hidden>
+            <div class="loading-card">
+              <p id="load-label" role="status" aria-live="polite" data-copy="loading">Loading the film…</p>
+              <strong id="load-percent" dir="ltr" aria-hidden="true">0%</strong>
+              <progress id="load-progress" max="100" value="0" aria-labelledby="load-label" aria-describedby="load-bytes"></progress>
+              <span id="load-bytes" dir="ltr">0 MB downloaded</span>
+            </div>
+          </div>
         </div>
         <div class="film-controls" hidden>
           <div class="playhead-row">

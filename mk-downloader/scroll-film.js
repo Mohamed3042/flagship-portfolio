@@ -4,6 +4,7 @@
   const video = $('#scroll-film'), story = $('#film-story'), controls = $('.film-controls');
   const slider = $('#playhead'), timecode = $('#timecode'), sceneLabel = $('#scene-label');
   const loading = $('#load-state'), motionChoice = $('#motion-choice'), dialog = $('#cinema'), sound = $('#sound-film');
+  const loadLabel=$('#load-label'), loadPercent=$('#load-percent'), loadProgress=$('#load-progress'), loadBytes=$('#load-bytes');
   const chapterButtons = [...document.querySelectorAll('[data-time]')];
   const times = [0,3,6,10,14,18,21], duration = 24, lastTime = duration - 1/60;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -28,6 +29,7 @@
   const names = chapterButtons.map(el=>el.textContent.trim());
   let enabled=false,ready=false,target=0,raf=0,format='',loadTimer=0,lastChapter=-1;
   let start=0,distance=0,resizeTimer=0,cinemaScroll=0;
+  let download=null,mediaURL='';
   const clamp=(n,a=0,b=1)=>Math.min(b,Math.max(a,n));
   const stamp=t=>`00:${String(Math.floor(t)).padStart(2,'0')}`;
   const currentFormat=()=>portrait.matches?'portrait':'wide';
@@ -54,12 +56,54 @@
     start=story.getBoundingClientRect().top+scrollY;distance=Math.max(1,story.offsetHeight-h);
     return progress;
   }
+  function downloadProgress(loaded,total,complete=false){
+    const mb=n=>(n/1e6).toFixed(2);
+    if(total>0){
+      const percent=complete?100:Math.min(99,Math.floor(loaded/total*100));
+      loadPercent.textContent=`${percent}%`;loadProgress.value=percent;
+      loadBytes.textContent=`${mb(loaded)} / ${mb(total)} MB`;
+    }else{
+      loadPercent.textContent='—';loadProgress.removeAttribute('value');
+      loadBytes.textContent=ar?`${mb(loaded)} MB تم تحميلها`:`${mb(loaded)} MB downloaded`;
+    }
+  }
+  function loadingWatchdog(){
+    clearTimeout(loadTimer);
+    loadTimer=setTimeout(()=>{if(!ready)fallback(ar?'توقف التحميل مؤقتًا. استخدم أدوات التشغيل أو أعد تفعيل التمرير.':'The download has stalled. Use the playback controls or enable scroll control to retry.')},35000);
+  }
+  function releaseDownload(){
+    clearTimeout(loadTimer);
+    if(download){const previous=download;download=null;previous.abort()}
+    video.removeAttribute('src');video.load();
+    if(mediaURL){URL.revokeObjectURL(mediaURL);mediaURL=''}
+  }
   function source(){
     const next=currentFormat();if(next===format)return;
-    format=next;ready=false;loading.hidden=false;loading.dataset.error='false';
-    loading.querySelector('span').textContent=ar?copy.loading:'Loading the film…';
-    video.poster=`assets/poster-${format}.jpg`;video.src=`assets/scroll-${format}.mp4`;video.load();
-    clearTimeout(loadTimer);loadTimer=setTimeout(()=>{if(!ready)fallback(ar?'تحميل الفيلم يستغرق وقتًا. استخدم أدوات التشغيل.':'The film is taking a while to load. Use the playback controls.')},25000);
+    ready=false;releaseDownload();format=next;loading.hidden=false;video.setAttribute('aria-hidden','true');
+    loadLabel.textContent=ar?copy.loading:'Loading the film…';downloadProgress(0,0);
+    video.poster=`assets/poster-${format}.jpg`;
+    // Native video buffering measures time ranges, not downloaded bytes. Fetch
+    // the complete scrub file so the percentage and every later seek are real.
+    const request=new XMLHttpRequest();download=request;
+    request.open('GET',`assets/scroll-${format}.mp4`);request.responseType='blob';
+    request.onreadystatechange=()=>{
+      if(download===request&&request.readyState===2){
+        downloadProgress(0,Number(request.getResponseHeader('Content-Length'))||0);loadingWatchdog();
+      }
+    };
+    request.onprogress=event=>{
+      if(download!==request)return;
+      downloadProgress(event.loaded,event.lengthComputable?event.total:0);loadingWatchdog();
+    };
+    request.onload=()=>{
+      if(download!==request||!enabled)return;
+      if(request.status!==200||!request.response?.size){fallback(ar?'تعذّر تحميل الفيلم. استخدم أدوات التشغيل أو أعد المحاولة.':'The film could not download. Use the playback controls or try again.');return}
+      download=null;const blob=request.response;
+      downloadProgress(blob.size,blob.size,true);loadLabel.textContent=ar?'اكتمل التحميل. جارٍ تجهيز الفيلم…':'Download complete. Preparing the film…';
+      mediaURL=URL.createObjectURL(blob);video.src=mediaURL;video.load();loadingWatchdog();
+    };
+    request.onerror=()=>{if(download===request)fallback(ar?'انقطع الاتصال. استخدم أدوات التشغيل أو أعد المحاولة.':'The connection was interrupted. Use the playback controls or try again.')};
+    loadingWatchdog();request.send();
   }
   function enable(){
     if(enabled)return;enabled=true;document.documentElement.classList.add('scroll-active');motionChoice.hidden=true;controls.hidden=false;
@@ -67,16 +111,16 @@
     layout();source();scroll();
   }
   function fallback(message){
-    const wasEnabled=enabled;enabled=false;ready=false;clearTimeout(loadTimer);cancelAnimationFrame(raf);raf=0;document.documentElement.classList.remove('scroll-active');controls.hidden=true;loading.hidden=true;
-    video.controls=true;video.muted=false;video.preload='metadata';format='';
+    const wasEnabled=enabled;enabled=false;ready=false;releaseDownload();cancelAnimationFrame(raf);raf=0;document.documentElement.classList.remove('scroll-active');controls.hidden=true;loading.hidden=true;
+    video.controls=true;video.muted=false;video.preload='metadata';video.removeAttribute('aria-hidden');format='';
     const f=currentFormat();video.poster=`assets/poster-${f}.jpg`;video.src=`assets/film-${f}.mp4`;video.load();
     motionChoice.hidden=false;motionChoice.querySelector('p').textContent=message|| (ar?copy.reduced:'Reduced motion is on. Play the film, or enable scroll control.');
     if(wasEnabled)window.scrollTo({top:story.offsetTop,behavior:'instant'});
   }
   function jump(t,smooth=true){if(!enabled)enable();window.scrollTo({top:Math.ceil(start+clamp(t/lastTime)*distance),behavior:smooth&&!reduced.matches?'smooth':'instant'})}
-  video.addEventListener('loadeddata',()=>{if(!enabled)return;clearTimeout(loadTimer);ready=true;video.pause();loading.hidden=true;scroll()});
+  video.addEventListener('loadeddata',()=>{if(!enabled||!mediaURL||video.getAttribute('src')!==mediaURL)return;clearTimeout(loadTimer);ready=true;video.pause();video.removeAttribute('aria-hidden');loading.hidden=true;scroll()});
   video.addEventListener('seeked',()=>{if(enabled)schedule()});
-  video.addEventListener('error',()=>{if(enabled)fallback(ar?'تعذّر تحميل نسخة التمرير. شغّل الفيلم أدناه.':'The scroll version could not load. Play the film below.')});
+  video.addEventListener('error',()=>{if(enabled&&mediaURL&&video.getAttribute('src')===mediaURL)fallback(ar?'تعذّر تحميل نسخة التمرير. شغّل الفيلم أدناه.':'The scroll version could not load. Play the film below.')});
   video.addEventListener('play',()=>{if(enabled)video.pause()});
   window.addEventListener('scroll',scroll,{passive:true});
   window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(!enabled)return;const p=distance?clamp((scrollY-start)/distance):0;layout();source();window.scrollTo({top:start+p*distance,behavior:'instant'});scroll()},150)},{passive:true});
