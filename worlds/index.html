@@ -211,12 +211,12 @@
     <!-- MK Educate film entry: public campaign media only. -->
     <a class="card feature" href="../en/work/mk-educate" data-educate-world style="--wc:#E8B64A">
       <span class="badge"><span class="L en">Scroll the film · MK Educate</span><span class="L ar">حرّك الفيلم بالتمرير · MK Educate</span></span>
-      <div class="art"><img src="../media/mk-educate/poster-desktop.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="art"><img src="../media/mk-educate/v2/poster-desktop.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
       <div class="pal"><i style="background:#111B34"></i><i style="background:#24355B"></i><i style="background:#796AC7"></i><i style="background:#E8B64A"></i><i style="background:#F8F4EB"></i></div>
       <div class="meta">
-        <h2><span class="L en">From pages to a lesson.</span><span class="L ar">من صفحات كثيرة إلى درس واضح.</span></h2>
-        <p><span class="L en">An Arabic-first teaching workspace. Scroll the actual film forward and back, with a dedicated cut for desktop and phone.</span><span class="L ar">مساحة عمل عربية للمعلّم. حرّك الفيلم للأمام والخلف بالتمرير، بنسخة مخصّصة للكمبيوتر وأخرى للهاتف.</span></p>
-        <p class="spec"><span><i>00:28</i></span><span><span class="L en">product film · demonstration data</span><span class="L ar">فيلم منتج · بيانات توضيحية</span></span></p>
+        <h2><span class="L en">A little more room to teach.</span><span class="L ar">مساحة لكل درس يستحق.</span></h2>
+        <p><span class="L en">A longer story with a cleaner, reimagined teaching interface. Scroll the film forward and back, composed separately for desktop and phone.</span><span class="L ar">قصة أطول بواجهة تدريس مُعاد تصوّرها. حرّك الفيلم للأمام والخلف بالتمرير، بتكوين مخصّص لكل من الكمبيوتر والهاتف.</span></p>
+        <p class="spec"><span><i>01:00</i></span><span><span class="L en">reimagined interface · illustrative content</span><span class="L ar">واجهة مُعاد تصوّرها · محتوى توضيحي</span></span></p>
       </div>
     </a>
     <!-- End MK Educate film entry. -->
@@ -440,5 +440,6 @@
       ? '../ar/work/engineering-smart-system' : '../en/work/engineering-smart-system';
   });
 </script>
+<script id="educate-world-language">document.querySelector('[data-educate-world]').addEventListener('click',function(){this.href=document.documentElement.lang==='ar'||document.body.classList.contains('lang-ar')?'../ar/work/mk-educate':'../en/work/mk-educate'});</script>
 </body>
 </html>
