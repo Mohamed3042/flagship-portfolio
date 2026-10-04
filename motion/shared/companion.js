@@ -141,6 +141,86 @@
   .mk-ripple{position:fixed;z-index:2147482569;left:0;top:0;width:40px;height:40px;margin:-20px 0 0 -20px;border:2px solid rgba(143,211,255,.95);border-radius:50%;pointer-events:none;animation:mk-ripple 1s ease-out both}
   @keyframes mk-ripple{from{transform:scale(.2);opacity:1}to{transform:scale(4.5);opacity:0}}
   .mk-confetti{position:fixed;z-index:2147482575;left:0;top:0;width:8px;height:12px;border-radius:2px;pointer-events:none}
+  .mk-deco{position:fixed;z-index:2147482380;left:0;top:0;pointer-events:none;animation:mk-deco-in .6s cubic-bezier(.2,.9,.3,1.2) both}
+  .mk-deco.is-out{animation:mk-deco-out .45s ease-in both}
+  @keyframes mk-deco-in{from{opacity:0;transform:scale(.92)}}
+  @keyframes mk-deco-out{to{opacity:0;transform:scale(1.04)}}
+  .mk-deco>*{position:absolute}
+  .mk-deco svg{overflow:visible}
+  .mk-deco .lbl{font:800 13px/1 'Inter Variable',Inter,system-ui,sans-serif;color:#fff;text-shadow:0 1px 3px #000}
+  .is-tv .bezel{inset:-12px;border:14px solid #2b2722;border-radius:22px;box-shadow:inset 0 0 30px rgba(0,0,0,.85),0 12px 30px rgba(0,0,0,.5)}
+  .is-tv .lines{inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.3) 0 1px,transparent 1px 3px);border-radius:10px}
+  .is-tv .lbl{right:16px;top:14px;color:#9f9;text-shadow:0 0 6px #3f3}
+  .is-reel .strip{top:-6px;bottom:-6px;width:22px;background-color:#0d0b09;background-image:linear-gradient(180deg,#e9e1cf 0 52%,transparent 52%);background-size:9px 15px;background-repeat:repeat-y;background-position:6px 4px}
+  .is-reel .l{left:-22px}.is-reel .r{right:-22px}
+  .is-reel .scr{inset:0;background:linear-gradient(90deg,transparent 31%,rgba(255,255,255,.35) 31.2%,transparent 31.5%,transparent 68%,rgba(255,255,255,.25) 68.2%,transparent 68.4%);animation:mk-scr .3s steps(3) infinite}
+  @keyframes mk-scr{33%{transform:translateX(7px)}66%{transform:translateX(-5px)}}
+  .is-pola .frame{inset:-12px -12px -54px;border:12px solid #fbfaf6;border-bottom-width:54px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+  .is-pola .cap{left:0;right:0;bottom:-42px;text-align:center;font:600 18px/1 'Segoe Print','Bradley Hand','Comic Sans MS',cursive;color:#2b2b2b}
+  .is-marquee .b1,.is-marquee .b2{inset:-12px;border:6px dotted #ffd34d;border-radius:14px;filter:drop-shadow(0 0 6px #ffb703)}
+  .is-marquee .b2{border-color:#fff7cc;inset:-12px;animation:mk-chase .45s steps(1) infinite}
+  @keyframes mk-chase{50%{opacity:0}}
+  .is-marquee .sign{left:50%;top:-46px;translate:-50% 0;padding:7px 14px;border-radius:8px;background:#b3121f;color:#ffe08a;font:900 14px/1 'Inter Variable',Inter,sans-serif;box-shadow:0 0 18px rgba(255,180,60,.6);white-space:nowrap}
+  .is-comic .dots{inset:0;background:radial-gradient(circle,rgba(0,0,0,.4) 1.2px,transparent 1.7px) 0 0/7px 7px;mix-blend-mode:multiply}
+  .is-comic .ink{inset:-5px;border:6px solid #111;border-radius:4px}
+  .is-comic .pow{width:96px;height:96px;right:-34px;top:-38px}
+  .is-comic .pow text{font:900 22px 'Inter Variable',Inter,sans-serif;fill:#e10600}
+  .is-vhs .track{left:0;right:0;height:14%;background:linear-gradient(transparent,rgba(255,255,255,.22),transparent);animation:mk-track 2.4s linear infinite}
+  @keyframes mk-track{from{top:-14%}to{top:100%}}
+  .is-vhs .osd{left:14px;top:12px;font-size:16px}.is-vhs .date{right:14px;bottom:12px;font-size:14px}
+  .is-thermal .cross{left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border:2px solid rgba(255,255,255,.8);border-radius:50%}
+  .is-thermal .lbl{left:12px;top:12px}
+    .mk-spot{position:fixed;inset:0;z-index:2147482370;pointer-events:none;animation:mk-deco-in .6s both}
+  .mk-spot.is-out{animation:mk-deco-out .45s both}
+  .is-coffin svg{inset:0;width:100%;height:100%}
+  .is-coffin polygon{fill:none;stroke:#6b4423;stroke-width:7;vector-effect:non-scaling-stroke}
+  .is-coffin .rip{left:50%;top:52%;translate:-50% -50%;font:800 20px/1 Georgia,serif;color:rgba(255,240,220,.88);text-shadow:0 2px 6px #000}
+  .is-haunt .vig{inset:0;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.78))}
+  .is-haunt .eye{width:12px;height:7px;margin:-3px 0 0 -6px;border-radius:50%;background:#ff2b2b;box-shadow:0 0 12px 4px rgba(255,40,40,.8);animation:mk-blink 3.6s infinite}
+  @keyframes mk-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+  .is-web .web{width:84px;height:84px;stroke:rgba(235,235,245,.92);stroke-width:.7;fill:none;stroke-dasharray:80;stroke-dashoffset:80;animation:mk-web 1.6s ease-out forwards}
+  @keyframes mk-web{to{stroke-dashoffset:0}}
+  .is-web .tl{left:-2px;top:-2px}.is-web .br{right:-2px;bottom:-2px;transform:scale(-1,-1)}
+  .is-web .thread{left:64%;top:0;width:1px;height:20%;background:rgba(235,235,245,.85);animation:mk-thread 3s ease-in-out infinite alternate}
+  @keyframes mk-thread{to{height:46%}}
+  .is-web .spider{position:absolute;left:-6px;bottom:-7px;width:13px;height:10px;border-radius:50%;background:#111;box-shadow:-5px 1px 0 -3px #111,5px 1px 0 -3px #111,0 0 0 1px rgba(255,255,255,.35)}
+  .is-pumpkin svg{inset:0;width:100%;height:100%}
+  .is-pumpkin svg *{fill:#ffcf5a;filter:drop-shadow(0 0 6px #ff9a1a);animation:mk-candle 1.4s ease-in-out infinite alternate}
+  @keyframes mk-candle{to{opacity:.72}}
+  .is-slime svg{inset:0;width:100%;height:100%;fill:#7cff3a;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45))}
+  .is-slime path{transform-origin:50% 0;transform-box:fill-box;animation:mk-drip 1.8s ease-in both}
+  @keyframes mk-drip{from{transform:scaleY(0)}}
+  .is-ghost .gface{left:27%;top:22%;width:46%;height:56%;fill:#14141a;opacity:.82}
+  .is-tomb .epitaph{left:50%;top:40%;translate:-50% -50%;text-align:center;font:800 clamp(16px,2.2vw,30px)/1.1 Georgia,'Times New Roman',serif;color:rgba(255,255,255,.9);text-shadow:0 -1px 0 rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.2);white-space:nowrap}
+  .is-tomb .epitaph small{display:block;margin-top:6px;font-size:.55em;font-weight:600}
+  .is-tomb .grass{left:4%;right:4%;bottom:-6px;height:12px;background:repeating-linear-gradient(90deg,#2f6b2f 0 3px,#3f8f3f 3px 5px,transparent 5px 7px)}
+  .is-brew .brew{left:0;right:0;bottom:0;height:46%;background:linear-gradient(180deg,rgba(124,255,58,.8),rgba(30,120,20,.95));border-radius:0 0 8px 8px;box-shadow:0 -6px 22px rgba(124,255,58,.55);animation:mk-rise 1.2s ease-out both}
+  @keyframes mk-rise{from{height:0}}
+  .is-brew .bub{bottom:12%;width:12px;height:12px;border-radius:50%;border:2px solid rgba(220,255,200,.9);animation:mk-bub 1.6s ease-in infinite}
+  .is-brew .bub:nth-child(2){left:18%;animation-delay:.2s}.is-brew .bub:nth-child(3){left:42%;animation-delay:.7s}.is-brew .bub:nth-child(4){left:66%;animation-delay:1.1s}.is-brew .bub:nth-child(5){left:84%;animation-delay:.4s}
+  @keyframes mk-bub{from{transform:translateY(0);opacity:1}to{transform:translateY(-70px);opacity:0}}
+  .is-moon .moon{right:-20px;top:-30px;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9a8a,#c0182a 60%,#6d0a14);box-shadow:0 0 44px 12px rgba(220,30,40,.55)}
+  .is-moon .fog{left:-10%;right:-10%;bottom:-8px;height:42%;background:linear-gradient(transparent,rgba(200,200,220,.42));filter:blur(8px);animation:mk-fog 4s ease-in-out infinite alternate}
+  @keyframes mk-fog{to{transform:translateX(16px)}}
+  .is-angel .halo{left:50%;top:-30px;width:46%;height:20px;translate:-50% 0;border-radius:50%;border:5px solid #ffd76a;box-shadow:0 0 18px 4px rgba(255,215,106,.85),inset 0 0 8px rgba(255,240,180,.8)}
+  .is-angel .wing{top:8%;width:70px;height:94px;fill:#fff;stroke:#d9dde6;stroke-width:1.2;filter:drop-shadow(0 4px 12px rgba(255,255,255,.55))}
+  .is-angel .l{left:-64px;transform-origin:100% 50%;animation:mk-flapL 1.3s ease-in-out infinite}
+  .is-angel .r{right:-64px;transform-origin:0 50%;animation:mk-flapR 1.3s ease-in-out infinite}
+  @keyframes mk-flapL{50%{transform:rotate(-14deg)}}
+  @keyframes mk-flapR{50%{transform:rotate(14deg)}}
+  .is-cloud .c{width:96px;height:34px;border-radius:999px;background:#fff;box-shadow:26px -15px 0 5px #fff,54px -6px 0 3px #fff,0 8px 24px rgba(160,190,255,.45);animation:mk-drift 6s ease-in-out infinite alternate}
+  .is-cloud .c1{left:-30px;bottom:-14px}.is-cloud .c2{right:10px;bottom:-18px;animation-delay:-2s}.is-cloud .c3{left:16%;top:-22px;scale:.7;animation-delay:-4s}
+  @keyframes mk-drift{to{translate:18px 0}}
+  .is-rainbow .bow{left:-8%;width:116%;bottom:52%;height:auto;aspect-ratio:2;fill:none;stroke-width:6;stroke-linecap:round;stroke-dasharray:320;stroke-dashoffset:320;animation:mk-bow 1.5s ease-out forwards;filter:drop-shadow(0 0 6px rgba(255,255,255,.6))}
+  @keyframes mk-bow{to{stroke-dashoffset:0}}
+  .is-gold .frame{inset:-14px;border:14px solid #d4a017;border-image:linear-gradient(135deg,#fff3b0,#d4a017 30%,#fff6c4 50%,#b8860b 70%,#fff3b0) 1;box-shadow:0 0 34px rgba(255,215,0,.5)}
+  .is-gold .rays{left:50%;bottom:100%;width:220%;height:140%;translate:-50% 0;background:repeating-conic-gradient(from -62deg at 50% 100%,rgba(255,240,170,.3) 0deg 5deg,transparent 5deg 13deg);-webkit-mask:linear-gradient(transparent,#000 70%);mask:linear-gradient(transparent,#000 70%);animation:mk-rays 9s linear infinite}
+  @keyframes mk-rays{to{transform:rotate(6deg)}}
+  .is-bubble .b{inset:-16%;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.8),transparent 16%),conic-gradient(from 0deg,rgba(255,120,200,.3),rgba(120,200,255,.3),rgba(160,255,180,.3),rgba(255,230,120,.3),rgba(255,120,200,.3));-webkit-mask:radial-gradient(circle,transparent 60%,#000 69%);mask:radial-gradient(circle,transparent 60%,#000 69%);animation:mk-spin 6s linear infinite}
+  .is-box .side{left:0;right:0;bottom:0;height:60%;background:linear-gradient(#c4975a,#a87a43);border-top:3px solid #8c6338;box-shadow:inset 0 -10px 20px rgba(0,0,0,.2)}
+  .is-box .flap{bottom:60%;width:46%;height:20%;background:#c4975a;border:2px solid #8c6338}
+  .is-box .fl{left:-6%;transform:skewY(-14deg);transform-origin:100% 100%}.is-box .fr{right:-6%;transform:skewY(14deg);transform-origin:0 100%}
+  .is-box .tape{left:46%;bottom:0;width:8%;height:60%;background:rgba(240,220,170,.6)}
   [data-site-mode=white] .mk-sfx:not(.rainbow){color:#141414;text-shadow:0 1px 0 #fff,0 0 10px rgba(255,255,255,.85)}
   [data-site-mode=white] .mk-pop:not(.mk-note){background:#fff;color:#16161a;border-color:rgba(0,0,0,.1);box-shadow:0 14px 40px rgba(0,0,0,.16)}
   [data-site-mode=white] .mk-pop .k{color:#b4532f}[data-site-mode=white] .mk-pop .s{color:#2f7d32}[data-site-mode=white] .mk-pop .f{color:#2e5bd6}[data-site-mode=white] .mk-pop .c{color:#6b7078}[data-site-mode=white] .mk-pop .n{color:#a8661a}
@@ -359,7 +439,20 @@
     }
     for (const s of [-1, 1]) if ((s < 0 ? P.armL : P.armR) === 'fwd') cells(ARM.fwd, ox, oy + (s < 0 ? P.dyL || 0 : P.dyR || 0), s, c.d);
   }
-  const drawChar = (who, ox, oy, P) => (who === 'crow' ? drawCrow : drawOpus)(ox, oy, P);
+  // an edition dresses the companion: a witch for Halloween, a fairy for Heaven
+  const HAT = ['..........kk......', '.........kkk......', '........kkkk......', '.......kkkkk......', '.......kkkkkk.....', '......kkkkkkk.....', '......pppyppp.....', '.....kkkkkkkkk....', '.kkkkkkkkkkkkkkkk.'];
+  const WINGL = ['..ww.', '.wwwb', 'wwwwb', 'wwwb.', '.wb..', '..b..'], WINGR = WINGL.map(r => [...r].reverse().join(''));
+  function costume(layer, ox, oy, P) {
+    const ed = root.dataset.edition;
+    if (!ed) return;
+    const top = topOf(oy, P);
+    if (ed === 'halloween' && layer === 'front' && !P.hat) S(ox, top - 9, HAT, {k: '#241B33', p: '#7B3FBF', y: '#FFD34D'});
+    if (ed === 'heaven') {
+      if (layer === 'back') {const up = frame % 4 < 2 ? 1 : 0; alpha(.85, () => {S(ox - 4, top + 1 - up, WINGL, {w: '#EAF6FF', b: '#B9DCFF'}); S(ox + 17, top + 1 - up, WINGR, {w: '#EAF6FF', b: '#B9DCFF'});});}
+      else if (!P.hat) S(ox + 5, top - 4, ['.yyyyyy.', 'y......y', '.yyyyyy.'], {y: '#FFD76A'});
+    }
+  }
+  const drawChar = (who, ox, oy, P) => {costume('back', ox, oy, P); (who === 'crow' ? drawCrow : drawOpus)(ox, oy, P); costume('front', ox, oy, P);};
 
   // ── props ─────────────────────────────────────────────────────────────────────────────────────
   const SYN = ['#E8916F', '#7AA2F7', '#9ECE6A', '#BB9AF7', '#E0AF68', '#C0CAF5', '#C0CAF5'];
@@ -500,6 +593,7 @@
         case 'dust': alpha(k * .5, () => {const s = 1 + Math.round(p.t * 4); R(x - (s >> 1), y - (s >> 1), s, s, p.c || '#B9B4AA');}); break;
         case 'glyph': alpha(Math.min(1, k * 1.6), () => glyph(p.ch, x, y, p.c)); break;
         case 'spark': alpha(k, () => {P1(x, y, p.c); if (p.t % .2 < .1) for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) P1(x + dx, y + dy, p.c);}); break;
+        case 'sprite': alpha(Math.min(1, k * 2.5), () => S(x, y, p.frames[(frame + (p.ph | 0)) % p.frames.length], p.pal)); break;
         case 'item': alpha(Math.min(1, (p.life - p.t) / 2), () => {S(x, y, p.art.a, p.art.p); if (p.t % 1.4 < .15) P1(x + p.art.a[0].length, y - 1, '#FFFFFF');}); break;
         case 'feather': alpha(p.down ? clamp(1 - (p.t - p.down - 3) / 2, 0, 1) : 1, () => S(x, y, p.down ? FEATHER[2] : p.vx < -3 ? FEATHER[0] : p.vx > 3 ? FEATHER[1] : FEATHER[3], FPAL)); break;
       }
@@ -831,7 +925,7 @@
       front(t, o) {laptop(o.bx, o.by, t);},
       tick(t, st) {if (t > (st.next ??= 3.5)) {st.next = t + rnd(3, 5); const ok = Math.random() < .8; emit({kind: 'glyph', ch: ok ? '✓' : '✗', x: C.ox + 23, y: C.oy - 6, vy: -5, life: 1.4, c: ok ? '#7EE08A' : '#FF6B6B'});}}},
     {id: 'sleep', who: 'both', dur: [12, 18], say: T('Five more minutes. The build is still running.', 'خمس دقائق بعد. البناء ما زال يعمل.'),
-      pose(t, P) {P.flat = 1; P.eyes = 'closed'; P.look = [0, 0];},
+      pose(t, P) {P.flat = 1; P.eyes = 'closed'; P.look = [0, 0]; P.hat = 1;},
       front(t, o, st) {if (st.kind === 'opus') nightcap(o.ox, o.top);},
       tick(t, st) {if (t > (st.next ??= .6)) {st.next = t + 1.2; st.z = !st.z; emit({kind: 'glyph', ch: st.z ? 'Z' : 'z', x: C.ox + 15, y: C.oy + 1, vx: 3, vy: -5, life: 2.2, c: '#B9B1FF'});}}},
     {id: 'flex', who: 'both', dur: [6, 7.5], say: T('These muscles? Pure TypeScript.', 'هذه العضلات؟ تايب سكريبت خالص.'),
@@ -855,7 +949,7 @@
       front(t, o) {bucket(o.ox + 6, o.oy + 4);},
       tick(t, st) {if (t > (st.next ??= 1)) {st.next = t + rnd(.8, 1.6); emit({kind: 'px', x: C.ox + 8 + Math.random() * 3, y: C.oy + 3, vx: rnd(-8, 8), vy: -20, g: 60, life: .9, c: '#FFF1B8'});}}},
     {id: 'director', who: 'opus', dur: [7, 9], say: T('Take 47. The pixels keep blinking.', 'اللقطة ٤٧. البكسلات لا تتوقف عن الرمش.'),
-      pose(t, P) {P.armR = 'hold'; P.look = [-1, 0];},
+      pose(t, P) {P.armR = 'hold'; P.look = [-1, 0]; P.hat = 1;},
       front(t, o) {beret(o.ox, o.top); clapper(o.ox + 17, o.oy + 1, t % 2.4 < 2.1);},
       tick(t, st) {const n = Math.floor((t - 2.1) / 2.4); if (n >= 0 && n !== st.n) {st.n = n; sfx(any([T('Action!', 'أكشن!'), T('Cut!', 'ستوب!'), T('Take two!', 'إعادة!')]));}}},
     {id: 'bug', who: 'both', on: 'floor', dur: [7.2, 7.2], say: T('Found a bug. Fixed it. Added two more. Balance.', 'وجدت خطأً. أصلحته. وأضفت اثنين. توازن.'),
@@ -1239,6 +1333,209 @@
       },
       front(t, o) {if (xo) xoProps(o);}},
   ];
+  // ── spells: for a few seconds a window of the work turns into something else ─────────────────
+  const decos = [];
+  function deco(el, html, cls = '', update) {
+    const node = document.createElement('div');
+    node.className = `mk-deco ${cls}`; node.innerHTML = html; node.setAttribute('aria-hidden', 'true');
+    layer().append(node);
+    const d = {el, node, update, r: null,
+      place() {
+        const r = el.getBoundingClientRect(), w = el.offsetWidth || r.width, h = el.offsetHeight || r.height;
+        d.r = r;
+        Object.assign(node.style, {left: `${r.left + r.width / 2 - w / 2}px`, top: `${r.top + r.height / 2 - h / 2}px`, width: `${w}px`, height: `${h}px`, rotate: el.style.rotate || ''});
+        update?.(d);
+      },
+      end() {const i = decos.indexOf(d); if (i >= 0) decos.splice(i, 1); node.classList.add('is-out'); setTimeout(() => node.remove(), 500);}};
+    d.place(); decos.push(d);
+    return d;
+  }
+  function restyle(el, props) {
+    const keys = [...Object.keys(props), 'transition'], prev = Object.fromEntries(keys.map(k => [k, el.style[k]]));
+    el.style.transition = 'filter .6s ease, clip-path .7s ease, scale .6s ease, rotate .6s ease, opacity .6s ease';
+    requestAnimationFrame(() => Object.assign(el.style, props));
+    return () => {for (const k of Object.keys(props)) el.style[k] = prev[k]; setTimeout(() => {el.style.transition = prev.transition;}, 750);};
+  }
+  // clip-path animates only between shapes with the same number of points
+  function morph(el, from, to, extra = {}) {
+    const prev = {clipPath: el.style.clipPath, transition: el.style.transition, filter: el.style.filter};
+    el.style.transition = 'clip-path .8s cubic-bezier(.2,.8,.2,1), filter .6s ease'; el.style.clipPath = from;
+    void el.offsetWidth;
+    requestAnimationFrame(() => {el.style.clipPath = to; Object.assign(el.style, extra);});
+    return () => {el.style.clipPath = from; el.style.filter = prev.filter; setTimeout(() => {el.style.clipPath = prev.clipPath; el.style.transition = prev.transition;}, 820);};
+  }
+  const critters = [];
+  function critter(el, draw) {const c = {el, t0: performance.now(), draw}; critters.push(c); return () => {const i = critters.indexOf(c); if (i >= 0) critters.splice(i, 1);};}
+  const SPRITES = {
+    bat: [['k.....k', 'kk.k.kk', '.krkrk.', '..k.k..'], ['.......', 'k.kkk.k', 'kkrkrkk', '..k.k..']],
+    dove: [['..ww...', 'wwwwww.', '.wwwwwy', '..w.w..'], ['ww.....', '.wwwww.', '..wwwwy', '..w.w..']],
+  };
+  const critPal = k => (k === 'bat' ? {k: '#5A4688', r: '#FF5C5C'} : {w: root.dataset.siteMode === 'white' ? '#C9D6EA' : '#FFFFFF', y: '#FFB347'});
+  const CAT = ['.o......o.', 'oo......oo', 'oooooooooo', 'okoooooko.', 'oooopoooo.', '.oooooooo.', 'oooooooooo', 'ossoossooo', '.oo....oo.'];
+  const CATPAL = {o: '#F2A65A', s: '#D9823B', k: '#2A1D10', p: '#FF8FA3'};
+  function fxNoise(el, ms = 650) {
+    const n = document.createElement('canvas'); n.width = 80; n.height = 45;
+    const nx = n.getContext('2d'), img = nx.createImageData(80, 45), t0 = performance.now();
+    fxAdd({draw: now => {
+      const k = (now - t0) / ms; if (k > 1) return false;
+      for (let i = 0; i < img.data.length; i += 4) {const v = Math.random() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255;}
+      nx.putImageData(img, 0, 0);
+      const r = el.getBoundingClientRect(); fx.save(); fx.globalAlpha = (1 - k) * .85; fx.imageSmoothingEnabled = false; fx.drawImage(n, r.left, r.top, r.width, r.height); fx.restore();
+    }});
+  }
+  // a small copy of the frame's picture, sampled into a grid of colours
+  function sample(el, cols) {
+    const r0 = el.getBoundingClientRect(); fxOn(); const tex = snapshot(el, r0);
+    const rows = Math.max(6, Math.round(cols * r0.height / r0.width)), c = document.createElement('canvas'); c.width = cols; c.height = rows;
+    const x = c.getContext('2d', {willReadFrequently: true}); x.drawImage(tex, 0, 0, cols, rows);
+    let data = null; try {data = x.getImageData(0, 0, cols, rows).data;} catch {}
+    return {r0, tex, cols, rows, small: c, at: (u, v) => {if (!data) return [200, 190, 170]; const px = Math.min(cols - 1, Math.floor(u * cols)), py = Math.min(rows - 1, Math.floor(v * rows)), i = (py * cols + px) * 4; return [data[i], data[i + 1], data[i + 2]];}};
+  }
+  function stainedGlass(el) {
+    const sm = sample(el, 40), shards = makeShards(sm.r0.width, sm.r0.height, sm.r0.width / 2, sm.r0.height / 2);
+    const GLASS = [[200, 16, 46], [31, 79, 191], [30, 140, 78], [242, 169, 0], [123, 63, 191], [224, 95, 160], [0, 150, 170]];
+    for (const p of shards) {const c = sm.at(p.hx / sm.r0.width, p.hy / sm.r0.height), k = .6 + .7 * (c[0] * .3 + c[1] * .59 + c[2] * .11) / 255; p.fill = `rgb(${any(GLASS).map(v => Math.round(clamp(v * k, 0, 255))).join(',')})`;}
+    const e = fxAdd({k: 0, draw: (now, dt) => {
+      if (e.done) return false;
+      e.k = Math.min(1, e.k + dt * 1.6);
+      const r = el.getBoundingClientRect();
+      fx.save(); fx.globalAlpha = e.k;
+      for (const p of shards) {fx.beginPath(); p.pts.forEach(([x, y], i) => (i ? fx.lineTo(r.left + p.hx + x, r.top + p.hy + y) : fx.moveTo(r.left + p.hx + x, r.top + p.hy + y))); fx.closePath(); fx.fillStyle = p.fill; fx.fill(); fx.lineWidth = 3; fx.strokeStyle = '#1d1a16'; fx.stroke();}
+      const gl = fx.createRadialGradient(r.left + r.width * .5, r.top, 0, r.left + r.width * .5, r.top, r.width); gl.addColorStop(0, 'rgba(255,250,220,.4)'); gl.addColorStop(1, 'rgba(255,250,220,0)');
+      fx.fillStyle = gl; fx.fillRect(r.left, r.top, r.width, r.height); fx.restore();
+    }});
+    return () => {e.done = true;};
+  }
+  function constellation(el) {
+    const sm = sample(el, 32); let pts = [];
+    for (let y = 0; y < sm.rows; y++) for (let x = 0; x < sm.cols; x++) {const c = sm.at((x + .5) / sm.cols, (y + .5) / sm.rows); pts.push({x: (x + .5) / sm.cols, y: (y + .5) / sm.rows, v: c[0] + c[1] + c[2] + Math.random() * 40});}
+    pts = pts.sort((a, b) => b.v - a.v).slice(0, 22);
+    const links = pts.map((p, i) => {let best = -1, bd = 9; pts.forEach((q, j) => {if (j <= i) return; const d = Math.hypot(p.x - q.x, p.y - q.y); if (d < bd) {bd = d; best = j;}}); return best;});
+    const undo = restyle(el, {filter: 'brightness(.28) saturate(.6) hue-rotate(190deg)'});
+    const e = fxAdd({t: 0, draw: (now, dt) => {
+      if (e.done) return false;
+      e.t += dt; const r = el.getBoundingClientRect(), k = Math.min(1, e.t / 1.2);
+      fx.save(); fx.strokeStyle = 'rgba(190,210,255,.5)'; fx.lineWidth = 1;
+      pts.forEach((p, i) => {const j = links[i]; if (j >= 0 && i / pts.length < k) {const q = pts[j]; fx.beginPath(); fx.moveTo(r.left + p.x * r.width, r.top + p.y * r.height); fx.lineTo(r.left + q.x * r.width, r.top + q.y * r.height); fx.stroke();}});
+      fx.restore();
+      pts.forEach((p, i) => star(r.left + p.x * r.width, r.top + p.y * r.height, (3 + (i % 3)) * (.75 + .25 * Math.sin(e.t * 3 + i)), '#ffffff', Math.min(1, k * 1.5)));
+    }});
+    return () => {e.done = true; undo();};
+  }
+  function pixelate(el) {
+    const sm = sample(el, 28);
+    const e = fxAdd({k: 0, draw: (now, dt) => {if (e.done) return false; e.k = Math.min(1, e.k + dt * 3); const r = el.getBoundingClientRect(); fx.save(); fx.imageSmoothingEnabled = false; fx.globalAlpha = e.k; fx.drawImage(sm.small, r.left, r.top, r.width, r.height); fx.restore();}});
+    return () => {e.done = true;};
+  }
+  const starburst = () => Array.from({length: 32}, (_, i) => {const a = i / 32 * Math.PI * 2, r = i % 2 ? 26 : 48; return `${(50 + Math.cos(a) * r).toFixed(1)},${(50 + Math.sin(a) * r).toFixed(1)}`;}).join(' ');
+  const webSvg = () => {const A = [0, 18, 36, 54, 72, 90].map(a => a * Math.PI / 180); return A.map(a => `<line x1="0" y1="0" x2="${(Math.cos(a) * 40).toFixed(1)}" y2="${(Math.sin(a) * 40).toFixed(1)}"/>`).join('') + [12, 22, 32].map(r => `<polyline points="${A.map(a => `${(Math.cos(a) * r).toFixed(1)},${(Math.sin(a) * r).toFixed(1)}`).join(' ')}"/>`).join('');};
+  const WING_SVG = '<path d="M58 6 C34 10 10 26 4 52 C14 46 22 44 28 46 C18 54 12 64 12 76 C22 66 30 62 38 62 C32 70 30 78 32 88 C42 76 50 60 56 40 Z"/><path d="M50 18 C38 26 26 38 20 50 M46 34 C36 44 30 54 26 64" fill="none"/>';
+  const nameOf = el => (el.closest('[data-film]')?.querySelector('.nf-card-name') || el.closest('a,article,li')?.querySelector('h2,h3,b,.nf-card-name'))?.textContent?.trim() || '';
+  const flock2 = (el, kind2, n) => {const r = el.getBoundingClientRect(), cx = (r.left + r.width / 2) / U, cy = (r.top + r.height / 2) / U; for (let i = 0; i < n; i++) {const an = kind2 === 'dove' ? rnd(-Math.PI * .85, -Math.PI * .15) : rnd(-Math.PI, 0) + rnd(-.3, .3); emit({kind: 'sprite', frames: SPRITES[kind2], pal: critPal(kind2), x: cx + rnd(-8, 8), y: cy + rnd(-4, 4), vx: Math.cos(an) * rnd(30, 70), vy: Math.sin(an) * rnd(30, 60), life: rnd(2, 3.2), ph: Math.floor(rnd(0, 4))});}};
+  const SPELL_PACKS = {
+    // the everyday site: the cinema it already is
+    studio: [
+      {id: 'tv', name: T('Channel 3', 'القناة ٣'), cast(el) {const a = restyle(el, {filter: 'contrast(1.25) saturate(.55) sepia(.3) brightness(.95)'}), d = deco(el, '<i class="bezel"></i><i class="lines"></i><span class="lbl">CH 03</span>', 'is-tv'); fxNoise(el); return () => {a(); d.end();};}},
+      {id: 'reel', name: T('Rolling!', 'تصوير!'), cast(el) {const a = restyle(el, {filter: 'sepia(.85) contrast(1.15) brightness(.95)'}), d = deco(el, '<i class="strip l"></i><i class="strip r"></i><i class="scr"></i>', 'is-reel'); return () => {a(); d.end();};}},
+      {id: 'polaroid', name: T('Say cheese', 'ابتسم'), cast(el) {const a = restyle(el, {rotate: `${any([-3, 3, -2, 2])}deg`, filter: 'saturate(.8) contrast(1.05) sepia(.15)'}), d = deco(el, '<i class="frame"></i><span class="cap"></span>', 'is-pola'); d.node.querySelector('.cap').textContent = any(['#throwback', '#mood', 'best day ever', '10/10, would ship again']); return () => {a(); d.end();};}},
+      {id: 'marquee', name: T('Now showing', 'يُعرض الآن'), cast(el) {const d = deco(el, `<i class="b1"></i><i class="b2"></i><span class="sign">${T('NOW SHOWING', 'يُعرض الآن')}</span>`, 'is-marquee'); return () => d.end();}},
+      {id: 'comic', name: 'POW!', cast(el) {const a = restyle(el, {filter: 'contrast(1.45) saturate(1.5)'}), d = deco(el, `<i class="dots"></i><i class="ink"></i><svg class="pow" viewBox="0 0 100 100"><polygon points="${starburst()}" fill="#ffd400" stroke="#111" stroke-width="3"/><text x="50" y="58" text-anchor="middle">POW!</text></svg>`, 'is-comic'); return () => {a(); d.end();};}},
+      {id: 'vhs', name: T('Be kind, rewind', 'رجّع الشريط'), cast(el) {const a = restyle(el, {filter: 'saturate(1.7) contrast(1.1) drop-shadow(3px 0 0 rgba(255,0,60,.55)) drop-shadow(-3px 0 0 rgba(0,220,255,.55))'}), d = deco(el, '<i class="track"></i><span class="lbl osd">PLAY ▶</span><span class="lbl date">OCT 04 2026</span>', 'is-vhs'); return () => {a(); d.end();};}},
+      {id: 'thermal', name: T('Heat vision', 'رؤية حرارية'), cast(el) {const a = restyle(el, {filter: 'grayscale(1) invert(1) sepia(1) saturate(6) hue-rotate(170deg) contrast(1.3)'}), d = deco(el, '<i class="cross"></i><span class="lbl">THERMAL · 36.6°</span>', 'is-thermal'); return () => {a(); d.end();};}},
+      {id: 'pixel', name: T('8-bit mode', 'وضع ٨ بت'), cast: pixelate},
+      {id: 'spotlight', name: T('Spotlight', 'تحت الأضواء'), cast(el) {
+        const node = document.createElement('div'); node.className = 'mk-spot'; layer().append(node);
+        const d = {el, node, place() {const r = el.getBoundingClientRect(); node.style.background = `radial-gradient(ellipse ${Math.round(r.width * .75)}px ${Math.round(r.height * .85)}px at ${Math.round(r.left + r.width / 2)}px ${Math.round(r.top + r.height / 2)}px, transparent 60%, rgba(0,0,0,.78) 100%)`;}, end() {const i = decos.indexOf(d); if (i >= 0) decos.splice(i, 1); node.classList.add('is-out'); setTimeout(() => node.remove(), 500);}};
+        d.place(); decos.push(d); return () => d.end();
+      }},
+      {id: 'popcorn', name: T('Popcorn time', 'وقت الفشار'), cast(el) {let on = true; const rain = () => {if (!on) return; const r = el.getBoundingClientRect(); for (let i = 0; i < 2; i++) emit({kind: 'px', x: (r.left + Math.random() * r.width) / U, y: (r.top - 30) / U, vy: rnd(20, 40), g: 30, life: 1.6, c: any(['#FFF1B8', '#FFE08A', '#FFFFFF']), s: 2}); setTimeout(rain, 90);}; rain(); return () => {on = false;};}},
+    ],
+    // Halloween: the witch curses the work
+    halloween: [
+      {id: 'coffin', name: T('Coffin curse!', 'لعنة التابوت!'), cast(el) {const a = morph(el, 'polygon(0% 0%, 100% 0%, 100% 24%, 100% 100%, 0% 100%, 0% 24%)', 'polygon(28% 0%, 72% 0%, 100% 24%, 82% 100%, 18% 100%, 0% 24%)', {filter: 'grayscale(.75) brightness(.75) contrast(1.15)'}), d = deco(el, '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="28,0 72,0 100,24 82,100 18,100 0,24"/></svg><span class="rip">R.I.P.</span>', 'is-coffin'); return () => {a(); d.end();};}},
+      {id: 'haunted', name: T('It’s watching you', 'إنها تراقبك'), cast(el) {
+        const a = restyle(el, {filter: 'grayscale(1) contrast(1.35) brightness(.6) sepia(.25)'});
+        const d = deco(el, '<i class="vig"></i><i class="eye"></i><i class="eye"></i>', 'is-haunt', dd => {const r = dd.r, [e1, e2] = dd.node.querySelectorAll('.eye'), ax = attention.t ? clamp((attention.x - (r.left + r.width / 2)) / r.width, -.5, .5) : 0, ay = attention.t ? clamp((attention.y - (r.top + r.height * .35)) / r.height, -.5, .5) : 0; for (const [e, cx] of [[e1, .4], [e2, .6]]) {e.style.left = `${(cx + ax * .05) * 100}%`; e.style.top = `${(.34 + ay * .05) * 100}%`;}});
+        return () => {a(); d.end();};
+      }},
+      {id: 'cobweb', name: T('Abandoned since 1999', 'مهجورة منذ ١٩٩٩'), cast(el) {const d = deco(el, `<svg class="web tl" viewBox="0 0 40 40">${webSvg()}</svg><svg class="web br" viewBox="0 0 40 40">${webSvg()}</svg><i class="thread"><b class="spider"></b></i>`, 'is-web'); return () => d.end();}},
+      {id: 'pumpkin', name: T('Pumpkin head!', 'رأس يقطين!'), cast(el) {const a = restyle(el, {filter: 'sepia(1) saturate(4.5) hue-rotate(-12deg) brightness(.8) contrast(1.15)'}), d = deco(el, '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="24,32 38,32 31,18"/><polygon points="62,32 76,32 69,18"/><polygon points="45,46 55,46 50,37"/><path d="M20 58 L29 67 L35 60 L42 69 L50 61 L58 69 L65 60 L71 67 L80 58 L73 78 L27 78 Z"/></svg>', 'is-pumpkin'); return () => {a(); d.end();};}},
+      {id: 'bats', name: T('Bats!', 'خفافيش!'), cast(el) {const a = restyle(el, {filter: 'brightness(.35) saturate(.6)'}); flock2(el, 'bat', 14); return a;}},
+      {id: 'slime', name: T('Ectoplasm', 'مادة شبحية'), cast(el) {const drips = Array.from({length: 7}, (_, i) => {const x = 7 + i * 14 + rnd(-4, 4), w = rnd(4, 8), h = rnd(18, 46); return `<path d="M${(x - w).toFixed(1)} 0 Q${(x - w).toFixed(1)} ${(h * .6).toFixed(1)} ${x.toFixed(1)} ${h.toFixed(1)} Q${(x + w).toFixed(1)} ${(h * .6).toFixed(1)} ${(x + w).toFixed(1)} 0 Z" style="animation-delay:${rnd(0, .8).toFixed(2)}s"/>`;}).join(''); const d = deco(el, `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="0" y="0" width="100" height="5"/>${drips}</svg>`, 'is-slime'); return () => d.end();}},
+      {id: 'ghost', name: T('Boooo', 'بوووو'), cast(el) {const a = restyle(el, {filter: 'grayscale(1) invert(1) brightness(1.1) opacity(.72)'}), bob = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -10px'}, {translate: '0 0'}], {duration: 1600, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, '<svg class="gface" viewBox="0 0 100 100"><ellipse cx="38" cy="40" rx="6" ry="9"/><ellipse cx="62" cy="40" rx="6" ry="9"/><ellipse cx="50" cy="66" rx="7" ry="9"/></svg>', 'is-ghost'); return () => {a(); d.end(); bob?.cancel?.();};}},
+      {id: 'tomb', name: T('Rest in pixels', 'ارقد بسلام يا بكسل'), cast(el) {const a = morph(el, 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)', 'inset(0% 7% 0% 7% round 46% 46% 6px 6px)', {filter: 'grayscale(1) brightness(.62) contrast(1.25)'}), d = deco(el, '<span class="epitaph">R.I.P.<small></small></span><i class="grass"></i>', 'is-tomb'); d.node.querySelector('small').textContent = nameOf(el) || '2026'; return () => {a(); d.end();};}},
+      {id: 'cauldron', name: T('Double, double…', 'غليان وفقاعات…'), cast(el) {const a = restyle(el, {filter: 'hue-rotate(70deg) saturate(1.3)'}), d = deco(el, '<i class="brew"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i>', 'is-brew'); return () => {a(); d.end();};}},
+      {id: 'zombie', name: T('Braaains', 'أدمغة…'), cast(el) {
+        const r0 = el.getBoundingClientRect(), fx0 = rnd(.3, .7); shake(el, 8);
+        return critter(el, (t, r) => {
+          const gy = Math.round(r.bottom / U) - 1, x = Math.round((r.left + r.width * fx0) / U), up = Math.min(1, t / .7) * (t > 6.6 ? Math.max(0, 1 - (t - 6.6) / .6) : 1), h = Math.round(up * 13); if (h <= 0) return;
+          R(x - 2, gy - h, 5, h, '#7FA36B'); R(x - 2, gy - h + 4, 5, 3, '#4A3B5C');
+          const wave = Math.floor(t * 6) % 2;
+          R(x - 3, gy - h - 4, 7, 4, '#8FB57A'); for (let i = 0; i < 4; i++) R(x - 3 + i * 2, gy - h - 7 - ((i + wave) % 2), 1, 3, '#8FB57A');
+          if (t < 1) for (let i = 0; i < 2; i++) P1(x + Math.round(rnd(-6, 6)), gy - Math.round(rnd(0, 3)), '#6B4F35');
+        });
+      }},
+      {id: 'moon', name: T('Blood moon', 'قمر دموي'), cast(el) {const a = restyle(el, {filter: 'sepia(1) saturate(5) hue-rotate(-38deg) brightness(.7) contrast(1.2)'}), d = deco(el, '<i class="moon"></i><i class="fog"></i>', 'is-moon'); flock2(el, 'bat', 5); return () => {a(); d.end();};}},
+    ],
+    // Heaven: the fairy blesses the work (sometimes with a cat)
+    heaven: [
+      {id: 'stained', name: T('Stained glass', 'زجاج معشّق'), cast: stainedGlass},
+      {id: 'angel', name: T('Angel mode', 'وضع الملاك'), cast(el) {const float = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -8px'}, {translate: '0 0'}], {duration: 2400, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, `<i class="halo"></i><svg class="wing l" viewBox="0 0 60 92">${WING_SVG}</svg><svg class="wing r" viewBox="0 0 60 92"><g transform="translate(60 0) scale(-1 1)">${WING_SVG}</g></svg>`, 'is-angel'); return () => {float?.cancel?.(); d.end();};}},
+      {id: 'clouds', name: T('Cloud nine', 'فوق السحاب'), cast(el) {const a = restyle(el, {filter: 'brightness(1.08) saturate(.9)'}), d = deco(el, '<i class="c c1"></i><i class="c c2"></i><i class="c c3"></i>', 'is-cloud'); return () => {a(); d.end();};}},
+      {id: 'rainbow', name: T('Rainbow!', 'قوس قزح!'), cast(el) {const d = deco(el, `<svg class="bow" viewBox="0 0 200 100">${['#ff4d4d', '#ff9f1c', '#ffe14d', '#4dd06a', '#3fa7ff', '#7a5cff'].map((c, i) => `<path d="M${10 + i * 7} 100 A ${90 - i * 7} ${90 - i * 7} 0 0 1 ${190 - i * 7} 100" stroke="${c}"/>`).join('')}</svg>`, 'is-rainbow'); return () => d.end();}},
+      {id: 'gold', name: T('Framed in gold', 'إطار من ذهب'), cast(el) {const a = restyle(el, {filter: 'brightness(1.08) saturate(1.12)'}), d = deco(el, '<i class="rays"></i><i class="frame"></i>', 'is-gold'); return () => {a(); d.end();};}},
+      {id: 'doves', name: T('Coo', 'هديل'), cast(el) {flock2(el, 'dove', 9); const a = restyle(el, {filter: 'brightness(1.15)'}); return a;}},
+      {id: 'cat', name: T('A cat. Obviously.', 'قطة. طبعاً.'), cast(el) {
+        const at = rnd(.25, .75);
+        return critter(el, (t, r) => {
+          const x = Math.round((r.left + r.width * at) / U) - 5, y = Math.round(r.top / U) - 9;
+          S(x, y, CAT, CATPAL);
+          const sw = Math.round(Math.sin(t * 3) * 2); P1(x + 10, y + 6 + sw, CATPAL.o); P1(x + 11, y + 5 + sw, CATPAL.o); P1(x + 12, y + 4 + sw, CATPAL.s);
+          if (Math.floor(t * 1.2) % 3 === 0 && t % .8 < .05) emit({kind: 'glyph', ch: 'z', x: x + 8, y: y - 3, vx: 3, vy: -5, life: 1.6, c: '#FFD7A8'});
+        });
+      }},
+      {id: 'catbox', name: T('If it fits, it sits', 'إذا وسعتها جلست فيها'), cast(el) {
+        const d = deco(el, '<i class="side"></i><i class="tape"></i><i class="flap fl"></i><i class="flap fr"></i>', 'is-box'), at = rnd(.35, .65);
+        const c = critter(el, (t, r) => {const x = Math.round((r.left + r.width * at) / U) - 5, y = Math.round((r.top + r.height * .4) / U) - 4 - Math.round(Math.min(1, t / .6) * 2); g.save(); g.beginPath(); g.rect(0, 0, W, Math.round((r.top + r.height * .4) / U)); g.clip(); S(x, y, CAT.slice(0, 6), CATPAL); g.restore();});
+        return () => {d.end(); c();};
+      }},
+      {id: 'bloom', name: T('Spring!', 'ربيع!'), cast(el) {
+        const spots = Array.from({length: 7}, () => ({u: Math.random(), h: rnd(6, 13), c: any(['#FF8FAB', '#FFD166', '#B388FF', '#7EE0FF', '#FFFFFF'])}));
+        return critter(el, (t, r) => {const gy = Math.round(r.bottom / U) - 1; for (const s of spots) {const x = Math.round((r.left + r.width * s.u) / U), h = Math.round(s.h * Math.min(1, t / 1.4)); R(x, gy - h, 1, h, '#4FAF5A'); if (t > 1.2) {for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) P1(x + dx, gy - h - 1 + dy, s.c); P1(x, gy - h - 1, '#FFE066');}}});
+      }},
+      {id: 'stars', name: T('Written in the stars', 'مكتوب في النجوم'), cast: constellation},
+      {id: 'bubble', name: T('Bubble wrap', 'فقاعة حماية'), cast(el) {const float = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -6px'}, {translate: '0 0'}], {duration: 2600, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, '<i class="b"></i>', 'is-bubble'); return () => {float?.cancel?.(); d.end();};}},
+    ],
+  };
+  const spellBags = {};
+  const packNow = () => (SPELL_PACKS[root.dataset.edition] ? root.dataset.edition : 'studio');
+  const spellable = el => {if (!el?.isConnected) return false; const r = el.getBoundingClientRect(); return r.width >= 110 && r.height >= 60 && r.top > 30 && r.bottom < innerHeight + 40 && r.left > -20 && r.right < innerWidth + 20;};
+  function wand(o, pack, up) {
+    const hx = o.ox + (up ? 16 : 17), hy = o.oy + (up ? 1 : 4);
+    if (pack === 'halloween') {line(hx, hy, hx + 3, hy - 3, '#3B2A1E'); line(hx + 3, hy - 3, hx + 5, hy - 6, '#3B2A1E'); P1(hx + 5, hy - 7, frame % 2 ? '#9CFF57' : '#D6FFB0');}
+    else if (pack === 'heaven') {line(hx, hy, hx + 4, hy - 5, '#E3B04B'); const k = frame % 2; for (const [dx, dy] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) P1(hx + 5 + dx, hy - 7 + dy, k && (dx || dy) ? '#FFF6C9' : '#FFD76A');}
+    else {line(hx, hy, hx + 4, hy - 5, '#141418'); P1(hx + 4, hy - 5, '#FFFFFF'); P1(hx + 5, hy - 6, '#FFFFFF');}
+  }
+  ACTS.push({id: 'spell', who: 'both', on: 'frame', dur: [11, 11], can: () => spellable(C.on),
+    say: T('Magic. Don’t worry, it wears off. Probably.', 'سحر. لا تقلق، يزول. غالباً.'),
+    start(st) {st.pack = packNow(); st.spell = (spellBags[st.pack] ||= bag(SPELL_PACKS[st.pack]))(() => true); st.el = C.on;},
+    tick(t, st) {
+      if (!st.el.isConnected) return 'done';
+      if (t > .9 && !st.cast) {
+        st.cast = 1; sfx(st.spell.name);
+        const r = st.el.getBoundingClientRect(), tx = (r.left + r.width / 2) / U, ty = (r.top + r.height / 2) / U, sx = C.ox + 21, sy = C.oy - 6;
+        for (let i = 0; i < 16; i++) {const k = rnd(.5, 1.2); emit({kind: 'spark', x: sx, y: sy, vx: (tx - sx) / k + rnd(-10, 10), vy: (ty - sy) / k + rnd(-10, 10), life: k * .9, c: any(st.pack === 'halloween' ? ['#9CFF57', '#B388FF'] : st.pack === 'heaven' ? ['#FFF6C9', '#FFD76A', '#CFE6FF'] : ['#FFFFFF', '#FFD34D'])});}
+      }
+      if (t > 1.6 && !st.on) {
+        st.on = 1; st.undo = safe(() => st.spell.cast(st.el)) || null;
+        const r = st.el.getBoundingClientRect(); for (let i = 0; i < 18; i++) emit({kind: 'spark', x: (r.left + Math.random() * r.width) / U, y: (r.top + Math.random() * r.height) / U, life: .7, c: st.pack === 'halloween' ? '#B388FF' : '#FFF6C9'});
+        setTimeout(() => sfx(st.pack === 'halloween' ? T('mwahaha', 'هاهاها') : st.pack === 'heaven' ? T('sparkle!', 'لمعة!') : T('ta-da', 'تا-دا')), 900);
+      }
+      if (t > 9.6 && !st.off) {st.off = 1; st.undo?.(); st.undo = null;}
+    },
+    pose(t, P, st) {P.armR = t < 1.7 ? 'up' : 'hold'; P.look = t < .9 ? lookUser() : [0, 1]; if (t > 1.6 && t < 3) P.eyes = st.pack === 'halloween' ? 'squint' : 'happy';},
+    front(t, o, st, P) {wand(o, st.pack, P.armR === 'up');},
+    end(st) {st.undo?.(); st.undo = null;}});
   const ACT = Object.fromEntries(ACTS.map(a => [a.id, a]));
   const actBag = bag(ACTS.filter(a => !a.once && a.on !== 'text'));
   const theftBag = bag(ACTS.filter(a => a.on === 'text'));
@@ -1494,7 +1791,7 @@
       }},
     {id: 'propeller', who: 'opus', path: 'fly', speed: 85, board: .5, land: .5,
       draw(r, x, y, ph, p, P) {
-        P.legs = ph === 'go' ? 'dangle' : 'stand'; P.armL = P.armR = ph === 'go' ? 'out' : 'down';
+        P.legs = ph === 'go' ? 'dangle' : 'stand'; P.armL = P.armR = ph === 'go' ? 'out' : 'down'; P.hat = 1;
         const o = rider(x, y, 0, P), [ox, oy] = o, top = topOf(oy, P), a = ph === 'board' ? p : ph === 'land' ? 1 - p : 1;
         alpha(a, () => {R(ox + 5, top - 1, 8, 1, '#E84855'); R(ox + 7, top - 1, 2, 1, '#F9DC5C'); R(ox + 11, top - 1, 2, 1, '#3185FC'); R(ox + 8, top - 2, 2, 1, '#2A2A2E'); if (frame % 2) R(ox + 2, top - 3, 14, 1, '#E84855'); else R(ox + 6, top - 3, 6, 1, '#E84855');});
         return o;
@@ -1554,6 +1851,14 @@
         return [x - 9, y - 10];
       }},
   ];
+  RIDES.push(
+    {id: 'broom', who: 'both', edition: 'halloween', path: 'fly', speed: 115, board: .4, land: .5, sfx: T('whoosh', 'ووووش'),
+      draw(r, x, y, ph, p, P) {const a = ph === 'board' ? smooth(p * 2) : ph === 'land' ? 1 - smooth(p) : 1; P.legs = 'tuck'; const o = rider(x, y, 2, P); alpha(a, () => {line(x - 14, y - 1, x + 15, y - 4, '#7A4A2A'); for (let i = 0; i < 6; i++) line(x - 14, y - 1, x - 21, y - 4 + i, i % 2 ? '#D9A441' : '#B8862B');}); return o;},
+      trail(r, x, y) {if (Math.random() < .5) emit({kind: 'spark', x: x - r.dir * 20, y: y - 2 + rnd(-2, 2), vx: -r.dir * 12, life: .6, c: any(['#9CFF57', '#B388FF'])});}},
+    {id: 'cloud', who: 'both', edition: 'heaven', path: 'fly', speed: 70, board: .5, land: .7, sfx: T('floating', 'طفو'),
+      draw(r, x, y, ph, p, P) {const a = ph === 'board' ? smooth(p * 2) : ph === 'land' ? 1 - smooth(p) : 1; P.legs = 'tuck'; P.eyes = 'happy'; const o = rider(x, y, 3, P); alpha(a, () => {for (const [dx, dy, rr] of [[-8, -1, 4], [-2, -3, 5], [5, -2, 4], [10, 0, 3], [-12, 1, 3]]) disc(x + dx, y + dy, rr, '#FFFFFF'); for (const [dx, dy, rr] of [[-4, 2, 3], [4, 2, 3]]) disc(x + dx, y + dy, rr, '#E3ECFF');}); return o;},
+      trail(r, x, y) {if (Math.random() < .35) emit({kind: 'spark', x: x - r.dir * 14, y: y + rnd(-3, 1), vx: -r.dir * 8, life: .7, c: any(['#FFF6C9', '#CFE6FF', '#FFFFFF'])});}},
+  );
   const JUMP = RIDES.find(r => r.id === 'jump');
   const rideBag = bag(RIDES.filter(r => !r.basic)), basicBag = bag(RIDES.filter(r => r.basic));
 
@@ -1703,9 +2008,10 @@
     const now = performance.now(), floor = floorU(), dx = tx - C.x, dy = ty - C.y, d = Math.hypot(dx, dy), level = Math.abs(dy) < 3;
     C.then = then; C.next = null;
     if (d < 3) {if (el) perch(el, tx); C.y = ty; return arrive(now);}
-    const ok = r => (r.who === 'both' || r.who === kind) && (!r.need || r.need(dx, dy));
+    const ed = root.dataset.edition || '', ok = r => (r.who === 'both' || r.who === kind) && (!r.need || r.need(dx, dy)) && (!r.edition || r.edition === ed);
     const small = d < 45 || (C.scrolled < 50 && d < 70);
-    const def = (small ? basicBag(r => ok(r) && (level || r.path !== 'ground')) : rideBag(ok)) || JUMP;
+    let def = (small ? basicBag(r => ok(r) && (level || r.path !== 'ground')) : rideBag(ok)) || JUMP;
+    if (!small && ed) {const own = RIDES.filter(r => r.edition === ed && ok(r)); if (own.length && Math.random() < .45) def = any(own);}   // an edition likes its own ride
     if (def.path === 'ground' && !level && ty < floor - 2) {C.next = {x: tx, y: ty, el}; startRide(def, now, tx, floor, null);}   // drive below it, then jump up
     else startRide(def, now, tx, ty, el);
   }
@@ -1797,7 +2103,8 @@
       const me = C.on.getBoundingClientRect(), near = perches().filter(p => p.el !== C.on && p.type === 'frame' && Math.abs(p.r.top - me.top) < 260 && Math.abs(p.r.left - me.left) < 460);
       if (near.length) {const p = any(near); return travel(clamp((p.r.left + p.r.right) / 2 + rnd(-30, 30), p.r.left + 24, p.r.right - 24) / U, p.r.top / U, p.el);}
     }
-    const fits = a => (a.who === 'both' || a.who === kind) && (!a.on || a.on === here || (a.on === 'perch' && (here === 'frame' || here === 'title'))) && (!a.can || safe(a.can));
+    if (here === 'frame' && Math.random() < (root.dataset.edition ? .8 : .25) && safe(ACT.spell.can)) return startAct(ACT.spell, now);
+    const fits = a => a.id !== 'spell' && (a.who === 'both' || a.who === kind) && (!a.on || a.on === here || (a.on === 'perch' && (here === 'frame' || here === 'title'))) && (!a.can || safe(a.can));
     const mischief = here !== 'floor' && Math.random() < .75;
     startAct(actBag(a => fits(a) && (!mischief || !!a.on)) || actBag(fits) || ACT.code, now);
   }
@@ -1911,7 +2218,12 @@
   }
   function render(now) {
     g.clearRect(0, 0, W, H);
-    for (const [i, v] of visitors.entries()) {const P = pose(); P.armL = P.armR = ['fup', 'fmid', 'fdown', 'fmid'][(frame + i) % 4]; P.legs = 'tuck'; P.look = [Math.sign(v.vx), 0]; drawCrow(Math.round(v.x) - 9, Math.round(v.y + Math.sin(v.ph * 3) * 2) - 10, P);}
+    const ed = root.dataset.edition;
+    for (const [i, v] of visitors.entries()) {
+      const vx = Math.round(v.x), vy = Math.round(v.y + Math.sin(v.ph * 3) * 2);
+      if (ed === 'halloween' || ed === 'heaven') {const big = ed === 'halloween' ? SPRITES.bat : SPRITES.dove, fr = big[(frame + i) % 2], pal = critPal(ed === 'halloween' ? 'bat' : 'dove'); mirror(vx, Math.sign(v.vx), () => {for (let r2 = 0; r2 < fr.length; r2++) for (let c2 = 0; c2 < fr[r2].length; c2++) if (pal[fr[r2][c2]]) R(vx - 7 + c2 * 2, vy - 4 + r2 * 2, 2, 2, pal[fr[r2][c2]]);});}
+      else {const P = pose(); P.armL = P.armR = ['fup', 'fmid', 'fdown', 'fmid'][(frame + i) % 4]; P.legs = 'tuck'; P.look = [Math.sign(v.vx), 0]; drawCrow(vx - 9, vy - 10, P);}
+    }
     if (kind !== 'off') {
       const floor = floorU(), x = Math.round(C.x), y = Math.round(C.y), P = pose();
       P.look = lookAt();
@@ -1962,6 +2274,7 @@
       }
       if (o) {C.ox = o[0]; C.oy = o[1];}
     }
+    for (const c of critters) {const r = c.el.isConnected ? c.el.getBoundingClientRect() : null; if (r) safe(() => c.draw((now - c.t0) / 1000, r));}
     drawParts();
   }
   function loop(now) {
@@ -1972,11 +2285,12 @@
     const floor = floorU();
     if (kind !== 'off') update(now, dt, floor);
     stepParts(dt, floor);
-    const busy = C.mode === 'ride' || parts.length || visitors.length || C.mode === 'held' || C.mode === 'fall' || C.mode === 'carried' || C.act?.st.free;
+    const busy = critters.length || C.mode === 'ride' || parts.length || visitors.length || C.mode === 'held' || C.mode === 'fall' || C.mode === 'carried' || C.act?.st.free;
     if (now - drawAt > (busy ? 15 : 32)) {drawAt = now; render(now);}
     fxStep(now, dt);
     hit.style.transform = `translate(${C.ox * U - 4}px, ${(C.oy - 1) * U - 4}px)`;
     placePops(now); placeBubble(); baitPlace();
+    for (const d of decos) d.place();
   }
 
   // ── the page bullies you too: buttons that do not want to be pressed ──────────────────────────
@@ -2301,7 +2615,7 @@
   rehome();
   baitDress();
   requestAnimationFrame(loop);
-  if (!still) setInterval(() => {if (root.dataset.siteMode === 'crow' && kind === 'opus' && !document.hidden && Math.random() < .5) flock(1);}, 45000);
+  if (!still) setInterval(() => {if (((root.dataset.siteMode === 'crow' && kind === 'opus') || root.dataset.edition) && !document.hidden && Math.random() < .5) flock(root.dataset.edition ? 2 : 1);}, 45000);
   // QA hooks
   window.__mk = {
     act(id) {if (ACT[id]) {endRide(true); stopAct(); startAct(ACT[id], performance.now());}},
@@ -2311,6 +2625,7 @@
     prank(id, sel) {const b = document.querySelector(sel), p = PRANKS.find(x => x.id === id); return b && p ? Promise.resolve(p.run(b, null)).then(() => true) : false;},
     xo(how) {xoStart(how); return !!xo;},
     state: () => ({mode: C.mode, act: C.act?.def.id, ride: C.ride?.def.id, phase: C.ride?.phase, on: C.onType, x: C.x, y: C.y, W, H, U, stolen: stolen.length, xo: xo && {how: xo.how, board: xo.board.join(',')}, rides: RIDES.map(r => r.id), acts: ACTS.map(a => a.id)}),
+    spell(id) {const sp = Object.values(SPELL_PACKS).flat().find(x => x.id === id); if (!sp || !C.on) return false; endRide(true); stopAct(); startAct(ACT.spell, performance.now()); C.act.st.spell = sp; return true;},
     giveBack, flock, bait: () => {const c = document.querySelector(BAIT_SEL); if (c) {baitDone = false; baitOpen(c);} return !!c;},
   };
 })();
