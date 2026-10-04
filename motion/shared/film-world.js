@@ -48,6 +48,11 @@ export function createFilmWorld(data, scope = document) {
   const story = one('[data-film-story]');
   const calm = one('[data-calm-story]');
   const videos = all('[data-film-buffer]');
+  const trackEl = one('[data-film-track]');
+  // Ambient: the shown frame, tiny and blurred, fills whatever the film does not cover (phones, ultra-wide).
+  const ambient = one('[data-film-ambient]'), ambientCtx = ambient?.getContext('2d');
+  let ambientAt = 0;
+  const drawAmbient = video => {if (!ambientCtx || performance.now() - ambientAt < 80) return; ambientAt = performance.now(); try {ambientCtx.drawImage(video, 0, 0, ambient.width, ambient.height);} catch {}};
   if (videos.length !== 3 || !stage || !story) throw new Error('The film requires a stage, story, and exactly three video buffers.');
   const slots = videos.map(video => ({video, key:'', profile:'', index:-1, ready:false, generation:0, wanted:0, presented:0, frameHandle:0, holdUntil:0}));
   const cache = new Map(), jobs = new Map();
@@ -175,7 +180,7 @@ export function createFilmWorld(data, scope = document) {
       videos.forEach(video=>video.classList.toggle('is-visible',video===slot.video));
       display=slot;metrics.switches++;
     }
-    painted=clamp(slot.index*data.clipSeconds+localTime,0,lastTime);
+    painted=clamp(slot.index*data.clipSeconds+localTime,0,lastTime);drawAmbient(slot.video);
     root.dataset.paintedTime=painted.toFixed(4);root.dataset.clip=String(slot.index);root.dataset.profile=slot.profile;
     chrome(painted,true);hideLoading();
     if(!isReady){isReady=true;root.dataset.filmReady='true';root.classList.add('film-ready');}
@@ -274,7 +279,7 @@ export function createFilmWorld(data, scope = document) {
       if(!navigator.connection?.saveData && jobs.size<2 && next>=0 && next<clipCount)fetchClip(next).catch(()=>{});
     }
     slider.value=String(goal);slider.setAttribute('aria-valuetext',`${fmt(goal)} — ${tr(chapterAt(goal).title)}`);
-    progress.style.transform=`scaleX(${goal/lastTime})`;
+    progress.style.transform=`scaleX(${goal/lastTime})`;trackEl?.style.setProperty('--p',String(goal/lastTime));
     root.dataset.targetTime=goal.toFixed(4);root.dataset.positionTime=position.toFixed(4);
     root.classList.toggle('has-film-progress',goal>.5);evict();
     metrics.maxTickMs=Math.max(metrics.maxTickMs,performance.now()-tickStart);
@@ -309,7 +314,8 @@ export function createFilmWorld(data, scope = document) {
   function changeMode(enabled,fromUser=false) {
     filmMode=enabled;root.classList.toggle('is-film-mode',enabled);root.classList.toggle('is-poster-mode',!enabled);
     story.hidden=!enabled;calm.hidden=enabled;
-    for(const button of all('[data-mode-toggle]'))button.textContent=enabled?label('View chapters','عرض الفصول'):label('Scroll the film','تصفّح الفيلم بالتمرير');
+    for(const button of all('[data-mode-toggle]')){const text=enabled?label('View chapters','عرض الفصول'):label('Scroll the film','تصفّح الفيلم بالتمرير');if(button.classList.contains('film-icon'))button.setAttribute('aria-label',text);else button.textContent=text;}
+    if(!enabled&&autoplaying)setAutoplay(false);
     if(!enabled){for(const job of jobs.values())job.controller.abort();loading.hidden=true;if(fromUser)scrollTo({top:0,behavior:'instant'});}
     else {setTravel();if(fromUser)go(painted,false);schedule();}
   }
@@ -364,20 +370,68 @@ export function createFilmWorld(data, scope = document) {
   slider.addEventListener('pointerdown',()=>{holding=true;showChrome();});
   addEventListener('pointerup',()=>{holding=false;},{passive:true});
   addEventListener('scroll',()=>{
-    if(!filmMode||!started||holding||document.querySelector('dialog[open],.film-header details[open],.film-controls details[open],.film-header :focus-visible,.film-controls :focus-visible'))return;
+    if(!filmMode||!started||holding||autoplaying||document.querySelector('dialog[open],.film-header details[open],.film-controls details[open],.film-header :focus-visible,.film-controls :focus-visible'))return;
     root.classList.add('film-chrome-hidden');clearTimeout(chromeTimer);chromeTimer=setTimeout(showChrome,1400);
   },{passive:true});
-  addEventListener('pointermove',event=>{if(event.pointerType==='mouse'&&Math.abs(event.movementX)+Math.abs(event.movementY)>3)showChrome();},{passive:true}); // still-mouse moves fired by scrolling don't count
+  addEventListener('pointermove',event=>{if(event.pointerType==='mouse'&&Math.abs(event.movementX)+Math.abs(event.movementY)>3){showChrome();if(autoplaying)hideSoon(2600);}},{passive:true}); // still-mouse moves fired by scrolling don't count
   for(const type of ['pointerdown','keydown','focusin'])addEventListener(type,showChrome,{passive:true});
   addEventListener('hashchange',()=>{if(redirectLegacyHash())return;const time=hashTime();if(time!==null)go(time,false);});
   reduced.addEventListener('change',()=>changeMode(!reduced.matches,true));
   addEventListener('pagehide',()=>{watchVideo?.pause();for(const job of jobs.values())job.controller.abort();});
   addEventListener('pageshow',()=>{previous=0;schedule();});
+
+  // ── Player controls (film pages with the Netflix-style chrome; every element is optional) ──
+  // Play auto-advances the scroll at the film's own pace (pixelsPerSecond), so it plays in real time;
+  // the chrome then fades out and returns on pointer movement. Any manual scroll, swipe or seek pauses.
+  const playButton=one('[data-film-play]'),ticks=one('[data-film-ticks]'),peek=one('[data-film-peek]'),fullButton=one('[data-film-fullscreen]');
+  let autoplaying=false,autoLast=0,autoCarry=0,idleTimer=0;
+  function hideSoon(delay){clearTimeout(idleTimer);idleTimer=setTimeout(()=>{if(autoplaying&&!document.querySelector('dialog[open]'))root.classList.add('film-chrome-hidden');},delay);}
+  function autoStep(now){
+    if(!autoplaying)return;
+    const dt=autoLast?Math.min(.1,(now-autoLast)/1000):0;autoLast=now;
+    if(document.querySelector('dialog[open]')){requestAnimationFrame(autoStep);return;}
+    if(scrollY>=story.offsetTop+travel-1){setAutoplay(false);return;}
+    autoCarry+=travel/data.duration*dt;const step=Math.floor(autoCarry);
+    if(step){autoCarry-=step;scrollBy(0,step);}
+    requestAnimationFrame(autoStep);
+  }
+  function setAutoplay(on){
+    if(on===autoplaying)return;
+    autoplaying=on;root.classList.toggle('film-autoplay',on);
+    if(playButton){playButton.setAttribute('aria-pressed',String(on));playButton.setAttribute('aria-label',on?label('Pause','إيقاف'):label('Play','تشغيل'));}
+    autoLast=0;autoCarry=0;
+    if(on){if(!filmMode)changeMode(true,true);if(scrollY>=story.offsetTop+travel-2)go(0,false);requestAnimationFrame(autoStep);hideSoon(1200);}
+    else{clearTimeout(idleTimer);showChrome();}
+  }
+  playButton?.addEventListener('click',()=>setAutoplay(!autoplaying));
+  for(const button of all('[data-film-skip]'))button.addEventListener('click',()=>go(clamp(goal+Number(button.dataset.filmSkip),0,lastTime),false));
+  for(const type of ['wheel','touchstart'])addEventListener(type,()=>setAutoplay(false),{passive:true});
+  slider.addEventListener('pointerdown',()=>setAutoplay(false));
+  addEventListener('keydown',event=>{
+    if(event.code==='Space'&&filmMode&&inFilm()&&!/INPUT|TEXTAREA|SELECT|BUTTON|^A$/.test(event.target.tagName)&&!event.target.isContentEditable&&!document.querySelector('dialog[open]')){event.preventDefault();setAutoplay(!autoplaying);}
+    else if(autoplaying&&/Arrow|Page|Home|End/.test(event.key))setAutoplay(false);
+  });
+  for(const dialog of [chapterDialog,watchDialog].filter(Boolean))dialog.addEventListener('toggle',()=>{if(dialog.open)setAutoplay(false);});
+  if(ticks)ticks.replaceChildren(...data.chapters.slice(1).map(chapter=>{const mark=document.createElement('i');mark.style.left=`${chapter.start/data.duration*100}%`;return mark;}));
+  if(trackEl&&peek&&matchMedia('(hover:hover)').matches){
+    const img=peek.querySelector('img'),peekTitle=peek.querySelector('[data-peek-title]'),peekTime=peek.querySelector('[data-peek-time]');
+    trackEl.addEventListener('pointermove',event=>{
+      const box=trackEl.getBoundingClientRect(),x=clamp(event.clientX-box.left,0,box.width),t=x/box.width*lastTime,chapter=chapterAt(t),src=posterFor(chapter);
+      peek.hidden=false;if(img.getAttribute('src')!==src)img.src=src;
+      peekTitle.textContent=tr(chapter.title);peekTime.textContent=fmt(t);peek.style.left=`${clamp(x,130,box.width-130)}px`;
+    });
+    trackEl.addEventListener('pointerleave',()=>{peek.hidden=true;});
+  }
+  if(fullButton&&document.fullscreenEnabled){
+    fullButton.hidden=false;
+    fullButton.addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else root.requestFullscreen().catch(()=>{});});
+    addEventListener('fullscreenchange',()=>{const on=!!document.fullscreenElement;root.classList.toggle('film-fullscreen',on);fullButton.setAttribute('aria-label',on?label('Exit full screen','الخروج من ملء الشاشة'):label('Full screen','ملء الشاشة'));});
+  }
   buildChapters();setTravel();
   const linkedTime=hashTime()??0,deep=chapterAt(linkedTime);position=goal=painted=linkedTime;setPoster(deep);chrome(linkedTime);
   changeMode(filmMode);root.classList.add('film-enhanced');
   requestAnimationFrame(()=>{if(hashTime()!==null)go(linkedTime,false);started=true;schedule();});
-  const api={seek:go,setMode:mode=>changeMode(mode==='film',true),get time(){return painted;},get chapter(){return chapterAt(painted).id;},get profile(){return profile;},get mode(){return filmMode?'film':'posters';},get metrics(){return structuredClone(metrics);},destroy(){disposed=true;cancelAnimationFrame(raf);for(const job of jobs.values())job.controller.abort();for(const entry of cache.values())URL.revokeObjectURL(entry.url);}};
+  const api={play:()=>setAutoplay(true),pause:()=>setAutoplay(false),get playing(){return autoplaying;},seek:go,setMode:mode=>changeMode(mode==='film',true),get time(){return painted;},get chapter(){return chapterAt(painted).id;},get profile(){return profile;},get mode(){return filmMode?'film':'posters';},get metrics(){return structuredClone(metrics);},destroy(){disposed=true;cancelAnimationFrame(raf);for(const job of jobs.values())job.controller.abort();for(const entry of cache.values())URL.revokeObjectURL(entry.url);}};
   return api;
 }
 

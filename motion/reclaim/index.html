@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" class="nf-player">
 <head>
   <meta charset="utf-8"><script src="../shared/arcade-loader.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -24,6 +24,7 @@
   <a class="film-skip" data-film-skip href="#chapters" data-i18n="skip">Skip to the chapters</a>
   <header class="film-header">
     <a class="film-brand" data-gallery-link href="../../en/motion/" aria-label="Reclaim · Software in Motion">
+      <span class="film-back" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></span>
       <svg aria-hidden="true" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" d="M18 2.5 31.4 10.25v15.5L18 33.5 4.6 25.75v-15.5Zm0 4.6L8.6 12.55v10.9L18 28.9l9.4-5.45v-10.9Z"/><path fill="currentColor" d="M18 12.2 23 15.1v5.8L18 23.8 13 20.9v-5.8Z"/></svg>
       <span>Reclaim<small data-i18n="edition">Eleven rooms · A motion study</small></span>
     </a>
@@ -36,6 +37,7 @@
 
   <main class="film-story" data-film-story aria-label="Reclaim scroll film" hidden>
     <div class="film-stage" data-film-stage>
+      <canvas class="film-ambient" data-film-ambient width="48" height="27" aria-hidden="true"></canvas>
       <div class="film-screen" aria-hidden="true">
         <img class="film-poster" data-film-poster src="./media/desktop/poster-scan.jpg" width="1600" height="900" alt="Reclaim" fetchpriority="high">
         <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
@@ -54,18 +56,28 @@
       <button type="button" data-retry data-i18n="retry" hidden>Try again</button>
     </div>
     <footer class="film-controls">
-      <nav class="film-chapter-rail" data-chapter-rail aria-label="Film chapters" data-i18n-label="chapters"></nav>
-      <div class="film-track">
-        <div class="film-progress" data-film-progress></div>
-        <input class="film-scrubber" data-film-scrubber type="range" min="0" max="164.9667" step="0.033333" value="0" aria-label="Film position">
+      <div class="nf-timeline">
+        <div class="film-track" data-film-track>
+          <div class="film-ticks" data-film-ticks></div>
+          <div class="film-progress" data-film-progress></div>
+          <div class="film-knob" aria-hidden="true"></div>
+          <input class="film-scrubber" data-film-scrubber type="range" min="0" max="164.9667" step="0.033333" value="0" aria-label="Film position">
+          <div class="film-peek" data-film-peek hidden><img alt="" width="1600" height="900"><span data-peek-title></span><b data-peek-time></b></div>
+        </div>
+        <span class="film-clock" data-clock>00:00 / 02:45</span>
       </div>
       <div class="film-control-row">
         <div class="film-control-group">
-          <button type="button" data-open-chapters data-i18n="chapters">Chapters</button>
-          <button type="button" data-mode-toggle>View chapters</button>
+          <button type="button" class="film-icon" data-film-play aria-pressed="false" aria-label="Play"><svg class="ico-play solid" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg><svg class="ico-pause solid" viewBox="0 0 24 24"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></button>
+          <button type="button" class="film-icon" data-film-skip="-10" aria-label="Back 10 seconds"><svg viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5"/><path d="M4.5 3.8v4.6h4.6"/><text x="12.2" y="15.3" text-anchor="middle" font-size="6.6" font-weight="700" fill="currentColor" stroke="none">10</text></svg></button>
+          <button type="button" class="film-icon" data-film-skip="10" aria-label="Forward 10 seconds"><svg viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.4-5.5"/><path d="M19.5 3.8v4.6h-4.6"/><text x="11.8" y="15.3" text-anchor="middle" font-size="6.6" font-weight="700" fill="currentColor" stroke="none">10</text></svg></button>
         </div>
-        <span class="film-hint" data-i18n="hint">Scroll to explore · Reverse to return</span>
-        <span class="film-clock" data-clock>00:00 / 02:45</span>
+        <div class="film-now"><b>Reclaim</b><span data-chapter-name>A whole drive in seconds.</span><span class="film-hint" data-i18n="hint">Scroll to explore · Reverse to return</span></div>
+        <div class="film-control-group">
+          <button type="button" class="film-icon" data-open-chapters aria-label="Chapters" data-i18n-label="chapters"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="13.5" height="11.5" rx="1.6"/><path d="M7 4.5h12.4c.9 0 1.6.7 1.6 1.6V15"/></svg></button>
+          <button type="button" class="film-icon" data-mode-toggle aria-label="View chapters"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"/></svg></button>
+          <button type="button" class="film-icon" data-film-fullscreen aria-label="Full screen" hidden><svg class="ico-full" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg class="ico-exit" viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
+        </div>
       </div>
     </footer>
   </main>
