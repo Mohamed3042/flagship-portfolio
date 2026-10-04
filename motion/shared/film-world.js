@@ -239,6 +239,7 @@ export function createFilmWorld(data, scope = document) {
     });
     slot.video.addEventListener('error',()=>{if(slot.key===desiredKey)failure(new Error(slot.video.error?.message||'The scene could not decode.'));});
   }
+  const inFilm=()=>scrollY>=story.offsetTop-innerHeight*.5&&scrollY<=story.offsetTop+travel+innerHeight*.5;
   function setTravel() {
     travel=data.duration*(profile==='mobile'?(data.pixelsPerSecond?.mobile||72):(data.pixelsPerSecond?.desktop||88));
     root.style.setProperty('--film-travel',`${travel}px`);
@@ -317,7 +318,9 @@ export function createFilmWorld(data, scope = document) {
     resizeTimer=setTimeout(()=>{
       const next=chooseProfile(),progressBefore=goal/lastTime;
       if(next!==profile){profile=next;metrics.profileChanges++;root.dataset.requestedProfile=profile;setPoster(chapterAt(painted));buildChapters();}
-      setTravel();if(filmMode)scrollTo({top:story.offsetTop+progressBefore*travel,behavior:'instant'});schedule();
+      // Keep the film frame across a resize, but only while the film is on screen: pages can place
+      // other scenes before or after the story (the home World), and those must not jump into the film.
+      setTravel();if(filmMode&&inFilm())scrollTo({top:story.offsetTop+progressBefore*travel,behavior:'instant'});schedule();
     },120);
   }
   function openChapter(chapter) {
@@ -338,7 +341,7 @@ export function createFilmWorld(data, scope = document) {
     if(event.target.closest('[data-film-skip]')){event.preventDefault();changeMode(false,true);calm.focus();}
   });
   scope.addEventListener('keydown',event=>{
-    if(!filmMode || chapterDialog?.open || watchDialog?.open || event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT|BUTTON/.test(event.target.tagName) || event.target.isContentEditable)return;
+    if(!filmMode || !inFilm() || chapterDialog?.open || watchDialog?.open || event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT|BUTTON/.test(event.target.tagName) || event.target.isContentEditable)return;
     const current=data.chapters.indexOf(chapterAt(goal));
     const targets={ArrowRight:current+1,ArrowLeft:current-1,PageDown:current+1,PageUp:current-1,Home:0,End:data.chapters.length-1};
     if(event.key in targets){event.preventDefault();go(data.chapters[clamp(targets[event.key],0,data.chapters.length-1)].start);}

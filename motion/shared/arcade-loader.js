@@ -89,7 +89,10 @@
   }
   function whenReady() {
     const film = document.querySelector('[data-film-story]') && root.dataset.portfolioMediaReady !== 'false';
-    const ready = () => !film || root.classList.contains('film-ready') || root.classList.contains('is-poster-mode');
+    // Pages with a World canvas also wait for its first frame (or its failure / reduced motion).
+    const world = document.querySelector('[data-world-canvas]') && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ready = () => (!film || root.classList.contains('film-ready') || root.classList.contains('is-poster-mode'))
+      && (!world || root.classList.contains('world-first-frame') || root.classList.contains('world-failed'));
     if (ready()) return finish();
     const watch = new MutationObserver(() => ready() && (watch.disconnect(), finish()));
     watch.observe(root, {attributes: true, attributeFilter: ['class']});
