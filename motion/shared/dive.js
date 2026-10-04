@@ -5,6 +5,8 @@
    the same inside the 3D engine).
    const d = mkDive(canvas, {tint: '#ffb000', bokeh: 1});   // bokeh: how much lens dust drifts past (0 to 1)
    d.play([{src, f: [x, y], z}, ...], {seconds: 9, onDone});   // or d.seek(p) for scroll-driven use
+   A shot may add video: 'clip.mp4' (that picture brought to life); the still shows until the clip plays,
+   and only the shots on screen load and play. d.live(true) keeps redrawing while the reader rests.
 */
 (() => {
   const VERT = 'attribute vec2 aP; varying vec2 vUv; void main(){ vUv = aP * .5 + .5; gl_Position = vec4(aP, 0., 1.); }';
@@ -58,7 +60,25 @@
     const tint = (opts.tint || '#ffb000').match(/[0-9a-f]{2}/gi).map(h => parseInt(h, 16) / 255);
     gl.uniform3f(u.uTint, tint[0], tint[1], tint[2]); gl.uniform1f(u.uBokeh, opts.bokeh ?? 1); gl.uniform1i(u.tA, 0); gl.uniform1i(u.tB, 1);
     const blank = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, blank); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([6, 8, 8, 255]));
-    const textures = new Map();
+    const textures = new Map(), clips = new Map();
+    const setup = () => {gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);};
+    const quiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // a shot's clip: a muted looping video whose current frame is uploaded each draw
+    function clip(shot) {
+      if (!shot?.video || quiet) return null;
+      let c = clips.get(shot.video);
+      if (!c) {
+        const v = document.createElement('video');
+        Object.assign(v, {muted: true, loop: true, playsInline: true, preload: 'auto', src: shot.video});
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        const g = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, g); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([6, 8, 8, 255])); setup();
+        c = {v, gl: g, ready: false};
+        clips.set(shot.video, c);
+      }
+      if (c.v.paused) c.v.play().catch(() => {});
+      if (c.v.readyState >= 2) {gl.bindTexture(gl.TEXTURE_2D, c.gl); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, c.v); c.ready = true;}
+      return c.ready ? c : null;
+    }
     function tex(src) {
       if (textures.has(src)) return textures.get(src);
       const t = {gl: blank, ok: false};
@@ -71,7 +91,7 @@
       if (img.complete && img.naturalWidth) up(); else img.addEventListener('load', up, {once: true});
       return t;
     }
-    let shots = [], p = 0, raf = 0, at = 0;
+    let shots = [], p = 0, raf = 0, at = 0, liveRaf = 0;
     function size() {
       const dpr = Math.min(devicePixelRatio || 1, 1.5), w = Math.max(1, Math.round(canvas.clientWidth * dpr)), h = Math.max(1, Math.round(canvas.clientHeight * dpr));
       if (canvas.width !== w || canvas.height !== h) {canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h);}
@@ -89,13 +109,18 @@
       const shot = shots[s], next = shots[s + 1], m = Math.pow(shot.z || 1.4, uu), e = smooth(uu);
       const w = S[0] / m, h = S[1] / m, keep = (c, half) => Math.min(1 - half, Math.max(half, c));
       const cx = keep(.5 + (shot.f[0] - .5) * e, w / 2), cy = keep(.5 + (shot.f[1] - .5) * e, h / 2);
-      const A = tex(shot.src);
-      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.gl);
+      // the clips of the shots on screen play; the rest rest
+      const using = new Set([shot.video, next?.video]);
+      for (const [k, c] of clips) if (!using.has(k) && !c.v.paused) c.v.pause();
+      gl.activeTexture(gl.TEXTURE0);
+      const cA = clip(shot), A = tex(shot.src);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, cA ? cA.gl : A.gl);
       gl.uniform4f(u.uA, cx, cy, w, h);
       const mix = next ? smooth((uu - .42) / .5) : 0;
       if (next) {
-        const B = tex(next.src);
-        gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, B.gl);
+        gl.activeTexture(gl.TEXTURE1);
+        const cB = mix > 0 ? clip(next) : null, B = tex(next.src);
+        gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, cB ? cB.gl : B.gl);
         gl.uniform4f(u.uB, (cx - shot.f[0]) * shot.z + .5, (cy - shot.f[1]) * shot.z + .5, w * shot.z, h * shot.z);
         gl.uniform1f(u.uHasB, B.ok ? 1 : 0); tex(shots[s + 2]?.src || next.src);
       } else gl.uniform1f(u.uHasB, 0);
@@ -116,7 +141,13 @@
         raf = requestAnimationFrame(step);
         return api;
       },
-      stop() {cancelAnimationFrame(raf);},
+      stop() {cancelAnimationFrame(raf); for (const c of clips.values()) c.v.pause();},
+      live(on) {   // keep redrawing (clips move) while a scroll-scrubbed page is in view
+        cancelAnimationFrame(liveRaf); liveRaf = 0;
+        if (on) {const loop = () => {draw(); liveRaf = requestAnimationFrame(loop);}; liveRaf = requestAnimationFrame(loop);}
+        else for (const c of clips.values()) c.v.pause();
+        return api;
+      },
       get progress() {return p;},
       get pos() {return at;},   // which picture the camera is in (2.5 = halfway from the third to the fourth)
     };

@@ -11,5 +11,5 @@
   // special editions (?edition=halloween|heaven|…): kept for the visit, or saved by the edition picker
   let ed = '';
   try {const q = new URLSearchParams(location.search).get('edition'); if (q !== null) {ed = q; sessionStorage.setItem('mk-edition', q);} else ed = sessionStorage.getItem('mk-edition') || localStorage.getItem('mk-edition') || '';} catch {}
-  if (['halloween', 'heaven', 'rgb', 'tactical', 'comic', 'clay'].includes(ed)) r.dataset.edition = ed; else delete r.dataset.edition;
+  if (['halloween', 'heaven', 'rgb', 'tactical', 'comic', 'clay', 'keynote'].includes(ed)) r.dataset.edition = ed; else delete r.dataset.edition;
 })();

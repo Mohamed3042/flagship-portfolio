@@ -16,6 +16,7 @@
     {id: 'rgb', name: T('RGB Overdrive', 'RGB بأقصى سرعة'), note: T('Gamer glow, every colour at once', 'توهج الألعاب، كل الألوان معاً'), sw: 'conic-gradient(#ff0040,#ffb300,#00ff88,#00b3ff,#a100ff,#ff0040)', font: 'Orbitron:wght@600;800'},
     {id: 'tactical', name: T('Night Ops', 'عمليات ليلية'), note: T('Night vision, scopes, classified files', 'رؤية ليلية ومناظير وملفات سرية'), sw: 'linear-gradient(135deg,#9be564,#0d140d)', font: 'Black+Ops+One'},
     {id: 'comic', name: T('Ink & Pow', 'حبر وبوم'), note: T('Halftone panels and sound effects', 'لوحات منقطة ومؤثرات صوتية'), sw: 'radial-gradient(circle at 30% 30%,#ffd400 0 38%,#e10600 40%)', font: 'Bangers'},
+    {id: 'keynote', name: T('Keynote', 'كينوت'), note: T('Make.: a launch film made in code', 'Make.: فيلم إطلاق مصنوع بالكود'), sw: 'linear-gradient(135deg,#F2EEE6 0 50%,#0B0B0C 50%)'},
     {id: 'clay', name: T('Terracotta', 'تيراكوتا'), note: T('Warm clay, stop-motion, handmade', 'طين دافئ وحركة إطار بإطار'), sw: 'linear-gradient(135deg,#d97757,#f0eee6)'},
   ];
   const byId = id => ED.find(e => e.id === (id || '')) || ED[0];
@@ -166,7 +167,7 @@
     dispatchEvent(new CustomEvent('mk:edition', {detail: {id: e.id, name: e.name}}));
   }
   // editions with a page of their own (the others still dress the World)
-  const PAGES = new Set(['tactical']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
+  const PAGES = new Set(['tactical', 'keynote']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
   function go(id) {
     if (PAGES.has(id)) {location.href = `${base}/${L}/edition/${id}`; return;}
     if (edPage) {location.href = id ? `${base}/${L}/world?edition=${id}` : `${base}/${L}/world?edition=`; return;}
