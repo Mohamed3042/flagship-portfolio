@@ -167,7 +167,7 @@
     dispatchEvent(new CustomEvent('mk:edition', {detail: {id: e.id, name: e.name}}));
   }
   // editions with a page of their own (the others still dress the World)
-  const PAGES = new Set(['tactical', 'keynote']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
+  const PAGES = new Set(['tactical', 'keynote', 'halloween', 'heaven']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
   function go(id) {
     if (PAGES.has(id)) {location.href = `${base}/${L}/edition/${id}`; return;}
     if (edPage) {location.href = id ? `${base}/${L}/world?edition=${id}` : `${base}/${L}/world?edition=`; return;}
