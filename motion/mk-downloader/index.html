@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8"><script src="../shared/arcade-loader.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06111F">
+  <meta name="description" content="A 135-second tour of MK Downloader 2.0.1: 16-connection transfers, batch links, resume, SHA-256 checks, scheduling, an MP4/MP3 media studio, signed-in sessions, the Chrome companion and phone pairing, rebuilt from the real navy and mint interface.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MK Downloader — Eleven streams">
+  <meta property="og:description" content="Every MK Downloader 2.0 feature, one world each.">
+  <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/motion/mk-downloader/media/og.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://mohamed3042.github.io/flagship-portfolio/motion/mk-downloader/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://mohamed3042.github.io/flagship-portfolio/motion/mk-downloader/">
+  <title>MK Downloader — Eleven streams</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20fill%3D%22%2352F1D2%22%20color%3D%22%2352F1D2%22%20viewBox%3D%220%200%2036%2036%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20fill%3D%22currentColor%22%20x%3D%2216.25%22%20y%3D%225%22%20width%3D%223.5%22%20height%3D%2215%22%20rx%3D%221.75%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M10.6%2013.9a1.75%201.75%200%200%201%202.47%200L18%2018.8l4.93-4.9a1.75%201.75%200%201%201%202.47%202.47l-6.17%206.17a1.75%201.75%200%200%201-2.47%200l-6.16-6.17a1.75%201.75%200%200%201%200-2.47Z%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M7%2022.25c.97%200%201.75.78%201.75%201.75v3.25h18.5V24a1.75%201.75%200%201%201%203.5%200v5a1.75%201.75%200%200%201-1.75%201.75H7A1.75%201.75%200%200%201%205.25%2029v-5c0-.97.78-1.75%201.75-1.75Z%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="../shared/film.css">
+  <style>:root{--accent:#52F1D2;--film-bg:#06111F;--film-deep:#030911;--film-surface:#10232e;--film-raised:#142c35;--film-button:#0a1c28;--film-hover:#1a3d43;--film-line:#265154;--film-line-soft:#1e3e44;--film-line-faint:#0e2a33;--film-text:#ebf3ef;--film-soft:#a0b7b0;--film-dim:#688880;--muted:#a0b0ab;--film-on-accent:#0b221d;--glass:rgba(6,17,31,0.42)}</style>
+  <link rel="preload" as="image" href="./media/desktop/poster-full-speed.jpg" media="(min-aspect-ratio: 4/5)">
+  <link rel="preload" as="image" href="./media/mobile/poster-full-speed.jpg" media="(max-aspect-ratio: 4/5)">
+</head>
+<body>
+  <a class="film-skip" data-film-skip href="#chapters" data-i18n="skip">Skip to the chapters</a>
+  <header class="film-header">
+    <a class="film-brand" data-gallery-link href="../../en/motion/" aria-label="MK Downloader · Software in Motion">
+      <svg aria-hidden="true" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect fill="currentColor" x="16.25" y="5" width="3.5" height="15" rx="1.75"/><path fill="currentColor" d="M10.6 13.9a1.75 1.75 0 0 1 2.47 0L18 18.8l4.93-4.9a1.75 1.75 0 1 1 2.47 2.47l-6.17 6.17a1.75 1.75 0 0 1-2.47 0l-6.16-6.17a1.75 1.75 0 0 1 0-2.47Z"/><path fill="currentColor" d="M7 22.25c.97 0 1.75.78 1.75 1.75v3.25h18.5V24a1.75 1.75 0 1 1 3.5 0v5a1.75 1.75 0 0 1-1.75 1.75H7A1.75 1.75 0 0 1 5.25 29v-5c0-.97.78-1.75 1.75-1.75Z"/></svg>
+      <span>MK Downloader<small data-i18n="edition">Eleven streams · A motion study</small></span>
+    </a>
+    <nav aria-label="Film navigation" data-i18n-label="navigation">
+      <a class="gallery-header" data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a>
+      <a data-language-link href="?lang=ar" lang="ar" hreflang="ar">العربية</a>
+    </nav>
+  </header>
+
+  <main class="film-story" data-film-story aria-label="MK Downloader scroll film" hidden>
+    <div class="film-stage" data-film-stage>
+      <div class="film-screen" aria-hidden="true">
+        <img class="film-poster" data-film-poster src="./media/desktop/poster-full-speed.jpg" width="1600" height="900" alt="MK Downloader" fetchpriority="high">
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+      </div>
+    </div>
+    <div class="film-caption">
+      <div class="eyebrow" data-i18n="filmLabel">MK Downloader · Eleven streams</div>
+      <h1 data-chapter-title>Your files. At full speed.</h1>
+      <p data-chapter-summary>One workspace shows live speed, active transfers and time left for every download.</p>
+      <a class="film-chapter-action" data-chapter-action href="#" hidden></a>
+    </div>
+    <div class="film-loading" data-film-loading role="status" hidden>
+      <span data-load-message>Opening the film…</span>
+      <button type="button" data-retry data-i18n="retry" hidden>Try again</button>
+    </div>
+    <footer class="film-controls">
+      <nav class="film-chapter-rail" data-chapter-rail aria-label="Film chapters" data-i18n-label="chapters"></nav>
+      <div class="film-track">
+        <div class="film-progress" data-film-progress></div>
+        <input class="film-scrubber" data-film-scrubber type="range" min="0" max="134.9667" step="0.033333" value="0" aria-label="Film position">
+      </div>
+      <div class="film-control-row">
+        <div class="film-control-group">
+          <button type="button" data-open-chapters data-i18n="chapters">Chapters</button>
+          <button type="button" data-mode-toggle>View chapters</button>
+        </div>
+        <span class="film-hint" data-i18n="hint">Scroll to explore · Reverse to return</span>
+        <span class="film-clock" data-clock>00:00 / 02:15</span>
+      </div>
+    </footer>
+  </main>
+
+  <section class="calm-story" id="chapters" data-calm-story tabindex="-1" aria-label="MK Downloader chapter posters">
+    <div class="calm-intro">
+      <div class="eyebrow" data-i18n="edition">Eleven streams · A motion study</div>
+      <h1 data-i18n="calmTitle">Your files. At full speed.</h1>
+      <p data-i18n="calmSummary">A 135-second tour of MK Downloader 2.0.1: 16-connection transfers, batch links, resume, SHA-256 checks, scheduling, an MP4/MP3 media studio, signed-in sessions, the Chrome companion and phone pairing, rebuilt from the real navy and mint interface.</p>
+      <button type="button" data-mode-toggle>Scroll the film</button>
+    </div>
+    <div class="calm-grid">
+      <article class="chapter-card" id="full-speed" data-poster-chapter="full-speed"><figure><img src="./media/desktop/poster-full-speed.jpg" alt="Your files. At full speed." width="960" height="540" loading="lazy"></figure><h2>Your files. At full speed.</h2><p>One workspace shows live speed, active transfers and time left for every download.</p><button data-play-chapter="full-speed">Play a short scene</button></article>
+      <article class="chapter-card" id="batch-links" data-poster-chapter="batch-links"><figure><img src="./media/desktop/poster-batch-links.jpg" alt="One link, or a hundred." width="960" height="540" loading="lazy"></figure><h2>One link, or a hundred.</h2><p>Paste up to 100 direct links at once; each one becomes its own transfer.</p><button data-play-chapter="batch-links">Play a short scene</button></article>
+      <article class="chapter-card" id="connections" data-poster-chapter="connections"><figure><img src="./media/desktop/poster-connections.jpg" alt="Sixteen connections, one file." width="960" height="540" loading="lazy"></figure><h2>Sixteen connections, one file.</h2><p>MK checks the server's byte-range support, then splits one file across up to 16 connections.</p><button data-play-chapter="connections">Play a short scene</button></article>
+      <article class="chapter-card" id="pause-resume" data-poster-chapter="pause-resume"><figure><img src="./media/desktop/poster-pause-resume.jpg" alt="Pause keeps every byte." width="960" height="540" loading="lazy"></figure><h2>Pause keeps every byte.</h2><p>Partial data stays on disk, resume checks the source first, and dropped connections retry on their own.</p><button data-play-chapter="pause-resume">Play a short scene</button></article>
+      <article class="chapter-card" id="integrity" data-poster-chapter="integrity"><figure><img src="./media/desktop/poster-integrity.jpg" alt="Verified, not assumed." width="960" height="540" loading="lazy"></figure><h2>Verified, not assumed.</h2><p>Every finished file gets a SHA-256, compared with the checksum you supply.</p><button data-play-chapter="integrity">Play a short scene</button></article>
+      <article class="chapter-card" id="scheduler" data-poster-chapter="scheduler"><figure><img src="./media/desktop/poster-scheduler.jpg" alt="Let your queue work around you." width="960" height="540" loading="lazy"></figure><h2>Let your queue work around you.</h2><p>Schedule starts, share one speed cap and pause the queue while the PC stays awake.</p><button data-play-chapter="scheduler">Play a short scene</button></article>
+      <article class="chapter-card" id="media-studio" data-poster-chapter="media-studio"><figure><img src="./media/desktop/poster-media-studio.jpg" alt="Choose the format. Keep the moment." width="960" height="540" loading="lazy"></figure><h2>Choose the format. Keep the moment.</h2><p>Inspect a link, save MP4 at an available resolution or MP3 up to 320 kbps, then preview it.</p><button data-play-chapter="media-studio">Play a short scene</button></article>
+      <article class="chapter-card" id="accounts" data-poster-chapter="accounts"><figure><img src="./media/desktop/poster-accounts.jpg" alt="Your password stays in the browser." width="960" height="540" loading="lazy"></figure><h2>Your password stays in the browser.</h2><p>Use your own signed-in browser session, or import cookies.txt, encrypted on this PC.</p><button data-play-chapter="accounts">Play a short scene</button></article>
+      <article class="chapter-card" id="chrome-companion" data-poster-chapter="chrome-companion"><figure><img src="./media/desktop/poster-chrome-companion.jpg" alt="Send it from the page." width="960" height="540" loading="lazy"></figure><h2>Send it from the page.</h2><p>The Chrome companion adds Download with MK to links and video players, then hands off to your engine.</p><button data-play-chapter="chrome-companion">Play a short scene</button></article>
+      <article class="chapter-card" id="phone" data-poster-chapter="phone"><figure><img src="./media/desktop/poster-phone.jpg" alt="Your downloads, from your phone." width="960" height="540" loading="lazy"></figure><h2>Your downloads, from your phone.</h2><p>Pair a phone on your network; downloads run on the PC and finished files can be saved to the phone.</p><button data-play-chapter="phone">Play a short scene</button></article>
+      <article class="chapter-card" id="settings" data-poster-chapter="settings"><figure><img src="./media/desktop/poster-settings.jpg" alt="Tune your engine your way." width="960" height="540" loading="lazy"></figure><h2>Tune your engine your way.</h2><p>Set connections, simultaneous downloads, a shared speed limit and retries; integrity stays on.</p><button data-play-chapter="settings">Play a short scene</button></article>
+    </div>
+    <footer class="calm-footer"><a data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a><a href="../mk-marketplace/" data-i18n="nextFilm">Next film: MK Marketplace ↗</a></footer>
+  </section>
+
+  <dialog class="film-dialog" data-chapter-dialog aria-labelledby="chapter-dialog-title">
+    <header><h2 id="chapter-dialog-title" data-i18n="chapters">Chapters</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <ol data-chapter-list></ol>
+  </dialog>
+  <dialog class="film-dialog film-watch" data-watch-dialog aria-labelledby="watch-title">
+    <header><h2 id="watch-title" data-watch-title>MK Downloader</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <video data-watch-video controls playsinline preload="none"></video>
+    <p data-i18n="shortScene">A short, silent scene from the film. Close it to continue exploring.</p>
+  </dialog>
+  <script id="film-data" type="application/json">{"schemaVersion":1,"id":"mk-downloader","duration":135,"fps":30,"clipSeconds":5,"clipCount":27,"accent":"#52F1D2","title":{"en":"MK Downloader — Eleven streams","ar":"MK Downloader — أحد عشر مساراً"},"gallery":{"en":"../../en/motion/","ar":"../../ar/motion/"},"pixelsPerSecond":{"desktop":88,"mobile":72},"profiles":{"desktop":{"clips":"./media/desktop/clip-{index}.mp4","poster":"./media/desktop/poster-full-speed.jpg","width":1600,"height":900},"mobile":{"clips":"./media/mobile/clip-{index}.mp4","poster":"./media/mobile/poster-full-speed.jpg","width":720,"height":1280}},"copy":{"skip":{"en":"Skip to the chapters","ar":"انتقل إلى الفصول"},"edition":{"en":"Eleven streams · A motion study","ar":"أحد عشر مساراً · دراسة في الحركة"},"filmLabel":{"en":"MK Downloader · Eleven streams","ar":"MK Downloader · أحد عشر مساراً"},"product":{"en":"Product","ar":"البرنامج"},"world":{"en":"World","ar":"العالم"},"lensLabel":{"en":"Explore MK Downloader","ar":"استكشف MK Downloader"},"navigation":{"en":"Film navigation","ar":"التنقل في الفيلم"},"gallery":{"en":"All films","ar":"كل الأفلام"},"caseStudy":{"en":"Case study","ar":"دراسة الحالة"},"retry":{"en":"Try again","ar":"أعد المحاولة"},"chapters":{"en":"Chapters","ar":"الفصول"},"close":{"en":"Close","ar":"إغلاق"},"hint":{"en":"Scroll to explore · Reverse to return","ar":"مرّر لتستكشف · اعكس التمرير للرجوع"},"calmTitle":{"en":"Your files. At full speed.","ar":"ملفاتك بأقصى سرعة."},"calmSummary":{"en":"A 135-second tour of MK Downloader 2.0.1: 16-connection transfers, batch links, resume, SHA-256 checks, scheduling, an MP4/MP3 media studio, signed-in sessions, the Chrome companion and phone pairing, rebuilt from the real navy and mint interface.","ar":"جولة مدتها 135 ثانية في MK Downloader 2.0.1: تنزيل بستة عشر اتصالاً، وروابط دفعة واحدة، واستئناف آمن، وتحقق SHA-256، وجدولة، واستوديو وسائط MP4/MP3، وجلسات تسجيل الدخول، ومرافق كروم، وربط الهاتف، أُعيد بناؤها من الواجهة الحقيقية بالكحلي والنعناعي."},"shortScene":{"en":"A short, silent scene from the film. Close it to continue exploring.","ar":"مشهد قصير من الفيلم دون صوت. أغلقه لتواصل الاستكشاف."},"nextFilm":{"en":"Next film: MK Marketplace ↗","ar":"الفيلم التالي: MK Marketplace ↗"}},"chapters":[{"id":"full-speed","start":0,"previewAt":7,"title":{"en":"Your files. At full speed.","ar":"ملفاتك بأقصى سرعة."},"summary":{"en":"One workspace shows live speed, active transfers and time left for every download.","ar":"مساحة عمل واحدة تعرض السرعة الحية والتنزيلات النشطة والوقت المتبقي لكل ملف."},"accent":"#52F1D2","posters":{"desktop":"./media/desktop/poster-full-speed.jpg","mobile":"./media/mobile/poster-full-speed.jpg"}},{"id":"batch-links","start":13,"previewAt":17,"title":{"en":"One link, or a hundred.","ar":"رابط واحد أو مئة."},"summary":{"en":"Paste up to 100 direct links at once; each one becomes its own transfer.","ar":"الصق حتى 100 رابط مباشر دفعة واحدة، فيصبح كل رابط تنزيلاً مستقلاً."},"accent":"#6CB6FF","posters":{"desktop":"./media/desktop/poster-batch-links.jpg","mobile":"./media/mobile/poster-batch-links.jpg"}},{"id":"connections","start":25,"previewAt":31,"title":{"en":"Sixteen connections, one file.","ar":"ستة عشر اتصالاً لملف واحد."},"summary":{"en":"MK checks the server's byte-range support, then splits one file across up to 16 connections.","ar":"يتحقق MK من دعم الخادم لنطاقات البايت، ثم يقسم الملف الواحد على ما يصل إلى 16 اتصالاً."},"accent":"#B4F25A","posters":{"desktop":"./media/desktop/poster-connections.jpg","mobile":"./media/mobile/poster-connections.jpg"}},{"id":"pause-resume","start":37,"previewAt":39,"title":{"en":"Pause keeps every byte.","ar":"الإيقاف المؤقت يحفظ كل بايت."},"summary":{"en":"Partial data stays on disk, resume checks the source first, and dropped connections retry on their own.","ar":"تبقى البيانات الجزئية على القرص، ويتحقق الاستئناف من المصدر أولاً، وتُعاد محاولة الاتصالات المنقطعة تلقائياً."},"accent":"#FFC266","posters":{"desktop":"./media/desktop/poster-pause-resume.jpg","mobile":"./media/mobile/poster-pause-resume.jpg"}},{"id":"integrity","start":49,"previewAt":57,"title":{"en":"Verified, not assumed.","ar":"تحقّق لا افتراض."},"summary":{"en":"Every finished file gets a SHA-256, compared with the checksum you supply.","ar":"يحصل كل ملف مكتمل على بصمة SHA-256 تُقارَن بالبصمة التي تزوّده بها."},"accent":"#AA99FF","posters":{"desktop":"./media/desktop/poster-integrity.jpg","mobile":"./media/mobile/poster-integrity.jpg"}},{"id":"scheduler","start":61,"previewAt":67,"title":{"en":"Let your queue work around you.","ar":"دع قائمة التنزيل تعمل وفق وقتك."},"summary":{"en":"Schedule starts, share one speed cap and pause the queue while the PC stays awake.","ar":"جدوِل بدء التنزيلات، وحدّد سرعة مشتركة، وأوقف القائمة مؤقتاً ما دام الحاسوب مستيقظاً."},"accent":"#FF8E6E","posters":{"desktop":"./media/desktop/poster-scheduler.jpg","mobile":"./media/mobile/poster-scheduler.jpg"}},{"id":"media-studio","start":73,"previewAt":83,"title":{"en":"Choose the format. Keep the moment.","ar":"اختر الصيغة واحتفظ باللحظة."},"summary":{"en":"Inspect a link, save MP4 at an available resolution or MP3 up to 320 kbps, then preview it.","ar":"افحص الرابط، واحفظه بصيغة MP4 بدقة متاحة أو MP3 حتى 320 كيلوبت في الثانية، ثم شاهده مباشرة."},"accent":"#FF6DB6","posters":{"desktop":"./media/desktop/poster-media-studio.jpg","mobile":"./media/mobile/poster-media-studio.jpg"}},{"id":"accounts","start":86,"previewAt":92,"title":{"en":"Your password stays in the browser.","ar":"كلمة مرورك تبقى في المتصفح."},"summary":{"en":"Use your own signed-in browser session, or import cookies.txt, encrypted on this PC.","ar":"استخدم جلسة متصفحك الذي سجّلت فيه دخولك، أو استورد ملف cookies.txt مشفّراً على هذا الحاسوب."},"accent":"#8FE3FF","posters":{"desktop":"./media/desktop/poster-accounts.jpg","mobile":"./media/mobile/poster-accounts.jpg"}},{"id":"chrome-companion","start":97,"previewAt":103,"title":{"en":"Send it from the page.","ar":"أرسله من الصفحة مباشرة."},"summary":{"en":"The Chrome companion adds Download with MK to links and video players, then hands off to your engine.","ar":"يضيف مرافق كروم خيار التنزيل عبر MK إلى الروابط ومشغلات الفيديو، ثم يسلّم كل طلب إلى محرّكك."},"accent":"#F6D365","posters":{"desktop":"./media/desktop/poster-chrome-companion.jpg","mobile":"./media/mobile/poster-chrome-companion.jpg"}},{"id":"phone","start":109,"previewAt":117,"title":{"en":"Your downloads, from your phone.","ar":"تنزيلاتك من هاتفك."},"summary":{"en":"Pair a phone on your network; downloads run on the PC and finished files can be saved to the phone.","ar":"اربط هاتفك عبر شبكتك المحلية؛ تعمل التنزيلات على الحاسوب، ويمكن حفظ الملفات المكتملة على الهاتف."},"accent":"#8E9BFF","posters":{"desktop":"./media/desktop/poster-phone.jpg","mobile":"./media/mobile/poster-phone.jpg"}},{"id":"settings","start":122,"previewAt":124,"title":{"en":"Tune your engine your way.","ar":"اضبط محرّكك على طريقتك."},"summary":{"en":"Set connections, simultaneous downloads, a shared speed limit and retries; integrity stays on.","ar":"حدّد عدد الاتصالات والتنزيلات المتزامنة وحدّ السرعة المشترك وإعادة المحاولة، مع بقاء التحقق مفعّلاً دائماً."},"accent":"#DCE6F2","posters":{"desktop":"./media/desktop/poster-settings.jpg","mobile":"./media/mobile/poster-settings.jpg"},"action":{"href":{"en":"../mk-marketplace/?lang=en","ar":"../mk-marketplace/?lang=ar"},"label":{"en":"Next film: MK Marketplace","ar":"الفيلم التالي: MK Marketplace"}}}]}</script>
+  <script type="module" src="../shared/film-world.js"></script>
+  <script>
+    // Case-study link follows the page language (film-world.js translates everything else).
+    if (new URLSearchParams(location.search).get('lang') === 'ar') for (const a of document.querySelectorAll('[data-case-link]')) a.href = a.href.replace('/en/', '/ar/');
+  </script>
+</body>
+</html>
