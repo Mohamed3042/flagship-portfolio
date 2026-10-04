@@ -221,6 +221,85 @@
   .is-box .flap{bottom:60%;width:46%;height:20%;background:#c4975a;border:2px solid #8c6338}
   .is-box .fl{left:-6%;transform:skewY(-14deg);transform-origin:100% 100%}.is-box .fr{right:-6%;transform:skewY(14deg);transform-origin:0 100%}
   .is-box .tape{left:46%;bottom:0;width:8%;height:60%;background:rgba(240,220,170,.6)}
+  .is-rgbring .ring{inset:-7px;border-radius:14px;padding:4px;background:conic-gradient(#ff0040,#ffb300,#00ff88,#00b3ff,#a100ff,#ff0040);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:mk-rgb 1.6s linear infinite}
+  @keyframes mk-rgb{from{filter:hue-rotate(0deg) drop-shadow(0 0 8px #00e5ff)}to{filter:hue-rotate(360deg) drop-shadow(0 0 8px #00e5ff)}}
+  .is-lvl .lvl{left:50%;top:-14px;translate:-50% 0;font:900 clamp(20px,2.6vw,32px)/1 Orbitron,'Inter Variable',sans-serif;color:#ffe066;text-shadow:0 0 14px #ffb300,0 3px 0 #7a4b00;white-space:nowrap;animation:mk-lvl 2.6s cubic-bezier(.2,1.2,.3,1) both}
+  @keyframes mk-lvl{from{transform:translateY(40px) scale(.5);opacity:0}30%{transform:translateY(-8px) scale(1.12);opacity:1}45%{transform:none}}
+  .is-xp .xp{left:var(--x);bottom:24%;font:800 17px/1 Orbitron,'Inter Variable',sans-serif;color:#7cff6b;text-shadow:0 0 10px #2bff88,0 2px 0 #063;opacity:0;animation:mk-xp 2.2s ease-out infinite;animation-delay:var(--d);white-space:nowrap}
+  @keyframes mk-xp{12%{opacity:1}to{transform:translateY(-80px);opacity:0}}
+  .is-hp .hp{left:12%;right:12%;top:-24px;height:14px;border:2px solid #111;border-radius:4px;background:#3a0d0d;overflow:hidden;box-shadow:0 2px 0 rgba(0,0,0,.5)}
+  .is-hp .hp i{position:absolute;inset:0;background:#41d651;transform-origin:0 50%;animation:mk-hp 5s ease-in-out infinite}
+  @keyframes mk-hp{0%,100%{transform:scaleX(1);background:#41d651}38%,58%{transform:scaleX(.16);background:#ff4d4d}}
+  .is-hp .hpl{left:12%;top:-46px;font:800 14px/1 'Inter Variable',sans-serif;color:#fff;text-shadow:0 1px 2px #000}
+  .is-glitch .sl{left:-3%;right:-3%;height:7%;top:var(--y);background:rgba(0,255,240,.28);mix-blend-mode:screen;animation:mk-slice .45s steps(2) infinite;animation-delay:var(--d)}
+  .is-glitch .sl:nth-child(even){background:rgba(255,0,200,.28)}
+  @keyframes mk-slice{50%{transform:translateX(14px)}}
+  .is-ach .ach{left:50%;bottom:8px;translate:-50% 0;display:grid;grid-template-columns:auto auto;gap:1px 10px;align-items:center;padding:8px 16px 8px 10px;border-radius:999px;background:rgba(10,10,16,.9);color:#fff;font:650 13px/1.25 'Inter Variable',sans-serif;box-shadow:0 0 0 2px #00e5ff,0 10px 24px rgba(0,0,0,.5);white-space:nowrap;animation:mk-ach .55s cubic-bezier(.2,1.3,.4,1) both}
+  .is-ach .ach i{grid-row:span 2;font-style:normal;font-size:22px}
+  .is-ach .ach small{font-weight:450;color:#c9c9d4}
+  @keyframes mk-ach{from{transform:translateY(20px) scale(.8);opacity:0}}
+  .is-wasd .keys{left:50%;bottom:-70px;translate:-50% 0;display:grid;grid-template-columns:repeat(3,30px);grid-template-rows:repeat(2,30px);gap:4px}
+  .is-wasd .keys b{display:grid;place-items:center;border-radius:7px;background:#1b1b22;color:#e8e8f0;font:750 14px 'Inter Variable',sans-serif;box-shadow:0 3px 0 #000,inset 0 0 0 1px #33333d;animation:mk-key 1.6s steps(1) infinite;animation-delay:var(--d)}
+  .is-wasd .keys b:first-child{grid-column:2}
+  @keyframes mk-key{0%{background:#00e5ff;color:#001018;box-shadow:0 1px 0 #000,0 0 16px #00e5ff;transform:translateY(2px)}25%{background:#1b1b22;color:#e8e8f0;box-shadow:0 3px 0 #000,inset 0 0 0 1px #33333d;transform:none}}
+  .is-run .sr{right:8px;top:8px;padding:6px 10px 7px;border-radius:9px;background:rgba(0,0,0,.78);color:#7cff6b;font:800 17px/1.1 'Inter Variable',sans-serif;font-variant-numeric:tabular-nums}
+  .is-run .sr small{display:block;color:#ffd34d;font-size:12px;font-weight:650}
+  .is-gg .gg{left:50%;top:50%;translate:-50% -50%;font:900 clamp(44px,7vw,92px)/1 Orbitron,'Inter Variable',sans-serif;color:transparent;-webkit-text-stroke:3px #fff;filter:drop-shadow(0 0 14px #ff00d4);animation:mk-gg .8s cubic-bezier(.2,1.4,.3,1) both}
+  @keyframes mk-gg{from{transform:scale(2.2);opacity:0}}
+  .is-nvg .scan{inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}
+  .is-nvg .vig{inset:0;background:radial-gradient(circle,transparent 42%,rgba(0,12,0,.86) 74%)}
+  .is-nvg .lbl{left:12px;top:10px;color:#b6ff8a;text-shadow:0 0 6px #4f4}
+  .is-scope svg{inset:0;width:100%;height:100%}
+  .is-scope line,.is-scope circle{stroke:#111;stroke-width:1.6;fill:none;vector-effect:non-scaling-stroke}
+  .is-scope .red{fill:#ff2b2b;stroke:none}
+  .is-tgt .k{width:24px;height:24px;border:3px solid #ff3b3b;animation:mk-lock .9s cubic-bezier(.2,.9,.3,1) both}
+  .is-tgt .k1{left:-6px;top:-6px;border-right:0;border-bottom:0;--tx:-40px;--ty:-30px}.is-tgt .k2{right:-6px;top:-6px;border-left:0;border-bottom:0;--tx:40px;--ty:-30px}
+  .is-tgt .k3{left:-6px;bottom:-6px;border-right:0;border-top:0;--tx:-40px;--ty:30px}.is-tgt .k4{right:-6px;bottom:-6px;border-left:0;border-top:0;--tx:40px;--ty:30px}
+  @keyframes mk-lock{from{transform:translate(var(--tx),var(--ty));opacity:0}}
+  .is-tgt .lbl{left:50%;bottom:-30px;translate:-50% 0;color:#ff5c5c;white-space:nowrap;animation:mk-blink2 1s steps(1) infinite}
+  @keyframes mk-blink2{50%{opacity:.35}}
+  .is-radar .rad{inset:0;overflow:hidden;border-radius:10px}
+  .is-radar .sweep{position:absolute;left:50%;top:50%;width:160%;aspect-ratio:1;translate:-50% -50%;background:conic-gradient(from 0deg,rgba(155,229,100,.6),rgba(155,229,100,0) 70deg,transparent);animation:mk-spin 2.6s linear infinite}
+  .is-radar .rings{left:50%;top:50%;width:90%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 18%,rgba(155,229,100,.45) 18% 18.6%)}
+  .is-radar .blip{width:8px;height:8px;margin:-4px;border-radius:50%;background:#c4ff9a;box-shadow:0 0 10px #8f8;animation:mk-blink2 1.3s steps(1) infinite;animation-delay:var(--d)}
+  .is-camo svg{inset:0;width:100%;height:100%;mix-blend-mode:multiply;opacity:.8;overflow:hidden!important;border-radius:10px}
+  .is-stamp .stamp{left:50%;top:50%;translate:-50% -50%;rotate:-14deg;padding:6px 16px;border:4px solid #d11;border-radius:6px;color:#d11;font:400 clamp(20px,3vw,34px)/1 'Black Ops One','Inter Variable',sans-serif;white-space:nowrap;background:rgba(255,255,255,.14);animation:mk-stamp .45s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes mk-stamp{from{transform:scale(2.4);opacity:0}}
+  .is-redact .bar{height:9%;left:var(--l);width:var(--w);top:var(--y);background:#0b0b0b;transform-origin:0 50%;animation:mk-redact .35s ease-out both;animation-delay:var(--d)}
+  @keyframes mk-redact{from{transform:scaleX(0)}}
+  .is-dot .dot{width:12px;height:12px;margin:-6px;border-radius:50%;background:#ff2020;box-shadow:0 0 12px 4px rgba(255,30,30,.75)}
+  .is-dot .ring2{width:34px;height:34px;margin:-17px;border:2px solid rgba(255,60,60,.75);border-radius:50%}
+  .is-done .banner{left:-4%;right:-4%;top:50%;translate:0 -50%;padding:10px 0;background:linear-gradient(90deg,transparent,rgba(10,20,10,.92) 12%,rgba(10,20,10,.92) 88%,transparent);color:#c4ff9a;text-align:center;font:400 clamp(18px,2.6vw,30px)/1.1 'Black Ops One','Inter Variable',sans-serif;animation:mk-banner .6s cubic-bezier(.2,.9,.3,1) both}
+  @keyframes mk-banner{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+  .is-kapow .lines,.is-speed .lines{inset:-25%;background:repeating-conic-gradient(from 0deg at 50% 50%,transparent 0 4deg,rgba(255,255,255,.6) 4deg 5deg);-webkit-mask:radial-gradient(circle,transparent 28%,#000 66%);mask:radial-gradient(circle,transparent 28%,#000 66%)}
+  .is-kapow svg,.is-boom svg{left:50%;top:50%;width:min(80%,260px);aspect-ratio:1;translate:-50% -50%;animation:mk-gg .6s cubic-bezier(.2,1.5,.3,1) both}
+  .is-kapow text,.is-boom text{font:400 24px Bangers,'Comic Sans MS','Inter Variable',sans-serif;fill:#e10600;stroke:#111;stroke-width:1.2}
+  .is-say .bub{left:50%;bottom:calc(100% + 18px);translate:-50% 0;width:max-content;max-width:min(260px,80vw);padding:10px 14px;border:3px solid #111;border-radius:22px;background:#fff;color:#111;font:400 18px/1.15 Bangers,'Comic Sans MS','Inter Variable',sans-serif;letter-spacing:.02em;text-align:center;animation:mk-gg .4s cubic-bezier(.2,1.4,.3,1) both}
+  .is-say .bub::after{content:'';position:absolute;left:30%;bottom:-11px;width:16px;height:16px;background:#fff;border-right:3px solid #111;border-bottom:3px solid #111;transform:skew(-14deg) rotate(45deg)}
+  .is-say .bub.think{border-radius:50%/44%;padding:16px 22px}
+  .is-say .bub.think::after{width:12px;height:12px;border:3px solid #111;border-radius:50%;bottom:-24px;transform:none}
+  .is-panels .g{top:-5px;bottom:-5px;width:12px;margin-left:-6px;background:#fff8e6;border-left:3px solid #111;border-right:3px solid #111}
+  .is-panels .ink{inset:-5px;border:5px solid #111;border-radius:3px}
+  .is-cap .cap{left:-8px;top:-10px;padding:7px 12px;background:#ffd400;border:3px solid #111;color:#111;font:400 18px/1 Bangers,'Comic Sans MS','Inter Variable',sans-serif;letter-spacing:.02em;box-shadow:3px 3px 0 #111;white-space:nowrap;animation:mk-ach .5s cubic-bezier(.2,1.3,.4,1) both}
+  .is-sketch .paper{inset:0;background:repeating-linear-gradient(-32deg,rgba(40,40,40,.16) 0 1px,transparent 1px 5px);mix-blend-mode:multiply}
+  .is-sketch .lbl{right:10px;bottom:8px;color:#222;text-shadow:none;font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive;font-weight:600}
+  .is-cmyk .dots{inset:0;background:radial-gradient(circle,rgba(0,170,255,.55) 32%,transparent 36%) 0 0/9px 9px,radial-gradient(circle,rgba(255,0,140,.45) 32%,transparent 36%) 4px 4px/9px 9px;mix-blend-mode:multiply}
+  .is-cape .cape{right:96%;top:0;width:46%;height:92%;background:linear-gradient(90deg,#7a0c10,#c8151d 45%,#e8252d 70%,#a51219);clip-path:polygon(100% 0,100% 96%,76% 86%,54% 100%,30% 84%,6% 94%,14% 56%,38% 14%);transform-origin:100% 50%;animation:mk-cape 1.1s ease-in-out infinite}
+  @keyframes mk-cape{50%{transform:scaleX(1.1) skewY(5deg)}}
+  .is-cape .tie{left:-12px;top:-8px;width:18px;height:18px;border-radius:50%;background:#ffd400;border:3px solid #111}
+  .is-thumb .tp{left:50%;top:50%;width:46%;aspect-ratio:.78;translate:-50% -50%;border-radius:50%;background:repeating-radial-gradient(ellipse at 50% 62%,transparent 0 5px,rgba(70,28,12,.5) 5px 7px);-webkit-mask:radial-gradient(ellipse,#000 52%,transparent 70%);mask:radial-gradient(ellipse,#000 52%,transparent 70%);rotate:-16deg;animation:mk-press .7s cubic-bezier(.3,1.4,.5,1) both}
+  @keyframes mk-press{from{transform:scale(1.5);opacity:0}}
+  .is-kiln .glow{inset:0;border-radius:10px;box-shadow:inset 0 0 42px 6px rgba(255,120,40,.75)}
+  .is-kiln .lbl{left:12px;top:10px}
+  .is-wheel .wh{left:6%;right:6%;bottom:-22px;height:22px;border-radius:50%;background:repeating-linear-gradient(90deg,#a85a38 0 14px,#8a4428 14px 28px);box-shadow:0 6px 0 #5e2c18;animation:mk-wheel .5s linear infinite}
+  @keyframes mk-wheel{to{background-position:28px 0}}
+  .is-carve svg{inset:0;width:100%;height:100%}
+  .is-carve path{fill:none;stroke-linecap:round;stroke-dasharray:300;stroke-dashoffset:300;animation:mk-web 2.2s ease-out forwards}
+  .is-carve .s1{stroke:rgba(70,28,12,.78);stroke-width:7}.is-carve .s2{stroke:rgba(255,220,190,.6);stroke-width:2;transform:translate(-1px,-1.5px)}
+  .is-sun .rays{right:-46px;top:-46px;width:108px;height:108px;border-radius:50%;background:repeating-conic-gradient(#f6b75c 0 12deg,transparent 12deg 30deg);-webkit-mask:radial-gradient(circle,transparent 40%,#000 41%);mask:radial-gradient(circle,transparent 40%,#000 41%);animation:mk-spin 14s linear infinite}
+  .is-sun .disc{right:-26px;top:-26px;width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 36% 34%,#ffe0a3,#f29b38 62%,#c86a1e);box-shadow:0 5px 0 rgba(90,38,22,.4)}
+  .is-sun .disc::before{content:'';position:absolute;left:30%;top:40%;width:6px;height:6px;border-radius:50%;background:#5a2616;box-shadow:16px 0 0 #5a2616}
+  .is-sun .disc::after{content:'';position:absolute;left:34%;top:56%;width:22px;height:10px;border-bottom:3px solid #5a2616;border-radius:0 0 50% 50%}
   [data-site-mode=white] .mk-sfx:not(.rainbow){color:#141414;text-shadow:0 1px 0 #fff,0 0 10px rgba(255,255,255,.85)}
   [data-site-mode=white] .mk-pop:not(.mk-note){background:#fff;color:#16161a;border-color:rgba(0,0,0,.1);box-shadow:0 14px 40px rgba(0,0,0,.16)}
   [data-site-mode=white] .mk-pop .k{color:#b4532f}[data-site-mode=white] .mk-pop .s{color:#2f7d32}[data-site-mode=white] .mk-pop .f{color:#2e5bd6}[data-site-mode=white] .mk-pop .c{color:#6b7078}[data-site-mode=white] .mk-pop .n{color:#a8661a}
@@ -441,6 +520,8 @@
   }
   // an edition dresses the companion: a witch for Halloween, a fairy for Heaven
   const HAT = ['..........kk......', '.........kkk......', '........kkkk......', '.......kkkkk......', '.......kkkkkk.....', '......kkkkkkk.....', '......pppyppp.....', '.....kkkkkkkkk....', '.kkkkkkkkkkkkkkkk.'];
+  const HELMET = ['.....hhhhhhhh.....', '...hhhhhhhhhhhh...', '..dddddddddddddd..'];
+  const hsl = (h, l = 60) => `hsl(${Math.round(h) % 360} 100% ${l}%)`;
   const WINGL = ['..ww.', '.wwwb', 'wwwwb', 'wwwb.', '.wb..', '..b..'], WINGR = WINGL.map(r => [...r].reverse().join(''));
   function costume(layer, ox, oy, P) {
     const ed = root.dataset.edition;
@@ -450,6 +531,18 @@
     if (ed === 'heaven') {
       if (layer === 'back') {const up = frame % 4 < 2 ? 1 : 0; alpha(.85, () => {S(ox - 4, top + 1 - up, WINGL, {w: '#EAF6FF', b: '#B9DCFF'}); S(ox + 17, top + 1 - up, WINGR, {w: '#EAF6FF', b: '#B9DCFF'});});}
       else if (!P.hat) S(ox + 5, top - 4, ['.yyyyyy.', 'y......y', '.yyyyyy.'], {y: '#FFD76A'});
+    }
+    if (ed === 'rgb' && layer === 'front' && !P.hat) {const c = hsl(frame * 24); headphones(ox, top, c); line(ox + 2, top + 3, ox + 5, top + 6, '#2A2A2E'); P1(ox + 6, top + 6, c);}
+    if (ed === 'tactical' && layer === 'front' && !P.hat) {const g = frame % 3 ? '#9BE564' : '#D6FFB0'; S(ox, top - 3, HELMET, {h: '#4B5320', d: '#2F3414'}); R(ox + 7, top - 5, 4, 2, '#26262A'); P1(ox + 7, top - 5, g); P1(ox + 10, top - 5, g);}
+    if (ed === 'comic') {
+      if (layer === 'back') {R(ox + 2, top + 1, 14, oy + 8 - top, '#C8102E'); for (let x = 2; x < 16; x++) if ((x + frame) % 3) P1(ox + x, oy + 9, '#C8102E');}
+      else {R(ox + 4, top + 1, 4, 3, '#1B1B3A'); R(ox + 10, top + 1, 4, 3, '#1B1B3A'); R(ox + 8, top + 2, 2, 1, '#1B1B3A'); R(ox + 5, top + 2, 2, 1, '#FFFFFF'); R(ox + 11, top + 2, 2, 1, '#FFFFFF');}
+    }
+    if (ed === 'clay' && layer === 'front' && !P.hat) {
+      line(ox + 9, top - 1, ox + 9, top - 3, '#6A994E'); P1(ox + 10, top - 2, '#81B29A');
+      for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) P1(ox + 9 + dx, top - 5 + dy, '#F0EEE6');
+      P1(ox + 9, top - 5, '#E9C46A');
+      for (const [dx, dy] of [[12, 5], [13, 6], [11, 6]]) P1(ox + dx, top + dy, 'rgba(90,38,22,.35)');   // a thumbprint in the clay
     }
   }
   const drawChar = (who, ox, oy, P) => {costume('back', ox, oy, P); (who === 'crow' ? drawCrow : drawOpus)(ox, oy, P); costume('front', ox, oy, P);};
@@ -1432,6 +1525,12 @@
   const WING_SVG = '<path d="M58 6 C34 10 10 26 4 52 C14 46 22 44 28 46 C18 54 12 64 12 76 C22 66 30 62 38 62 C32 70 30 78 32 88 C42 76 50 60 56 40 Z"/><path d="M50 18 C38 26 26 38 20 50 M46 34 C36 44 30 54 26 64" fill="none"/>';
   const nameOf = el => (el.closest('[data-film]')?.querySelector('.nf-card-name') || el.closest('a,article,li')?.querySelector('h2,h3,b,.nf-card-name'))?.textContent?.trim() || '';
   const flock2 = (el, kind2, n) => {const r = el.getBoundingClientRect(), cx = (r.left + r.width / 2) / U, cy = (r.top + r.height / 2) / U; for (let i = 0; i < n; i++) {const an = kind2 === 'dove' ? rnd(-Math.PI * .85, -Math.PI * .15) : rnd(-Math.PI, 0) + rnd(-.3, .3); emit({kind: 'sprite', frames: SPRITES[kind2], pal: critPal(kind2), x: cx + rnd(-8, 8), y: cy + rnd(-4, 4), vx: Math.cos(an) * rnd(30, 70), vy: Math.sin(an) * rnd(30, 60), life: rnd(2, 3.2), ph: Math.floor(rnd(0, 4))});}};
+  const camoSvg = () => {const tones = ['#4B5320', '#6B7A3A', '#3A3326', '#8A8455']; let out = ''; for (let i = 0; i < 26; i++) out += `<ellipse cx="${rnd(0, 100).toFixed(1)}" cy="${rnd(0, 100).toFixed(1)}" rx="${rnd(8, 22).toFixed(1)}" ry="${rnd(5, 14).toFixed(1)}" fill="${any(tones)}" transform="rotate(${rnd(-40, 40).toFixed(0)} 50 50)"/>`; return `<svg viewBox="0 0 100 100" preserveAspectRatio="none">${out}</svg>`;};
+  const CHEST = ['.kkkkkkkkkk.', 'kbbbbbbbbbbk', 'kkkkkyykkkkk', 'kbbbbyybbbbk', 'kbbbbbbbbbbk', 'kkkkkkkkkkkk'];
+  const CHEST_PAL = {k: '#3B2414', b: '#8B5A2B', y: '#FFD34D'};
+  const burst = (word, fill = '#ffd400') => `<svg viewBox="0 0 100 100"><polygon points="${starburst()}" fill="${fill}" stroke="#111" stroke-width="3"/><text x="50" y="58" text-anchor="middle">${word}</text></svg>`;
+  const undoAll = (...fns) => () => fns.forEach(fn => safe(() => fn?.()));
+  const loopAnim = (el, frames, opts) => safe(() => el.animate(frames, {iterations: Infinity, composite: 'add', ...opts}));
   const SPELL_PACKS = {
     // the everyday site: the cinema it already is
     studio: [
@@ -1506,14 +1605,122 @@
       {id: 'stars', name: T('Written in the stars', 'مكتوب في النجوم'), cast: constellation},
       {id: 'bubble', name: T('Bubble wrap', 'فقاعة حماية'), cast(el) {const float = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -6px'}, {translate: '0 0'}], {duration: 2600, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, '<i class="b"></i>', 'is-bubble'); return () => {float?.cancel?.(); d.end();};}},
     ],
+    // RGB Overdrive: the gamer edition
+    rgb: [
+      {id: 'rgbring', name: T('RGB sync', 'مزامنة RGB'), cast(el) {const a = restyle(el, {filter: 'saturate(1.45) contrast(1.08)'}), d = deco(el, '<i class="ring"></i>', 'is-rgbring'); return undoAll(a, () => d.end());}},
+      {id: 'levelup', name: T('Level up!', 'ارتقاء!'), cast(el) {
+        const d = deco(el, `<span class="lvl">${T('LEVEL UP!', 'ارتقيت!')}</span>`, 'is-lvl'), an = safe(() => el.animate([{scale: '1'}, {scale: '1.06'}, {scale: '1'}], {duration: 650, iterations: 3, composite: 'add'}));
+        const r = el.getBoundingClientRect(); for (let i = 0; i < 24; i++) emit({kind: 'spark', x: (r.left + Math.random() * r.width) / U, y: r.bottom / U, vy: -rnd(20, 60), life: 1.4, c: any(['#FFE066', '#FFB300', '#FFFFFF'])});
+        return undoAll(() => d.end(), () => an?.cancel?.());
+      }},
+      {id: 'xp', name: '+XP', cast(el) {const d = deco(el, ['+100 XP', '+50 XP', '+250 XP', T('CRIT!', 'ضربة!'), '+10 XP', '+500 XP'].map((s, i) => `<span class="xp" style="--x:${4 + i * 15}%;--d:${(i * .37).toFixed(2)}s">${s}</span>`).join(''), 'is-xp'); return () => d.end();}},
+      {id: 'hp', name: T('Low HP!', 'الصحة منخفضة!'), cast(el) {const d = deco(el, '<span class="hpl">HP</span><span class="hp"><i></i></span>', 'is-hp'); shake(el, 7); const tm = setInterval(() => shake(el, 6), 5000); return undoAll(() => d.end(), () => clearInterval(tm));}},
+      {id: 'glitch', name: T('Glitch', 'خلل'), cast(el) {
+        const a = restyle(el, {filter: 'drop-shadow(5px 0 0 rgba(255,0,80,.7)) drop-shadow(-5px 0 0 rgba(0,240,255,.7)) saturate(1.5)'});
+        const an = loopAnim(el, [{translate: '0 0'}, {translate: '-7px 1px'}, {translate: '5px -1px'}, {translate: '0 0'}], {duration: 360, easing: 'steps(2)'});
+        const d = deco(el, Array.from({length: 5}, (_, i) => `<i class="sl" style="--y:${rnd(5, 88).toFixed(0)}%;--d:-${(i * .09).toFixed(2)}s"></i>`).join(''), 'is-glitch');
+        return undoAll(a, () => d.end(), () => an?.cancel?.());
+      }},
+      {id: 'achievement', name: T('Achievement!', 'إنجاز!'), cast(el) {
+        const d = deco(el, '<span class="ach"><i>🏆</i><b></b><small></small></span>', 'is-ach');
+        d.node.querySelector('b').textContent = T('Achievement unlocked', 'تم فتح إنجاز');
+        d.node.querySelector('small').textContent = any([T('Stared at a project for 10 s', 'حدّقت في مشروع ١٠ ثوانٍ'), T('Found the companion', 'وجدت الرفيق'), T('Scrolled like a pro', 'تمرير احترافي'), T('Hovered with intent', 'مرّرت عن قصد')]);
+        return () => d.end();
+      }},
+      {id: 'loot', name: T('Loot!', 'غنيمة!'), cast(el) {
+        const at = rnd(.3, .7);
+        return critter(el, (t, r) => {
+          const x = Math.round((r.left + r.width * at) / U) - 6, y = Math.round(r.top / U) - 6, open = t > 1;
+          if (open) alpha(.45 + .3 * Math.sin(t * 6), () => disc(x + 6, y - 1, 5, '#FFE066'));
+          S(x, y - (open ? 3 : 0), CHEST.slice(0, 2), CHEST_PAL); S(x, y + 2, CHEST.slice(2), CHEST_PAL);
+          if (open && Math.random() < .35) emit({kind: 'px', x: x + 6, y: y - 2, vx: rnd(-20, 20), vy: -rnd(30, 55), g: 90, life: 1, c: any(['#FFD34D', '#FFE066', '#FFFFFF']), s: 1});
+        });
+      }},
+      {id: 'wasd', name: 'WASD', cast(el) {const d = deco(el, `<span class="keys">${['W', 'A', 'S', 'D'].map((k, i) => `<b style="--d:${(i * .4).toFixed(1)}s">${k}</b>`).join('')}</span>`, 'is-wasd'), an = loopAnim(el, [{translate: '0 -6px'}, {translate: '-6px 0'}, {translate: '0 6px'}, {translate: '6px 0'}, {translate: '0 -6px'}], {duration: 1600, easing: 'ease-in-out'}); return undoAll(() => d.end(), () => an?.cancel?.());}},
+      {id: 'speedrun', name: T('Speedrun', 'سباق سرعة'), cast(el) {
+        const t0 = performance.now(), d = deco(el, '<span class="sr"><b>0:00.00</b><small></small></span>', 'is-run', dd => {const s = (performance.now() - t0) / 1000; dd.node.querySelector('b').textContent = `${Math.floor(s / 60)}:${(s % 60).toFixed(2).padStart(5, '0')}`;});
+        d.node.querySelector('small').textContent = any([T('World-record pace', 'وتيرة رقم قياسي'), T('Personal best pace', 'أفضل وتيرة شخصية'), T('−0.42 ahead', 'متقدم ٠٫٤٢')]);
+        return () => d.end();
+      }},
+      {id: 'gg', name: 'GG', cast(el) {const an = safe(() => el.animate([{filter: 'hue-rotate(0deg) saturate(1.6)'}, {filter: 'hue-rotate(360deg) saturate(1.6)'}], {duration: 2200, iterations: Infinity})), d = deco(el, '<span class="gg">GG</span>', 'is-gg'); return undoAll(() => d.end(), () => an?.cancel?.());}},
+    ],
+    // Night Ops: the tactical edition
+    tactical: [
+      {id: 'nvg', name: T('Night vision', 'رؤية ليلية'), cast(el) {const a = restyle(el, {filter: 'grayscale(1) sepia(1) hue-rotate(52deg) saturate(4.5) brightness(1.15) contrast(1.25)'}), d = deco(el, '<i class="scan"></i><i class="vig"></i><span class="lbl">NV · 2</span>', 'is-nvg'); return undoAll(a, () => d.end());}},
+      {id: 'scope', name: T('Scope', 'منظار'), cast(el) {
+        const r0 = el.getBoundingClientRect(), rad = Math.min(r0.width, r0.height) / 2;
+        const a = morph(el, `circle(${Math.ceil(Math.hypot(r0.width, r0.height) / 2)}px at 50% 50%)`, `circle(${Math.floor(rad)}px at 50% 50%)`, {filter: 'contrast(1.15)'});
+        const d = deco(el, '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"><circle cx="50" cy="50" r="49"/><line x1="50" y1="6" x2="50" y2="42"/><line x1="50" y1="58" x2="50" y2="94"/><line x1="6" y1="50" x2="42" y2="50"/><line x1="58" y1="50" x2="94" y2="50"/><circle class="red" cx="50" cy="50" r="1.4"/></svg>', 'is-scope');
+        const an = loopAnim(el, [{translate: '0 0'}, {translate: '4px -3px'}, {translate: '-3px 2px'}, {translate: '0 0'}], {duration: 3200, easing: 'ease-in-out'});
+        return undoAll(a, () => d.end(), () => an?.cancel?.());
+      }},
+      {id: 'target', name: T('Target acquired', 'تم تحديد الهدف'), cast(el) {const d = deco(el, `<i class="k k1"></i><i class="k k2"></i><i class="k k3"></i><i class="k k4"></i><span class="lbl">${T('Target acquired', 'تم تحديد الهدف')}</span>`, 'is-tgt'); return () => d.end();}},
+      {id: 'radar', name: T('Radar', 'رادار'), cast(el) {const a = restyle(el, {filter: 'brightness(.5) saturate(.4) sepia(.4) hue-rotate(50deg)'}), d = deco(el, `<i class="rad"><i class="sweep"></i></i><i class="rings"></i>${[0, 1, 2].map(i => `<i class="blip" style="left:${rnd(15, 85).toFixed(0)}%;top:${rnd(15, 85).toFixed(0)}%;--d:${(i * .4).toFixed(1)}s"></i>`).join('')}`, 'is-radar'); return undoAll(a, () => d.end());}},
+      {id: 'camo', name: T('Camouflage', 'تمويه'), cast(el) {const d = deco(el, camoSvg(), 'is-camo'); return () => d.end();}},
+      {id: 'classified', name: T('Classified', 'سري للغاية'), cast(el) {const a = restyle(el, {filter: 'grayscale(.7) sepia(.35) contrast(1.1)'}), d = deco(el, `<span class="stamp">${T('CLASSIFIED', 'سري للغاية')}</span>`, 'is-stamp'); shake(el, 5); return undoAll(a, () => d.end());}},
+      {id: 'redacted', name: T('Redacted', 'محجوب'), cast(el) {const d = deco(el, Array.from({length: 6}, (_, i) => `<i class="bar" style="--l:${rnd(4, 30).toFixed(0)}%;--w:${rnd(30, 62).toFixed(0)}%;--y:${(8 + i * 14 + rnd(-3, 3)).toFixed(0)}%;--d:${(i * .25).toFixed(2)}s"></i>`).join(''), 'is-redact'); return () => d.end();}},
+      {id: 'airdrop', name: T('Airdrop!', 'إنزال جوي!'), cast(el) {
+        const at = rnd(.3, .7), fall = 2.2;
+        return critter(el, (t, r) => {
+          const gx = Math.round((r.left + r.width * at) / U), gy = Math.round(r.top / U), k = Math.min(1, t / fall), y = Math.round(gy - 70 + 70 * k) - 7, sway = Math.round(Math.sin(t * 3) * 2 * (1 - k));
+          if (k < 1) {for (let i = -6; i <= 6; i++) {const h = Math.round(Math.sqrt(36 - i * i) * .7); R(gx + i + sway, y - 12 - h, 1, h + 1, (i + 6) % 4 < 2 ? '#C83A2E' : '#F2E8DA');} line(gx - 6 + sway, y - 11, gx - 3, y, '#6B6B6B'); line(gx + 6 + sway, y - 11, gx + 3, y, '#6B6B6B');}
+          R(gx - 4, y, 9, 7, '#4B5320'); R(gx - 4, y + 3, 9, 1, '#2F3414'); R(gx, y, 1, 7, '#2F3414'); P1(gx - 3, y + 1, '#C4D69A');
+          if (k >= 1 && t < fall + .12) dust(gx, gy, 3);
+        });
+      }},
+      {id: 'lockon', name: T('Locked on', 'تم القفل'), cast(el) {const t0 = performance.now(), d = deco(el, '<i class="dot"></i><i class="ring2"></i>', 'is-dot', dd => {const t = (performance.now() - t0) / 1000, x = 50 + Math.sin(t * 1.3) * 30 + Math.sin(t * 3.1) * 6, y = 50 + Math.cos(t * 1.7) * 26; for (const n of dd.node.children) {n.style.left = `${x}%`; n.style.top = `${y}%`;}}); return () => d.end();}},
+      {id: 'complete', name: T('Mission complete', 'المهمة اكتملت'), cast(el) {const d = deco(el, `<span class="banner">✓ ${T('Mission complete', 'المهمة اكتملت')}</span>`, 'is-done'); return () => d.end();}},
+    ],
+    // Ink & Pow: the comic edition
+    comic: [
+      {id: 'kapow', name: 'KAPOW!', cast(el) {const a = restyle(el, {filter: 'contrast(1.4) saturate(1.6)'}), d = deco(el, `<i class="lines"></i>${burst('KAPOW!')}`, 'is-kapow'); shake(el, 8); return undoAll(a, () => d.end());}},
+      {id: 'speech', name: T('Speech!', 'كلام!'), cast(el) {const d = deco(el, '<span class="bub"></span>', 'is-say'); d.node.querySelector('.bub').textContent = any([T('Holy deadlines!', 'يا للمواعيد النهائية!'), T('It compiles?! Impossible!', 'يعمل؟! مستحيل!'), T('Ship it, team!', 'انشروه يا فريق!'), T('Is this… a portfolio?!', 'هل هذا… معرض أعمال؟!'), T('To the release notes!', 'إلى ملاحظات الإصدار!')]); return () => d.end();}},
+      {id: 'panels', name: T('Panels', 'لوحات'), cast(el) {const a = restyle(el, {filter: 'contrast(1.25) saturate(1.3)'}), d = deco(el, '<i class="ink"></i><i class="g" style="left:33.3%"></i><i class="g" style="left:66.6%"></i>', 'is-panels'); return undoAll(a, () => d.end());}},
+      {id: 'meanwhile', name: T('Meanwhile…', 'في هذه الأثناء…'), cast(el) {const d = deco(el, '<span class="cap"></span>', 'is-cap'); d.node.querySelector('.cap').textContent = any([T('Meanwhile, in production…', 'في هذه الأثناء، في الإنتاج…'), T('Later that sprint…', 'لاحقاً في نفس الدورة…'), T('Elsewhere, a bug stirs…', 'في مكان آخر، خلل يتحرك…'), T('One deploy later…', 'بعد نشر واحد…')]); return () => d.end();}},
+      {id: 'speed', name: T('Whoosh!', 'ووووش!'), cast(el) {const a = restyle(el, {filter: 'contrast(1.2)'}), d = deco(el, '<i class="lines"></i>', 'is-speed'), an = loopAnim(el, [{translate: '0 0'}, {translate: '10px 0'}, {translate: '0 0'}], {duration: 500, easing: 'ease-in-out'}); return undoAll(a, () => d.end(), () => an?.cancel?.());}},
+      {id: 'sketch', name: T('Pencils', 'رسم بالرصاص'), cast(el) {const a = restyle(el, {filter: 'grayscale(1) contrast(1.7) brightness(1.2)'}), d = deco(el, `<i class="paper"></i><span class="lbl">${T('pencils by Opus', 'رسم أوبس')}</span>`, 'is-sketch'); return undoAll(a, () => d.end());}},
+      {id: 'cmyk', name: T('Misprint', 'طباعة معيبة'), cast(el) {const a = restyle(el, {filter: 'drop-shadow(4px 2px 0 rgba(0,200,255,.75)) drop-shadow(-4px -2px 0 rgba(255,0,170,.7)) drop-shadow(2px -3px 0 rgba(255,230,0,.65))'}), d = deco(el, '<i class="dots"></i>', 'is-cmyk'); return undoAll(a, () => d.end());}},
+      {id: 'boom', name: 'BOOM!', cast(el) {const d = deco(el, burst('BOOM!', '#ff9f1c'), 'is-boom'); shake(el, 12); const r = el.getBoundingClientRect(); for (let i = 0; i < 4; i++) setTimeout(() => dust((r.left + Math.random() * r.width) / U, r.bottom / U, 8), i * 150); return () => d.end();}},
+      {id: 'cape', name: T('Hero mode', 'وضع البطل'), cast(el) {const d = deco(el, '<i class="cape"></i><i class="tie"></i>', 'is-cape'), an = loopAnim(el, [{translate: '0 0'}, {translate: '0 -5px'}, {translate: '0 0'}], {duration: 1800, easing: 'ease-in-out'}); return undoAll(() => d.end(), () => an?.cancel?.());}},
+      {id: 'thought', name: T('Hmm…', 'همم…'), cast(el) {const d = deco(el, '<span class="bub think"></span>', 'is-say'); d.node.querySelector('.bub').textContent = any([T('hmm… needs more glass', 'همم… يحتاج زجاجاً أكثر'), T('what if… dark mode?', 'ماذا لو… وضع داكن؟'), T('is it Friday yet?', 'هل وصلنا الجمعة؟'), T('one more feature…', 'ميزة واحدة أخرى…')]); return () => d.end();}},
+    ],
+    // Terracotta: the clay edition
+    clay: [
+      {id: 'squish', name: T('Squish!', 'هرس!'), cast(el) {const a = restyle(el, {filter: 'saturate(1.15) contrast(.95)'}), an = loopAnim(el, [{scale: '1 1'}, {scale: '1.06 .92'}, {scale: '.95 1.06'}, {scale: '1 1'}], {duration: 1300, easing: 'ease-in-out'}); return undoAll(a, () => an?.cancel?.());}},
+      {id: 'plasticine', name: T('Plasticine', 'صلصال'), cast(el) {return morph(el, 'inset(0% 0% 0% 0% round 0px)', 'inset(3% 3% 3% 3% round 34px)', {filter: 'saturate(1.45) contrast(.9) blur(.7px)'});}},
+      {id: 'thumb', name: T('Thumbprint', 'بصمة'), cast(el) {const d = deco(el, '<i class="tp"></i>', 'is-thumb'); shake(el, 4); return () => d.end();}},
+      {id: 'stopmotion', name: T('Stop-motion', 'إطار بإطار'), cast(el) {const an = loopAnim(el, Array.from({length: 7}, (_, i) => (i === 6 ? {translate: '0 0', rotate: '0deg'} : {translate: `${rnd(-3, 3).toFixed(1)}px ${rnd(-3, 3).toFixed(1)}px`, rotate: `${rnd(-1.4, 1.4).toFixed(2)}deg`, easing: 'steps(1, end)'})), {duration: 700}); return () => an?.cancel?.();}},
+      {id: 'flowers', name: T('Clay garden', 'حديقة صلصال'), cast(el) {
+        const spots = Array.from({length: 6}, () => ({u: rnd(.06, .94), h: rnd(5, 11), c: any(['#E07A5F', '#F2CC8F', '#81B29A', '#F4A261', '#E9C46A'])}));
+        return critter(el, (t, r) => {const gy = Math.round(r.bottom / U) - 1; for (const s of spots) {const x = Math.round((r.left + r.width * s.u) / U), h = Math.round(s.h * Math.min(1, t / 1.2)); R(x, gy - h, 2, h, '#6A994E'); if (t > 1) {R(x - 2, gy - h - 3, 6, 3, s.c); R(x - 1, gy - h - 4, 4, 5, s.c); R(x, gy - h - 2, 2, 1, '#FFF1D6');}}});
+      }},
+      {id: 'wheel', name: T('Pottery wheel', 'عجلة الفخار'), cast(el) {const d = deco(el, '<i class="wh"></i>', 'is-wheel'), an = loopAnim(el, [{rotate: '0deg'}, {rotate: '3deg'}, {rotate: '-3deg'}, {rotate: '0deg'}], {duration: 1400, easing: 'ease-in-out'}); return undoAll(() => d.end(), () => an?.cancel?.());}},
+      {id: 'kiln', name: T('Into the kiln', 'إلى الفرن'), cast(el) {const a = restyle(el, {filter: 'sepia(.6) saturate(1.7) hue-rotate(-14deg) brightness(1.06)'}), d = deco(el, `<i class="glow"></i><span class="lbl">${T('Firing at 1200°', 'حرق على ١٢٠٠°')}</span>`, 'is-kiln'), an = loopAnim(el, [{translate: '0 0'}, {translate: '0 -1px'}, {translate: '0 0'}], {duration: 240}); return undoAll(a, () => d.end(), () => an?.cancel?.());}},
+      {id: 'crumbs', name: T('Sculpting…', 'نحت…'), cast(el) {let on = true; const drop = () => {if (!on || !el.isConnected) return; const r = el.getBoundingClientRect(); emit({kind: 'px', x: (r.left + Math.random() * r.width) / U, y: r.bottom / U, vx: rnd(-6, 6), vy: rnd(5, 20), g: 120, life: 1.4, c: any(['#B5623F', '#D97757', '#8A4428']), s: 2}); setTimeout(drop, 120);}; drop(); shake(el, 3); return () => {on = false;};}},
+      {id: 'carve', name: T('A little carving', 'نقش صغير'), cast(el) {const d = deco(el, '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"><path class="s1" d="M30 62 Q50 80 70 62"/><path class="s1" d="M38 38 L38 46 M62 38 L62 46"/><path class="s2" d="M30 62 Q50 80 70 62"/><path class="s2" d="M38 38 L38 46 M62 38 L62 46"/></svg>', 'is-carve'); return () => d.end();}},
+      {id: 'sun', name: T('Clay sun', 'شمس صلصال'), cast(el) {const a = restyle(el, {filter: 'brightness(1.06) saturate(1.1)'}), d = deco(el, '<i class="rays"></i><i class="disc"></i>', 'is-sun'); return undoAll(a, () => d.end());}},
+    ],
   };
   const spellBags = {};
   const packNow = () => (SPELL_PACKS[root.dataset.edition] ? root.dataset.edition : 'studio');
   const spellable = el => {if (!el?.isConnected) return false; const r = el.getBoundingClientRect(); return r.width >= 110 && r.height >= 60 && r.top > 30 && r.bottom < innerHeight + 40 && r.left > -20 && r.right < innerWidth + 20;};
+  const PACK_FX = {
+    studio: {say: T('ta-da', 'تا-دا'), c: ['#FFFFFF', '#FFD34D'], eyes: 'happy'},
+    halloween: {say: T('mwahaha', 'هاهاها'), c: ['#9CFF57', '#B388FF'], eyes: 'squint'},
+    heaven: {say: T('sparkle!', 'لمعة!'), c: ['#FFF6C9', '#FFD76A', '#CFE6FF'], eyes: 'happy'},
+    rgb: {say: 'GG EZ', c: ['#00E5FF', '#FF00D4', '#7CFF6B'], eyes: 'wide'},
+    tactical: {say: T('copy that', 'عُلم'), c: ['#9BE564', '#D6FFB0'], eyes: 'squint'},
+    comic: {say: 'KAPOW!', c: ['#FFD400', '#E10600', '#FFFFFF'], eyes: 'wide'},
+    clay: {say: T('squish', 'هرس'), c: ['#D97757', '#F2CC8F', '#F0EEE6'], eyes: 'happy'},
+  };
   function wand(o, pack, up) {
     const hx = o.ox + (up ? 16 : 17), hy = o.oy + (up ? 1 : 4);
     if (pack === 'halloween') {line(hx, hy, hx + 3, hy - 3, '#3B2A1E'); line(hx + 3, hy - 3, hx + 5, hy - 6, '#3B2A1E'); P1(hx + 5, hy - 7, frame % 2 ? '#9CFF57' : '#D6FFB0');}
     else if (pack === 'heaven') {line(hx, hy, hx + 4, hy - 5, '#E3B04B'); const k = frame % 2; for (const [dx, dy] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) P1(hx + 5 + dx, hy - 7 + dy, k && (dx || dy) ? '#FFF6C9' : '#FFD76A');}
+    else if (pack === 'rgb') {line(hx, hy, hx + 4, hy - 5, '#1B1B22'); P1(hx + 5, hy - 6, hsl(frame * 40)); P1(hx + 4, hy - 6, hsl(frame * 40 + 120));}
+    else if (pack === 'tactical') {R(hx, hy - 3, 3, 4, '#2E3326'); P1(hx + 1, hy - 3, frame % 2 ? '#FF3B3B' : '#7A1A1A');}
+    else if (pack === 'comic') {line(hx, hy, hx + 4, hy - 5, '#F2C14E'); P1(hx + 5, hy - 6, '#111111'); P1(hx, hy, '#FF8FA3');}
+    else if (pack === 'clay') {line(hx, hy, hx + 3, hy - 4, '#8B5A2B'); for (const [dx, dy] of [[4, -5], [5, -6], [6, -5], [5, -4]]) P1(hx + dx, hy + dy, '#B9BCC2');}
     else {line(hx, hy, hx + 4, hy - 5, '#141418'); P1(hx + 4, hy - 5, '#FFFFFF'); P1(hx + 5, hy - 6, '#FFFFFF');}
   }
   ACTS.push({id: 'spell', who: 'both', on: 'frame', dur: [11, 11], can: () => spellable(C.on),
@@ -1524,16 +1731,16 @@
       if (t > .9 && !st.cast) {
         st.cast = 1; sfx(st.spell.name);
         const r = st.el.getBoundingClientRect(), tx = (r.left + r.width / 2) / U, ty = (r.top + r.height / 2) / U, sx = C.ox + 21, sy = C.oy - 6;
-        for (let i = 0; i < 16; i++) {const k = rnd(.5, 1.2); emit({kind: 'spark', x: sx, y: sy, vx: (tx - sx) / k + rnd(-10, 10), vy: (ty - sy) / k + rnd(-10, 10), life: k * .9, c: any(st.pack === 'halloween' ? ['#9CFF57', '#B388FF'] : st.pack === 'heaven' ? ['#FFF6C9', '#FFD76A', '#CFE6FF'] : ['#FFFFFF', '#FFD34D'])});}
+        for (let i = 0; i < 16; i++) {const k = rnd(.5, 1.2); emit({kind: 'spark', x: sx, y: sy, vx: (tx - sx) / k + rnd(-10, 10), vy: (ty - sy) / k + rnd(-10, 10), life: k * .9, c: any(PACK_FX[st.pack].c)});}
       }
       if (t > 1.6 && !st.on) {
         st.on = 1; st.undo = safe(() => st.spell.cast(st.el)) || null;
-        const r = st.el.getBoundingClientRect(); for (let i = 0; i < 18; i++) emit({kind: 'spark', x: (r.left + Math.random() * r.width) / U, y: (r.top + Math.random() * r.height) / U, life: .7, c: st.pack === 'halloween' ? '#B388FF' : '#FFF6C9'});
-        setTimeout(() => sfx(st.pack === 'halloween' ? T('mwahaha', 'هاهاها') : st.pack === 'heaven' ? T('sparkle!', 'لمعة!') : T('ta-da', 'تا-دا')), 900);
+        const r = st.el.getBoundingClientRect(); for (let i = 0; i < 18; i++) emit({kind: 'spark', x: (r.left + Math.random() * r.width) / U, y: (r.top + Math.random() * r.height) / U, life: .7, c: any(PACK_FX[st.pack].c)});
+        setTimeout(() => sfx(PACK_FX[st.pack].say), 900);
       }
       if (t > 9.6 && !st.off) {st.off = 1; st.undo?.(); st.undo = null;}
     },
-    pose(t, P, st) {P.armR = t < 1.7 ? 'up' : 'hold'; P.look = t < .9 ? lookUser() : [0, 1]; if (t > 1.6 && t < 3) P.eyes = st.pack === 'halloween' ? 'squint' : 'happy';},
+    pose(t, P, st) {P.armR = t < 1.7 ? 'up' : 'hold'; P.look = t < .9 ? lookUser() : [0, 1]; if (t > 1.6 && t < 3) P.eyes = PACK_FX[st.pack].eyes;},
     front(t, o, st, P) {wand(o, st.pack, P.armR === 'up');},
     end(st) {st.undo?.(); st.undo = null;}});
   const ACT = Object.fromEntries(ACTS.map(a => [a.id, a]));
@@ -1858,6 +2065,27 @@
     {id: 'cloud', who: 'both', edition: 'heaven', path: 'fly', speed: 70, board: .5, land: .7, sfx: T('floating', 'طفو'),
       draw(r, x, y, ph, p, P) {const a = ph === 'board' ? smooth(p * 2) : ph === 'land' ? 1 - smooth(p) : 1; P.legs = 'tuck'; P.eyes = 'happy'; const o = rider(x, y, 3, P); alpha(a, () => {for (const [dx, dy, rr] of [[-8, -1, 4], [-2, -3, 5], [5, -2, 4], [10, 0, 3], [-12, 1, 3]]) disc(x + dx, y + dy, rr, '#FFFFFF'); for (const [dx, dy, rr] of [[-4, 2, 3], [4, 2, 3]]) disc(x + dx, y + dy, rr, '#E3ECFF');}); return o;},
       trail(r, x, y) {if (Math.random() < .35) emit({kind: 'spark', x: x - r.dir * 14, y: y + rnd(-3, 1), vx: -r.dir * 8, life: .7, c: any(['#FFF6C9', '#CFE6FF', '#FFFFFF'])});}},
+    {id: 'hoverboard', who: 'both', edition: 'rgb', path: 'ground', speed: 120, board: .35, land: .4, sfx: T('vrrrm', 'ڤررررم'),
+      draw(r, x, y, ph, p, P) {const a = ph === 'board' ? smooth(p * 2) : ph === 'land' ? 1 - smooth(p) : 1, lift = Math.round(4 * a), o = rider(x, y, lift, P); R(x - 10, y - lift, 21, 2, '#1B1B22'); alpha(a, () => {for (let i = 0; i < 21; i++) P1(x - 10 + i, y - lift + 2, hsl(i * 17 + frame * 40));}); return o;},
+      trail(r, x, y) {if (Math.random() < .7) emit({kind: 'spark', x: x - r.dir * 12, y: y + 1, vx: -r.dir * 10, life: .5, c: hsl(frame * 40 + rnd(0, 120))});}},
+    {id: 'drone', who: 'both', edition: 'tactical', path: 'fly', speed: 100, board: .5, land: .5, sfx: T('bzzzz', 'بززززز'),
+      draw(r, x, y, ph, p, P) {
+        const a = ph === 'board' ? smooth(p * 2) : ph === 'land' ? 1 - smooth(p) : 1; P.armL = P.armR = 'up'; P.legs = 'dangle';
+        const o = rider(x, y, 0, P), top = o[1];
+        alpha(a, () => {const dy = top - 6, b = frame % 2; R(x - 5, dy, 11, 2, '#2E3326'); line(x - 5, dy, x - 11, dy - 2, '#2E3326'); line(x + 5, dy, x + 11, dy - 2, '#2E3326'); R(x - 15, dy - 3, 8, 1, b ? '#9AA08A' : '#5C6150'); R(x + 8, dy - 3, 8, 1, b ? '#5C6150' : '#9AA08A'); P1(x, dy + 2, '#FF3B3B'); line(x - 3, dy + 2, x - 7, top + 1, '#777777'); line(x + 3, dy + 2, x + 7, top + 1, '#777777');});
+        return o;
+      }},
+    {id: 'capeflight', who: 'both', edition: 'comic', path: 'fly', speed: 150, board: .35, land: .45, sfx: T('to the sky!', 'إلى السماء!'),
+      draw(r, x, y, ph, p, P) {P.armL = P.armR = 'up'; P.legs = 'tuck'; P.eyes = 'happy'; const w = Math.round(Math.sin(frame * 1.3) * 2); alpha(ph === 'go' ? 1 : .6, () => {for (let i = 0; i < 9; i++) R(x - 10 - i, y - 10 + Math.round(i * .4) + (i > 4 ? w : 0), 2, 7 - Math.round(i * .4), '#C8102E');}); return rider(x, y, 2, P);},
+      trail(r, x, y) {if (Math.random() < .6) emit({kind: 'px', x: x - r.dir * 14, y: y - 4 + rnd(-5, 5), vx: -r.dir * 80, life: .25, c: '#FFFFFF', s: 1});}},
+    {id: 'snail', who: 'both', edition: 'clay', path: 'ground', speed: 38, board: .5, land: .5, max: 4.5, sfx: T('slowly…', 'ببطء…'),
+      draw(r, x, y, ph, p, P) {
+        P.legs = 'tuck';
+        R(x - 10, y - 2, 20, 2, '#9DBF6B'); R(x + 8, y - 6, 3, 4, '#9DBF6B'); line(x + 9, y - 6, x + 9, y - 9, '#9DBF6B'); line(x + 10, y - 6, x + 12, y - 9, '#9DBF6B'); P1(x + 9, y - 10, '#2A1D10'); P1(x + 12, y - 10, '#2A1D10');
+        disc(x - 2, y - 7, 5, '#C76B45'); disc(x - 2, y - 7, 3, '#E08A5F'); disc(x - 2, y - 7, 1, '#9A4B2E');
+        return rider(x, y, 9, P);
+      },
+      trail(r, x, y) {if (Math.random() < .3) emit({kind: 'px', x: x - r.dir * 10, y: y - 1, life: 1.6, c: 'rgba(200,230,170,.7)', s: 1});}},
   );
   const JUMP = RIDES.find(r => r.id === 'jump');
   const rideBag = bag(RIDES.filter(r => !r.basic)), basicBag = bag(RIDES.filter(r => r.basic));
@@ -2615,6 +2843,12 @@
   rehome();
   baitDress();
   requestAnimationFrame(loop);
+  addEventListener('mk:edition', e => {
+    if (kind === 'off' || still) return;
+    const cx = C.ox + 9, cy = C.oy + 4, fxs = PACK_FX[packNow()];
+    for (let i = 0; i < 22; i++) {const an = rnd(0, Math.PI * 2), sp = rnd(15, 45); emit({kind: 'spark', x: cx, y: cy, vx: Math.cos(an) * sp, vy: Math.sin(an) * sp, life: .8, c: any(fxs.c)});}
+    dust(C.x, C.y, 8); sfx(e.detail?.name || '');
+  });
   if (!still) setInterval(() => {if (((root.dataset.siteMode === 'crow' && kind === 'opus') || root.dataset.edition) && !document.hidden && Math.random() < .5) flock(root.dataset.edition ? 2 : 1);}, 45000);
   // QA hooks
   window.__mk = {
