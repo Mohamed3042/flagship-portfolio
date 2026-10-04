@@ -136,6 +136,18 @@
       if (!room) return;
       canvas.classList.add('is-on');
       room.play(items, null);
+      // the title reads the frame behind it and fades to white or ink (title-tone.js)
+      const {watchTone, along, rgb} = await import('../shared/title-tone.js');
+      const bright = root.classList.contains('bright-film');
+      watchTone(document.querySelector('.calm-intro h1'), {source: () => room.video, frame: () => screen.getBoundingClientRect(), contain: () => room.contain,
+        active: () => root.classList.contains('is-poster-mode'),
+        veil: (R, F) => {   // the screen's own shade (film.css .calm-screen:after), in the page colour
+          const x = ((R.left + R.right) / 2 - F.left) / F.width, low = (F.bottom - (R.top + R.bottom) / 2) / F.height;
+          const phone = matchMedia('(max-width: 760px)').matches && !bright;
+          const a1 = phone ? 0 : along(bright ? [[0, 1], [.42, .88], [.68, .4], [.86, 0]] : [[0, 1], [.32, .72], [.62, 0]], root.dir === 'rtl' ? 1 - x : x);
+          const a2 = along(phone ? [[0, 1], [.4, .7], [.75, 0]] : [[0, 1], [bright ? .4 : .38, 0]], low);
+          return [...rgb(getComputedStyle(screen).getPropertyValue('--film-bg')), 1 - (1 - a1) * (1 - a2)];
+        }});
     }
     new MutationObserver(sync).observe(root, {attributes: true, attributeFilter: ['class']});
     sync();

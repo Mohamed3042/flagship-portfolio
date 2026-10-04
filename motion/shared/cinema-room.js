@@ -12,6 +12,7 @@
  *   const room = createRoom(canvas, {hero, onChange, onEnded});
  *   room.play([{url, label}...], {film})   // a film's sequence of clips
  *   room.skip(), room.setActive(bool), room.dispose()
+ *   room.video, room.contain                // the clip on screen, for title-tone.js
  */
 const VERT = `#version 300 es
 in vec2 aPos; out vec2 vUv;
@@ -309,6 +310,9 @@ export function createRoom(canvas, {hero, onChange, onEnded, style = 0} = {}) {
       else if (live && on && v.duration && v.currentTime >= v.duration - .32) advance();
     },
     get index() {return index;},
+    /** The clip on screen and how it is fitted (title-tone.js samples it). */
+    get video() {return slots[to].ready ? slots[to].video : null;},
+    get contain() {return !!contain(slots[to]);},
     dispose() {cancelAnimationFrame(raf); for (const s of slots) {s.video.pause(); s.video.removeAttribute('src'); s.video.load();}},
   };
 }
