@@ -35,7 +35,7 @@ const ROOM = `#version 300 es
 precision highp float;
 in vec2 vUv; out vec4 o;
 uniform sampler2D uA, uB;
-uniform float uK, uVaA, uVaB, uFitA, uFitB, uTime, uFlick, uPtrOn, uLive, uSide;
+uniform float uK, uVaA, uVaB, uFitA, uFitB, uTime, uFlick, uPtrOn, uLive, uSide, uLight;
 uniform vec4 uRect; uniform vec2 uRes, uPtr;
 ${COMMON}
 vec3 frame(vec2 uvA, vec2 uvB, float lod){
@@ -61,6 +61,9 @@ void main(){
   float dust = step(.9965, hash(floor((uv * asp + vec2(uTime * .006, -uTime * .011)) * uRes.y * .35))) * cone * 1.4;
   vec3 room = amb * (.2 + .2 * cone) + amb * beams * .32 + vec3(dust) * (.5 + amb);
   room *= uFlick;
+  // White mode: the same light, falling on a pale wall instead of a dark room
+  vec3 wall = vec3(.955, .945, .925) + amb * (.06 + .16 * cone) + amb * beams * .14 - vec3(dust) * .05;
+  room = mix(room, wall, uLight);
   // the billboard: the film itself, crisp, inside the hero's rectangle
   float inside = step(uRect.x, uv.x) * step(uv.x, uRect.z) * step(uRect.y, uv.y) * step(uv.y, uRect.w) * uLive;
   vec2 va = fitUv(uv, uRect, uVaA, uFitA, uRes), vb = fitUv(uv, uRect, uVaB, uFitB, uRes);
@@ -79,7 +82,7 @@ void main(){
   float r = length(pd) + wob;
   float shadow = smoothstep(.19, .07, r) * uPtrOn;
   float rim = smoothstep(.2, .17, r) * smoothstep(.15, .19, r) * uPtrOn;
-  col *= 1. - shadow * .62;
+  col *= 1. - shadow * mix(.62, .22, uLight * (1. - inside * ok));
   col += amb * rim * .35;
   col += (hash(uv * uRes + fract(uTime) * 91.) - .5) * .028;                        // grain
   o = vec4(max(col, 0.), 1.);
@@ -129,7 +132,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   const program = (vs, fs) => {const p = gl.createProgram(); gl.attachShader(p, compile(gl.VERTEX_SHADER, vs)); gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p)); return p;};
   const roomProg = program(VERT, ROOM), partProg = program(PVERT, PFRAG);
   const loc = (p, names) => Object.fromEntries(names.map(n => [n, gl.getUniformLocation(p, n)]));
-  const RU = loc(roomProg, ['uA', 'uB', 'uK', 'uVaA', 'uVaB', 'uFitA', 'uFitB', 'uTime', 'uFlick', 'uPtrOn', 'uLive', 'uSide', 'uRect', 'uRes', 'uPtr']);
+  const RU = loc(roomProg, ['uA', 'uB', 'uK', 'uVaA', 'uVaB', 'uFitA', 'uFitB', 'uTime', 'uFlick', 'uPtrOn', 'uLive', 'uSide', 'uLight', 'uRect', 'uRes', 'uPtr']);
   const PU = loc(partProg, ['uA', 'uB', 'uK', 'uTime', 'uVaA', 'uFitA', 'uPt', 'uRect', 'uRes']);
 
   const tri = gl.createBuffer();
@@ -180,7 +183,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
 
   let to = 0, from = 0, k = 1, transStart = 0, transDur = 1.2, list = [], index = -1, active = true, live = false, filmInfo = null, generation = 0;
   const pointer = {x: .5, y: .5, on: 0, target: 0};
-  let flick = 1, raf = 0, dpr = 1, last = performance.now();
+  let flick = 1, raf = 0, dpr = 1, last = performance.now(), light = document.documentElement.dataset.siteMode === 'white' ? 1 : 0;
   const contain = s => (s.aspect > 1.2 && (innerWidth / innerHeight) < .9 ? 1 : 0); // keep a 16:9 film whole on a phone
 
   function resize() {
@@ -259,6 +262,8 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     gl.uniform1f(RU.uVaA, (k < 1 ? sf : st).aspect); gl.uniform1f(RU.uVaB, st.aspect);
     gl.uniform1f(RU.uFitA, contain(k < 1 ? sf : st)); gl.uniform1f(RU.uFitB, contain(st));
     gl.uniform1f(RU.uTime, t); gl.uniform1f(RU.uFlick, flick); gl.uniform1f(RU.uPtrOn, pointer.on); gl.uniform1f(RU.uLive, live && st.ready ? 1 : 0);
+    light += ((document.documentElement.dataset.siteMode === 'white' ? 1 : 0) - light) * (1 - Math.exp(-dt * 4));
+    gl.uniform1f(RU.uLight, light);
     gl.uniform1f(RU.uSide, innerWidth / innerHeight < .9 ? 0 : document.documentElement.dir === 'rtl' ? -1 : 1);
     gl.uniform4f(RU.uRect, ...rect); gl.uniform2f(RU.uRes, canvas.width, canvas.height); gl.uniform2f(RU.uPtr, pointer.x, pointer.y);
     gl.bindVertexArray(roomVao);
