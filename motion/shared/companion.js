@@ -1559,7 +1559,7 @@
 
   // ── lines ─────────────────────────────────────────────────────────────────────────────────────
   const path = location.pathname;
-  const page = /\/world(\/|$)/.test(path) ? 'world' : /\/motion\/[a-z-]+\/?$/.test(path) || root.classList.contains('nf-player') ? 'film' : /\/motion\/?$/.test(path) ? 'gallery' : /\/classic/.test(path) ? 'classic' : /\/(en|ar)\/?$/.test(path) ? 'home' : 'other';
+  const page = /\/world(\/|$)/.test(path) ? 'world' : /\/space(\/|$)/.test(path) ? 'space' : /\/motion\/[a-z-]+\/?$/.test(path) || root.classList.contains('nf-player') ? 'film' : document.querySelector('.nf-bill') || /\/motion\/?$/.test(path) ? 'gallery' : /\/(en|ar)\/?$/.test(path) ? 'home' : 'other';
   const XO_ASK = T('Bored? Let’s play X O. I’ll go easy on you. I won’t.', 'زهقان؟ نلعب إكس أو. سأتساهل معك. لن أتساهل.');
   const L = {
     opus: {
@@ -1812,7 +1812,7 @@
     const text = doing || special || pool[lineIndex++ % pool.length];
     bubble = document.createElement('div');
     bubble.className = 'mk-bubble'; bubble.setAttribute('role', 'status');
-    const motion = `${base}/${ar ? 'ar' : 'en'}/motion`;
+    const motion = `${base}/${ar ? 'ar' : 'en'}`;
     bubble.innerHTML = `<b>${kind === 'crow' ? T('Crow', 'الغراب') : 'Opus'}</b><p></p><nav>
       <button type="button" data-xo>${T('Play X O', 'نلعب إكس أو')}</button>
       <button type="button" data-more>${T('Another one', 'واحدة أخرى')}</button>
