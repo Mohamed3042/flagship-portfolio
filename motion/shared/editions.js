@@ -85,12 +85,8 @@
   @media (prefers-reduced-motion:reduce){.ed-air *{animation:none!important}}
   /* the World chrome takes the edition's colours and display type */
   html[data-edition=halloween]{--w-accent:#ff8a1f;--w-panel:rgba(26,8,38,.6)}
-  html[data-edition=heaven]{--w-accent:#d9a93a;--w-ink:#1f2638;--w-dim:#525c72;--w-line:rgba(31,38,56,.24);--w-faint:rgba(31,38,56,.1);--w-panel:rgba(255,255,255,.55)}
-  html[data-edition=heaven] .world-header{color:#1f2638;background:linear-gradient(rgba(250,248,240,.82),transparent)}
-  html[data-edition=heaven] .style-switch{border-color:rgba(31,38,56,.2);background:rgba(31,38,56,.05)}
-  html[data-edition=heaven] .style-switch a:not([aria-current]){color:rgba(31,38,56,.72)}
-  html[data-edition=heaven] .ed-pick{border-color:rgba(31,38,56,.22);background:rgba(255,255,255,.5)}
-  html[data-edition=heaven] .wo-boxes span{background:#1f2638;color:#fff8e8}
+  html[data-edition=heaven]{--w-accent:#f2c14e;--w-panel:rgba(18,40,92,.5)}
+  html[data-edition=heaven] .world-header{background:linear-gradient(rgba(14,32,74,.7),transparent)}
   html[data-edition=rgb]{--w-accent:#00e5ff;--w-panel:rgba(10,4,24,.6)}
   html[data-edition=tactical]{--w-accent:#9be564;--w-panel:rgba(8,14,8,.66)}
   html[data-edition=comic]{--w-accent:#ffd400;--w-panel:rgba(20,24,38,.72)}
