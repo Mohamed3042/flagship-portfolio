@@ -8,7 +8,7 @@
  */
 (() => {
   const root = document.documentElement;
-  if (window.top !== window || root.classList.contains('mk-loading') || root.dataset.arcade === 'off') return;
+  if (window.top !== window || root.classList.contains('mk-loading') || root.dataset.arcade === 'off' || root.dataset.loader === 'blueprint') return;   // the World has its own
   root.classList.add('mk-loading');
   const born = performance.now(), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ease = 'cubic-bezier(.2,.8,.2,1)';
