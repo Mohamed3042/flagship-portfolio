@@ -9,33 +9,33 @@
     "desktop": {
       "width": 1600,
       "height": 900,
-      "totalBytes": 67335930,
-      "masterSha256": "e1326459c9b621085e9a0991ded17f061e81ed4a8d44904395f8cdc91b7ac69b",
+      "totalBytes": 71814392,
+      "masterSha256": "51c1e8f5868610e76686ac74dd45471c4202910c49e15fb09ae2e9d640e2c64b",
       "files": [
         {
           "file": "desktop/clip-000.mp4",
-          "bytes": 343422,
-          "sha256": "4a135aaf1a966d36b990e47f739909816600912f2fa185841dcd2d504ac5a08e"
+          "bytes": 343494,
+          "sha256": "b16f0f8f225439c834572d7f71a7d9df06d95cad9384ed1e3e1428c6faa79879"
         },
         {
           "file": "desktop/clip-001.mp4",
-          "bytes": 441961,
-          "sha256": "162865c4d0258d95841325473266cc04efd4d072436bf47833f3cb7f42f312c7"
+          "bytes": 1291091,
+          "sha256": "d19d708df00a20444d0c51d85fd2e3c568efdd44e768c18d2b58389c2f93c058"
         },
         {
           "file": "desktop/clip-002.mp4",
-          "bytes": 562531,
-          "sha256": "105551f343b382e1ab9b8ae8acdd7bfffb460ac4eff197f0ca4b646924cecf2a"
+          "bytes": 2389947,
+          "sha256": "7fcc40200283394cc071849bb03deaaf03b2741cca729820e7aa027350c76fa0"
         },
         {
           "file": "desktop/clip-003.mp4",
-          "bytes": 560342,
-          "sha256": "8c2a0cba7550188052febcd9a1be57b65f9bc23205aeacd069de38cca1debd0d"
+          "bytes": 2487629,
+          "sha256": "03ec6f0377379240ecbfa4472a2609ad14ba112cba655b2fedc21e0445d16a66"
         },
         {
           "file": "desktop/clip-004.mp4",
-          "bytes": 2587110,
-          "sha256": "e070fdc3105b1572acc6b3ddf18ade84c95bf0c92445dea119b3805797091b74"
+          "bytes": 2347940,
+          "sha256": "e213ad6f6f6f31cd6453c1f838144c4bc7c2556d37e76b7ffd297ebd633b07f1"
         },
         {
           "file": "desktop/clip-005.mp4",
@@ -324,8 +324,8 @@
         },
         {
           "file": "desktop/poster-maker.jpg",
-          "bytes": 43953,
-          "sha256": "f221fa221dcdcba1640d3b82789f16c69daab1482e6f964d4f933e2a36969b7b"
+          "bytes": 157680,
+          "sha256": "f9ff2e1db87d0f12b8c9014105f56928beca7853c42243ed0bef450a5c285eeb"
         },
         {
           "file": "desktop/poster-mk-business-os.jpg",
@@ -412,33 +412,33 @@
     "phone": {
       "width": 720,
       "height": 1280,
-      "totalBytes": 34630627,
-      "masterSha256": "a0e786336bd70646f94333f6f82f65382f2fb822d0625b37d4c0ff98bba45cdb",
+      "totalBytes": 36737013,
+      "masterSha256": "70b93161b131263469f7a18de4bd1bf55ff7668de906475cc4cae66522e4217e",
       "files": [
         {
           "file": "phone/clip-000.mp4",
-          "bytes": 260039,
-          "sha256": "16ac7a85bc8c70ef8fea93488b78a40b1ed789190510131773267dde6480ea3a"
+          "bytes": 259387,
+          "sha256": "e7cb6ec3e6eab06898c76e0f77488f7681e7de77bb9deecfcddd8ee6d7872005"
         },
         {
           "file": "phone/clip-001.mp4",
-          "bytes": 326152,
-          "sha256": "73e93308e036be56c8650f71b92afb73787a2212f87b7a0f5ed4e63ff83743cf"
+          "bytes": 810721,
+          "sha256": "b0f2a43d1f7078921a7491a752f1cc3e501e00cd29a8f7c866c3f8521b9e9192"
         },
         {
           "file": "phone/clip-002.mp4",
-          "bytes": 401993,
-          "sha256": "38c0fb431c4ae9cf84e5a288e5ea7fb59860b5410dcddbacfb0d90bd92a92327"
+          "bytes": 1257663,
+          "sha256": "d6c11772ac21095191f16ea613b1ed6e8a259a236c4ae44a3d33e2fbddfb4f37"
         },
         {
           "file": "phone/clip-003.mp4",
-          "bytes": 394796,
-          "sha256": "fa63b51d9ad482cf5cb13d1b1db64a953d1ed271af276ab1070e324ce9880970"
+          "bytes": 1157115,
+          "sha256": "5265f3a6e375e39709fe7586e1f8dfa4f26234a5110fdecdd4dfcef1a12815f4"
         },
         {
           "file": "phone/clip-004.mp4",
-          "bytes": 431193,
-          "sha256": "bee39763c9b1a680caa0da517bbcb95254e85f6df870703b3f8e7faa1d7a9065"
+          "bytes": 402867,
+          "sha256": "6f9de9f36cc2896bf497e1a48bc00bb19267d21c2f5b952b9d5d35ae2f7f3595"
         },
         {
           "file": "phone/clip-005.mp4",
@@ -727,8 +727,8 @@
         },
         {
           "file": "phone/poster-maker.jpg",
-          "bytes": 33777,
-          "sha256": "26e29cb7ec8ae0b132128f72f172d53b09d9fddd013288df1e567f1586693419"
+          "bytes": 66583,
+          "sha256": "02f61ccdbc7d6e01d1b1f891946fb5734ff6f4288cd988108fffbd1f1529f7b4"
         },
         {
           "file": "phone/poster-mk-business-os.jpg",
@@ -817,5 +817,9 @@
     "file": "og.jpg",
     "bytes": 66044,
     "sha256": "dfa9e88d77324d292b5a58a0261255c4475e6088b8c4782f00076da7b913dfb8"
+  },
+  "revision": {
+    "date": "2026-10-04",
+    "note": "maker chapter (8-20 s) replaced by MakerV2; clips 000-004 and poster-maker re-encoded from out/films-v2/home masters with the original settings"
   }
 }
