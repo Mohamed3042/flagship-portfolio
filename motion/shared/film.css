@@ -89,3 +89,18 @@ html:not(.has-film-progress):not(.film-autoplay) .film-now .film-hint{display:bl
 
 /* Ambient fill: a blurred, enlarged copy of the current frame behind the film (film-world.js draws it). */
 .film-ambient{position:absolute;inset:-12%;width:124%;height:124%;filter:blur(42px) saturate(1.55) brightness(.7);pointer-events:none}
+
+/* Chapters view: the film's scenes play behind its title in the projector room (cinema-room.js). */
+.calm-room{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;display:block;opacity:0;transition:opacity .8s ease}
+.calm-room.is-on{opacity:1}
+.is-film-mode .calm-room,.is-film-mode .calm-screen{display:none}
+.calm-story{position:relative}
+.calm-story>:not(.calm-room):not(.calm-screen){position:relative;z-index:1}
+.calm-screen{position:absolute;z-index:0;left:50%;top:0;width:100vw;height:min(84vh,780px);translate:-50% 0;pointer-events:none}
+.calm-screen:after{content:"";position:absolute;inset:0;background:linear-gradient(77deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 72%,transparent) 32%,transparent 62%),linear-gradient(0deg,var(--film-bg) 0%,transparent 38%)}
+[dir=rtl] .calm-screen:after{background:linear-gradient(-77deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 72%,transparent) 32%,transparent 62%),linear-gradient(0deg,var(--film-bg) 0%,transparent 38%)}
+.calm-intro{min-height:min(60vh,560px);display:flex;flex-direction:column;justify-content:flex-end}
+.calm-intro h1,.calm-intro p,.calm-intro .eyebrow{text-shadow:0 2px 18px rgba(0,0,0,.6)}
+@media (max-width:760px){.calm-screen{height:72vh}.calm-screen:after{background:linear-gradient(0deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 70%,transparent) 40%,transparent 75%)}.calm-intro{min-height:52vh}}
+.bright-film .calm-screen:after{background:linear-gradient(77deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 88%,transparent) 42%,color-mix(in srgb,var(--film-bg) 40%,transparent) 68%,transparent 86%),linear-gradient(0deg,var(--film-bg) 0%,transparent 40%)}
+[dir=rtl] .bright-film .calm-screen:after{background:linear-gradient(-77deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 88%,transparent) 42%,color-mix(in srgb,var(--film-bg) 40%,transparent) 68%,transparent 86%),linear-gradient(0deg,var(--film-bg) 0%,transparent 40%)}

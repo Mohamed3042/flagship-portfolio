@@ -82,6 +82,8 @@
   </main>
 
   <section class="calm-story" id="chapters" data-calm-story tabindex="-1" aria-label="MK Business OS chapter posters">
+    <canvas class="calm-room" data-calm-room aria-hidden="true"></canvas>
+    <div class="calm-screen" data-calm-screen aria-hidden="true"></div>
     <div class="calm-intro">
       <div class="eyebrow" data-i18n="edition">Ten worlds · One local workspace</div>
       <h1 data-i18n="calmTitle">Ten worlds, one workspace.</h1>
@@ -117,6 +119,28 @@
   <script type="module" src="../shared/film-world.js"></script>
   <script src="../shared/living-text.js" defer></script>
   <script src="../shared/companion.js" defer></script>
+  <script type="module">
+    // Chapters view: the film's own scenes play behind its title and break apart in this film's style.
+    const root = document.documentElement, canvas = document.querySelector('[data-calm-room]'), screen = document.querySelector('[data-calm-screen]');
+    let room = null, starting = false;
+    async function sync() {
+      if (!root.classList.contains('is-poster-mode')) {room?.setActive(false); canvas.classList.remove('is-on'); return;}
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (room) {room.setActive(true); canvas.classList.add('is-on'); return;}
+      if (starting) return; starting = true;
+      const {createRoom} = await import('../shared/cinema-room.js');
+      const data = JSON.parse(document.getElementById('film-data').textContent);
+      const p = matchMedia('(max-aspect-ratio: 4/5)').matches && data.profiles.mobile ? 'mobile' : 'desktop';
+      const count = data.clipCount || Math.ceil(data.duration / data.clipSeconds);
+      const items = data.chapters.map(c => ({url: new URL(data.profiles[p].clips.replace('{index}', String(Math.min(count - 1, Math.floor((c.previewAt ?? c.start + 2) / data.clipSeconds))).padStart(3, '0')), location.href).href}));
+      room = createRoom(canvas, {hero: screen, style: 4, onEnded: () => room.play(items, null)});
+      if (!room) return;
+      canvas.classList.add('is-on');
+      room.play(items, null);
+    }
+    new MutationObserver(sync).observe(root, {attributes: true, attributeFilter: ['class']});
+    sync();
+  </script>
   <script>
     // Case-study link follows the page language (film-world.js translates everything else).
     if (new URLSearchParams(location.search).get('lang') === 'ar') for (const a of document.querySelectorAll('[data-case-link]')) a.href = a.href.replace('/en/', '/ar/');

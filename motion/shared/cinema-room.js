@@ -92,7 +92,7 @@ const PVERT = `#version 300 es
 precision highp float;
 in vec2 aGrid; in float aSeed;
 uniform sampler2D uA, uB;
-uniform float uK, uTime, uVaA, uFitA, uPt;
+uniform float uK, uTime, uVaA, uFitA, uPt, uStyle;
 uniform vec4 uRect; uniform vec2 uRes;
 out vec3 vC; out float vA;
 ${COMMON}
@@ -110,7 +110,19 @@ void main(){
   float sw = (aSeed - .5) * 2.4 * p;
   dir = mat2(cos(sw), -sin(sw), sin(sw), cos(sw)) * dir;
   vec2 drift = vec2(noise(aGrid * 6. + uTime * .5), noise(aGrid * 6. - uTime * .4)) - .5;
-  vec2 pos = home * asp + (dir * (.04 + .18 * aSeed) + drift * .12) * p;
+  // each film breaks apart its own way
+  vec2 disp;
+  if (uStyle < .5) disp = dir * (.04 + .18 * aSeed) + drift * .12;                                   // scatter
+  else if (uStyle < 1.5) {                                                                           // orbit swirl
+    vec2 c = (q - .5) * asp; float r = length(c), a = atan(c.y, c.x) + (2.6 - r * 1.4) * (aSeed + .5);
+    disp = vec2(cos(a), sin(a)) * r * 1.2 - c;
+  } else if (uStyle < 2.5) disp = vec2((aSeed - .5) * .14, -(.12 + .5 * aSeed)) + drift * .06;     // sprinkles falling
+  else if (uStyle < 3.5) disp = vec2((aSeed - .5) * .03, sin(q.x * 18. + uTime * 4.) * .09 * (.5 + aSeed)); // sound wave
+  else if (uStyle < 4.5) {float row = floor(q.y * 26.); disp = vec2((hash(vec2(row, 1.7)) - .25) * .55, (aSeed - .5) * .01);} // streaming rows
+  else if (uStyle < 5.5) {float an = noise(q * 3. + uTime * .25) * 6.283; disp = vec2(cos(an), sin(an)) * (.08 + .16 * aSeed);} // flock flow
+  else if (uStyle < 6.5) {vec2 cell = floor(q * vec2(12., 7.)); disp = (vec2(hash(cell + 3.), hash(cell + 7.)) - .5) * .55 * hash(cell) + vec2(0., -.08);} // tiles flip out
+  else disp = vec2(.38 * (1. - q.y) * aSeed, (aSeed - .5) * .06);                                  // page sweep
+  vec2 pos = home * asp + disp * p;
   pos /= asp;
   vec3 a = textureLod(uA, aGrid, 1.5).rgb, b = textureLod(uB, aGrid, 1.5).rgb;
   vC = mix(a, b, smoothstep(.42, .58, uK));
@@ -125,7 +137,7 @@ precision highp float;
 in vec3 vC; in float vA; out vec4 o;
 void main(){ vec2 d = gl_PointCoord - .5; float r = length(d); if (r > .5) discard; float a = vA * smoothstep(.5, .3, r); o = vec4(vC * 1.08, a); }`;
 
-export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
+export function createRoom(canvas, {hero, onChange, onEnded, style = 0} = {}) {
   const gl = canvas.getContext('webgl2', {antialias: false, alpha: false, depth: false, premultipliedAlpha: false, powerPreference: 'high-performance'});
   if (!gl) return null;
   const compile = (type, src) => {const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s;};
@@ -133,7 +145,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   const roomProg = program(VERT, ROOM), partProg = program(PVERT, PFRAG);
   const loc = (p, names) => Object.fromEntries(names.map(n => [n, gl.getUniformLocation(p, n)]));
   const RU = loc(roomProg, ['uA', 'uB', 'uK', 'uVaA', 'uVaB', 'uFitA', 'uFitB', 'uTime', 'uFlick', 'uPtrOn', 'uLive', 'uSide', 'uLight', 'uRect', 'uRes', 'uPtr']);
-  const PU = loc(partProg, ['uA', 'uB', 'uK', 'uTime', 'uVaA', 'uFitA', 'uPt', 'uRect', 'uRes']);
+  const PU = loc(partProg, ['uA', 'uB', 'uK', 'uTime', 'uVaA', 'uFitA', 'uPt', 'uStyle', 'uRect', 'uRes']);
 
   const tri = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, tri);
@@ -276,7 +288,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
       gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, sf.tex); gl.uniform1i(PU.uA, 0);
       gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, st.tex); gl.uniform1i(PU.uB, 1);
       gl.uniform1f(PU.uK, k); gl.uniform1f(PU.uTime, t); gl.uniform1f(PU.uVaA, st.aspect); gl.uniform1f(PU.uFitA, contain(st));
-      gl.uniform1f(PU.uPt, cell * 1.05); gl.uniform4f(PU.uRect, ...rect); gl.uniform2f(PU.uRes, canvas.width, canvas.height);
+      gl.uniform1f(PU.uPt, cell * 1.05); gl.uniform1f(PU.uStyle, style); gl.uniform4f(PU.uRect, ...rect); gl.uniform2f(PU.uRes, canvas.width, canvas.height);
       gl.bindVertexArray(partVao);
       gl.drawArrays(gl.POINTS, 0, partCount);
     }
