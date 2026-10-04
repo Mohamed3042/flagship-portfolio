@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8"><script src="../shared/arcade-loader.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090F14">
+  <meta name="description" content="A tour of Engineering Smart System 0.3.1 in ten engineering materials, one real module each, filmed from the current app on sample data.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Engineering Smart System — Ten materials">
+  <meta property="og:description" content="From the mailbox to an approved quotation, with a person at every gate.">
+  <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/motion/ess/media/og.jpg">
+  <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://mohamed3042.github.io/flagship-portfolio/motion/ess/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://mohamed3042.github.io/flagship-portfolio/motion/ess/">
+  <title>Engineering Smart System — Ten materials</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20fill%3D%22%2355DEC4%22%20color%3D%22%2355DEC4%22%20viewBox%3D%220%200%2036%2036%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20transform%3D%22scale(0.5625)%22%20fill%3D%22currentColor%22%3E%3Cpath%20d%3D%22M7%2018%2033%203%2044%2010%2018%2025v30L7%2048Z%22%2F%3E%3Cpath%20d%3D%22m18%2025%2026-15v15L31%2033v15L18%2055Z%22%20opacity%3D%22.55%22%2F%3E%3Cpath%20d%3D%22m37%2039%2018-10v25L37%2064Z%22%2F%3E%3Cpath%20d%3D%22m37%2039%2018%2015-18%2010Z%22%20opacity%3D%22.55%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="../shared/film.css">
+  <style>:root{--accent:#55DEC4;--film-bg:#090F14;--film-deep:#05080b;--film-surface:#132023;--film-raised:#17292b;--film-button:#0d191d;--film-hover:#1d3838;--film-line:#294c49;--film-line-soft:#213a3a;--film-line-faint:#112627;--film-text:#ebf2ef;--film-soft:#a1b4af;--film-dim:#69847e;--muted:#a1aeaa;--film-on-accent:#0c1f1b;--glass:rgba(9,15,20,0.74)}</style>
+  <link rel="preload" as="image" href="./media/desktop/poster-decisions.jpg" media="(min-aspect-ratio: 4/5)">
+  <link rel="preload" as="image" href="./media/mobile/poster-decisions.jpg" media="(max-aspect-ratio: 4/5)">
+</head>
+<body>
+  <a class="film-skip" data-film-skip href="#chapters" data-i18n="skip">Skip to the chapters</a>
+  <header class="film-header">
+    <a class="film-brand" data-gallery-link href="../../en/motion/" aria-label="Engineering Smart System · Software in Motion">
+      <svg aria-hidden="true" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><g transform="scale(0.5625)" fill="currentColor"><path d="M7 18 33 3 44 10 18 25v30L7 48Z"/><path d="m18 25 26-15v15L31 33v15L18 55Z" opacity=".55"/><path d="m37 39 18-10v25L37 64Z"/><path d="m37 39 18 15-18 10Z" opacity=".55"/></g></svg>
+      <span>Engineering Smart System<small data-i18n="edition">Ten materials · A motion study</small></span>
+    </a>
+    <nav aria-label="Film navigation" data-i18n-label="navigation">
+      <a class="gallery-header" data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a>
+      <a data-language-link href="?lang=ar" lang="ar" hreflang="ar">العربية</a>
+    </nav>
+  </header>
+
+  <main class="film-story" data-film-story aria-label="Engineering Smart System scroll film" hidden>
+    <div class="film-stage" data-film-stage>
+      <div class="film-screen" aria-hidden="true">
+        <img class="film-poster" data-film-poster src="./media/desktop/poster-decisions.jpg" width="1600" height="900" alt="Engineering Smart System" fetchpriority="high">
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+        <video class="film-buffer" data-film-buffer playsinline muted preload="none" disablepictureinpicture></video>
+      </div>
+    </div>
+    <div class="film-caption">
+      <div class="eyebrow" data-i18n="filmLabel">Engineering Smart System · Ten materials</div>
+      <h1 data-chapter-title>Your next decisions.</h1>
+      <p data-chapter-summary>Home lists the work waiting for a person, each with its evidence and one next step.</p>
+      <a class="film-chapter-action" data-chapter-action href="#" hidden></a>
+    </div>
+    <div class="film-loading" data-film-loading role="status" hidden>
+      <span data-load-message>Opening the film…</span>
+      <button type="button" data-retry data-i18n="retry" hidden>Try again</button>
+    </div>
+    <footer class="film-controls">
+      <nav class="film-chapter-rail" data-chapter-rail aria-label="Film chapters" data-i18n-label="chapters"></nav>
+      <div class="film-track">
+        <div class="film-progress" data-film-progress></div>
+        <input class="film-scrubber" data-film-scrubber type="range" min="0" max="149.9667" step="0.033333" value="0" aria-label="Film position">
+      </div>
+      <div class="film-control-row">
+        <div class="film-control-group">
+          <button type="button" data-open-chapters data-i18n="chapters">Chapters</button>
+          <button type="button" data-mode-toggle>View chapters</button>
+        </div>
+        <span class="film-hint" data-i18n="hint">Scroll to explore · Reverse to return</span>
+        <span class="film-clock" data-clock>00:00 / 02:30</span>
+      </div>
+    </footer>
+  </main>
+
+  <section class="calm-story" id="chapters" data-calm-story tabindex="-1" aria-label="Engineering Smart System chapter posters">
+    <div class="calm-intro">
+      <div class="eyebrow" data-i18n="edition">Ten materials · A motion study</div>
+      <h1 data-i18n="calmTitle">Your next decisions.</h1>
+      <p data-i18n="calmSummary">A tour of Engineering Smart System 0.3.1 in ten engineering materials, one real module each, filmed from the current app on sample data.</p>
+      <button type="button" data-mode-toggle>Scroll the film</button>
+    </div>
+    <div class="calm-grid">
+      <article class="chapter-card" id="decisions" data-poster-chapter="decisions"><figure><img src="./media/desktop/poster-decisions.jpg" alt="Your next decisions." width="960" height="540" loading="lazy"></figure><h2>Your next decisions.</h2><p>Home lists the work waiting for a person, each with its evidence and one next step.</p><button data-play-chapter="decisions">Play a short scene</button></article>
+      <article class="chapter-card" id="learning" data-poster-chapter="learning"><figure><img src="./media/desktop/poster-learning.jpg" alt="It learns your business." width="960" height="540" loading="lazy"></figure><h2>It learns your business.</h2><p>It reads your mail and documents, suggests what you do, and waits for the owner to confirm.</p><button data-play-chapter="learning">Play a short scene</button></article>
+      <article class="chapter-card" id="inbox" data-poster-chapter="inbox"><figure><img src="./media/desktop/poster-inbox.jpg" alt="Mail, sorted by your business." width="960" height="540" loading="lazy"></figure><h2>Mail, sorted by your business.</h2><p>Every message is filed by the business it belongs to; promotions stay hidden until you ask.</p><button data-play-chapter="inbox">Play a short scene</button></article>
+      <article class="chapter-card" id="projects" data-poster-chapter="projects"><figure><img src="./media/desktop/poster-projects.jpg" alt="One project per tender." width="960" height="540" loading="lazy"></figure><h2>One project per tender.</h2><p>Each tender becomes one project, with an enquiry per contractor and dated, evidenced changes.</p><button data-play-chapter="projects">Play a short scene</button></article>
+      <article class="chapter-card" id="evidence" data-poster-chapter="evidence"><figure><img src="./media/desktop/poster-evidence.jpg" alt="Every fact keeps its sentence." width="960" height="540" loading="lazy"></figure><h2>Every fact keeps its sentence.</h2><p>Downloaded, read and reviewed are separate facts for every file, and every requirement quotes its source.</p><button data-play-chapter="evidence">Play a short scene</button></article>
+      <article class="chapter-card" id="review" data-poster-chapter="review"><figure><img src="./media/desktop/poster-review.jpg" alt="An engineer signs off." width="960" height="540" loading="lazy"></figure><h2>An engineer signs off.</h2><p>A new revision reopens the engineering review, and every approval records the exact revision.</p><button data-play-chapter="review">Play a short scene</button></article>
+      <article class="chapter-card" id="quotation" data-poster-chapter="quotation"><figure><img src="./media/desktop/poster-quotation.jpg" alt="Official quotes. Prices by people." width="960" height="540" loading="lazy"></figure><h2>Official quotes. Prices by people.</h2><p>Official templates, empty price cells for people to fill, and a stamp only after approval.</p><button data-play-chapter="quotation">Play a short scene</button></article>
+      <article class="chapter-card" id="customers" data-poster-chapter="customers"><figure><img src="./media/desktop/poster-customers.jpg" alt="Know who is asking." width="960" height="540" loading="lazy"></figure><h2>Know who is asking.</h2><p>Customer tags, research to a chosen evidence standard, and services they have not asked for yet.</p><button data-play-chapter="customers">Play a short scene</button></article>
+      <article class="chapter-card" id="automations" data-poster-chapter="automations"><figure><img src="./media/desktop/poster-automations.jpg" alt="Routines that stop at gates." width="960" height="540" loading="lazy"></figure><h2>Routines that stop at gates.</h2><p>Built-in workflows run step by step and stop wherever a person must approve.</p><button data-play-chapter="automations">Play a short scene</button></article>
+      <article class="chapter-card" id="qualified" data-poster-chapter="qualified"><figure><img src="./media/desktop/poster-qualified.jpg" alt="Only qualified AI works here." width="960" height="540" loading="lazy"></figure><h2>Only qualified AI works here.</h2><p>Every AI model must meet a fixed floor and pass the qualification exam, through an API key or MCP.</p><button data-play-chapter="qualified">Play a short scene</button></article>
+      <article class="chapter-card" id="finale" data-poster-chapter="finale"><figure><img src="./media/desktop/poster-finale.jpg" alt="People decide." width="960" height="540" loading="lazy"></figure><h2>People decide.</h2><p>Local-first: nothing leaves the company until a person approves it.</p><button data-play-chapter="finale">Play a short scene</button></article>
+    </div>
+    <footer class="calm-footer"><a data-gallery-link href="../../en/motion/" data-i18n="gallery">All films</a><a href="../cake-studio/" data-i18n="nextFilm">Next film: Cake Studio ↗</a></footer>
+  </section>
+
+  <dialog class="film-dialog" data-chapter-dialog aria-labelledby="chapter-dialog-title">
+    <header><h2 id="chapter-dialog-title" data-i18n="chapters">Chapters</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <ol data-chapter-list></ol>
+  </dialog>
+  <dialog class="film-dialog film-watch" data-watch-dialog aria-labelledby="watch-title">
+    <header><h2 id="watch-title" data-watch-title>Engineering Smart System</h2><button type="button" data-close data-i18n="close">Close</button></header>
+    <video data-watch-video controls playsinline preload="none"></video>
+    <p data-i18n="shortScene">A short, silent scene from the film. Close it to continue exploring.</p>
+  </dialog>
+  <script id="film-data" type="application/json">{"schemaVersion":1,"id":"ess","duration":150,"fps":30,"clipSeconds":5,"clipCount":30,"accent":"#55DEC4","title":{"en":"Engineering Smart System — Ten materials","ar":"Engineering Smart System — عشر مواد"},"gallery":{"en":"../../en/motion/","ar":"../../ar/motion/"},"pixelsPerSecond":{"desktop":88,"mobile":72},"profiles":{"desktop":{"clips":"./media/desktop/clip-{index}.mp4","poster":"./media/desktop/poster-decisions.jpg","width":1600,"height":900},"mobile":{"clips":"./media/mobile/clip-{index}.mp4","poster":"./media/mobile/poster-decisions.jpg","width":720,"height":1280}},"copy":{"skip":{"en":"Skip to the chapters","ar":"انتقل إلى الفصول"},"edition":{"en":"Ten materials · A motion study","ar":"عشر مواد · دراسة حركية"},"filmLabel":{"en":"Engineering Smart System · Ten materials","ar":"Engineering Smart System · عشر مواد"},"product":{"en":"Product","ar":"البرنامج"},"world":{"en":"World","ar":"العالم"},"lensLabel":{"en":"Explore Engineering Smart System","ar":"استكشف Engineering Smart System"},"navigation":{"en":"Film navigation","ar":"التنقل في الفيلم"},"gallery":{"en":"All films","ar":"كل الأفلام"},"caseStudy":{"en":"Case study","ar":"دراسة الحالة"},"retry":{"en":"Try again","ar":"أعد المحاولة"},"chapters":{"en":"Chapters","ar":"الفصول"},"close":{"en":"Close","ar":"إغلاق"},"hint":{"en":"Scroll to explore · Reverse to return","ar":"مرّر لتستكشف · اعكس التمرير للرجوع"},"calmTitle":{"en":"Your next decisions.","ar":"قراراتك التالية."},"calmSummary":{"en":"A tour of Engineering Smart System 0.3.1 in ten engineering materials, one real module each, filmed from the current app on sample data.","ar":"جولة في Engineering Smart System 0.3.1 عبر عشر مواد هندسية، لكل وحدة حقيقية مادتها، مصوّرة من التطبيق الحالي ببيانات تجريبية."},"shortScene":{"en":"A short, silent scene from the film. Close it to continue exploring.","ar":"مشهد قصير من الفيلم دون صوت. أغلقه لتواصل الاستكشاف."},"nextFilm":{"en":"Next film: Cake Studio ↗","ar":"الفيلم التالي: Cake Studio ↗"}},"chapters":[{"id":"decisions","start":0,"previewAt":9.5,"title":{"en":"Your next decisions.","ar":"قراراتك التالية."},"summary":{"en":"Home lists the work waiting for a person, each with its evidence and one next step.","ar":"تعرض الصفحة الرئيسية الأعمال التي تنتظر قرارًا بشريًا، ولكلٍّ منها دليله وخطوته التالية."},"accent":"#55DEC4","posters":{"desktop":"./media/desktop/poster-decisions.jpg","mobile":"./media/mobile/poster-decisions.jpg"}},{"id":"learning","start":14,"previewAt":22,"title":{"en":"It learns your business.","ar":"يتعلّم طبيعة عملك."},"summary":{"en":"It reads your mail and documents, suggests what you do, and waits for the owner to confirm.","ar":"يقرأ بريدك ومستنداتك، ويقترح ما تقدّمه شركتك، ثم ينتظر تأكيد المالك."},"accent":"#E08A4F","posters":{"desktop":"./media/desktop/poster-learning.jpg","mobile":"./media/mobile/poster-learning.jpg"}},{"id":"inbox","start":27,"previewAt":31,"title":{"en":"Mail, sorted by your business.","ar":"بريدٌ مصنّف حسب أعمالك."},"summary":{"en":"Every message is filed by the business it belongs to; promotions stay hidden until you ask.","ar":"تُصنَّف كل رسالة وفق النشاط الذي تخصّه، وتبقى العروض الترويجية مخفية حتى تطلبها."},"accent":"#A48BFF","posters":{"desktop":"./media/desktop/poster-inbox.jpg","mobile":"./media/mobile/poster-inbox.jpg"}},{"id":"projects","start":40,"previewAt":44.5,"title":{"en":"One project per tender.","ar":"مشروع واحد لكل مناقصة."},"summary":{"en":"Each tender becomes one project, with an enquiry per contractor and dated, evidenced changes.","ar":"تتحوّل كل مناقصة إلى مشروع واحد، لكل مقاول فيه استفساره، ولكل تغيير تاريخه ودليله."},"accent":"#E5553D","posters":{"desktop":"./media/desktop/poster-projects.jpg","mobile":"./media/mobile/poster-projects.jpg"}},{"id":"evidence","start":53,"previewAt":57,"title":{"en":"Every fact keeps its sentence.","ar":"لكل معلومة جملتها الأصلية."},"summary":{"en":"Downloaded, read and reviewed are separate facts for every file, and every requirement quotes its source.","ar":"التنزيل والقراءة والمراجعة حقائق منفصلة لكل ملف، وكل متطلب يقتبس مصدره حرفيًا."},"accent":"#C6F25A","posters":{"desktop":"./media/desktop/poster-evidence.jpg","mobile":"./media/mobile/poster-evidence.jpg"}},{"id":"review","start":66,"previewAt":69.5,"title":{"en":"An engineer signs off.","ar":"المهندس يعتمد."},"summary":{"en":"A new revision reopens the engineering review, and every approval records the exact revision.","ar":"أي مراجعة فنية جديدة تعيد فتح التدقيق الهندسي، وكل اعتماد يسجّل رقم المراجعة بدقة."},"accent":"#F1BC68","posters":{"desktop":"./media/desktop/poster-review.jpg","mobile":"./media/mobile/poster-review.jpg"}},{"id":"quotation","start":80,"previewAt":92.2,"title":{"en":"Official quotes. Prices by people.","ar":"عروض رسمية وأسعار يضعها البشر."},"summary":{"en":"Official templates, empty price cells for people to fill, and a stamp only after approval.","ar":"قوالب رسمية، وخانات أسعار يملؤها الموظفون، وختم لا يظهر إلا بعد الاعتماد."},"accent":"#6F8BFF","posters":{"desktop":"./media/desktop/poster-quotation.jpg","mobile":"./media/mobile/poster-quotation.jpg"}},{"id":"customers","start":94,"previewAt":96.8,"title":{"en":"Know who is asking.","ar":"اعرف من يسأل."},"summary":{"en":"Customer tags, research to a chosen evidence standard, and services they have not asked for yet.","ar":"وسوم للعملاء، وبحث وفق معيار الأدلة الذي تختاره، وخدمات لم يطلبوها بعد."},"accent":"#FF5FAE","posters":{"desktop":"./media/desktop/poster-customers.jpg","mobile":"./media/mobile/poster-customers.jpg"}},{"id":"automations","start":107,"previewAt":113.5,"title":{"en":"Routines that stop at gates.","ar":"إجراءات تتوقف عند البوابات."},"summary":{"en":"Built-in workflows run step by step and stop wherever a person must approve.","ar":"تعمل سير العمل المدمجة خطوةً بخطوة، وتتوقف حيث يلزم اعتماد بشري."},"accent":"#46C7F0","posters":{"desktop":"./media/desktop/poster-automations.jpg","mobile":"./media/mobile/poster-automations.jpg"}},{"id":"qualified","start":120,"previewAt":123.5,"title":{"en":"Only qualified AI works here.","ar":"لا يعمل هنا إلا ذكاء مؤهَّل."},"summary":{"en":"Every AI model must meet a fixed floor and pass the qualification exam, through an API key or MCP.","ar":"على كل نموذج ذكاء اصطناعي أن يستوفي حدًّا أدنى ثابتًا ويجتاز اختبار التأهيل، عبر مفتاح API أو MCP."},"accent":"#FF7A6E","posters":{"desktop":"./media/desktop/poster-qualified.jpg","mobile":"./media/mobile/poster-qualified.jpg"}},{"id":"finale","start":134,"previewAt":143,"title":{"en":"People decide.","ar":"القرار للإنسان."},"summary":{"en":"Local-first: nothing leaves the company until a person approves it.","ar":"يعمل محليًا أولًا: لا يغادر الشركة شيء قبل أن يعتمده شخص."},"accent":"#55DEC4","posters":{"desktop":"./media/desktop/poster-finale.jpg","mobile":"./media/mobile/poster-finale.jpg"},"action":{"href":{"en":"../cake-studio/?lang=en","ar":"../cake-studio/?lang=ar"},"label":{"en":"Next film: Cake Studio","ar":"الفيلم التالي: Cake Studio"}}}]}</script>
+  <script type="module" src="../shared/film-world.js"></script>
+  <script>
+    // Case-study link follows the page language (film-world.js translates everything else).
+    if (new URLSearchParams(location.search).get('lang') === 'ar') for (const a of document.querySelectorAll('[data-case-link]')) a.href = a.href.replace('/en/', '/ar/');
+  </script>
+</body>
+</html>
