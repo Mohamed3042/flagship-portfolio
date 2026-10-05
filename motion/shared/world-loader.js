@@ -2,13 +2,14 @@
  * World loader (Alche's opening, studied frame by frame in the owner's recording): black, the MK drawn in thin
  * construction lines, its outline with guides along its edges (circles, the M's V and the K's arms run long, cap and base
  * lines across the screen) and the tagline: that is the loading phase. The outline stands exactly where the World's glass
- * mark will stand (hero.ts sends world:markrect while the World loads), because it does not vanish: when the World has
- * really loaded (the hero fires world:surge after a run of smooth frames) the guides fade, the black hands over to the
- * World's own (lens.ts draws it round the glass), and glass runs into the outline, fills it, swells in a liquid pulse and
- * settles into the glass MK, the lines giving way to it (the owner, 2026-10-05). Nothing scrolls until the opening is
- * over, so the walk always starts at the top, as Alche's does. Fallbacks: world-failed, or 9 s. Classic <head> script so it
- * covers the first paint; html[data-loader=blueprint] tells the shared arcade loader to stand aside. (The earlier
- * versions: src/legacy/world-loader-blob.js.txt; the bead that swelled into a ball, git 37ba4f3.)
+ * mark will stand (hero.ts sends world:markrect while the World loads). When the World has really loaded and the drawing
+ * is finished (the hero fires world:surge), the loader hands its picture over: the World's lens draws the same black and
+ * the same lines on the same spot, so its glass can bend them, and the loader goes in that frame (lens.ts: a crystal
+ * ball pops in the mark, swells past the screen and becomes the glass MK; the owner, 2026-10-05, "liquid glass PULSING of
+ * those letters"; a window cut in the black read as a cartoon iris). Nothing scrolls until the opening is over, so the
+ * walk always starts at the top, as Alche's does. Fallbacks: world-failed, or 9 s. Classic <head> script so it covers
+ * the first paint; html[data-loader=blueprint] tells the shared arcade loader to stand aside. (The earlier versions:
+ * src/legacy/world-loader-blob.js.txt; the iris, git 38ace7e; the bead that swelled into a ball, git 37ba4f3.)
  */
 (() => {
   const root = document.documentElement;
@@ -37,8 +38,7 @@
 #mk-blueprint .m{fill:none;stroke:rgba(240,248,244,.85);stroke-width:calc(var(--sw) * 1.2);stroke-dasharray:1;stroke-dashoffset:1;animation:mkbp-draw 2s ${ease} .35s forwards}
 #mk-blueprint p{position:absolute;left:0;right:0;top:calc(50% + var(--below, 22vh));margin:0;text-align:center;font:500 15px/1.4 'Space Grotesk Variable','Inter Variable','Cairo',system-ui,sans-serif;color:rgba(225,240,233,.7);opacity:0;animation:mkbp-in 1s ${ease} .9s forwards}
 #mk-blueprint.is-open p{animation:mkbp-out .35s forwards}
-#mk-blueprint.is-open .g{transition:opacity .35s ease;opacity:0}
-#mk-blueprint.is-fill .m{transition:opacity .4s ease;opacity:0}
+#mk-blueprint.is-open .bg,#mk-blueprint.is-open svg{visibility:hidden}
 #mk-blueprint.is-done{opacity:0;visibility:hidden;pointer-events:none}
 @keyframes mkbp-draw{to{stroke-dashoffset:0}}
 @keyframes mkbp-in{to{opacity:1}}
@@ -70,10 +70,9 @@
   el.style.setProperty('--below', tall ? '17vh' : '22vh');
   el.innerHTML = `<div class="bg"></div><svg aria-hidden="true"><g class="mk">${guides}${outline(M)}${outline(K)}</g></svg><p>${ar ? 'برمجيات وأنظمة وعوالم سينمائية.' : 'Software, systems and cinematic worlds.'}</p>`;
   el.setAttribute('role', 'status'); el.setAttribute('aria-label', ar ? 'جارٍ تحميل العالم' : 'Loading the World');
-  const g = el.querySelector('.mk'), at0 = {x: 0, y: 0, unit: 1};
+  const g = el.querySelector('.mk');
   // (the lines' widths are in the mark's units, one CSS px whatever its size, so the dashes that draw them stay whole)
   const place = (x, y, unit, glide) => {
-    Object.assign(at0, {x, y, unit});
     g.style.transition = glide ? `transform .6s ${ease}` : 'none';
     g.style.transform = `translate(${x}px, ${y}px) scale(${unit}, ${-unit})`;
     g.style.setProperty('--sw', String(1 / unit));
@@ -81,29 +80,25 @@
   // where the mark will stand, until the World says exactly (hero.ts: about half the width, nine tenths on phones)
   place(innerWidth / 2, innerHeight * (tall ? .44 : .43), innerWidth * (tall ? .92 : .52) / MW, false);
   addEventListener('world:markrect', e => {const {x, y, unit} = e.detail; place(x, y, unit, true);});
-  const mount = () => document.body ? document.body.prepend(el) : requestAnimationFrame(mount);
+  // the World waits for the drawing (the outline's 2 s from .35 s) before it takes the picture over
+  const mount = () => {if (!document.body) return requestAnimationFrame(mount); document.body.prepend(el); window.__mkDrawnAt = performance.now() + 2400;};
   mount();
 
-  // Keep in step with hero.ts (seconds since the surge): at once the guides and tagline fade and a soft window opens round
-  // the mark (the World draws its own black inside it, round the glass); glass runs into the outline from .3 s and the
-  // lines give way to it from .55 s; at 1.25 s the black lifts with the World's and the room and the page come up.
+  // the surge: the World's lens has the same picture on the same spot from this frame on, so the black and the lines go at
+  // once and only the tagline fades; without a surge (the World failed, or 9 s went by) the loader fades away instead
   let gone = false;
-  function open() {
+  function open(handover) {
     if (gone) return; gone = true;
-    const done = () => {el.classList.add('is-done'); setTimeout(() => el.remove(), 700); if (root.classList.contains('world-failed')) release();};
-    if (still) {release(); return done();}
-    el.classList.add('is-open');
-    const bg = el.querySelector('.bg'), rx = at0.unit * 3.4, ry = at0.unit * 2.2;
-    bg.style.webkitMaskImage = bg.style.maskImage = `radial-gradient(${rx}px ${ry}px at ${at0.x}px ${at0.y}px, transparent 88%, #000 100%)`;
-    setTimeout(() => el.classList.add('is-fill'), 550);
-    setTimeout(done, 1250);
+    if (handover && !still) {el.classList.add('is-open'); setTimeout(() => el.remove(), 500); return;}
+    el.classList.add('is-done'); setTimeout(() => el.remove(), 700);
+    if (still || root.classList.contains('world-failed')) release();
   }
-  addEventListener('world:surge', open);
+  addEventListener('world:surge', () => open(true));
   addEventListener('world:intro', e => {if (!e.detail && gone) release();});   // the opening is over: the page is yours
   const born = performance.now();
   (function wait() {
     if (gone) return;
-    if (root.classList.contains('world-failed') || performance.now() - born > 9000) return open();
+    if (root.classList.contains('world-failed') || performance.now() - born > 9000) return open(false);
     setTimeout(wait, 200);
   })();
 })();

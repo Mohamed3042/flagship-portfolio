@@ -69,6 +69,13 @@ vec3 ledWall(vec2 uv, vec3 pic){
   vec2 cc = abs(fract(w + .5) - .5);
   return col + vec3(.1, .105, .125) * step(min(cc.x, cc.y), .006) * step(max(cc.x, cc.y), .05);
 }
+// an LED wall lights every pixel of the film on its own: magnified, the pixels keep hard edges (one screen pixel of
+// anti-aliasing), as on the World's walls (2026-10-05, the owner: the soft copy read as a blur)
+vec2 sharp(sampler2D t, vec2 q){
+  vec2 n = vec2(textureSize(t, 0)), p = q * n - .5, i = floor(p), f = p - i;
+  f = clamp((f - .5) / max(fwidth(p), vec2(1e-3)) + .5, 0., 1.);
+  return (i + f + .5) / n;
+}
 // White mode: the World's pale paper, a fine grid and a lattice of crosses
 vec3 paper(vec2 uv){
   vec2 px = uv * uRes + vec2(0., uScroll * uRes.y * .4);
@@ -85,10 +92,10 @@ void main(){
   // the film's light, enormous and soft, washing the wall
   vec2 fa = fitUv(uv, vec4(-.15, -.15, 1.15, 1.15), uVaA, 0., uRes), fb = fitUv(uv, vec4(-.15, -.15, 1.15, 1.15), uVaB, 0., uRes);
   vec3 amb = mix(textureLod(uA, clamp(fa, 0., 1.), 7.2).rgb, textureLod(uB, clamp(fb, 0., 1.), 7.2).rgb, smoothstep(.3, .7, uK));
-  // the wall's copy of the film: the whole frame filling the wall, a little soft, breathing slowly
+  // the wall's copy of the film: the whole frame filling the wall, pixel-sharp, breathing slowly
   vec4 wr = vec4(-.04, -.04, 1.04, 1.04) + vec4(-1., -1., 1., 1.) * .015 * sin(uTime * .11);
   vec2 wa = fitUv(uv, wr, uVaA, 0., uRes), wb = fitUv(uv, wr, uVaB, 0., uRes);
-  vec3 pic = mix(textureLod(uA, clamp(wa, 0., 1.), 2.2).rgb, textureLod(uB, clamp(wb, 0., 1.), 2.2).rgb, smoothstep(.3, .7, uK));
+  vec3 pic = mix(textureLod(uA, sharp(uA, clamp(wa, 0., 1.)), 0.).rgb, textureLod(uB, sharp(uB, clamp(wb, 0., 1.)), 0.).rgb, smoothstep(.3, .7, uK));
   amb = mix(vec3(dot(amb, vec3(.33))), amb, 1.35);                                   // a little more colour
   vec3 avg = textureLod(uB, vec2(.5), 10.).rgb;                                       // the film's own colour: the tiles take it on
   vec3 tint = pow(avg / max(max(avg.r, avg.g), max(avg.b, .05)), vec3(2.2));       // the film's own colour
