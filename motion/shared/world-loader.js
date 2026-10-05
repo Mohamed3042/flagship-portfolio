@@ -3,8 +3,8 @@
  * M's diagonals run long, cap and base lines across the screen) and the tagline. When the World has really loaded (the
  * hero fires world:surge after a run of smooth frames), a glass ball pops up in the middle of the drawing: it bends the
  * lines like a lens (upside down in the middle, stretched at the rim, swirling), splits them into colours at the edge,
- * and fills with the World's violet light; then it swells past the edges of the screen, its middle a window onto the
- * World. Fallbacks: world-failed, or 9 s. Classic <head> script so it covers the first paint; html[data-loader=blueprint]
+ * and fills with the World's violet light; then the drawing fades away round it and the World's own glass, the same
+ * ball, carries on: it swells into a fat glass MK and deflates into the mark (src/scripts/world/lens.ts). Fallbacks: world-failed, or 9 s. Classic <head> script so it covers the first paint; html[data-loader=blueprint]
  * tells the shared arcade loader to stand aside. (The earlier blurry burst: src/legacy/world-loader-blob.js.txt.)
  */
 (() => {
@@ -122,21 +122,16 @@
     const b = !still && ball();
     if (!b) return done();
     el.classList.add('is-open');
-    const R0 = Math.min(innerWidth, innerHeight) * (tall ? .3 : .22), far = Math.hypot(innerWidth, innerHeight) * 1.15;
+    const R0 = Math.min(innerWidth, innerHeight) * (tall ? .3 : .22);      // the World's lens (lens.ts) starts at this size, in the middle
     const t0 = performance.now();
     const spring = x => 1 - Math.exp(-7 * x) * Math.cos(9 * x);            // pops up with a little overshoot
-    const io = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
     (function frame(now) {
       const t = (now - t0) / 1000;
-      // 0–.45 s it pops up; .45–.95 s it swirls and fills with light; then it swells past the screen, opening in the middle
-      const grow = io(Math.min(1, Math.max(0, (t - .95) / .85)));
-      const R = R0 * spring(Math.min(t / .45, 1.4)) * (1 - grow) + far * grow;
-      const hole = Math.min(.97, grow * 1.4) * (grow > 0 ? 1 : 0);
-      b.draw(R, t, hole, Math.min(1, t / .9));
-      // cut the same window through the black and the drawing, so the World shows through it
-      const h = hole * R;
-      el.style.webkitMaskImage = el.style.maskImage = h > 1 ? `radial-gradient(circle at ${b.cx}px ${b.cy}px, transparent ${h}px, #000 ${h + 3}px)` : '';
-      if (t < 1.85) requestAnimationFrame(frame); else done();
+      // 0–.45 s it pops up; .45–.85 s it swirls and fills with light; then the World's own glass takes its place, the
+      // same ball, and goes on to swell into the mark, while the drawing fades away around it
+      b.draw(R0 * spring(Math.min(t / .45, 1.4)), t, 0, Math.min(1, t / .8));
+      el.style.opacity = String(1 - Math.min(1, Math.max(0, (t - .85) / .3)));
+      if (t < 1.2) requestAnimationFrame(frame); else done();
     })(t0);
   }
   addEventListener('world:surge', open);
