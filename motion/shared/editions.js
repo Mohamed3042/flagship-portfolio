@@ -7,7 +7,7 @@
   if (window.mkEditions) return;
   const root = document.documentElement, ar = root.lang === 'ar', T = (en, a) => (ar ? a : en);
   const base = (document.currentScript?.src ? new URL(document.currentScript.src).pathname : '/motion/shared/editions.js').replace(/\/motion\/shared\/editions\.js$/, '');
-  const onWorld = root.classList.contains('world-walk');
+  const onWorld = root.classList.contains('world-walk') && !root.dataset.world;   // (an edition's own World is its look: no grade or air over it)
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ED = [
     {id: '', name: T('Standard', 'العادي'), note: T('The studio as it is', 'الاستوديو كما هو'), sw: 'linear-gradient(135deg,#b9dacc,#0b1210)'},
