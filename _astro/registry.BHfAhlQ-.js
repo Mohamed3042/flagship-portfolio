@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["_astro/intro.B0ChY6u4.js","_astro/EditionWorld.astro_astro_type_script_index_0_lang.BklF1JMJ.js","_astro/preload-helper.DArFJGja.js","_astro/films.DdPL5BxW.js"])))=>i.map(i=>d[i]);
+import{_}from"./preload-helper.DArFJGja.js";const r={intro:()=>_(()=>import("./intro.B0ChY6u4.js"),__vite__mapDeps([0,1,2])),films:()=>_(()=>import("./films.DdPL5BxW.js"),__vite__mapDeps([3,1,2]))};export{r as sceneModules};
