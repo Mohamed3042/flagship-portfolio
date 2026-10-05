@@ -12,4 +12,15 @@
   let ed = '';
   try {const q = new URLSearchParams(location.search).get('edition'); if (q !== null) {ed = q; sessionStorage.setItem('mk-edition', q);} else ed = sessionStorage.getItem('mk-edition') || localStorage.getItem('mk-edition') || '';} catch {}
   if (['halloween', 'heaven', 'rgb', 'tactical', 'comic', 'clay', 'keynote'].includes(ed)) r.dataset.edition = ed; else delete r.dataset.edition;
+  // Owner's choice (as in BaseLayout): the portfolio always plays its motion, even when the OS asks to reduce motion, because
+  // the motion is the work being shown. Reduced-motion queries report "no preference"; the CSS blocks are written never to
+  // match. (2026-10-05: with Reduce Motion on, the owner's iMac showed Home and the World still.)
+  try {
+    if (!window.__mmNativeMedia) {
+      const mm = window.__mmNativeMedia = window.matchMedia.bind(window);
+      window.matchMedia = window.__mmForcedMedia = q => (typeof q === 'string' && q.includes('prefers-reduced-motion')
+        ? {matches: q.includes('no-preference'), media: q, onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false}
+        : mm(q));
+    }
+  } catch {}
 })();

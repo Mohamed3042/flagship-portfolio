@@ -21,7 +21,7 @@
 @media (max-height:560px) and (orientation:landscape){.film-header{min-height:65px;padding:10px 25px}.film-caption{bottom:104px;max-width:240px}.film-caption h1{font-size:24px}.film-caption p{display:none}.film-controls{bottom:10px}.film-chapter-rail{margin:0 -8px}.film-control-row{min-height:30px}.film-control-row button{padding:7px 10px}.film-loading{top:70px}}
 /* Cinema chrome: film-world.js sets html.film-chrome-hidden while the film is scrolled and clears it after a pause. */
 .film-header,.film-controls,.film-caption{transition:opacity .45s ease,transform .7s var(--chrome-ease)}.film-chrome-hidden .film-header{opacity:0;transform:translateY(-12px);pointer-events:none}.film-chrome-hidden .film-controls{opacity:0;transform:translateY(12px);pointer-events:none}.film-chrome-hidden .film-caption{opacity:0}.is-film-mode{scrollbar-width:none}.is-film-mode::-webkit-scrollbar{display:none}
-@media (prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}.film-stage{display:none}.is-film-mode .film-stage{display:block}}
+@media (prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}.film-stage{display:none}.is-film-mode .film-stage{display:block}}
 /* Films with titles burned into the picture can hide the page caption (everywhere, or only on portrait screens). */
 .film-caption-none .film-caption{display:none}@media (max-aspect-ratio:4/5){.film-caption-desktop .film-caption{display:none}}
 

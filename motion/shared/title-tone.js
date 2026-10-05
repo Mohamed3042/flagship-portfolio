@@ -18,7 +18,7 @@ const css = `
 [data-tone]{transition:color .7s ease,text-shadow .7s ease}
 [data-tone=light]{color:#fffdf8!important;text-shadow:0 1px 2px rgba(0,0,0,.45),0 4px 28px rgba(0,0,0,.55)!important}
 [data-tone=dark]{color:#111114!important;text-shadow:0 1px 2px rgba(255,255,255,.55),0 4px 28px rgba(255,255,255,.72)!important}
-@media (prefers-reduced-motion:reduce){[data-tone]{transition:none}}`;
+@media (prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference){[data-tone]{transition:none}}`;
 let styled = false;
 const lin = c => {c /= 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4;};
 const lum = (r, g, b) => .2126 * lin(r) + .7152 * lin(g) + .0722 * lin(b);

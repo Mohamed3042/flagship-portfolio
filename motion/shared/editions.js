@@ -83,7 +83,7 @@
   @keyframes ed-grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
   .ed-air .warm{inset:0;background:radial-gradient(ellipse at center,transparent 52%,rgba(122,46,18,.42))}
   .ed-air .print{right:4vw;bottom:9vh;width:clamp(90px,12vw,170px);aspect-ratio:.8;border-radius:50%;opacity:.16;background:repeating-radial-gradient(ellipse at 50% 60%,transparent 0 5px,#5a2a16 5px 7px);-webkit-mask:radial-gradient(ellipse,#000 55%,transparent 72%);mask:radial-gradient(ellipse,#000 55%,transparent 72%);rotate:-18deg}
-  @media (prefers-reduced-motion:reduce){.ed-air *{animation:none!important}}
+  @media (prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference){.ed-air *{animation:none!important}}
   /* the World chrome takes the edition's colours and display type */
   html[data-edition=halloween]{--w-accent:#ff8a1f;--w-panel:rgba(26,8,38,.6)}
   html[data-edition=heaven]{--w-accent:#f2c14e;--w-panel:rgba(18,40,92,.5)}

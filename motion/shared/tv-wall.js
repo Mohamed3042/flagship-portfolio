@@ -22,7 +22,7 @@
   .tvw-tv:focus-visible{box-shadow:0 0 0 3px var(--led,#7cff9a),0 34px 70px rgba(0,0,0,.5)}
   .tvw-hint{position:absolute;left:50%;bottom:0;translate:-50% 0;margin:0;font:500 13px/1.4 'Inter Variable',Inter,system-ui,sans-serif;color:rgba(255,255,255,.55);white-space:nowrap;pointer-events:none}
   [data-site-mode=white] .tvw-hint{color:rgba(0,0,0,.5)}
-  @media (prefers-reduced-motion:reduce){.tvw-tv{transition:none}}`;
+  @media (prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference){.tvw-tv{transition:none}}`;
   document.head.append(css);
 
   // ── drawing (virtual 1600 × 900; the same studio look as the World's TVs) ──
