@@ -245,9 +245,16 @@ export function createFilmWorld(data, scope = document) {
     slot.video.addEventListener('error',()=>{if(slot.key===desiredKey)failure(new Error(slot.video.error?.message||'The scene could not decode.'));});
   }
   const inFilm=()=>scrollY>=story.offsetTop-innerHeight*.5&&scrollY<=story.offsetTop+travel+innerHeight*.5;
+  // Phones: a flick on glass carries thousands of pixels, so the film runs slower under the finger and every chapter is
+  // a stop a fling halts at (CSS scroll snap, touch screens only, off while Play scrolls) — the owner, 2026-10-05: "you
+  // can end the whole thing in one strong scroll".
+  const touch=matchMedia('(pointer: coarse)');let snaps=[];
   function setTravel() {
-    travel=data.duration*(profile==='mobile'?(data.pixelsPerSecond?.mobile||72):(data.pixelsPerSecond?.desktop||88));
+    travel=data.duration*(profile==='mobile'?Math.max(data.pixelsPerSecond?.mobile||72,180):(data.pixelsPerSecond?.desktop||88));
     root.style.setProperty('--film-travel',`${travel}px`);
+    for(const s of snaps)s.remove();snaps=[];
+    const on=filmMode&&touch.matches;root.classList.toggle('film-snap',on&&!root.classList.contains('film-autoplay'));
+    if(on)for(const t of [...data.chapters.map(c=>c.start),lastTime]){const i=document.createElement('i');i.className='film-snap-point';i.style.top=`${t/lastTime*travel}px`;story.append(i);snaps.push(i);}
   }
   function abortDistant() {
     for(const [key,job] of jobs)if(key!==desiredKey && (job.profile!==profile||Math.abs(job.index-desiredIndex)>2)) {
@@ -397,7 +404,7 @@ export function createFilmWorld(data, scope = document) {
   }
   function setAutoplay(on){
     if(on===autoplaying)return;
-    autoplaying=on;root.classList.toggle('film-autoplay',on);
+    autoplaying=on;root.classList.toggle('film-autoplay',on);root.classList.toggle('film-snap',!on&&filmMode&&touch.matches);
     if(playButton){playButton.setAttribute('aria-pressed',String(on));playButton.setAttribute('aria-label',on?label('Pause','إيقاف'):label('Play','تشغيل'));}
     autoLast=0;autoCarry=0;
     if(on){if(!filmMode)changeMode(true,true);if(scrollY>=story.offsetTop+travel-2)go(0,false);requestAnimationFrame(autoStep);hideSoon(1200);}
