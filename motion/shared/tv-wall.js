@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /* TV wall: a playable carousel of TVs for the endings of the pages (the films home, Space).
    Any [data-tv-wall] element whose children are links becomes a CSS-3D ring of TVs, one per link;
    each TV is the link itself (keyboard and screen readers get real links) and loops its own motion

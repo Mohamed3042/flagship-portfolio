@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * World loader (Alche's opening, studied frame by frame in the owner's recording): black, the MK drawn in thin
  * construction lines, its outline with guides along its edges (circles, the M's V and the K's arms run long, cap and base

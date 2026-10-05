@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /* Special editions: Halloween, Heaven, RGB Overdrive, Night Ops, Ink & Pow, Terracotta.
    html[data-edition] is set before first paint by site-mode.js (from ?edition= or earlier in the visit).
    This file owns the picker (any [data-edition-picker] button), the edition fonts and, on the World

@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * Cinema room, 2026-10-05. One fixed WebGL2 canvas behind the Motion gallery:
  *  - the room: the World's LED wall (src/scripts/world/shared.ts ledWall, the owner's pick for Home):

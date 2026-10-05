@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /* Site mode, applied before first paint on every page (tiny, synchronous).
    html[data-site-mode] = crow (dark, default) | white;  html[data-companion] = opus | crow | off;
    html[data-edition] = halloween | heaven | rgb | tactical | comic | clay (optional special edition).

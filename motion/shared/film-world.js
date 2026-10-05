@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * Motion Portfolio film engine, 2026-10-03.
  * Adapted from Job Orbit's proven film-world.js (three paused video buffers,

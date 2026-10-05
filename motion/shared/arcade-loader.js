@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * Arcade loader, 2026-10-03. While a page loads, it sits under coloured frosted glass (blur + saturate,
  * so the page's own colours glow through) and two original pixel bots (coral and white) play Pong on a

@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /* Dive: a continuous camera move through a set of pictures, for the edition cutscenes and Space.
    Each shot glides toward its focal point while a real camera travels into the picture: its depth map (name.d.webp:
    red is how near each pixel is, green what is behind near things; made once with Depth Anything V2) lets near things

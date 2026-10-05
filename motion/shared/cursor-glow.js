@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * Cursor glow (Alche's flat pages): moving the mouse leaves a soft wake of light behind the content,
  * a smear that stretches along the stroke, drifts on a little and fades. One fixed canvas under the

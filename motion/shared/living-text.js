@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * Living text, 2026-10-04. Big titles anywhere on the site become a sticky, elastic material under
  * the pointer (or a finger): the letters burst into particles, scatter from the touch, get dragged

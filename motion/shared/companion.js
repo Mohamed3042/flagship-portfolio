@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * The companion + site mode, 2026-10-04 (v3). Loaded (deferred) on every page.
  *

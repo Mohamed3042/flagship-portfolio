@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 /**
  * Title tone, 2026-10-04. A title laid over a playing film stays readable whatever the frame does.
  * A few times a second the picture behind the title is sampled (in the title's own rectangle, through

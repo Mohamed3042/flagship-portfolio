@@ -1,3 +1,4 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */
 @font-face{font-family:FilmSans;src:url('./fonts/inter-latin.woff2') format('woff2');font-style:normal;font-weight:100 900;font-display:swap}
 @font-face{font-family:FilmArabic;src:url('./fonts/cairo-arabic.woff2') format('woff2');font-style:normal;font-weight:200 1000;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}
 /* Theme tokens. Defaults are MK Voice's green-black; a film page overrides them in an inline :root block. */
@@ -105,3 +106,5 @@ html:not(.has-film-progress):not(.film-autoplay) .film-now .film-hint{display:bl
 @media (max-width:760px){.calm-screen{height:72vh}.calm-screen:after{background:linear-gradient(0deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 70%,transparent) 40%,transparent 75%)}.calm-intro{min-height:52vh}}
 .bright-film .calm-screen:after{background:linear-gradient(77deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 88%,transparent) 42%,color-mix(in srgb,var(--film-bg) 40%,transparent) 68%,transparent 86%),linear-gradient(0deg,var(--film-bg) 0%,transparent 40%)}
 [dir=rtl] .bright-film .calm-screen:after{background:linear-gradient(-77deg,var(--film-bg) 0%,color-mix(in srgb,var(--film-bg) 88%,transparent) 42%,color-mix(in srgb,var(--film-bg) 40%,transparent) 68%,transparent 86%),linear-gradient(0deg,var(--film-bg) 0%,transparent 40%)}
+.film-legal{margin-inline-start:auto;font-size:12px;opacity:.6}
+.film-clock::after{content:" · © 2026 Mohamed Mahmoud";opacity:.7}@media (max-width:760px){.film-clock::after{content:none}}
