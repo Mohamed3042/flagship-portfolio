@@ -51,7 +51,7 @@ precision highp float;
 in vec2 vUv; out vec4 o;
 uniform sampler2D uA, uB;
 uniform float uK, uVaA, uVaB, uFitA, uFitB, uTime, uPtrOn, uLive, uLight, uStyle, uRadius, uScroll;
-uniform vec4 uRect; uniform vec2 uRes, uPtr;
+uniform vec4 uRect; uniform vec2 uRes, uPtr, uLag;
 ${COMMON}
 float line(float x, float w){ float d = abs(fract(x - .5) - .5) / fwidth(x); return 1. - min(d / w, 1.); }
 // the World's LED wall, seen from the middle of its curve: column by angle, row by height. It plays the film on the
@@ -89,6 +89,11 @@ vec3 paper(vec2 uv){
 }
 void main(){
   vec2 uv = vUv, asp = vec2(uRes.x / uRes.y, 1.);
+  // the pointer bends the room as liquid glass does, as the World's does (the owner, 2026-10-05: "this blue sucks, make it
+  // a glass warp like the World's cursor"; Alche's, "so clean, so smooth"): it draws the picture in toward itself where it
+  // rests and drags it along as it moves, smoothly, nothing more
+  vec2 dp = (uv - uPtr) * asp, dq = dp + uLag * asp * .5;
+  uv += dp / asp * exp(-dot(dp, dp) * 700.) * .12 * uPtrOn - uLag * exp(-dot(dq, dq) * 260.) * .6 * uPtrOn;
   // the film's light, enormous and soft, washing the wall
   vec2 fa = fitUv(uv, vec4(-.15, -.15, 1.15, 1.15), uVaA, 0., uRes), fb = fitUv(uv, vec4(-.15, -.15, 1.15, 1.15), uVaB, 0., uRes);
   vec3 amb = mix(textureLod(uA, clamp(fa, 0., 1.), 7.2).rgb, textureLod(uB, clamp(fb, 0., 1.), 7.2).rgb, smoothstep(.3, .7, uK));
@@ -100,9 +105,7 @@ void main(){
   vec3 avg = textureLod(uB, vec2(.5), 10.).rgb;                                       // the film's own colour: the tiles take it on
   vec3 tint = pow(avg / max(max(avg.r, avg.g), max(avg.b, .05)), vec3(2.2));       // the film's own colour
   vec3 room = mix(pow(ledWall(uv, pic), vec3(1. / 2.2)), paper(uv) + amb * .04, uLight);   // the wall to screen colour (the film is already)
-  // the pointer warms the panels it passes
-  vec2 pd = (uv - uPtr) * asp;
-  room += tint * .12 * exp(-dot(pd, pd) * 30.) * uPtrOn * (1. - uLight);
+  // (no coloured glow at the pointer any more: it read as a blue blob; the pointer bends the room instead, above)
   // the screen: a rounded rectangle, the film crisp inside it, its light spilling round its edge
   vec2 P = uv * uRes, r0 = uRect.xy * uRes, r1 = uRect.zw * uRes, ctr = (r0 + r1) * .5, hs = (r1 - r0) * .5;
   vec2 dd = abs(P - ctr) - hs + uRadius;
@@ -171,7 +174,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   const program = (vs, fs) => {const p = gl.createProgram(); gl.attachShader(p, compile(gl.VERTEX_SHADER, vs)); gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p)); return p;};
   const roomProg = program(VERT, ROOM), partProg = program(PVERT, PFRAG);
   const loc = (p, names) => Object.fromEntries(names.map(n => [n, gl.getUniformLocation(p, n)]));
-  const RU = loc(roomProg, ['uA', 'uB', 'uK', 'uVaA', 'uVaB', 'uFitA', 'uFitB', 'uTime', 'uPtrOn', 'uLive', 'uLight', 'uStyle', 'uRadius', 'uScroll', 'uRect', 'uRes', 'uPtr']);
+  const RU = loc(roomProg, ['uA', 'uB', 'uK', 'uVaA', 'uVaB', 'uFitA', 'uFitB', 'uTime', 'uPtrOn', 'uLive', 'uLight', 'uStyle', 'uRadius', 'uScroll', 'uRect', 'uRes', 'uPtr', 'uLag']);
   const PU = loc(partProg, ['uA', 'uB', 'uK', 'uTime', 'uVa', 'uFit', 'uPt', 'uStyle', 'uRect', 'uRes', 'uLight']);
 
   const tri = gl.createBuffer();
@@ -221,7 +224,8 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   };
 
   let to = 0, from = 0, k = 1, transStart = 0, transDur = 1.2, list = [], index = -1, active = true, live = false, filmInfo = null, generation = 0, changes = 0, style = 2;
-  const pointer = {x: .5, y: .5, on: 0, target: 0};
+  const pointer = {x: .5, y: .5, on: 0, target: 0, sx: .5, sy: .5};
+  document.documentElement.dataset.glow = 'off';   // the page's blue cursor glow stands aside: the room bends instead
   let raf = 0, dpr = 1, last = performance.now(), light = document.documentElement.dataset.siteMode === 'white' ? 1 : 0;
   const contain = s => {const r = hero?.getBoundingClientRect(); return r && s.aspect > 1.2 && r.width / Math.max(1, r.height) < 1.2 ? 1 : 0;};   // keep a wide film whole on a narrow screen
 
@@ -291,6 +295,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     const st = slots[to], sf = slots[from];
     if (!st.video.paused) upload(st);
     pointer.on += (pointer.target - pointer.on) * (1 - Math.exp(-dt * 6));
+    const lagK = 1 - Math.exp(-dt * 9); pointer.sx += (pointer.x - pointer.sx) * lagK; pointer.sy += (pointer.y - pointer.sy) * lagK;   // a moment behind: the drag
     const rect = heroRect(), t = now / 1000, A = k < 1 ? sf : st;
     light += ((document.documentElement.dataset.siteMode === 'white' ? 1 : 0) - light) * (1 - Math.exp(-dt * 4));
     gl.disable(gl.BLEND);
@@ -302,7 +307,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     gl.uniform1f(RU.uFitA, contain(A)); gl.uniform1f(RU.uFitB, contain(st));
     gl.uniform1f(RU.uTime, t); gl.uniform1f(RU.uPtrOn, pointer.on); gl.uniform1f(RU.uLive, live && st.ready ? 1 : 0);
     gl.uniform1f(RU.uLight, light); gl.uniform1f(RU.uRadius, (innerWidth < 760 ? 14 : 18) * dpr);
-    gl.uniform4f(RU.uRect, ...rect); gl.uniform2f(RU.uRes, canvas.width, canvas.height); gl.uniform2f(RU.uPtr, pointer.x, pointer.y);
+    gl.uniform4f(RU.uRect, ...rect); gl.uniform2f(RU.uRes, canvas.width, canvas.height); gl.uniform2f(RU.uPtr, pointer.x, pointer.y); gl.uniform2f(RU.uLag, Math.max(-.08, Math.min(.08, pointer.x - pointer.sx)), Math.max(-.08, Math.min(.08, pointer.y - pointer.sy)));
     gl.bindVertexArray(roomVao);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     // the dust: grains of both pictures in flight, a pixel or three across (not for a plain fade)

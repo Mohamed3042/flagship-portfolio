@@ -2,7 +2,7 @@
  * Cursor glow (Alche's flat pages): moving the mouse leaves a soft wake of light behind the content,
  * a smear that stretches along the stroke, drifts on a little and fades. One fixed canvas under the
  * page, screen-blended so it only adds light (pointer-events: none), drawn only while something glows. Fine pointers only;
- * off for reduced motion. Colour: html[data-glow] or the default teal-blue.
+ * off for reduced motion. Colour: html[data-glow] or a warm white (the owner, 2026-10-05: "this blue sucks"); data-glow=off: none.
  */
 (() => {
   if (window.top !== window || !matchMedia('(pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -34,9 +34,10 @@
   }, {passive: true});
   addEventListener('pointerleave', () => {last = null;}, {passive: true});
 
-  const colour = () => (root.dataset.glow || '72,170,255').split(',').map(Number);
+  const colour = () => (root.dataset.glow || '232,230,226').split(',').map(Number);
   function draw() {
     raf = 0;
+    if (root.dataset.glow === 'off') {g.clearRect(0, 0, w, h); blobs.length = 0; return;}   // a page that bends its own background (Home's room)
     g.clearRect(0, 0, w, h);
     g.globalCompositeOperation = 'lighter';
     const [r0, g0, b0] = colour();
