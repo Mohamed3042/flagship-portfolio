@@ -1,0 +1,1 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */const a=t=>Math.min(1,Math.max(0,t)),i={turn:.58},n={print:.07,panels:[.19,.38,.57,.74],dive:.8},s={first:.085,last:.885};function o(t,r){return t<s.first?-1+a(t/s.first):t>s.last?r-1+a((t-s.last)/(1-s.last)):(t-s.first)/(s.last-s.first)*(r-1)}const f={stops:[.2,.4,.6,.8]};export{i as C,n as O,f as P,o as i};
