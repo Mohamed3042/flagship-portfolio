@@ -7,7 +7,7 @@
  * the same lines on the same spot, so its glass can bend them, and the loader goes in that frame (lens.ts: a crystal
  * ball pops in the mark, swells past the screen and becomes the glass MK; the owner, 2026-10-05, "liquid glass PULSING of
  * those letters"; a window cut in the black read as a cartoon iris). Nothing scrolls until the opening is over, so the
- * walk always starts at the top, as Alche's does. Fallbacks: world-failed, or 9 s. Classic <head> script so it covers
+ * walk always starts at the top, as Alche's does. Fallbacks: world-failed, or 14 s. Classic <head> script so it covers
  * the first paint; html[data-loader=blueprint] tells the shared arcade loader to stand aside. (The earlier versions:
  * src/legacy/world-loader-blob.js.txt; the iris, git 38ace7e; the bead that swelled into a ball, git 37ba4f3.)
  */
@@ -26,7 +26,7 @@
   addEventListener('touchmove', held, {capture: true, passive: false});
   addEventListener('keydown', e => {if (/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key)) held(e);}, {capture: true});
   const release = () => root.classList.remove('world-hold');
-  setTimeout(release, 16000);   // never stuck: a World that has not opened by then lets the page go
+  setTimeout(release, 20000);   // never stuck: a World that has not opened by then lets the page go
 
   const style = document.createElement('style');
   style.textContent = `
@@ -98,7 +98,7 @@
   const born = performance.now();
   (function wait() {
     if (gone) return;
-    if (root.classList.contains('world-failed') || performance.now() - born > 9000) return open(false);
+    if (root.classList.contains('world-failed') || performance.now() - born > 14000) return open(false);   // (a slow World opens itself after 6 s: hero.ts)
     setTimeout(wait, 200);
   })();
 })();
