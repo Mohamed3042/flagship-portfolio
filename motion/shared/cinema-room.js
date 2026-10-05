@@ -1,8 +1,11 @@
 /**
  * Cinema room, 2026-10-05. One fixed WebGL2 canvas behind the Motion gallery:
- *  - the room: the playing film's colours spill across the page (an enlarged, very soft copy of the
- *    frame), cut by projector beams with drifting dust and a faint flicker; the pointer is a hand in
- *    the beam and casts a soft shadow on everything;
+ *  - the room: the World's LED wall (src/scripts/world/shared.ts ledWall, the owner's pick for Home):
+ *    a concave wall of dark panels with seams, a module grid and small crosses, deep blacks; panels
+ *    light up in the playing film's colour on their own beat under a giant faint MK breaking into
+ *    grain, broad stripes drift across now and then, and the film's light washes it dimly. It slides
+ *    a little as the page scrolls; the pointer warms the panels it passes. White mode: the World's
+ *    pale paper with its "+" lattice (the Vision section);
  *  - the screen: inside the hero's screen element the film plays crisp on a rounded screen, one
  *    5-second chapter clip after another (the copy sits beside it, never over the film's own words);
  *  - every change (next chapter, another film) takes the next formation in turn: a gust of wind that
@@ -46,32 +49,58 @@ float wave(vec2 q, float asp, float k, float style){
 const ROOM = `#version 300 es
 precision highp float;
 in vec2 vUv; out vec4 o;
-uniform sampler2D uA, uB;
-uniform float uK, uVaA, uVaB, uFitA, uFitB, uTime, uFlick, uPtrOn, uLive, uLight, uStyle, uRadius;
+uniform sampler2D uA, uB, uMark;
+uniform float uK, uVaA, uVaB, uFitA, uFitB, uTime, uPtrOn, uLive, uLight, uStyle, uRadius, uScroll;
 uniform vec4 uRect; uniform vec2 uRes, uPtr;
 ${COMMON}
+float line(float x, float w){ float d = abs(fract(x - .5) - .5) / fwidth(x); return 1. - min(d / w, 1.); }
+// the World's LED wall, seen from the middle of its curve: column by angle, row by height
+vec3 ledWall(vec2 uv, vec3 amb, vec3 tint){
+  vec2 s = (uv - .5) * 2. * vec2(uRes.x / uRes.y, 1.) * .62;
+  float th = atan(s.x), hgt = s.y / sqrt(1. + s.x * s.x) + uScroll;
+  vec2 w = vec2(th, hgt) * 5., pid = floor(w);
+  // panels lighting up in the tint, each on its own slow beat (fewer than half lit)
+  float beat = uTime * (.12 + hash(pid + 3.) * .2) + hash(pid) * 7., now = hash(pid + floor(beat)), was = hash(pid + floor(beat) - 1.);
+  float lit = mix(step(.7, was) * (.3 + .7 * fract(was * 7.3)), step(.7, now) * (.3 + .7 * fract(now * 7.3)), smoothstep(0., .25, fract(beat)));
+  vec3 c = pow(amb, vec3(2.2)) * .35 + tint * lit * .85;                          // worked in linear light, like the World
+  // a giant MK, faint, its edges breaking into grain
+  float L = texture(uMark, vec2(th / 1.25 + .5, (hgt - uScroll * .5) / 1.15 + .5)).r;
+  c += tint * .4 * step(hash(floor(gl_FragCoord.xy * .5) + floor(uTime * 9.)) * .9 + .06, L);
+  // now and then broad stripes drift across (Alche's hero wall)
+  float on = smoothstep(.0, .06, fract(uTime / 16.)) * (1. - smoothstep(.26, .32, fract(uTime / 16.)));
+  float st = fract((th * .8 + hgt) * 1.6 - uTime * .04);
+  c = mix(c, vec3(smoothstep(0., .02, st) - smoothstep(.48, .5, st)) * .55, on * .85);
+  c *= .11 + .04 * hash(pid + 9.);                                                  // turned down: deep blacks, panels a little uneven
+  // the hardware: modules inside each panel, dark seams between them, a small cross where four meet
+  float module = max(line(w.x * 6., .8), line(w.y * 6., .8)), seam = max(line(w.x, 1.6), line(w.y, 1.6));
+  vec3 col = c * (1. - .3 * module) + vec3(.012, .013, .02) * module;
+  col *= 1. - .9 * seam;
+  vec2 cc = abs(fract(w + .5) - .5);
+  return col + vec3(.1, .105, .125) * step(min(cc.x, cc.y), .006) * step(max(cc.x, cc.y), .05);
+}
+// White mode: the World's pale paper, a fine grid and a lattice of crosses
+vec3 paper(vec2 uv){
+  vec2 px = uv * uRes + vec2(0., uScroll * uRes.y * .4);
+  float cell = uRes.y / 8.5, w = max(.6, uRes.y / 1500.);
+  vec2 c = mod(px, cell) - cell * .5;
+  float plus = step(abs(c.x), w) * step(abs(c.y), cell * .06) + step(abs(c.y), w) * step(abs(c.x), cell * .06);
+  vec2 fc = abs(mod(px, cell * .25) - cell * .125);
+  vec3 col = vec3(.83, .85, .87) * (1.05 - .14 * pow(length((uv - .5) * vec2(uRes.x / uRes.y, 1.)), 1.6));
+  col *= 1. - .035 * step(cell * .125 - .7, max(fc.x, fc.y));
+  return mix(col, vec3(.97, .98, .985), clamp(plus, 0., 1.) * .6);
+}
 void main(){
   vec2 uv = vUv, asp = vec2(uRes.x / uRes.y, 1.);
-  // the room: the frame, enormous and soft, like light bouncing off the walls
+  // the film's light, enormous and soft, washing the wall
   vec2 fa = fitUv(uv, vec4(-.15, -.15, 1.15, 1.15), uVaA, 0., uRes), fb = fitUv(uv, vec4(-.15, -.15, 1.15, 1.15), uVaB, 0., uRes);
   vec3 amb = mix(textureLod(uA, clamp(fa, 0., 1.), 7.2).rgb, textureLod(uB, clamp(fb, 0., 1.), 7.2).rgb, smoothstep(.3, .7, uK));
   amb = mix(vec3(dot(amb, vec3(.33))), amb, 1.35);                                   // a little more colour
-  // projector beams from above and behind the viewer
-  vec2 org = vec2(.5, 1.25) * asp, d = uv * asp - org;
-  float ang = atan(d.x, -d.y), dist = length(d);
-  float beams = 0.;
-  for (int i = 0; i < 5; i++) {
-    float a = (float(i) - 2.) * .19 + sin(uTime * .05 + float(i) * 1.7) * .03;
-    beams += smoothstep(.09, 0., abs(ang - a)) * (.55 + .45 * noise(vec2(float(i) * 3.1, uTime * .2)));
-  }
-  float cone = smoothstep(.62, .2, abs(ang)) * smoothstep(2.2, .35, dist);
-  beams *= cone;
-  float dust = step(.9965, hash(floor((uv * asp + vec2(uTime * .006, -uTime * .011)) * uRes.y * .35))) * cone * 1.4;
-  vec3 room = amb * (.2 + .2 * cone) + amb * beams * .32 + vec3(dust) * (.5 + amb);
-  room *= uFlick;
-  // White mode: the same light, falling on a pale wall instead of a dark room
-  vec3 wall = vec3(.955, .945, .925) + amb * (.06 + .16 * cone) + amb * beams * .14 - vec3(dust) * .05;
-  room = mix(room, wall, uLight);
+  vec3 avg = textureLod(uB, vec2(.5), 10.).rgb;                                       // the film's own colour: the tiles take it on
+  vec3 tint = mix(vec3(.107, .045, 1.), pow(avg / max(max(avg.r, avg.g), max(avg.b, .05)), vec3(2.2)), .12);   // the World's violet, a hint of the film
+  vec3 room = mix(pow(ledWall(uv, amb, tint), vec3(1. / 2.2)), paper(uv) + amb * .04, uLight);   // the wall to screen colour (the film is already)
+  // the pointer warms the panels it passes
+  vec2 pd = (uv - uPtr) * asp;
+  room += tint * .12 * exp(-dot(pd, pd) * 30.) * uPtrOn * (1. - uLight);
   // the screen: a rounded rectangle, the film crisp inside it, its light spilling round its edge
   vec2 P = uv * uRes, r0 = uRect.xy * uRes, r1 = uRect.zw * uRes, ctr = (r0 + r1) * .5, hs = (r1 - r0) * .5;
   vec2 dd = abs(P - ctr) - hs + uRadius;
@@ -88,14 +117,6 @@ void main(){
   if (!fade) film = mix(film, amb * .25, band * .9);                                // at the front the picture has turned to dust (the dust pass draws it)
   if (uStyle > 3.5) film += vec3(1., .98, .94) * smoothstep(.12, 0., abs(t - .5)) * step(.01, band) * .6;   // the sweep: a line of light
   vec3 col = mix(room, film, inside);
-  // a hand in the beam: soft shadow under the pointer, a warm rim at its edge
-  vec2 pd = (uv - uPtr) * asp;
-  float wob = noise(pd * 9. + uTime * .6) * .03;
-  float r = length(pd) + wob;
-  float shadow = smoothstep(.19, .07, r) * uPtrOn;
-  float rim = smoothstep(.2, .17, r) * smoothstep(.15, .19, r) * uPtrOn;
-  col *= 1. - shadow * mix(.62, .22, uLight * (1. - inside));
-  col += amb * rim * .35;
   col += (hash(uv * uRes + fract(uTime) * 91.) - .5) * .028;                        // grain
   o = vec4(max(col, 0.), 1.);
 }`;
@@ -148,7 +169,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   const program = (vs, fs) => {const p = gl.createProgram(); gl.attachShader(p, compile(gl.VERTEX_SHADER, vs)); gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p); if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p)); return p;};
   const roomProg = program(VERT, ROOM), partProg = program(PVERT, PFRAG);
   const loc = (p, names) => Object.fromEntries(names.map(n => [n, gl.getUniformLocation(p, n)]));
-  const RU = loc(roomProg, ['uA', 'uB', 'uK', 'uVaA', 'uVaB', 'uFitA', 'uFitB', 'uTime', 'uFlick', 'uPtrOn', 'uLive', 'uLight', 'uStyle', 'uRadius', 'uRect', 'uRes', 'uPtr']);
+  const RU = loc(roomProg, ['uA', 'uB', 'uMark', 'uK', 'uVaA', 'uVaB', 'uFitA', 'uFitB', 'uTime', 'uPtrOn', 'uLive', 'uLight', 'uStyle', 'uRadius', 'uScroll', 'uRect', 'uRes', 'uPtr']);
   const PU = loc(partProg, ['uA', 'uB', 'uK', 'uTime', 'uVa', 'uFit', 'uPt', 'uStyle', 'uRect', 'uRes', 'uLight']);
 
   const tri = gl.createBuffer();
@@ -188,6 +209,20 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     return {video, tex, aspect: 16 / 9, ready: false, url: ''};
   });
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  // the wall's giant MK (the monogram's two polygons, shared.ts), soft-edged for the grain to break
+  const mark = gl.createTexture();
+  {
+    const cv = document.createElement('canvas'), g = cv.getContext('2d'); cv.width = 512; cv.height = 300;
+    g.fillStyle = '#000'; g.fillRect(0, 0, 512, 300); g.filter = 'blur(5px)'; g.fillStyle = '#fff';
+    g.translate(256, 150); g.scale(118, -118); g.translate(-1.935, -1);
+    const M = [[0, 0], [0, 2], [.5, 2], [.95, 1.15], [1.4, 2], [1.9, 2], [1.9, 0], [1.48, 0], [1.48, 1.25], [.95, .35], [.42, 1.25], [.42, 0]];
+    const K = [[0, 0], [0, 2], [.42, 2], [.42, 1.18], [1.15, 2], [1.68, 2], [.86, 1.05], [1.72, 0], [1.18, 0], [.56, .78], [.42, .93], [.42, 0]].map(([x, y]) => [x + 2.15, y]);
+    for (const P of [M, K]) {g.beginPath(); P.forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.fill();}
+    gl.bindTexture(gl.TEXTURE_2D, mark);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cv);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  }
   const upload = s => {
     if (s.video.readyState < 2) return;
     gl.bindTexture(gl.TEXTURE_2D, s.tex);
@@ -199,7 +234,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
 
   let to = 0, from = 0, k = 1, transStart = 0, transDur = 1.2, list = [], index = -1, active = true, live = false, filmInfo = null, generation = 0, changes = 0, style = 2;
   const pointer = {x: .5, y: .5, on: 0, target: 0};
-  let flick = 1, raf = 0, dpr = 1, last = performance.now(), light = document.documentElement.dataset.siteMode === 'white' ? 1 : 0;
+  let raf = 0, dpr = 1, last = performance.now(), light = document.documentElement.dataset.siteMode === 'white' ? 1 : 0;
   const contain = s => {const r = hero?.getBoundingClientRect(); return r && s.aspect > 1.2 && r.width / Math.max(1, r.height) < 1.2 ? 1 : 0;};   // keep a wide film whole on a narrow screen
 
   function resize() {
@@ -268,17 +303,17 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     const st = slots[to], sf = slots[from];
     if (!st.video.paused) upload(st);
     pointer.on += (pointer.target - pointer.on) * (1 - Math.exp(-dt * 6));
-    flick = .97 + .03 * Math.sin(now * .013) * Math.sin(now * .0071) + (Math.random() - .5) * .02;
     const rect = heroRect(), t = now / 1000, A = k < 1 ? sf : st;
     light += ((document.documentElement.dataset.siteMode === 'white' ? 1 : 0) - light) * (1 - Math.exp(-dt * 4));
     gl.disable(gl.BLEND);
     gl.useProgram(roomProg);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.tex); gl.uniform1i(RU.uA, 0);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, st.tex); gl.uniform1i(RU.uB, 1);
-    gl.uniform1f(RU.uK, k < 1 ? k : 1); gl.uniform1f(RU.uStyle, style);
+    gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, mark); gl.uniform1i(RU.uMark, 2);
+    gl.uniform1f(RU.uK, k < 1 ? k : 1); gl.uniform1f(RU.uStyle, style); gl.uniform1f(RU.uScroll, scrollY / innerHeight * .22);
     gl.uniform1f(RU.uVaA, A.aspect); gl.uniform1f(RU.uVaB, st.aspect);
     gl.uniform1f(RU.uFitA, contain(A)); gl.uniform1f(RU.uFitB, contain(st));
-    gl.uniform1f(RU.uTime, t); gl.uniform1f(RU.uFlick, flick); gl.uniform1f(RU.uPtrOn, pointer.on); gl.uniform1f(RU.uLive, live && st.ready ? 1 : 0);
+    gl.uniform1f(RU.uTime, t); gl.uniform1f(RU.uPtrOn, pointer.on); gl.uniform1f(RU.uLive, live && st.ready ? 1 : 0);
     gl.uniform1f(RU.uLight, light); gl.uniform1f(RU.uRadius, (innerWidth < 760 ? 14 : 18) * dpr);
     gl.uniform4f(RU.uRect, ...rect); gl.uniform2f(RU.uRes, canvas.width, canvas.height); gl.uniform2f(RU.uPtr, pointer.x, pointer.y);
     gl.bindVertexArray(roomVao);
