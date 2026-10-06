@@ -1,0 +1,1 @@
+/*! © 2026 Mohamed Mahmoud. All rights reserved. */const t={sunrise:18,series:40,easels:108,lamps:24,water:28,field:26,golden:34};Object.values(t).reduce((s,e)=>s+e,0);const a=[.1,.3,.5,.7,.9];[...a];const i=(s,e)=>e<=1?.5:+(.05+.9*s/(e-1)).toFixed(5);export{a as H,i as f};
