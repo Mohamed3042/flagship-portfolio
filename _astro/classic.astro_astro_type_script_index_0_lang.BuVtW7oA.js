@@ -1,1 +1,0 @@
-import{b as e,s as t}from"./boot.sjEm485b.js";import"./preload-helper.DArFJGja.js";document.addEventListener("astro:page-load",()=>{document.querySelector("[data-sky]")&&e()});document.addEventListener("astro:before-swap",t);
