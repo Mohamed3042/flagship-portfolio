@@ -27,7 +27,12 @@
   addEventListener('touchmove', held, {capture: true, passive: false});
   addEventListener('keydown', e => {if (/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key)) held(e);}, {capture: true});
   const release = () => root.classList.remove('world-hold');
-  setTimeout(release, 20000);   // never stuck: a World that has not opened by then lets the page go
+  // never stuck: a World that has not opened after 20 s lets the page go, unless it is still loading (its scenes report
+  // in, world:progress), and after 45 s in any case
+  const born0 = performance.now();
+  let heard = born0;
+  addEventListener('world:progress', () => {heard = performance.now();});
+  (function guard() {const now = performance.now(); if (now - born0 > 45000 || (now - born0 > 20000 && now - heard > 5000)) release(); else setTimeout(guard, 1000);})();
 
   const style = document.createElement('style');
   style.textContent = `
@@ -40,7 +45,10 @@
 #mk-blueprint p{position:absolute;left:0;right:0;top:calc(50% + var(--below, 22vh));margin:0;text-align:center;font:400 12.5px/1.4 ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;letter-spacing:.04em;color:rgba(240,240,242,.78);white-space:pre}
 #mk-blueprint p i{display:inline-block;width:.55em;height:1.05em;vertical-align:-.15em;background:rgba(240,240,242,.8);margin-left:1px;animation:mkbp-blink .9s steps(1) infinite}
 @keyframes mkbp-blink{50%{opacity:0}}
-#mk-blueprint.is-open p{animation:mkbp-out .35s forwards}
+#mk-blueprint .bar{position:absolute;left:50%;width:132px;margin-left:-66px;top:calc(50% + var(--below, 22vh) + 34px);height:1px;background:rgba(240,240,242,.12);opacity:0;transition:opacity .5s}
+#mk-blueprint .bar i{position:absolute;inset:0;background:rgba(240,240,242,.62);transform-origin:0 50%;transform:scaleX(var(--k,0));transition:transform .45s ${ease}}
+#mk-blueprint .bar.on{opacity:1}
+#mk-blueprint.is-open p,#mk-blueprint.is-open .bar{animation:mkbp-out .35s forwards}
 #mk-blueprint.is-open .bg,#mk-blueprint.is-open svg{visibility:hidden}
 #mk-blueprint.is-done{opacity:0;visibility:hidden;pointer-events:none}
 @keyframes mkbp-draw{from{opacity:1;stroke-dashoffset:1}to{opacity:1;stroke-dashoffset:0}}
@@ -76,7 +84,14 @@
   const el = document.createElement('div');
   el.id = 'mk-blueprint';
   el.style.setProperty('--below', tall ? '17vh' : '22vh');
-  el.innerHTML = `<div class="bg"></div><svg aria-hidden="true"><g class="mk">${guides}${outline(M)}${outline(K)}</g></svg><p></p>`;
+  el.innerHTML = `<div class="bg"></div><svg aria-hidden="true"><g class="mk">${guides}${outline(M)}${outline(K)}</g></svg><p></p><span class="bar" aria-hidden="true"><i></i></span>`;
+  // what has loaded: a hairline under the tagline, filled as the World's scenes are built (world:progress); it comes up
+  // with the tagline
+  const bar = el.querySelector('.bar');
+  if (ar) bar.firstChild.style.transformOrigin = '100% 50%';
+  addEventListener('world:progress', e => {const {done, total} = e.detail || {}; if (total) bar.style.setProperty('--k', String(done / total));});
+  addEventListener('world:loaded', () => bar.style.setProperty('--k', '1'));
+  setTimeout(() => bar.classList.add('on'), still ? 0 : 1100);
   // the tagline types in, a mono face and a caret, as Alche's motto does
   const line = ar ? 'برمجيات وأنظمة وعوالم سينمائية.' : 'Software, systems and cinematic worlds.', tag = el.querySelector('p');
   tag.innerHTML = '<i></i>';
@@ -112,7 +127,8 @@
   const born = performance.now();
   (function wait() {
     if (gone) return;
-    if (root.classList.contains('world-failed') || performance.now() - born > 14000) return open(false);   // (a slow World opens itself after 6 s: hero.ts)
+    const now = performance.now();   // (a World still loading keeps its loader; hero.ts opens itself 3 s after it has loaded)
+    if (root.classList.contains('world-failed') || (now - born > 14000 && now - heard > 5000) || now - born > 45000) return open(false);
     setTimeout(wait, 200);
   })();
 })();
