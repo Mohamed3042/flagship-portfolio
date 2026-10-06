@@ -19,6 +19,7 @@
     {id: 'comic', name: T('Ink & Pow', 'حبر وبوم'), note: T('Halftone panels and sound effects', 'لوحات منقطة ومؤثرات صوتية'), sw: 'radial-gradient(circle at 30% 30%,#ffd400 0 38%,#e10600 40%)', font: 'Bangers'},
     {id: 'keynote', name: T('Keynote', 'كينوت'), note: T('Make.: a launch film made in code', 'Make.: فيلم إطلاق مصنوع بالكود'), sw: 'linear-gradient(135deg,#F2EEE6 0 50%,#0B0B0C 50%)'},
     {id: 'clay', name: T('Terracotta', 'تيراكوتا'), note: T('Warm clay, stop-motion, handmade', 'طين دافئ وحركة إطار بإطار'), sw: 'linear-gradient(135deg,#d97757,#f0eee6)'},
+    {id: 'doodle', name: T('Doodle', 'خربشة'), note: T('A living marker sketchbook', 'دفتر رسم حيّ بالقلم'), sw: 'linear-gradient(135deg,#f3a43a 0 50%,#f4efe4 50%)'},
   ];
   const byId = id => ED.find(e => e.id === (id || '')) || ED[0];
 
@@ -167,8 +168,8 @@
     }
     dispatchEvent(new CustomEvent('mk:edition', {detail: {id: e.id, name: e.name}}));
   }
-  // editions with a page of their own (the others still dress the World)
-  const PAGES = new Set(['tactical', 'keynote', 'halloween', 'heaven']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
+  // editions with a World of their own (src/scripts/editions/<id>; keep in step when one lands); the rest dress the World
+  const PAGES = new Set(['tactical', 'keynote', 'halloween', 'heaven', 'rgb', 'comic', 'clay', 'doodle']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
   function go(id) {
     if (PAGES.has(id)) {location.href = `${base}/${L}/edition/${id}`; return;}
     if (edPage) {location.href = id ? `${base}/${L}/world?edition=${id}` : `${base}/${L}/world?edition=`; return;}
