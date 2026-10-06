@@ -33,7 +33,6 @@ instead import `createFilmWorld(data, scope)` without the `#film-data` element.
   "accent": "#1ed760",
   "title": {"en": "Film title", "ar": "عنوان الفيلم"},
   "gallery": {"en": "../en/motion/", "ar": "../ar/motion/"},
-  "pixelsPerSecond": {"desktop": 88, "mobile": 72},
   "profiles": {
     "desktop": {"clips": "./media/desktop/clip-{index}.mp4", "poster": "./media/desktop/poster.jpg", "width": 1920, "height": 1080},
     "mobile": {"clips": "./media/mobile/clip-{index}.mp4", "poster": "./media/mobile/poster.jpg", "width": 1080, "height": 1920}
@@ -52,6 +51,9 @@ instead import `createFilmWorld(data, scope)` without the `#film-data` element.
 
 Chapter starts are seconds, ordered from zero. Filenames use a three-digit index.
 All paths resolve relative to the page, preserving an Astro/GitHub Pages base.
+Without `pixelsPerSecond` the film walks at the World's pace (`100svh / 6` px per film second), with Lenis
+(`./lenis.mjs`) on the wheel, whole-film buffering on computers and chapter buffering on touch screens. A page that sets
+`"pixelsPerSecond": {"desktop": 88, "mobile": 72}` (Home's film) keeps that pace and native scrolling.
 `?lang=ar` switches HTML direction and copy; `#chapter-id` opens a chapter.
 `world` is optional. When present the link adds `from`, `chapter`, and `lang` so a
 paired world can return to the same chapter. Page-specific static content stays
