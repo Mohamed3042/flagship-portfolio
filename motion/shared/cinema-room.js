@@ -225,6 +225,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   };
 
   let to = 0, from = 0, k = 1, transStart = 0, transDur = 1.2, list = [], index = -1, active = true, live = false, filmInfo = null, generation = 0, changes = 0, style = 2;
+  let external = false;
   const pointer = {x: .5, y: .5, on: 0, target: 0, sx: .5, sy: .5};
   document.documentElement.dataset.glow = 'off';   // the page's blue cursor glow stands aside: the room bends instead
   let raf = 0, dpr = 1, last = performance.now(), light = document.documentElement.dataset.siteMode === 'white' ? 1 : 0;
@@ -261,6 +262,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     if (g !== generation) return;
     s.video.currentTime = 0;
     await s.video.play().catch(() => {});
+    if (g !== generation) {s.video.pause(); return;}
     upload(s);
     slots[to].video.pause();
     style = live ? ORDER[changes++ % ORDER.length] : 2;   // the very first picture fades in; after that each change takes the next formation
@@ -272,7 +274,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     if (after && after.url !== item.url) fetch(after.url, {priority: 'low'}).catch(() => {});
   }
   function advance() {
-    if (!active) return;
+    if (!active || external) return;
     if (index + 1 < list.length) show(index + 1, 1.6);
     else onEnded?.(filmInfo);
   }
@@ -294,7 +296,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     if (k < 1) k = Math.min(1, (now - transStart) / 1000 / transDur);
     const st = slots[to], sf = slots[from];
-    if (!st.video.paused) upload(st);
+    if (!external && !st.video.paused) upload(st);
     pointer.on += (pointer.target - pointer.on) * (1 - Math.exp(-dt * 6));
     const lagK = 1 - Math.exp(-dt * 9); pointer.sx += (pointer.x - pointer.sx) * lagK; pointer.sy += (pointer.y - pointer.sy) * lagK;   // a moment behind: the drag
     const rect = heroRect(), t = now / 1000, A = k < 1 ? sf : st;
@@ -333,18 +335,39 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
 
   return {
     /** Play a film's clips in order; the first change uses the longer "new film" transition. */
-    play(items, info) {list = items; filmInfo = info; index = -1; show(0, 2);},
+    play(items, info) {
+      external = false; canvas.dataset.roomSource = info?.id || ''; canvas.dataset.roomInput = 'video';
+      list = items; filmInfo = info; index = -1; show(0, 2);
+    },
+    /** Called synchronously after a World's render, before its drawing buffer is cleared. */
+    showCanvas(source, info) {
+      if (!source.width || !source.height) return;
+      if (!external) {
+        ++generation; external = true;
+        for (const s of slots) s.video.pause();
+        list = []; index = -1; filmInfo = info;
+        from = to; to = 1 - to; k = 0; style = 2; transStart = performance.now(); transDur = .6;
+        canvas.dataset.roomSource = info?.id || ''; canvas.dataset.roomInput = 'canvas';
+      }
+      // Use a fixed texture unit: the room's preceding draw leaves unit 1 active.
+      const s = slots[to];
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, s.tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      s.aspect = source.width / source.height; s.ready = true; live = true;
+    },
     skip() {advance();},
     goto(i) {if (list[i]) show(i, 1.4);},
     setActive(on) {
       active = on;
+      if (external) return;
       const v = slots[to].video;
       if (!on) v.pause(); else if (live && v.paused && !(v.duration && v.currentTime >= v.duration - .32)) v.play().catch(() => {});
       else if (live && on && v.duration && v.currentTime >= v.duration - .32) advance();
     },
     get index() {return index;},
     /** The clip on screen and how it is fitted. */
-    get video() {return slots[to].ready ? slots[to].video : null;},
+    get video() {return !external && slots[to].ready ? slots[to].video : null;},
     get contain() {return !!contain(slots[to]);},
     dispose() {cancelAnimationFrame(raf); for (const s of slots) {s.video.pause(); s.video.removeAttribute('src'); s.video.load();}},
   };
