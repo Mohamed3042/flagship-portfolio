@@ -271,7 +271,7 @@
     opener = btn;
     const cur = root.dataset.world || root.dataset.edition || '';
     menu = document.createElement('div');
-    menu.className = 'ed-menu'; menu.id = 'mk-editions-menu'; menu.dataset.noPrank = ''; menu.setAttribute('role', 'menu'); menu.setAttribute('aria-label', T('Special editions', 'الإصدارات الخاصة'));
+    menu.className = 'ed-menu'; menu.id = 'mk-editions-menu'; menu.dataset.noPrank = ''; menu.dataset.lenisPrevent = ''; menu.setAttribute('role', 'menu'); menu.setAttribute('aria-label', T('Special editions', 'الإصدارات الخاصة'));
     menu.innerHTML = `<div class="ed-menu-head"><h2>${T('Special editions', 'الإصدارات الخاصة')}</h2><button class="ed-close" type="button" role="menuitem" tabindex="-1" aria-label="${T('Close editions','إغلاق الإصدارات')}">×</button></div>` + ED.map(e => `<button type="button" role="menuitemradio" tabindex="-1" aria-checked="${e.id === cur}" data-ed="${e.id}"><i class="ed-sw" style="--sw:${e.sw}"></i><b></b><small></small></button>`).join('');
     menu.querySelectorAll('[data-ed]').forEach((b, i) => {b.querySelector('b').textContent = ED[i].name; b.querySelector('small').textContent = ED[i].note;});
     menu.querySelector('.ed-close').addEventListener('click', () => close(true));
