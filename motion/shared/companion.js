@@ -2561,7 +2561,7 @@
   function prank(btn, e, onlyMoves) {
     const now = performance.now();
     if (still || prankOn || now - prankAt < 20000 || (spared.get(btn) || 0) > now) return false;
-    if (btn.closest('.mk-dock,.mk-bubble,.mk-xo,.mk-hit,.mk-bait,.mk-bait-btn,[data-no-prank],input[type=range]') || btn.disabled) return false;
+    if (btn.closest('header,nav,[role=navigation],[role=menu],.mk-dock,.mk-bubble,.mk-xo,.mk-hit,.mk-bait,.mk-bait-btn,[data-no-prank],input[type=range]') || btn.disabled) return false;
     const r = btn.getBoundingClientRect();
     if (r.width < 22 || r.height < 18 || r.width > innerWidth * .8 || r.height > 220) return false;
     const p = prankBag(x => !onlyMoves || x.move); if (!p) return false;

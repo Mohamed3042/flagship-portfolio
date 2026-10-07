@@ -10,6 +10,11 @@
   const base = (document.currentScript?.src ? new URL(document.currentScript.src).pathname : '/motion/shared/editions.js').replace(/\/motion\/shared\/editions\.js$/, '');
   const onWorld = root.classList.contains('world-walk') && !root.dataset.world;   // (an edition's own World is its look: no grade or air over it)
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (ar) {
+    const type = document.createElement('link');
+    type.rel = 'stylesheet'; type.href = `${base}/motion/shared/arabic-type.css?v=1`;
+    document.head.append(type);
+  }
   const ED = [
     {id: '', name: T('Standard', 'العادي'), note: T('The studio as it is', 'الاستوديو كما هو'), sw: 'linear-gradient(135deg,#b9dacc,#0b1210)'},
     {id: 'halloween', name: T('Halloween', 'الهالوين'), note: T('Witching hour: fog, bats and curses', 'ساعة السحر: ضباب وخفافيش ولعنات'), sw: 'linear-gradient(135deg,#ff8a1f,#3a0f5c)', font: 'Creepster'},
@@ -38,17 +43,55 @@
   [data-site-mode=white] .ed-pick,html[data-world-tone=light] .ed-pick{border-color:rgba(0,0,0,.2);background:rgba(0,0,0,.05)}
   .ed-menu{position:fixed;z-index:2147482700;width:min(340px,calc(100vw - 24px));padding:10px;border-radius:20px;background:rgba(14,15,18,.9);color:#f2f2f4;border:1px solid rgba(255,255,255,.14);box-shadow:0 24px 60px rgba(0,0,0,.5);backdrop-filter:blur(20px);font:400 14px/1.35 'Inter Variable',Inter,system-ui,sans-serif;transform-origin:var(--ox,90%) 0;animation:ed-in .28s cubic-bezier(.2,.9,.3,1.15)}
   @keyframes ed-in{from{opacity:0;transform:translateY(-6px) scale(.96)}}
-  .ed-menu h2{margin:4px 10px 8px;font-size:15px;font-weight:650;line-height:1.3}
+  .ed-menu{box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scroll-padding-block:58px 10px;max-height:calc(100dvh - 24px)}
+  .ed-menu-head{position:sticky;top:-10px;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-10px -10px 6px;padding:10px 12px;background:#111216;border-bottom:1px solid #ffffff18}
+  .ed-menu h2{margin:0;font-size:15px;font-weight:650;line-height:1.4}
+  .ed-menu button.ed-close{display:grid;grid-template-columns:1fr;gap:0;place-items:center;flex:0 0 44px;width:44px;height:44px;padding:0;font-size:26px;line-height:1}
   .ed-menu button{display:grid;grid-template-columns:34px 1fr;gap:2px 12px;align-items:center;width:100%;padding:9px 10px;border:0;border-radius:14px;background:none;color:inherit;font:inherit;text-align:start;cursor:pointer}
-  .ed-menu button:hover,.ed-menu button:focus-visible{background:rgba(255,255,255,.08);outline:none}
+  .ed-menu button:hover,.ed-menu button:focus-visible{background:rgba(255,255,255,.08)}
+  .ed-menu button:focus-visible{outline:2px solid currentColor;outline-offset:-3px}
   .ed-menu button[aria-checked=true]{background:rgba(255,255,255,.12)}
   .ed-menu .ed-sw{grid-row:span 2;width:34px;height:34px;border-radius:11px;background:var(--sw);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
   .ed-menu b{font-weight:650;font-size:15px}
   .ed-menu small{font-size:13px;color:rgba(242,242,244,.66)}
   [data-site-mode=white] .ed-menu{background:rgba(250,250,248,.94);color:#141416;border-color:rgba(0,0,0,.1)}
+  [data-site-mode=white] .ed-menu-head{background:#fafaf8;border-color:#0002}
   [data-site-mode=white] .ed-menu small{color:rgba(20,20,22,.62)}
   [data-site-mode=white] .ed-menu button:hover,[data-site-mode=white] .ed-menu button[aria-checked=true]{background:rgba(0,0,0,.06)}
-  @media (max-width:640px){.ed-pick .ed-name{display:none}.ed-pick{padding:6px 9px}.ed-menu{left:12px!important;right:12px!important;top:auto!important;bottom:12px;width:auto;transform-origin:50% 100%}}
+  @media (max-width:640px){.ed-pick .ed-name{display:none}.ed-pick{padding:6px 9px}.ed-menu{width:calc(100vw - 24px);transform-origin:50% 0}}
+
+  /* One stable navigation layout for Home and every World. The scene keeps its
+     own colours; essential links stay visible and usable at every width. */
+  .m-nav[data-site-nav][data-no-prank],.world-header[data-site-nav][data-no-prank]{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto auto;align-items:center;height:auto;gap:clamp(12px,1.5vw,24px);box-sizing:border-box;padding:12px clamp(12px,4vw,64px);isolation:isolate}
+  [data-site-nav][data-no-prank] :is(.m-brand,.world-brand){min-width:0;margin:0}
+  [data-site-nav][data-no-prank] :is(a,button,nav){box-sizing:border-box}
+  [data-site-nav][data-no-prank] .world-brand>span:not(.world-mark){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  [data-site-nav][data-no-prank] .world-mark{flex-shrink:0}
+  [data-site-nav][data-no-prank] [data-primary-nav]{display:flex;align-items:center;gap:clamp(12px,1.5vw,24px)}
+  [data-site-nav][data-no-prank] [data-primary-nav] a{display:flex;align-items:center;min-height:44px;padding:6px 0;white-space:nowrap}
+  [data-site-nav][data-no-prank] .style-switch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-flow:column;gap:0;margin:0;min-width:0;padding:3px}
+  [data-site-nav][data-no-prank] .style-switch a{display:flex;align-items:center;justify-content:center;min-height:36px;padding:7px 12px;border:0;white-space:nowrap;font-size:13px;line-height:1.3}
+  [data-site-nav][data-no-prank] :is(.ed-pick,.m-language,.world-lang){display:flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;box-sizing:border-box;margin:0}
+  [data-site-nav][data-no-prank] .ed-pick{max-width:180px}
+  [data-site-nav][data-no-prank] .ed-name{overflow:hidden;text-overflow:ellipsis}
+  [data-site-nav][data-no-prank] :is(.m-language,.world-lang){white-space:nowrap;font-size:12px}
+  [data-site-nav][data-no-prank] .style-switch:has([data-style=world][aria-current]) .style-switch-thumb{transform:translateX(100%)}
+  [data-site-nav][data-no-prank] .style-switch:has([data-style=space][aria-current]) .style-switch-thumb{transform:translateX(200%)}
+  [dir=rtl] [data-site-nav][data-no-prank] .style-switch:has([data-style=world][aria-current]) .style-switch-thumb{transform:translateX(-100%)}
+  [dir=rtl] [data-site-nav][data-no-prank] .style-switch:has([data-style=space][aria-current]) .style-switch-thumb{transform:translateX(-200%)}
+  @media(max-width:1100px){[data-site-nav][data-no-prank] .m-brand>span,[data-site-nav][data-no-prank] .world-brand>span:not(.world-mark){display:none}}
+  @media(max-width:900px){
+    .m-nav[data-site-nav][data-no-prank],.world-header[data-site-nav][data-no-prank]{grid-template-columns:44px minmax(0,1fr) 44px 44px;gap:4px;padding:8px 12px}
+    [data-site-nav][data-no-prank] :is(.m-brand,.world-brand){grid-column:1;grid-row:1;justify-self:start}
+    [data-site-nav][data-no-prank] .style-switch{grid-column:2;grid-row:1;justify-self:center;width:min(100%,240px)}
+    [data-site-nav][data-no-prank] .style-switch a{padding:6px 4px;font-size:12px;min-height:36px}
+    [data-site-nav][data-no-prank] .ed-pick{grid-column:3;grid-row:1;width:44px;padding:0;gap:0}
+    [data-site-nav][data-no-prank] .ed-name{display:none}
+    [data-site-nav][data-no-prank] :is(.m-language,.world-lang){grid-column:4;grid-row:1;width:44px;padding:0}
+    [data-site-nav][data-no-prank] [data-primary-nav]{grid-column:1/-1;grid-row:2;justify-content:space-evenly;gap:8px;width:100%}
+    [data-site-nav][data-no-prank] [data-primary-nav] a{min-height:44px;font-size:13px;line-height:1.4;padding:6px 4px}
+  }
+  @media(prefers-reduced-motion:reduce){.ed-menu{animation:none}}
 
   .ed-air{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden;opacity:0;transition:opacity 1.2s ease}
   .ed-air.is-on{opacity:1}
@@ -186,7 +229,7 @@
   // ── the picker ──
   const pickers = () => document.querySelectorAll('[data-edition-picker]');
   function label() {
-    const e = byId(root.dataset.edition);
+    const e = byId(root.dataset.world || root.dataset.edition);
     for (const b of pickers()) {
       b.style.setProperty('--sw', e.id ? e.sw : 'conic-gradient(#ff8a1f,#e9c46a,#00e5ff,#9be564,#ffd400,#d97757,#ff8a1f)');   // standard: a swatch of every edition
       const n = b.querySelector('.ed-name'); if (n) n.textContent = e.id ? e.name : b.dataset.label || T('Editions', 'إصدارات');
@@ -199,39 +242,59 @@
     opener?.setAttribute('aria-expanded', 'false');
     if (focus) opener?.focus();
     removeEventListener('pointerdown', outside, true); removeEventListener('keydown', keys, true);
+    removeEventListener('resize', placeMenu); window.visualViewport?.removeEventListener('resize', placeMenu);
   }
   const outside = ev => {if (menu && !menu.contains(ev.target) && !opener?.contains(ev.target)) close();};
   function keys(ev) {
     if (!menu) return;
-    if (ev.key === 'Escape') {ev.preventDefault(); close(true);}
-    if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
-      ev.preventDefault();
-      const items = [...menu.querySelectorAll('button')], i = items.indexOf(document.activeElement);
-      items[(i + (ev.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length].focus();
+    if (ev.key === 'Escape') {ev.preventDefault(); ev.stopPropagation(); close(true); return;}
+    if (ev.key === 'Tab') {close(true); return;}
+    if (['ArrowDown','ArrowUp','Home','End'].includes(ev.key)) {
+      ev.preventDefault(); ev.stopPropagation();
+      const items = [...menu.querySelectorAll('button[role^=menuitem]')], i = items.indexOf(document.activeElement);
+      const j = ev.key === 'Home' ? 0 : ev.key === 'End' ? items.length - 1 : (i + (ev.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+      items.forEach((b, n) => b.tabIndex = n === j ? 0 : -1);
+      items[j].focus({preventScroll:true}); items[j].scrollIntoView({block:'nearest'});
     }
+  }
+  function placeMenu() {
+    if (!menu || !opener) return;
+    const view = window.visualViewport, vh = view?.height || innerHeight, vw = view?.width || innerWidth;
+    const r = opener.getBoundingClientRect(), w = Math.min(340, vw - 24);
+    const top = Math.max(12, Math.min(r.bottom + 8, vh - 160));
+    const left = vw <= 640 ? 12 : Math.max(12, Math.min(vw - w - 12, ar ? r.left : r.right - w));
+    Object.assign(menu.style, {left:`${left}px`,top:`${top}px`,maxHeight:`${Math.max(120,vh - top - 12)}px`});
+    menu.style.setProperty('--ox', `${r.left + r.width / 2 - left}px`);
   }
   function open(btn) {
     if (menu) return close();
     opener = btn;
-    const cur = root.dataset.edition || '';
+    const cur = root.dataset.world || root.dataset.edition || '';
     menu = document.createElement('div');
-    menu.className = 'ed-menu'; menu.setAttribute('role', 'menu'); menu.setAttribute('aria-label', T('Special editions', 'الإصدارات الخاصة'));
-    menu.innerHTML = `<h2>${T('Special editions', 'الإصدارات الخاصة')}</h2>` + ED.map(e => `<button type="button" role="menuitemradio" aria-checked="${e.id === cur}" data-ed="${e.id}"><i class="ed-sw" style="--sw:${e.sw}"></i><b></b><small></small></button>`).join('');
-    menu.querySelectorAll('button').forEach((b, i) => {b.querySelector('b').textContent = ED[i].name; b.querySelector('small').textContent = ED[i].note;});
+    menu.className = 'ed-menu'; menu.id = 'mk-editions-menu'; menu.dataset.noPrank = ''; menu.setAttribute('role', 'menu'); menu.setAttribute('aria-label', T('Special editions', 'الإصدارات الخاصة'));
+    menu.innerHTML = `<div class="ed-menu-head"><h2>${T('Special editions', 'الإصدارات الخاصة')}</h2><button class="ed-close" type="button" role="menuitem" tabindex="-1" aria-label="${T('Close editions','إغلاق الإصدارات')}">×</button></div>` + ED.map(e => `<button type="button" role="menuitemradio" tabindex="-1" aria-checked="${e.id === cur}" data-ed="${e.id}"><i class="ed-sw" style="--sw:${e.sw}"></i><b></b><small></small></button>`).join('');
+    menu.querySelectorAll('[data-ed]').forEach((b, i) => {b.querySelector('b').textContent = ED[i].name; b.querySelector('small').textContent = ED[i].note;});
+    menu.querySelector('.ed-close').addEventListener('click', () => close(true));
     menu.addEventListener('click', ev => {const b = ev.target.closest('button[data-ed]'); if (!b) return; close(); go(b.dataset.ed);});
     document.body.append(menu);
-    const r = btn.getBoundingClientRect(), w = menu.offsetWidth;
-    const left = Math.max(12, Math.min(innerWidth - w - 12, ar ? r.left : r.right - w));
-    Object.assign(menu.style, {left: `${left}px`, top: `${r.bottom + 10}px`});
-    menu.style.setProperty('--ox', `${r.left + r.width / 2 - left}px`);
+    placeMenu();
     btn.setAttribute('aria-expanded', 'true');
-    (menu.querySelector('[aria-checked=true]') || menu.querySelector('button')).focus();
+    const selected = menu.querySelector('[aria-checked=true]') || menu.querySelector('[data-ed]');
+    selected.tabIndex = 0; selected.focus({preventScroll:true}); selected.scrollIntoView({block:'nearest'});
     addEventListener('pointerdown', outside, true); addEventListener('keydown', keys, true);
+    addEventListener('resize', placeMenu); window.visualViewport?.addEventListener('resize', placeMenu);
   }
   function wire() {
+    for (const header of document.querySelectorAll('.m-nav,.world-header')) {
+      header.dataset.siteNav = ''; header.dataset.noPrank = ''; header.dataset.noSteal = '';
+      const primary = header.querySelector('nav:not(.style-switch)');
+      if (primary) primary.dataset.primaryNav = '';
+    }
     for (const b of pickers()) {
       if (b.dataset.wired) continue;
       b.dataset.wired = '1'; b.dataset.label = b.querySelector('.ed-name')?.textContent || '';
+      b.setAttribute('aria-label', T('Choose a World edition', 'اختر إصداراً من العالم'));
+      b.setAttribute('aria-controls', 'mk-editions-menu'); b.dataset.noPrank = '';
       b.addEventListener('click', () => open(b));
     }
     label();

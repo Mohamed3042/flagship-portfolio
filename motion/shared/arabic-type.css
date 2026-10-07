@@ -1,0 +1,75 @@
+/* Arabic portfolio UI: an open-source alternative chosen for the MediaPro brief.
+   Keep Latin brand/code lettering intact; allow native Arabic joining and marks. */
+@font-face {
+  font-family: 'Rakkas'; src: url('./fonts/Rakkas-Regular.ttf') format('truetype');
+  font-style: normal; font-weight: 400; font-display: swap;
+  unicode-range: U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF;
+}
+@font-face {
+  font-family: 'Noto Naskh Arabic'; src: url('./fonts/NotoNaskhArabic-Variable.ttf') format('truetype');
+  font-style: normal; font-weight: 400 700; font-display: swap;
+  unicode-range: U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF;
+}
+html[lang=ar] {
+  --ar-body: 'Inter Variable', 'Noto Naskh Arabic', serif;
+  --ar-title: 'Inter Variable', 'Rakkas', 'Noto Naskh Arabic', serif;
+  --w-display: var(--ar-body); --w-serif: var(--ar-title);
+  --sp-font: var(--ar-body);
+}
+/* Edition CSS arrives with its scene module. Higher specificity keeps the shared
+   Arabic reading family stable regardless of that module's load order. */
+html[lang=ar][dir=rtl][data-world] {
+  --kx-font: var(--ar-body); --sp-thin: var(--ar-body); --bp-sans: var(--ar-body);
+  --tc-hand: var(--ar-body); --tc-sans: var(--ar-body); --tc-disp: var(--ar-body); --tc-mono: var(--ar-body);
+  --rx-display: var(--ar-body); --rx-mono: var(--ar-body);
+  --cx-display: var(--ar-body); --cx-read: var(--ar-body); --cx-style: normal;
+  --dd-display: var(--ar-body); --dd-read: var(--ar-body);
+  --tw-sans: var(--ar-body); --tw-label: var(--ar-body);
+  --cg-serif: var(--ar-body); --cg-sans: var(--ar-body);
+  --hx-serif: var(--ar-body); --hx-sans: var(--ar-body);
+  --mu-serif: var(--ar-body); --mu-sans: var(--ar-body);
+}
+html[lang=ar] :is(body.motion-body,.motion-body--cinema) {
+  --cx-display: var(--ar-body); --m-display: var(--ar-body);
+  font-family: var(--ar-body); line-height: 1.7;
+}
+html[lang=ar] :is(.nf-bill-title,.nf-row-title,.cx-head h2,.cx-end h2,.cx-title,.m-intro h1,.m-worlds h2,.nf-sheet-head h2) {
+  font-family: var(--ar-title); font-weight: 400; letter-spacing: 0; line-height: 1.45;
+}
+html[lang=ar] .nf-bill-title { font-size: clamp(48px,5.6vw,86px); margin-bottom: 10px; }
+html[lang=ar] :is(.nf-bill-tagline,.nf-home-line,.cx-end p,.m-invitation p,.m-world-caption p) {
+  font-family: var(--ar-body); font-size: 18px; line-height: 1.8; letter-spacing: 0;
+}
+html[lang=ar] :is(.nf-btn,.nf-bill-now,.nf-bill-meta,.nf-rank,.nf-pick button,.nf-lobby-tools button,.nf-sheet,.cx-filters button,.cx-eyebrow,.cx-kicker,.m-footer) {
+  font-family: var(--ar-body); letter-spacing: 0; line-height: 1.6;
+}
+html[lang=ar] :is([data-site-nav][data-no-prank],.ed-menu) { font-family: var(--ar-body); letter-spacing: 0; }
+html[lang=ar] [data-site-nav][data-no-prank] :is(a,button),html[lang=ar] .ed-menu button {
+  font-family: var(--ar-body); letter-spacing: 0; font-weight: 600; line-height: 1.6;
+}
+html[lang=ar] [data-site-nav][data-no-prank] :is([data-primary-nav] a,.style-switch a,.ed-pick) { font-size: 16px; }
+html[lang=ar] .ed-menu { line-height: 1.65; }
+html[lang=ar] .ed-menu :is(b,h2) { font-size: 19px; font-weight: 700; }
+html[lang=ar] .ed-menu small { font-size: 16px; font-weight: 400; line-height: 1.65; }
+html[lang=ar] :is(.wo-display,.wo-headline,.wo-serif-title,.wo-film-name,.wo-caption-name,.wo-boxes,.wo-grow-line) {
+  font-family: var(--ar-title); font-weight: 400; letter-spacing: 0; line-height: 1.4;
+}
+html[lang=ar] :is(.wo-sub,.wo-film-tagline,.wo-caption-line,.wo-fam-line) { line-height: 1.8; }
+html[lang=ar][dir=rtl][data-world=machine] :is(.mc-cap b,.mc-layer b,.mc-spine) {
+  font-family: var(--ar-title); font-weight: 400; letter-spacing: 0; line-height: 1.4;
+}
+html[lang=ar][dir=rtl][data-world=machine] :is(.mc-k,.mc-line,.mc-meta,.mc-eyebrow,.mc-watch,.mc-work,.mc-pill,.mc-pill span,.mc-pill b) {
+  font-family: var(--ar-body); letter-spacing: 0; line-height: 1.6;
+}
+html[lang=ar][dir=rtl][data-world=crossover] :is(.cx-line,.cx-meta,.cx-eyebrow,.cx-watch,.cx-pill,.cx-pill span,.cx-pill b),
+html[lang=ar][dir=rtl][data-world=blueprint] :is(.bp-cmd-hist bdi,.bp-cmd-label) {
+  font-family: var(--ar-body); letter-spacing: 0;
+}
+@media(max-width:900px) {
+  html[lang=ar] [data-site-nav][data-no-prank] .style-switch a { font-size: 14px; padding-inline: 2px; }
+  html[lang=ar] [data-site-nav][data-no-prank] [data-primary-nav] a { font-size: 16px; }
+}
+@media(max-width:640px) {
+  html[lang=ar] .nf-bill-title { font-size: clamp(44px,12vw,64px); }
+  html[lang=ar] .nf-bill-tagline { font-size: 18px; }
+}
