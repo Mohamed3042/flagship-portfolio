@@ -31,6 +31,7 @@
     {id: 'impression', name: T('Impression', 'انطباع'), note: T('Painted live in oil, stroke by stroke', 'مرسومة مباشرةً بالزيت، ضربة بعد ضربة'), sw: 'linear-gradient(135deg,#e9dcc2 0 50%,#e8833a 50%)'},
     {id: 'museum', name: T('Hall of Solutions', 'قاعة الحلول'), note: T('The museum: a marble hall at night', 'المتحف: قاعة رخامية ليلاً'), sw: 'linear-gradient(135deg,#080706 0 50%,#d9b36a 50%)'},
     {id: 'machine', name: T('Solution Machine', 'آلة الحلول'), note: T('Inside the machine: one movie, eight rooms', 'داخل الآلة: فيلم واحد، ثماني غرف'), sw: 'linear-gradient(135deg,#06070a 0 50%,#ffb340 50%)'},
+    {id: 'rounds', name: T('Four Rounds', 'أربع جولات'), note: T('One fighter, four arts: blade, eight limbs, ring and cage', 'مقاتل واحد وأربعة فنون: النصل والأطراف الثمانية والحلبة والقفص'), sw: 'linear-gradient(135deg,#0b0908 0 50%,#e8412c 50%)'},
   ];
   const byId = id => ED.find(e => e.id === (id || '')) || ED[0];
 
@@ -218,7 +219,7 @@
     dispatchEvent(new CustomEvent('mk:edition', {detail: {id: e.id, name: e.name}}));
   }
   // editions with a World of their own (src/scripts/editions/<id>; keep in step when one lands); the rest dress the World
-  const PAGES = new Set(['tactical', 'keynote', 'halloween', 'heaven', 'rgb', 'comic', 'clay', 'doodle', 'blueprint', 'ice', 'crossover', 'impression', 'museum', 'machine']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
+  const PAGES = new Set(['tactical', 'keynote', 'halloween', 'heaven', 'rgb', 'comic', 'clay', 'doodle', 'blueprint', 'ice', 'crossover', 'impression', 'museum', 'machine', 'rounds']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
   function go(id) {
     if (PAGES.has(id)) {location.href = `${base}/${L}/edition/${id}`; return;}
     if (edPage) {location.href = id ? `${base}/${L}/world?edition=${id}` : `${base}/${L}/world?edition=`; return;}
