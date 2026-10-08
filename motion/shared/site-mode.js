@@ -16,6 +16,7 @@
   // Owner's choice (as in BaseLayout): the portfolio always plays its motion, even when the OS asks to reduce motion, because
   // the motion is the work being shown. Reduced-motion queries report "no preference"; the CSS blocks are written never to
   // match. (2026-10-05: with Reduce Motion on, the owner's iMac showed Home and the World still.)
+  if (r.dataset.motionPreference === 'native') return;
   try {
     if (!window.__mmNativeMedia) {
       const mm = window.__mmNativeMedia = window.matchMedia.bind(window);
