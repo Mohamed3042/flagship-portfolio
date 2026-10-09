@@ -2401,6 +2401,8 @@
   if (preview) new MutationObserver(() => {if (!preview.hidden && preview.classList.contains('is-in')) setTimeout(() => {if (preview.classList.contains('is-in')) chase(preview.querySelector('.nf-pop-media') || preview);}, 260);}).observe(preview, {attributes: true, attributeFilter: ['class', 'hidden']});
 
   // ── the loop ──────────────────────────────────────────────────────────────────────────────────
+  let playEl = null;
+  const playBtn = () => (playEl?.isConnected ? playEl : (playEl = document.querySelector('.world-play')));
   function followPerch(floor) {
     const el = C.on; if (!el) return;
     const r = el.isConnected ? el.getBoundingClientRect() : null;
@@ -2428,6 +2430,11 @@
       if (C.y < floor - .5) {C.vy += GRAV * dt; C.y = Math.min(floor, C.y + C.vy * dt); if (C.y >= floor) C.vy = 0;} else {C.y = floor; C.vy = 0;}
     }
     C.x = clamp(C.x, 12, W - 12);
+    // never stand on a World's play button, where a phone's thumb lands: it steps aside along the floor (2026-10-09)
+    if (!C.on && C.mode !== 'held' && C.mode !== 'ride') {
+      const pb = playBtn(), r = pb?.getBoundingClientRect(), feet = C.y * U;
+      if (r?.width && feet > r.top && feet - 22 * U < r.bottom) {const l = r.left / U - 11, rr = r.right / U + 11; if (C.x > l && C.x < rr) C.x = ar ? rr : l;}
+    }
     if (now > C.lookAt) {C.lookAt = now + rnd(900, 2200); C.idleLook = any([[-1, 0], [1, 0], [0, 0], [0, 1], [1, -1], [-1, -1], [0, 0]]);}
     for (let i = visitors.length - 1; i >= 0; i--) {const v = visitors[i]; v.x += v.vx * dt; v.ph += dt; if (Math.random() < .012) feather(v.x, v.y - 2); if (v.x < -60 || v.x > W + 60) visitors.splice(i, 1);}
     const calm = (C.mode === 'idle' || (C.mode === 'act' && !C.act.def.on && !C.act.def.once)) && !bubble && !xo;
