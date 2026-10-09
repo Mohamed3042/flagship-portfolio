@@ -2,8 +2,8 @@
   "schema": "cake-studio-bookends/v2",
   "version": "1.8.0",
   "ready": true,
-  "width": 1280,
-  "height": 720,
+  "width": 1920,
+  "height": 1080,
   "fps": 30,
   "duration": 5,
   "delivery": {

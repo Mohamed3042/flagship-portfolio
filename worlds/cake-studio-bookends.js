@@ -69,7 +69,7 @@
       || manifest.version !== '1.8.0') {
       throw new Error('bookend manifest version mismatch');
     }
-    if (manifest.width !== 1280 || manifest.height !== 720
+    if (manifest.width !== 1920 || manifest.height !== 1080
       || manifest.fps !== 30 || manifest.duration !== 5) {
       throw new Error('bookend manifest media contract mismatch');
     }
