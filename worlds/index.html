@@ -252,12 +252,12 @@
 
 <a class="card feature" href="../mk-business-os/" data-business-world style="--wc:#edb15d">
       <span class="badge"><span class="L en">Scroll the film · MK Business OS</span><span class="L ar">حرّك الفيلم بالتمرير · MK Business OS</span></span>
-      <div class="art"><img src="../mk-business-os/media/poster.jpg" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
+      <div class="art"><img src="../motion/mk-business-os/media/poster.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
       <div class="pal"><i style="background:#070c12"></i><i style="background:#17212b"></i><i style="background:#edb15d"></i><i style="background:#80d6ca"></i><i style="background:#edf1f3"></i></div>
       <div class="meta"><h2><span class="L en">From signal to strategy.</span><span class="L ar">من الإشارة إلى الاستراتيجية.</span></h2><p><span class="L en">Eight worlds of business research. Edge-to-edge picture, saved view settings and a film controlled by your scroll.</span><span class="L ar">ثمانية عوالم للبحث التجاري. صورة تملأ الشاشة وإعدادات عرض محفوظة وفيلم يتحرك بتمريرك.</span></p><p class="spec"><span><i>01:48</i></span><span><span class="L en">8 worlds · illustrative workflows</span><span class="L ar">٨ عوالم · مسارات عمل توضيحية</span></span></p></div>
     </a>
 
-<a class="card feature" href="../en/work/mk-educate" data-educate-world style="--wc:#E8B64A">
+<a class="card feature" href="../motion/mk-educate/?lang=en" data-educate-world style="--wc:#E8B64A">
       <span class="badge"><span class="L en">Scroll the film · MK Educate</span><span class="L ar">حرّك الفيلم بالتمرير · MK Educate</span></span>
       <div class="art"><img src="../media/mk-educate/v2/poster-desktop.webp" alt="" loading="lazy" decoding="async"><div class="shade"></div></div>
       <div class="pal"><i style="background:#111B34"></i><i style="background:#24355B"></i><i style="background:#796AC7"></i><i style="background:#E8B64A"></i><i style="background:#F8F4EB"></i></div>
@@ -268,7 +268,7 @@
       </div>
     </a>
 
-<a class="card feature" href="../en/work/engineering-smart-system" data-ess-world style="--wc:#81ECD0">
+<a class="card feature" href="../motion/ess/?lang=en" data-ess-world style="--wc:#81ECD0">
       <span class="badge"><span class="L en">90-second scroll film</span><span class="L ar">فيلم بالتمرير · ٩٠ ثانية</span></span>
       <div class="art"><img src="../media/ess-ai/poster.webp" alt="" loading="eager" decoding="async"><div class="shade"></div></div>
       <div class="pal"><i style="background:#071416"></i><i style="background:#0E2023"></i><i style="background:#81ECD0"></i><i style="background:#90C9E8"></i><i style="background:#E4C477"></i></div>
@@ -440,11 +440,11 @@
   });
   document.querySelector('[data-educate-world]').addEventListener('click', function () {
     this.href = document.documentElement.lang === 'ar' || document.body.classList.contains('lang-ar')
-      ? '../ar/work/mk-educate' : '../en/work/mk-educate';
+      ? '../motion/mk-educate/?lang=ar' : '../motion/mk-educate/?lang=en';
   });
   document.querySelector('[data-ess-world]').addEventListener('click', function () {
     this.href = document.documentElement.lang === 'ar' || document.body.classList.contains('lang-ar')
-      ? '../ar/work/engineering-smart-system' : '../en/work/engineering-smart-system';
+      ? '../motion/ess/?lang=ar' : '../motion/ess/?lang=en';
   });
 </script>
 <script>document.querySelector('[data-motion-home]').addEventListener('click',function(){this.href='../'+(document.documentElement.lang==='ar'?'ar':'en')+'/motion/'});</script>
