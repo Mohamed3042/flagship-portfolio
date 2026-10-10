@@ -17,7 +17,7 @@
   }
   const ED = [
     {id: '', name: T('Standard', 'العادي'), note: T('The studio as it is', 'الاستوديو كما هو'), sw: 'linear-gradient(135deg,#b9dacc,#0b1210)'},
-    {id: 'halloween', name: T('Halloween', 'الهالوين'), note: T('Witching hour: fog, bats and curses', 'ساعة السحر: ضباب وخفافيش ولعنات'), sw: 'linear-gradient(135deg,#ff8a1f,#3a0f5c)', font: 'Creepster'},
+    {id: 'halloween', name: T('Halloween', 'الهالوين'), note: T('Optical illusions, then a treat', 'خدع بصرية، ثم حلوى'), sw: 'linear-gradient(135deg,#ff8a1f,#3a0f5c)', font: 'Creepster'},
     {id: 'heaven', name: T('Heaven', 'الجنة'), note: T('Cloud nine: light, doves and blessings', 'فوق السحاب: نور وحمام وبركات'), sw: 'linear-gradient(135deg,#fff3c4,#9cc2ff)', font: 'Cormorant+Garamond:wght@500;600;700'},
     {id: 'rgb', name: T('RGB Overdrive', 'RGB بأقصى سرعة'), note: T('Gamer glow, every colour at once', 'توهج الألعاب، كل الألوان معاً'), sw: 'conic-gradient(#ff0040,#ffb300,#00ff88,#00b3ff,#a100ff,#ff0040)', font: 'Orbitron:wght@600;800'},
     {id: 'tactical', name: T('Night Ops', 'عمليات ليلية'), note: T('Night vision, scopes, classified files', 'رؤية ليلية ومناظير وملفات سرية'), sw: 'linear-gradient(135deg,#9be564,#0d140d)', font: 'Black+Ops+One'},

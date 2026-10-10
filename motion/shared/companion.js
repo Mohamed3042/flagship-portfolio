@@ -195,11 +195,6 @@
   .is-tomb .epitaph{left:50%;top:40%;translate:-50% -50%;text-align:center;font:800 clamp(16px,2.2vw,30px)/1.1 Georgia,'Times New Roman',serif;color:rgba(255,255,255,.9);text-shadow:0 -1px 0 rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.2);white-space:nowrap}
   .is-tomb .epitaph small{display:block;margin-top:6px;font-size:.55em;font-weight:600}
   .is-tomb .grass{left:4%;right:4%;bottom:-6px;height:12px;background:repeating-linear-gradient(90deg,#2f6b2f 0 3px,#3f8f3f 3px 5px,transparent 5px 7px)}
-  .is-brew .brew{left:0;right:0;bottom:0;height:46%;background:linear-gradient(180deg,rgba(124,255,58,.8),rgba(30,120,20,.95));border-radius:0 0 8px 8px;box-shadow:0 -6px 22px rgba(124,255,58,.55);animation:mk-rise 1.2s ease-out both}
-  @keyframes mk-rise{from{height:0}}
-  .is-brew .bub{bottom:12%;width:12px;height:12px;border-radius:50%;border:2px solid rgba(220,255,200,.9);animation:mk-bub 1.6s ease-in infinite}
-  .is-brew .bub:nth-child(2){left:18%;animation-delay:.2s}.is-brew .bub:nth-child(3){left:42%;animation-delay:.7s}.is-brew .bub:nth-child(4){left:66%;animation-delay:1.1s}.is-brew .bub:nth-child(5){left:84%;animation-delay:.4s}
-  @keyframes mk-bub{from{transform:translateY(0);opacity:1}to{transform:translateY(-70px);opacity:0}}
   .is-moon .moon{right:-20px;top:-30px;width:70px;height:70px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff9a8a,#c0182a 60%,#6d0a14);box-shadow:0 0 44px 12px rgba(220,30,40,.55)}
   .is-moon .fog{left:-10%;right:-10%;bottom:-8px;height:42%;background:linear-gradient(transparent,rgba(200,200,220,.42));filter:blur(8px);animation:mk-fog 4s ease-in-out infinite alternate}
   @keyframes mk-fog{to{transform:translateX(16px)}}
@@ -519,8 +514,8 @@
     }
     for (const s of [-1, 1]) if ((s < 0 ? P.armL : P.armR) === 'fwd') cells(ARM.fwd, ox, oy + (s < 0 ? P.dyL || 0 : P.dyR || 0), s, c.d);
   }
-  // an edition dresses the companion: a witch for Halloween, a fairy for Heaven
-  const HAT = ['..........kk......', '.........kkk......', '........kkkk......', '.......kkkkk......', '.......kkkkkk.....', '......kkkkkkk.....', '......pppyppp.....', '.....kkkkkkkkk....', '.kkkkkkkkkkkkkkkk.'];
+  // an edition dresses the companion: a jack-o'-lantern for Halloween (no witch: owner, 2026-10-10), a fairy for Heaven
+  const JACK = ['.....gg.....', '..doogoood..', '.dooooooood.', 'doyyooooyyod', 'dooooyyooood', 'doyyyyyyyyod', '.dooooooood.', '..dddddddd..'];
   const HELMET = ['.....hhhhhhhh.....', '...hhhhhhhhhhhh...', '..dddddddddddddd..'];
   const hsl = (h, l = 60) => `hsl(${Math.round(h) % 360} 100% ${l}%)`;
   const WINGL = ['..ww.', '.wwwb', 'wwwwb', 'wwwb.', '.wb..', '..b..'], WINGR = WINGL.map(r => [...r].reverse().join(''));
@@ -528,7 +523,7 @@
     const ed = root.dataset.edition;
     if (!ed) return;
     const top = topOf(oy, P);
-    if (ed === 'halloween' && layer === 'front' && !P.hat) S(ox, top - 9, HAT, {k: '#241B33', p: '#7B3FBF', y: '#FFD34D'});
+    if (ed === 'halloween' && layer === 'front' && !P.hat) S(ox + 3, top - 8, JACK, {o: '#FF7417', d: '#D4520A', g: '#5A8F2E', y: frame % 6 ? '#FFC34D' : '#FFE08A'});
     if (ed === 'heaven') {
       if (layer === 'back') {const up = frame % 4 < 2 ? 1 : 0; alpha(.85, () => {S(ox - 4, top + 1 - up, WINGL, {w: '#EAF6FF', b: '#B9DCFF'}); S(ox + 17, top + 1 - up, WINGR, {w: '#EAF6FF', b: '#B9DCFF'});});}
       else if (!P.hat) S(ox + 5, top - 4, ['.yyyyyy.', 'y......y', '.yyyyyy.'], {y: '#FFD76A'});
@@ -1550,9 +1545,9 @@
       }},
       {id: 'popcorn', name: T('Popcorn time', 'وقت الفشار'), cast(el) {let on = true; const rain = () => {if (!on) return; const r = el.getBoundingClientRect(); for (let i = 0; i < 2; i++) emit({kind: 'px', x: (r.left + Math.random() * r.width) / U, y: (r.top - 30) / U, vy: rnd(20, 40), g: 30, life: 1.6, c: any(['#FFF1B8', '#FFE08A', '#FFFFFF']), s: 2}); setTimeout(rain, 90);}; rain(); return () => {on = false;};}},
     ],
-    // Halloween: the witch curses the work
+    // Halloween: trick or treat on the work
     halloween: [
-      {id: 'coffin', name: T('Coffin curse!', 'لعنة التابوت!'), cast(el) {const a = morph(el, 'polygon(0% 0%, 100% 0%, 100% 24%, 100% 100%, 0% 100%, 0% 24%)', 'polygon(28% 0%, 72% 0%, 100% 24%, 82% 100%, 18% 100%, 0% 24%)', {filter: 'grayscale(.75) brightness(.75) contrast(1.15)'}), d = deco(el, '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="28,0 72,0 100,24 82,100 18,100 0,24"/></svg><span class="rip">R.I.P.</span>', 'is-coffin'); return () => {a(); d.end();};}},
+      {id: 'coffin', name: T('Coffin!', 'تابوت!'), cast(el) {const a = morph(el, 'polygon(0% 0%, 100% 0%, 100% 24%, 100% 100%, 0% 100%, 0% 24%)', 'polygon(28% 0%, 72% 0%, 100% 24%, 82% 100%, 18% 100%, 0% 24%)', {filter: 'grayscale(.75) brightness(.75) contrast(1.15)'}), d = deco(el, '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="28,0 72,0 100,24 82,100 18,100 0,24"/></svg><span class="rip">R.I.P.</span>', 'is-coffin'); return () => {a(); d.end();};}},
       {id: 'haunted', name: T('It’s watching you', 'إنها تراقبك'), cast(el) {
         const a = restyle(el, {filter: 'grayscale(1) contrast(1.35) brightness(.6) sepia(.25)'});
         const d = deco(el, '<i class="vig"></i><i class="eye"></i><i class="eye"></i>', 'is-haunt', dd => {const r = dd.r, [e1, e2] = dd.node.querySelectorAll('.eye'), ax = attention.t ? clamp((attention.x - (r.left + r.width / 2)) / r.width, -.5, .5) : 0, ay = attention.t ? clamp((attention.y - (r.top + r.height * .35)) / r.height, -.5, .5) : 0; for (const [e, cx] of [[e1, .4], [e2, .6]]) {e.style.left = `${(cx + ax * .05) * 100}%`; e.style.top = `${(.34 + ay * .05) * 100}%`;}});
@@ -1564,7 +1559,6 @@
       {id: 'slime', name: T('Ectoplasm', 'مادة شبحية'), cast(el) {const drips = Array.from({length: 7}, (_, i) => {const x = 7 + i * 14 + rnd(-4, 4), w = rnd(4, 8), h = rnd(18, 46); return `<path d="M${(x - w).toFixed(1)} 0 Q${(x - w).toFixed(1)} ${(h * .6).toFixed(1)} ${x.toFixed(1)} ${h.toFixed(1)} Q${(x + w).toFixed(1)} ${(h * .6).toFixed(1)} ${(x + w).toFixed(1)} 0 Z" style="animation-delay:${rnd(0, .8).toFixed(2)}s"/>`;}).join(''); const d = deco(el, `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="0" y="0" width="100" height="5"/>${drips}</svg>`, 'is-slime'); return () => d.end();}},
       {id: 'ghost', name: T('Boooo', 'بوووو'), cast(el) {const a = restyle(el, {filter: 'grayscale(1) invert(1) brightness(1.1) opacity(.72)'}), bob = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -10px'}, {translate: '0 0'}], {duration: 1600, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, '<svg class="gface" viewBox="0 0 100 100"><ellipse cx="38" cy="40" rx="6" ry="9"/><ellipse cx="62" cy="40" rx="6" ry="9"/><ellipse cx="50" cy="66" rx="7" ry="9"/></svg>', 'is-ghost'); return () => {a(); d.end(); bob?.cancel?.();};}},
       {id: 'tomb', name: T('Rest in pixels', 'ارقد بسلام يا بكسل'), cast(el) {const a = morph(el, 'inset(0% 0% 0% 0% round 0px 0px 0px 0px)', 'inset(0% 7% 0% 7% round 46% 46% 6px 6px)', {filter: 'grayscale(1) brightness(.62) contrast(1.25)'}), d = deco(el, '<span class="epitaph">R.I.P.<small></small></span><i class="grass"></i>', 'is-tomb'); d.node.querySelector('small').textContent = nameOf(el) || '2026'; return () => {a(); d.end();};}},
-      {id: 'cauldron', name: T('Double, double…', 'غليان وفقاعات…'), cast(el) {const a = restyle(el, {filter: 'hue-rotate(70deg) saturate(1.3)'}), d = deco(el, '<i class="brew"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i><i class="bub"></i>', 'is-brew'); return () => {a(); d.end();};}},
       {id: 'zombie', name: T('Braaains', 'أدمغة…'), cast(el) {
         const r0 = el.getBoundingClientRect(), fx0 = rnd(.3, .7); shake(el, 8);
         return critter(el, (t, r) => {
@@ -1707,7 +1701,7 @@
   const spellable = el => {if (!el?.isConnected) return false; const r = el.getBoundingClientRect(); return r.width >= 110 && r.height >= 60 && r.top > 30 && r.bottom < innerHeight + 40 && r.left > -20 && r.right < innerWidth + 20;};
   const PACK_FX = {
     studio: {say: T('ta-da', 'تا-دا'), c: ['#FFFFFF', '#FFD34D'], eyes: 'happy'},
-    halloween: {say: T('mwahaha', 'هاهاها'), c: ['#9CFF57', '#B388FF'], eyes: 'squint'},
+    halloween: {say: T('trick!', 'خدعة!'), c: ['#FF7417', '#FFC34D', '#F2E9DA'], eyes: 'squint'},
     heaven: {say: T('sparkle!', 'لمعة!'), c: ['#FFF6C9', '#FFD76A', '#CFE6FF'], eyes: 'happy'},
     rgb: {say: 'GG EZ', c: ['#00E5FF', '#FF00D4', '#7CFF6B'], eyes: 'wide'},
     tactical: {say: T('copy that', 'عُلم'), c: ['#9BE564', '#D6FFB0'], eyes: 'squint'},
@@ -1716,7 +1710,7 @@
   };
   function wand(o, pack, up) {
     const hx = o.ox + (up ? 16 : 17), hy = o.oy + (up ? 1 : 4);
-    if (pack === 'halloween') {line(hx, hy, hx + 3, hy - 3, '#3B2A1E'); line(hx + 3, hy - 3, hx + 5, hy - 6, '#3B2A1E'); P1(hx + 5, hy - 7, frame % 2 ? '#9CFF57' : '#D6FFB0');}
+    if (pack === 'halloween') {line(hx, hy, hx + 4, hy - 5, '#F2E9DA'); for (const [dx, dy] of [[4, -6], [5, -6], [4, -7], [5, -7], [6, -6], [5, -5]]) P1(hx + dx, hy + dy, frame % 2 ? '#FF7417' : '#FFC34D');}   // a lollipop: the treat
     else if (pack === 'heaven') {line(hx, hy, hx + 4, hy - 5, '#E3B04B'); const k = frame % 2; for (const [dx, dy] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) P1(hx + 5 + dx, hy - 7 + dy, k && (dx || dy) ? '#FFF6C9' : '#FFD76A');}
     else if (pack === 'rgb') {line(hx, hy, hx + 4, hy - 5, '#1B1B22'); P1(hx + 5, hy - 6, hsl(frame * 40)); P1(hx + 4, hy - 6, hsl(frame * 40 + 120));}
     else if (pack === 'tactical') {R(hx, hy - 3, 3, 4, '#2E3326'); P1(hx + 1, hy - 3, frame % 2 ? '#FF3B3B' : '#7A1A1A');}
@@ -2060,9 +2054,6 @@
       }},
   ];
   RIDES.push(
-    {id: 'broom', who: 'both', edition: 'halloween', path: 'fly', speed: 115, board: .4, land: .5, sfx: T('whoosh', 'ووووش'),
-      draw(r, x, y, ph, p, P) {const a = ph === 'board' ? smooth(p * 2) : ph === 'land' ? 1 - smooth(p) : 1; P.legs = 'tuck'; const o = rider(x, y, 2, P); alpha(a, () => {line(x - 14, y - 1, x + 15, y - 4, '#7A4A2A'); for (let i = 0; i < 6; i++) line(x - 14, y - 1, x - 21, y - 4 + i, i % 2 ? '#D9A441' : '#B8862B');}); return o;},
-      trail(r, x, y) {if (Math.random() < .5) emit({kind: 'spark', x: x - r.dir * 20, y: y - 2 + rnd(-2, 2), vx: -r.dir * 12, life: .6, c: any(['#9CFF57', '#B388FF'])});}},
     {id: 'cloud', who: 'both', edition: 'heaven', path: 'fly', speed: 70, board: .5, land: .7, sfx: T('floating', 'طفو'),
       draw(r, x, y, ph, p, P) {const a = ph === 'board' ? smooth(p * 2) : ph === 'land' ? 1 - smooth(p) : 1; P.legs = 'tuck'; P.eyes = 'happy'; const o = rider(x, y, 3, P); alpha(a, () => {for (const [dx, dy, rr] of [[-8, -1, 4], [-2, -3, 5], [5, -2, 4], [10, 0, 3], [-12, 1, 3]]) disc(x + dx, y + dy, rr, '#FFFFFF'); for (const [dx, dy, rr] of [[-4, 2, 3], [4, 2, 3]]) disc(x + dx, y + dy, rr, '#E3ECFF');}); return o;},
       trail(r, x, y) {if (Math.random() < .35) emit({kind: 'spark', x: x - r.dir * 14, y: y + rnd(-3, 1), vx: -r.dir * 8, life: .7, c: any(['#FFF6C9', '#CFE6FF', '#FFFFFF'])});}},
