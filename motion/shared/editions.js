@@ -18,7 +18,7 @@
   const ED = [
     {id: '', name: T('Standard', 'العادي'), note: T('The studio as it is', 'الاستوديو كما هو'), sw: 'linear-gradient(135deg,#b9dacc,#0b1210)'},
     {id: 'halloween', name: T('Halloween', 'الهالوين'), note: T('Optical illusions, then a treat', 'خدع بصرية، ثم حلوى'), sw: 'linear-gradient(135deg,#ff8a1f,#3a0f5c)', font: 'Creepster'},
-    {id: 'heaven', name: T('Heaven', 'الجنة'), note: T('Cloud nine: light, doves and blessings', 'فوق السحاب: نور وحمام وبركات'), sw: 'linear-gradient(135deg,#fff3c4,#9cc2ff)', font: 'Cormorant+Garamond:wght@500;600;700'},
+    {id: 'heaven', name: T('Heaven', 'السماء'), note: T('Feathers, light and open sky', 'ريش وضوء وسماء مفتوحة'), sw: 'linear-gradient(135deg,#fff6ec,#f6c7a1)', font: 'Cormorant+Garamond:wght@500;600;700'},
     {id: 'rgb', name: T('RGB Overdrive', 'RGB بأقصى سرعة'), note: T('Gamer glow, every colour at once', 'توهج الألعاب، كل الألوان معاً'), sw: 'conic-gradient(#ff0040,#ffb300,#00ff88,#00b3ff,#a100ff,#ff0040)', font: 'Orbitron:wght@600;800'},
     {id: 'tactical', name: T('Night Ops', 'عمليات ليلية'), note: T('Night vision, scopes, classified files', 'رؤية ليلية ومناظير وملفات سرية'), sw: 'linear-gradient(135deg,#9be564,#0d140d)', font: 'Black+Ops+One'},
     {id: 'comic', name: T('Ink & Pow', 'حبر وبوم'), note: T('Halftone panels and sound effects', 'لوحات منقطة ومؤثرات صوتية'), sw: 'radial-gradient(circle at 30% 30%,#ffd400 0 38%,#e10600 40%)', font: 'Bangers'},
@@ -135,8 +135,8 @@
   @media (prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference){.ed-air *{animation:none!important}}
   /* the World chrome takes the edition's colours and display type */
   html[data-edition=halloween]{--w-accent:#ff8a1f;--w-panel:rgba(26,8,38,.6)}
-  html[data-edition=heaven]{--w-accent:#f2c14e;--w-panel:rgba(18,40,92,.5)}
-  html[data-edition=heaven] .world-header{background:linear-gradient(rgba(14,32,74,.7),transparent)}
+  html[data-edition=heaven]{--w-accent:#e9b97f;--w-panel:rgba(74,52,40,.45)}
+  html[data-edition=heaven] .world-header{background:linear-gradient(rgba(60,40,30,.42),transparent)}
   html[data-edition=rgb]{--w-accent:#00e5ff;--w-panel:rgba(10,4,24,.6)}
   html[data-edition=tactical]{--w-accent:#9be564;--w-panel:rgba(8,14,8,.66)}
   html[data-edition=comic]{--w-accent:#ffd400;--w-panel:rgba(20,24,38,.72)}
@@ -171,7 +171,7 @@
   const tape = () => {const s = ['N', '015', '030', 'NE', '060', '075', 'E', '105', '120', 'SE', '150', '165', 'S', '195', '210', 'SW', '240', '255', 'W', '285', '300', 'NW', '330', '345'].join(' · '); return `<em>${s} · ${s} · </em>`;};
   const AIR = {
     halloween: () => '<i class="fog"></i><i class="fog f2"></i><i class="moon"></i><i class="flash"></i>',
-    heaven: () => `<i class="rays"></i><i class="bank"></i>${motes(26)}`,
+    heaven: () => `<i class="bank"></i>${motes(26)}`,   // (no rays fanning from above: Heaven carries no religion, the owner 2026-10-10)
     rgb: () => '<i class="glow"></i><i class="edge"></i>',
     tactical: () => `<i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><i class="reticle"></i><span class="tape">${tape()}</span><span class="rec">● ${T('Recording', 'تسجيل')}</span>`,
     comic: () => '<i class="dots a"></i><i class="dots b"></i><i class="panel"></i>',

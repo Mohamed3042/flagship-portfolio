@@ -525,8 +525,8 @@
     const top = topOf(oy, P);
     if (ed === 'halloween' && layer === 'front' && !P.hat) S(ox + 3, top - 8, JACK, {o: '#FF7417', d: '#D4520A', g: '#5A8F2E', y: frame % 6 ? '#FFC34D' : '#FFE08A'});
     if (ed === 'heaven') {
-      if (layer === 'back') {const up = frame % 4 < 2 ? 1 : 0; alpha(.85, () => {S(ox - 4, top + 1 - up, WINGL, {w: '#EAF6FF', b: '#B9DCFF'}); S(ox + 17, top + 1 - up, WINGR, {w: '#EAF6FF', b: '#B9DCFF'});});}
-      else if (!P.hat) S(ox + 5, top - 4, ['.yyyyyy.', 'y......y', '.yyyyyy.'], {y: '#FFD76A'});
+      // little pearl wings only: no halo (Heaven carries no religion, the owner 2026-10-10)
+      if (layer === 'back') {const up = frame % 4 < 2 ? 1 : 0; alpha(.9, () => {S(ox - 4, top + 1 - up, WINGL, {w: '#FFF8F0', b: '#F0CDB4'}); S(ox + 17, top + 1 - up, WINGR, {w: '#FFF8F0', b: '#F0CDB4'});});}
     }
     if (ed === 'rgb' && layer === 'front' && !P.hat) {const c = hsl(frame * 24); headphones(ox, top, c); line(ox + 2, top + 3, ox + 5, top + 6, '#2A2A2E'); P1(ox + 6, top + 6, c);}
     if (ed === 'tactical' && layer === 'front' && !P.hat) {const g = frame % 3 ? '#9BE564' : '#D6FFB0'; S(ox, top - 3, HELMET, {h: '#4B5320', d: '#2F3414'}); R(ox + 7, top - 5, 4, 2, '#26262A'); P1(ox + 7, top - 5, g); P1(ox + 10, top - 5, g);}
@@ -654,6 +654,8 @@
   const emit = p => {if (!still && parts.length < 260) parts.push({vx: 0, vy: 0, g: 0, t: 0, life: 1, ...p});};
   const FEATHER = [['..q', '.bl', '.b.', 'b..', 'b..'], ['q..', 'lb.', '.b.', '..b', '..b'], ['qbbl'], ['.q.', '.l.', '.b.', '.b.', '.b.']];
   const FPAL = {b: '#3C3550', l: '#7464BE', q: '#CFC8E2'};
+  const HPAL = {b: '#D9AE86', l: '#FFF3E6', q: '#FFFFFF'};   // Heaven's feathers: pearl and champagne, not the crow's
+  const fpal = () => (root.dataset.edition === 'heaven' ? HPAL : FPAL);
   const feather = (x, y) => emit({kind: 'feather', x, y, ph: Math.random() * 6, life: 99});
   const dust = (x, y, n = 5) => {for (let i = 0; i < n; i++) emit({kind: 'dust', x: x + rnd(-6, 6), y: y - 1, vx: rnd(-14, 14), vy: rnd(-8, -2), life: .5 + Math.random() * .3});};
   let suckAt = null;   // the vacuum's nozzle: loose particles fly into it
@@ -684,7 +686,7 @@
         case 'spark': alpha(k, () => {P1(x, y, p.c); if (p.t % .2 < .1) for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) P1(x + dx, y + dy, p.c);}); break;
         case 'sprite': alpha(Math.min(1, k * 2.5), () => S(x, y, p.frames[(frame + (p.ph | 0)) % p.frames.length], p.pal)); break;
         case 'item': alpha(Math.min(1, (p.life - p.t) / 2), () => {S(x, y, p.art.a, p.art.p); if (p.t % 1.4 < .15) P1(x + p.art.a[0].length, y - 1, '#FFFFFF');}); break;
-        case 'feather': alpha(p.down ? clamp(1 - (p.t - p.down - 3) / 2, 0, 1) : 1, () => S(x, y, p.down ? FEATHER[2] : p.vx < -3 ? FEATHER[0] : p.vx > 3 ? FEATHER[1] : FEATHER[3], FPAL)); break;
+        case 'feather': alpha(p.down ? clamp(1 - (p.t - p.down - 3) / 2, 0, 1) : 1, () => S(x, y, p.down ? FEATHER[2] : p.vx < -3 ? FEATHER[0] : p.vx > 3 ? FEATHER[1] : FEATHER[3], fpal())); break;
       }
     }
   }
@@ -1571,14 +1573,15 @@
       }},
       {id: 'moon', name: T('Blood moon', 'قمر دموي'), cast(el) {const a = restyle(el, {filter: 'sepia(1) saturate(5) hue-rotate(-38deg) brightness(.7) contrast(1.2)'}), d = deco(el, '<i class="moon"></i><i class="fog"></i>', 'is-moon'); flock2(el, 'bat', 5); return () => {a(); d.end();};}},
     ],
-    // Heaven: the fairy blesses the work (sometimes with a cat)
+    // Heaven: feathers, light and open sky (sometimes a cat). No religion: no stained glass, no halos, no doves (the
+    // owner, 2026-10-10: "nothing about real religion or anything, just normal angelic stuff, no symbols")
     heaven: [
-      {id: 'stained', name: T('Stained glass', 'زجاج معشّق'), cast: stainedGlass},
-      {id: 'angel', name: T('Angel mode', 'وضع الملاك'), cast(el) {const float = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -8px'}, {translate: '0 0'}], {duration: 2400, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, `<i class="halo"></i><svg class="wing l" viewBox="0 0 60 92">${WING_SVG}</svg><svg class="wing r" viewBox="0 0 60 92"><g transform="translate(60 0) scale(-1 1)">${WING_SVG}</g></svg>`, 'is-angel'); return () => {float?.cancel?.(); d.end();};}},
+      {id: 'opal', name: T('Opal', 'لؤلؤي'), cast(el) {return restyle(el, {filter: 'brightness(1.07) saturate(1.15) sepia(.08)'});}},
+      {id: 'featherweight', name: T('Featherweight', 'خفيف كالريشة'), cast(el) {const float = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -8px'}, {translate: '0 0'}], {duration: 2400, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, `<svg class="wing l" viewBox="0 0 60 92">${WING_SVG}</svg><svg class="wing r" viewBox="0 0 60 92"><g transform="translate(60 0) scale(-1 1)">${WING_SVG}</g></svg>`, 'is-angel'); return () => {float?.cancel?.(); d.end();};}},
       {id: 'clouds', name: T('Cloud nine', 'فوق السحاب'), cast(el) {const a = restyle(el, {filter: 'brightness(1.08) saturate(.9)'}), d = deco(el, '<i class="c c1"></i><i class="c c2"></i><i class="c c3"></i>', 'is-cloud'); return () => {a(); d.end();};}},
       {id: 'rainbow', name: T('Rainbow!', 'قوس قزح!'), cast(el) {const d = deco(el, `<svg class="bow" viewBox="0 0 200 100">${['#ff4d4d', '#ff9f1c', '#ffe14d', '#4dd06a', '#3fa7ff', '#7a5cff'].map((c, i) => `<path d="M${10 + i * 7} 100 A ${90 - i * 7} ${90 - i * 7} 0 0 1 ${190 - i * 7} 100" stroke="${c}"/>`).join('')}</svg>`, 'is-rainbow'); return () => d.end();}},
-      {id: 'gold', name: T('Framed in gold', 'إطار من ذهب'), cast(el) {const a = restyle(el, {filter: 'brightness(1.08) saturate(1.12)'}), d = deco(el, '<i class="rays"></i><i class="frame"></i>', 'is-gold'); return () => {a(); d.end();};}},
-      {id: 'doves', name: T('Coo', 'هديل'), cast(el) {flock2(el, 'dove', 9); const a = restyle(el, {filter: 'brightness(1.15)'}); return a;}},
+      {id: 'gold', name: T('Framed in gold', 'إطار من ذهب'), cast(el) {const a = restyle(el, {filter: 'brightness(1.08) saturate(1.12)'}), d = deco(el, '<i class="frame"></i>', 'is-gold'); return () => {a(); d.end();};}},
+      {id: 'feathers', name: T('Feather drift', 'ريش يتهادى'), cast(el) {const r = el.getBoundingClientRect(); for (let i = 0; i < 9; i++) feather((r.left + Math.random() * r.width) / U, r.top / U - rnd(2, 12)); return restyle(el, {filter: 'brightness(1.08)'});}},
       {id: 'cat', name: T('A cat. Obviously.', 'قطة. طبعاً.'), cast(el) {
         const at = rnd(.25, .75);
         return critter(el, (t, r) => {
@@ -1702,7 +1705,7 @@
   const PACK_FX = {
     studio: {say: T('ta-da', 'تا-دا'), c: ['#FFFFFF', '#FFD34D'], eyes: 'happy'},
     halloween: {say: T('trick!', 'خدعة!'), c: ['#FF7417', '#FFC34D', '#F2E9DA'], eyes: 'squint'},
-    heaven: {say: T('sparkle!', 'لمعة!'), c: ['#FFF6C9', '#FFD76A', '#CFE6FF'], eyes: 'happy'},
+    heaven: {say: T('sparkle!', 'لمعة!'), c: ['#FFF6EC', '#E9B97F', '#F6C7A1'], eyes: 'happy'},
     rgb: {say: 'GG EZ', c: ['#00E5FF', '#FF00D4', '#7CFF6B'], eyes: 'wide'},
     tactical: {say: T('copy that', 'عُلم'), c: ['#9BE564', '#D6FFB0'], eyes: 'squint'},
     comic: {say: 'KAPOW!', c: ['#FFD400', '#E10600', '#FFFFFF'], eyes: 'wide'},
@@ -1711,7 +1714,7 @@
   function wand(o, pack, up) {
     const hx = o.ox + (up ? 16 : 17), hy = o.oy + (up ? 1 : 4);
     if (pack === 'halloween') {line(hx, hy, hx + 4, hy - 5, '#F2E9DA'); for (const [dx, dy] of [[4, -6], [5, -6], [4, -7], [5, -7], [6, -6], [5, -5]]) P1(hx + dx, hy + dy, frame % 2 ? '#FF7417' : '#FFC34D');}   // a lollipop: the treat
-    else if (pack === 'heaven') {line(hx, hy, hx + 4, hy - 5, '#E3B04B'); const k = frame % 2; for (const [dx, dy] of [[0, 0], [-1, 0], [1, 0], [0, -1], [0, 1]]) P1(hx + 5 + dx, hy - 7 + dy, k && (dx || dy) ? '#FFF6C9' : '#FFD76A');}
+    else if (pack === 'heaven') {line(hx, hy, hx + 4, hy - 5, '#E3B04B'); const k = frame % 2; for (const [dx, dy] of [[0, 0], [1, 0], [0, -1], [1, -1]]) P1(hx + 4 + dx, hy - 6 + dy, k ? '#FFF6EC' : '#E9B97F');}   // a round glint, never a four-point (cross) sparkle
     else if (pack === 'rgb') {line(hx, hy, hx + 4, hy - 5, '#1B1B22'); P1(hx + 5, hy - 6, hsl(frame * 40)); P1(hx + 4, hy - 6, hsl(frame * 40 + 120));}
     else if (pack === 'tactical') {R(hx, hy - 3, 3, 4, '#2E3326'); P1(hx + 1, hy - 3, frame % 2 ? '#FF3B3B' : '#7A1A1A');}
     else if (pack === 'comic') {line(hx, hy, hx + 4, hy - 5, '#F2C14E'); P1(hx + 5, hy - 6, '#111111'); P1(hx, hy, '#FF8FA3');}
@@ -2448,7 +2451,8 @@
     const ed = root.dataset.edition;
     for (const [i, v] of visitors.entries()) {
       const vx = Math.round(v.x), vy = Math.round(v.y + Math.sin(v.ph * 3) * 2);
-      if (ed === 'halloween' || ed === 'heaven') {const big = ed === 'halloween' ? SPRITES.bat : SPRITES.dove, fr = big[(frame + i) % 2], pal = critPal(ed === 'halloween' ? 'bat' : 'dove'); mirror(vx, Math.sign(v.vx), () => {for (let r2 = 0; r2 < fr.length; r2++) for (let c2 = 0; c2 < fr[r2].length; c2++) if (pal[fr[r2][c2]]) R(vx - 7 + c2 * 2, vy - 4 + r2 * 2, 2, 2, pal[fr[r2][c2]]);});}
+      if (ed === 'heaven') S(vx - 3, vy - 3, FEATHER[v.vx < 0 ? 0 : 1], HPAL);   // (Heaven's visitors drift as feathers, not doves)
+      else if (ed === 'halloween') {const big = SPRITES.bat, fr = big[(frame + i) % 2], pal = critPal('bat'); mirror(vx, Math.sign(v.vx), () => {for (let r2 = 0; r2 < fr.length; r2++) for (let c2 = 0; c2 < fr[r2].length; c2++) if (pal[fr[r2][c2]]) R(vx - 7 + c2 * 2, vy - 4 + r2 * 2, 2, 2, pal[fr[r2][c2]]);});}
       else {const P = pose(); P.armL = P.armR = ['fup', 'fmid', 'fdown', 'fmid'][(frame + i) % 4]; P.legs = 'tuck'; P.look = [Math.sign(v.vx), 0]; drawCrow(vx - 9, vy - 10, P);}
     }
     if (kind !== 'off') {
