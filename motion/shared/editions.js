@@ -76,10 +76,7 @@
   [data-site-nav][data-no-prank] .ed-pick{max-width:180px}
   [data-site-nav][data-no-prank] .ed-name{overflow:hidden;text-overflow:ellipsis}
   [data-site-nav][data-no-prank] :is(.m-language,.world-lang){white-space:nowrap;font-size:12px}
-  [data-site-nav][data-no-prank] .style-switch:has([data-style=world][aria-current]) .style-switch-thumb{transform:translateX(100%)}
-  [data-site-nav][data-no-prank] .style-switch:has([data-style=space][aria-current]) .style-switch-thumb{transform:translateX(200%)}
-  [dir=rtl] [data-site-nav][data-no-prank] .style-switch:has([data-style=world][aria-current]) .style-switch-thumb{transform:translateX(-100%)}
-  [dir=rtl] [data-site-nav][data-no-prank] .style-switch:has([data-style=space][aria-current]) .style-switch-thumb{transform:translateX(-200%)}
+  [data-site-nav][data-no-prank] .style-switch:not(:has([aria-current])) .style-switch-thumb{opacity:0}
   @media(max-width:1100px){[data-site-nav][data-no-prank] .m-brand>span,[data-site-nav][data-no-prank] .world-brand>span:not(.world-mark){display:none}}
   @media(max-width:900px){
     .m-nav[data-site-nav][data-no-prank],.world-header[data-site-nav][data-no-prank]{grid-template-columns:44px minmax(0,1fr) 44px 44px;gap:4px;padding:8px 12px}

@@ -231,15 +231,19 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   let raf = 0, dpr = 1, last = performance.now(), light = document.documentElement.dataset.siteMode === 'white' ? 1 : 0;
   const contain = s => {const r = hero?.getBoundingClientRect(); return r && s.aspect > 1.2 && r.width / Math.max(1, r.height) < 1.2 ? 1 : 0;};   // keep a wide film whole on a narrow screen
 
+  // H = the canvas's own CSS height (100vh). Phones change innerHeight as the browser bars slide while 100vh stays the
+  // large viewport, so sizing or placing by innerHeight stretched the wall and drew the screen bigger and lower than its box.
+  let H = innerHeight;
   function resize() {
     dpr = Math.min(devicePixelRatio || 1, innerWidth < 760 ? 1.5 : 1.5);
-    canvas.width = Math.round(innerWidth * dpr); canvas.height = Math.round(innerHeight * dpr);
+    H = canvas.clientHeight || innerHeight;
+    canvas.width = Math.round(innerWidth * dpr); canvas.height = Math.round(H * dpr);
     gl.viewport(0, 0, canvas.width, canvas.height);
   }
   function heroRect() {
     if (!hero) return [0, 0, 0, 0];
     const r = hero.getBoundingClientRect();
-    return [r.left / innerWidth, 1 - r.bottom / innerHeight, r.right / innerWidth, 1 - r.top / innerHeight];
+    return [r.left / innerWidth, 1 - r.bottom / H, r.right / innerWidth, 1 - r.top / H];
   }
 
   function waitReady(video, ms = 4000) {
@@ -286,7 +290,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
 
   addEventListener('pointermove', e => {
     if (e.pointerType !== 'mouse') return;
-    pointer.x = e.clientX / innerWidth; pointer.y = 1 - e.clientY / innerHeight; pointer.target = 1;
+    pointer.x = e.clientX / innerWidth; pointer.y = 1 - e.clientY / H; pointer.target = 1;
   }, {passive: true});
   document.documentElement.addEventListener('pointerleave', () => {pointer.target = 0;});
 
@@ -305,7 +309,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     gl.useProgram(roomProg);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.tex); gl.uniform1i(RU.uA, 0);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, st.tex); gl.uniform1i(RU.uB, 1);
-    gl.uniform1f(RU.uK, k < 1 ? k : 1); gl.uniform1f(RU.uStyle, style); gl.uniform1f(RU.uScroll, scrollY / innerHeight * .22);
+    gl.uniform1f(RU.uK, k < 1 ? k : 1); gl.uniform1f(RU.uStyle, style); gl.uniform1f(RU.uScroll, scrollY / H * .22);
     gl.uniform1f(RU.uVaA, A.aspect); gl.uniform1f(RU.uVaB, st.aspect);
     gl.uniform1f(RU.uFitA, contain(A)); gl.uniform1f(RU.uFitB, contain(st));
     gl.uniform1f(RU.uTime, t); gl.uniform1f(RU.uPtrOn, pointer.on); gl.uniform1f(RU.uLive, live && st.ready ? 1 : 0);
