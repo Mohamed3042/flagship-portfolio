@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><script src="../motion/shared/arcade-loader.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pop &amp; Ship — a 90-second cartoon · Mohamed Mahmoud</title>
+<meta name="description" content="Pop, an original sponge in a hard hat, ships eight real projects in 90 seconds and meets one optical illusion per episode. A cartoon by Mohamed Mahmoud, AI &amp; Automation Engineer.">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Pop &amp; Ship — a 90-second cartoon">
+<meta property="og:description" content="Eight real projects, eight optical illusions, one sponge in a hard hat.">
+<meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/worlds/pop-and-ship/poster.jpg">
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%23090B10"/><rect x="8" y="9" width="16" height="15" rx="4" fill="%23FF5CA8"/><rect x="8" y="19" width="16" height="5" rx="2" fill="%2340E8A0"/><path d="M9 9a7 6 0 0 1 14 0z" fill="%23F6C531"/></svg>'>
+<link rel="stylesheet" href="cinema.css?v=4">
+<style>
+  :root{
+    --w-bg:#090B10; --w-ink:#EFEAE0; --w-accent:#F6C531; --w-pink:#FF5CA8; --w-mint:#40E8A0; --w-dim:#9a9eaf;
+    --w-display:"Iowan Old Style",Palatino,"Book Antiqua",Georgia,serif;
+    --w-body:Georgia,serif;
+    --w-ui:ui-sans-serif,system-ui,"Segoe UI",sans-serif;
+    --grade-a:rgba(6,8,14,.45); --grade-b:rgba(23,27,40,.25); --grain:.2;
+  }
+  body{ background:radial-gradient(90% 50% at 50% -6%, #1b2230 0%, transparent 62%), var(--w-bg); }
+  .page.tail{ padding-top:0; }
+  .page{ max-width:1180px; margin:0 auto; padding:clamp(84px,14vh,140px) clamp(16px,5vw,44px) 40px; }
+
+  .marquee{ display:inline-flex; align-items:center; gap:12px; margin-bottom:18px; border:1px solid rgba(246,197,49,.4);
+    border-radius:999px; padding:10px 18px; background:linear-gradient(180deg, rgba(246,197,49,.08), transparent); }
+  .marquee b{ font:700 11px/1 var(--w-ui); letter-spacing:.28em; text-transform:uppercase; color:var(--w-accent); }
+  .marquee s{ text-decoration:none; font:600 11px/1 var(--w-ui); letter-spacing:.18em; text-transform:uppercase; color:var(--w-dim); }
+  h1{ font:700 clamp(44px,8vw,96px)/1 var(--w-display); margin:4px 0 14px; text-wrap:balance; }
+  h1 em{ font-style:normal; color:var(--w-pink); }
+  .lede{ max-width:64ch; font-size:clamp(16px,1.8vw,19px); line-height:1.65; color:color-mix(in srgb, var(--w-ink) 82%, transparent); }
+
+  /* the scroll theatre: a pinned stage; the page's scroll is the film's playhead */
+  html{ scroll-behavior:auto; }   /* cinema.css sets smooth; the page follows the playhead and must not animate */
+  .grain,.grade{ display:none; }
+  .theatre{ position:relative; margin-top:clamp(24px,4vh,40px); }
+  .theatre .stage{ position:relative; background:#05060a; border:1px solid rgba(246,197,49,.28); border-radius:16px; overflow:hidden; }
+  .theatre .stage{ display:grid; }
+  .theatre video{ display:block; width:100%; aspect-ratio:16/9; background:#000; grid-area:1/1; }
+  .theatre [data-scrub]{ display:none; }
+  .theatre.scrub [data-scrub]{ display:block; }
+  .theatre.scrub [data-soundvideo]{ visibility:hidden; }
+  .theatre.scrub.sound [data-soundvideo]{ visibility:visible; }
+  .theatre.scrub.sound [data-scrub]{ visibility:hidden; }
+  .theatre:not(.scrub){ max-width:1180px; margin:clamp(24px,4vh,40px) auto 0; padding:0 clamp(16px,5vw,44px); }
+  .theatre.scrub{ height:calc(100vh + var(--run,90000px)); margin-top:0; }
+  .theatre.scrub .stage{ position:sticky; top:0; height:100vh; border:0; border-radius:0; place-items:center; }
+  @supports (height:100svh){ .theatre.scrub{ height:calc(100svh + var(--run,90000px)); } .theatre.scrub .stage{ height:100svh; } }
+  .theatre.scrub video{ width:min(100%, calc(100vh * 16 / 9)); max-height:100%; }
+  .hud{ position:absolute; inset:auto 0 0 0; z-index:2; padding:46px clamp(14px,3vw,34px) clamp(14px,2.4vh,26px);
+    background:linear-gradient(to top, rgba(5,6,10,.92), rgba(5,6,10,0)); pointer-events:none; display:none; }
+  .theatre.scrub .hud{ display:block; }
+  .hud .row{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:10px; }
+  .hud .ep{ font:700 clamp(15px,2vw,20px)/1.2 var(--w-display); color:var(--w-ink); }
+  .hud .ep i{ font:700 11px/1 var(--w-ui); font-style:normal; letter-spacing:.2em; color:var(--w-pink); margin-inline-end:10px; }
+  .hud .tc{ font:600 13px/1 var(--w-ui); letter-spacing:.12em; color:var(--w-dim); font-variant-numeric:tabular-nums; }
+  .hud .bar{ height:4px; border-radius:2px; background:rgba(239,234,224,.16); overflow:hidden; }
+  .hud .bar b{ display:block; height:100%; width:100%; transform-origin:0 50%; transform:scaleX(var(--f,0)); background:var(--w-accent); }
+  [dir=rtl] .hud .bar b{ transform-origin:100% 50%; }
+  .hud button{ pointer-events:auto; font:700 12px/1 var(--w-ui); letter-spacing:.14em; text-transform:uppercase; color:var(--w-ink);
+    background:rgba(5,6,10,.7); border:1px solid rgba(239,234,224,.34); border-radius:999px; padding:11px 16px; cursor:pointer; min-height:44px; }
+  .hud button:hover{ border-color:var(--w-accent); color:var(--w-accent); }
+  .cue{ position:absolute; z-index:2; inset:0 0 auto 0; padding:clamp(70px,12vh,110px) 16px 0; text-align:center; pointer-events:none;
+    font:700 clamp(13px,1.6vw,16px)/1.5 var(--w-ui); letter-spacing:.2em; text-transform:uppercase; color:var(--w-ink);
+    text-shadow:0 2px 14px rgba(0,0,0,.9); transition:opacity .5s; display:none; }
+  .theatre.scrub .cue{ display:block; }
+  .theatre.started .cue{ opacity:0; }
+  .theatre.plain .hud, .theatre.plain .cue{ display:none; }
+  .facts{ display:flex; flex-wrap:wrap; gap:8px 22px; margin:14px 2px 0; font:600 12px/1.4 var(--w-ui); letter-spacing:.1em;
+    text-transform:uppercase; color:var(--w-dim); }
+  .facts i{ font-style:normal; color:var(--w-accent); }
+
+  h2.sec{ font:700 clamp(26px,3.4vw,40px)/1.1 var(--w-display); margin:clamp(40px,7vh,72px) 0 8px; }
+  .sec-note{ max-width:66ch; color:color-mix(in srgb, var(--w-ink) 70%, transparent); line-height:1.65; margin:0 0 20px; }
+
+  .eps{ display:grid; gap:clamp(14px,2vw,20px); grid-template-columns:repeat(auto-fill, minmax(min(260px,100%), 1fr)); list-style:none; padding:0; margin:0; }
+  .ep{ border:1px solid rgba(239,234,224,.14); border-radius:14px; overflow:hidden; background:#0d1017; display:flex; flex-direction:column; }
+  .ep img{ display:block; width:100%; aspect-ratio:16/9; object-fit:cover; background:#151a24; }
+  .ep .b{ padding:14px 16px 16px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .ep .no{ font:700 10.5px/1 var(--w-ui); letter-spacing:.22em; color:var(--w-pink); }
+  .ep h3{ font:700 20px/1.15 var(--w-display); margin:2px 0 0; }
+  .ep p{ margin:0; font-size:14px; line-height:1.55; color:color-mix(in srgb, var(--w-ink) 72%, transparent); }
+  .ep .stat{ margin-top:auto; padding-top:10px; display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    border-top:1px solid rgba(239,234,224,.1); font:600 11px/1.3 var(--w-ui); letter-spacing:.1em; text-transform:uppercase; color:var(--w-dim); }
+  .ep .stat b{ font:700 18px/1 var(--w-display); letter-spacing:0; text-transform:none; color:var(--w-mint); white-space:nowrap; }
+  .ep b{ color:var(--w-accent); font-weight:700; }
+
+  .honest{ margin-top:clamp(36px,6vh,56px); padding:18px 20px; border:1px solid rgba(239,234,224,.14); border-radius:14px;
+    background:rgba(255,255,255,.03); max-width:80ch; line-height:1.65; font-size:15px; color:color-mix(in srgb, var(--w-ink) 78%, transparent); }
+  footer.disclosure{ max-width:900px; margin:34px auto 0; padding:0 18px 40px; text-align:center; font-size:12px; line-height:1.6; color:var(--w-dim); }
+  .back{ display:inline-block; margin-top:28px; color:var(--w-accent); text-decoration:none; font:600 13px/1 var(--w-ui); letter-spacing:.1em; }
+  [dir=rtl] .ep .stat{ flex-direction:row-reverse; }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="grade" aria-hidden="true"></div>
+
+<nav class="chrome" aria-label="Page chrome">
+  <div class="grp">
+    <a href="index.html"><span class="L en">◂ The Worlds</span><span class="L ar">◂ العوالم</span></a>
+    <a href="../"><span class="L en">Portfolio</span><span class="L ar">الموقع</span></a>
+  </div>
+  <div class="grp">
+    <button type="button" data-lang-toggle aria-label="Language">EN / ع</button>
+  </div>
+</nav>
+
+<main>
+<div class="page">
+  <header>
+    <p class="marquee"><b><span class="L en">Mohamed Mahmoud Pictures</span><span class="L ar">استوديو محمد محمود</span></b><s><span class="L en">Original cartoon</span><span class="L ar">كرتون أصلي</span></s></p>
+    <h1>Pop <em>&amp;</em> Ship</h1>
+    <p class="lede"><span class="L en">A 90-second cartoon about eight real projects. Pop, an original pink sponge in a yellow hard hat, ships them one by one, and every episode fools your eyes with a real optical illusion before it shows you the proof. Scroll to play it four times slower, about six minutes at a steady pace, or press play with sound for the normal speed.</span><span class="L ar">كرتون مدته ٩٠ ثانية عن ثمانية مشاريع حقيقية. «بوب»، إسفنجة وردية أصلية بخوذة صفراء، يسلّمها واحداً تلو الآخر، وفي كل حلقة تخدع عينيك خدعة بصرية حقيقية قبل أن تُعرض الأدلة. مرّر لتشغّله أبطأ بأربع مرات، نحو ست دقائق بوتيرة ثابتة، أو اضغط التشغيل بالصوت للسرعة العادية.</span></p>
+  </header>
+
+</div>
+
+  <section class="theatre" data-theatre aria-label="Pop &amp; Ship, scroll to play">
+    <div class="stage">
+      <video data-soundvideo controls playsinline preload="none" poster="pop-and-ship/poster.jpg" data-src="pop-and-ship/sound.mp4" src="pop-and-ship/sound.mp4" aria-label="Pop &amp; Ship, 90 seconds"></video>
+      <video data-scrub muted playsinline preload="metadata" poster="pop-and-ship/poster.jpg" aria-hidden="true"><source src="pop-and-ship/slow.mp4" type="video/mp4"></video>
+      <p class="cue"><span class="L en">Scroll slowly ↓ the film plays at your pace</span><span class="L ar">مرّر ببطء ↓ الفيلم يسير بإيقاعك</span></p>
+      <div class="hud">
+        <div class="row">
+          <div class="ep"><i data-ep-no>S01</i><span data-ep-title>Pop &amp; Ship</span></div>
+          <button type="button" data-sound><span class="L en">▶ Play with sound</span><span class="L ar">▶ شغّل بالصوت</span></button>
+          <div class="tc" data-tc>0:00 / 1:30</div>
+        </div>
+        <div class="bar" role="progressbar" aria-label="Film progress" aria-valuemin="0" aria-valuemax="90" aria-valuenow="0"><b></b></div>
+      </div>
+    </div>
+  </section>
+<div class="page tail">
+  <p class="facts">
+    <span><i>90</i> <span class="L en">seconds</span><span class="L ar">ثانية</span></span>
+    <span><i>8</i> <span class="L en">episodes</span><span class="L ar">حلقات</span></span>
+    <span><i>8</i> <span class="L en">optical illusions</span><span class="L ar">خدع بصرية</span></span>
+    <span><span class="L en">English · 60 fps with sound · slow mode 240 fps</span><span class="L ar">بالإنجليزية · ٦٠ إطاراً مع الصوت · الوضع البطيء ٢٤٠ إطاراً</span></span>
+  </p>
+
+  <h2 class="sec"><span class="L en">The eight episodes</span><span class="L ar">الحلقات الثماني</span></h2>
+  <p class="sec-note"><span class="L en">Each episode is one project from the site, one illusion, and one number the project can show.</span><span class="L ar">كل حلقة هي مشروع من الموقع، وخدعة بصرية، ورقم واحد يستطيع المشروع إثباته.</span></p>
+
+  <ol class="eps">
+    <li class="ep"><img src="pop-and-ship/heroes/askrepos.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E01</span><h3>Show Your Work</h3>
+      <p><b class="L en">ask-repos</b><b class="L ar">ask-repos</b> · <span class="L en">Müller-Lyer lines</span><span class="L ar">خطوط مولر-لاير</span></p>
+      <div class="stat"><span class="L en">answers with a citation</span><span class="L ar">إجابات بمصدر</span><b>169/169</b></div></div></li>
+    <li class="ep"><img src="pop-and-ship/heroes/templates.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E02</span><h3>Sign Here</h3>
+      <p><b class="L en">AI Automation Templates</b><b class="L ar">AI Automation Templates</b> · <span class="L en">scintillating grid</span><span class="L ar">الشبكة المتلألئة</span></p>
+      <div class="stat"><span class="L en">checks passing</span><span class="L ar">فحوصات ناجحة</span><b>61/61</b></div></div></li>
+    <li class="ep"><img src="pop-and-ship/heroes/relayops.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E03</span><h3>No Event Left Behind</h3>
+      <p><b class="L en">RelayOps</b><b class="L ar">RelayOps</b> · <span class="L en">lilac chaser</span><span class="L ar">مطارد الليلك</span></p>
+      <div class="stat"><span class="L en">tests</span><span class="L ar">اختبارات</span><b>121</b></div></div></li>
+    <li class="ep"><img src="pop-and-ship/heroes/petpoint.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E04</span><h3>Losers Get Leaderboards Too</h3>
+      <p><b class="L en">PetPoint Ops Hub</b><b class="L ar">PetPoint Ops Hub</b> · <span class="L en">Ebbinghaus circles</span><span class="L ar">دوائر إبنغهاوس</span></p>
+      <div class="stat"><span class="L en">the rejected model</span><span class="L ar">النموذج المرفوض</span><b>p = 0.196</b></div></div></li>
+    <li class="ep"><img src="pop-and-ship/heroes/cake.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E05</span><h3>Mind the Millimetre</h3>
+      <p><b class="L en">Cake Studio</b><b class="L ar">Cake Studio</b> · <span class="L en">Ponzo railway</span><span class="L ar">سكة بونزو</span></p>
+      <div class="stat"><span class="L en">tests</span><span class="L ar">اختبارات</span><b>588</b></div></div></li>
+    <li class="ep"><img src="pop-and-ship/heroes/box.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E06</span><h3>One Box, One Face</h3>
+      <p><b class="L en">Box Studio</b><b class="L ar">Box Studio</b> · <span class="L en">Necker cube</span><span class="L ar">مكعب نيكر</span></p>
+      <div class="stat"><span class="L en">orientation checks</span><span class="L ar">فحوصات الاتجاه</span><b>39/39</b></div></div></li>
+    <li class="ep"><img src="pop-and-ship/heroes/sheep.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E07</span><h3>Counting Sheep, Legally</h3>
+      <p><b class="L en">Sheep Business Management</b><b class="L ar">Sheep Business Management</b> · <span class="L en">the hidden sheep</span><span class="L ar">الخروف المخفي</span></p>
+      <div class="stat"><span class="L en">measured tasks</span><span class="L ar">مهام مقيسة</span><b>18/18</b></div></div></li>
+    <li class="ep"><img src="pop-and-ship/heroes/spaceframe.webp" alt="" loading="lazy" width="640" height="360"><div class="b">
+      <span class="no">S01E08</span><h3>Some Assembly Required</h3>
+      <p><b class="L en">Spaceframe World</b><b class="L ar">Spaceframe World</b> · <span class="L en">Penrose triangle</span><span class="L ar">مثلث بنروز</span></p>
+      <div class="stat"><span class="L en">tests at release</span><span class="L ar">اختبارات عند الإصدار</span><b>325</b></div></div></li>
+  </ol>
+
+  <p class="honest"><span class="L en">Pop is an original character. Every number in the film comes from the same project data this site is built on. The builds are AI-assisted: specified, reviewed and verified by Mohamed. The picture is made in code and the sound is synthesised, so there are no third-party clips or music.</span><span class="L ar">«بوب» شخصية أصلية. كل رقم في الفيلم مأخوذ من بيانات المشاريع نفسها التي بُني عليها هذا الموقع. المشاريع مبنية بمساعدة الذكاء الاصطناعي: حدّدها وراجعها وتحقّق منها محمد. الصورة مصنوعة بالكود والصوت مُركَّب، فلا مقاطع ولا موسيقى من طرف ثالث.</span></p>
+
+  <a class="back" href="index.html"><span class="L en">◂ Back to The Worlds</span><span class="L ar">◂ العودة إلى العوالم</span></a>
+</div>
+</main>
+
+<footer class="disclosure">
+  <p><span class="L en">Original cartoon for Mohamed Mahmoud's portfolio. No affiliation with any company or character; no third-party marks.</span><span class="L ar">كرتون أصلي لملف أعمال محمد محمود. لا انتساب لأي شركة أو شخصية؛ ولا علامات تجارية لأطراف ثالثة.</span></p>
+</footer>
+
+<script src="cinema.js?v=6"></script>
+<script>
+/* Scroll-paced playback. The page's scroll position sets a TARGET time; the video plays toward it at a capped speed,
+   so the film is never faster than MAX_RATE x real time (4x slower: 6 min at the cap) and runs slower when you scroll slower.
+   Backward scroll seeks. "Play with sound" hands the playhead back to normal playback and the page follows it.
+   Tuning knobs: RUN (px of scroll for the whole film), MAX_RATE, MIN_RATE, K (catch-up gain), JUMP (s: seek instead of play). */
+(() => {
+  'use strict';
+  const th = document.querySelector('[data-theatre]'); if (!th) return;
+  const v = th.querySelector('[data-scrub]'), sv = th.querySelector('[data-soundvideo]'), btn = th.querySelector('[data-sound]');
+  const tcEl = th.querySelector('[data-tc]'), epNo = th.querySelector('[data-ep-no]'), epTitle = th.querySelector('[data-ep-title]');
+  const bar = th.querySelector('.bar'), fill = bar.querySelector('b');
+  const RUN = 90000, MAX_RATE = 0.25, MIN_RATE = 0.1, K = 4, JUMP = 30;
+  const EPS = [[0, '', 'Pop & Ship'], [4, 'S01E01', 'Show Your Work'], [14, 'S01E02', 'Sign Here'], [24, 'S01E03', 'No Event Left Behind'],
+    [34, 'S01E04', 'Losers Get Leaderboards Too'], [44, 'S01E05', 'Mind the Millimetre'], [54, 'S01E06', 'One Box, One Face'],
+    [64, 'S01E07', 'Counting Sheep, Legally'], [74, 'S01E08', 'Some Assembly Required'], [84, 'S01', 'The End']];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) { th.classList.add('plain'); v.remove(); return; }   // the sound video with native controls, no pinning
+  th.classList.add('scrub'); th.style.setProperty('--run', RUN + 'px');
+  sv.removeAttribute('controls'); sv.removeAttribute('src'); sv.preload = 'none'; v.muted = true;   // sound.mp4 loads only on "Play with sound"
+  const now = () => (mode === 'sound' ? sv.currentTime : v.currentTime);
+  let dur = 90, ready = false, seeking = false, mode = 'scroll', lastEp = -1, lastSec = -1;
+  const fmt = t => Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
+  const label = t => { let i = 0; while (i + 1 < EPS.length && t >= EPS[i + 1][0]) i++; return i; };
+  const paint = () => {
+    const t = now(), sec = Math.floor(t);
+    if (sec !== lastSec) {
+      lastSec = sec; tcEl.textContent = fmt(t) + ' / ' + fmt(dur);
+      bar.setAttribute('aria-valuenow', String(sec));
+    }
+    fill.style.setProperty('--f', (t / dur).toFixed(4));
+    const i = label(t);
+    if (i !== lastEp) { lastEp = i; epNo.textContent = EPS[i][1]; epTitle.textContent = EPS[i][2]; }
+  };
+  const geom = () => { const r = th.getBoundingClientRect(); const span = Math.max(1, r.height - innerHeight); return { r, span, p: Math.min(1, Math.max(0, -r.top / span)) }; };
+  const onMeta = () => { if (ready) return; dur = v.duration || 90; ready = true; try { v.currentTime = 0.001; } catch (e) {} };
+  v.addEventListener('loadedmetadata', onMeta); if (v.readyState >= 1) onMeta();   // the event may already have fired
+  v.addEventListener('seeked', () => { seeking = false; });
+  sv.addEventListener('ended', () => { if (mode === 'sound') leaveSound(); });
+  const enterSound = () => {
+    mode = 'sound'; th.classList.add('started', 'sound');
+    const t0 = v.currentTime; v.pause();
+    const go = () => { try { sv.currentTime = Math.min(t0, (sv.duration || dur) - 0.05); } catch (e) {} sv.muted = false; sv.playbackRate = 1; sv.play().catch(() => leaveSound()); };
+    if (!sv.getAttribute('src')) { sv.src = sv.dataset.src; sv.load(); }
+    if (sv.readyState >= 1) go(); else sv.addEventListener('loadedmetadata', go, { once: true });
+    btn.querySelector('.en').textContent = '⏸ Back to scroll'; btn.querySelector('.ar').textContent = '⏸ العودة للتمرير';
+  };
+  const leaveSound = () => {
+    const t = sv.currentTime; sv.pause(); sv.muted = true; th.classList.remove('sound'); mode = 'scroll';
+    try { v.currentTime = Math.min(t, dur - 0.05); } catch (e) {}
+    btn.querySelector('.en').textContent = '▶ Play with sound'; btn.querySelector('.ar').textContent = '▶ شغّل بالصوت';
+  };
+  btn.addEventListener('click', () => (mode === 'sound' ? leaveSound() : enterSound()));
+  const intent = e => { if (mode === 'sound' && !(e.target && e.target.closest && e.target.closest('[data-sound]'))) leaveSound(); };
+  addEventListener('wheel', intent, { passive: true });
+  addEventListener('touchstart', intent, { passive: true });
+  addEventListener('keydown', e => { if (/^(Arrow|Page|Home|End| )/.test(e.key)) intent(e); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { v.pause(); if (mode === 'sound') leaveSound(); } });
+  const tick = () => {
+    requestAnimationFrame(tick);
+    if (!ready || document.hidden) return;
+    const { r, span, p } = geom();
+    if (r.bottom < -innerHeight || r.top > innerHeight * 1.5) { if (!v.paused && mode === 'scroll') v.pause(); return; }
+    if (mode === 'sound') {
+      const y = scrollY + r.top + (sv.currentTime / dur) * span;     // the page follows the playhead
+      if (Math.abs(scrollY - y) > 1) scrollTo({ top: y, behavior: 'instant' });
+      paint(); return;
+    }
+    if (p > 0.004) th.classList.add('started');
+    const tgt = p * dur, e = tgt - v.currentTime;
+    if (e > JUMP || e < -0.06) {                                   // a jump or any backward move: scrub by seeking
+      if (!seeking) { seeking = true; v.pause(); try { v.currentTime = Math.min(dur - 0.05, Math.max(0, tgt)); } catch (x) { seeking = false; } }
+    } else if (e > 0.02) {                                         // ahead of the playhead: play toward it, never faster than MAX_RATE
+      const rate = Math.min(MAX_RATE, Math.max(MIN_RATE, e * K));
+      if (Math.abs(v.playbackRate - rate) > 0.02) v.playbackRate = rate;
+      if (v.paused && !seeking) v.play().catch(() => {});
+    } else if (!v.paused) v.pause();
+    paint();
+  };
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
