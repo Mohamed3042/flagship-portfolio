@@ -123,6 +123,7 @@
     if (still || root.classList.contains('world-failed')) release();
   }
   addEventListener('world:surge', () => open(true));
+  addEventListener('world:open', () => {open(false); release();});   // a World with no glass to hand over to (Pop & Ship's film): fade out, page free
   addEventListener('world:intro', e => {if (!e.detail && gone) release();});   // the opening is over: the page is yours
   const born = performance.now();
   (function wait() {

@@ -292,7 +292,7 @@
       </div>
     </a>
 
-<a class="card feature" href="pop-and-ship.html" style="--wc:#FF5CA8">
+<a class="card feature" href="../en/pop-and-ship/" data-pop-world style="--wc:#FF5CA8">
       <span class="badge"><span class="L en">Scroll the film · 90-second cartoon</span><span class="L ar">حرّك الفيلم · كرتون ٩٠ ثانية</span></span>
       <div class="art"><img src="pop-and-ship/card.webp" alt="" loading="lazy" decoding="async" width="800" height="450"><div class="shade"></div></div>
       <div class="pal"><i style="background:#3EC7E8"></i><i style="background:#FF5CA8"></i><i style="background:#F6C531"></i><i style="background:#40E8A0"></i><i style="background:#1B1630"></i></div>
@@ -457,6 +457,10 @@
   document.querySelector('[data-ess-world]').addEventListener('click', function () {
     this.href = document.documentElement.lang === 'ar' || document.body.classList.contains('lang-ar')
       ? '../motion/ess/?lang=ar' : '../motion/ess/?lang=en';
+  });
+  document.querySelector('[data-pop-world]').addEventListener('click', function () {   // Pop & Ship is a page of the World family now
+    this.href = document.documentElement.lang === 'ar' || document.body.classList.contains('lang-ar')
+      ? '../ar/pop-and-ship/' : '../en/pop-and-ship/';
   });
 </script>
 <script>document.querySelector('[data-motion-home]').addEventListener('click',function(){this.href='../'+(document.documentElement.lang==='ar'?'ar':'en')+'/motion/'});</script>
