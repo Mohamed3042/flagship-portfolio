@@ -1,0 +1,314 @@
+{
+  "version": 1,
+  "updated": "2026-10-25T21:00:00Z",
+  "lead": {
+    "en": "mohamed-mahmoud-solution-machine-extended-v2-2",
+    "ar": "mohamed-mahmoud-solution-machine-extended-ar-v2-2"
+  },
+  "items": {
+    "mohamed-mahmoud-solution-machine-extended-v2-2": {
+      "kind": "film",
+      "lang": "en",
+      "dir": "ltr",
+      "name": "Solution Machine: The Film",
+      "line": "Problem in, solution out: drawings, farms, voices, careers, films and one OS, all from one machine.",
+      "accent": "#ffb340",
+      "seconds": 78,
+      "version": "2.2",
+      "card": "program/mohamed-mahmoud-solution-machine-extended-v2-2/poster-c8ad3171.jpg",
+      "film": "program/mohamed-mahmoud-solution-machine-extended-v2-2/film-baeee543.mp4",
+      "filmTall": "program/mohamed-mahmoud-solution-machine-extended-v2-2/film-tall-31eb8bfc.mp4",
+      "chapters": [
+        {
+          "id": "knot",
+          "start": 0.0,
+          "title": "Tangle → Line"
+        },
+        {
+          "id": "gate",
+          "start": 3.0,
+          "title": "Problem → Solution"
+        },
+        {
+          "id": "dxf",
+          "start": 6.0,
+          "title": "Sketch → DXF"
+        },
+        {
+          "id": "facade",
+          "start": 9.0,
+          "title": "Facade → Access"
+        },
+        {
+          "id": "sheep",
+          "start": 15.0,
+          "title": "Herd → Records"
+        },
+        {
+          "id": "greens",
+          "start": 18.0,
+          "title": "Seeds → Greens"
+        },
+        {
+          "id": "palms",
+          "start": 21.0,
+          "title": "Sand → Palms"
+        },
+        {
+          "id": "voice",
+          "start": 24.0,
+          "title": "Noise → Voice"
+        },
+        {
+          "id": "tones",
+          "start": 27.0,
+          "title": "Silence → Tones"
+        },
+        {
+          "id": "atlas",
+          "start": 30.0,
+          "title": "Careers → Atlas"
+        },
+        {
+          "id": "orbit",
+          "start": 33.0,
+          "title": "Jobs → Orbit"
+        },
+        {
+          "id": "apps",
+          "start": 36.0,
+          "title": "Ideas → 15 apps"
+        },
+        {
+          "id": "films",
+          "start": 42.0,
+          "title": "Apps → Films"
+        },
+        {
+          "id": "cinema",
+          "start": 45.0,
+          "title": "Folders → Cinema"
+        },
+        {
+          "id": "store",
+          "start": 48.0,
+          "title": "Chats → Store"
+        },
+        {
+          "id": "branches",
+          "start": 51.0,
+          "title": "Silos → One OS"
+        },
+        {
+          "id": "leads",
+          "start": 57.0,
+          "title": "Leads → Customers"
+        },
+        {
+          "id": "night",
+          "start": 60.0,
+          "title": "Built while I sleep"
+        },
+        {
+          "id": "flagship",
+          "start": 66.0,
+          "title": "CV → Portfolio"
+        },
+        {
+          "id": "end",
+          "start": 72.0,
+          "title": "Maker of the MK series"
+        }
+      ],
+      "cuts": [
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0030-9c691f51.mp4",
+          "label": "Problem → Solution",
+          "chapter": 2,
+          "start": 3.0,
+          "end": 8.0
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0150-eb3fd909.mp4",
+          "label": "Herd → Records",
+          "chapter": 5,
+          "start": 15.0,
+          "end": 20.0
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0355-e3b063fb.mp4",
+          "label": "Ideas → 15 apps",
+          "chapter": 12,
+          "start": 35.5,
+          "end": 40.5
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0410-633121da.mp4",
+          "label": "Apps → Films",
+          "chapter": 13,
+          "start": 41.0,
+          "end": 46.0
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0665-0cf039e8.mp4",
+          "label": "CV → Portfolio",
+          "chapter": 19,
+          "start": 66.5,
+          "end": 71.5
+        }
+      ]
+    },
+    "mohamed-mahmoud-solution-machine-extended-ar-v2-2": {
+      "kind": "film",
+      "lang": "ar",
+      "dir": "rtl",
+      "name": "آلة الحلول: الفيلم",
+      "line": "مشكلة تدخل وحلّ يخرج: رسومات ومزارع وأصوات ووظائف وأفلام ونظام واحد، كلها من آلة واحدة.",
+      "accent": "#ffb340",
+      "seconds": 78,
+      "version": "2.2",
+      "card": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/poster-7d0b0639.jpg",
+      "film": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/film-448c78c7.mp4",
+      "filmTall": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/film-tall-4fe51c63.mp4",
+      "chapters": [
+        {
+          "id": "knot",
+          "start": 0.0,
+          "title": "عقدة ← خط مستقيم"
+        },
+        {
+          "id": "gate",
+          "start": 3.0,
+          "title": "مشكلة ← حل"
+        },
+        {
+          "id": "dxf",
+          "start": 6.0,
+          "title": "كروكي ← DXF"
+        },
+        {
+          "id": "facade",
+          "start": 9.0,
+          "title": "واجهة ← وصول"
+        },
+        {
+          "id": "sheep",
+          "start": 15.0,
+          "title": "قطيع ← سجلات"
+        },
+        {
+          "id": "greens",
+          "start": 18.0,
+          "title": "بذور ← خضار"
+        },
+        {
+          "id": "palms",
+          "start": 21.0,
+          "title": "رمل ← نخيل"
+        },
+        {
+          "id": "voice",
+          "start": 24.0,
+          "title": "ضجيج ← صوت"
+        },
+        {
+          "id": "tones",
+          "start": 27.0,
+          "title": "صمت ← نغمات"
+        },
+        {
+          "id": "atlas",
+          "start": 30.0,
+          "title": "مهن ← أطلس"
+        },
+        {
+          "id": "orbit",
+          "start": 33.0,
+          "title": "وظائف ← مدار"
+        },
+        {
+          "id": "apps",
+          "start": 36.0,
+          "title": "أفكار ← 15 تطبيق"
+        },
+        {
+          "id": "films",
+          "start": 42.0,
+          "title": "تطبيقات ← أفلام"
+        },
+        {
+          "id": "cinema",
+          "start": 45.0,
+          "title": "مجلدات ← سينما"
+        },
+        {
+          "id": "store",
+          "start": 48.0,
+          "title": "محادثات ← متجر"
+        },
+        {
+          "id": "branches",
+          "start": 51.0,
+          "title": "تشتت ← نظام واحد"
+        },
+        {
+          "id": "leads",
+          "start": 57.0,
+          "title": "استفسارات ← عملاء"
+        },
+        {
+          "id": "night",
+          "start": 60.0,
+          "title": "بيتبني وأنا نايم"
+        },
+        {
+          "id": "flagship",
+          "start": 66.0,
+          "title": "سيرة ذاتية ← معرض أعمال"
+        },
+        {
+          "id": "end",
+          "start": 72.0,
+          "title": "صانع سلسلة ام كي"
+        }
+      ],
+      "cuts": [
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0030-2c1a53bc.mp4",
+          "label": "مشكلة ← حل",
+          "chapter": 2,
+          "start": 3.0,
+          "end": 8.0
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0150-cdf164e5.mp4",
+          "label": "قطيع ← سجلات",
+          "chapter": 5,
+          "start": 15.0,
+          "end": 20.0
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0355-88bcbf88.mp4",
+          "label": "أفكار ← 15 تطبيق",
+          "chapter": 12,
+          "start": 35.5,
+          "end": 40.5
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0410-c2c48718.mp4",
+          "label": "تطبيقات ← أفلام",
+          "chapter": 13,
+          "start": 41.0,
+          "end": 46.0
+        },
+        {
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0665-c422735b.mp4",
+          "label": "سيرة ذاتية ← معرض أعمال",
+          "chapter": 19,
+          "start": 66.5,
+          "end": 71.5
+        }
+      ]
+    }
+  }
+}
