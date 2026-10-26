@@ -1,0 +1,231 @@
+name: Program
+
+# Changes the featured film on the portfolio when the PC is off. This file lives in TWO places:
+#   - here, tools/cuts/github/program.yml in the private library: the canonical copy, guarded by tools/cuts/test_workflow.py;
+#   - .github/workflows/program.yml on the gh-pages branch of the PUBLIC Mohamed3042/flagship-portfolio, which is where it runs
+#     (public repositories run Actions for free). When this file changes, copy it there (tools/cuts/README.md, "From GitHub").
+#
+#  1. The GitHub copy of MK Launcher opens github.com on a new file program-requests/<stamp>.json of the portfolio's gh-pages
+#     branch with the pick filled in; tapping "Commit changes" is the request. That push (or "Run workflow") starts this.
+#  2. The private library is cloned over SSH with a READ-ONLY deploy key (the secret LIBRARY_DEPLOY_KEY): blobless, one commit,
+#     only cinema.json, program.json, tools/ and every film's cuts.json. The library is never written.
+#  3. tools/cuts/apply_request.py (from that clone) folds the newest request into the clone's program.json (same rules as the
+#     launcher). A refused request is deleted from gh-pages and the run goes red; the library's own program.json is untouched.
+#  4. Only the lead films' folders are fetched, tools/cuts/publish.py cuts the clips and pushes motion/program/ and
+#     motion/program.json to gh-pages with the job's GITHUB_TOKEN. A program the site already has is not cut or pushed again
+#     (unless "force").
+#  5. Only then are the request files deleted from gh-pages ([skip ci]). A run that failed before that leaves them, and a
+#     re-run applies the same pick again.
+#
+# The PC publishes straight from the launcher and keeps its own program.json; a pick made here changes only the live site, and
+# whichever was made last wins. Run logs of a public repository are public: nothing here prints a key, a token or anything the
+# site does not show. Only actions/checkout is used.
+
+on:
+  push:
+    branches: [gh-pages]
+    paths:
+      - program-requests/**
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Publish even when the site already has this program
+        type: boolean
+        default: false
+
+concurrency:
+  group: program
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  program:
+    # the cleanup pushes to gh-pages, so never run from another branch
+    if: github.ref == 'refs/heads/gh-pages'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      GIT_TERMINAL_PROMPT: "0"
+    steps:
+      - name: Write the library key
+        # first, so a missing or broken key fails before anything is changed
+        env:
+          LIBRARY_KEY: ${{ secrets.LIBRARY_DEPLOY_KEY }}
+        run: |
+          if [ -z "$LIBRARY_KEY" ]; then
+            echo "::error title=No library key::The secret LIBRARY_DEPLOY_KEY is empty or missing in this repository's Actions secrets. Nothing was changed."
+            exit 1
+          fi
+          key="$RUNNER_TEMP/library_deploy_key"
+          (umask 077 && printf '%s\n' "$LIBRARY_KEY" | tr -d '\r' > "$key")
+          chmod 600 "$key"
+          if ! ssh-keygen -y -P '' -f "$key" > /dev/null 2>&1; then
+            echo "::error title=Bad library key::LIBRARY_DEPLOY_KEY is not a private key without a passphrase (it needs its BEGIN and END lines). Nothing was changed."
+            exit 1
+          fi
+
+      - name: Clone the library without the films
+        env:
+          GIT_SSH_COMMAND: ssh -i ${{ runner.temp }}/library_deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new -o BatchMode=yes
+        run: |
+          lib="$RUNNER_TEMP/lib"
+          git clone -q --filter=blob:none --depth 1 --no-checkout --single-branch --branch main git@github.com:Mohamed3042/mk-cinema-library.git "$lib"
+          printf '%s\n' /cinema.json /program.json /tools/ '/films/*/cuts.json' | git -C "$lib" sparse-checkout set --no-cone --stdin
+          git -C "$lib" checkout -q main
+          test -s "$lib/cinema.json" || { echo "::error title=Library unusable::cinema.json is missing from the library clone."; exit 1; }
+
+      - name: Check out the requests
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: site
+          filter: blob:none
+          sparse-checkout: |
+            /program-requests/
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Apply the request
+        # Changes the clone's program.json on this runner only. State for the later steps goes to GITHUB_ENV as fixed words.
+        run: |
+          lib="$RUNNER_TEMP/lib"
+          site="$GITHUB_WORKSPACE/site"
+          out="$RUNNER_TEMP/apply.txt"
+          list="$RUNNER_TEMP/requests.nul"
+          # every request file to delete once the pick is live, NUL separated (dotfiles and a README stay)
+          : > "$list"
+          while IFS= read -r -d '' f; do
+            case "${f##*/}" in .*|[Rr][Ee][Aa][Dd][Mm][Ee]*) continue ;; esac
+            printf '%s\0' "$f" >> "$list"
+          done < <(git -C "$site" ls-files -z -- program-requests)
+          # the library's apply script reads *.json from its own requests folder
+          mkdir -p "$lib/program/requests"
+          for f in "$site"/program-requests/*.json; do
+            if [ -f "$f" ]; then cp -- "$f" "$lib/program/requests/"; fi
+          done
+          code=0
+          python3 "$lib/tools/cuts/apply_request.py" --library "$lib" > "$out" || code=$?
+          cat "$out"
+          { echo "### Program"; echo; echo '```'; cat "$out"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          case "$code" in
+            0) state=applied ;;
+            2) state=invalid ;;
+            3) state=none ;;
+            *) echo "::error title=Could not apply the request::$(head -n 1 "$out")"; exit 1 ;;
+          esac
+          publish=yes
+          if [ "$state" = invalid ]; then
+            publish=no
+            echo "::error title=The request was refused::$(head -n 1 "$out")"
+          elif [ "$state" = none ] && [ "$GITHUB_EVENT_NAME" != workflow_dispatch ]; then
+            publish=no
+            echo "No request to apply, so nothing is published (Run workflow publishes the library's own program)."
+          fi
+          { echo "REQUEST_STATE=$state"; echo "PUBLISH=$publish"; } >> "$GITHUB_ENV"
+
+      - name: Fetch the films the program leads with
+        if: env.PUBLISH == 'yes'
+        env:
+          GIT_SSH_COMMAND: ssh -i ${{ runner.temp }}/library_deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new -o BatchMode=yes
+        run: |
+          cd "$RUNNER_TEMP/lib"
+          # print-leads only prints folder names made of letters, digits, dot, dash and underscore
+          leads="$(python3 tools/cuts/apply_request.py --library . --print-leads)"
+          if [ -z "$leads" ]; then
+            echo "The program leads with site worlds only: no film files needed."
+            exit 0
+          fi
+          while IFS= read -r s; do printf '/films/%s/\n' "$s"; done <<< "$leads" | git sparse-checkout add --stdin
+          git read-tree -mu HEAD
+          while IFS= read -r s; do
+            test -s "films/$s/cuts.json" || { echo "::error title=Film missing::films/$s/ is not in the library"; exit 1; }
+            echo "Fetched films/$s/"
+          done <<< "$leads"
+
+      - name: Install ffmpeg
+        if: env.PUBLISH == 'yes'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ffmpeg
+          ffmpeg -version | head -n 1
+
+      - name: Publish to the portfolio
+        if: env.PUBLISH == 'yes'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          lib="$RUNNER_TEMP/lib"
+          # git signs in with the job's token through the environment only: never in a URL, an argument or a file
+          auth="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          echo "::add-mask::$auth"
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth"
+          args=()
+          if [ "$FORCE" = "true" ]; then args+=(--force); fi
+          python3 "$lib/tools/cuts/publish.py" --library "$lib" --pages "$RUNNER_TEMP/pages" --push --no-wait \
+            --remote https://github.com/Mohamed3042/flagship-portfolio.git "${args[@]}"
+
+      - name: Delete the requests
+        # After the publish (or after a refusal), never before: a run that fails in between leaves the requests, and a re-run
+        # applies the same pick again. Only the files this run saw are deleted; a request that arrived meanwhile stays for the
+        # next run. If gh-pages moved (the publish just pushed to it), take the newest gh-pages and delete again, up to 5 times.
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          list="$RUNNER_TEMP/requests.nul"
+          if [ ! -s "$list" ]; then
+            echo "No request files to delete."
+            exit 0
+          fi
+          auth="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          echo "::add-mask::$auth"
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $auth"
+          cd "$GITHUB_WORKSPACE/site"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          case "$REQUEST_STATE" in
+            applied) msg="Program: the pick made on GitHub is live [skip ci]" ;;
+            invalid) msg="Program: a refused pick was removed [skip ci]" ;;
+            *) msg="Program: stray request files removed [skip ci]" ;;
+          esac
+          saved=no
+          for attempt in 1 2 3 4 5; do
+            git fetch -q origin gh-pages
+            git reset -q --hard FETCH_HEAD
+            git --literal-pathspecs rm -q --ignore-unmatch --pathspec-from-file="$list" --pathspec-file-nul
+            if git diff --cached --quiet; then
+              saved=nothing
+              break
+            fi
+            git commit -q -m "$msg"
+            if git push -q origin HEAD:gh-pages; then
+              saved=yes
+              break
+            fi
+            echo "the push to gh-pages was refused (try $attempt of 5): taking the newest gh-pages and deleting again"
+          done
+          if [ "$saved" = no ]; then
+            echo "::error title=Could not delete the requests::git push to gh-pages failed 5 times, see the log above."
+            exit 1
+          fi
+          echo "Request files deleted: $saved"
+
+      - name: Fail on a refused request
+        if: env.REQUEST_STATE == 'invalid'
+        run: |
+          echo "::error title=Nothing was published::The request was refused (the reason is the first line of the step Apply the request), its file is deleted and the site is as it was. Send a new pick."
+          exit 1
+
+      - name: Delete the library key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/library_deploy_key"
