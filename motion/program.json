@@ -1,6 +1,7 @@
 {
   "version": 1,
   "updated": "2026-10-25T21:00:00Z",
+  "source": "d319727c19928999",
   "lead": {
     "en": "mohamed-mahmoud-solution-machine-extended-v2-2",
     "ar": "mohamed-mahmoud-solution-machine-extended-ar-v2-2"
@@ -15,7 +16,7 @@
       "accent": "#ffb340",
       "seconds": 78,
       "version": "2.2",
-      "card": "program/mohamed-mahmoud-solution-machine-extended-v2-2/poster-c8ad3171.jpg",
+      "card": "program/mohamed-mahmoud-solution-machine-extended-v2-2/poster-c2d8bf0b.jpg",
       "film": "program/mohamed-mahmoud-solution-machine-extended-v2-2/film-baeee543.mp4",
       "filmTall": "program/mohamed-mahmoud-solution-machine-extended-v2-2/film-tall-31eb8bfc.mp4",
       "chapters": [
@@ -122,35 +123,35 @@
       ],
       "cuts": [
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0030-9c691f51.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0030-fd09f499.mp4",
           "label": "Problem → Solution",
           "chapter": 2,
           "start": 3.0,
           "end": 8.0
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0150-eb3fd909.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0150-e14eea7b.mp4",
           "label": "Herd → Records",
           "chapter": 5,
           "start": 15.0,
           "end": 20.0
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0355-e3b063fb.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0355-1f02aa02.mp4",
           "label": "Ideas → 15 apps",
           "chapter": 12,
           "start": 35.5,
           "end": 40.5
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0410-633121da.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0410-b8f2cabf.mp4",
           "label": "Apps → Films",
           "chapter": 13,
           "start": 41.0,
           "end": 46.0
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0665-0cf039e8.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-v2-2/t0665-ff3577a0.mp4",
           "label": "CV → Portfolio",
           "chapter": 19,
           "start": 66.5,
@@ -167,7 +168,7 @@
       "accent": "#ffb340",
       "seconds": 78,
       "version": "2.2",
-      "card": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/poster-7d0b0639.jpg",
+      "card": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/poster-225715d9.jpg",
       "film": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/film-448c78c7.mp4",
       "filmTall": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/film-tall-4fe51c63.mp4",
       "chapters": [
@@ -274,35 +275,35 @@
       ],
       "cuts": [
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0030-2c1a53bc.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0030-15010687.mp4",
           "label": "مشكلة ← حل",
           "chapter": 2,
           "start": 3.0,
           "end": 8.0
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0150-cdf164e5.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0150-c97736bf.mp4",
           "label": "قطيع ← سجلات",
           "chapter": 5,
           "start": 15.0,
           "end": 20.0
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0355-88bcbf88.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0355-20c0fa92.mp4",
           "label": "أفكار ← 15 تطبيق",
           "chapter": 12,
           "start": 35.5,
           "end": 40.5
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0410-c2c48718.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0410-9d5c4717.mp4",
           "label": "تطبيقات ← أفلام",
           "chapter": 13,
           "start": 41.0,
           "end": 46.0
         },
         {
-          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0665-c422735b.mp4",
+          "url": "program/mohamed-mahmoud-solution-machine-extended-ar-v2-2/t0665-8bcccddb.mp4",
           "label": "سيرة ذاتية ← معرض أعمال",
           "chapter": 19,
           "start": 66.5,
