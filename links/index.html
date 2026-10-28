@@ -11,124 +11,243 @@
 <meta property="og:url" content="https://mohamed3042.github.io/flagship-portfolio/links/">
 <meta property="og:image" content="https://mohamed3042.github.io/flagship-portfolio/links/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f5efe6">
+<meta name="theme-color" content="#2a2119">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%232a2119'/%3E%3Ctext x='32' y='42' font-family='Georgia,serif' font-size='26' text-anchor='middle' fill='%23f5efe6'%3EMK%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap">
 <style>
 :root {
-  --paper: #f5efe6; --paper-deep: #ede5d9; --card: #fffcf7; --ink: #2a2119; --ink-2: #4b3e33; --muted: #75685b;
-  --accent: #8a5d34; --accent-ink: #fffcf7; --line: rgba(42,33,25,.14); --line-2: rgba(42,33,25,.24); --ok: #2f6b45;
+  --paper: #f5efe6; --paper-deep: #ede5d9; --card: #fffcf7; --field: #f8f3eb; --ink: #2a2119; --ink-2: #4b3e33; --muted: #6b5e51;
+  --accent: #8a5d34; --accent-ink: #fffcf7; --gold: #e2b682; --line: rgba(42,33,25,.12); --line-2: rgba(42,33,25,.2); --ok: #2f6b45;
+  --shadow: 0 1px 0 rgba(255,255,255,.8) inset, 0 18px 40px -26px rgba(42,33,25,.45), 0 0 0 1px rgba(42,33,25,.05);
   --f-lat: "Manrope", "Readex Pro", system-ui, sans-serif;
   --f-ar: "Readex Pro", "Manrope", system-ui, sans-serif;
   --f-mark: Georgia, "Times New Roman", serif;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; min-height: 100vh; background: radial-gradient(900px 700px at 50% 0%, #faf6ef 0%, var(--paper) 55%, var(--paper-deep) 100%) fixed; color: var(--ink);
-  font: 500 16px/1.5 var(--f-ar); padding: max(24px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom)); }
+body { margin: 0; min-height: 100vh; background: var(--paper); color: var(--ink); font: 500 16px/1.5 var(--f-ar);
+  padding: 0 0 max(28px, env(safe-area-inset-bottom)); }
 html[lang="en"] body { font-family: var(--f-lat); }
 .wrap { max-width: 520px; margin: 0 auto; display: grid; gap: 14px; }
-.top { display: flex; justify-content: space-between; align-items: center; }
-.lang { font: 700 13px var(--f-lat); letter-spacing: .08em; color: var(--ink-2); background: transparent; border: 1px solid var(--line-2); border-radius: 999px; padding: 8px 14px; cursor: pointer; }
-.lang:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2.5px solid var(--accent); outline-offset: 2px; }
-.who { display: grid; justify-items: center; text-align: center; gap: 6px; padding: 6px 0 10px; }
-.who svg { width: 96px; height: 96px; }
-.who h1 { margin: 6px 0 0; font: 800 26px/1.15 var(--f-lat); letter-spacing: -0.01em; }
-.who .handle { font: 600 14px var(--f-lat); color: var(--muted); }
-.who p { margin: 4px 0 0; color: var(--ink-2); font-size: 15.5px; max-width: 34ch; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px 18px 16px; box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 14px 34px -22px rgba(42,33,25,.35); }
-.card.primary { border-color: rgba(138,93,52,.45); }
-.eyebrow { font: 700 11.5px var(--f-lat); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 4px; }
-.card h2 { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 700; }
-.card h2 .lat { font-family: var(--f-lat); font-weight: 800; }
-.card p { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
-.badge { display: inline-block; font: 700 12px var(--f-lat); color: var(--ok); border: 1px solid rgba(47,107,69,.35); background: rgba(47,107,69,.07); border-radius: 999px; padding: 3px 10px; margin-top: 10px; }
-form { display: grid; gap: 10px; margin-top: 14px; }
-label { display: grid; gap: 5px; font-size: 13.5px; font-weight: 600; color: var(--ink-2); }
-input, select { font: inherit; font-size: 16px; color: var(--ink); background: var(--paper); border: 1px solid var(--line-2); border-radius: 12px; padding: 11px 12px; width: 100%; min-height: 46px; }
+.pad { padding: 0 16px; display: grid; gap: 14px; }
+a, button, input, select { -webkit-tap-highlight-color: transparent; }
+.lang:focus-visible, button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2.5px solid var(--gold); outline-offset: 2px; }
+[hidden] { display: none !important; }
+.lat { font-family: var(--f-lat); }
+
+/* ---------- header: dark warm photo ---------- */
+.hero { position: relative; color: #fbf6ee; padding: max(14px, env(safe-area-inset-top)) 14px 64px; overflow: hidden; isolation: isolate; }
+.hero::before { content: ""; position: absolute; inset: 0; z-index: -2; background: url("img/header.webp") 72% 30% / cover no-repeat; }
+.hero::after { content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(24,17,12,.72) 0%, rgba(24,17,12,.58) 32%, rgba(24,17,12,.66) 62%, rgba(24,17,12,.82) 86%, var(--paper) 100%); }
+.top { display: flex; justify-content: space-between; align-items: center; min-height: 44px; }
+.lang { display: inline-flex; align-items: center; gap: 8px; font: 700 14px/1 var(--f-lat); letter-spacing: .02em; color: var(--ink); background: rgba(255,252,247,.92);
+  border: 0; border-radius: 999px; padding: 10px 14px 10px 12px; cursor: pointer; box-shadow: 0 8px 20px -10px rgba(0,0,0,.5); }
+.lang::before { content: ""; width: 18px; height: 18px; flex: none; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c2.5 2.5 3.8 5.5 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.5-3.8-9S9.5 5.5 12 3z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c2.5 2.5 3.8 5.5 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.5-3.8-9S9.5 5.5 12 3z'/%3E%3C/svg%3E") center / contain no-repeat; }
+.who { display: flex; align-items: center; gap: 14px; margin-top: 18px; direction: ltr; justify-content: center; }
+.who svg { width: 82px; height: 82px; flex: none; filter: drop-shadow(0 10px 18px rgba(0,0,0,.45)); }
+.who h1 { margin: 0; font: 400 31px/1.1 var(--f-mark); letter-spacing: .005em; color: #fffcf7; }
+.who .handle { font: 600 14px/1.2 var(--f-lat); color: rgba(251,246,238,.78); margin-top: 6px; letter-spacing: .02em; }
+.tag { text-align: center; margin: 18px auto 0; max-width: 36ch; }
+.tag p { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.45; color: #fffcf7; text-shadow: 0 2px 16px rgba(0,0,0,.35); }
+.tag .other { margin-top: 3px; font-size: 13.5px; font-weight: 500; color: rgba(251,246,238,.8); }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 16px; direction: ltr; }
+.chips span { font: 600 11.5px/1 var(--f-lat); color: #fbf6ee; border: 1px solid rgba(251,246,238,.5); border-radius: 999px; padding: 8px 8px; background: rgba(24,17,12,.25); white-space: nowrap; }
+.social { display: flex; justify-content: center; gap: 12px; margin-top: 18px; }
+.social a { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: #fbf6ee; border: 1.5px solid rgba(251,246,238,.6); background: rgba(24,17,12,.25); }
+.social svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* ---------- cards ---------- */
+.card { background: var(--card); border-radius: 22px; padding: 20px 18px 18px; box-shadow: var(--shadow); }
+.first { margin-top: -44px; position: relative; }
+.head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.eyebrow { margin: 0; font: 600 13px/1 var(--f-ar); color: var(--accent); background: #f3e6d6; border-radius: 999px; padding: 8px 13px; }
+html[lang="en"] .eyebrow { font-family: var(--f-lat); letter-spacing: .02em; }
+.badge { display: inline-block; font: 700 12px/1 var(--f-lat); color: var(--ok); border: 1px solid rgba(47,107,69,.3); background: rgba(47,107,69,.06); border-radius: 999px; padding: 7px 10px; }
+.ico { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; flex: none; color: var(--accent); background: #f3e6d6; }
+.ico svg { width: 22px; height: 22px; }
+.card h2 { margin: 14px 0 0; font-size: 24px; line-height: 1.32; font-weight: 700; }
+.card h2 .lat { font-family: var(--f-mark); font-weight: 400; font-size: 1.08em; letter-spacing: .005em; }
+.card p { margin: 8px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+form { display: grid; gap: 12px; margin-top: 16px; }
+label { display: grid; gap: 6px; font-size: 14px; font-weight: 600; color: var(--ink); }
+.field { position: relative; display: block; }
+.field > svg, .field > .flag { position: absolute; top: 50%; transform: translateY(-50%); inset-inline-start: 13px; width: 20px; height: 20px; color: var(--accent); pointer-events: none; }
+.field > .flag { width: 24px; height: 17px; border-radius: 3px; overflow: hidden; box-shadow: 0 0 0 1px rgba(42,33,25,.15); }
+.field > .flag svg { display: block; width: 100%; height: 100%; }
+input, select { font: inherit; font-size: 16px; font-weight: 500; color: var(--ink); background: var(--field); border: 1px solid var(--line-2); border-radius: 14px;
+  padding: 12px 12px; padding-inline-start: 44px; width: 100%; min-height: 52px; -webkit-appearance: none; appearance: none; }
+input::placeholder { color: #9a8b7b; font-weight: 500; font-size: 14.5px; }
+select { padding-inline-end: 34px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b3e33' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-size: 16px; background-position: left 12px center; }
+html[dir="ltr"] select { background-position: right 12px center; }
+.flagged select { padding-inline-start: 48px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.btn { display: inline-flex; justify-content: center; align-items: center; gap: 10px; width: 100%; min-height: 50px; border: 0; border-radius: 14px; background: var(--accent); color: var(--accent-ink);
-  font: 700 16px var(--f-ar); cursor: pointer; text-decoration: none; padding: 12px 16px; }
+.btn { display: inline-flex; justify-content: center; align-items: center; gap: 10px; width: 100%; min-height: 56px; border: 0; border-radius: 16px;
+  background: linear-gradient(180deg, #9a6a3c, #7a4f2a); color: var(--accent-ink); font: 700 17px var(--f-ar); cursor: pointer; text-decoration: none; padding: 12px 16px;
+  box-shadow: 0 16px 30px -16px rgba(122,79,42,.9), inset 0 1px 0 rgba(255,255,255,.18); }
 html[lang="en"] .btn { font-family: var(--f-lat); }
-.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line-2); }
-.btn svg { width: 20px; height: 20px; flex: none; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid rgba(138,93,52,.6); box-shadow: none; }
+.btn svg { width: 22px; height: 22px; flex: none; }
+.btn .go { width: 18px; height: 18px; margin-inline-start: auto; opacity: .9; }
+.btn .wa { margin-inline-end: auto; }
+.lock { display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 13px; color: var(--muted); text-align: center; }
+.lock svg { width: 15px; height: 15px; flex: none; color: var(--accent); }
 .alt { font-size: 13px; color: var(--muted); text-align: center; }
 .alt a { color: var(--ink-2); }
-.links { display: grid; gap: 10px; }
-.link { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; min-height: 58px; }
-.link b { display: block; font-size: 16px; }
-.link span { display: block; font-size: 13.5px; color: var(--muted); }
-.link svg { width: 18px; height: 18px; color: var(--accent); flex: none; }
+.sent { margin-top: 2px; font-size: 13.5px; color: var(--ok); text-align: center; }
 html[dir="rtl"] .flip { transform: scaleX(-1); }
-.soon { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.soon i { font: 700 12.5px var(--f-lat); font-style: normal; color: var(--ink-2); border: 1px dashed var(--line-2); border-radius: 999px; padding: 5px 11px; }
-.social { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding-top: 4px; }
-.social a { font: 700 13px var(--f-lat); color: var(--ink-2); text-decoration: none; border: 1px solid var(--line-2); border-radius: 999px; padding: 8px 13px; }
+
+/* photo cards */
+.links { display: grid; gap: 12px; }
+.link { display: grid; grid-template-columns: 1fr 44%; align-items: stretch; text-decoration: none; color: var(--ink); background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); min-height: 128px; }
+.link .txt { padding: 16px 16px 14px; display: flex; flex-direction: column; gap: 4px; }
+.link .ttl { display: flex; align-items: center; gap: 8px; }
+.link .ttl svg.mini { width: 22px; height: 22px; color: var(--accent); flex: none; }
+.link b { display: block; font-size: 19px; font-weight: 700; line-height: 1.3; }
+.link span.sub { display: block; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+.link .ph { position: relative; background-size: cover; background-position: center; }
+.link .ph .play { position: absolute; inset: 0; margin: auto; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,252,247,.92); display: grid; place-items: center; color: var(--accent); box-shadow: 0 10px 20px -8px rgba(0,0,0,.5); }
+.go-c { margin-top: auto; align-self: flex-end; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); border: 1px solid var(--line-2); }
+.go-c svg { width: 16px; height: 16px; }
+
+/* MK Cloud */
+.cloud { position: relative; overflow: hidden; padding: 0; display: grid; grid-template-columns: 1fr 46%; min-height: 220px;
+  background: radial-gradient(400px 260px at 20% 60%, #fbf3e6, #f6eadb 60%, #efe0cc); }
+.cloud .txt { padding: 20px 18px 18px; display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1; }
+.cloud .soonb { align-self: flex-start; font: 700 12.5px/1 var(--f-ar); color: var(--accent-ink); background: var(--accent); border-radius: 999px; padding: 7px 11px; margin: 0; }
+html[lang="en"] .cloud .soonb { font-family: var(--f-lat); }
+.cloud h2 { margin: 2px 0 0; font-size: 17px; line-height: 1.4; font-weight: 600; color: var(--ink-2); }
+.cloud h2 .cloudname { display: block; font: 400 34px/1.05 var(--f-mark); color: var(--ink); margin-bottom: 6px; letter-spacing: .005em; direction: ltr; text-align: start; }
+html[dir="rtl"] .cloud h2 .cloudname { text-align: right; }
+.soon { display: block; margin-top: 4px; direction: ltr; text-align: right; line-height: 1.7; }
+html[dir="ltr"] .soon { text-align: left; }
+.soon i { display: inline-block; font: 600 12px/1.6 var(--f-lat); font-style: normal; color: var(--muted); white-space: nowrap; }
+.soon i:not(:last-child)::after { content: " ·"; color: var(--accent); }
+.soon i + i { margin-left: 5px; }
+.cloud .art { background: url("img/cloud.webp") 50% 55% / cover no-repeat; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22%); mask-image: linear-gradient(90deg, transparent 0, #000 22%); }
+html[dir="rtl"] .cloud .art { -webkit-mask-image: linear-gradient(270deg, transparent 0, #000 22%); mask-image: linear-gradient(270deg, transparent 0, #000 22%); }
+
+/* MK apps */
+.apps-h { display: flex; align-items: baseline; justify-content: space-between; margin: 10px 2px 0; }
+.apps-h h2 { margin: 0; font-size: 21px; font-weight: 700; }
+.apps-h a { font-size: 13.5px; font-weight: 600; color: var(--accent); text-decoration: none; display: inline-flex; gap: 4px; align-items: center; }
+.apps-h a svg { width: 14px; height: 14px; }
+.apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.tile { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); padding: 12px 6px 10px; text-decoration: none; color: var(--ink);
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 5px; min-width: 0; }
+.tile .ti { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: #fffcf7; background: linear-gradient(150deg, #a5733f, #75491f); }
+.tile .ti svg { width: 20px; height: 20px; }
+.tile b { font: 700 12px/1.25 var(--f-lat); margin-top: 3px; letter-spacing: -0.01em; text-wrap: balance; }
+.tile > span:not(.ti):not(.go-c) { font-size: 10.5px; line-height: 1.45; color: var(--muted); text-wrap: balance; }
+.tile .go-c { margin-top: auto; align-self: center; width: 26px; height: 26px; }
+.tile .go-c svg { width: 12px; height: 12px; }
+@media (max-width: 359.98px) { .apps { grid-template-columns: 1fr 1fr; } }
+
+/* journey banner */
+.banner { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 104px; padding: 16px 18px; border-radius: 20px;
+  text-decoration: none; color: #fffcf7; overflow: hidden; isolation: isolate; box-shadow: var(--shadow); }
+.banner::before { content: ""; position: absolute; inset: 0; z-index: -2; background: url("img/journey.webp") 50% 60% / cover no-repeat; }
+.banner::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(24,17,12,0) 20%, rgba(24,17,12,.66) 78%); }
+html[dir="ltr"] .banner::after { background: linear-gradient(270deg, rgba(24,17,12,0) 20%, rgba(24,17,12,.66) 78%); }
+.banner b { display: block; font-size: 21px; font-weight: 700; line-height: 1.25; text-shadow: 0 2px 12px rgba(0,0,0,.45); }
+.banner div > span { display: block; font-size: 13.5px; color: rgba(255,252,247,.9); margin-top: 2px; text-shadow: 0 1px 8px rgba(0,0,0,.45); }
+.banner .go-c { margin: 0; align-self: center; width: 46px; height: 46px; border: 0; background: rgba(255,252,247,.94); color: var(--accent); flex: none; }
+.banner .go-c svg { width: 18px; height: 18px; }
 footer { text-align: center; font-size: 12.5px; color: var(--muted); padding-top: 6px; }
-[hidden] { display: none !important; }
-.sent { margin-top: 10px; font-size: 13.5px; color: var(--ok); }
-@media (prefers-reduced-motion: no-preference) { .card, .link { transition: transform .18s ease, box-shadow .18s ease; } .link:active { transform: scale(.99); } }
+@media (min-width: 521px) { .hero { border-radius: 0 0 28px 28px; } }
+@media (prefers-reduced-motion: no-preference) { .card, .link, .tile, .banner { transition: transform .18s ease, box-shadow .18s ease; } .link:active, .tile:active, .banner:active { transform: scale(.99); } }
 </style>
 </head>
 <body>
 <main class="wrap">
-  <div class="top">
-    <span></span>
-    <button class="lang" id="lang" type="button" aria-label="Switch language">English</button>
-  </div>
-
-  <header class="who">
-    <svg viewBox="0 0 96 96" role="img" aria-label="MK">
-      <circle cx="48" cy="48" r="45" fill="#2a2119"/>
-      <circle cx="48" cy="48" r="45" fill="none" stroke="#8a5d34" stroke-width="2.5"/>
-      <circle cx="48" cy="48" r="40.5" fill="none" stroke="#f5efe6" stroke-opacity=".14" stroke-width="1"/>
-      <text x="48" y="60" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f5efe6" letter-spacing="1">MK</text>
-    </svg>
-    <h1>MK by Mohamed</h1>
-    <div class="handle" dir="ltr">@mkbymohamed</div>
-    <p data-ar="أبني تطبيقات MK اللي بتشغّل الشركات." data-en="I build the MK apps that run a business."></p>
+  <header class="hero">
+    <div class="top">
+      <span></span>
+      <button class="lang" id="lang" type="button" aria-label="Switch language">English</button>
+    </div>
+    <div class="who">
+      <svg viewBox="0 0 96 96" role="img" aria-label="MK">
+        <circle cx="48" cy="48" r="45" fill="#2a2119"/>
+        <circle cx="48" cy="48" r="45" fill="none" stroke="#b07a46" stroke-width="2.5"/>
+        <circle cx="48" cy="48" r="40.5" fill="none" stroke="#f5efe6" stroke-opacity=".14" stroke-width="1"/>
+        <text x="48" y="60" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="36" fill="#f5efe6" letter-spacing="1">MK</text>
+      </svg>
+      <div>
+        <h1>MK by Mohamed</h1>
+        <div class="handle" dir="ltr">@mkbymohamed</div>
+      </div>
+    </div>
+    <div class="tag">
+      <p data-ar="أبني تطبيقات MK اللي بتشغّل الشركات." data-en="I build the MK apps that run a business."></p>
+      <p class="other" dir="auto" data-ar="I build the MK apps that run a business." data-en="أبني تطبيقات MK اللي بتشغّل الشركات."></p>
+    </div>
+    <div class="chips" aria-label="MK apps"><span>MK Business OS</span><span>Job Orbit</span><span>Talent Atlas</span><span>MK Voice</span></div>
+    <div class="social" dir="ltr" aria-label="Follow">
+      <a href="https://www.tiktok.com/@mkbymohamed" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+      <a href="https://www.instagram.com/mkbymohamed/" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a>
+      <a href="https://www.facebook.com/mkbymohamed" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a>
+      <a href="https://www.youtube.com/@mkbymohamed" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+      <a href="https://www.linkedin.com/in/mohamed-mahmoud-5a748b243" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+    </div>
   </header>
 
-  <section class="card primary" aria-labelledby="h-pilot">
-    <p class="eyebrow" data-ar="تجربة مجانية" data-en="Free pilot"></p>
+  <div class="pad">
+  <section class="card primary first" aria-labelledby="h-pilot">
+    <div class="head">
+      <div class="pills"><p class="eyebrow" data-ar="تجربة مجانية" data-en="Free pilot"></p><span class="badge" data-ar="٥ أماكن" data-en="5 spots"></span></div>
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8" width="17" height="4" rx="1"/><path d="M5 12v8h14v-8M12 8v12M12 8c-1.5-3.5-5.5-3.5-5.5-1 0 1.4 2.3 1 5.5 1zM12 8c1.5-3.5 5.5-3.5 5.5-1 0 1.4-2.3 1-5.5 1z"/></svg></span>
+    </div>
     <h2 id="h-pilot" data-ar="جرّب <span class='lat' dir='ltr'>MK Business OS</span> مجانًا لشركتك" data-en="Try <span class='lat'>MK Business OS</span> free in your company"></h2>
     <p data-ar="بدوّر على ٥ شركات في الكويت والخليج. بتكتب بتبيع إيه، وهو يلاقي مشترين حقيقيين ليهم مصدر، ويجهّز أول رسالة وانت اللي توافق." data-en="Looking for 5 companies in Kuwait and the Gulf. Type what you sell; it finds real buyers with a source you can check, drafts the first message, and waits for your OK."></p>
-    <span class="badge" data-ar="٥ أماكن" data-en="5 spots"></span>
     <form id="pilot" novalidate>
-      <label><span data-ar="اسم الشركة" data-en="Company"></span><input name="company" autocomplete="organization" required maxlength="80"></label>
-      <label><span data-ar="بتبيعوا إيه؟" data-en="What do you sell?"></span><input name="sells" required maxlength="120"></label>
+      <label><span data-ar="اسم الشركة" data-en="Company"></span>
+        <span class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21h16M6 21V4.5h9V21M15 9.5h3.5V21M9 8h3M9 11.5h3M9 15h3"/></svg><input name="company" autocomplete="organization" required maxlength="80" data-ph-ar="مثال: شركة النخيل الزراعية" data-ph-en="e.g. Al Nakheel Agriculture Co."></span></label>
+      <label><span data-ar="بتبيعوا إيه؟" data-en="What do you sell?"></span>
+        <span class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><input name="sells" required maxlength="120" data-ph-ar="مثال: زراعة، أغنام، تجارة، مقاولات…" data-ph-en="e.g. farming, livestock, trading, contracting…"></span></label>
       <div class="row2">
         <label><span data-ar="الدولة" data-en="Country"></span>
+          <span class="field flagged"><span class="flag" data-flag-for="country" aria-hidden="true"></span>
           <select name="country">
             <option value="KW" data-ar="الكويت" data-en="Kuwait"></option><option value="SA" data-ar="السعودية" data-en="Saudi Arabia"></option>
             <option value="AE" data-ar="الإمارات" data-en="UAE"></option><option value="QA" data-ar="قطر" data-en="Qatar"></option>
             <option value="BH" data-ar="البحرين" data-en="Bahrain"></option><option value="OM" data-ar="عُمان" data-en="Oman"></option>
             <option value="EG" data-ar="مصر" data-en="Egypt"></option><option value="XX" data-ar="غير ذلك" data-en="Other"></option>
-          </select></label>
+          </select></span></label>
         <label><span data-ar="حجم الفريق" data-en="Team size"></span>
-          <select name="team"><option value="1–5" data-ar="من ١ إلى ٥" data-en="1–5"></option><option value="6–20" data-ar="من ٦ إلى ٢٠" data-en="6–20"></option><option value="21–50" data-ar="من ٢١ إلى ٥٠" data-en="21–50"></option><option value="50+" data-ar="أكتر من ٥٠" data-en="50+"></option></select></label>
+          <span class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5v-1a4.5 4.5 0 0 1 4.5-4.5h2a4.5 4.5 0 0 1 4.5 4.5v1M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.6 14.2a4.5 4.5 0 0 1 2.9 4.3v1"/></svg>
+          <select name="team"><option value="1–5" data-ar="من ١ إلى ٥" data-en="1–5"></option><option value="6–20" data-ar="من ٦ إلى ٢٠" data-en="6–20"></option><option value="21–50" data-ar="من ٢١ إلى ٥٠" data-en="21–50"></option><option value="50+" data-ar="أكتر من ٥٠" data-en="50+"></option></select></span></label>
       </div>
-      <button class="btn" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg><span data-ar="ابعت على واتساب" data-en="Send on WhatsApp"></span></button>
+      <button class="btn" type="submit"><svg class="wa" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg><span data-ar="ابعت على واتساب" data-en="Send on WhatsApp"></span><svg class="go flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span data-ar="معلوماتك آمنة ولن يتم مشاركتها مع أي جهة أخرى" data-en="Your details are safe and are never shared with anyone else"></span></div>
       <div class="alt"><span data-ar="مش بتستخدم واتساب؟" data-en="No WhatsApp?"></span> <a id="pilot-mail" href="#" data-ar="ابعت إيميل" data-en="Send an email"></a></div>
       <div class="sent" id="pilot-sent" hidden data-ar="تمام! كمّل في واتساب وهرد عليك." data-en="Done — finish in WhatsApp and I'll reply."></div>
     </form>
   </section>
 
   <section class="card" aria-labelledby="h-jo">
-    <p class="eyebrow" data-ar="تسجيل مبكر" data-en="Early access"></p>
+    <div class="head">
+      <div class="pills"><p class="eyebrow" data-ar="تسجيل مبكر" data-en="Early access"></p></div>
+      <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="9.5" ry="4.2" transform="rotate(-25 12 12)"/></svg></span>
+    </div>
     <h2 id="h-jo" data-ar="<span class='lat' dir='ltr'>Job Orbit</span> بيدوّر لك على شغل كل يوم" data-en="<span class='lat'>Job Orbit</span> hunts jobs with you every day"></h2>
     <p data-ar="برنامج Windows: بيلاقي الوظايف، ويقيّمها على حقايقك انت، ويجهّز الـCV والجواب للأحسن… ومفيش حاجة بتتبعت غير لما توافق." data-en="A Windows app: it finds jobs, checks them against your own facts, prepares the CV and letter for the best ones — and sends nothing until you approve."></p>
     <form id="jo" novalidate>
       <div class="row2">
         <label><span data-ar="بلدك" data-en="Your country"></span>
+          <span class="field flagged"><span class="flag" data-flag-for="country" aria-hidden="true"></span>
           <select name="country">
             <option value="EG" data-ar="مصر" data-en="Egypt"></option><option value="KW" data-ar="الكويت" data-en="Kuwait"></option>
             <option value="SA" data-ar="السعودية" data-en="Saudi Arabia"></option><option value="AE" data-ar="الإمارات" data-en="UAE"></option>
             <option value="XX" data-ar="غير ذلك" data-en="Other"></option>
-          </select></label>
-        <label><span data-ar="الوظيفة اللي بتدوّر عليها" data-en="Job you want"></span><input name="role" maxlength="80"></label>
+          </select></span></label>
+        <label><span data-ar="الوظيفة اللي بتدوّر عليها" data-en="Job you want"></span>
+          <span class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5v-2h6v2M3.5 12.5h17"/></svg><input name="role" maxlength="80" data-ph-ar="مثال: محاسب" data-ph-en="e.g. Accountant"></span></label>
       </div>
       <button class="btn ghost" type="submit"><span data-ar="سجّلني في التسجيل المبكر" data-en="Put me on the early-access list"></span></button>
       <div class="sent" id="jo-sent" hidden data-ar="تمام! هبعتلك أول ما التحميل يفتح." data-en="Done — I'll message you when the download opens."></div>
@@ -136,24 +255,33 @@ footer { text-align: center; font-size: 12.5px; color: var(--muted); padding-top
   </section>
 
   <nav class="links" aria-label="More">
-    <a class="link" id="films" href="../en/motion/"><div><b data-ar="شوف الأفلام" data-en="Watch the films"></b><span data-ar="أفلام تطبيقات MK" data-en="The MK app films"></span></div><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <a class="link" id="services" href="../en/services/"><div><b data-ar="اشتغل معايا" data-en="Work with me"></b><span data-ar="أفلام للتطبيقات · مواقع سينمائية · أنظمة أتمتة" data-en="App films · cinematic websites · automation"></span></div><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <a class="link" id="films" href="../en/motion/"><div class="txt"><div class="ttl"><svg class="mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="3"/><path d="M10 9v6l5-3z" fill="currentColor"/></svg><b data-ar="شوف الأفلام" data-en="Watch the films"></b></div><span class="sub" data-ar="أفلام تطبيقات MK" data-en="The MK app films"></span><span class="go-c"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div><div class="ph" style="background-image:url('img/films.webp')"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span></div></a>
+    <a class="link" id="services" href="../en/services/"><div class="txt"><div class="ttl"><svg class="mini" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5v-1a4.5 4.5 0 0 1 4.5-4.5h2a4.5 4.5 0 0 1 4.5 4.5v1M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.6 14.2a4.5 4.5 0 0 1 2.9 4.3v1"/></svg><b data-ar="اشتغل معايا" data-en="Work with me"></b></div><span class="sub" data-ar="أفلام للتطبيقات · مواقع سينمائية · أنظمة أتمتة" data-en="App films · cinematic websites · automation"></span><span class="go-c"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div><div class="ph" style="background-image:url('img/work.webp');background-position:40% 50%"></div></a>
   </nav>
 
-  <section class="card" aria-labelledby="h-soon">
-    <p class="eyebrow" data-ar="قريبًا" data-en="Coming soon"></p>
-    <h2 id="h-soon" data-ar="<span class='lat' dir='ltr'>MK Cloud</span>: كل تطبيقات MK في حساب واحد" data-en="<span class='lat'>MK Cloud</span>: every MK app, one account"></h2>
-    <div class="soon" dir="ltr"><i>MK Business OS</i><i>Job Orbit</i><i>Talent Atlas</i><i>MK Voice</i></div>
+  <section class="card cloud" aria-labelledby="h-soon">
+    <div class="txt">
+      <p class="soonb" data-ar="قريبًا" data-en="Coming soon"></p>
+      <h2 id="h-soon" data-ar="<span class='cloudname' dir='ltr'>MK Cloud</span>كل تطبيقات <span class='lat' dir='ltr'>MK</span> في حساب واحد" data-en="<span class='cloudname'>MK Cloud</span>Every MK app, one account"></h2>
+      <div class="soon" dir="ltr"><i>MK Business OS</i><i>Job Orbit</i><i>Talent Atlas</i><i>MK Voice</i></div>
+    </div>
+    <div class="art" role="img" aria-label="MK Cloud"></div>
   </section>
 
-  <div class="social" dir="ltr" aria-label="Follow">
-    <a href="https://www.tiktok.com/@mkbymohamed" rel="noopener">TikTok</a>
-    <a href="https://www.instagram.com/mkbymohamed/" rel="noopener">Instagram</a>
-    <a href="https://www.facebook.com/mkbymohamed" rel="noopener">Facebook</a>
-    <a href="https://www.youtube.com/@mkbymohamed" rel="noopener">YouTube</a>
-    <a href="https://www.linkedin.com/in/mohamed-mahmoud-5a748b243" rel="noopener">LinkedIn</a>
-  </div>
+  <section aria-labelledby="h-apps">
+    <div class="apps-h"><h2 id="h-apps" data-ar="تطبيقات <span class='lat' dir='ltr'>MK</span>" data-en="MK apps"></h2><a id="apps-all" href="../en/motion/" data-href-ar="../ar/motion/" data-href-en="../en/motion/"><span data-ar="عرض الكل" data-en="See all"></span><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+    <div class="apps" style="margin-top:10px">
+      <a class="tile" href="../motion/mk-business-os/?lang=en" data-href-ar="../motion/mk-business-os/?lang=ar" data-href-en="../motion/mk-business-os/?lang=en"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 20.5h16M6.5 20.5v-6M11 20.5v-11M15.5 20.5v-8M20 20.5v-14"/></svg></span><b>MK Business OS</b><span data-ar="مبيعات وتسويق للشركات" data-en="Sales &amp; marketing for companies"></span><span class="go-c"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tile" href="../motion/job-orbit/?lang=en" data-href-ar="../motion/job-orbit/?lang=ar" data-href-en="../motion/job-orbit/?lang=en"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="7.5" width="17" height="12" rx="2"/><path d="M9 7.5v-2h6v2M3.5 12.5h17"/></svg></span><b>Job Orbit</b><span data-ar="فرص ووظائف" data-en="Openings &amp; jobs"></span><span class="go-c"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tile" href="../motion/talent-atlas/?lang=en" data-href-ar="../motion/talent-atlas/?lang=ar" data-href-en="../motion/talent-atlas/?lang=en"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5v-1a4.5 4.5 0 0 1 4.5-4.5h2a4.5 4.5 0 0 1 4.5 4.5v1M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.6 14.2a4.5 4.5 0 0 1 2.9 4.3v1"/></svg></span><b>Talent Atlas</b><span data-ar="بناء المواهب والفرق" data-en="Building talent &amp; teams"></span><span class="go-c"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="tile" href="../motion/mk-voice/?lang=en" data-href-ar="../motion/mk-voice/?lang=ar" data-href-en="../motion/mk-voice/?lang=en"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/></svg></span><b>MK Voice</b><span data-ar="استوديو صوت" data-en="Voice studio"></span><span class="go-c"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+    </div>
+  </section>
+
+  <a class="banner" id="journey" href="https://www.instagram.com/mkbymohamed/" rel="noopener"><div><b data-ar="تابع الرحلة" data-en="Follow the journey"></b><span dir="auto" data-ar="Follow the journey · @mkbymohamed" data-en="تابع الرحلة · <span dir='ltr'>@mkbymohamed</span>"></span></div><span class="go-c"><svg class="flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+
   <footer><span data-ar="محمد محمود · الصفحة دي من غير تتبّع" data-en="Mohamed Mahmoud · no trackers on this page"></span></footer>
+  </div>
 </main>
 
 <script>
@@ -175,6 +303,8 @@ footer { text-align: center; font-size: 12.5px; color: var(--muted); padding-top
     document.getElementById("films").href = "../" + l + "/motion/";
     document.getElementById("services").href = "../" + l + "/services/";
     document.title = l === "ar" ? "MK by Mohamed — الروابط" : "MK by Mohamed — links";
+    document.querySelectorAll("[data-ph-ar]").forEach(function (el) { el.placeholder = el.getAttribute("data-ph-" + l); });
+    document.querySelectorAll("[data-href-ar]").forEach(function (el) { el.href = el.getAttribute("data-href-" + l); });
     try { localStorage.setItem("mk-links-lang", l); } catch (e) {}
   }
   document.getElementById("lang").addEventListener("click", function () { apply(lang === "ar" ? "en" : "ar"); });
@@ -211,6 +341,24 @@ footer { text-align: center; font-size: 12.5px; color: var(--muted); padding-top
       : "Hi Mohamed, please add me to the Job Orbit early-access list.\nCountry: " + k + (r ? "\nJob I want: " + r : "") + via();
     document.getElementById("jo-sent").hidden = false;
     open("https://wa.me/" + WA + "?text=" + encodeURIComponent(t));
+  });
+})();
+// flag of the chosen country, drawn next to each country select (decoration only)
+(function () {
+  var F = {
+    KW: '<rect width="30" height="7" fill="#007a3d"/><rect y="7" width="30" height="6" fill="#fff"/><rect y="13" width="30" height="7" fill="#ce1126"/><path d="M0 0l8 6v8l-8 6z" fill="#000"/>',
+    SA: '<rect width="30" height="20" fill="#006c35"/><path d="M8 7.5h14M9 10h12" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/><path d="M8.5 14h12.5l-2 1" stroke="#fff" stroke-width="1.1" fill="none" stroke-linecap="round"/>',
+    AE: '<rect width="30" height="7" fill="#00732f"/><rect y="7" width="30" height="6" fill="#fff"/><rect y="13" width="30" height="7" fill="#000"/><rect width="8" height="20" fill="#ff0000"/>',
+    QA: '<rect width="30" height="20" fill="#8a1538"/><path d="M0 0h9l3 1.1-3 1.1 3 1.1-3 1.1 3 1.1-3 1.1 3 1.1-3 1.1 3 1.1-3 1.1 3 1.1-3 1.1 3 1.1-3 1.1 3 1.1-3 1.1 3 1.1-3 1.2H0z" fill="#fff"/>',
+    BH: '<rect width="30" height="20" fill="#ce1126"/><path d="M0 0h8l4 2-4 2 4 2-4 2 4 2-4 2 4 2-4 2 4 2-4 2H0z" fill="#fff"/>',
+    OM: '<rect width="30" height="20" fill="#db161b"/><rect x="9" width="21" height="7" fill="#fff"/><rect x="9" y="13" width="21" height="7" fill="#008000"/>',
+    EG: '<rect width="30" height="7" fill="#ce1126"/><rect y="7" width="30" height="6" fill="#fff"/><rect y="13" width="30" height="7" fill="#000"/><circle cx="15" cy="10" r="1.8" fill="#c09300"/>',
+    XX: '<rect width="30" height="20" fill="#f3e6d6"/><circle cx="15" cy="10" r="6" fill="none" stroke="#8a5d34" stroke-width="1.2"/><path d="M9 10h12M15 4c1.8 1.8 2.6 3.8 2.6 6s-.8 4.2-2.6 6c-1.8-1.8-2.6-3.8-2.6-6s.8-4.2 2.6-6z" fill="none" stroke="#8a5d34" stroke-width="1.1"/>'
+  };
+  document.querySelectorAll("[data-flag-for]").forEach(function (box) {
+    var sel = box.parentNode.querySelector("select");
+    function draw() { box.innerHTML = '<svg viewBox="0 0 30 20" preserveAspectRatio="none">' + (F[sel.value] || F.XX) + "</svg>"; }
+    sel.addEventListener("change", draw); draw();
   });
 })();
 </script>
