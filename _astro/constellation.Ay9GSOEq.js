@@ -1,0 +1,73 @@
+import{S as Ke,C as Z,P as Qe,D as Ie,T as et,j as tt,U as Ne,M as H,a as ot,b as He,t as at,X as it,s as le,G as ue,m as rt,Y as nt,Z as st,V as g,_ as lt,J as C,r as k,o as Y,$ as ut,p as ce,a0 as ct}from"./EditionWorld.astro_astro_type_script_index_0_lang.CsSJ2So1.js";import{f as dt,P as R,s as pt,g as de,h as mt,I as ht,i as Ve,a as ft}from"./_pearKit.CzhAfOcY.js";import"./preload-helper.4QTdcD_W.js";/* empty css                      *//*! © 2026 Mohamed Mahmoud. All rights reserved. */const V=ct.constellation.sec,vt=i=>{const w=i*V,S=Math.max(V-5,5),h=5+S*(V>10?.41:.64);return w<=5?w/10:w<=h?.5+(w-5)/(h-5)*.32:Math.min(1,.82+(w-h)/(V-h)*.18)},T=["studio","business","people","utility"],W=[{r:9.7,orbit:8.6,top:0,gap:.3},{r:7.6,orbit:6.55,top:.26,gap:.38},{r:5.55,orbit:4.6,top:.52,gap:.55},{r:3.6,orbit:2.75,top:.78,gap:.9}],pe=-.36,gt=1.1,X=new g(-.5,1,.62).normalize(),wt=new g(-.9,.44,0).normalize(),Be="varying vec3 vP, vW; void main(){ vP = position; vec4 w = modelMatrix * vec4(position, 1.); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }",qe=`
+  float hair(float d, float w){ float px = fwidth(d); float ww = max(w, px * .75); return (1. - smoothstep(ww - px * .6, ww + px * .6, abs(d))) * min(1., w / ww); }
+  float h21(vec2 p){ p = fract(p * vec2(.1031, .1030)); p += dot(p, p.yx + 33.33); return fract((p.x + p.y) * p.x); }
+  float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+    return mix(mix(h21(i), h21(i + vec2(1, 0)), f.x), mix(h21(i + vec2(0, 1)), h21(i + vec2(1, 1)), f.x), f.y); }
+  float mottle(vec2 w){ return .93 + .1 * vn(w * 1.3) + .05 * vn(w * 4.1 + 7.); }   // the paper's cloudy body (smooth: no shimmer at a slant)
+  float pool(vec3 w){ return .5 + .62 * exp(-dot(w.xz, w.xz) / 60.); }   // a warm light over the centre, the rim in the dark`,xt=`
+  uniform vec3 uPaper, uFoil, uFoilHi, uLightDir; uniform vec4 uSph[15];
+  uniform float uR0, uR1, uOrbit, uDraw, uTicks, uFocus, uGlint, uAbove, uAboveH, uTop, uNameAmt;
+  uniform sampler2D uName; uniform vec2 uBand;
+  varying vec3 vP, vW;
+  ${qe}
+  void main(){
+    float r = length(vP.xz), an = fract(atan(vP.z, vP.x) / 6.28318 + 1.), wa = atan(vW.z, vW.x);
+    // paper: warm black, cloudy, a sheen where the light skims it
+    vec3 col = uPaper * mottle(vW.xz);
+    col *= .86 + .3 * pow(max(0., .5 + .5 * cos(wa - uGlint)), 3.);
+    // engraving, drawn in going round (a compass): the rim first, then the ticks, the orbit and the name
+    float D = uDraw * 1.3, d1 = step(an, D), d2 = step(an, D - .15), d3 = step(an, D - .3);
+    float e = hair(r - (uR1 - .1), .011) * d1 + hair(r - (uR1 - .5), .007) * d1 + hair(r - (uR0 + .14), .006) * d2;
+    float n = uTicks, idx = floor(an * n + .5), tick = (an * n - idx) / n * 6.28318 * r;
+    float major = step(mod(idx, 5.), .5), len = mix(.12, .3, major);
+    e = max(e, hair(tick, mix(.0045, .0075, major)) * step(uR1 - .5, r) * step(r, uR1 - .5 + len) * d2);
+    float dn = 160., da = (fract(an * dn) - .5) / dn * 6.28318 * r;   // the orbit the films ride, dotted
+    e = max(e, smoothstep(.03, .015, length(vec2(da, r - uOrbit))) * d3 * .85);
+    // the family's name, engraved three times round the tier
+    float u = 1. - fract(an * 3.), v = (r - uBand.x) / (uBand.y - uBand.x);
+    if (v > 0. && v < 1.) { vec4 t = texture2D(uName, vec2(u, 1. - v)); e = max(e, t.a * d3 * uNameAmt); }
+    // the pen: a spark where the compass is drawing
+    float spark = exp(-pow((an - D) * 70., 2.)) * step(D, 1.) * step(.01, uDraw) * smoothstep(.2, .02, abs(r - (uR1 - .1)));
+    // gold foil: brighter where its grooves face the light
+    float glint = .62 + .75 * pow(max(0., .5 + .5 * cos(wa - uGlint)), 10.);
+    vec3 foil = mix(uFoil, uFoilHi, clamp(glint - .7, 0., 1.)) * glint * (1. + uFocus * .3);
+    col = mix(col, foil, clamp(e, 0., 1.));
+    // shadows: the tier above, then each sphere (straight down the light)
+    float sh = 0.;
+    if (uAbove > 0.) { vec2 q = vW.xz + uLightDir.xz / uLightDir.y * uAboveH; sh = smoothstep(uAbove + .32, uAbove - .06, length(q)) * .6; }
+    for (int i = 0; i < 15; i++) {
+      vec4 s = uSph[i]; if (s.w <= 0.) continue;
+      vec2 c = s.xz - uLightDir.xz / uLightDir.y * (s.y - uTop);
+      sh = max(sh, smoothstep(s.w * 1.5, s.w * .2, length(vW.xz - c)) * .6);
+    }
+    col *= (1. - sh) * pool(vW);
+    col += uFoilHi * spark * 2.2;
+    gl_FragColor = vec4(col, 1.);
+  }`,yt=`
+  uniform vec3 uPaper, uFoil; uniform float uDraw, uGlint; uniform sampler2D uNums;
+  varying vec3 vP, vW;
+  ${qe}
+  void main(){
+    float r = length(vW.xz), an = fract(atan(vW.z, vW.x) / 6.28318 + 1.), wa = atan(vW.z, vW.x);
+    vec3 col = uPaper * mottle(vW.xz * .7);
+    // the limb: a degree scale round the whole instrument, numbers every thirty degrees
+    float L0 = 10.5, L1 = 11.4, d = step(an, uDraw * 1.2);
+    float e = (hair(r - L0, .008) + hair(r - L1, .012) + hair(r - (L1 + .16), .006)) * d;
+    float n = 360., idx = floor(an * n + .5), tick = (an * n - idx) / n * 6.28318 * r;
+    float m5 = step(mod(idx, 5.), .5), m10 = step(mod(idx, 10.), .5);
+    e = max(e, hair(tick, mix(.004, .007, m5)) * step(L0, r) * step(r, L0 + mix(.14, mix(.3, .5, m10), m5)) * d);
+    float u = fract(an * 12.), v = (r - (L0 + .56)) / .3;   // read from outside: left to right along the near side, tops inward
+    if (v > 0. && v < 1. && abs(u - .5) < .1) { float t = texture2D(uNums, vec2((1. - (u - .4) / .2) / 12. + floor(an * 12.) / 12., 1. - v)).a; e = max(e, t * d * .9); }
+    // faint rings and spokes beyond: the chart runs on into the dark
+    float ring = hair(fract(r / 1.2 + .5) - .5, .0035 / 1.2) * step(L1 + .5, r);
+    float spoke = hair((fract(an * 24. + .5) - .5) / 24. * 6.28318 * r, .004) * step(L1 + .5, r);
+    e = max(e, (ring + spoke * .7) * .3 * d);
+    float glint = .55 + .7 * pow(max(0., .5 + .5 * cos(wa - uGlint)), 10.);
+    col = mix(col, uFoil * glint, clamp(e, 0., 1.));
+    col *= 1. - smoothstep(10.9, 8.9, length(vW.xz + vec2(.35, -.42))) * .55;   // the stack's shadow
+    col *= pool(vW) * smoothstep(34., 16., r);
+    gl_FragColor = vec4(col, 1.);
+  }`,St=async i=>{const w=i.lang==="ar",S=w?-1:1,h=matchMedia("(prefers-reduced-motion: reduce)").matches;await dt(i.lang);const f=new Ke;f.background=new Z(R.black);const B=pt(i.renderer),r=new Qe(30,i.viewport.aspect,.1,200),me=new Ie("#fff1d6",2.6);me.position.copy(X).multiplyScalar(30),f.add(me);const he=new Ie("#ffd9a0",1.1);he.position.set(8,4,-12),f.add(he),f.add(new et("#ffffff",.1));const fe=new tt("#ffd9a0",14,9,1.6);fe.position.set(.4,3.2,2.2),f.add(fe);const ve=new Z(R.gold),Ue=new Z(R.goldHi),ge=new Z("#15110e"),je=t=>ut[T[t]][i.lang],q=document.createElement("canvas");q.width=1152,q.height=64;{const t=q.getContext("2d");t.font='500 34px "Inter Variable", sans-serif',t.textAlign="center",t.textBaseline="middle",t.fillStyle="#fff";for(let o=0;o<12;o++)t.fillText(String((12-o)%12*30),o*96+48,34)}const $=new Ne(q);$.anisotropy=4;const D=new H(new ot(90,90),new He({uniforms:{uPaper:{value:ge},uFoil:{value:ve.clone().multiplyScalar(.7)},uDraw:{value:0},uGlint:{value:0},uNums:{value:$}},vertexShader:Be,fragmentShader:yt}));D.rotation.x=-Math.PI/2,D.position.y=pe,f.add(D);const we=de(B,{color:"#c08f3e",rough:.3,leaf:2.5,squares:!1}),xe=Array.from({length:15},()=>new at),L=W.map((t,o)=>{const a=t.top-pe,p=new it(t.r,t.r,a,i.quality?220:140,1,!1),u=document.createElement("canvas"),n=[t.r-1.06,t.r-.68],s=Math.PI*2*(n[0]+n[1])/2/3;u.height=112,u.width=Math.min(2048,Math.round(u.height*s/(n[1]-n[0])));const l=u.getContext("2d");l.fillStyle="#fff",l.textBaseline="middle",l.textAlign="center",l.direction=w?"rtl":"ltr",l.font=w?'400 70px "Amiri", serif':'italic 300 78px "Fraunces Variable", serif',l.fillText(je(o),u.width*.5,62);const c=new Ne(u);c.anisotropy=8;const x=new He({uniforms:{uPaper:{value:ge.clone().multiplyScalar(1.05+o*.1)},uFoil:{value:ve},uFoilHi:{value:Ue},uLightDir:{value:X},uSph:{value:xe},uR0:{value:W[o+1]?.r??0},uR1:{value:t.r},uOrbit:{value:t.orbit},uDraw:{value:0},uTicks:{value:o===0?240:o===1?180:120},uFocus:{value:0},uGlint:{value:0},uAbove:{value:W[o+1]?.r??0},uAboveH:{value:0},uTop:{value:t.top},uName:{value:c},uBand:{value:new le(n[0],n[1])},uNameAmt:{value:.9}},vertexShader:Be,fragmentShader:xt}),z=new H(p,[we,x,x]);z.position.y=pe+a/2;const y=new ue;return y.add(z),f.add(y),{T:t,k:o,pivot:y,mesh:z,top:x,nameTex:c,lift:0,gild:0}}),ye=rt(.42),J=de(B,{color:"#e2b057",rough:.34,leaf:7,squares:!1});J.envMapIntensity=1.9;const K=new H(ye,J);K.scale.setScalar(.38);const U=new ue;U.add(K),f.add(U);const b=[],Q=new nt(1,i.quality?48:32,i.quality?32:20),Me=[];T.forEach((t,o)=>st[t].apps.forEach((a,p,u)=>{const n=new ue,s=mt({paper:"#15110e",ink:R.cream,warm:R.goldHi,cell:6,amb:.04,gain:1.1});s.fragmentShader=s.fragmentShader.replace("float shade = clamp((1. - (uAmb + (1. - uAmb) * lam)) * uGain, 0., 1.);","float shade = clamp((uAmb + (1. - uAmb) * lam) * uGain, 0., 1.); float rim = pow(1. - abs(dot(n, normalize(cameraPosition - vW))), 3.);").replace("col += uWarm * uEmit;","col = mix(col, uInk, smoothstep(.6, .92, rim) * .8); col += uWarm * uEmit;").replace("void main(){",`uniform float uCut; varying vec3 vO;
+      void main(){ if (vO.y > uCut) discard;`),s.vertexShader=s.vertexShader.replace("varying vec3 vN, vW;","varying vec3 vN, vW; varying vec3 vO;").replace("vec4 w = modelMatrix","vO = position; vec4 w = modelMatrix"),s.uniforms.uCut={value:2},Me.push(s);const l=new H(Q,s),c=de(B,{rough:.26,leaf:1}),x={value:-2},z=c.onBeforeCompile;c.onBeforeCompile=(G,ne)=>{z.call(c,G,ne),G.uniforms.uCutG=x,G.fragmentShader=G.fragmentShader.replace("void main() {",`uniform float uCutG;
+void main() {
+  if (vLeafP.y + .09 * sin(vLeafP.x * 17.) * sin(vLeafP.z * 13.) <= uCutG) discard;`)},c.customProgramCacheKey=()=>"pear-gold-sphere";const y=new H(Q,c);n.add(l,y),f.add(n),b.push({fam:o,i:p,n:u.length,grp:n,dots:l,dm:s,gild:y,gm:c,gu:x,world:new g,px:new le})}));const ke=new ht;b.forEach(()=>ke.seg([0,0,0],[0,1,0],{w:.8,c:R.gold}));const P=ke.build();f.add(P);const Pe=P.geometry.getAttribute("aA"),ze=P.geometry.getAttribute("aB"),Se=P.geometry.getAttribute("aC"),_e=ce.degToRad(40),Ze=-.55;let F=[];const A={portrait:!1,oy:0,ox:0};function Le(){const t=A.portrait=i.viewport.portrait;r.fov=t?44:30,r.updateProjectionMatrix();const o=Math.tan(ce.degToRad(r.fov/2)),a=i.viewport.aspect,p=(s,l)=>s/(l*o*a),u=ce.degToRad(t?38:28),n=p(11.6,t?1.5:.66);A.ox=t?0:-S*.23,A.oy=t?.2:.02,F=[{p:0,el:.34,d:t?12:9.5,ty:1,tz:0},{p:.35,el:u,d:n,ty:.2,tz:0},{p:.82,el:u+.03,d:n*.97,ty:.2,tz:0},{p:1,el:u-.1,d:n*(V>10?.3:.55),ty:.1,tz:7.2}],ft(Me,i.viewport.dpr),Ve(P,r,i.viewport)}Le();const Ye=t=>{let o=0;for(;o<F.length-2&&t>F[o+1].p;)o++;const a=F[o],p=F[o+1],u=Y.inOut(k(a.p,p.p,t)),n=s=>a[s]+(p[s]-a[s])*u;return{el:n("el"),d:Math.exp(Math.log(a.d)+(Math.log(p.d)-Math.log(a.d))*u),ty:n("ty"),tz:n("tz")}},Ae=new lt,De=new le,Te=L.map(t=>t.mesh),be=(t,o)=>{De.set(t,o),Ae.setFromCamera(De,r);const a=Ae.intersectObjects(Te,!1)[0];return a?L.findIndex(p=>p.mesh===a.object):-1};let O=-1,ee=-1,te=0,Ge=0;addEventListener("world:index-hover",t=>{const o=t.detail;ee=o?T.indexOf(o):-1});let m=0,j=0,oe=0;const Ce=new g,E=new g,ae=new g,ie=new g,re=new g,Re=new g(0,1,0),We=new g,_=()=>i.viewport.width,I=()=>i.viewport.height,Xe=(t,o)=>(re.copy(t).project(r),o.set((re.x+1)/2*_(),(1-re.y)/2*I()));return{scene:f,camera:r,resize:Le,focus(t){t||(O=-1)},update({p:t,t:o,dt:a}){m=C(m,vt(t),7,a);const p=A.portrait,u=k(-.05,.3,m),n=k(.82,1,m),s=h?0:Y.inOut(k(.8,.99,m));j=C(j,i.pointer.inside&&!p?i.pointer.x:0,2.5,a),oe=C(oe,i.pointer.inside&&!p?i.pointer.y:0,2.5,a);const l=Ye(m),c=S*(Ze+_e*m+(h?0:Math.sin(o*.07)*.02));E.set(Math.sin(c)*l.tz,l.ty,Math.cos(c)*l.tz),r.up.copy(Re),r.position.set(Math.sin(c)*Math.cos(l.el),Math.sin(l.el),Math.cos(c)*Math.cos(l.el)).multiplyScalar(l.d).add(E),r.lookAt(E),ae.setFromMatrixColumn(r.matrix,0),ie.setFromMatrixColumn(r.matrix,1),r.position.addScaledVector(ae,j*l.d*.024).addScaledVector(ie,oe*l.d*.016),r.lookAt(E),r.rotateZ(-j*.014);const x=1-Y.inOut(n);r.setViewOffset(_(),I(),A.ox*_()*x,A.oy*I()*x,_(),I()),r.updateMatrixWorld();const z=Math.atan2(r.position.z+X.z*30,r.position.x+X.x*30);We.copy(wt).applyQuaternion(r.quaternion);const y=!h&&m>.38&&m<.8;te=y?te+Math.max(a,Math.abs(m-Ge)*10):0,Ge=m;const G=y?Math.floor(te/1.1)%4:-1,ne=O>=0?O:ee>=0?ee:G;L.forEach(e=>{const M=ne===e.k?1:0,d=Math.max(M,e.k===0?n:0);e.lift=C(e.lift,M*.3,4,a),e.gild=C(e.gild,d,4,a);const N=(e.k-1.5)*Math.PI/2+Math.PI/4+m*1.2*(e.k%2?-1:1);e.pivot.rotation.y=c-Math.PI/2+S*N+(h?0:Math.sin(o*.11+e.k)*.025),e.pivot.position.y=e.lift;const v=e.top.uniforms;v.uDraw.value=k((3-e.k)*.17,.5+(3-e.k)*.17,u),v.uFocus.value=C(v.uFocus.value,d,3,a),v.uGlint.value=z,v.uAboveH.value=W[e.k+1]?W[e.k+1].top-e.T.top+L[e.k+1].lift-e.lift:0,v.uTop.value=e.T.top+e.lift});const Fe=D.material.uniforms;Fe.uDraw.value=k(.62,1,u),Fe.uGlint.value=z,U.rotation.y=c+(h?0:Math.sin(o*.22)*.42);const Oe=.36+.12*(1-k(0,.3,m));K.scale.setScalar(Oe),U.position.y=W[3].top+L[3].lift+.08+Oe+(h?0:Math.sin(o*.6)*.025),b.forEach((e,M)=>{const d=L[e.fam],N=d.pivot.rotation.y+S*(e.i-(e.n-1)/2)*d.T.gap,v=k(.45+(3-e.fam)*.1,.62+(3-e.fam)*.1,u),se=.42*(1+d.gild*.1),$e=h?0:Math.sin(o*.8+M*1.7)*.05;if(e.grp.position.set(Math.cos(N)*d.T.orbit,d.T.top+d.lift+gt*.8+$e,-Math.sin(N)*d.T.orbit),s>0){const Je=Y.inOut(k(e.fam*.12,e.fam*.12+.64,s)),Ee=M*7%b.length/b.length*Math.PI*2+(o*.25+s*2.4)*S;Ce.copy(E).addScaledVector(Re,.9).addScaledVector(ae,Math.cos(Ee)*2.9).addScaledVector(ie,Math.sin(Ee)*1.6),e.grp.position.lerp(Ce,Je*.9)}e.grp.scale.setScalar(se),e.grp.rotation.y=N*.5+o*.1,e.world.copy(e.grp.position),xe[M].set(e.world.x,e.world.y,e.world.z,se*(e.grp.visible?1:0)),e.gu.value=1.15-d.gild*2.3,e.dm.uniforms.uCut.value=e.gu.value,e.dm.uniforms.uGain.value=1.1*v,e.dm.uniforms.uLight.value.copy(We),e.dots.visible=d.gild<.999,e.gild.visible=d.gild>.001,e.grp.visible=v>.001,Xe(e.world,e.px),e.dm.uniforms.uShift.value.set(-e.px.x,e.px.y-I()),Pe.setXYZ(M,e.world.x,d.T.top+d.lift+.005,e.world.z),ze.setXYZ(M,e.world.x,e.world.y-se,e.world.z),Se.setW(M,.55*v*(1-s))}),Pe.needsUpdate=!0,ze.needsUpdate=!0,Se.needsUpdate=!0,Ve(P,r,i.viewport)},hover(t,o){return O=A.portrait||!i.pointer.inside?-1:be(t,o),O>=0},pick(t,o){const a=be(t,o);return a>=0&&i.emit("jump",{id:T[a]}),null},dispose(){D.geometry.dispose(),D.material.dispose(),$.dispose(),Q.dispose(),ye.dispose(),J.dispose(),P.geometry.dispose(),P.material.dispose(),L.forEach(t=>{t.mesh.geometry.dispose(),t.nameTex.dispose(),t.top.dispose()}),b.forEach(t=>{t.dm.dispose(),t.gm.dispose()}),we.dispose(),B.dispose()}}};export{St as default};
