@@ -150,13 +150,17 @@ export function createFilmWorld(data, scope = document) {
     retry.hidden=false;
   }
   // In memory: the two clips either side of the frame, and on film pages every clip of the chapter on screen and of the
-  // chapters either side, so a scroll into the next or previous chapter never waits on the network. A computer keeps the
-  // whole film (nearest clips first): a jump anywhere then starts from memory, not from the browser's cache.
+  // chapters either side, so a scroll into the next or previous chapter never waits on the network. Every device keeps
+  // only that window (2026-11-10: a computer used to hold the whole film, fetched three clips at a time from the first
+  // frame on, so a jump waited behind the download and Job Orbit pulled ~100 MB); the rest streams into the HTTP cache
+  // after the page's load event (warm), one clip at a time and only while nothing on screen is loading.
   let near = [0, 2];
-  const keepAll = filmPage && !coarse.matches;
+  // No look-ahead before the load event: until then only the clip on screen is fetched.
+  let afterLoad = document.readyState === 'complete';
+  const loaded = afterLoad ? Promise.resolve() : new Promise(resolve => addEventListener('load', resolve, {once: true}));
+  loaded.then(() => {afterLoad = true; schedule();});
   function bufferRange(t) {
     const around = [desiredIndex-2, desiredIndex+2];
-    if (keepAll) return [0, clipCount-1];
     if (!filmPage) return around;
     const c = data.chapters.indexOf(chapterAt(t)), from = data.chapters[Math.max(0,c-1)].start, to = data.chapters[c+2]?.start ?? data.duration;
     return [Math.min(around[0], Math.floor(from/data.clipSeconds)), Math.max(around[1], Math.ceil(to/data.clipSeconds)-1)];
@@ -191,11 +195,11 @@ export function createFilmWorld(data, scope = document) {
     jobs.set(key,job);
     try{return await job.promise;}finally{if(jobs.get(key)===job)jobs.delete(key);}
   }
-  // Touch screens, once the buffer is in: the rest of the film streams into the HTTP cache one clip at a time, nearest first
+  // Every device, once the buffer is in and the page has loaded: the rest of the film streams into the HTTP cache one clip at a time, nearest first
   // and only while nothing on screen is loading, so a jump anywhere can start from disk without holding a phone's memory
   // (the owner, 2026-10-06: "its ok force them all to load each page so its well loaded before to avoid lag"). Save-Data opts out.
   async function warm() {
-    if(warming||!filmPage||navigator.connection?.saveData)return;
+    if(warming||!filmPage||!afterLoad||navigator.connection?.saveData)return;
     warming=true;
     while(!disposed&&filmMode){
       if(jobs.size){await new Promise(r=>setTimeout(r,250));continue;}
@@ -224,6 +228,7 @@ export function createFilmWorld(data, scope = document) {
     }
     painted=clamp(slot.index*data.clipSeconds+localTime,0,lastTime);drawAmbient(slot.video);
     root.dataset.paintedTime=painted.toFixed(4);root.dataset.clip=String(slot.index);root.dataset.profile=slot.profile;
+    root.classList.toggle('film-opening',painted<(+root.dataset.filmOpen||0));   // a film that opens on a blank page keeps its lit chapter poster over it until then (data-film-open, seconds)
     chrome(painted,true);hideLoading();
     if(!isReady){isReady=true;root.dataset.filmReady='true';root.classList.add('film-ready');}
   }
@@ -311,8 +316,10 @@ export function createFilmWorld(data, scope = document) {
   }).catch(()=>{});
   const jump=y=>{if(lenis){lenis.resize();lenis.scrollTo(y,{immediate:true,force:true});}else scrollTo({top:y,behavior:'instant'});};
   function abortDistant() {
-    const urgent=!cache.has(desiredKey); // after a jump, look-ahead far from the new frame waits its turn again
-    for(const [key,job] of jobs)if(key!==desiredKey && (job.profile!==profile||!isNear(job.index)||(urgent&&Math.abs(job.index-desiredIndex)>2))) {
+    // after a jump the frame on screen comes first: until its clip is in, every other download waits its turn again
+    // (2026-11-10: at 20 Mbps the look-ahead two clips away kept the line busy and the new frame sat on "Loading this scene…")
+    const urgent=!cache.has(desiredKey);
+    for(const [key,job] of jobs)if(key!==desiredKey && (job.profile!==profile||!isNear(job.index)||urgent)) {
       job.controller.abort();
       for(const slot of slots)if(slot.key===key&&slot!==display){slot.key='';slot.index=-1;slot.ready=false;slot.generation++;}
     }
@@ -338,7 +345,7 @@ export function createFilmWorld(data, scope = document) {
     abortDistant();
     const slot=ensureSlot(desiredIndex,true);
     if(slot?.ready)seek(slot,frameTime-desiredIndex*data.clipSeconds);
-    if(slot?.ready&&display?.key===desiredKey) {
+    if(slot?.ready&&display?.key===desiredKey&&afterLoad) {
       ensureSlot(desiredIndex+lastDirection);ensureSlot(desiredIndex-lastDirection);
       if(filmPage) {
         // the rest of the buffer, nearest first and ahead before behind, three at a time; once it is all in, the rest of the film
