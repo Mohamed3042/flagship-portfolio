@@ -53,6 +53,10 @@
   // whole page keeps it on its floor (walks and ground rides only, no beam, no flock, the page's scroll does not lift it)
   const noPerch = el => !!el?.closest?.('[data-no-perch]');
   const grounded = () => !!document.body?.closest('[data-no-perch]');
+  // opt-out (2026-11-11, World r6 #6): a page may mark one shown [data-mk-park] box as its spot; on a grounded page the
+  // companion stands inside it (its strip of floor and its floor), so it never sits on the pill, Play or the copy
+  // (pages without one: as before)
+  const parkBox = () => {const el = document.querySelector('[data-mk-park]'); if (!el) return null; const r = el.getBoundingClientRect(); return r.width > 1 && r.height > 1 ? r : null;};
 
   // ── styles ────────────────────────────────────────────────────────────────────────────────────
   const css = `
@@ -2189,6 +2193,7 @@
       const r = el.getBoundingClientRect(), cs = getComputedStyle(owner ? el.closest(owner) || el : el);
       if (r.height && cs.visibility !== 'hidden' && cs.display !== 'none' && +cs.opacity > .3 && r.top > innerHeight * .5) top = Math.min(top, r.top - 4);
     }
+    const pk = grounded() && parkBox(); if (pk) top = Math.min(top, pk.bottom - 4 - U);   // (World r6: stand inside the park)
     return (floorVal = top);
   }
   const floorU = () => Math.floor(floorPx() / U);
@@ -2234,6 +2239,7 @@
   // a grounded page keeps it to a strip of floor beside its pill, clear of the page's copy (World hunt r5 #2: walking the
   // floor it crossed the opening's line and the Contact buttons); [lo, hi] in units, null when the pill is not shown
   function home() {
+    const pk = parkBox(); if (pk) {const lo = (pk.left + 4) / U + 9, hi = (pk.right - 4) / U - 9; return [lo, Math.max(lo, hi)];}   // (World r6: its park)
     const r = dock.getBoundingClientRect(); if (!r.width) return null;
     const lo = clamp((r.left - 110) / U, 12, W - 12), hi = clamp(r.right / U - 18, 12, W - 12);
     return lo < hi ? [lo, hi] : null;
@@ -2435,6 +2441,7 @@
     if (grounded() && C.mode !== 'held' && C.mode !== 'fall') {
       if (C.on) C.on = null; if (C.mode !== 'ride' || C.ride?.def.path !== 'ground') C.y = floor;
       const h = home();   // (out of its strip: an act holds it at the edge, and idle it walks back)
+      if (h && parkBox() && C.mode !== 'ride' && (C.x < h[0] || C.x > h[1])) C.x = clamp(C.x, h[0], h[1]);   // (World r6: a park is kept, never walked to across the controls)
       if (h && C.mode === 'act') C.x = clamp(C.x, h[0], h[1]);
       else if (h && C.mode === 'idle' && (C.x < h[0] - 2 || C.x > h[1] + 2)) travel(clamp(C.x, h[0], h[1]), floor);
     }

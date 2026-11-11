@@ -55,6 +55,12 @@
 @keyframes mkbp-in{to{opacity:1}}
 @keyframes mkbp-out{from{opacity:1}to{opacity:0}}
 @media (prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference){#mk-blueprint .g{animation:none;stroke-dashoffset:0;opacity:1}#mk-blueprint .m{animation:none;opacity:1}}`;
+  // (world-13, item 22, the World only; Pop & Ship keeps its loader as it was) the owner's 03: the thin grey line sat on the
+  // guides and the first 3 s were only lines. The line now stands on a solid black ground no guide crosses, in a readable
+  // weight, and the name and role (profile.ts, as the World's opening shows them) type in first, from .35 s
+  const r6 = !root.classList.contains('pop-world');
+  if (r6) style.textContent += `#mk-blueprint.r6 p{left:50%;right:auto;translate:-50% -14px;width:max-content;max-width:calc(100% - 28px);padding:10px 16px;border-radius:10px;background:#000;box-shadow:0 0 0 6px #000;font:500 13px/1.5 ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;letter-spacing:.02em;color:rgba(244,244,246,.94);white-space:pre}
+#mk-blueprint.r6 .bar{top:calc(var(--tag-y, calc(50% + var(--below, 22vh))) + 66px)}`;
   document.head.append(style);
 
   // the drawing, in the mark's own units (3.87 wide, 2 tall, centred, y up; the polygons of shared.ts MARK_POLYGONS), formed
@@ -93,11 +99,13 @@
   addEventListener('world:loaded', () => bar.style.setProperty('--k', '1'));
   setTimeout(() => bar.classList.add('on'), still ? 0 : 1100);
   // the tagline types in, a mono face and a caret, as Alche's motto does
-  const line = ar ? 'برمجيات وأنظمة وعوالم سينمائية.' : 'Software, systems and cinematic worlds.', tag = el.querySelector('p');
+  const motto = ar ? 'برمجيات وأنظمة وعوالم سينمائية.' : 'Software, systems and cinematic worlds.', tag = el.querySelector('p');
+  const line = r6 ? (ar ? 'محمد محمود · مهندس ذكاء اصطناعي وأتمتة' : 'Mohamed Mahmoud · AI & Automation Engineer') + '\n' + motto : motto;
+  if (r6) el.classList.add('r6');
   tag.innerHTML = '<i></i>';
   if (still) tag.textContent = line;
   else setTimeout(function type(n = 1) {tag.textContent = line.slice(0, n); tag.append(Object.assign(document.createElement('i')));
-    if (n < line.length) setTimeout(() => type(n + 1), 26);}, 1100);
+    if (n < line.length) setTimeout(() => type(n + 1), r6 ? 20 : 26);}, r6 ? 350 : 1100);
   el.setAttribute('role', 'status'); el.setAttribute('aria-label', ar ? 'جارٍ تحميل العالم' : 'Loading the World');
   const g = el.querySelector('.mk');
   // (the lines' widths are in the mark's units, one CSS px whatever its size, so the dashes that draw them stay whole)
