@@ -212,7 +212,11 @@ void main(){
       let c = clips.get(shot.video);
       if (!c) {
         const v = document.createElement('video');
-        Object.assign(v, {muted: true, loop: true, playsInline: true, preload: 'auto', src: shot.video});
+        // films on the media host (<meta name="mk-media-base">, the Pages build): a same-site .mp4 comes from the same path there
+        const meta = document.querySelector('meta[name="mk-media-base"]'), u = new URL(shot.video, location.href), site = (meta?.dataset.site || '').replace(/\/+$/, '');
+        const src = meta && /^https?:\/\//.test(meta.content) && u.origin === location.origin && /\.mp4$/i.test(u.pathname) && u.pathname.startsWith(`${site}/`) ? meta.content.replace(/\/+$/, '') + u.pathname.slice(site.length) + u.search + u.hash : shot.video;
+        if (src !== shot.video) v.crossOrigin = 'anonymous';
+        Object.assign(v, {muted: true, loop: true, playsInline: true, preload: 'auto', src});
         v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
         c = {v, gl: blank(), ready: false};
         clips.set(shot.video, c);

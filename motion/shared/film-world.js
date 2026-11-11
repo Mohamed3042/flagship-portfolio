@@ -65,7 +65,19 @@ export function createFilmWorld(data, scope = document) {
   let goal = 0, position = 0, painted = 0, lastGoal = 0, lastDirection = 1, raf = 0, previous = 0, layer = 1;
   let travel = 0, filmMode = !reduced.matches, isReady = false, started = false, disposed = false, resizeTimer = 0, lenis = null, warming = false;
   const keyFor = (p, i) => `${p}:${i}`;
-  const clipURL = (i, p = profile) => new URL(data.profiles[p].clips.replace('{index}', String(i).padStart(3,'0')), location.href).href;
+  // The Pages build moves the MP4s to a media host and writes <meta name="mk-media-base" content="<host>" data-site="<site base>">
+  // into the page (scripts/media/finish-dist.mjs): a same-site .mp4 then comes from the same path there. No meta = the site's own file.
+  const mediaMeta = document.querySelector('meta[name="mk-media-base"]');
+  const toMedia = href => {
+    if (!mediaMeta || !/^https?:\/\//.test(mediaMeta.content)) return href;
+    const u = new URL(href), site = (mediaMeta.dataset.site || '').replace(/\/+$/, '');
+    if (u.origin !== location.origin || !/\.mp4$/i.test(u.pathname) || !u.pathname.startsWith(`${site}/`)) return href;
+    return mediaMeta.content.replace(/\/+$/, '') + u.pathname.slice(site.length) + u.search;
+  };
+  // films from the media host: anonymous CORS before any src, so a canvas that reads these frames (the ambient glow,
+  // companion.js sample()) stays readable (blob clips are same-origin anyway; the watch dialog streams from the host)
+  if (mediaMeta && /^https?:\/\//.test(mediaMeta.content)) for (const v of [...videos, watchVideo]) if (v) v.crossOrigin = 'anonymous';
+  const clipURL = (i, p = profile) => toMedia(new URL(data.profiles[p].clips.replace('{index}', String(i).padStart(3,'0')), location.href).href);
   const chapterAt = t => data.chapters.reduce((current, item) => item.start <= t ? item : current, data.chapters[0]);
   const hashChapter = () => data.chapters.find(c => `#${c.id}` === location.hash);
   const hashTime = () => {

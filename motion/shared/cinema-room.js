@@ -168,6 +168,19 @@ uniform float uLight;
 void main(){ vec2 d = gl_PointCoord - .5; float r = length(d); if (r > .5) discard; float a = vA * smoothstep(.5, .15, r);
   o = uLight > .5 ? vec4(vC * .9, a) : vec4(vC * a, a); }`;
 
+/** The page's media host (<meta name="mk-media-base" content="<host>" data-site="<site base>">, written by the Pages build,
+ *  scripts/media/finish-dist.mjs): a same-site .mp4 comes from the same path there. Same rule as film-world.js toMedia.
+ *  Every caller of createRoom (Home, the 14 film pages' Chapters view) passes through here. No meta = the URL unchanged. */
+export function mediaHref(href) {
+  const meta = document.querySelector('meta[name="mk-media-base"]');
+  if (!meta || !/^https?:\/\//.test(meta.content)) return href;
+  try {
+    const u = new URL(href, location.href), site = (meta.dataset.site || '').replace(/\/+$/, '');
+    if (u.origin !== location.origin || !/\.mp4$/i.test(u.pathname) || !u.pathname.startsWith(`${site}/`)) return href;
+    return meta.content.replace(/\/+$/, '') + u.pathname.slice(site.length) + u.search + u.hash;
+  } catch {return href;}
+}
+
 export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   const gl = canvas.getContext('webgl2', {antialias: false, alpha: false, depth: false, premultipliedAlpha: false, powerPreference: 'high-performance'});
   if (!gl) return null;
@@ -203,8 +216,17 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
   // two video slots, each with its texture
   const slots = [0, 1].map(() => {
     const video = document.createElement('video');
-    Object.assign(video, {muted: true, playsInline: true, preload: 'auto', loop: false});
+    // (anonymous CORS: the films may come from the media host; a WebGL texture of a cross-origin video needs it)
+    Object.assign(video, {crossOrigin: 'anonymous', muted: true, playsInline: true, preload: 'auto', loop: false});
     video.setAttribute('playsinline', ''); video.setAttribute('muted', '');
+    // this video is never in the document, so the page's safety net (media-fallback.js) cannot see it fail:
+    // a same-site .mp4 that fails is retried once from the media host here (waitReady waits for the retry)
+    video.addEventListener('error', () => {
+      if (video.dataset.mkMediaRetry) return;
+      const to = mediaHref(video.currentSrc || video.src);
+      if (to === (video.currentSrc || video.src)) return;
+      video.dataset.mkMediaRetry = '1'; video.src = to; video.load();
+    });
     const tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([8, 8, 10, 255]));
@@ -250,7 +272,8 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     return new Promise((resolve, reject) => {
       if (video.readyState >= 3) return resolve();
       const done = () => {clearTimeout(t); video.removeEventListener('canplay', done); video.removeEventListener('error', fail); resolve();};
-      const fail = () => {clearTimeout(t); video.removeEventListener('canplay', done); video.removeEventListener('error', fail); reject(new Error('clip failed'));};
+      const fail = e => {if (e?.type === 'error' && video.dataset.mkMediaRetry === '1') {video.dataset.mkMediaRetry = '2'; return;}   // the retry from the media host is under way
+        clearTimeout(t); video.removeEventListener('canplay', done); video.removeEventListener('error', fail); reject(new Error('clip failed'));};
       const t = setTimeout(fail, ms);
       video.addEventListener('canplay', done); video.addEventListener('error', fail);
     });
@@ -261,7 +284,8 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     const item = list[i]; if (!item) return;
     const next = 1 - to, s = slots[next];
     s.video.pause();
-    if (s.url !== item.url) {s.url = item.url; s.ready = false; s.video.src = item.url; s.video.load();}
+    const url = mediaHref(item.url);
+    if (s.url !== url) {s.url = url; s.ready = false; delete s.video.dataset.mkMediaRetry; s.video.src = url; s.video.load();}
     try {await waitReady(s.video);} catch {if (g === generation) advance(); return;}
     if (g !== generation) return;
     s.video.currentTime = 0;
@@ -275,7 +299,7 @@ export function createRoom(canvas, {hero, onChange, onEnded} = {}) {
     onChange?.({index, count: list.length, item, film: filmInfo});
     // warm the following clip so the next change is instant
     const after = list[(i + 1) % list.length];
-    if (after && after.url !== item.url) fetch(after.url, {priority: 'low'}).catch(() => {});
+    if (after && after.url !== item.url) fetch(mediaHref(after.url), {priority: 'low'}).catch(() => {});
   }
   function advance() {
     if (!active || external) return;
