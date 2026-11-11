@@ -49,6 +49,10 @@
   // a shuffle bag: everything comes up once before anything repeats
   const bag = items => {let pool = []; return ok => {if (!pool.some(ok)) pool = shuffle([...items]); const i = pool.findIndex(ok); return i < 0 ? null : pool.splice(i, 1)[0];};};
   const visible = el => !el.checkVisibility || el.checkVisibility({opacityProperty: true, visibilityProperty: true});
+  // opt-out (2026-11-11, World r5): [data-no-perch] boxes are never stood on, ridden to or picked for an act; on <body> the
+  // whole page keeps it on its floor (walks and ground rides only, no beam, no flock, the page's scroll does not lift it)
+  const noPerch = el => !!el?.closest?.('[data-no-perch]');
+  const grounded = () => !!document.body?.closest('[data-no-perch]');
 
   // ── styles ────────────────────────────────────────────────────────────────────────────────────
   const css = `
@@ -826,7 +830,7 @@
   // ── DOM pop-ups that follow the companion (code cards, sticky notes), sound effects, tips ─────
   const pops = [];
   function popup(build, {cls = '', ms = 4200, dx = 0, dy = 0, rot = 0} = {}) {
-    if (still) return;
+    if (still || grounded()) return;   // (a [data-no-perch] page: nothing floats up over its copy, World hunt r5 #1)
     const el = document.createElement('div');
     el.className = `mk-pop ${cls}`; build(el);
     el.style.setProperty('--r', `${rot}deg`);
@@ -844,7 +848,7 @@
   }
   const clearPops = () => {for (const p of pops) p.el.remove(); pops.length = 0;};
   function sfx(s, cls = '', at) {
-    if (still || !s) return;
+    if (still || !s || grounded()) return;   // (likewise)
     const el = document.createElement('i');
     el.className = `mk-sfx ${cls}`; el.textContent = s;
     el.style.left = `${at ? at[0] : (C.ox + 9) * U}px`; el.style.top = `${at ? at[1] : (C.oy - 6) * U}px`;
@@ -962,7 +966,7 @@
     const out = [], seen = new Set(), modal = layerHost !== document.body ? layerHost : null, top = topU() * U + 20, bottom = floorPx() - 30;
     const add = (el, type) => {
       if (seen.has(el)) return; seen.add(el);
-      if ((modal && !modal.contains(el)) || el.closest('.mk-bubble,.mk-pop,.mk-xo,.mk-dock,dialog:not([open])')) return;
+      if ((modal && !modal.contains(el)) || el.closest('.mk-bubble,.mk-pop,.mk-xo,.mk-dock,dialog:not([open])') || noPerch(el)) return;
       if (type === 'frame' && el.parentElement?.closest(FRAME_SEL)) return;   // the outermost frame only
       const r = el.getBoundingClientRect();
       if (r.width < (type === 'title' ? 100 : 90) || r.height < (type === 'title' ? 22 : 50)) return;
@@ -2169,7 +2173,7 @@
 
   // passing crows (Crow mode with Opus, and the flock when you switch to Crow mode)
   const visitors = [];
-  function flock(n) {if (still) return; const left = Math.random() < .5; for (let i = 0; i < n; i++) visitors.push({x: left ? -14 - i * 24 : W + 14 + i * 24, y: rnd(20, Math.max(26, H * .28)) + i * 6, vx: (left ? 1 : -1) * rnd(50, 70), ph: Math.random() * 6});}
+  function flock(n) {if (still || grounded()) return; const left = Math.random() < .5; for (let i = 0; i < n; i++) visitors.push({x: left ? -14 - i * 24 : W + 14 + i * 24, y: rnd(20, Math.max(26, H * .28)) + i * 6, vx: (left ? 1 : -1) * rnd(50, 70), ph: Math.random() * 6});}
 
   // ── the companion ─────────────────────────────────────────────────────────────────────────────
   let floorAt = 0, floorVal = 0;
@@ -2222,18 +2226,26 @@
     if (C.mode === 'held' || xo) return;
     if (C.mode !== 'carried') {endRide(true); stopAct(); C.next = C.then = null; C.mode = 'carried'; C.scrolled = 0; C.vy = 0;}
     C.scrolled += Math.abs(dy);
-    if (!C.on) C.y = clamp(C.y - dy / U, topU(), floorU());   // standing on the page, so the page carries it
+    if (!C.on && !grounded()) C.y = clamp(C.y - dy / U, topU(), floorU());   // standing on the page, so the page carries it
   }, {passive: true});
   function wake() {stopAct(); C.mode = 'idle'; C.until = performance.now() + 1400; C.why = 'wake';}
 
   // travelling: pick a ride for the distance and the destination, then go
+  // a grounded page keeps it to a strip of floor beside its pill, clear of the page's copy (World hunt r5 #2: walking the
+  // floor it crossed the opening's line and the Contact buttons); [lo, hi] in units, null when the pill is not shown
+  function home() {
+    const r = dock.getBoundingClientRect(); if (!r.width) return null;
+    const lo = clamp((r.left - 110) / U, 12, W - 12), hi = clamp(r.right / U - 18, 12, W - 12);
+    return lo < hi ? [lo, hi] : null;
+  }
   function travel(tx, ty, el = null, then = null) {
+    if (grounded() && C.mode !== 'held') {ty = floorU(); el = null; const h = home(); if (h) tx = clamp(tx, h[0], h[1]);}   // (a grounded page: only along the floor, by its pill)
     const now = performance.now(), floor = floorU(), dx = tx - C.x, dy = ty - C.y, d = Math.hypot(dx, dy), level = Math.abs(dy) < 3;
     C.then = then; C.next = null;
     if (d < 3) {if (el) perch(el, tx); C.y = ty; return arrive(now);}
-    const ed = root.dataset.edition || '', ok = r => (r.who === 'both' || r.who === kind) && (!r.need || r.need(dx, dy)) && (!r.edition || r.edition === ed);
+    const ed = root.dataset.edition || '', low = grounded(), ok = r => (r.who === 'both' || r.who === kind) && (!r.need || r.need(dx, dy)) && (!r.edition || r.edition === ed) && (!low || r.path === 'ground');
     const small = d < 45 || (C.scrolled < 50 && d < 70);
-    let def = (small ? basicBag(r => ok(r) && (level || r.path !== 'ground')) : rideBag(ok)) || JUMP;
+    let def = (small ? basicBag(r => ok(r) && (level || r.path !== 'ground')) : rideBag(ok)) || (low && (basicBag(ok) || rideBag(ok))) || JUMP;
     if (!small && ed) {const own = RIDES.filter(r => r.edition === ed && ok(r)); if (own.length && Math.random() < .45) def = any(own);}   // an edition likes its own ride
     if (def.path === 'ground' && !level && ty < floor - 2) {C.next = {x: tx, y: ty, el}; startRide(def, now, tx, floor, null);}   // drive below it, then jump up
     else startRide(def, now, tx, ty, el);
@@ -2260,7 +2272,7 @@
   }
   function chase(el) {
     const now = performance.now();
-    if (kind === 'off' || still || !el?.isConnected || xo || C.mode === 'held' || now - C.chaseAt < 1800 || C.act?.def.once) return;
+    if (kind === 'off' || still || !el?.isConnected || noPerch(el) || xo || C.mode === 'held' || now - C.chaseAt < 1800 || C.act?.def.once) return;
     const r = el.getBoundingClientRect();
     if (r.width < 60 || r.top < 30 || r.top > innerHeight - 40) return;
     C.chaseAt = now; stopAct(); endRide(true);
@@ -2419,6 +2431,12 @@
       case 'fall': C.vy += GRAV * dt; C.y += C.vy * dt; if (C.y >= floor) {C.y = floor; C.vy = 0; dust(C.x, floor); if (kind === 'crow') feather(C.x, floor - 8); idle(now, 900, 'land');} break;
       case 'act': {let r; try {r = C.act.def.tick?.((now - C.act.st.t0) / 1000, C.act.st, dt);} catch {r = 'done';} if (C.act && (r === 'done' || now > C.act.end)) endAct();} break;
       default: if (now > C.until && !bubble) {if (xo) startAct(ACT.xo, now, 36e5); else nextAct(now);}
+    }
+    if (grounded() && C.mode !== 'held' && C.mode !== 'fall') {
+      if (C.on) C.on = null; if (C.mode !== 'ride' || C.ride?.def.path !== 'ground') C.y = floor;
+      const h = home();   // (out of its strip: an act holds it at the edge, and idle it walks back)
+      if (h && C.mode === 'act') C.x = clamp(C.x, h[0], h[1]);
+      else if (h && C.mode === 'idle' && (C.x < h[0] - 2 || C.x > h[1] + 2)) travel(clamp(C.x, h[0], h[1]), floor);
     }
     if ((C.mode === 'idle' || C.mode === 'act') && !C.on && !C.act?.st.free) {
       if (C.y < floor - .5) {C.vy += GRAV * dt; C.y = Math.min(floor, C.y + C.vy * dt); if (C.y >= floor) C.vy = 0;} else {C.y = floor; C.vy = 0;}

@@ -1,0 +1,2 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["_astro/intro.-c1Vj_dk.js","_astro/EditionWorld.astro_astro_type_script_index_0_lang.DJSO9PCe.js","_astro/preload-helper.4QTdcD_W.js","_astro/media-base.CkYm9YKi.js","_astro/films.CXWwCt_q.js"])))=>i.map(i=>d[i]);
+import{_}from"./preload-helper.4QTdcD_W.js";/*! © 2026 Mohamed Mahmoud. All rights reserved. */const r={intro:()=>_(()=>import("./intro.-c1Vj_dk.js"),__vite__mapDeps([0,1,2,3])),films:()=>_(()=>import("./films.CXWwCt_q.js"),__vite__mapDeps([4,1,2,3]))};export{r as sceneModules};

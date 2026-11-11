@@ -42,10 +42,10 @@
 #mk-blueprint .mk{transform-box:view-box;transform-origin:0 0}
 #mk-blueprint .g{fill:none;stroke:rgba(232,232,236,.38);stroke-width:var(--sw);stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:mkbp-draw .6s ${ease} forwards;animation-delay:var(--d)}
 #mk-blueprint .m{fill:none;stroke:rgba(246,246,248,.85);stroke-width:calc(var(--sw) * 1.2);opacity:0;animation:mkbp-in .7s ${ease} 1.45s forwards}
-#mk-blueprint p{position:absolute;left:0;right:0;top:calc(50% + var(--below, 22vh));margin:0;text-align:center;font:400 12.5px/1.4 ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;letter-spacing:.04em;color:rgba(240,240,242,.78);white-space:pre}
+#mk-blueprint p{position:absolute;left:0;right:0;top:var(--tag-y, calc(50% + var(--below, 22vh)));margin:0;padding:14px 0;translate:0 -14px;text-align:center;background:linear-gradient(transparent,#000 30%,#000 70%,transparent);transition:top .6s ${ease};font:400 12.5px/1.4 ui-monospace,'SF Mono','Cascadia Mono',Menlo,Consolas,monospace;letter-spacing:.04em;color:rgba(240,240,242,.78);white-space:pre}
 #mk-blueprint p i{display:inline-block;width:.55em;height:1.05em;vertical-align:-.15em;background:rgba(240,240,242,.8);margin-left:1px;animation:mkbp-blink .9s steps(1) infinite}
 @keyframes mkbp-blink{50%{opacity:0}}
-#mk-blueprint .bar{position:absolute;left:50%;width:132px;margin-left:-66px;top:calc(50% + var(--below, 22vh) + 34px);height:1px;background:rgba(240,240,242,.12);opacity:0;transition:opacity .5s}
+#mk-blueprint .bar{position:absolute;left:50%;width:132px;margin-left:-66px;top:calc(var(--tag-y, calc(50% + var(--below, 22vh))) + 34px);height:1px;background:rgba(240,240,242,.12);opacity:0;transition:opacity .5s,top .6s ${ease}}
 #mk-blueprint .bar i{position:absolute;inset:0;background:rgba(240,240,242,.62);transform-origin:0 50%;transform:scaleX(var(--k,0));transition:transform .45s ${ease}}
 #mk-blueprint .bar.on{opacity:1}
 #mk-blueprint.is-open p,#mk-blueprint.is-open .bar{animation:mkbp-out .35s forwards}
@@ -108,7 +108,12 @@
   };
   // where the mark will stand, until the World says exactly (hero.ts: about half the width, nine tenths on phones)
   place(innerWidth / 2, innerHeight * (tall ? .44 : .43), innerWidth * (tall ? .92 : .52) / MW, false);
-  addEventListener('world:markrect', e => {const {x, y, unit} = e.detail; place(x, y, unit, true);});
+  // (world-11c, owner's iPhone 11 Nov: on a phone the typed line ran across the MK's strokes) on a tall screen the line stands
+  // under the outline (the mark is two units tall, centred on y), on a soft black band that hides the construction lines
+  // behind it; wide screens keep their place, with the same band
+  const under = (y, unit) => {if (tall) el.style.setProperty('--tag-y', `${Math.round(Math.min(innerHeight - 64, y + unit + 30))}px`);};
+  under(innerHeight * .44, innerWidth * .92 / MW);
+  addEventListener('world:markrect', e => {const {x, y, unit} = e.detail; place(x, y, unit, true); under(y, unit);});
   // the World waits for the drawing (the outline's 2 s from .35 s) before it takes the picture over
   const mount = () => {if (!document.body) return requestAnimationFrame(mount); document.body.prepend(el); window.__mkDrawnAt = performance.now() + 2400;};
   mount();
