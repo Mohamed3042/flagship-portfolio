@@ -4,13 +4,13 @@
  * construction lines, its outline with guides along its edges (circles, the M's V and the K's arms run long, cap and base
  * lines across the screen) and the tagline: that is the loading phase. The outline stands exactly where the World's glass
  * mark will stand (hero.ts sends world:markrect while the World loads). When the World has really loaded and the drawing
- * is finished (the hero fires world:surge), the loader hands its picture over: the World's lens draws the same black and
- * the same lines on the same spot, so its glass can bend them, and the loader goes in that frame (lens.ts: a crystal
- * ball pops in the mark, swells past the screen and becomes the glass MK; the owner, 2026-10-05, "liquid glass PULSING of
- * those letters"; a window cut in the black read as a cartoon iris). Nothing scrolls until the opening is over, so the
- * walk always starts at the top, as Alche's does. Fallbacks: world-failed, or 14 s. Classic <head> script so it covers
- * the first paint; html[data-loader=blueprint] tells the shared arcade loader to stand aside. (The earlier versions:
- * src/legacy/world-loader-blob.js.txt; the iris, git 38ace7e; the bead that swelled into a ball, git 37ba4f3.)
+ * is finished (the hero fires world:surge), the typed line and the bar fade (.35 s) while the World paints this very
+ * picture (the black and the lines) into its last pass; on world:handover the loader goes in one frame and the World opens
+ * alche's window from the middle of the screen onto the live Open (world-58b: open-window.ts, engine.ts uOpen). Nothing
+ * scrolls until .8 s into the window, so the walk always starts at the top, as Alche's does. Fallbacks: world-failed, or
+ * 14 s (a .4 s fade with reduced motion). Classic <head> script so it covers the first paint; html[data-loader=blueprint]
+ * tells the shared arcade loader to stand aside. (The ball that swelled and puffed into a glass MK: lens.ts, git 08d2cb16;
+ * the earlier versions: src/legacy/world-loader-blob.js.txt; the iris, git 38ace7e.)
  */
 (() => {
   const root = document.documentElement;
@@ -48,7 +48,8 @@
 #mk-blueprint .bar{position:absolute;left:50%;width:132px;margin-left:-66px;top:calc(var(--tag-y, calc(50% + var(--below, 22vh))) + 34px);height:1px;background:rgba(240,240,242,.12);opacity:0;transition:opacity .5s,top .6s ${ease}}
 #mk-blueprint .bar i{position:absolute;inset:0;background:rgba(240,240,242,.62);transform-origin:0 50%;transform:scaleX(var(--k,0));transition:transform .45s ${ease}}
 #mk-blueprint .bar.on{opacity:1}
-#mk-blueprint.is-open p,#mk-blueprint.is-open .bar{animation:mkbp-out .35s forwards}
+#mk-blueprint.is-surge p,#mk-blueprint.is-surge .bar{animation:mkbp-out .35s forwards}
+@media (min-aspect-ratio:1001/1000){#mk-blueprint svg{-webkit-mask-image:linear-gradient(90deg,transparent 10%,rgba(0,0,0,.16) 12%,rgba(0,0,0,.84) 16%,#000 18%,#000 82%,rgba(0,0,0,.84) 84%,rgba(0,0,0,.16) 88%,transparent 90%);mask-image:linear-gradient(90deg,transparent 10%,rgba(0,0,0,.16) 12%,rgba(0,0,0,.84) 16%,#000 18%,#000 82%,rgba(0,0,0,.84) 84%,rgba(0,0,0,.16) 88%,transparent 90%)}}
 #mk-blueprint.is-open .bg,#mk-blueprint.is-open svg{visibility:hidden}
 #mk-blueprint.is-done{opacity:0;visibility:hidden;pointer-events:none}
 @keyframes mkbp-draw{from{opacity:1;stroke-dashoffset:1}to{opacity:1;stroke-dashoffset:0}}
@@ -126,12 +127,20 @@
   const mount = () => {if (!document.body) return requestAnimationFrame(mount); document.body.prepend(el); window.__mkDrawnAt = performance.now() + 2400;};
   mount();
 
-  // the surge: the World's lens has the same picture on the same spot from this frame on, so the black and the lines go at
-  // once and only the tagline fades; without a surge (the World failed, or 9 s went by) the loader fades away instead
+  // the surge: the typed line and the bar fade, the black and the lines stay; on world:handover (the World draws the same
+  // picture from that frame on) the loader goes at once and the World's window opens; without a surge (the World failed, or
+  // 14 s went by) the loader fades away instead (a plain .4 s fade with reduced motion)
   let gone = false;
   function open(handover) {
     if (gone) return; gone = true;
-    if (handover && !still) {el.classList.add('is-open'); setTimeout(() => el.remove(), 500); return;}
+    if (handover && !still) {
+      el.classList.add('is-surge');
+      const out = () => {if (el.classList.contains('is-open')) return; el.classList.add('is-open'); setTimeout(() => el.remove(), 100);};
+      addEventListener('world:handover', out, {once: true});
+      setTimeout(out, 3000);   // (never stuck over the World)
+      return;
+    }
+    if (still) el.style.transition = 'opacity .4s linear,visibility 0s .45s';
     el.classList.add('is-done'); setTimeout(() => el.remove(), 700);
     if (still || root.classList.contains('world-failed')) release();
   }
