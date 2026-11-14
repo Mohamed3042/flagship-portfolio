@@ -1,0 +1,1 @@
+import"./EditionWorld.astro_astro_type_script_index_0_lang.CGr-gj7z.js";/*! © 2026 Mohamed Mahmoud. All rights reserved. */const a=()=>Promise.allSettled([document.fonts.load('700 120px "Space Grotesk Variable"'),document.fonts.load('600 40px "Inter Variable"'),document.fonts.load('400 40px "Inter Variable"'),document.fonts.load('700 40px "Cairo Variable"')]);export{a as f};
