@@ -8,6 +8,7 @@
  * Public contract: #film-data JSON + the data-film-* hooks in README.md.
  * Native portrait is a separate authored film, never a crop of the landscape.
  */
+import {clipHref, clipIndexAt, isClipIndex, scrollProgress} from './film-index.mjs';
 export function createFilmWorld(data, scope = document) {
   const root = document.documentElement;
   const redirectLegacyHash = () => {
@@ -77,7 +78,8 @@ export function createFilmWorld(data, scope = document) {
   // films from the media host: anonymous CORS before any src, so a canvas that reads these frames (the ambient glow,
   // companion.js sample()) stays readable (blob clips are same-origin anyway; the watch dialog streams from the host)
   if (mediaMeta && /^https?:\/\//.test(mediaMeta.content)) for (const v of [...videos, watchVideo]) if (v) v.crossOrigin = 'anonymous';
-  const clipURL = (i, p = profile) => toMedia(new URL(data.profiles[p].clips.replace('{index}', String(i).padStart(3,'0')), location.href).href);
+  // (clipHref throws on an index that is not a clip: a NaN index used to become "clip-NaN.mp4"; see film-index.mjs)
+  const clipURL = (i, p = profile) => toMedia(new URL(clipHref(data.profiles[p].clips, i, clipCount), location.href).href);
   const chapterAt = t => data.chapters.reduce((current, item) => item.start <= t ? item : current, data.chapters[0]);
   const hashChapter = () => data.chapters.find(c => `#${c.id}` === location.hash);
   const hashTime = () => {
@@ -265,7 +267,7 @@ export function createFilmWorld(data, scope = document) {
     try {slot.video.currentTime=requested;metrics.seeks++;}catch(error){failure(error);}
   }
   function ensureSlot(index,primary=false) {
-    if(index<0||index>=clipCount)return null;
+    if(!isClipIndex(index,clipCount))return null;
     const key=keyFor(profile,index);
     let slot=slots.find(s=>s.key===key);if(slot)return slot;
     const candidates=slots.filter(s=>s!==display && s.key!==desiredKey && s.holdUntil<performance.now());
@@ -343,7 +345,7 @@ export function createFilmWorld(data, scope = document) {
     // Scroll positions are integral CSS pixels. Snap their mapped time to the
     // nearest real film frame so a chapter/segment boundary cannot settle
     // fractionally before the requested frame.
-    goal=Math.round(clamp((scrollY-story.offsetTop)/travel,0,1)*lastTime*data.fps)/data.fps;
+    goal=Math.round(scrollProgress(scrollY,story.offsetTop,travel)*lastTime*data.fps)/data.fps;
     if(Math.abs(goal-lastGoal)>.01)lastDirection=goal>lastGoal?1:-1;
     lastGoal=goal;
     // Far chapter jumps resolve directly. Otherwise the film eases after the scroll: lightly behind the wheel, and on film
@@ -352,7 +354,7 @@ export function createFilmWorld(data, scope = document) {
     position=Math.abs(goal-position)>data.clipSeconds*1.5?goal:position+(goal-position)*(1-Math.exp(-delta*rate/1000));
     if(Math.abs(position-goal)<frame*.2)position=goal;
     const frameTime=clamp(Math.round(position*data.fps)/data.fps,0,lastTime);
-    desiredIndex=Math.min(clipCount-1,Math.floor(frameTime/data.clipSeconds));desiredKey=keyFor(profile,desiredIndex);
+    desiredIndex=clipIndexAt(frameTime,data.clipSeconds,clipCount);desiredKey=keyFor(profile,desiredIndex);
     near=bufferRange(frameTime);
     abortDistant();
     const slot=ensureSlot(desiredIndex,true);
@@ -424,7 +426,7 @@ export function createFilmWorld(data, scope = document) {
   }
   function openChapter(chapter) {
     watchVideo.pause();
-    const index=Math.min(clipCount-1,Math.floor((chapter.previewAt??chapter.start)/data.clipSeconds));
+    const index=clipIndexAt(chapter.previewAt??chapter.start,data.clipSeconds,clipCount);
     watchVideo.src=clipURL(index);watchVideo.poster=posterFor(chapter);watchVideo.load();
     one('[data-watch-title]').textContent=tr(chapter.title);
     watchDialog.showModal();watchVideo.play().catch(()=>{});
