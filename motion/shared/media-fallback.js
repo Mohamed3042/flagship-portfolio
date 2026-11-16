@@ -1,7 +1,5 @@
-/* Safety net for films moved to the media host (scripts/media/finish-dist.mjs writes it into every page of the Pages build,
-   right after <meta name="mk-media-base" content="<host>" data-site="<site base>">). When a <video> or <source> fails to load
-   a same-site .mp4, it retries once from the same path on the media host (crossOrigin="anonymous" first, so a WebGL texture
-   of it stays usable). Nothing fails = nothing happens. No meta (astro dev, local build) = does nothing. */
+
+
 (() => {
   const meta = document.querySelector('meta[name="mk-media-base"]');
   if (!meta || !/^https?:\/\//.test(meta.content)) return;
@@ -10,7 +8,7 @@
     try {
       const u = new URL(href, location.href);
       if (u.origin !== location.origin || !/\.mp4$/i.test(u.pathname) || !u.pathname.startsWith(`${site}/`)) return null;
-      return host + u.pathname.slice(site.length) + u.search + u.hash;   // keeps a #t= start time
+      return host + u.pathname.slice(site.length) + u.search + u.hash;
     } catch { return null; }
   };
   addEventListener('error', e => {

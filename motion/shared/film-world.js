@@ -1,13 +1,6 @@
 /*! © 2026 Mohamed Mahmoud. All rights reserved. */
-/**
- * Motion Portfolio film engine, 2026-10-03.
- * Adapted from Job Orbit's proven film-world.js (three paused video buffers,
- * 5-second segments, blob cache, rVFC + paused-seek fallback). Its ownership and
- * original source are documented in README.md. No framework or runtime CDN.
- *
- * Public contract: #film-data JSON + the data-film-* hooks in README.md.
- * Native portrait is a separate authored film, never a crop of the landscape.
- */
+
+
 import {clipHref, clipIndexAt, isClipIndex, scrollProgress} from './film-index.mjs';
 export function createFilmWorld(data, scope = document) {
   const root = document.documentElement;
@@ -27,8 +20,8 @@ export function createFilmWorld(data, scope = document) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const portrait = matchMedia('(max-aspect-ratio: 4/5)');
   const coarse = matchMedia('(pointer: coarse)');
-  // Film pages (no pixelsPerSecond in their data) scroll like the World: its pace, its smooth wheel and its glide after a
-  // finger, with whole chapters kept buffered. Home's film sets its own pace inside the World engine and keeps the old feel.
+
+
   const filmPage = !data.pixelsPerSecond;
   const chooseProfile = () => data.profiles.mobile && (portrait.matches || (coarse.matches && innerWidth <= 600)) ? 'mobile' : 'desktop';
   const frame = 1 / data.fps, lastTime = data.duration - frame;
@@ -54,7 +47,7 @@ export function createFilmWorld(data, scope = document) {
   const calm = one('[data-calm-story]');
   const videos = all('[data-film-buffer]');
   const trackEl = one('[data-film-track]');
-  // Ambient: the shown frame, tiny and blurred, fills whatever the film does not cover (phones, ultra-wide).
+
   const ambient = one('[data-film-ambient]'), ambientCtx = ambient?.getContext('2d');
   let ambientAt = 0;
   const drawAmbient = video => {if (!ambientCtx || performance.now() - ambientAt < 80) return; ambientAt = performance.now(); try {ambientCtx.drawImage(video, 0, 0, ambient.width, ambient.height);} catch {}};
@@ -66,8 +59,8 @@ export function createFilmWorld(data, scope = document) {
   let goal = 0, position = 0, painted = 0, lastGoal = 0, lastDirection = 1, raf = 0, previous = 0, layer = 1;
   let travel = 0, filmMode = !reduced.matches, isReady = false, started = false, disposed = false, resizeTimer = 0, lenis = null, warming = false;
   const keyFor = (p, i) => `${p}:${i}`;
-  // The Pages build moves the MP4s to a media host and writes <meta name="mk-media-base" content="<host>" data-site="<site base>">
-  // into the page (scripts/media/finish-dist.mjs): a same-site .mp4 then comes from the same path there. No meta = the site's own file.
+
+
   const mediaMeta = document.querySelector('meta[name="mk-media-base"]');
   const toMedia = href => {
     if (!mediaMeta || !/^https?:\/\//.test(mediaMeta.content)) return href;
@@ -75,10 +68,10 @@ export function createFilmWorld(data, scope = document) {
     if (u.origin !== location.origin || !/\.mp4$/i.test(u.pathname) || !u.pathname.startsWith(`${site}/`)) return href;
     return mediaMeta.content.replace(/\/+$/, '') + u.pathname.slice(site.length) + u.search;
   };
-  // films from the media host: anonymous CORS before any src, so a canvas that reads these frames (the ambient glow,
-  // companion.js sample()) stays readable (blob clips are same-origin anyway; the watch dialog streams from the host)
+
+
   if (mediaMeta && /^https?:\/\//.test(mediaMeta.content)) for (const v of [...videos, watchVideo]) if (v) v.crossOrigin = 'anonymous';
-  // (clipHref throws on an index that is not a clip: a NaN index used to become "clip-NaN.mp4"; see film-index.mjs)
+
   const clipURL = (i, p = profile) => toMedia(new URL(clipHref(data.profiles[p].clips, i, clipCount), location.href).href);
   const chapterAt = t => data.chapters.reduce((current, item) => item.start <= t ? item : current, data.chapters[0]);
   const hashChapter = () => data.chapters.find(c => `#${c.id}` === location.hash);
@@ -104,7 +97,7 @@ export function createFilmWorld(data, scope = document) {
   for (const link of all('[data-gallery-link]')) link.href = new URL(data.gallery?.[lang] || data.gallery?.en || '../../',location.href).href;
   const setPoster = chapter => {
     poster.src = posterFor(chapter);
-    stage.style.setProperty('--film-ar', String(data.profiles[profile].width / data.profiles[profile].height)); // film.css: cover, capped by --film-overscan
+    stage.style.setProperty('--film-ar', String(data.profiles[profile].width / data.profiles[profile].height));
     poster.alt = tr(chapter.title);
     poster.width = data.profiles[profile].width;
     poster.height = data.profiles[profile].height;
@@ -141,7 +134,7 @@ export function createFilmWorld(data, scope = document) {
         chapterAction.hidden=!chapter.action;
         if(chapter.action){chapterAction.textContent=tr(chapter.action.label);chapterAction.href=new URL(tr(chapter.action.href),location.href).href;}
       }
-      // On the root so the glass header, dock and caption take on each world's colour too (film.css transitions it).
+
       root.style.setProperty('--chapter-accent',chapter.accent||data.accent||'#1ed760');
       for (const link of all('[data-chapter]')) {
         if (link.dataset.chapter === chapter.id) link.setAttribute('aria-current','step'); else link.removeAttribute('aria-current');
@@ -163,13 +156,13 @@ export function createFilmWorld(data, scope = document) {
     showLoading(label('This scene could not load. Try again or open the chapter posters.','تعذّر تحميل هذا المشهد. أعد المحاولة أو افتح صور الفصول.'));
     retry.hidden=false;
   }
-  // In memory: the two clips either side of the frame, and on film pages every clip of the chapter on screen and of the
-  // chapters either side, so a scroll into the next or previous chapter never waits on the network. Every device keeps
-  // only that window (2026-11-10: a computer used to hold the whole film, fetched three clips at a time from the first
-  // frame on, so a jump waited behind the download and Job Orbit pulled ~100 MB); the rest streams into the HTTP cache
-  // after the page's load event (warm), one clip at a time and only while nothing on screen is loading.
+
+
+
+
+
   let near = [0, 2];
-  // No look-ahead before the load event: until then only the clip on screen is fetched.
+
   let afterLoad = document.readyState === 'complete';
   const loaded = afterLoad ? Promise.resolve() : new Promise(resolve => addEventListener('load', resolve, {once: true}));
   loaded.then(() => {afterLoad = true; schedule();});
@@ -191,7 +184,7 @@ export function createFilmWorld(data, scope = document) {
     const key=keyFor(requestedProfile,index);
     if(cache.has(key))return cache.get(key).url;
     if(jobs.has(key))return jobs.get(key).promise;
-    if(warmJob&&warmJob.key!==key){warmJob.controller.abort();warmed.delete(warmJob.key);} // the film on screen comes first
+    if(warmJob&&warmJob.key!==key){warmJob.controller.abort();warmed.delete(warmJob.key);}
     const job={controller:new AbortController(),promise:null,index,profile:requestedProfile};
     job.promise=(async()=>{
       const timeout=setTimeout(()=>job.controller.abort(new DOMException('Scene download timed out','TimeoutError')),60000);
@@ -209,9 +202,9 @@ export function createFilmWorld(data, scope = document) {
     jobs.set(key,job);
     try{return await job.promise;}finally{if(jobs.get(key)===job)jobs.delete(key);}
   }
-  // Every device, once the buffer is in and the page has loaded: the rest of the film streams into the HTTP cache one clip at a time, nearest first
-  // and only while nothing on screen is loading, so a jump anywhere can start from disk without holding a phone's memory
-  // (the owner, 2026-10-06: "its ok force them all to load each page so its well loaded before to avoid lag"). Save-Data opts out.
+
+
+
   async function warm() {
     if(warming||!filmPage||!afterLoad||navigator.connection?.saveData)return;
     warming=true;
@@ -221,7 +214,7 @@ export function createFilmWorld(data, scope = document) {
       if(i===undefined)break;
       const key=keyFor(p,i);warmed.add(key);
       warmJob={key,controller:new AbortController()};
-      try{ // read through and drop: the cache keeps the bytes, the page holds none of them
+      try{
         const response=await fetch(clipURL(i,p),{signal:warmJob.controller.signal,priority:'low'});
         if(response.ok){const reader=response.body.getReader();while(!(await reader.read()).done);metrics.warmed++;}
       }catch{}
@@ -233,8 +226,8 @@ export function createFilmWorld(data, scope = document) {
     if(!filmMode || !slot.ready || slot.video.readyState<2 || slot.key!==desiredKey)return;
     if(Math.abs(localTime-slot.wanted)>.11)return;
     if(slot!==display) {
-      // The new buffer fades in on top while the old one stays opaque underneath, then the old one goes: two half-faded
-      // layers over the dark stage dipped the picture by a quarter at every 5 s clip boundary.
+
+
       const old=display;
       slot.video.style.zIndex=String(++layer);slot.video.classList.add('is-visible');
       if(old){old.holdUntil=performance.now()+240;setTimeout(()=>{if(display!==old)old.video.classList.remove('is-visible');},240);}
@@ -242,7 +235,7 @@ export function createFilmWorld(data, scope = document) {
     }
     painted=clamp(slot.index*data.clipSeconds+localTime,0,lastTime);drawAmbient(slot.video);
     root.dataset.paintedTime=painted.toFixed(4);root.dataset.clip=String(slot.index);root.dataset.profile=slot.profile;
-    root.classList.toggle('film-opening',painted<(+root.dataset.filmOpen||0));   // a film that opens on a blank page keeps its lit chapter poster over it until then (data-film-open, seconds)
+    root.classList.toggle('film-opening',painted<(+root.dataset.filmOpen||0));
     chrome(painted,true);hideLoading();
     if(!isReady){isReady=true;root.dataset.filmReady='true';root.classList.add('film-ready');}
   }
@@ -297,7 +290,7 @@ export function createFilmWorld(data, scope = document) {
     });
     slot.video.addEventListener('seeked',()=>{
       const generation=slot.generation;
-      // Safari/Chromium may decode a paused seek without a compositor callback.
+
       requestAnimationFrame(()=>{
         if(slot.generation===generation&&!slot.video.seeking)paint(slot,slot.video.currentTime);
       });
@@ -306,11 +299,11 @@ export function createFilmWorld(data, scope = document) {
     slot.video.addEventListener('error',()=>{if(slot.key===desiredKey)failure(new Error(slot.video.error?.message||'The scene could not decode.'));});
   }
   const inFilm=()=>scrollY>=story.offsetTop-innerHeight*.5&&scrollY<=story.offsetTop+travel+innerHeight*.5;
-  // Pace. Film pages walk at the World's: six seconds of film to a screen of scroll on every device (world.css:
-  // html.world-walk{--pps:calc(100svh / 6)}), measured on the small viewport so a phone's toolbars never stretch the film
-  // under the finger — the owner, 2026-10-06: "make it same way as world was made because i feel they too fast".
-  // Touch screens also stop at every chapter start: CSS scroll snap, off while Play scrolls — the owner, 2026-10-05: "you
-  // can end the whole thing in one strong scroll".
+
+
+
+
+
   const touch=matchMedia('(pointer: coarse)');let snaps=[],snapKey='';
   const screenProbe=filmPage?document.body.appendChild(document.createElement('i')):null;
   if(screenProbe)screenProbe.style.cssText='position:fixed;top:0;width:0;height:100vh;height:100svh;visibility:hidden;pointer-events:none';
@@ -323,15 +316,15 @@ export function createFilmWorld(data, scope = document) {
     for(const s of snaps)s.remove();snaps=[];
     if(on)for(const t of [...data.chapters.map(c=>c.start),lastTime]){const i=document.createElement('i');i.className='film-snap-point';i.style.top=`${t/lastTime*travel}px`;story.append(i);snaps.push(i);}
   }
-  // Smooth, weighted wheel scrolling the World's way (boot.ts: Lenis, lerp .09). A finger scrolls natively, so touch
-  // screens keep their snap stops and the film glides after the finger instead (tick).
+
+
   if(filmPage&&!touch.matches&&!reduced.matches)import('./lenis.mjs').then(({default:Lenis})=>{
     if(!disposed)lenis=new Lenis({lerp:.09,wheelMultiplier:.9,touchMultiplier:1.3,autoRaf:true,prevent:node=>node.tagName==='DIALOG'});
   }).catch(()=>{});
   const jump=y=>{if(lenis){lenis.resize();lenis.scrollTo(y,{immediate:true,force:true});}else scrollTo({top:y,behavior:'instant'});};
   function abortDistant() {
-    // after a jump the frame on screen comes first: until its clip is in, every other download waits its turn again
-    // (2026-11-10: at 20 Mbps the look-ahead two clips away kept the line busy and the new frame sat on "Loading this scene…")
+
+
     const urgent=!cache.has(desiredKey);
     for(const [key,job] of jobs)if(key!==desiredKey && (job.profile!==profile||!isNear(job.index)||urgent)) {
       job.controller.abort();
@@ -342,14 +335,14 @@ export function createFilmWorld(data, scope = document) {
     const tickStart=performance.now();raf=0;
     if(!filmMode || disposed || chapterDialog?.open || watchDialog?.open)return;
     const delta=previous?Math.min(64,now-previous):16;previous=now;
-    // Scroll positions are integral CSS pixels. Snap their mapped time to the
-    // nearest real film frame so a chapter/segment boundary cannot settle
-    // fractionally before the requested frame.
+
+
+
     goal=Math.round(scrollProgress(scrollY,story.offsetTop,travel)*lastTime*data.fps)/data.fps;
     if(Math.abs(goal-lastGoal)>.01)lastDirection=goal>lastGoal?1:-1;
     lastGoal=goal;
-    // Far chapter jumps resolve directly. Otherwise the film eases after the scroll: lightly behind the wheel, and on film
-    // pages' touch screens with the World's glide after a finger (engine.ts: damp(…, 6)).
+
+
     const rate=filmPage&&coarse.matches?6:1000/65;
     position=Math.abs(goal-position)>data.clipSeconds*1.5?goal:position+(goal-position)*(1-Math.exp(-delta*rate/1000));
     if(Math.abs(position-goal)<frame*.2)position=goal;
@@ -362,7 +355,7 @@ export function createFilmWorld(data, scope = document) {
     if(slot?.ready&&display?.key===desiredKey&&afterLoad) {
       ensureSlot(desiredIndex+lastDirection);ensureSlot(desiredIndex-lastDirection);
       if(filmPage) {
-        // the rest of the buffer, nearest first and ahead before behind, three at a time; once it is all in, the rest of the film
+
         const order=[];for(let i=Math.max(0,near[0]);i<=Math.min(clipCount-1,near[1]);i++)if(!cache.has(keyFor(profile,i)))order.push(i);
         order.sort((a,b)=>Math.abs(a-desiredIndex)-Math.abs(b-desiredIndex)||(b-a)*lastDirection);
         for(const i of order){if(jobs.size>=3)break;fetchClip(i).then(schedule,()=>{});}
@@ -418,9 +411,9 @@ export function createFilmWorld(data, scope = document) {
     resizeTimer=setTimeout(()=>{
       const next=chooseProfile(),progressBefore=goal/lastTime,travelBefore=travel;
       if(next!==profile){profile=next;metrics.profileChanges++;root.dataset.requestedProfile=profile;setPoster(chapterAt(painted));buildChapters();}
-      // Keep the film frame across a resize, but only while the film is on screen: pages can place
-      // other scenes before or after the story (the home World), and those must not jump into the film.
-      // A film page re-scrolls only when its length changed: a phone's toolbars resize the window mid-fling.
+
+
+
       setTravel();if(filmMode&&inFilm()&&(!filmPage||travel!==travelBefore))jump(story.offsetTop+progressBefore*travel);schedule();
     },120);
   }
@@ -458,8 +451,8 @@ export function createFilmWorld(data, scope = document) {
     dialog.addEventListener('click',event=>{if(event.target===dialog){const b=dialog.getBoundingClientRect();if(event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)dialog.close();}});
   }
   addEventListener('scroll',schedule,{passive:true});addEventListener('resize',resize,{passive:true});
-  // Cinema chrome: header and dock clear the frame while the film is scrolled, then fade back after a pause.
-  // They stay while a menu or dialog is open, while the scrubber is held, and while keyboard focus is inside them.
+
+
   let chromeTimer=0,holding=false;
   const showChrome=()=>{clearTimeout(chromeTimer);root.classList.remove('film-chrome-hidden');};
   slider.addEventListener('pointerdown',()=>{holding=true;showChrome();});
@@ -468,16 +461,16 @@ export function createFilmWorld(data, scope = document) {
     if(!filmMode||!started||holding||autoplaying||document.querySelector('dialog[open],.film-header details[open],.film-controls details[open],.film-header :focus-visible,.film-controls :focus-visible'))return;
     root.classList.add('film-chrome-hidden');clearTimeout(chromeTimer);chromeTimer=setTimeout(showChrome,1400);
   },{passive:true});
-  addEventListener('pointermove',event=>{if(event.pointerType==='mouse'&&Math.abs(event.movementX)+Math.abs(event.movementY)>3){showChrome();if(autoplaying)hideSoon(2600);}},{passive:true}); // still-mouse moves fired by scrolling don't count
+  addEventListener('pointermove',event=>{if(event.pointerType==='mouse'&&Math.abs(event.movementX)+Math.abs(event.movementY)>3){showChrome();if(autoplaying)hideSoon(2600);}},{passive:true});
   for(const type of ['pointerdown','keydown','focusin'])addEventListener(type,showChrome,{passive:true});
   addEventListener('hashchange',()=>{if(redirectLegacyHash())return;const time=hashTime();if(time!==null)go(time,false);});
   reduced.addEventListener('change',()=>changeMode(!reduced.matches,true));
   addEventListener('pagehide',()=>{watchVideo?.pause();for(const job of jobs.values())job.controller.abort();warmJob?.controller.abort();});
   addEventListener('pageshow',()=>{previous=0;schedule();});
 
-  // ── Player controls (film pages with the Netflix-style chrome; every element is optional) ──
-  // Play auto-advances the scroll at the film's own pace (travel / duration), so it plays in real time;
-  // the chrome then fades out and returns on pointer movement. Any manual scroll, swipe or seek pauses.
+
+
+
   const playButton=one('[data-film-play]'),ticks=one('[data-film-ticks]'),peek=one('[data-film-peek]'),fullButton=one('[data-film-fullscreen]');
   let autoplaying=false,autoLast=0,autoCarry=0,idleTimer=0;
   function hideSoon(delay){clearTimeout(idleTimer);idleTimer=setTimeout(()=>{if(autoplaying&&!document.querySelector('dialog[open]'))root.classList.add('film-chrome-hidden');},delay);}

@@ -1,19 +1,6 @@
 /*! © 2026 Mohamed Mahmoud. All rights reserved. */
-/* Dive: a continuous camera move through a set of pictures, for the edition cutscenes and Space.
-   Each shot glides toward its focal point while a real camera travels into the picture: its depth map (name.d.webp:
-   red is how near each pixel is, green what is behind near things; made once with Depth Anything V2) lets near things
-   slide past far ones, and its background layer (name.bg.webp) shows what is behind an edge when the camera looks past
-   it. The next picture grows out of exactly that region as a soft-edged inset until it fills the frame, so nothing ever
-   cuts. Depth of field, a flare at every hand-off and bokeh past the lens carry it. The pointer leans the camera; at
-   rest the picture breathes. A shot can bring its own effects (fx: fog, flicker, rays, dust, bats) or take the dive's.
-   A picture without a depth map stays flat. (The flat version is archived in src/legacy/dive-flat.js.txt.)
-   const d = mkDive(canvas, {tint: '#ffb000', bokeh: 1, depth: .16, fx});
-   d.play([{src, f: [x, y], z, fx?, video?}, ...], {seconds: 9, onDone});   // or d.seek(p) for scroll-driven use
-   fx = {fog: [{d, y: [y0, y1], color, a, wind: [x, y], scale}], flicker: {amt, glow}, rays: {at: [x, y], amt},
-         dust: {color, amt, rise}, bats: {n, at: [x, y], r: [rx, ry], d, size, color}}
-   A shot may add video: 'clip.mp4' (that picture brought to life, flat); only the shots on screen load and play.
-   d.live(true) keeps redrawing while a scroll-scrubbed reader rests (it does so by itself when a picture has depth).
-*/
+
+
 (() => {
   const VERT = `#version 300 es
 in vec2 aP; out vec2 vUv; void main(){ vUv = aP * .5 + .5; gl_Position = vec4(aP, 0., 1.); }`;
@@ -32,12 +19,12 @@ float hash(vec2 p){ return fract(sin(dot(p, vec2(41.3, 289.1))) * 43758.5453); }
 float h2(vec2 p){ p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 float noise(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h2(i), h2(i + vec2(1, 0)), f.x), mix(h2(i + vec2(0, 1)), h2(i + vec2(1, 1)), f.x), f.y); }
 float fbm(vec2 p){ float s = 0., a = .5; for (int i = 0; i < 4; i++){ s += a * noise(p); p = p * 2.03 + 17.1; a *= .5; } return s; }
-// c: the picture centred, one unit tall; pictures sit in their textures upside down (flipped on upload)
+
 vec2 tc(vec2 c){ vec2 p = clamp(c / vec2(IMG, 1.) + .5, .001, .999); return vec2(p.x, 1. - p.y); }
 vec2 viewC(vec4 v, vec2 uv){ return (vec2(v.x + (uv.x - .5) * v.z, v.y - (uv.y - .5) * v.w) - .5) * vec2(IMG, 1.); }
-// where this pixel's line of sight crosses nearness w (1: the nearest thing, 0: infinitely far), the camera moved by cam
+
 vec2 rayAt(vec2 C, vec3 cam, float w){ return C * (1. - cam.z * w) + cam.xy * w; }
-// march the line of sight from near to far to the first surface; past an occlusion edge, carry on through what is behind
+
 void march(sampler2D dep, vec2 C, vec3 cam, out vec2 hc, out float hw, out bool behind){
   const int N = 40; float dw = 1. / float(N);
   hc = C; hw = 0.; behind = false;
@@ -66,7 +53,7 @@ vec3 see(sampler2D img, sampler2D dep, sampler2D bg, float has, vec4 v, vec3 cam
   if (has > .5) march(dep, C, cam, hc, hw, behind);
   vec2 t = tc(hc);
   vec3 col = behind ? textureLod(bg, t, 0.).rgb : textureLod(img, t, 0.).rgb;
-  // where the camera stretches a sliver of picture over many pixels (the side of an edge), show what is behind instead
+
   float st = min(length(dFdx(hc)), length(dFdy(hc))) / max(min(length(dFdx(C)), length(dFdy(C))), 1e-7);
   if (has > .5 && !behind) col = mix(textureLod(bg, t, 0.).rgb, col, smoothstep(.25, .6, st));
   if (blur > .0005) { vec3 b = col; for (int i = 1; i < 9; i++) { float a = float(i) * 2.39996, r = blur * sqrt(float(i) / 8.); b += textureLod(img, t + vec2(cos(a), sin(a) * uRes.x / uRes.y) * r, 0.).rgb; } col = b / 9.; }
@@ -84,7 +71,7 @@ float bat(vec2 p, float flap, float aa){
   float wing = (1. - smoothstep(-aa, aa, p.y - top)) * (1. - smoothstep(-aa, aa, bot - p.y)) * (1. - smoothstep(1., 1.06, p.x));
   return max(max(body, head), max(ear, wing));
 }
-// the current picture's life: its own lights flicker and glow, fog drifts at its depths, dust floats, rays breathe, bats fly
+
 vec3 effects(vec3 col, vec2 C, vec3 cam, vec2 hc, float hw){
   vec2 t = tc(hc);
   float warm = smoothstep(.1, .3, col.r - col.b) * smoothstep(.5, .85, max(col.r, col.g));
@@ -184,7 +171,7 @@ void main(){
     const upload = (img, {mips = false, raw = false} = {}) => {
       const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-      gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, raw ? gl.NONE : gl.BROWSER_DEFAULT_WEBGL);   // a depth map's bytes must arrive untouched
+      gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, raw ? gl.NONE : gl.BROWSER_DEFAULT_WEBGL);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
       if (mips) gl.generateMipmap(gl.TEXTURE_2D);
       params(mips);
@@ -192,7 +179,7 @@ void main(){
     };
     const quiet = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const textures = new Map(), clips = new Map();
-    // a picture: its colour, and if they exist, its depth map and the layer behind its edges
+
     function tex(src) {
       if (textures.has(src)) return textures.get(src);
       const t = {gl: black, ok: false, dep: flat, bg: black, depth: false};
@@ -206,13 +193,13 @@ void main(){
       when(dep, both); when(bg, both);
       return t;
     }
-    // a shot's clip: a muted looping video whose current frame is uploaded each draw (shown flat)
+
     function clip(shot) {
       if (!shot?.video || quiet) return null;
       let c = clips.get(shot.video);
       if (!c) {
         const v = document.createElement('video');
-        // films on the media host (<meta name="mk-media-base">, the Pages build): a same-site .mp4 comes from the same path there
+
         const meta = document.querySelector('meta[name="mk-media-base"]'), u = new URL(shot.video, location.href), site = (meta?.dataset.site || '').replace(/\/+$/, '');
         const src = meta && /^https?:\/\//.test(meta.content) && u.origin === location.origin && /\.mp4$/i.test(u.pathname) && u.pathname.startsWith(`${site}/`) ? meta.content.replace(/\/+$/, '') + u.pathname.slice(site.length) + u.search + u.hash : shot.video;
         if (src !== shot.video) v.crossOrigin = 'anonymous';
@@ -225,7 +212,7 @@ void main(){
       if (c.v.readyState >= 2) {gl.bindTexture(gl.TEXTURE_2D, c.gl); gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true); gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.BROWSER_DEFAULT_WEBGL); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c.v); params(false); c.ready = true;}
       return c.ready ? c : null;
     }
-    // the effects of the shot in front (its own, or the dive's)
+
     let fxFor = null;
     function setFx(fx) {
       if (fx === fxFor) return; fxFor = fx;
@@ -254,7 +241,7 @@ void main(){
     function draw(now = performance.now()) {
       if (!shots.length) return;
       const dt = Math.min(.1, (now - (lastNow || now)) / 1000); lastNow = now;
-      // the hand-offs share the first part of the way; the last picture keeps the rest for a slow push
+
       const S = size(), last = shots.length - 1, END = last ? .86 : 0;
       const pos = last ? clamp(p / END) * last : 0;
       const s = Math.min(last, Math.floor(pos)), uu = s === last ? clamp((p - END) / (1 - END)) * .5 : pos - s;
@@ -262,7 +249,7 @@ void main(){
       const shot = shots[s], next = shots[s + 1], m = Math.pow(shot.z || 1.4, uu), e = smooth(uu);
       const w = S[0] / m, h = S[1] / m, keep = (c, half) => Math.min(1 - half, Math.max(half, c));
       const cx = keep(.5 + (shot.f[0] - .5) * e, w / 2), cy = keep(.5 + (shot.f[1] - .5) * e, h / 2);
-      // the camera: it travels toward the focal point as it zooms; the pointer leans it; at rest it breathes
+
       const t = now / 1000, k = 1 - Math.exp(-dt * 3);
       lean[0] += (want[0] - lean[0]) * k; lean[1] += (want[1] - lean[1]) * k;
       const lx = quiet ? 0 : lean[0] * .022 + Math.sin(t * .21) * .006, ly = quiet ? 0 : lean[1] * .016 + Math.sin(t * .17 + 1) * .004;
@@ -270,7 +257,7 @@ void main(){
       gl.uniform3f(u.cA, lam * fx + lx, lam * fy + ly, lam);
       gl.uniform3f(u.cB, lx, ly, 0);
       gl.uniform1f(u.uT, quiet ? 0 : t);
-      // the clips of the shots on screen play; the rest rest
+
       const using = new Set([shot.video, next?.video]);
       for (const [key, c] of clips) if (!using.has(key) && !c.v.paused) c.v.pause();
       const cA = clip(shot), A = tex(shot.src);
@@ -279,7 +266,7 @@ void main(){
       gl.uniform4f(u.uA, cx, cy, w, h);
       const fxs = shot.fx ?? opts.fx;
       setFx(fxs);
-      gl.uniform1f(u.uFx, fxs && !cA ? smooth(uu / .12) : 0);   // the effects come in as the shot begins
+      gl.uniform1f(u.uFx, fxs && !cA ? smooth(uu / .12) : 0);
       const mix = next ? smooth((uu - .42) / .5) : 0;
       if (next) {
         const cB = mix > 0 ? clip(next) : null, B = tex(next.src);
@@ -292,7 +279,7 @@ void main(){
       gl.uniform1f(u.uFlare, next ? Math.sin(Math.PI * clamp((uu - .45) / .5)) * .9 : 0); gl.uniform1f(u.uPush, pos * .5 + now / 50000);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     }
-    // one loop: it runs while a play() is going, and while a picture with depth (or a forced live()) is on screen
+
     const alive = () => forced || (!quiet && shots.some(sh => textures.get(sh.src)?.depth || sh.fx || opts.fx));
     function loop(now) {
       raf = 0;
@@ -319,7 +306,7 @@ void main(){
       stop() {playing = null; for (const c of clips.values()) c.v.pause();},
       live(on) {forced = !!on; if (on) wake(); else for (const c of clips.values()) c.v.pause(); return api;},
       get progress() {return p;},
-      get pos() {return at;},   // which picture the camera is in (2.5 = halfway from the third to the fourth)
+      get pos() {return at;},
     };
     addEventListener('resize', () => draw(), {passive: true});
     return api;

@@ -1,25 +1,17 @@
 /*! © 2026 Mohamed Mahmoud. All rights reserved. */
-/**
- * Living text, 2026-10-04. Big titles anywhere on the site become a sticky, elastic material under
- * the pointer (or a finger): the letters burst into particles, scatter from the touch, get dragged
- * along with it like goo, and snap back into the word when you let go. The real text stays in the
- * DOM (selectable, read by screen readers); a canvas only exists while you play with it.
- *
- * Auto-attaches to h1, h2 and [data-living-text] whose text is at least 30px (data-living-text="off"
- * opts out). Rasterises each word where the browser laid it out (Range rects), in the element's own
- * font, colour or gradient. Reduced motion: nothing happens. No dependencies.
- */
+
+
 (() => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || window.__livingText) return;
   window.__livingText = true;
   const MIN = 30, MAX_PARTICLES = 14000, SPREAD = 90;
-  const live = new Map(); // element → state
+  const live = new Map();
   const dpr = () => Math.min(2, devicePixelRatio || 1);
 
   const candidate = el => {
     const h = el?.closest?.('[data-living-text],h1,h2');
     if (!h || h.dataset.livingText === 'off' || h.closest('[data-living-text="off"],dialog,button,a[href] h1,a[href] h2')) return null;
-    if (h.closest('a[href],button') && !h.hasAttribute('data-living-text')) return null; // headings inside links stay links
+    if (h.closest('a[href],button') && !h.hasAttribute('data-living-text')) return null;
     const size = parseFloat(getComputedStyle(h).fontSize);
     return size >= MIN && h.textContent.trim() ? h : null;
   };
@@ -66,11 +58,11 @@
             g.fillStyle = grad;
           } else g.fillStyle = transparent ? '#ffffff' : cs.color;
           g.fillText(word[0], x, y);
-          break; // one rect per word is enough; wrapped words are rare in titles
+          break;
         }
       }
     }
-    // sample the drawn letters into particles
+
     const step = Math.max(2, Math.round(size / 26)) * ratio;
     const data = g.getImageData(0, 0, off.width, off.height).data;
     let s = step, parts = [];
@@ -105,9 +97,9 @@
     const groups = new Map();
     for (let i = 0; i < n; i++) {
       hx[i] = px[i] = parts[i * 5]; hy[i] = py[i] = parts[i * 5 + 1];
-      const a = Math.random() * Math.PI * 2, burst = 1.2 + Math.random() * 2.6;                    // the dissolve: a soft burst
+      const a = Math.random() * Math.PI * 2, burst = 1.2 + Math.random() * 2.6;
       vx[i] = Math.cos(a) * burst; vy[i] = Math.sin(a) * burst;
-      const key = `${parts[i * 5 + 2] >> 4},${parts[i * 5 + 3] >> 4},${parts[i * 5 + 4] >> 4}`;    // batch draws by colour
+      const key = `${parts[i * 5 + 2] >> 4},${parts[i * 5 + 3] >> 4},${parts[i * 5 + 4] >> 4}`;
       if (!groups.has(key)) groups.set(key, {fill: `rgb(${parts[i * 5 + 2]},${parts[i * 5 + 3]},${parts[i * 5 + 4]})`, idx: []});
       groups.get(key).idx.push(i);
     }
@@ -137,9 +129,9 @@
         const dx = px[i] - ptr.x, dy = py[i] - ptr.y, d2 = dx * dx + dy * dy;
         if (d2 < R2) {
           const d = Math.sqrt(d2) + .001, f = 1 - d / R;
-          ax += (dx / d) * f * f * 6.5;                       // pushed away from the touch…
+          ax += (dx / d) * f * f * 6.5;
           ay += (dy / d) * f * f * 6.5;
-          ax += ptr.vx * f * .32; ay += ptr.vy * f * .32;     // …and dragged along with it, like goo
+          ax += ptr.vx * f * .32; ay += ptr.vy * f * .32;
         }
       }
       vx[i] = (vx[i] + ax) * damp; vy[i] = (vy[i] + ay) * damp;
@@ -159,7 +151,7 @@
     st.raf = requestAnimationFrame(() => tick(st));
   }
 
-  // pointer: hover (mouse) or press-and-drag (touch, pen)
+
   let current = null;
   const move = e => {
     if (!current) return;
@@ -167,7 +159,7 @@
     const x = e.clientX - st.origin.x, y = e.clientY - st.origin.y;
     if (st.ptr.x > -1e4) {st.ptr.vx = x - st.ptr.x; st.ptr.vy = y - st.ptr.y;}
     st.ptr.x = x; st.ptr.y = y;
-    // left the play area (the title plus some margin): let it reassemble
+
     const b = current.getBoundingClientRect(), m = 40;
     if (e.pointerType === 'mouse' && (e.clientX < b.left - m || e.clientX > b.right + m || e.clientY < b.top - m || e.clientY > b.bottom + m)) release();
   };
@@ -190,6 +182,6 @@
   addEventListener('pointerup', e => {if (e.pointerType !== 'mouse') release();}, {passive: true});
   addEventListener('pointercancel', release, {passive: true});
   addEventListener('scroll', () => {for (const st of live.values()) if (!st.releasing && st.el !== current) st.releasing = true;}, {passive: true});
-  // a title whose text changes (e.g. the gallery billboard) is rebuilt the next time it is touched
+
   addEventListener('living:refresh', e => {const st = live.get(e.target); if (st) finish(st);});
 })();

@@ -1,66 +1,34 @@
 /*! Lenis 1.3.25 · MIT License · Copyright (c) 2024 darkroom.engineering · https://github.com/darkroomengineering/lenis
    Copied unchanged from node_modules/lenis/dist/lenis.mjs (the package the World already ships, package.json) so the static
    film pages can import it: public/motion/shared/film-world.js. */
-//#region package.json
+
 var version = "1.3.25";
-//#endregion
-//#region packages/core/src/maths.ts
-/**
-* Clamp a value between a minimum and maximum value
-*
-* @param min Minimum value
-* @param input Value to clamp
-* @param max Maximum value
-* @returns Clamped value
-*/
+
+
+
+
 function clamp(min, input, max) {
 	return Math.max(min, Math.min(input, max));
 }
-/**
-*  Linearly interpolate between two values using an amount (0 <= t <= 1)
-*
-* @param x First value
-* @param y Second value
-* @param t Amount to interpolate (0 <= t <= 1)
-* @returns Interpolated value
-*/
+
+
 function lerp(x, y, t) {
 	return (1 - t) * x + t * y;
 }
-/**
-* Damp a value over time using a damping factor
-* {@link http://www.rorydriscoll.com/2016/03/07/frame-rate-independent-damping-using-lerp/}
-*
-* @param x Initial value
-* @param y Target value
-* @param lambda Damping factor
-* @param dt Time elapsed since the last update
-* @returns Damped value
-*/
+
+
 function damp(x, y, lambda, deltaTime) {
 	return lerp(x, y, 1 - Math.exp(-lambda * deltaTime));
 }
-/**
-* Calculate the modulo of the dividend and divisor while keeping the result within the same sign as the divisor
-* {@link https://anguscroll.com/just/just-modulo}
-*
-* @param n Dividend
-* @param d Divisor
-* @returns Modulo
-*/
+
+
 function modulo(n, d) {
 	return (n % d + d) % d;
 }
-//#endregion
-//#region packages/core/src/animate.ts
-/**
-* Animate class to handle value animations with lerping or easing
-*
-* @example
-* const animate = new Animate()
-* animate.fromTo(0, 100, { duration: 1, easing: (t) => t })
-* animate.advance(0.5) // 50
-*/
+
+
+
+
 var Animate = class {
 	isRunning = false;
 	value = 0;
@@ -71,11 +39,8 @@ var Animate = class {
 	duration;
 	easing;
 	onUpdate;
-	/**
-	* Advance the animation by the given delta time
-	*
-	* @param deltaTime - The time in seconds to advance the animation
-	*/
+	
+
 	advance(deltaTime) {
 		if (!this.isRunning) return;
 		let completed = false;
@@ -98,18 +63,12 @@ var Animate = class {
 		if (completed) this.stop();
 		this.onUpdate?.(this.value, completed);
 	}
-	/** Stop the animation */
+	
 	stop() {
 		this.isRunning = false;
 	}
-	/**
-	* Set up the animation from a starting value to an ending value
-	* with optional parameters for lerping, duration, easing, and onUpdate callback
-	*
-	* @param from - The starting value
-	* @param to - The ending value
-	* @param options - Options for the animation
-	*/
+	
+
 	fromTo(from, to, { lerp, duration, easing, onStart, onUpdate }) {
 		this.from = this.value = from;
 		this.to = to;
@@ -122,8 +81,8 @@ var Animate = class {
 		this.onUpdate = onUpdate;
 	}
 };
-//#endregion
-//#region packages/core/src/debounce.ts
+
+
 function debounce(callback, delay) {
 	let timer;
 	return function(...args) {
@@ -134,17 +93,10 @@ function debounce(callback, delay) {
 		}, delay);
 	};
 }
-//#endregion
-//#region packages/core/src/dimensions.ts
-/**
-* Dimensions class to handle the size of the content and wrapper
-*
-* @example
-* const dimensions = new Dimensions(wrapper, content)
-* dimensions.on('resize', (e) => {
-*   console.log(e.width, e.height)
-* })
-*/
+
+
+
+
 var Dimensions = class {
 	width = 0;
 	height = 0;
@@ -202,34 +154,20 @@ var Dimensions = class {
 		};
 	}
 };
-//#endregion
-//#region packages/core/src/emitter.ts
-/**
-* Emitter class to handle events
-* @example
-* const emitter = new Emitter()
-* emitter.on('event', (data) => {
-*   console.log(data)
-* })
-* emitter.emit('event', 'data')
-*/
+
+
+
+
 var Emitter = class {
 	events = {};
-	/**
-	* Emit an event with the given data
-	* @param event Event name
-	* @param args Data to pass to the event handlers
-	*/
+	
+
 	emit(event, ...args) {
 		const callbacks = this.events[event] || [];
 		for (let i = 0, length = callbacks.length; i < length; i++) callbacks[i]?.(...args);
 	}
-	/**
-	* Add a callback to the event
-	* @param event Event name
-	* @param cb Callback function
-	* @returns Unsubscribe function
-	*/
+	
+
 	on(event, cb) {
 		if (this.events[event]) this.events[event].push(cb);
 		else this.events[event] = [cb];
@@ -237,23 +175,19 @@ var Emitter = class {
 			this.events[event] = this.events[event]?.filter((i) => cb !== i);
 		};
 	}
-	/**
-	* Remove a callback from the event
-	* @param event Event name
-	* @param callback Callback function
-	*/
+	
+
 	off(event, callback) {
 		this.events[event] = this.events[event]?.filter((i) => callback !== i);
 	}
-	/**
-	* Remove all event listeners and clean up
-	*/
+	
+
 	destroy() {
 		this.events = {};
 	}
 };
-//#endregion
-//#region packages/core/src/virtual-scroll.ts
+
+
 const LINE_HEIGHT = 100 / 6;
 const listenerOptions = { passive: false };
 function getDeltaMultiplier(deltaMode, size) {
@@ -288,16 +222,12 @@ var VirtualScroll = class {
 		this.element.addEventListener("touchmove", this.onTouchMove, listenerOptions);
 		this.element.addEventListener("touchend", this.onTouchEnd, listenerOptions);
 	}
-	/**
-	* Add an event listener for the given event and callback
-	*
-	* @param event Event name
-	* @param callback Callback function
-	*/
+	
+
 	on(event, callback) {
 		return this.emitter.on(event, callback);
 	}
-	/** Remove all event listeners and clean up */
+	
 	destroy() {
 		this.emitter.destroy();
 		window.removeEventListener("resize", this.onWindowResize);
@@ -306,11 +236,8 @@ var VirtualScroll = class {
 		this.element.removeEventListener("touchmove", this.onTouchMove, listenerOptions);
 		this.element.removeEventListener("touchend", this.onTouchEnd, listenerOptions);
 	}
-	/**
-	* Event handler for 'touchstart' event
-	*
-	* @param event Touch event
-	*/
+	
+
 	onTouchStart = (event) => {
 		const { clientX, clientY } = event.targetTouches ? event.targetTouches[0] : event;
 		this.touchStart.x = clientX;
@@ -325,7 +252,7 @@ var VirtualScroll = class {
 			event
 		});
 	};
-	/** Event handler for 'touchmove' event */
+	
 	onTouchMove = (event) => {
 		const { clientX, clientY } = event.targetTouches ? event.targetTouches[0] : event;
 		const deltaX = -(clientX - this.touchStart.x) * this.options.touchMultiplier;
@@ -349,7 +276,7 @@ var VirtualScroll = class {
 			event
 		});
 	};
-	/** Event handler for 'wheel' event */
+	
 	onWheel = (event) => {
 		let { deltaX, deltaY, deltaMode } = event;
 		const multiplierX = getDeltaMultiplier(deltaMode, this.window.width);
@@ -371,8 +298,8 @@ var VirtualScroll = class {
 		};
 	};
 };
-//#endregion
-//#region packages/core/src/lenis.ts
+
+
 const defaultEasing = (t) => Math.min(1, 1.001 - 2 ** (-10 * t));
 var Lenis = class {
 	_isScrolling = false;
@@ -382,52 +309,35 @@ var Lenis = class {
 	_resetVelocityTimeout = null;
 	_rafId = null;
 	_isDraggingSelection = false;
-	/**
-	* Whether or not the user is touching the screen
-	*/
+	
+
 	isTouching;
-	/**
-	* Whether or not the device is running iOS
-	*/
+	
+
 	isIos;
-	/**
-	* The time in ms since the lenis instance was created
-	*/
+	
+
 	time = 0;
-	/**
-	* User data that will be forwarded through the scroll event
-	*
-	* @example
-	* lenis.scrollTo(100, {
-	*   userData: {
-	*     foo: 'bar'
-	*   }
-	* })
-	*/
+	
+
 	userData = {};
-	/**
-	* The last velocity of the scroll
-	*/
+	
+
 	lastVelocity = 0;
-	/**
-	* The current velocity of the scroll
-	*/
+	
+
 	velocity = 0;
-	/**
-	* The direction of the scroll
-	*/
+	
+
 	direction = 0;
-	/**
-	* The options passed to the lenis instance
-	*/
+	
+
 	options;
-	/**
-	* The target scroll value
-	*/
+	
+
 	targetScroll;
-	/**
-	* The animated scroll value
-	*/
+	
+
 	animatedScroll;
 	animate = new Animate();
 	emitter = new Emitter();
@@ -488,9 +398,8 @@ var Lenis = class {
 		}
 		if (this.options.autoRaf) this._rafId = requestAnimationFrame(this.raf);
 	}
-	/**
-	* Destroy the lenis instance, remove all event listeners and clean up the class name
-	*/
+	
+
 	destroy() {
 		this.emitter.destroy();
 		this.options.wrapper.removeEventListener("scroll", this.onNativeScroll);
@@ -638,9 +547,8 @@ var Lenis = class {
 			}
 		});
 	};
-	/**
-	* Force lenis to recalculate the dimensions
-	*/
+	
+
 	resize() {
 		this.dimensions.resize();
 		this.animatedScroll = this.targetScroll = this.actualScroll;
@@ -681,9 +589,8 @@ var Lenis = class {
 		this.lastVelocity = this.velocity = 0;
 		this.animate.stop();
 	}
-	/**
-	* Start lenis scroll after it has been stopped
-	*/
+	
+
 	start() {
 		if (!this.isStopped) return;
 		if (this.options.autoToggle) {
@@ -698,9 +605,8 @@ var Lenis = class {
 		this.isStopped = false;
 		this.emit();
 	}
-	/**
-	* Stop lenis scroll
-	*/
+	
+
 	stop() {
 		if (this.isStopped) return;
 		if (this.options.autoToggle) {
@@ -715,37 +621,16 @@ var Lenis = class {
 		this.isStopped = true;
 		this.emit();
 	}
-	/**
-	* RequestAnimationFrame for lenis
-	*
-	* @param time The time in ms from an external clock like `requestAnimationFrame` or Tempus
-	*/
+	
+
 	raf = (time) => {
 		const deltaTime = time - (this.time || time);
 		this.time = time;
 		this.animate.advance(deltaTime * .001);
 		if (this.options.autoRaf) this._rafId = requestAnimationFrame(this.raf);
 	};
-	/**
-	* Scroll to a target value
-	*
-	* @param target The target value to scroll to
-	* @param options The options for the scroll
-	*
-	* @example
-	* lenis.scrollTo(100, {
-	*   offset: 100,
-	*   duration: 1,
-	*   easing: (t) => 1 - Math.cos((t * Math.PI) / 2),
-	*   lerp: 0.1,
-	*   onStart: () => {
-	*     console.log('onStart')
-	*   },
-	*   onComplete: () => {
-	*     console.log('onComplete')
-	*   },
-	* })
-	*/
+	
+
 	scrollTo(_target, { offset = 0, immediate = false, lock = false, programmatic = true, lerp = programmatic ? this.options.lerp : void 0, duration = programmatic ? this.options.duration : void 0, easing = programmatic ? this.options.easing : void 0, onStart, onComplete, force = false, userData } = {}) {
 		if ((this.isStopped || this.isLocked) && !force) return;
 		let target = _target;
@@ -935,15 +820,13 @@ var Lenis = class {
 		if (!hasOverscrollBehavior && (scroll >= maxScroll || scroll <= 0)) return true;
 		return (delta > 0 ? scroll < maxScroll : scroll > 0) && hasOverflow && isScrollable;
 	}
-	/**
-	* The root element on which lenis is instanced
-	*/
+	
+
 	get rootElement() {
 		return this.options.wrapper === window ? document.documentElement : this.options.wrapper;
 	}
-	/**
-	* The limit which is the maximum scroll value
-	*/
+	
+
 	get limit() {
 		if (this.options.naiveDimensions) {
 			if (this.isHorizontal) return this.rootElement.scrollWidth - this.rootElement.clientWidth;
@@ -951,34 +834,29 @@ var Lenis = class {
 		}
 		return this.dimensions.limit[this.isHorizontal ? "x" : "y"];
 	}
-	/**
-	* Whether or not the scroll is horizontal
-	*/
+	
+
 	get isHorizontal() {
 		return this.options.orientation === "horizontal";
 	}
-	/**
-	* The actual scroll value
-	*/
+	
+
 	get actualScroll() {
 		const wrapper = this.options.wrapper;
 		return this.isHorizontal ? wrapper.scrollX ?? wrapper.scrollLeft : wrapper.scrollY ?? wrapper.scrollTop;
 	}
-	/**
-	* The current scroll value
-	*/
+	
+
 	get scroll() {
 		return this.options.infinite ? modulo(this.animatedScroll, this.limit) : this.animatedScroll;
 	}
-	/**
-	* The progress of the scroll relative to the limit
-	*/
+	
+
 	get progress() {
 		return this.limit === 0 ? 1 : this.scroll / this.limit;
 	}
-	/**
-	* Current scroll state
-	*/
+	
+
 	get isScrolling() {
 		return this._isScrolling;
 	}
@@ -988,9 +866,8 @@ var Lenis = class {
 			this.updateClassName();
 		}
 	}
-	/**
-	* Check if lenis is stopped
-	*/
+	
+
 	get isStopped() {
 		return this._isStopped;
 	}
@@ -1000,9 +877,8 @@ var Lenis = class {
 			this.updateClassName();
 		}
 	}
-	/**
-	* Check if lenis is locked
-	*/
+	
+
 	get isLocked() {
 		return this._isLocked;
 	}
@@ -1012,15 +888,13 @@ var Lenis = class {
 			this.updateClassName();
 		}
 	}
-	/**
-	* Check if lenis is smooth scrolling
-	*/
+	
+
 	get isSmooth() {
 		return this.isScrolling === "smooth";
 	}
-	/**
-	* The class name applied to the wrapper element
-	*/
+	
+
 	get className() {
 		let className = "lenis";
 		if (this.options.autoToggle) className += " lenis-autoToggle";
@@ -1040,6 +914,6 @@ var Lenis = class {
 		for (const className of Array.from(this.rootElement.classList)) if (className === "lenis" || className.startsWith("lenis-")) this.rootElement.classList.remove(className);
 	}
 };
-//#endregion
+
 export { Lenis as default };
 

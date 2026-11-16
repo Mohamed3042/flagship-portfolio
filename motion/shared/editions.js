@@ -1,14 +1,11 @@
 /*! © 2026 Mohamed Mahmoud. All rights reserved. */
-/* Special editions: Halloween, Heaven, RGB Overdrive, Night Ops, Ink & Pow, Terracotta.
-   html[data-edition] is set before first paint by site-mode.js (from ?edition= or earlier in the visit).
-   This file owns the picker (any [data-edition-picker] button), the edition fonts and, on the World
-   page, the atmosphere layer. The World engine (colour grade) and the companion (costume, ride,
-   spells) read html[data-edition] themselves, so a switch on the World page is live. */
+
+
 (() => {
   if (window.mkEditions) return;
   const root = document.documentElement, ar = root.lang === 'ar', T = (en, a) => (ar ? a : en);
   const base = (document.currentScript?.src ? new URL(document.currentScript.src).pathname : '/motion/shared/editions.js').replace(/\/motion\/shared\/editions\.js$/, '');
-  const onWorld = root.classList.contains('world-walk') && !root.dataset.world;   // (an edition's own World is its look: no grade or air over it)
+  const onWorld = root.classList.contains('world-walk') && !root.dataset.world;
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (ar) {
     const type = document.createElement('link');
@@ -165,13 +162,13 @@
     document.head.append(l);
   }
 
-  // ── the atmosphere over the World (between the 3D canvas and its copy) ──
+
   let air = null, flashTimer = 0;
   const motes = n => Array.from({length: n}, () => `<b class="mote" style="--x:${(Math.random() * 100).toFixed(1)}%;--s:${(2 + Math.random() * 4).toFixed(1)}px;--d:${(9 + Math.random() * 12).toFixed(1)}s;--w:-${(Math.random() * 20).toFixed(1)}s;--dx:${((Math.random() - .5) * 120).toFixed(0)}px"></b>`).join('');
   const tape = () => {const s = ['N', '015', '030', 'NE', '060', '075', 'E', '105', '120', 'SE', '150', '165', 'S', '195', '210', 'SW', '240', '255', 'W', '285', '300', 'NW', '330', '345'].join(' · '); return `<em>${s} · ${s} · </em>`;};
   const AIR = {
     halloween: () => '<i class="fog"></i><i class="fog f2"></i><i class="moon"></i><i class="flash"></i>',
-    heaven: () => `<i class="bank"></i>${motes(26)}`,   // (no rays fanning from above: Heaven carries no religion, the owner 2026-10-10)
+    heaven: () => `<i class="bank"></i>${motes(26)}`,
     rgb: () => '<i class="glow"></i><i class="edge"></i>',
     tactical: () => `<i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><i class="reticle"></i><span class="tape">${tape()}</span><span class="rec">● ${T('Recording', 'تسجيل')}</span>`,
     comic: () => '<i class="dots a"></i><i class="dots b"></i><i class="panel"></i>',
@@ -191,7 +188,7 @@
       flashTimer = setTimeout(strike, 3500);
     }
   }
-  // comic: a sound effect pops up whenever the walk moves to the next scene
+
   const POWS = ['POW!', 'ZAP!', 'WHAM!', 'KRAK!', 'BOOM!', 'SHAZAM!', 'BLAM!', 'ZOOM!', 'THWIP!', 'KAPOW!'];
   if (onWorld) new MutationObserver(() => {
     if (root.dataset.edition !== 'comic' || !air || still) return;
@@ -202,7 +199,7 @@
     air.append(p); setTimeout(() => p.remove(), 1600);
   }).observe(root, {attributes: true, attributeFilter: ['data-world-scene']});
 
-  // ── applying an edition ──
+
   function apply(id, how = 'live') {
     const e = byId(id);
     try {sessionStorage.setItem('mk-edition', e.id);} catch {}
@@ -215,7 +212,7 @@
     }
     dispatchEvent(new CustomEvent('mk:edition', {detail: {id: e.id, name: e.name}}));
   }
-  // editions with a World of their own (src/scripts/editions/<id>; keep in step when one lands); the rest dress the World
+
   const PAGES = new Set(['tactical', 'keynote', 'halloween', 'heaven', 'rgb', 'comic', 'clay', 'doodle', 'blueprint', 'ice', 'crossover', 'impression', 'museum', 'machine', 'rounds']), edPage = root.hasAttribute('data-edition-page'), L = ar ? 'ar' : 'en';
   function go(id) {
     if (PAGES.has(id)) {location.href = `${base}/${L}/edition/${id}`; return;}
@@ -224,12 +221,12 @@
     location.href = `${base}/${L}/world?edition=${id}`;
   }
 
-  // ── the picker ──
+
   const pickers = () => document.querySelectorAll('[data-edition-picker]');
   function label() {
     const e = byId(root.dataset.world || root.dataset.edition);
     for (const b of pickers()) {
-      b.style.setProperty('--sw', e.id ? e.sw : 'conic-gradient(#ff8a1f,#e9c46a,#00e5ff,#9be564,#ffd400,#d97757,#ff8a1f)');   // standard: a swatch of every edition
+      b.style.setProperty('--sw', e.id ? e.sw : 'conic-gradient(#ff8a1f,#e9c46a,#00e5ff,#9be564,#ffd400,#d97757,#ff8a1f)');
       const n = b.querySelector('.ed-name'); if (n) n.textContent = e.id ? e.name : b.dataset.label || T('Editions', 'إصدارات');
     }
   }

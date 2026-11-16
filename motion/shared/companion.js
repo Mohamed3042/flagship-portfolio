@@ -1,34 +1,6 @@
 /*! © 2026 Mohamed Mahmoud. All rights reserved. */
-/**
- * The companion + site mode, 2026-10-04 (v3). Loaded (deferred) on every page.
- *
- *  - A split pill on the screen edge: the top half switches the site between Crow (dark) and White
- *    (light); the bottom half swaps the companion between Opus and Crow. Choices persist.
- *  - Opus is a small orange pixel creature (block body, square eyes, stubby arms, four legs; after the
- *    Claude Code mascot). The Crow is its mirror twin: the same block in black with white eyes, a beak
- *    and a crest. Both live in one low-resolution pixel layer over the page, plus a full-resolution
- *    effects layer for glass, markers and lasers.
- *  - It follows you. It stares at your pointer (or where you last touched), jumps onto the frames of
- *    the work and the big titles and sits there while you read, follows you into the previews and the
- *    details sheet, and every time you stop scrolling it catches up a different way: spaceship, horse
- *    carriage (حنطور), tuk-tuk (توكتوك), bread bicycle (عجلة), motorbike (مكنة), magic carpet, camel,
- *    parachute, jetpack, skateboard, pogo stick, forklift, paper plane, balloons, teleporter, propeller
- *    cap, rocket, crow taxi; the crow flaps, glides, sleds on a jar lid, bursts into feathers.
- *  - It bullies you, gently. On a frame it smashes the glass, falls, cries, rebuilds it and fixes it
- *    with a magic potion; it also plays peekaboo, cleans windows on a rope, sprays graffiti, fishes,
- *    rides the frame like a seesaw. On titles: a highlighter, a laser pointer, a stretch. Sit on the
- *    same text for ten seconds and it steals words you have read (sack, vacuum, squeegee, eraser,
- *    magnet, letter by letter, a fishing rod; the crow pecks them); they come back when you scroll or
- *    tap. Buttons sometimes dodge your first press (fourteen ways) and then give in; keyboard presses
- *    are never blocked.
- *  - Left alone it lives its day (coding, napping, flexing with a real file from this site, a project-
- *    manager suit, glasses, coffee, popcorn, a rubber duck…); the crow does real crow things that make
- *    no sense (sunbathing like it died, funerals, gifts, cracking nuts with traffic, counting to five).
- *  - Click it to talk (sarcastic, page-aware lines in English and Arabic) or to play X O on a sheet of
- *    paper it pulls out of somewhere different every time. It cheats. Drag it anywhere.
- * Reduced motion: no travel, no pranks, no particles; a still companion that still talks and plays.
- * QA: window.__mk.{act, ride, perch, steal, prank, xo, state}.
- */
+
+
 (() => {
   if (window.top !== window || window.__mkCompanion) return;
   window.__mkCompanion = true;
@@ -46,19 +18,19 @@
   const smooth = t => (t = clamp(t, 0, 1), t * t * (3 - 2 * t));
   const shuffle = a => {for (let i = a.length - 1; i > 0; i--) {const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]];} return a;};
   const safe = fn => {try {return fn();} catch {return false;}};
-  // a shuffle bag: everything comes up once before anything repeats
+
   const bag = items => {let pool = []; return ok => {if (!pool.some(ok)) pool = shuffle([...items]); const i = pool.findIndex(ok); return i < 0 ? null : pool.splice(i, 1)[0];};};
   const visible = el => !el.checkVisibility || el.checkVisibility({opacityProperty: true, visibilityProperty: true});
-  // opt-out (2026-11-11, World r5): [data-no-perch] boxes are never stood on, ridden to or picked for an act; on <body> the
-  // whole page keeps it on its floor (walks and ground rides only, no beam, no flock, the page's scroll does not lift it)
+
+
   const noPerch = el => !!el?.closest?.('[data-no-perch]');
   const grounded = () => !!document.body?.closest('[data-no-perch]');
-  // opt-out (2026-11-11, World r6 #6): a page may mark one shown [data-mk-park] box as its spot; on a grounded page the
-  // companion stands inside it (its strip of floor and its floor), so it never sits on the pill, Play or the copy
-  // (pages without one: as before)
+
+
+
   const parkBox = () => {const el = document.querySelector('[data-mk-park]'); if (!el) return null; const r = el.getBoundingClientRect(); return r.width > 1 && r.height > 1 ? r : null;};
 
-  // ── styles ────────────────────────────────────────────────────────────────────────────────────
+
   const css = `
   html.mk-switching::view-transition-old(root){animation:none}
   html.mk-switching::view-transition-new(root){animation:mk-reveal .75s cubic-bezier(.2,.8,.2,1) both}
@@ -346,7 +318,7 @@
   style.textContent = css;
   document.head.append(style);
 
-  // ── the pixel layer: one low-resolution canvas over the page, scaled up crisp ─────────────────
+
   const world = document.createElement('div');
   world.className = 'mk-world'; world.setAttribute('aria-hidden', 'true');
   const cv = document.createElement('canvas');
@@ -357,7 +329,7 @@
   let g = cv.getContext('2d'), U = 3, W = 1, H = 1;
   function fit() {
     const dpr = devicePixelRatio || 1;
-    U = Math.max(2, Math.round((innerWidth < 600 ? 2.5 : 3) * dpr)) / dpr;   // whole device pixels per unit
+    U = Math.max(2, Math.round((innerWidth < 600 ? 2.5 : 3) * dpr)) / dpr;
     W = Math.ceil(innerWidth / U) + 1; H = Math.ceil(innerHeight / U) + 1;
     cv.width = W; cv.height = H;
     cv.style.width = `${W * U}px`; cv.style.height = `${H * U}px`;
@@ -366,7 +338,7 @@
   }
   const R = (x, y, w, h, c) => {g.fillStyle = c; g.fillRect(x, y, w, h);};
   const P1 = (x, y, c) => {g.fillStyle = c; g.fillRect(x, y, 1, 1);};
-  // a sprite from rows of characters ('.' is empty), filled in horizontal runs
+
   function S(x, y, rows, pal) {
     for (let r = 0; r < rows.length; r++) {
       const row = rows[r];
@@ -402,7 +374,7 @@
   }
   function disc(cx, cy, r, c) {g.fillStyle = c; for (let y = -r; y <= r; y++) {const w = Math.round(Math.sqrt(r * r - y * y)); g.fillRect(cx - w, cy + y, w * 2 + 1, 1);}}
   const alpha = (a, fn) => {const p = g.globalAlpha; g.globalAlpha = p * clamp(a, 0, 1); fn(); g.globalAlpha = p;};
-  // draw facing left by mirroring around column ax
+
   const mirror = (ax, dir, fn) => {if (dir >= 0) return fn(); g.save(); g.translate(2 * ax + 1, 0); g.scale(-1, 1); fn(); g.restore();};
   const FONT = {
     Z: ['####', '..#.', '.#..', '####'], z: ['###', '.#.', '###'],
@@ -412,7 +384,7 @@
   const glyph = (ch, x, y, c) => {if (FONT[ch]) S(x, y, FONT[ch], {'#': c});};
   const text = (s, x, y, c) => {for (const ch of s) {glyph(ch, x, y, c); x += (FONT[ch]?.[0].length ?? 3) + 1;}};
 
-  // ── state ─────────────────────────────────────────────────────────────────────────────────────
+
   let kind = root.dataset.companion === 'crow' ? 'crow' : root.dataset.companion === 'off' ? 'off' : 'opus';
   const C = {x: 0, y: 0, vy: 0, dir: 1, mode: 'idle', until: 0, why: '', act: null, ride: null, next: null, then: null, on: null, onType: '', onDx: 0,
     ox: 0, oy: 0, scrolled: 0, held: null, idleLook: [0, 0], lookAt: 0, blinkAt: 0, blinkUntil: 0, stareAt: 0, chaseAt: 0};
@@ -423,10 +395,10 @@
   let layerHost = document.body;
   const layer = () => layerHost;
 
-  // ── the two characters, front view on an 18×10 grid; (ox, oy) is the grid's top-left ─────────
+
   const OP = {b: '#D97757', d: '#B65B3D', e: '#1B1311'};
   const CR = {b: '#2E2A37', d: '#1C1923', l: '#5B4C92', t: '#2F716A', w: '#F3EFE6', p: '#121016', y: '#E8A03E', yd: '#B46D24', g: '#9C97AA', shut: '#7A748C', rim: 'rgba(230,222,255,.26)'};
-  // left-side cells [col, row]; the right side mirrors them (17 − col)
+
   const ARM = {
     out: [[1, 4], [2, 4], [1, 5], [2, 5]],
     up: [[1, 1], [2, 1], [1, 2], [2, 2], [1, 3], [2, 3], [2, 4]],
@@ -464,8 +436,8 @@
     }
     for (const s of [-1, 1]) {const k = s < 0 ? P.armL : P.armR; if (k !== 'fwd') cells(ARM[k] || ARM.out, ox, oy + (flat && (k === 'out' || k === 'down') ? 2 : 0) + (s < 0 ? P.dyL || 0 : P.dyR || 0), s, P.sleeve || OP.b);}
     R(ox + 3 - wide, top, 12 + wide * 2, oy + 8 - top, OP.b);
-    R(ox + 14 + wide, top, 1, oy + 8 - top, OP.d);                 // the toy's right side, in shade
-    R(ox + 3 - wide, oy + 7, 12 + wide * 2, 1, OP.d);               // and its underside
+    R(ox + 14 + wide, top, 1, oy + 8 - top, OP.d);
+    R(ox + 3 - wide, oy + 7, 12 + wide * 2, 1, OP.d);
     const [lx, ly] = P.look, a = ox + 5 + lx, b = ox + 12 + lx, y = top + 2 + ly;
     g.fillStyle = OP.e;
     const f = (x, yy, w = 1, h = 1) => g.fillRect(x, yy, w, h);
@@ -485,7 +457,7 @@
 
   function drawCrow(ox, oy, P) {
     const c = CR, flat = P.flat ? 3 : 0, top = oy + (flat || P.breath), wide = flat ? 1 : 0;
-    if (root.dataset.siteMode !== 'white') R(ox + 2 - wide, top - 1, 14 + wide * 2, oy + 9 - top, c.rim);   // rim light: a black bird on a black page
+    if (root.dataset.siteMode !== 'white') R(ox + 2 - wide, top - 1, 14 + wide * 2, oy + 9 - top, c.rim);
     if (P.legs !== 'tuck') {
       const len = P.legs === 'dangle' ? 3 : 2;
       [6, 11].forEach((x, i) => {
@@ -497,8 +469,8 @@
     R(ox + 3 - wide, top, 12 + wide * 2, oy + 8 - top, c.b);
     R(ox + 14 + wide, top, 1, oy + 8 - top, c.d);
     R(ox + 3 - wide, oy + 7, 12 + wide * 2, 1, c.d);
-    P1(ox + 4, top, c.l); P1(ox + 5, top, c.l); P1(ox + 4, top + 1, c.t); P1(ox + 13, top + 1, c.l);   // oil-slick sheen
-    if (!flat && !P.hat) {P1(ox + 8, top - 1, c.b); P1(ox + 9, top - 1, c.b); P1(ox + 9, top - 2, c.b); P1(ox + 10, top - 2, c.l);}   // crest
+    P1(ox + 4, top, c.l); P1(ox + 5, top, c.l); P1(ox + 4, top + 1, c.t); P1(ox + 13, top + 1, c.l);
+    if (!flat && !P.hat) {P1(ox + 8, top - 1, c.b); P1(ox + 9, top - 1, c.b); P1(ox + 9, top - 2, c.b); P1(ox + 10, top - 2, c.l);}
     const [lx, ly] = P.look, y = top + 2, L = ox + 5, Rr = ox + 11;
     const f = (x, yy, col, w = 1, h = 1) => {g.fillStyle = col; g.fillRect(x, yy, w, h);};
     switch (P.eyes) {
@@ -515,14 +487,14 @@
         f(lx < 0 ? L : L + 1, py, c.p); f(lx > 0 ? Rr + 1 : Rr, py, c.p);
       }
     }
-    if (!flat || P.eyes !== 'closed') {   // the beak (open to caw)
+    if (!flat || P.eyes !== 'closed') {
       const by = top + 4;
       R(ox + 7, by, 4, 1, c.y);
       if (P.beak) {R(ox + 8, by + 1, 2, 1, c.p); R(ox + 8, by + 2, 2, 1, c.yd);} else R(ox + 8, by + 1, 2, 1, c.yd);
     }
     for (const s of [-1, 1]) if ((s < 0 ? P.armL : P.armR) === 'fwd') cells(ARM.fwd, ox, oy + (s < 0 ? P.dyL || 0 : P.dyR || 0), s, c.d);
   }
-  // an edition dresses the companion: a jack-o'-lantern for Halloween (no witch: owner, 2026-10-10), a fairy for Heaven
+
   const JACK = ['.....gg.....', '..doogoood..', '.dooooooood.', 'doyyooooyyod', 'dooooyyooood', 'doyyyyyyyyod', '.dooooooood.', '..dddddddd..'];
   const HELMET = ['.....hhhhhhhh.....', '...hhhhhhhhhhhh...', '..dddddddddddddd..'];
   const hsl = (h, l = 60) => `hsl(${Math.round(h) % 360} 100% ${l}%)`;
@@ -533,7 +505,7 @@
     const top = topOf(oy, P);
     if (ed === 'halloween' && layer === 'front' && !P.hat) S(ox + 3, top - 8, JACK, {o: '#FF7417', d: '#D4520A', g: '#5A8F2E', y: frame % 6 ? '#FFC34D' : '#FFE08A'});
     if (ed === 'heaven') {
-      // little pearl wings only: no halo (Heaven carries no religion, the owner 2026-10-10)
+
       if (layer === 'back') {const up = frame % 4 < 2 ? 1 : 0; alpha(.9, () => {S(ox - 4, top + 1 - up, WINGL, {w: '#FFF8F0', b: '#F0CDB4'}); S(ox + 17, top + 1 - up, WINGR, {w: '#FFF8F0', b: '#F0CDB4'});});}
     }
     if (ed === 'rgb' && layer === 'front' && !P.hat) {const c = hsl(frame * 24); headphones(ox, top, c); line(ox + 2, top + 3, ox + 5, top + 6, '#2A2A2E'); P1(ox + 6, top + 6, c);}
@@ -546,12 +518,12 @@
       line(ox + 9, top - 1, ox + 9, top - 3, '#6A994E'); P1(ox + 10, top - 2, '#81B29A');
       for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1], [0, 1]]) P1(ox + 9 + dx, top - 5 + dy, '#F0EEE6');
       P1(ox + 9, top - 5, '#E9C46A');
-      for (const [dx, dy] of [[12, 5], [13, 6], [11, 6]]) P1(ox + dx, top + dy, 'rgba(90,38,22,.35)');   // a thumbprint in the clay
+      for (const [dx, dy] of [[12, 5], [13, 6], [11, 6]]) P1(ox + dx, top + dy, 'rgba(90,38,22,.35)');
     }
   }
   const drawChar = (who, ox, oy, P) => {costume('back', ox, oy, P); (who === 'crow' ? drawCrow : drawOpus)(ox, oy, P); costume('front', ox, oy, P);};
 
-  // ── props ─────────────────────────────────────────────────────────────────────────────────────
+
   const SYN = ['#E8916F', '#7AA2F7', '#9ECE6A', '#BB9AF7', '#E0AF68', '#C0CAF5', '#C0CAF5'];
   const CODE = Array.from({length: 24}, () => {const out = []; let x = Math.floor(Math.random() * 3); while (x < 9) {const w = 1 + Math.floor(Math.random() * 3); out.push([x, Math.min(w, 9 - x), any(SYN)]); x += w + 1;} return out;});
   function laptop(ox, oy, t) {
@@ -561,7 +533,7 @@
     for (let i = 0; i < 7; i++) for (const [cx, w, col] of CODE[(first + i) % CODE.length]) R(x + cx, y + i, w, 1, col);
     if (t % 1 < .5) P1(x + 1 + (first % 7), y + 6, '#FFFFFF');
     R(x - 3, y + 8, 16, 1, '#C9CED6'); R(x - 2, y + 9, 15, 1, '#8D939C');
-    alpha(.13, () => R(ox + 9, oy + 1, 6, 7, '#8EC5FF'));   // the screen's light on his face
+    alpha(.13, () => R(ox + 9, oy + 1, 6, 7, '#8EC5FF'));
   }
   const nightcap = (ox, top) => {R(ox + 4, top - 1, 10, 1, '#3B5BA9'); R(ox + 6, top - 2, 7, 1, '#3B5BA9'); R(ox + 9, top - 3, 5, 1, '#3B5BA9'); R(ox + 12, top - 4, 3, 1, '#3B5BA9'); R(ox + 15, top - 5, 1, 2, '#F4F4F4');};
   const beret = (ox, top) => {R(ox + 4, top - 1, 10, 1, '#1E1E24'); R(ox + 5, top - 2, 8, 1, '#1E1E24'); R(ox + 7, top - 3, 4, 1, '#1E1E24'); P1(ox + 9, top - 4, '#1E1E24');};
@@ -603,7 +575,7 @@
   function easel(x, gy, k) {
     line(x + 1, gy, x + 3, gy - 12, '#8B5A2B'); line(x + 9, gy, x + 7, gy - 12, '#8B5A2B');
     R(x, gy - 13, 11, 8, '#FFFDF5');
-    const pic = ['.bbbbb.', 'bwbbbwb', 'bbbyybb', 'bbbbbbb', '.g...g.'];   // a portrait of the crow, unflattering
+    const pic = ['.bbbbb.', 'bwbbbwb', 'bbbyybb', 'bbbbbbb', '.g...g.'];
     let n = Math.floor(clamp(k, 0, 1) * 35);
     for (let r = 0; r < pic.length && n > 0; r++) for (let c = 0; c < 7 && n > 0; c++, n--) {const ch = pic[r][c]; if (ch !== '.') P1(x + 2 + c, gy - 12 + r, {b: '#2E2A37', w: '#F3EFE6', y: '#E8A03E', g: '#9C97AA'}[ch]);}
   }
@@ -657,16 +629,16 @@
     {a: ['..###..', '.#####.', '##.#.##', '#######', '#.###.#', '.##.##.', '..###..'], c: '#9ECE6A'},
   ];
 
-  // ── particles (in pixel units): feathers, dust, sparks, little glyphs, gifts ─────────────────
+
   const parts = [];
   const emit = p => {if (!still && parts.length < 260) parts.push({vx: 0, vy: 0, g: 0, t: 0, life: 1, ...p});};
   const FEATHER = [['..q', '.bl', '.b.', 'b..', 'b..'], ['q..', 'lb.', '.b.', '..b', '..b'], ['qbbl'], ['.q.', '.l.', '.b.', '.b.', '.b.']];
   const FPAL = {b: '#3C3550', l: '#7464BE', q: '#CFC8E2'};
-  const HPAL = {b: '#D9AE86', l: '#FFF3E6', q: '#FFFFFF'};   // Heaven's feathers: pearl and champagne, not the crow's
+  const HPAL = {b: '#D9AE86', l: '#FFF3E6', q: '#FFFFFF'};
   const fpal = () => (root.dataset.edition === 'heaven' ? HPAL : FPAL);
   const feather = (x, y) => emit({kind: 'feather', x, y, ph: Math.random() * 6, life: 99});
   const dust = (x, y, n = 5) => {for (let i = 0; i < n; i++) emit({kind: 'dust', x: x + rnd(-6, 6), y: y - 1, vx: rnd(-14, 14), vy: rnd(-8, -2), life: .5 + Math.random() * .3});};
-  let suckAt = null;   // the vacuum's nozzle: loose particles fly into it
+  let suckAt = null;
   function stepParts(dt, floor) {
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
@@ -699,7 +671,7 @@
     }
   }
 
-  // ── the effects layer: full resolution, for glass, cracks, potion, the marker and the laser ──
+
   const fxc = document.createElement('canvas');
   fxc.className = 'mk-fx'; fxc.setAttribute('aria-hidden', 'true'); fxc.width = fxc.height = 1;
   const fx = fxc.getContext('2d');
@@ -714,13 +686,13 @@
   }
   function star(x, y, s, c, a = 1) {if (s <= 0) return; fx.save(); fx.globalAlpha = a; fx.fillStyle = c; fx.beginPath(); fx.moveTo(x, y - s); fx.quadraticCurveTo(x, y, x + s, y); fx.quadraticCurveTo(x, y, x, y + s); fx.quadraticCurveTo(x, y, x - s, y); fx.quadraticCurveTo(x, y, x, y - s); fx.fill(); fx.restore();}
   function shake(el, px = 6) {try {el.animate([{translate: '0 0'}, {translate: `${-px}px ${px / 2}px`}, {translate: `${px * .7}px ${-px / 3}px`}, {translate: `${-px / 3}px ${px / 4}px`}, {translate: '0 0'}], {duration: 320, composite: 'add'});} catch {}}
-  // a frame can break if it shows a picture and sits comfortably on screen
+
   function breakable(el) {
     if (!el?.isConnected) return false;
     const r = el.getBoundingClientRect();
     return r.width >= 110 && r.height >= 60 && r.top > 40 && r.left > -8 && r.right < innerWidth + 8 && r.top < innerHeight - 80 && !!(el.matches('img,video') || el.querySelector('img,video'));
   }
-  // what the frame looks like right now, at full resolution (its picture, its corners, its background)
+
   function snapshot(el, r) {
     const c = document.createElement('canvas'), w = Math.max(1, Math.round(r.width * fdpr)), h = Math.max(1, Math.round(r.height * fdpr));
     c.width = w; c.height = h;
@@ -781,7 +753,7 @@
     if (edge > .01) {fx.strokeStyle = `rgba(255,255,255,${.6 * edge})`; fx.lineWidth = 1; fx.stroke();}
     fx.restore();
   }
-  // the glass of one frame: cracks → shards on the floor → rebuilt → healed by the potion
+
   function glass(el) {
     const r0 = el.getBoundingClientRect();
     fxOn();
@@ -831,10 +803,10 @@
     return fxAdd(e);
   }
 
-  // ── DOM pop-ups that follow the companion (code cards, sticky notes), sound effects, tips ─────
+
   const pops = [];
   function popup(build, {cls = '', ms = 4200, dx = 0, dy = 0, rot = 0} = {}) {
-    if (still || grounded()) return;   // (a [data-no-perch] page: nothing floats up over its copy, World hunt r5 #1)
+    if (still || grounded()) return;
     const el = document.createElement('div');
     el.className = `mk-pop ${cls}`; build(el);
     el.style.setProperty('--r', `${rot}deg`);
@@ -852,7 +824,7 @@
   }
   const clearPops = () => {for (const p of pops) p.el.remove(); pops.length = 0;};
   function sfx(s, cls = '', at) {
-    if (still || !s || grounded()) return;   // (likewise)
+    if (still || !s || grounded()) return;
     const el = document.createElement('i');
     el.className = `mk-sfx ${cls}`; el.textContent = s;
     el.style.left = `${at ? at[0] : (C.ox + 9) * U}px`; el.style.top = `${at ? at[1] : (C.oy - 6) * U}px`;
@@ -869,7 +841,7 @@
     setTimeout(() => t.remove(), ms);
     return t;
   }
-  // a flex: a real file from this site (or a fact), a different one every time
+
   const code = s => s.replace(/<(k|s|f|c|n)>/g, '<span class="$1">').replace(/<\/(k|s|f|c|n)>/g, '</span>');
   const FLEX = [
     ['companion.js', ['<k>const</k> me = <f>draw</f>(<s>‘in code’</s>);', `<c>// ${T('no images, no libraries', 'بلا صور، بلا مكتبات')}</c>`, '<f>flex</f>(<n>2</n>);']],
@@ -891,7 +863,7 @@
     T('Is it scalable?', 'هل هو قابل للتوسع؟'), T('Ship it Friday', 'نطلقه الخميس'), T('Add AI to it', 'أضف له ذكاءً اصطناعياً'), T('Low-hanging fruit', 'ثمار سهلة القطف'), T('Q4 roadmap', 'خطة الربع الرابع')];
   const SOUNDS = [T('meow', 'مياو'), T('ring ring', 'رن رن'), T('beep beep', 'بيب بيب'), T('hello?', 'ألو؟'), T('*dial-up noises*', '*صوت مودم قديم*'), T('ding!', 'دينغ!'), T('woof', 'هاو هاو'), T('*car alarm*', '*إنذار سيارة*')];
 
-  // ── stealing words (only from text you have been sitting on for a while) ──────────────────────
+
   const TEXT_SEL = 'p, li, h3, h4, blockquote, figcaption, dd';
   const stolen = [];
   function wordsIn(el, min = 3) {
@@ -905,7 +877,7 @@
     }
     return out;
   }
-  // hide a word (or a letter) where it is: it keeps its space, so nothing below moves
+
   function take(node, start, end) {
     const range = document.createRange(); range.setStart(node, start); range.setEnd(node, end);
     const span = document.createElement('span'); span.className = 'mk-stolen';
@@ -937,12 +909,12 @@
     setTimeout(() => el.remove(), dur + 500);
   }
   const mouth = () => [(C.ox + 18) * U, (C.oy + 3) * U];
-  // take one word (or one letter) from the block: it vanishes in place, a copy flies to `to`
+
   function steal(el, {letter = false, to = mouth, how = 'arc', dur = 650, near} = {}) {
     const ws = wordsIn(el, letter ? 2 : 3); if (!ws.length) return false;
     let w;
     if (near !== undefined) {const top = Math.min(...ws.map(v => v.r.top)), first = ws.filter(v => v.r.top < top + 4); w = first.reduce((a, b) => (Math.abs((b.r.left + b.r.right) / 2 - near) < Math.abs((a.r.left + a.r.right) / 2 - near) ? b : a));}
-    else w = any(ws.slice(0, Math.max(2, Math.ceil(ws.length * .6))));   // the part you have probably read
+    else w = any(ws.slice(0, Math.max(2, Math.ceil(ws.length * .6))));
     let start = w.start, end = w.end, s = w.text, r = w.r;
     if (letter) {const i = Math.floor(Math.random() * s.length); start += i; end = start + 1; s = s[i]; const rg = document.createRange(); rg.setStart(w.node, start); rg.setEnd(w.node, end); r = rg.getBoundingClientRect();}
     const host = w.node.parentElement, span = take(w.node, start, end);
@@ -950,7 +922,7 @@
     flyWord(s, r, host, to, how, dur);
     return r;
   }
-  // text blocks fully on screen: what you are reading (or have just read)
+
   function readable() {
     const out = [], modal = layerHost !== document.body ? layerHost : null;
     for (const el of document.querySelectorAll(`${TEXT_SEL}, ${TITLE_SEL}`)) {
@@ -963,7 +935,7 @@
     return out;
   }
 
-  // ── perches: the frames of the work and the big titles it can stand and sit on ───────────────
+
   const FRAME_SEL = '.nf-card-art, .nf-pop-media, .nf-sheet-media, .cx-poster figure, .cx-world, .chapter-card figure, .fcard__thumb, .portfolio-film-card, main figure, article figure, main picture, main img, main video, article img';
   const TITLE_SEL = 'h1, h2, [data-living-text]';
   function perches() {
@@ -971,10 +943,10 @@
     const add = (el, type) => {
       if (seen.has(el)) return; seen.add(el);
       if ((modal && !modal.contains(el)) || el.closest('.mk-bubble,.mk-pop,.mk-xo,.mk-dock,dialog:not([open])') || noPerch(el)) return;
-      if (type === 'frame' && el.parentElement?.closest(FRAME_SEL)) return;   // the outermost frame only
+      if (type === 'frame' && el.parentElement?.closest(FRAME_SEL)) return;
       const r = el.getBoundingClientRect();
       if (r.width < (type === 'title' ? 100 : 90) || r.height < (type === 'title' ? 22 : 50)) return;
-      if (r.width > innerWidth * .96 && r.height > innerHeight * .8) return;  // full-screen layers are not frames
+      if (r.width > innerWidth * .96 && r.height > innerHeight * .8) return;
       if (r.top < top || r.top > bottom || r.right < 30 || r.left > innerWidth - 30 || !visible(el)) return;
       out.push({el, type, r});
     };
@@ -993,11 +965,11 @@
   const typeOf = el => (el.matches(FRAME_SEL) ? 'frame' : el.matches(TITLE_SEL) ? 'title' : el.matches(TEXT_SEL) ? 'text' : 'thing');
   function perch(el, x = C.x) {C.on = el; C.onType = typeOf(el); const r = el.getBoundingClientRect(); C.onDx = clamp(x * U - r.left, 10, Math.max(10, r.width - 10));}
 
-  // ── what it does when left alone, and the mischief ────────────────────────────────────────────
-  // pose(t, P, st) adjusts the sprite; back/front(t, o, st, P) draw props behind / in front of it
-  // (o = {bx, by} standing origin, {ox, oy} drawn origin, top drawn body top); tick(t, st, dt)
-  // runs side effects and may return 'done'; st.free means it moves itself; say is its click line.
-  // on: where it can happen ('floor', 'frame', 'title', 'text', 'perch' = frame or title; none = anywhere)
+
+
+
+
+
   const side = () => (C.x < W / 2 ? 1 : -1);
   const lookUser = () => {if (!attention.t) return [0, 0]; const dx = attention.x - (C.ox + 9) * U, dy = attention.y - (C.oy + 3) * U; return [Math.abs(dx) < 24 ? 0 : Math.sign(dx), dy < -60 ? -1 : dy > 60 ? 1 : 0];};
   const edgeOf = () => C.on?.getBoundingClientRect();
@@ -1018,7 +990,7 @@
     {id: 'code', who: 'both', dur: [11, 16], say: T('Shh. Shipping. Pull requests don’t write themselves. Mine do, but still.', 'هس. أشحن الكود. طلبات الدمج لا تكتب نفسها. طلباتي تفعل، لكن مع ذلك.'),
       pose(t, P, st) {
         if (t % 7 < 6) P.look = [1, 1];
-        if (st.kind === 'crow') {P.y = frame % 3 === 0 ? 1 : 0; P.beak = P.y;}   // hunt-and-peck
+        if (st.kind === 'crow') {P.y = frame % 3 === 0 ? 1 : 0; P.beak = P.y;}
         else {P.armR = 'reach'; P.dyR = frame % 2 ? -1 : 0;}
       },
       front(t, o) {laptop(o.bx, o.by, t);},
@@ -1109,7 +1081,7 @@
     {id: 'paint', who: 'opus', on: 'floor', dur: [9, 11], say: T('Painting my rival, the crow. Unflattering on purpose.', 'أرسم منافسي، الغراب. بشكل غير لطيف عمداً.'),
       pose(t, P) {P.armR = frame % 3 ? 'hold' : 'reach'; P.look = [1, 0];},
       front(t, o) {easel(o.bx + 20, o.by + 9, t / 8);}},
-    // the crow's own: real crow behaviour that makes no sense
+
     {id: 'sunbathe', who: 'crow', dur: [8, 10], say: T('I’m not dead. I’m sunbathing. Crows do this. Look it up.', 'لست ميتاً. أتشمس. الغربان تفعل هذا. ابحث عنها.'),
       pose(t, P) {P.flat = 1; P.armL = P.armR = 'spread'; P.eyes = t % 5 > 2.5 ? 'dead' : 'closed'; P.beak = 1; P.look = [0, 0];},
       front(t, o) {const x = o.bx + 26, y = o.by - 8; disc(x, y, 2, '#FFD166'); for (let i = 0; i < 8; i++) {const a = i * Math.PI / 4 + t * .5; P1(Math.round(x + Math.cos(a) * 4), Math.round(y + Math.sin(a) * 4), '#FFE08A');}}},
@@ -1128,7 +1100,7 @@
       start(st) {st.side = side(); st.nx = C.x + st.side * 16;},
       pose(t, P, st) {
         const carX = st.nx - st.side * 90 * (5.2 - t);
-        if (t > 3 && t < 7 && Math.abs(carX - C.x) < 12) {P.y = -9; P.eyes = 'wide'; P.armL = P.armR = 'fup';}   // hops over the car
+        if (t > 3 && t < 7 && Math.abs(carX - C.x) < 12) {P.y = -9; P.eyes = 'wide'; P.armL = P.armR = 'fup';}
         else if (t > 6.6 && t < 8.4) {P.y = frame % 2; P.beak = frame % 2; P.look = [st.side, 1];}
         else P.look = t > 2.6 && t < 5.2 ? [-st.side, 0] : [st.side, 1];
       },
@@ -1189,7 +1161,7 @@
       tick() {if (Math.random() < .35) emit({kind: 'px', x: C.x + rnd(-10, 10), y: C.y - 2, vx: rnd(-25, 25), vy: rnd(-30, -10), g: 80, life: .7, c: '#8EC5FF'});}},
     {id: 'hang', who: 'crow', dur: [7, 8], say: T('Upside down is my thinking position.', 'وضعية التفكير عندي: رأساً على عقب.'),
       pose(t, P) {P.eyes = t % 3 > 2.6 ? 'blink' : 'open'; P.x = Math.round(Math.sin(t * 2.4)); P.look = [0, 1];},
-      self(t, o, P) {   // upside down from a pull-up bar: crows invented the gym
+      self(t, o, P) {
         const bar = o.by - 4, gy = o.by + 9;
         R(o.bx - 4, bar, 26, 1, '#9AA0A8'); R(o.bx - 4, bar, 1, gy - bar + 1, '#6B7078'); R(o.bx + 21, bar, 1, gy - bar + 1, '#6B7078');
         g.save(); g.translate(0, 2 * (o.by + 3) + 1); g.scale(1, -1); drawCrow(o.ox, o.by, P); g.restore();
@@ -1201,7 +1173,7 @@
       pose(t, P) {P.beak = t % 1.3 < .35 ? 1 : 0; P.y = P.beak ? -1 : 0;},
       tick(t, st) {const i = Math.floor(t / 1.3); if (i !== st.i && i < 3) {st.i = i; sfx(T('caw', 'قاق'));}}},
 
-    // ── mischief on the frames of the work ──
+
     {id: 'shatter', who: 'both', on: 'frame', dur: [26, 26], can: () => breakable(C.on), say: T('I broke it. I fixed it. Net zero. That’s agile.', 'كسرتها. وأصلحتها. المحصلة صفر. هذا هو الأجايل.'),
       start(st) {st.el = C.on; st.free = true; st.ph = 'perch'; st.at = 0; const r = st.el.getBoundingClientRect(); st.gl = glass(st.el); st.ix = clamp(C.x * U - r.left, 16, r.width - 16); st.iy = Math.min(36, r.height * .3);},
       tick(t, st, dt) {
@@ -1235,7 +1207,7 @@
         const since = t - st.at;
         switch (st.ph) {
           case 'perch':
-            if (t < .7) break;   // a stare at you first
+            if (t < .7) break;
             P.look = [0, 1]; P.eyes = t > 1.5 && t < 2.2 ? 'wide' : 'squint';
             if (t > 1 && t < 1.5) P.y = -Math.round(Math.sin((t - 1) / .5 * Math.PI) * 9);
             if (t > 2.3 && t < 2.8) P.y = -Math.round(Math.sin((t - 2.3) / .5 * Math.PI) * 14);
@@ -1324,7 +1296,7 @@
       },
       pose(t, P, st) {if (st.walk) P.legs = frame % 2 ? 'a' : 'b'; P.eyes = Math.abs(st.ang) > 3 ? 'wide' : 'happy';},
       end(st) {st.el.style.rotate = st.prev || ''; if (st.el.isConnected) perch(st.el, C.x);}},
-    // ── mischief on titles ──
+
     {id: 'marker', who: 'both', on: 'title', dur: [8, 8], can: () => wordsIn(C.on, 4).length > 0, say: T('Highlighted the important part. You’re welcome.', 'ظلّلت الجزء المهم. على الرحب.'),
       start(st) {
         st.el = C.on; st.free = true; st.k = 0; st.fade = 1;
@@ -1376,7 +1348,7 @@
       },
       pose(t, P, st) {if (t < 1.2) P.legs = frame % 2 ? 'a' : 'b'; else if (!st.snap) {P.armL = P.armR = 'hold'; P.eyes = 'squint'; P.legs = frame % 3 ? 'a' : 'b';} else {P.eyes = 'wide'; P.armL = P.armR = 'up';}},
       end(st) {st.el.style.scale = st.prev || ''; st.el.style.transformOrigin = st.prevO || ''; if (st.el.isConnected) perch(st.el, C.x);}},
-    // ── stealing words you have already read ──
+
     thief('sack', 'both', T('What words? I didn’t take any words.', 'أي كلمات؟ لم آخذ أي كلمات.'), {dur: 7.5, count: () => 3 + Math.floor(Math.random() * 3), every: 1.1,
       pose(t, P, st) {P.armR = 'hold'; P.look = [0, 1]; P.eyes = st.n >= st.max ? 'happy' : 'squint';},
       front(t, o, st) {sack(o.ox + 17, o.oy + 8, st.n);}}),
@@ -1413,12 +1385,12 @@
       to: () => [(C.ox + 9) * U, (C.oy + 5) * U],
       got(st) {if (st.n % 3 === 0) sfx(T('gulp', 'بلع'));},
       pose(t, P) {P.y = frame % 2; P.beak = frame % 2; P.look = [0, 1];}}),
-    // buttons: it stands on the one you wanted and says no
+
     {id: 'guard', who: 'both', dur: [2.6, 2.6], once: true, say: T('Nope. Not this button. Try another one.', 'لا. ليس هذا الزر. جرّب غيره.'),
       start() {sfx(T('nope', 'لأ'));},
       pose(t, P) {P.armL = P.armR = 'up'; P.eyes = 'squint'; P.y = Math.floor(t * 4) % 2 ? -2 : 0; P.look = lookUser();},
       tick(t, st) {const n = Math.floor(t * 4); if (n !== st.n && n % 2 === 0 && C.on) {st.n = n; try {C.on.animate([{scale: '1 1'}, {scale: '1.05 .85'}, {scale: '1 1'}], {duration: 220});} catch {}}}},
-    // X O
+
     {id: 'xo', who: 'both', dur: [3600, 3600], once: true, say: T('Focus. I’m winning.', 'ركّز. أنا أفوز.'),
       pose(t, P) {
         if (!xo) return;
@@ -1432,7 +1404,7 @@
       },
       front(t, o) {if (xo) xoProps(o);}},
   ];
-  // ── spells: for a few seconds a window of the work turns into something else ─────────────────
+
   const decos = [];
   function deco(el, html, cls = '', update) {
     const node = document.createElement('div');
@@ -1455,7 +1427,7 @@
     requestAnimationFrame(() => Object.assign(el.style, props));
     return () => {for (const k of Object.keys(props)) el.style[k] = prev[k]; setTimeout(() => {el.style.transition = prev.transition;}, 750);};
   }
-  // clip-path animates only between shapes with the same number of points
+
   function morph(el, from, to, extra = {}) {
     const prev = {clipPath: el.style.clipPath, transition: el.style.transition, filter: el.style.filter};
     el.style.transition = 'clip-path .8s cubic-bezier(.2,.8,.2,1), filter .6s ease'; el.style.clipPath = from;
@@ -1482,7 +1454,7 @@
       const r = el.getBoundingClientRect(); fx.save(); fx.globalAlpha = (1 - k) * .85; fx.imageSmoothingEnabled = false; fx.drawImage(n, r.left, r.top, r.width, r.height); fx.restore();
     }});
   }
-  // a small copy of the frame's picture, sampled into a grid of colours
+
   function sample(el, cols) {
     const r0 = el.getBoundingClientRect(); fxOn(); const tex = snapshot(el, r0);
     const rows = Math.max(6, Math.round(cols * r0.height / r0.width)), c = document.createElement('canvas'); c.width = cols; c.height = rows;
@@ -1538,7 +1510,7 @@
   const undoAll = (...fns) => () => fns.forEach(fn => safe(() => fn?.()));
   const loopAnim = (el, frames, opts) => safe(() => el.animate(frames, {iterations: Infinity, composite: 'add', ...opts}));
   const SPELL_PACKS = {
-    // the everyday site: the cinema it already is
+
     studio: [
       {id: 'tv', name: T('Channel 3', 'القناة ٣'), cast(el) {const a = restyle(el, {filter: 'contrast(1.25) saturate(.55) sepia(.3) brightness(.95)'}), d = deco(el, '<i class="bezel"></i><i class="lines"></i><span class="lbl">CH 03</span>', 'is-tv'); fxNoise(el); return () => {a(); d.end();};}},
       {id: 'reel', name: T('Rolling!', 'تصوير!'), cast(el) {const a = restyle(el, {filter: 'sepia(.85) contrast(1.15) brightness(.95)'}), d = deco(el, '<i class="strip l"></i><i class="strip r"></i><i class="scr"></i>', 'is-reel'); return () => {a(); d.end();};}},
@@ -1555,7 +1527,7 @@
       }},
       {id: 'popcorn', name: T('Popcorn time', 'وقت الفشار'), cast(el) {let on = true; const rain = () => {if (!on) return; const r = el.getBoundingClientRect(); for (let i = 0; i < 2; i++) emit({kind: 'px', x: (r.left + Math.random() * r.width) / U, y: (r.top - 30) / U, vy: rnd(20, 40), g: 30, life: 1.6, c: any(['#FFF1B8', '#FFE08A', '#FFFFFF']), s: 2}); setTimeout(rain, 90);}; rain(); return () => {on = false;};}},
     ],
-    // Halloween: trick or treat on the work
+
     halloween: [
       {id: 'coffin', name: T('Coffin!', 'تابوت!'), cast(el) {const a = morph(el, 'polygon(0% 0%, 100% 0%, 100% 24%, 100% 100%, 0% 100%, 0% 24%)', 'polygon(28% 0%, 72% 0%, 100% 24%, 82% 100%, 18% 100%, 0% 24%)', {filter: 'grayscale(.75) brightness(.75) contrast(1.15)'}), d = deco(el, '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="28,0 72,0 100,24 82,100 18,100 0,24"/></svg><span class="rip">R.I.P.</span>', 'is-coffin'); return () => {a(); d.end();};}},
       {id: 'haunted', name: T('It’s watching you', 'إنها تراقبك'), cast(el) {
@@ -1581,8 +1553,8 @@
       }},
       {id: 'moon', name: T('Blood moon', 'قمر دموي'), cast(el) {const a = restyle(el, {filter: 'sepia(1) saturate(5) hue-rotate(-38deg) brightness(.7) contrast(1.2)'}), d = deco(el, '<i class="moon"></i><i class="fog"></i>', 'is-moon'); flock2(el, 'bat', 5); return () => {a(); d.end();};}},
     ],
-    // Heaven: feathers, light and open sky (sometimes a cat). No religion: no stained glass, no halos, no doves (the
-    // owner, 2026-10-10: "nothing about real religion or anything, just normal angelic stuff, no symbols")
+
+
     heaven: [
       {id: 'opal', name: T('Opal', 'لؤلؤي'), cast(el) {return restyle(el, {filter: 'brightness(1.07) saturate(1.15) sepia(.08)'});}},
       {id: 'featherweight', name: T('Featherweight', 'خفيف كالريشة'), cast(el) {const float = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -8px'}, {translate: '0 0'}], {duration: 2400, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, `<svg class="wing l" viewBox="0 0 60 92">${WING_SVG}</svg><svg class="wing r" viewBox="0 0 60 92"><g transform="translate(60 0) scale(-1 1)">${WING_SVG}</g></svg>`, 'is-angel'); return () => {float?.cancel?.(); d.end();};}},
@@ -1611,7 +1583,7 @@
       {id: 'stars', name: T('Written in the stars', 'مكتوب في النجوم'), cast: constellation},
       {id: 'bubble', name: T('Bubble wrap', 'فقاعة حماية'), cast(el) {const float = safe(() => el.animate([{translate: '0 0'}, {translate: '0 -6px'}, {translate: '0 0'}], {duration: 2600, iterations: Infinity, easing: 'ease-in-out', composite: 'add'})), d = deco(el, '<i class="b"></i>', 'is-bubble'); return () => {float?.cancel?.(); d.end();};}},
     ],
-    // RGB Overdrive: the gamer edition
+
     rgb: [
       {id: 'rgbring', name: T('RGB sync', 'مزامنة RGB'), cast(el) {const a = restyle(el, {filter: 'saturate(1.45) contrast(1.08)'}), d = deco(el, '<i class="ring"></i>', 'is-rgbring'); return undoAll(a, () => d.end());}},
       {id: 'levelup', name: T('Level up!', 'ارتقاء!'), cast(el) {
@@ -1650,7 +1622,7 @@
       }},
       {id: 'gg', name: 'GG', cast(el) {const an = safe(() => el.animate([{filter: 'hue-rotate(0deg) saturate(1.6)'}, {filter: 'hue-rotate(360deg) saturate(1.6)'}], {duration: 2200, iterations: Infinity})), d = deco(el, '<span class="gg">GG</span>', 'is-gg'); return undoAll(() => d.end(), () => an?.cancel?.());}},
     ],
-    // Night Ops: the tactical edition
+
     tactical: [
       {id: 'nvg', name: T('Night vision', 'رؤية ليلية'), cast(el) {const a = restyle(el, {filter: 'grayscale(1) sepia(1) hue-rotate(52deg) saturate(4.5) brightness(1.15) contrast(1.25)'}), d = deco(el, '<i class="scan"></i><i class="vig"></i><span class="lbl">NV · 2</span>', 'is-nvg'); return undoAll(a, () => d.end());}},
       {id: 'scope', name: T('Scope', 'منظار'), cast(el) {
@@ -1677,7 +1649,7 @@
       {id: 'lockon', name: T('Locked on', 'تم القفل'), cast(el) {const t0 = performance.now(), d = deco(el, '<i class="dot"></i><i class="ring2"></i>', 'is-dot', dd => {const t = (performance.now() - t0) / 1000, x = 50 + Math.sin(t * 1.3) * 30 + Math.sin(t * 3.1) * 6, y = 50 + Math.cos(t * 1.7) * 26; for (const n of dd.node.children) {n.style.left = `${x}%`; n.style.top = `${y}%`;}}); return () => d.end();}},
       {id: 'complete', name: T('Mission complete', 'المهمة اكتملت'), cast(el) {const d = deco(el, `<span class="banner">✓ ${T('Mission complete', 'المهمة اكتملت')}</span>`, 'is-done'); return () => d.end();}},
     ],
-    // Ink & Pow: the comic edition
+
     comic: [
       {id: 'kapow', name: 'KAPOW!', cast(el) {const a = restyle(el, {filter: 'contrast(1.4) saturate(1.6)'}), d = deco(el, `<i class="lines"></i>${burst('KAPOW!')}`, 'is-kapow'); shake(el, 8); return undoAll(a, () => d.end());}},
       {id: 'speech', name: T('Speech!', 'كلام!'), cast(el) {const d = deco(el, '<span class="bub"></span>', 'is-say'); d.node.querySelector('.bub').textContent = any([T('Holy deadlines!', 'يا للمواعيد النهائية!'), T('It compiles?! Impossible!', 'يعمل؟! مستحيل!'), T('Ship it, team!', 'انشروه يا فريق!'), T('Is this… a portfolio?!', 'هل هذا… معرض أعمال؟!'), T('To the release notes!', 'إلى ملاحظات الإصدار!')]); return () => d.end();}},
@@ -1690,7 +1662,7 @@
       {id: 'cape', name: T('Hero mode', 'وضع البطل'), cast(el) {const d = deco(el, '<i class="cape"></i><i class="tie"></i>', 'is-cape'), an = loopAnim(el, [{translate: '0 0'}, {translate: '0 -5px'}, {translate: '0 0'}], {duration: 1800, easing: 'ease-in-out'}); return undoAll(() => d.end(), () => an?.cancel?.());}},
       {id: 'thought', name: T('Hmm…', 'همم…'), cast(el) {const d = deco(el, '<span class="bub think"></span>', 'is-say'); d.node.querySelector('.bub').textContent = any([T('hmm… needs more glass', 'همم… يحتاج زجاجاً أكثر'), T('what if… dark mode?', 'ماذا لو… وضع داكن؟'), T('is it Friday yet?', 'هل وصلنا الجمعة؟'), T('one more feature…', 'ميزة واحدة أخرى…')]); return () => d.end();}},
     ],
-    // Terracotta: the clay edition
+
     clay: [
       {id: 'squish', name: T('Squish!', 'هرس!'), cast(el) {const a = restyle(el, {filter: 'saturate(1.15) contrast(.95)'}), an = loopAnim(el, [{scale: '1 1'}, {scale: '1.06 .92'}, {scale: '.95 1.06'}, {scale: '1 1'}], {duration: 1300, easing: 'ease-in-out'}); return undoAll(a, () => an?.cancel?.());}},
       {id: 'plasticine', name: T('Plasticine', 'صلصال'), cast(el) {return morph(el, 'inset(0% 0% 0% 0% round 0px)', 'inset(3% 3% 3% 3% round 34px)', {filter: 'saturate(1.45) contrast(.9) blur(.7px)'});}},
@@ -1721,8 +1693,8 @@
   };
   function wand(o, pack, up) {
     const hx = o.ox + (up ? 16 : 17), hy = o.oy + (up ? 1 : 4);
-    if (pack === 'halloween') {line(hx, hy, hx + 4, hy - 5, '#F2E9DA'); for (const [dx, dy] of [[4, -6], [5, -6], [4, -7], [5, -7], [6, -6], [5, -5]]) P1(hx + dx, hy + dy, frame % 2 ? '#FF7417' : '#FFC34D');}   // a lollipop: the treat
-    else if (pack === 'heaven') {line(hx, hy, hx + 4, hy - 5, '#E3B04B'); const k = frame % 2; for (const [dx, dy] of [[0, 0], [1, 0], [0, -1], [1, -1]]) P1(hx + 4 + dx, hy - 6 + dy, k ? '#FFF6EC' : '#E9B97F');}   // a round glint, never a four-point (cross) sparkle
+    if (pack === 'halloween') {line(hx, hy, hx + 4, hy - 5, '#F2E9DA'); for (const [dx, dy] of [[4, -6], [5, -6], [4, -7], [5, -7], [6, -6], [5, -5]]) P1(hx + dx, hy + dy, frame % 2 ? '#FF7417' : '#FFC34D');}
+    else if (pack === 'heaven') {line(hx, hy, hx + 4, hy - 5, '#E3B04B'); const k = frame % 2; for (const [dx, dy] of [[0, 0], [1, 0], [0, -1], [1, -1]]) P1(hx + 4 + dx, hy - 6 + dy, k ? '#FFF6EC' : '#E9B97F');}
     else if (pack === 'rgb') {line(hx, hy, hx + 4, hy - 5, '#1B1B22'); P1(hx + 5, hy - 6, hsl(frame * 40)); P1(hx + 4, hy - 6, hsl(frame * 40 + 120));}
     else if (pack === 'tactical') {R(hx, hy - 3, 3, 4, '#2E3326'); P1(hx + 1, hy - 3, frame % 2 ? '#FF3B3B' : '#7A1A1A');}
     else if (pack === 'comic') {line(hx, hy, hx + 4, hy - 5, '#F2C14E'); P1(hx + 5, hy - 6, '#111111'); P1(hx, hy, '#FF8FA3');}
@@ -1753,12 +1725,12 @@
   const actBag = bag(ACTS.filter(a => !a.once && a.on !== 'text'));
   const theftBag = bag(ACTS.filter(a => a.on === 'text'));
 
-  // ── how it follows you: the rides ─────────────────────────────────────────────────────────────
-  // draw(r, x, y, phase, p, P, t) draws facing right with (x, y) the ground point under the rider;
-  // it returns the rider's grid origin. phases: board → go → land (a fall comes first if the ride
-  // needs the ground and the rider is up in the air).
+
+
+
+
   const rider = (x, y, lift, P, who = kind) => {const ox = x - 9, oy = y - 10 - lift; drawChar(who, ox, oy, P); return [ox, oy];};
-  // vehicles pop in with a puff, carry the rider, then drive off and fade (ground rides share this)
+
   function vehicle(ph, p, x, outAt = .25) {
     const off = ph === 'land' ? Math.round(70 * smooth((p - outAt) / (1 - outAt))) : 0;
     const a = ph === 'board' ? smooth(p / .5) : ph === 'land' ? 1 - smooth((p - .5) / .5) : 1;
@@ -1775,7 +1747,7 @@
     R(hx + 15, by - 24, 1, 2, H); P1(hx + 16, by - 23, H);
     R(hx + 12, by - 21, 2, 7, M); P1(hx + 14, by - 22, M);
     R(hx - 1, by - 14, 2, 2, M); R(hx - 2, by - 12, 2, 4, M);
-    // a Cairo carriage horse: gold collar, red saddle pad, red pompom plume
+
     R(hx + 13, by - 14, 1, 5, G); R(hx + 5, by - 15, 5, 2, Rd); R(hx + 5, by - 15, 5, 1, G); R(hx + 16, by - 26, 1, 2, Rd); R(hx + 15, by - 28, 3, 2, Rd); P1(hx + 18, by - 20, G);
     [hx + 2, hx + 4, hx + 11, hx + 13].forEach((lx, i) => {
       const l = moving && ((step === 1 && (i === 0 || i === 3)) || (step === 3 && (i === 1 || i === 2))) ? 2 : 0;
@@ -1863,7 +1835,7 @@
       },
       trail(r, x, y) {if (Math.random() < .25) emit({kind: 'dust', x: x - r.dir * 14, y: y - 3, vx: -r.dir * 8, vy: -3, life: .6, c: '#8F8F8F'});}},
     {id: 'bike', who: 'both', path: 'ground', speed: 52, board: .5, land: .8, sfx: T('fresh bread!', 'عيش سخن!'),
-      draw(r, x, y, ph, p, P) {   // the Cairo bread bicycle: a tray of bread balanced on the head
+      draw(r, x, y, ph, p, P) {
         const v = vehicle(ph, p, x), {cx, step} = v, F = '#2E8BC0', K = '#1E1E24';
         const bike = () => alpha(v.a, () => {
           ring(cx - 7, y - 5, 4, K); ring(cx + 7, y - 5, 4, K); P1(cx - 7, y - 5, '#9AA0A8'); P1(cx + 7, y - 5, '#9AA0A8');
@@ -1881,7 +1853,7 @@
         return o;
       }},
     {id: 'moto', who: 'both', path: 'ground', speed: 100, board: .6, land: .9, sfx: T('vroom', 'بررررم'),
-      draw(r, x, y, ph, p, P) {   // an Egyptian delivery motorbike, box and all
+      draw(r, x, y, ph, p, P) {
         const v = vehicle(ph, p, x), {cx} = v, K = '#1E1E24', Rr = '#C8372D';
         const moto = () => alpha(v.a, () => {
           R(cx - 15, y - 19, 7, 7, '#E8B33A'); R(cx - 15, y - 16, 7, 1, Rr);
@@ -1960,7 +1932,7 @@
         return o;
       }},
     {id: 'forklift', who: 'opus', path: 'ground', speed: 50, board: .6, land: 1, sfx: T('beep beep beep', 'بيب بيب بيب'),
-      draw(r, x, y, ph, p, P) {   // the warehouse guy's company car
+      draw(r, x, y, ph, p, P) {
         const v = vehicle(ph, p, x), {cx, step} = v;
         const lift = () => alpha(v.a, () => {
           R(cx - 10, y - 25, 14, 1, '#2A2A2A'); R(cx - 10, y - 24, 1, 12, '#2A2A2A'); R(cx + 3, y - 24, 1, 12, '#2A2A2A'); P1(cx - 4, y - 26, frame % 2 ? '#FF8A00' : '#7A3E00');
@@ -2029,7 +2001,7 @@
       },
       trail(r, x, y) {if (Math.random() < .6) emit({kind: 'spark', x: x - r.dir * 15, y: y - 2, vx: -r.dir * 20, vy: rnd(-4, 4), life: .4, c: any(['#FFB703', '#FB5607', '#FFFFFF'])});}},
     {id: 'crowtaxi', who: 'opus', path: 'fly', speed: 85, board: .7, land: .9, sfx: T('caw! (taxi)', 'قاق! (تاكسي)'),
-      draw(r, x, y, ph, p, P) {   // the crow carries him
+      draw(r, x, y, ph, p, P) {
         let cy = 0, a = 1, held = true;
         if (ph === 'board') {cy = -Math.round(40 * (1 - smooth(p / .7))); held = p > .7;}
         if (ph === 'land') {held = p < .2; cy = p > .2 ? -Math.round(60 * smooth((p - .2) / .8)) : 0; a = 1 - Math.max(0, (p - .5) / .5);}
@@ -2040,7 +2012,7 @@
         return o;
       }},
     {id: 'opustaxi', who: 'crow', path: 'ground', speed: 40, board: .6, land: .9,
-      draw(r, x, y, ph, p, P) {   // rides on Opus's head
+      draw(r, x, y, ph, p, P) {
         const v = vehicle(ph, p, x, .3), Po = pose(); Po.legs = v.moving ? (frame % 2 ? 'a' : 'b') : 'stand'; Po.look = [1, 0];
         if (ph === 'land' && p > .3) {Po.armR = 'wave'; Po.eyes = 'happy';}
         alpha(v.a, () => drawOpus(v.cx - 9, y - 10, Po));
@@ -2048,7 +2020,7 @@
         return rider(x, y, 0, P);
       }},
     {id: 'lid', who: 'crow', path: 'slide', speed: 70, board: .3, land: .8, need: (dx, dy) => dy > 20, sfx: T('wheee', 'ييييي'),
-      draw(r, x, y, ph, p, P) {   // sledding on a jar lid, like the famous roof crow
+      draw(r, x, y, ph, p, P) {
         const skid = ph === 'land' ? Math.round(smooth(p) * 6) : 0, a = ph === 'land' && p > .6 ? 1 - (p - .6) / .4 : 1;
         alpha(a, () => {R(x - 6 + skid, y - 1, 12, 1, '#C8CCD2'); R(x - 5 + skid, y, 10, 1, '#9AA0A8');});
         P.armL = P.armR = 'fmid'; P.eyes = 'happy';
@@ -2093,7 +2065,7 @@
   const JUMP = RIDES.find(r => r.id === 'jump');
   const rideBag = bag(RIDES.filter(r => !r.basic)), basicBag = bag(RIDES.filter(r => r.basic));
 
-  // ── lines ─────────────────────────────────────────────────────────────────────────────────────
+
   const path = location.pathname;
   const page = /\/world(\/|$)/.test(path) ? 'world' : /\/space(\/|$)/.test(path) ? 'space' : /\/motion\/[a-z-]+\/?$/.test(path) || root.classList.contains('nf-player') ? 'film' : document.querySelector('.nf-bill') || /\/motion\/?$/.test(path) ? 'gallery' : /\/(en|ar)\/?$/.test(path) ? 'home' : 'other';
   const XO_ASK = T('Bored? Let’s play X O. I’ll go easy on you. I won’t.', 'زهقان؟ نلعب إكس أو. سأتساهل معك. لن أتساهل.');
@@ -2133,7 +2105,7 @@
   };
   const night = () => {const h = (new Date().getUTCHours() + 3) % 24; return h < 5 ? T(`It’s ${h || 12} AM in Kuwait. Who reads portfolios now? Respect.`, `الساعة ${h || 12} بعد منتصف الليل في الكويت. من يقرأ المعارض الآن؟ احترام.`) : null;};
 
-  // ── the pill ──────────────────────────────────────────────────────────────────────────────────
+
   const dock = document.createElement('div');
   dock.className = 'mk-dock'; dock.setAttribute('role', 'group'); dock.setAttribute('aria-label', T('Site style', 'نمط الموقع'));
   const modeBtn = document.createElement('button'), palBtn = document.createElement('button');
@@ -2157,7 +2129,7 @@
   function setMode(mode, from) {
     const apply = () => {
       root.dataset.siteMode = mode; store('mk-mode', mode);
-      if (document.querySelector('[data-theme-menu]') || recall('mm-theme')) {   // the classic site's own theme follows
+      if (document.querySelector('[data-theme-menu]') || recall('mm-theme')) {
         store('mm-theme', mode === 'white' ? 'light' : 'dark');
         if (mode === 'white') root.setAttribute('data-theme', 'light'); else root.removeAttribute('data-theme');
       }
@@ -2175,29 +2147,29 @@
   modeBtn.addEventListener('click', () => setMode(root.dataset.siteMode === 'white' ? 'crow' : 'white', modeBtn));
   palBtn.addEventListener('click', () => setCompanion(kind === 'opus' ? 'crow' : 'opus'));
 
-  // passing crows (Crow mode with Opus, and the flock when you switch to Crow mode)
+
   const visitors = [];
   function flock(n) {if (still || grounded()) return; const left = Math.random() < .5; for (let i = 0; i < n; i++) visitors.push({x: left ? -14 - i * 24 : W + 14 + i * 24, y: rnd(20, Math.max(26, H * .28)) + i * 6, vx: (left ? 1 : -1) * rnd(50, 70), ph: Math.random() * 6});}
 
-  // ── the companion ─────────────────────────────────────────────────────────────────────────────
+
   let floorAt = 0, floorVal = 0;
   function floorPx() {
     const now = performance.now();
     if (now - floorAt < 250) return floorVal;
     floorAt = now;
     let top = innerHeight - 8;
-    // stand on the player's progress bar (not its gradient), the World HUD, or the home film's dock
+
     for (const [s, owner] of [['.nf-timeline', '.film-controls'], ['.portfolio-film-dock', '.film-controls'], ['.world-hud', null]]) {
       const el = document.querySelector(s);
       if (!el) continue;
       const r = el.getBoundingClientRect(), cs = getComputedStyle(owner ? el.closest(owner) || el : el);
       if (r.height && cs.visibility !== 'hidden' && cs.display !== 'none' && +cs.opacity > .3 && r.top > innerHeight * .5) top = Math.min(top, r.top - 4);
     }
-    const pk = grounded() && parkBox(); if (pk) top = Math.min(top, pk.bottom - 4 - U);   // (World r6: stand inside the park)
+    const pk = grounded() && parkBox(); if (pk) top = Math.min(top, pk.bottom - 4 - U);
     return (floorVal = top);
   }
   const floorU = () => Math.floor(floorPx() / U);
-  const topU = () => 16;   // hanging off the top edge
+  const topU = () => 16;
   const fresh = () => attention.t && performance.now() - attention.t < 12000;
   function lookAt() {
     if (!fresh()) return C.idleLook;
@@ -2212,7 +2184,7 @@
     paintDock();
   }
 
-  // input: where you are looking, and whether a scroll is yours (autoplay scrolls are ignored)
+
   addEventListener('pointermove', e => {if (e.pointerType === 'mouse') {attention.x = e.clientX; attention.y = e.clientY; attention.t = performance.now();} lastInput = performance.now();}, {passive: true});
   addEventListener('pointerdown', e => {
     attention.x = e.clientX; attention.y = e.clientY; attention.t = lastInput = performance.now();
@@ -2231,32 +2203,32 @@
     if (C.mode === 'held' || xo) return;
     if (C.mode !== 'carried') {endRide(true); stopAct(); C.next = C.then = null; C.mode = 'carried'; C.scrolled = 0; C.vy = 0;}
     C.scrolled += Math.abs(dy);
-    if (!C.on && !grounded()) C.y = clamp(C.y - dy / U, topU(), floorU());   // standing on the page, so the page carries it
+    if (!C.on && !grounded()) C.y = clamp(C.y - dy / U, topU(), floorU());
   }, {passive: true});
   function wake() {stopAct(); C.mode = 'idle'; C.until = performance.now() + 1400; C.why = 'wake';}
 
-  // travelling: pick a ride for the distance and the destination, then go
-  // a grounded page keeps it to a strip of floor beside its pill, clear of the page's copy (World hunt r5 #2: walking the
-  // floor it crossed the opening's line and the Contact buttons); [lo, hi] in units, null when the pill is not shown
+
+
+
   function home() {
-    const pk = parkBox(); if (pk) {const lo = (pk.left + 4) / U + 9, hi = (pk.right - 4) / U - 9; return [lo, Math.max(lo, hi)];}   // (World r6: its park)
+    const pk = parkBox(); if (pk) {const lo = (pk.left + 4) / U + 9, hi = (pk.right - 4) / U - 9; return [lo, Math.max(lo, hi)];}
     const r = dock.getBoundingClientRect(); if (!r.width) return null;
     const lo = clamp((r.left - 110) / U, 12, W - 12), hi = clamp(r.right / U - 18, 12, W - 12);
     return lo < hi ? [lo, hi] : null;
   }
   function travel(tx, ty, el = null, then = null) {
-    if (grounded() && C.mode !== 'held') {ty = floorU(); el = null; const h = home(); if (h) tx = clamp(tx, h[0], h[1]);}   // (a grounded page: only along the floor, by its pill)
+    if (grounded() && C.mode !== 'held') {ty = floorU(); el = null; const h = home(); if (h) tx = clamp(tx, h[0], h[1]);}
     const now = performance.now(), floor = floorU(), dx = tx - C.x, dy = ty - C.y, d = Math.hypot(dx, dy), level = Math.abs(dy) < 3;
     C.then = then; C.next = null;
     if (d < 3) {if (el) perch(el, tx); C.y = ty; return arrive(now);}
     const ed = root.dataset.edition || '', low = grounded(), ok = r => (r.who === 'both' || r.who === kind) && (!r.need || r.need(dx, dy)) && (!r.edition || r.edition === ed) && (!low || r.path === 'ground');
     const small = d < 45 || (C.scrolled < 50 && d < 70);
     let def = (small ? basicBag(r => ok(r) && (level || r.path !== 'ground')) : rideBag(ok)) || (low && (basicBag(ok) || rideBag(ok))) || JUMP;
-    if (!small && ed) {const own = RIDES.filter(r => r.edition === ed && ok(r)); if (own.length && Math.random() < .45) def = any(own);}   // an edition likes its own ride
-    if (def.path === 'ground' && !level && ty < floor - 2) {C.next = {x: tx, y: ty, el}; startRide(def, now, tx, floor, null);}   // drive below it, then jump up
+    if (!small && ed) {const own = RIDES.filter(r => r.edition === ed && ok(r)); if (own.length && Math.random() < .45) def = any(own);}
+    if (def.path === 'ground' && !level && ty < floor - 2) {C.next = {x: tx, y: ty, el}; startRide(def, now, tx, floor, null);}
     else startRide(def, now, tx, ty, el);
   }
-  // where to go after a scroll: the frame or title nearest to you (or the floor beside your thumb)
+
   function follow(now) {
     const a = fresh() ? attention : {x: C.x * U, y: innerHeight * .5}, list = perches();
     let best = null, bestD = Infinity;
@@ -2324,9 +2296,9 @@
   function arrive(now) {
     const then = C.then; C.then = null;
     if (then) return then();
-    idle(now, C.on ? rnd(3000, 5000) : rnd(1400, 2400), 'arrive');   // sits and looks at you for a bit
+    idle(now, C.on ? rnd(3000, 5000) : rnd(1400, 2400), 'arrive');
   }
-  // routines
+
   function idle(now, ms, why = '') {C.mode = 'idle'; C.until = now + ms; C.why = why; C.act = null;}
   function startAct(def, now, ms) {
     const st = {kind, t0: now, lookUser: lookUser()};
@@ -2339,7 +2311,7 @@
     if (!greeted) {greeted = true; return startAct(ACT.hello, now);}
     if (now - lastInput > 45000) return startAct(ACT.sleep, now, 864e5);
     const here = C.on ? C.onType : 'floor';
-    // perched on a frame: sometimes hop to the next one
+
     if (C.on && here === 'frame' && Math.random() < .25) {
       const me = C.on.getBoundingClientRect(), near = perches().filter(p => p.el !== C.on && p.type === 'frame' && Math.abs(p.r.top - me.top) < 260 && Math.abs(p.r.left - me.left) < 460);
       if (near.length) {const p = any(near); return travel(clamp((p.r.left + p.r.right) / 2 + rnd(-30, 30), p.r.left + 24, p.r.right - 24) / U, p.r.top / U, p.el);}
@@ -2350,7 +2322,7 @@
     startAct(actBag(a => fits(a) && (!mischief || !!a.on)) || actBag(fits) || ACT.code, now);
   }
 
-  // talking (only when clicked)
+
   function say() {
     if (xo) return;
     closeBubble(); clicks++;
@@ -2385,7 +2357,7 @@
   }
   function closeBubble() {bubble?.remove(); bubble = null;}
 
-  // drag and drop (a short press is a click)
+
   hit.addEventListener('pointerdown', e => {C.held = {sx: e.clientX, sy: e.clientY, at: performance.now(), moved: false, dx: e.clientX / U - C.x, dy: e.clientY / U - C.y}; hit.setPointerCapture(e.pointerId);});
   hit.addEventListener('pointermove', e => {
     const h = C.held; if (!h) return;
@@ -2397,7 +2369,7 @@
   hit.addEventListener('pointercancel', release);
   hit.addEventListener('keydown', e => {if (e.key === 'Enter' || e.key === ' ') {e.preventDefault(); say();}});
 
-  // ── it follows you into the previews and the details sheet ────────────────────────────────────
+
   function rehome() {
     const modal = [...document.querySelectorAll('dialog[open]')].reverse().find(d => safe(() => d.matches(':modal')));
     const next = modal || document.body;
@@ -2412,7 +2384,7 @@
   const preview = document.querySelector('[data-pop]');
   if (preview) new MutationObserver(() => {if (!preview.hidden && preview.classList.contains('is-in')) setTimeout(() => {if (preview.classList.contains('is-in')) chase(preview.querySelector('.nf-pop-media') || preview);}, 260);}).observe(preview, {attributes: true, attributeFilter: ['class', 'hidden']});
 
-  // ── the loop ──────────────────────────────────────────────────────────────────────────────────
+
   let playEl = null;
   const playBtn = () => (playEl?.isConnected ? playEl : (playEl = document.querySelector('.world-play')));
   function followPerch(floor) {
@@ -2440,8 +2412,8 @@
     }
     if (grounded() && C.mode !== 'held' && C.mode !== 'fall') {
       if (C.on) C.on = null; if (C.mode !== 'ride' || C.ride?.def.path !== 'ground') C.y = floor;
-      const h = home();   // (out of its strip: an act holds it at the edge, and idle it walks back)
-      if (h && parkBox() && C.mode !== 'ride' && (C.x < h[0] || C.x > h[1])) C.x = clamp(C.x, h[0], h[1]);   // (World r6: a park is kept, never walked to across the controls)
+      const h = home();
+      if (h && parkBox() && C.mode !== 'ride' && (C.x < h[0] || C.x > h[1])) C.x = clamp(C.x, h[0], h[1]);
       if (h && C.mode === 'act') C.x = clamp(C.x, h[0], h[1]);
       else if (h && C.mode === 'idle' && (C.x < h[0] - 2 || C.x > h[1] + 2)) travel(clamp(C.x, h[0], h[1]), floor);
     }
@@ -2449,7 +2421,7 @@
       if (C.y < floor - .5) {C.vy += GRAV * dt; C.y = Math.min(floor, C.y + C.vy * dt); if (C.y >= floor) C.vy = 0;} else {C.y = floor; C.vy = 0;}
     }
     C.x = clamp(C.x, 12, W - 12);
-    // never stand on a World's play button, where a phone's thumb lands: it steps aside along the floor (2026-10-09)
+
     if (!C.on && C.mode !== 'held' && C.mode !== 'ride') {
       const pb = playBtn(), r = pb?.getBoundingClientRect(), feet = C.y * U;
       if (r?.width && feet > r.top && feet - 22 * U < r.bottom) {const l = r.left / U - 11, rr = r.right / U + 11; if (C.x > l && C.x < rr) C.x = ar ? rr : l;}
@@ -2457,13 +2429,13 @@
     if (now > C.lookAt) {C.lookAt = now + rnd(900, 2200); C.idleLook = any([[-1, 0], [1, 0], [0, 0], [0, 1], [1, -1], [-1, -1], [0, 0]]);}
     for (let i = visitors.length - 1; i >= 0; i--) {const v = visitors[i]; v.x += v.vx * dt; v.ph += dt; if (Math.random() < .012) feather(v.x, v.y - 2); if (v.x < -60 || v.x > W + 60) visitors.splice(i, 1);}
     const calm = (C.mode === 'idle' || (C.mode === 'act' && !C.act.def.on && !C.act.def.once)) && !bubble && !xo;
-    // staring at a frame or a title with the mouse: it comes and sits on it
+
     if (calm && hoverable && attention.t && now - attention.t > 1400 && now - C.stareAt > 6000) {
       C.stareAt = now;
       const el = perchAt(attention.x, attention.y);
       if (el && el !== C.on) {const r = el.getBoundingClientRect(); stopAct(); travel(clamp(attention.x, r.left + 24, r.right - 24) / U, r.top / U, el);}
     }
-    // ten quiet seconds on the same text: it steals some of what you have read
+
     if (calm && now - Math.max(lastScroll, lastTap) > 10000 && now - lastTheft > 25000) {
       lastTheft = now;
       const blocks = readable(), read = blocks.filter(b => b.r.bottom < (attention.t && hoverable ? attention.y : innerHeight * .62));
@@ -2476,7 +2448,7 @@
     const ed = root.dataset.edition;
     for (const [i, v] of visitors.entries()) {
       const vx = Math.round(v.x), vy = Math.round(v.y + Math.sin(v.ph * 3) * 2);
-      if (ed === 'heaven') S(vx - 3, vy - 3, FEATHER[v.vx < 0 ? 0 : 1], HPAL);   // (Heaven's visitors drift as feathers, not doves)
+      if (ed === 'heaven') S(vx - 3, vy - 3, FEATHER[v.vx < 0 ? 0 : 1], HPAL);
       else if (ed === 'halloween') {const big = SPRITES.bat, fr = big[(frame + i) % 2], pal = critPal('bat'); mirror(vx, Math.sign(v.vx), () => {for (let r2 = 0; r2 < fr.length; r2++) for (let c2 = 0; c2 < fr[r2].length; c2++) if (pal[fr[r2][c2]]) R(vx - 7 + c2 * 2, vy - 4 + r2 * 2, 2, 2, pal[fr[r2][c2]]);});}
       else {const P = pose(); P.armL = P.armR = ['fup', 'fmid', 'fdown', 'fmid'][(frame + i) % 4]; P.legs = 'tuck'; P.look = [Math.sign(v.vx), 0]; drawCrow(vx - 9, vy - 10, P);}
     }
@@ -2525,7 +2497,7 @@
           if (C.why === 'wake' && C.until - now > 700) P.eyes = 'wide';
           if (bubble) P.armR = frame % 4 < 2 ? 'wave' : 'up';
           if (blink && P.eyes === 'open') P.eyes = 'blink';
-          if (C.on) {P.legs = 'dangle'; o = rider(x, y, -2, P);} else o = rider(x, y, 0, P);   // sitting on the frame's edge, legs over it
+          if (C.on) {P.legs = 'dangle'; o = rider(x, y, -2, P);} else o = rider(x, y, 0, P);
         }
       }
       if (o) {C.ox = o[0]; C.oy = o[1];}
@@ -2549,7 +2521,7 @@
     for (const d of decos) d.place();
   }
 
-  // ── the page bullies you too: buttons that do not want to be pressed ──────────────────────────
+
   const BTN = 'button, [role=button], a.nf-btn, a[class*="btn"], a[class*="button"], input[type=submit], input[type=button]';
   const spared = new WeakMap();
   let prankAt = -30000, prankOn = null, blocked = null;
@@ -2562,7 +2534,7 @@
     dx = clamp(dx / d * dist, 8 - r.left, innerWidth - 8 - r.right); dy = clamp(dy / d * dist, 8 - r.top, innerHeight - 8 - r.bottom);
     return [dx, dy];
   }
-  const press = btn => {blocked = null; safe(() => btn.click());};   // the gag is over: do what you asked
+  const press = btn => {blocked = null; safe(() => btn.click());};
   const PRANKS = [
     {id: 'dodge', move: true, run: (b, e) => {const [dx, dy] = away(b, e, 90); return anim(b, [{translate: '0 0'}, {translate: `${dx}px ${dy}px`, offset: .22}, {translate: `${dx}px ${dy}px`, offset: .78}, {translate: '0 0'}], {duration: 1800});}},
     {id: 'shy', run: b => {tip(b, T('too shy…', 'مكسوف…')); return anim(b, [{scale: '1', rotate: '0deg'}, {scale: '.35', rotate: '-4deg', offset: .2}, {scale: '.35', rotate: '4deg', offset: .4}, {scale: '.35', rotate: '-4deg', offset: .6}, {scale: '.35', rotate: '0deg', offset: .8}, {scale: '1', rotate: '0deg'}], {duration: 1600});}},
@@ -2592,25 +2564,25 @@
     const r = btn.getBoundingClientRect();
     if (r.width < 22 || r.height < 18 || r.width > innerWidth * .8 || r.height > 220) return false;
     const p = prankBag(x => !onlyMoves || x.move); if (!p) return false;
-    prankAt = now; prankOn = btn; spared.set(btn, now + 25000);   // after this it gives in
+    prankAt = now; prankOn = btn; spared.set(btn, now + 25000);
     blocked = {btn, until: now + 4000};
     Promise.resolve(p.run(btn, e)).then(() => {if (p.then && blocked?.btn === btn) press(btn);}).finally(() => {prankOn = null; if (blocked?.btn === btn) blocked = null;});
     return true;
   }
-  // mouse: it runs from the pointer before you can press it; touch: it reacts to the press
+
   document.addEventListener('pointerover', e => {
     if (e.pointerType !== 'mouse' || Math.random() > .35) return;
     const b = e.target.closest?.(BTN); if (b && !b.contains(e.relatedTarget)) prank(b, e, true);
   }, true);
   document.addEventListener('pointerdown', e => {const b = e.target.closest?.(BTN); if (b && Math.random() < .4) prank(b, e, false);}, true);
-  // the press that started the gag does not count; keyboard presses and our own replay always do
+
   document.addEventListener('click', e => {
     if (!blocked || !e.isTrusted || e.detail === 0 || !blocked.btn.contains(e.target) || performance.now() > blocked.until) return;
     e.preventDefault(); e.stopImmediatePropagation();
   }, true);
 
-  // ── MK Voice: the most pressable card on the site. Pressing it summons a big glowing button,
-  //    and the button trips you five different ways before it lets you in. Keyboard: straight in. ──
+
+
   const BAIT_SEL = '.nf-card[data-film="mk-voice"], .cx-poster a[href*="/mk-voice"]';
   const BAIT_LABELS = [T('Press to enter MK Voice', 'اضغط لتدخل MK Voice'), T('Press again. Harder.', 'اضغط مرة ثانية. أقوى.'), T('Almost. Once more.', 'تقريباً. مرة أخرى.'), T('Last one, promise.', 'آخر مرة، أعدك.'), T('OK, this one. Really.', 'حسناً، هذه. حقاً.'), T('Fine. Go in.', 'طيب. ادخل.')];
   let bait = null, baitDone = false;
@@ -2649,7 +2621,7 @@
     btn.addEventListener('click', async e => {
       e.stopPropagation();
       if (!bait || bait.busy) return;
-      if (e.detail === 0 || bait.n >= bait.trips.length) return baitWin();   // keyboard presses go straight in
+      if (e.detail === 0 || bait.n >= bait.trips.length) return baitWin();
       bait.busy = true;
       await bait.trips[bait.n++].run(btn, e);
       if (!bait) return;
@@ -2673,7 +2645,7 @@
     }
     sfx(T('OK OK. You earned it.', 'طيب طيب. استحققتها.'), '', [cx, r.top - 10]);
     baitDone = true; baitClose();
-    setTimeout(() => card.click(), 380);   // now it does what you asked
+    setTimeout(() => card.click(), 380);
   }
   document.addEventListener('click', e => {
     if (baitDone || still || !e.isTrusted || e.detail === 0) return;
@@ -2693,7 +2665,7 @@
     }
   }
 
-  // ── X O on a sheet of paper it gets from somewhere different every time ───────────────────────
+
   const XO_LINES = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
   const portalBag = bag(['portal', 'pipe', 'printer', 'scroll', 'plane', 'hat', 'draw', 'courier', 'beam']);
   const jit = () => rnd(-1.6, 1.6);
@@ -2701,7 +2673,7 @@
   const winningMove = (b, who) => {for (let i = 0; i < 9; i++) if (!b[i]) {const c = [...b]; c[i] = who; if (winner(c)?.who === who) return i;} return null;};
   function aiMove(b) {
     const empty = b.map((v, i) => (v ? -1 : i)).filter(i => i >= 0);
-    if (Math.random() < .18) return any(empty);   // it is good, not perfect
+    if (Math.random() < .18) return any(empty);
     const win = winningMove(b, 'O'); if (win !== null) return win;
     const block = winningMove(b, 'X'); if (block !== null) return block;
     if (!b[4]) return 4;
@@ -2741,7 +2713,7 @@
     el.querySelector('.close').addEventListener('click', () => {xoNote(T('Coward.', 'جبان.')); xoClose();});
     xoEnter().then(() => {if (!xo) return; xo.ready = true; xo.busy = false; xoNote(T('Your move. You’re X.', 'دورك. أنت X.'));});
   }
-  // where the paper comes from, and how it gets to its spot
+
   async function xoEnter() {
     const {el, how, box} = xo, cx = box.left + box.size / 2, cy = box.top + box.size / 2;
     const from = (x, y) => `translate(${x - cx}px, ${y - cy}px)`;
@@ -2772,7 +2744,7 @@
       case 'draw': sfx(T('scribble', 'خربشة'), '', [cx, box.top]); await wait(1300); break;
     }
   }
-  // the pixel side of each entrance (drawn next to the companion or at the paper)
+
   function xoProps(o) {
     const e = (performance.now() - xo.t0) / 1000, bx = Math.round((xo.box.left + xo.box.size / 2) / U), by = Math.round((xo.box.top + xo.box.size / 2) / U);
     switch (xo.how) {
@@ -2803,7 +2775,7 @@
     xoNote(any([T('Hmm…', 'همم…'), T('Interesting choice. Wrong, but interesting.', 'اختيار مثير. خاطئ، لكن مثير.'), T('Bold.', 'جريء.'), T('Let me think. Done.', 'دعني أفكر. انتهيت.')]));
     setTimeout(() => {
       if (!xo || xo.over) return;
-      // the bully move: when you are about to win, it sometimes rubs out one of your Xs
+
       const threat = winningMove(xo.board, 'X');
       if (threat !== null && !xo.cheated && Math.random() < .35) {
         const l = XO_LINES.find(k => k.includes(threat) && k.filter(j => xo.board[j] === 'X').length === 2), victim = l.find(j => xo.board[j] === 'X');
@@ -2836,7 +2808,7 @@
     else {xoNote(T('Draw. How boring. Again?', 'تعادل. ممل. مرة ثانية؟')); setTimeout(() => xoClose(), 2800);}
     return true;
   }
-  // it lost: the paper gets crumpled and thrown away
+
   async function xoRage() {
     if (!xo) return;
     const el = xo.el;
@@ -2861,7 +2833,7 @@
     if (C.act?.def.id === 'xo') endAct();
   }
 
-  // ── start ─────────────────────────────────────────────────────────────────────────────────────
+
   document.body.append(fxc, world, hit, dock);
   fit();
   addEventListener('resize', () => {fit(); floorAt = 0; C.x = clamp(C.x, 12, W - 12); C.y = Math.min(C.y, floorU());}, {passive: true});
@@ -2878,7 +2850,7 @@
     dust(C.x, C.y, 8); sfx(e.detail?.name || '');
   });
   if (!still) setInterval(() => {if (((root.dataset.siteMode === 'crow' && kind === 'opus') || root.dataset.edition) && !document.hidden && Math.random() < .5) flock(root.dataset.edition ? 2 : 1);}, 45000);
-  // QA hooks
+
   window.__mk = {
     act(id) {if (ACT[id]) {endRide(true); stopAct(); startAct(ACT[id], performance.now());}},
     ride(id, tx) {const d = RIDES.find(r => r.id === id); if (d) {endRide(true); stopAct(); startRide(d, performance.now(), tx ?? (C.x < W / 2 ? W * .75 : W * .25), floorU(), null);}},

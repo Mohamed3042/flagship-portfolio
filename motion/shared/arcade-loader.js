@@ -1,15 +1,9 @@
 /*! © 2026 Mohamed Mahmoud. All rights reserved. */
-/**
- * Arcade loader, 2026-10-03. While a page loads, it sits under coloured frosted glass (blur + saturate,
- * so the page's own colours glow through) and two original pixel bots (coral and white) play Pong on a
- * glass cabinet. Once ready the cabinet leaves and the glass clears, so the landing fades in sharp.
- * Classic <head> script (no defer/async) so it covers the first paint. Ready = window load, plus the
- * film's first frame on film pages (html.film-ready), capped at 6 s. Skipped inside iframes (embedded
- * films) and with html[data-arcade=off]. Reduced motion: one still frame. No dependencies.
- */
+
+
 (() => {
   const root = document.documentElement;
-  if (window.top !== window || root.classList.contains('mk-loading') || root.dataset.arcade === 'off' || root.dataset.loader === 'blueprint') return;   // the World has its own
+  if (window.top !== window || root.classList.contains('mk-loading') || root.dataset.arcade === 'off' || root.dataset.loader === 'blueprint') return;
   root.classList.add('mk-loading');
   const born = performance.now(), still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ease = 'cubic-bezier(.2,.8,.2,1)';
@@ -25,12 +19,12 @@
   document.head.append(style);
 
   const W = 160, H = 90;
-  const BOTS = [ // 8x8 original pixel bots: '.' clear; a coral body, b white body, k visor, e eyes
+  const BOTS = [
     ['..aaaa..', '.aaaaaa.', 'aa.aa.aa', 'aaaaaaaa', 'aaaaaaaa', 'a.aaaa.a', '.a.aa.a.', '.a....a.'],
     ['..bbbb..', '.bbbbbb.', 'bkkkkkkb', 'bkekkekb', 'bbbbbbbb', 'b.bbbb.b', '.b.bb.b.', '.b....b.'],
   ];
   const COLORS = {a: '#e07a5f', b: '#eef2f0', k: '#0b1310', e: '#7ad3ff'};
-  const FONT = { // 3x5 glyphs, row-major
+  const FONT = {
     L: '100100100100111', O: '111101101101111', A: '010101111101101', D: '110101101101110',
     I: '111010010010111', N: '101111111111101', G: '011100101101011', '.': '000000000000010',
   };
@@ -41,12 +35,12 @@
   function draw() {
     ctx.clearRect(0, 0, W, H);
     px(0, 0, W, H, 'rgba(4,10,7,.82)');
-    for (let y = 4; y < H - 14; y += 6) px(W / 2, y, 1, 3, '#2a4a39');                          // net
+    for (let y = 4; y < H - 14; y += 6) px(W / 2, y, 1, 3, '#2a4a39');
     px(0, H - 12, W, 1, '#2a4a39');
     bots.forEach((bot, side) => {
       const x = side ? W - 18 : 10;
       BOTS[side].forEach((row, j) => [...row].forEach((ch, i) => ch !== '.' && px(x + i, bot.y - 4 + j, 1, 1, COLORS[ch])));
-      px(side ? x - 3 : x + 10, bot.y - 6, 2, 12, side ? '#eef2f0' : '#e07a5f');                  // paddle
+      px(side ? x - 3 : x + 10, bot.y - 6, 2, 12, side ? '#eef2f0' : '#e07a5f');
     });
     for (let t = 1; t <= 3; t++) px(ball.x - ball.vx * t * 2, ball.y - ball.vy * t * 2, 2, 2, `rgba(122,211,164,${.3 / t})`);
     px(ball.x, ball.y, 2, 2, '#c9ffe3');
@@ -56,7 +50,7 @@
   function step() {
     ball.x += ball.vx; ball.y += ball.vy;
     if (ball.y < 2 || ball.y > H - 16) ball.vy *= -1;
-    bots.forEach((bot, side) => {                                                                  // lazy tracking
+    bots.forEach((bot, side) => {
       bot.y += (((side ? ball.vx > 0 : ball.vx < 0) ? ball.y : H / 2 - 6) - bot.y) * 0.09;
       const face = side ? W - 21 : 20;
       if ((side ? ball.x >= face : ball.x <= face) && Math.abs(ball.y - bot.y) < 8) {
@@ -80,7 +74,7 @@
   }
   function finish() {
     if (done) return;
-    const wait = 600 - (performance.now() - born);                                                  // let one rally show
+    const wait = 600 - (performance.now() - born);
     if (wait > 0) return void setTimeout(finish, wait);
     done = true; cancelAnimationFrame(raf);
     root.classList.remove('mk-loading');
@@ -90,18 +84,18 @@
   }
   function whenReady() {
     const film = document.querySelector('[data-film-story]') && root.dataset.portfolioMediaReady !== 'false';
-    // Pages with a World canvas also wait for its first frame (or its failure / reduced motion).
+
     const world = document.querySelector('[data-world-canvas]') && !matchMedia('(prefers-reduced-motion: reduce)').matches;
     const ready = () => (!film || root.classList.contains('film-ready') || root.classList.contains('is-poster-mode'))
       && (!world || root.classList.contains('world-first-frame') || root.classList.contains('world-failed'));
     if (ready()) return finish();
     const watch = new MutationObserver(() => ready() && (watch.disconnect(), finish()));
     watch.observe(root, {attributes: true, attributeFilter: ['class']});
-    setTimeout(finish, 2500);                                                                      // never hold a slow network hostage
+    setTimeout(finish, 2500);
   }
   if (document.body) mount();
   else new MutationObserver((_, watch) => document.body && (watch.disconnect(), mount())).observe(root, {childList: true});
   document.readyState === 'complete' ? whenReady() : addEventListener('load', whenReady, {once: true});
   setTimeout(finish, 6000);
-  addEventListener('pageshow', event => event.persisted && finish());                                // back/forward cache
+  addEventListener('pageshow', event => event.persisted && finish());
 })();

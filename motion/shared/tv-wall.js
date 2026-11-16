@@ -1,11 +1,6 @@
 /*! © 2026 Mohamed Mahmoud. All rights reserved. */
-/* TV wall: a playable carousel of TVs for the endings of the pages (the films home, Space).
-   Any [data-tv-wall] element whose children are links becomes a CSS-3D ring of TVs, one per link;
-   each TV is the link itself (keyboard and screen readers get real links) and loops its own motion
-   graphics in a canvas: mail, chat, profile, the World, Space, the films. Drag to spin it (it coasts,
-   then settles on a TV), hover to bring a TV forward, click to go; left alone it steps to the next
-   TV every few seconds. Without JS the links stay a simple row. The World's ending does the same in
-   WebGL (src/scripts/world/scenes/finale.ts) and shares this look (src/scripts/world/tv.ts). */
+
+
 (() => {
   const walls = document.querySelectorAll('[data-tv-wall]');
   if (!walls.length) return;
@@ -26,7 +21,7 @@
   @media (prefers-reduced-motion:reduce) and (prefers-reduced-motion:no-preference){.tvw-tv{transition:none}}`;
   document.head.append(css);
 
-  // ── drawing (virtual 1600 × 900; the same studio look as the World's TVs) ──
+
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const ease3 = x => 1 - Math.pow(1 - clamp(x), 3);
   const rgba = (hex, a) => {const m = /#?([0-9a-f]{6})/i.exec(hex), n = m ? parseInt(m[1], 16) : 0xffffff; return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;};
@@ -51,14 +46,14 @@
     for (let j = 0; j < 5; j++) {const o = ((t * 70 + j * 420) % 2300) - 500; g.moveTo(o, 900); g.lineTo(o + 520, 0);}
     g.stroke();
   }
-  const isRtl = s => [...s].some(c => c.charCodeAt(0) >= 0x590 && c.charCodeAt(0) <= 0x8ff);   // Hebrew/Arabic: letters join
+  const isRtl = s => [...s].some(c => c.charCodeAt(0) >= 0x590 && c.charCodeAt(0) <= 0x8ff);
   function kinetic(g, text, y, size, k, t, accent) {
     g.font = DISPLAY(700, size);
     while (g.measureText(text).width > 1360 && size > 60) {size -= 6; g.font = DISPLAY(700, size);}
     const lw = g.measureText(text).width, top = y + size * .8, sweep = ((t * .32) % 1.7) * 1900 - 150;
     const gr = g.createLinearGradient(sweep - 240, 0, sweep + 240, 0);
     gr.addColorStop(0, rgba(accent, 0)); gr.addColorStop(.5, 'rgba(255,255,255,.95)'); gr.addColorStop(1, rgba(accent, 0));
-    if (isRtl(text)) {   // Arabic joins its letters: it rises as a whole word
+    if (isRtl(text)) {
       const p = ease3(k * 2.2), y2 = top + (1 - p) * 60;
       g.textAlign = ar ? 'right' : 'left'; g.direction = 'rtl';
       g.globalAlpha = p; g.fillStyle = '#fff'; g.fillText(text, ar ? R : L, y2);
@@ -127,7 +122,7 @@
       P.forEach(([x, y], i) => {const p = (Math.sin(t * 2 + i) + 1) / 2; g.fillStyle = i === 7 ? '#fff' : rgba(look.c, .6 + .4 * p); g.beginPath(); g.arc(x, y, i === 7 ? 22 : 7 + p * 5, 0, Math.PI * 2); g.fill();});
       kinetic(g, label, 560, 116, k, t, look.c);
     } else if (kind === 'world') {
-      // a glass MK turning in the studio
+
       const cx = ar ? 480 : 1120, cy = 300, turn = Math.sin(t * .8);
       g.save(); g.translate(cx, cy); g.scale(.55 + .45 * Math.abs(Math.cos(t * .4)), 1);
       g.font = DISPLAY(700, 300); g.textAlign = 'center';
@@ -160,7 +155,7 @@
     return im.complete && im.naturalWidth ? im : null;
   }
 
-  // ── one wall ──
+
   walls.forEach(host => {
     const links = [...host.querySelectorAll('a[href]')];
     if (links.length < 2) return;
@@ -196,10 +191,10 @@
     }
     size(); addEventListener('resize', size, {passive: true});
 
-    // spin: drag (with momentum), settle on the nearest TV, step on when left alone
+
     let spin = 0, vel = 0, target = 0, drag = null, moved = 0, idleAt = performance.now(), visible = false, born = -1, last = performance.now();
     const setSpin = () => {ring.style.transform = `translateZ(${-r}px) rotateY(${-spin}deg)`;};
-    // a press is a click until it moves; only then does the ring take the pointer (so links still open)
+
     stage.addEventListener('pointerdown', e => {drag = {x: e.clientX, at: performance.now(), spin, id: e.pointerId, live: false}; moved = 0; vel = 0;});
     stage.addEventListener('pointermove', e => {
       if (!drag) return;
@@ -211,7 +206,7 @@
     });
     const up = () => {if (!drag) return; drag = null; stage.classList.remove('is-drag'); idleAt = performance.now();};
     stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
-    stage.addEventListener('click', e => {if (moved > 6) {e.preventDefault(); e.stopPropagation();}}, true);   // a drag is not a click
+    stage.addEventListener('click', e => {if (moved > 6) {e.preventDefault(); e.stopPropagation();}}, true);
     tvs.forEach((tv, i) => tv.a.addEventListener('focus', () => {target = Math.round((spin - i * step) / 360) * 360 + i * step; idleAt = performance.now();}));
     new IntersectionObserver(es => {visible = es[0].isIntersecting; if (visible && born < 0) born = performance.now() / 1000;}, {threshold: .2}).observe(stage);
 
